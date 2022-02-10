@@ -4,7 +4,10 @@
 
 This GoLang package has a complete, (almost complete), implementation of the iSolarCloud API.
 There's been no published specs on this, so I've had to figure it all out based on the Android app, using javascript IDEs and various other means.
-Note: [iSolarCloud](https://isolarcloud.com) has no interest in developing a public API. In fact their implementation is so broken with security and coding issues, I'm surprised it hasn't been exploited yet.
+
+Note:
+- [iSolarCloud](https://isolarcloud.com) has no interest in developing a public API.
+- Their "API" implementation is so broken with security and coding issues, I'm surprised it hasn't been exploited yet.
 
 ![alt text](https://github.com/MickMake/GoSungro/blob/master/docs/iSolarCloudLogin.png?raw=true)
 
