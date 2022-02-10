@@ -1,0 +1,52 @@
+stages:
+  - build
+  - release
+  - cleanup
+
+variables:
+  CONTAINER_TEST_IMAGE: mickmake.io/docker/gosungro/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHORT_SHA
+  CONTAINER_RELEASE_IMAGE: mickmake.io/docker/gosungro:latest
+  GO_REPO_TOKEN: $GO_REPO_TOKEN
+  SUNGRO_HOST: $SUNGRO_HOST
+  SUNGRO_USER: $SUNGRO_USER
+  SUNGRO_PASSWORD: $SUNGRO_PASSWORD
+  SUNGRO_ID: $SUNGRO_ID
+  SUNGRO_SECRET: $SUNGRO_SECRET
+  SUNGRO_GIT_REPO: $SUNGRO_GIT_REPO
+  SUNGRO_GIT_DIR: $SUNGRO_GIT_DIR
+  SUNGRO_GIT_TOKEN: $SUNGRO_GIT_TOKEN
+  SUNGRO_DIFF_CMD: $SUNGRO_DIFF_CMD
+  TZ: $TZ
+
+build:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+  # This relies on GOOGLE_APPLICATION_CREDENTIALS being set and pointing to the Google Service Account JSON file
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CONTAINER_TEST_IMAGE --cache=true --build-arg "GO_REPO_TOKEN=${GO_REPO_TOKEN}" --build-arg "GO_REPO_TOKEN=${GO_REPO_TOKEN}" --build-arg "SUNGRO_HOST=${SUNGRO_HOST}" --build-arg "SUNGRO_USER=${SUNGRO_USER}" --build-arg "SUNGRO_PASSWORD=${SUNGRO_PASSWORD}" --build-arg "SUNGRO_ID=${SUNGRO_ID}" --build-arg "SUNGRO_SECRET=${SUNGRO_SECRET}" --build-arg "SUNGRO_GIT_REPO=${SUNGRO_GIT_REPO}" --build-arg "SUNGRO_GIT_DIR=${SUNGRO_GIT_DIR}" --build-arg "SUNGRO_GIT_TOKEN=${SUNGRO_GIT_TOKEN}" --build-arg "SUNGRO_DIFF_CMD=${SUNGRO_DIFF_CMD}" --build-arg "TZ=${TZ}"
+
+release-image-master:
+  stage: release
+  needs:
+    - build
+  image:
+    name: gcr.io/go-containerregistry/gcrane:debug
+    entrypoint: [""]
+  # This relies on GOOGLE_APPLICATION_CREDENTIALS being set and pointing to the Google Service Account JSON file
+  script:
+    - gcrane cp $CONTAINER_TEST_IMAGE $CONTAINER_RELEASE_IMAGE
+  only:
+    - master
+  variables:
+    GIT_STRATEGY: none
+
+#cleanup_temp_tag:
+#  stage: cleanup
+#  image: google/cloud-sdk
+#  when: always
+#  script:
+#    # This relies on GOOGLE_APPLICATION_CREDENTIALS being set and pointing to the Google Service Account JSON file
+#    # Untag the test image we created (but don't delete, as it's likely to be tagged with a latest tag too)
+#    - gcloud container images untag $CONTAINER_TEST_IMAGE

@@ -1,0 +1,111 @@
+################################################################################
+project_name: GoSungro
+
+
+################################################################################
+before:
+  hooks:
+    - go mod download
+    - go generate ./...
+
+
+################################################################################
+builds:
+- env:
+  - CGO_ENABLED=0
+
+  binary: GoSungro
+
+  goos:
+    - linux
+    - darwin
+    # windows
+  goarch:
+    # 386
+    - amd64
+    - arm
+    - arm64
+
+
+################################################################################
+# .goreleaser.yml
+archives:
+  -
+    # ID of this archive.
+    # Defaults to `default`.
+    #id: GoSungro-archive
+
+    # Builds reference which build instances should be archived in this archive.
+    #builds:
+    #- default
+
+    # Archive name template.
+    # Defaults:
+    # - if format is `tar.gz`, `tar.xz`, `gz` or `zip`:
+    #   - `{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}`
+    # - if format is `binary`:
+    #   - `{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}`
+    name_template: "{{ .ProjectName }}-{{ .Os }}_{{ .Arch }}"
+
+    # Replacements for GOOS and GOARCH in the archive name.
+    # Keys should be valid GOOSs or GOARCHs.
+    # Values are the respective replacements.
+    # Default is empty.
+    replacements:
+      darwin: darwin
+      linux: linux
+      windows: windows
+      386: i386
+      amd64: amd64
+
+    # Set to true, if you want all files in the archive to be in a single directory.
+    # If set to true and you extract the archive 'goreleaser_Linux_arm64.tar.gz',
+    # you get a folder 'goreleaser_Linux_arm64'.
+    # If set to false, all files are extracted separately.
+    # You can also set it to a custom folder name (templating is supported).
+    # Default is false.
+    wrap_in_directory: false
+
+    # Archive format. Valid options are `tar.gz`, `tar.xz`, `gz`, `zip` and `binary`.
+    # If format is `binary`, no archives are created and the binaries are instead
+    # uploaded directly.
+    # Default is `tar.gz`.
+    format: tar.gz
+
+    # Can be used to change the archive formats for specific GOOSs.
+    # Most common use case is to archive as zip on Windows.
+    # Default is empty.
+    #format_overrides:
+    #  - goos: windows
+    #    format: zip
+
+    # Additional files/template/globs you want to add to the archive.
+    # Defaults are any files matching `LICENCE*`, `LICENSE*`,
+    # `README*` and `CHANGELOG*` (case-insensitive).
+    #files:
+    #  - LICENSE.txt
+    #  - README_{{.Os}}.md
+    #  - CHANGELOG.md
+    #  - docs/*
+    #  - design/*.png
+    #  - templates/**/*
+
+
+################################################################################
+checksum:
+  name_template: 'checksums.txt'
+
+
+################################################################################
+snapshot:
+  name_template: "{{ .Tag }}-next"
+
+
+################################################################################
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+
