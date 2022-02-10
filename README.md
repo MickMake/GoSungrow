@@ -25,7 +25,7 @@ This GoLang package does several things:
 3. Provides ready access to all API calls via a simple get/put framework.
 
 To be added:
-1. MQTT client to push to things like HomeAssistant.
+1. MQTT client to push to things like [HomeAssistant](https://www.home-assistant.io/).
 
 
 ## Use case example:
