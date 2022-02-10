@@ -1,28 +1,47 @@
-# GoSungro - Over The Wire SUNGRO to Gitlab syncing tool.
+# GoSungro - iSolarCloud API written in GoLang.
 
-This tool does several things:
-1. Pull a Gitlab repo that holds SUNGRO data.
-2. Fetch all data available from the SUNGRO.
-3. Save this data as a JSON file.
-4. Commit changes to the Gitlab repo.
-5. Push changes to remote.
+## What is it?
 
-It is intended to provide full revision history for any changes made to the SUNGRO.
+This GoLang package has a complete, (almost complete), implementation of the iSolarCloud API.
+There's been no published specs on this, so I've had to figure it all out based on the Android app, using javascript IDEs and various other means.
+Note: [iSolarCloud](https://isolarcloud.com) has no interest in developing a public API. In fact their implementation is so broken with security and coding issues, I'm surprised it hasn't been exploited yet.
+
+![alt text](https://github.com/MickMake/GoSungro/blob/master/docs/iSolarCloudLogin.png?raw=true)
+
+![alt text](https://github.com/MickMake/GoSungro/blob/master/docs/iSolarCloud.png?raw=true)
+
+
+## What state is it in?
+
+This is currently under development. So far I have mapped out all the API calls, but now figuring out JSON POST data formats.
+It's tricky as their "API" changes regularly.
+
+
+## What does it do?
+
+This GoLang package does several things:
+1. Update a GitHub repo with SunGro PV data, (provide full revision history for any changes made to the SunGro PV).
+2. Update a Google sheet with SunGro PV data.
+3. Provides ready access to all API calls via a simple get/put framework.
+
+To be added:
+1. MQTT client to push to things like HomeAssistant.
+
 
 ## Use case example:
-### Record changes made to user data on SUNGRO. (Will clone if not existing.)
+### Record statistics data from SUNGRO to GitHub. (Will clone if not existing.)
 
-	% GoSungro sync 'Updating just user data' users
+	% GoSungro sync 'Updating statistics' statistics
 
-### Record changes made to all SUNGRO manually.
+### Record all changes made to GitHub.
 
-	% GoSungro sync 'Updated everything'
+	% GoSungro sync 'Update everything'
 
-### Record changes made to the SUNGRO with default commit message.
+### Record changes with default commit message.
 
 	% GoSungro sync default
 
-### Record changes made to the SUNGRO every 30 minutes.
+### Record changes made every 30 minutes.
 
 	% GoSungro cron run ./30 . . . . sync default
 
@@ -94,7 +113,6 @@ Change SUNGRO API token.
       --config string         GoSungro: config file. (default "$HOME/.GoSungro/config.json")
       --debug                 GoSungro: Debug mode.
       --diff-cmd string       Git: Command for diffs. (default "tkdiff")
-  -d, --domain string         SUNGRO: Default domain. (default "mickmake.com")
       --git-dir string        Git: Local repo directory.
       --git-password string   Git: Repo password.
       --git-repo string       Git: Repo url for updates.
@@ -103,26 +121,21 @@ Change SUNGRO API token.
       --git-username string   Git: Repo username.
       --google-sheet string   Google: Sheet URL for updates.
       --host string           SUNGRO: Provider API URL. (default "https://augateway.isolarcloud.com")
-  -i, --id string             SUNGRO: API client id.
   -p, --password string       SUNGRO: Extension password.
-  -q, --quiet                 GoSungro: Silence all messages.
-  -s, --secret string         SUNGRO: API client secret.
+  -q, --quiet                 SUNGRO: Silence all messages.
       --timeout duration      SUNGRO: API timeout. (default 30s)
   -u, --user string           SUNGRO: Extension username.
 ```
 
 ## Using environment variables instad of flags.
 ```
-+----------------+------------+------------------+--------------------------------+-----------------------------------------------+
-|      FLAG      | SHORT FLAG |   ENVIRONMENT    |          DESCRIPTION           |                    DEFAULT                    |
-+----------------+------------+------------------+--------------------------------+-----------------------------------------------+
-| --user         | -u         | SUNGRO_USER         | SUNGRO: Extension username.       |                                               |
-| --password     | -p         | SUNGRO_PASSWORD     | SUNGRO: Extension password.       |                                               |
-| --id           | -i         | SUNGRO_ID           | SUNGRO: API client id.            |                                               |
-| --secret       | -s         | SUNGRO_SECRET       | SUNGRO: API client secret.        |                                               |
-| --domain       | -d         | SUNGRO_DOMAIN       | SUNGRO: Default domain.           | mickmake.com                                  |
-| --host         |            | SUNGRO_HOST         | SUNGRO: Provider API URL.         | https://augateway.isolarcloud.com/v1/userService/login
-| --timeout      |            | SUNGRO_TIMEOUT      | SUNGRO: API timeout.              | 30s                                           |
++----------------+------------+---------------------+--------------------------------+-----------------------------------------------+
+|      FLAG      | SHORT FLAG |   ENVIRONMENT       |          DESCRIPTION           |                    DEFAULT                    |
++----------------+------------+---------------------+--------------------------------+-----------------------------------------------+
+| --user         | -u         | SUNGRO_USER         | SUNGRO: API username.          |                                               |
+| --password     | -p         | SUNGRO_PASSWORD     | SUNGRO: API password.          |                                               |
+| --host         |            | SUNGRO_HOST         | SUNGRO: Provider API URL.      | https://augateway.isolarcloud.com             |
+| --timeout      |            | SUNGRO_TIMEOUT      | SUNGRO: API timeout.           | 30s                                           |
 | --google-sheet |            | SUNGRO_GOOGLE_SHEET | Google: Sheet URL for updates. |                                               |
 | --git-repo     |            | SUNGRO_GIT_REPO     | Git: Repo url for updates.     |                                               |
 | --git-dir      |            | SUNGRO_GIT_DIR      | Git: Local repo directory.     |                                               |
@@ -131,9 +144,9 @@ Change SUNGRO API token.
 | --git-sshkey   |            | SUNGRO_GIT_SSHKEY   | Git: Repo SSH keyfile.         |                                               |
 | --git-token    |            | SUNGRO_GIT_TOKEN    | Git: Repo token string.        |                                               |
 | --diff-cmd     |            | SUNGRO_DIFF_CMD     | Git: Command for diffs.        | tkdiff                                        |
-| --config       |            | SUNGRO_CONFIG       | GoSungro: config file.            | $HOME/.GoSungro/config.json                      |
-| --debug        |            | SUNGRO_DEBUG        | GoSungro: Debug mode.             | false                                         |
-| --quiet        | -q         | SUNGRO_QUIET        | GoSungro: Silence all messages.   | false                                         |
-+----------------+------------+------------------+--------------------------------+-----------------------------------------------+
+| --config       |            | SUNGRO_CONFIG       | GoSungro: config file.         | $HOME/.GoSungro/config.json                   |
+| --debug        |            | SUNGRO_DEBUG        | GoSungro: Debug mode.          | false                                         |
+| --quiet        | -q         | SUNGRO_QUIET        | GoSungro: Silence all messages.| false                                         |
++----------------+------------+------------------+--------------------------------+--------------------------------------------------+
 ```
 
