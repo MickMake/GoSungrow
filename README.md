@@ -18,7 +18,7 @@ Note:
 
 This is currently under development.
 
-So far I have mapped out all the API calls, but now figuring out JSON POST data formats.
+So far I have mapped out all the API calls, but now figuring out JSON POST data formats. This is around 20% complete.
 
 It's tricky as their "API" changes regularly.
 
