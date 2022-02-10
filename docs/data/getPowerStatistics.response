@@ -1,0 +1,27 @@
+{
+	"req_serial_num":"2022020997a540228837a0a0c81368c8",
+	"result_code":"1",
+	"result_data":{
+		"PRVlaue":"--",
+		"city":null,
+		"dayPower":{
+			"unit":"kWh",
+			"value":"24.8"
+		},
+		"design_capacity":{
+			"unit":"kWp",
+			"value":"10"
+		},
+		"eqVlaue":"2.48",
+		"nowCapacity":{
+			"unit":"kW",
+			"value":"8.629"
+		},
+		"ps_name":"MickMake",
+		"ps_short_name":"B2192301528",
+		"status1":"0",
+		"status2":"0",
+		"status3":"0"
+	},
+	"result_msg":"success"
+}

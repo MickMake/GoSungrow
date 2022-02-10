@@ -1,0 +1,3 @@
+mosquitto_sub -v -h audata.isolarcloud.com -p 18886 -t '/mqtt/#' -u USERNAME -P PASSWORD
+mosquitto_sub --insecure -v -L 'mqtt://audata.isolarcloud.com:18886/mqtt' -u USERNAME -P PASSWORD
+

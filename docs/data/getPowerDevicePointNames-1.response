@@ -1,0 +1,352 @@
+{
+	"req_serial_num":"20220209dd17496aabab6b7ac57bcb33",
+	"result_code":"1",
+	"result_data":[
+		{
+			"point_cal_type":2,
+			"point_id":1,
+			"point_name":"Daily Yield"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":24,
+			"point_name":"Total Active Power"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":2,
+			"point_name":"Total Yield"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":14,
+			"point_name":"Total DC Power"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":18,
+			"point_name":"Phase A Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":19,
+			"point_name":"Phase B Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":20,
+			"point_name":"Phase C Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":21,
+			"point_name":"Phase A Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":22,
+			"point_name":"Phase B Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":23,
+			"point_name":"Phase C Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":25,
+			"point_name":"Total Reactive Power"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":27,
+			"point_name":"Grid Frequency"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":15,
+			"point_name":"A-B Line Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":16,
+			"point_name":"B-C Line Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":17,
+			"point_name":"C-A Line Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":4,
+			"point_name":"Internal Air Temperature"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":26,
+			"point_name":"Total Power Factor"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":90,
+			"point_name":"Negative Voltage to Ground"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":43,
+			"point_name":"Total Apparent Power"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":33,
+			"point_name":"Module 1 Temperature"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":34,
+			"point_name":"Module 2 Temperature"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":35,
+			"point_name":"Module 3 Temperature"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":36,
+			"point_name":"Module 4 Temperature"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":37,
+			"point_name":"Module 5 Temperature"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":38,
+			"point_name":"Module 6 Temperature"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":39,
+			"point_name":"Positive Impedance to Ground"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":40,
+			"point_name":"Negative Impedance to Ground"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":41,
+			"point_name":"P-limit-actual"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":42,
+			"point_name":"Reactive Power Regulation Actual Value"
+		},
+		{
+			"point_cal_type":2,
+			"point_id":67,
+			"point_name":"Daily Yield (Theoretical)"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":5,
+			"point_name":"MPPT1 Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":6,
+			"point_name":"MPPT1 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":7,
+			"point_name":"MPPT2 Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8,
+			"point_name":"MPPT2 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":9,
+			"point_name":"MPPT3 Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":10,
+			"point_name":"MPPT3 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":45,
+			"point_name":"MPPT4 Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":46,
+			"point_name":"MPPT4 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":47,
+			"point_name":"MPPT5 Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":48,
+			"point_name":"MPPT5 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":49,
+			"point_name":"MPPT6 Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":50,
+			"point_name":"MPPT6 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":51,
+			"point_name":"MPPT7 Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":52,
+			"point_name":"MPPT7 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":53,
+			"point_name":"MPPT8 Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":54,
+			"point_name":"MPPT8 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":55,
+			"point_name":"MPPT9 Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":56,
+			"point_name":"MPPT9 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":57,
+			"point_name":"MPPT10 Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":58,
+			"point_name":"MPPT10 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":70,
+			"point_name":"String 1 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":71,
+			"point_name":"String 2 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":72,
+			"point_name":"String 3 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":73,
+			"point_name":"String 4 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":74,
+			"point_name":"String 5 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":75,
+			"point_name":"String 6 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":76,
+			"point_name":"String 7 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":77,
+			"point_name":"String 8 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":78,
+			"point_name":"String 9 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":79,
+			"point_name":"String 10 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":80,
+			"point_name":"String 11 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":81,
+			"point_name":"String 12 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":82,
+			"point_name":"String 13 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":83,
+			"point_name":"String 14 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":84,
+			"point_name":"String 15 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":85,
+			"point_name":"String 16 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":92,
+			"point_name":"String 17 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":93,
+			"point_name":"String 18 Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":86,
+			"point_name":"Pac-Nom."
+		}
+	],
+	"result_msg":"success"
+}

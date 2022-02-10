@@ -1,0 +1,8 @@
+{
+	"error":"Not Found",
+	"message":"Not Found",
+	"path":"/getSerialNum",
+	"req_serial_num":"20220209507943dc81ec574f9c175382",
+	"status":404,
+	"timestamp":"2022-02-09 07:21:11"
+}

@@ -1,0 +1,6 @@
+{
+	"req_serial_num":"202202103b664fd3853417c2ec96d908",
+	"result_code":"010",
+	"result_data":null,
+	"result_msg":"Parameter:start_time_stamp and end_time_stamp length must be 14 !"
+}

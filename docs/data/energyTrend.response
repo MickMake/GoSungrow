@@ -1,0 +1,18 @@
+{
+	"req_serial_num":"20220209fc6d4088ad27fa353d556896",
+	"result_code":"1",
+	"result_data":{
+		"echartunit":"kWh",
+		"endTime":"202202090930",
+		"energyMap":{
+			"valStr":""
+		},
+		"energyunit":"kW",
+		"powerMap":{
+			"dates":[],
+			"units":"kWh",
+			"valStr":""
+		}
+	},
+	"result_msg":"success"
+}

@@ -1,0 +1,67 @@
+{
+	"req_serial_num":"20220209b94d46c1808bfa7cacfef659",
+	"result_code":"1",
+	"result_data":[
+		{
+			"point_cal_type":1,
+			"point_id":81002,
+			"point_name":"Inverter AC Power"
+		},
+		{
+			"point_cal_type":2,
+			"point_id":81023,
+			"point_name":"Unit Daily Yield"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":81007,
+			"point_name":"Inverter Total Yield"
+		},
+		{
+			"point_cal_type":2,
+			"point_id":81012,
+			"point_name":"Daily Yield by Inverter"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":81004,
+			"point_name":"Inverter DC Power"
+		},
+		{
+			"point_cal_type":3,
+			"point_id":81022,
+			"point_name":"Unit PR"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":81001,
+			"point_name":"Inverter AC Power Normalization"
+		},
+		{
+			"point_cal_type":2,
+			"point_id":81025,
+			"point_name":"Unit Yield (Theoretical)"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":81003,
+			"point_name":"Inverter DC Power Normalization"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":81005,
+			"point_name":"Inverter Efficiency"
+		},
+		{
+			"point_cal_type":2,
+			"point_id":81011,
+			"point_name":"Inverter Equivalent Hours"
+		},
+		{
+			"point_cal_type":2,
+			"point_id":81040,
+			"point_name":"Yp-day"
+		}
+	],
+	"result_msg":"success"
+}

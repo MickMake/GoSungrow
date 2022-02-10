@@ -1,0 +1,5283 @@
+{
+	"req_serial_num":"20220209fcf34fe3be8a20144e7f86e0",
+	"result_code":"1",
+	"result_data":{
+		"currentPage":0,
+		"pageDataList":[
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":1,
+				"period":1,
+				"point_id":83022,
+				"point_name":"Daily Yield of Plant",
+				"point_name_new":"Daily Yield",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":2,
+				"period":2,
+				"point_id":83022,
+				"point_name":"Daily Yield of Plant",
+				"point_name_new":"Monthly Yield",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":3,
+				"period":3,
+				"point_id":83022,
+				"point_name":"Daily Yield of Plant",
+				"point_name_new":"Annual Yield",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":4,
+				"period":1,
+				"point_id":83018,
+				"point_name":"Daily Yield (Theoretical)",
+				"point_name_new":"Daily Yield (Theoretical)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":5,
+				"period":2,
+				"point_id":83018,
+				"point_name":"Daily Yield (Theoretical)",
+				"point_name_new":"Monthly Yield (Theoretical)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":6,
+				"period":3,
+				"point_id":83018,
+				"point_name":"Daily Yield (Theoretical)",
+				"point_name_new":"Yearly Yield (Theoretical)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":7,
+				"period":1,
+				"point_id":82016,
+				"point_name":"Daily Irradiation at Grid-connecting Point",
+				"point_name_new":"Daily Horizontal Irradiation",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":8,
+				"period":2,
+				"point_id":82016,
+				"point_name":"Daily Irradiation at Grid-connecting Point",
+				"point_name_new":"Plan Monthly Radiation",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":9,
+				"period":3,
+				"point_id":82016,
+				"point_name":"Daily Irradiation at Grid-connecting Point",
+				"point_name_new":"Plan Yearly Radiation",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":10,
+				"period":1,
+				"point_id":81012,
+				"point_name":"Daily Yield by Inverter",
+				"point_name_new":"Daily Yield (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":16,
+				"period":1,
+				"point_id":8000,
+				"point_name":"Phase A Voltage",
+				"point_name_new":"Phase A Voltage",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":17,
+				"period":2,
+				"point_id":8000,
+				"point_name":"Phase A Voltage",
+				"point_name_new":"Phase A Voltage",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":18,
+				"period":3,
+				"point_id":8000,
+				"point_name":"Phase A Voltage",
+				"point_name_new":"Phase A Voltage",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":29,
+				"period":1,
+				"point_id":83001,
+				"point_name":"Inverter AC Power Normalization",
+				"point_name_new":"AC Power Normalization (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":30,
+				"period":1,
+				"point_id":83002,
+				"point_name":"Inverter AC Power",
+				"point_name_new":"AC Power (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":31,
+				"period":1,
+				"point_id":83004,
+				"point_name":"Inverter Total Yield",
+				"point_name_new":"Total Yield (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":32,
+				"period":1,
+				"point_id":83009,
+				"point_name":"Daily Yield by Inverter",
+				"point_name_new":"Daily Yield (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":33,
+				"period":1,
+				"point_id":83008,
+				"point_name":"Daily Equivalent Hours of Inverter",
+				"point_name_new":"Daily Yield Equivalent Hour (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":34,
+				"period":1,
+				"point_id":83010,
+				"point_name":"Inverter PR",
+				"point_name_new":"PR (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":35,
+				"period":1,
+				"point_id":83032,
+				"point_name":"Meter AC Power",
+				"point_name_new":"AC Power (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":36,
+				"period":1,
+				"point_id":83020,
+				"point_name":"Meter Total Yield",
+				"point_name_new":"Total Yield (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":37,
+				"period":1,
+				"point_id":83006,
+				"point_name":"Meter Daily Yield",
+				"point_name_new":"Daily Yield (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":38,
+				"period":1,
+				"point_id":83005,
+				"point_name":"Daily Equivalent Hours of Meter",
+				"point_name_new":"Daily Yield Equivalent Hour (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":39,
+				"period":1,
+				"point_id":83007,
+				"point_name":"Meter PR",
+				"point_name_new":"PR (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":40,
+				"period":1,
+				"point_id":83021,
+				"point_name":"Accumulative Power Consumption by Meter",
+				"point_name_new":"Total Power Consumption (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":41,
+				"period":1,
+				"point_id":83011,
+				"point_name":"Meter E-daily Consumption",
+				"point_name_new":"Daily Energy Consumption (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":42,
+				"period":1,
+				"point_id":83019,
+				"point_name":"Power/Installed Power of Plant",
+				"point_name_new":"Power/Load",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":43,
+				"period":1,
+				"point_id":83012,
+				"point_name":"P-radiation-H",
+				"point_name_new":"Transient Horizontal Irradiation",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":44,
+				"period":1,
+				"point_id":83013,
+				"point_name":"Daily Irradiation",
+				"point_name_new":"Daily Irradiation",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":45,
+				"period":1,
+				"point_id":83016,
+				"point_name":"Plant Ambient Temperature",
+				"point_name_new":"Ambient Temperature",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":46,
+				"period":1,
+				"point_id":83017,
+				"point_name":"Plant Module Temperature",
+				"point_name_new":"Temp. (PV module)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":47,
+				"period":1,
+				"point_id":83023,
+				"point_name":"Plant PR",
+				"point_name_new":"PR",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":48,
+				"period":1,
+				"point_id":83024,
+				"point_name":"Plant Total Yield",
+				"point_name_new":"Total Yield",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":49,
+				"period":1,
+				"point_id":83025,
+				"point_name":"Plant Equivalent Hours",
+				"point_name_new":"Daily Equivalent Hours",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":54,
+				"period":2,
+				"point_id":83009,
+				"point_name":"Daily Yield by Inverter",
+				"point_name_new":"Monthly Yield (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":55,
+				"period":2,
+				"point_id":83008,
+				"point_name":"Daily Equivalent Hours of Inverter",
+				"point_name_new":"Monthly Equivalent Hours (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":56,
+				"period":2,
+				"point_id":83010,
+				"point_name":"Inverter PR",
+				"point_name_new":"PR (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":59,
+				"period":2,
+				"point_id":83006,
+				"point_name":"Meter Daily Yield",
+				"point_name_new":"Monthly Yield (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":60,
+				"period":2,
+				"point_id":83005,
+				"point_name":"Daily Equivalent Hours of Meter",
+				"point_name_new":"Monthly Equivalent Hours (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":61,
+				"period":2,
+				"point_id":83007,
+				"point_name":"Meter PR",
+				"point_name_new":"PR (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":63,
+				"period":2,
+				"point_id":83011,
+				"point_name":"Meter E-daily Consumption",
+				"point_name_new":"Monthly Energy Consumption (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":66,
+				"period":2,
+				"point_id":83013,
+				"point_name":"Daily Irradiation",
+				"point_name_new":"Monthly Radiation Of PS",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":69,
+				"period":2,
+				"point_id":83023,
+				"point_name":"Plant PR",
+				"point_name_new":"PR",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":71,
+				"period":2,
+				"point_id":83025,
+				"point_name":"Plant Equivalent Hours",
+				"point_name_new":"Monthly Equivalent Hours",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":76,
+				"period":3,
+				"point_id":83009,
+				"point_name":"Daily Yield by Inverter",
+				"point_name_new":"Yearly Yield (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":77,
+				"period":3,
+				"point_id":83008,
+				"point_name":"Daily Equivalent Hours of Inverter",
+				"point_name_new":"Yearly Equivalent Hours (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":78,
+				"period":3,
+				"point_id":83010,
+				"point_name":"Inverter PR",
+				"point_name_new":"PR (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":81,
+				"period":3,
+				"point_id":83006,
+				"point_name":"Meter Daily Yield",
+				"point_name_new":"Yearly Yield (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":82,
+				"period":3,
+				"point_id":83005,
+				"point_name":"Daily Equivalent Hours of Meter",
+				"point_name_new":"Yearly Equivalent Hours (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":83,
+				"period":3,
+				"point_id":83007,
+				"point_name":"Meter PR",
+				"point_name_new":"PR (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":85,
+				"period":3,
+				"point_id":83011,
+				"point_name":"Meter E-daily Consumption",
+				"point_name_new":"Yearly Energy Consumption (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":88,
+				"period":3,
+				"point_id":83013,
+				"point_name":"Daily Irradiation",
+				"point_name_new":"Yearly Radiation Of PS",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":91,
+				"period":3,
+				"point_id":83023,
+				"point_name":"Plant PR",
+				"point_name_new":"PR",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":93,
+				"period":3,
+				"point_id":83025,
+				"point_name":"Plant Equivalent Hours",
+				"point_name_new":"Yearly Equivalent Hours",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":95,
+				"period":1,
+				"point_id":82001,
+				"point_name":"Inverter AC Power Normalization",
+				"point_name_new":"AC Power Normalization (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":96,
+				"period":1,
+				"point_id":82002,
+				"point_name":"Inverter AC Power",
+				"point_name_new":"AC Power (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":97,
+				"period":1,
+				"point_id":82003,
+				"point_name":"Inverter DC Power Normalization",
+				"point_name_new":"DC Power Normalization (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":98,
+				"period":1,
+				"point_id":82004,
+				"point_name":"Inverter DC Power",
+				"point_name_new":"DC Power (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":100,
+				"period":1,
+				"point_id":82007,
+				"point_name":"Inverter Total Yield",
+				"point_name_new":"Total Yield (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":101,
+				"period":1,
+				"point_id":82012,
+				"point_name":"Daily Yield by Inverter",
+				"point_name_new":"Daily Yield (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":102,
+				"period":1,
+				"point_id":82011,
+				"point_name":"Daily Equivalent Hours of Inverter",
+				"point_name_new":"Daily Yield Equivalent Hour (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":103,
+				"period":1,
+				"point_id":82013,
+				"point_name":"Inverter PR",
+				"point_name_new":"PR (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":104,
+				"period":1,
+				"point_id":82021,
+				"point_name":"Total Yield of Meter",
+				"point_name_new":"Total Yield (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":106,
+				"period":1,
+				"point_id":82008,
+				"point_name":"Daily Equivalent Hours of Meter",
+				"point_name_new":"Daily Yield Equivalent Hour (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":107,
+				"period":1,
+				"point_id":82010,
+				"point_name":"Meter PR",
+				"point_name_new":"PR (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":108,
+				"period":1,
+				"point_id":82022,
+				"point_name":"Total Energy Consumption by Meter",
+				"point_name_new":"Total Energy Consumption (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":109,
+				"period":1,
+				"point_id":82014,
+				"point_name":"Meter E-daily Consumption",
+				"point_name_new":"Daily Energy Consumption (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":110,
+				"period":1,
+				"point_id":82015,
+				"point_name":"Transient Irradiation at Grid-connecting Point",
+				"point_name_new":"Transient Horizontal Irradiation",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":111,
+				"period":1,
+				"point_id":82019,
+				"point_name":"Ambient Temperature",
+				"point_name_new":"Ambient Temperature",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":112,
+				"period":1,
+				"point_id":82020,
+				"point_name":"PV Module Temperature",
+				"point_name_new":"Temp. (PV module)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":113,
+				"period":1,
+				"point_id":82023,
+				"point_name":"Meter Active Power",
+				"point_name_new":"Active Power (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":114,
+				"period":1,
+				"point_id":82034,
+				"point_name":"Daily Yield (Theoretical)",
+				"point_name_new":"Daily Yield (Theoretical)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":115,
+				"period":1,
+				"point_id":82035,
+				"point_name":"Grid-connecting Point PR",
+				"point_name_new":"PR",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":116,
+				"period":1,
+				"point_id":82038,
+				"point_name":"Equivalent Hours of Grid-connecting Point",
+				"point_name_new":"Daily Equivalent Hours",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":117,
+				"period":1,
+				"point_id":82033,
+				"point_name":"Grid-connection Point Daily Yield",
+				"point_name_new":"Grid-connection Point Daily Yield",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":118,
+				"period":1,
+				"point_id":82039,
+				"point_name":"Grid-connection Point Total Yield",
+				"point_name_new":"Grid-connection Point Total Yield",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":125,
+				"period":2,
+				"point_id":82012,
+				"point_name":"Daily Yield by Inverter",
+				"point_name_new":"Monthly Yield (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":126,
+				"period":2,
+				"point_id":82011,
+				"point_name":"Daily Equivalent Hours of Inverter",
+				"point_name_new":"Monthly Equivalent Hours (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":127,
+				"period":2,
+				"point_id":82013,
+				"point_name":"Inverter PR",
+				"point_name_new":"PR (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":129,
+				"period":2,
+				"point_id":82009,
+				"point_name":"Meter Daily Yield",
+				"point_name_new":"Monthly Yield (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":130,
+				"period":2,
+				"point_id":82008,
+				"point_name":"Daily Equivalent Hours of Meter",
+				"point_name_new":"Monthly Equivalent Hours (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":131,
+				"period":2,
+				"point_id":82010,
+				"point_name":"Meter PR",
+				"point_name_new":"PR (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":133,
+				"period":2,
+				"point_id":82014,
+				"point_name":"Meter E-daily Consumption",
+				"point_name_new":"Monthly Energy Consumption (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":138,
+				"period":2,
+				"point_id":82034,
+				"point_name":"Daily Yield (Theoretical)",
+				"point_name_new":"Monthly Yield (Theoretical)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":139,
+				"period":2,
+				"point_id":82035,
+				"point_name":"Grid-connecting Point PR",
+				"point_name_new":"PR",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":140,
+				"period":2,
+				"point_id":82038,
+				"point_name":"Equivalent Hours of Grid-connecting Point",
+				"point_name_new":"Monthly Equivalent Hours",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":141,
+				"period":2,
+				"point_id":82033,
+				"point_name":"Grid-connection Point Daily Yield",
+				"point_name_new":"Grid-connection Point Monthly Yield",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":149,
+				"period":3,
+				"point_id":82012,
+				"point_name":"Daily Yield by Inverter",
+				"point_name_new":"Yearly Yield (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":150,
+				"period":3,
+				"point_id":82011,
+				"point_name":"Daily Equivalent Hours of Inverter",
+				"point_name_new":"Yearly Equivalent Hours (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":151,
+				"period":3,
+				"point_id":82013,
+				"point_name":"Inverter PR",
+				"point_name_new":"PR (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":153,
+				"period":3,
+				"point_id":82009,
+				"point_name":"Meter Daily Yield",
+				"point_name_new":"Yearly Yield (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":154,
+				"period":3,
+				"point_id":82008,
+				"point_name":"Daily Equivalent Hours of Meter",
+				"point_name_new":"Yearly Equivalent Hours (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":155,
+				"period":3,
+				"point_id":82010,
+				"point_name":"Meter PR",
+				"point_name_new":"PR (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":157,
+				"period":3,
+				"point_id":82014,
+				"point_name":"Meter E-daily Consumption",
+				"point_name_new":"Yearly Energy Consumption (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":162,
+				"period":3,
+				"point_id":82034,
+				"point_name":"Daily Yield (Theoretical)",
+				"point_name_new":"Yearly Yield (Theoretical)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":163,
+				"period":3,
+				"point_id":82035,
+				"point_name":"Grid-connecting Point PR",
+				"point_name_new":"PR",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":164,
+				"period":3,
+				"point_id":82038,
+				"point_name":"Equivalent Hours of Grid-connecting Point",
+				"point_name_new":"Yearly Equivalent Hours",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":165,
+				"period":3,
+				"point_id":82033,
+				"point_name":"Grid-connection Point Daily Yield",
+				"point_name_new":"Grid-connection Point Yearly Yield",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":167,
+				"period":1,
+				"point_id":81001,
+				"point_name":"Inverter AC Power Normalization",
+				"point_name_new":"AC Power Normalization (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":168,
+				"period":1,
+				"point_id":81002,
+				"point_name":"Inverter AC Power",
+				"point_name_new":"AC Power (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":169,
+				"period":1,
+				"point_id":81003,
+				"point_name":"Inverter DC Power Normalization",
+				"point_name_new":"DC Power Normalization (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":170,
+				"period":1,
+				"point_id":81004,
+				"point_name":"Inverter DC Power",
+				"point_name_new":"DC Power (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":172,
+				"period":1,
+				"point_id":81007,
+				"point_name":"Inverter Total Yield",
+				"point_name_new":"Total Yield (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":174,
+				"period":1,
+				"point_id":81011,
+				"point_name":"Inverter Equivalent Hours",
+				"point_name_new":"Daily Yield Equivalent Hour (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":175,
+				"period":1,
+				"point_id":81022,
+				"point_name":"Unit PR",
+				"point_name_new":"PR",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":176,
+				"period":1,
+				"point_id":81023,
+				"point_name":"Unit Daily Yield",
+				"point_name_new":"Daily Yield",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":177,
+				"period":1,
+				"point_id":81025,
+				"point_name":"Unit Yield (Theoretical)",
+				"point_name_new":"Daily Yield (Theoretical)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":184,
+				"period":2,
+				"point_id":81012,
+				"point_name":"Daily Yield by Inverter",
+				"point_name_new":"Monthly Yield (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":185,
+				"period":2,
+				"point_id":81011,
+				"point_name":"Inverter Equivalent Hours",
+				"point_name_new":"Monthly Equivalent Hours (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":186,
+				"period":2,
+				"point_id":81022,
+				"point_name":"Unit PR",
+				"point_name_new":"PR",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":187,
+				"period":2,
+				"point_id":81023,
+				"point_name":"Unit Daily Yield",
+				"point_name_new":"Monthly Yield",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":188,
+				"period":2,
+				"point_id":81025,
+				"point_name":"Unit Yield (Theoretical)",
+				"point_name_new":"Monthly Yield (Theoretical)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":195,
+				"period":3,
+				"point_id":81012,
+				"point_name":"Daily Yield by Inverter",
+				"point_name_new":"Yearly Yield (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":196,
+				"period":3,
+				"point_id":81011,
+				"point_name":"Inverter Equivalent Hours",
+				"point_name_new":"Yearly Equivalent Hours (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":197,
+				"period":3,
+				"point_id":81022,
+				"point_name":"Unit PR",
+				"point_name_new":"PR",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":198,
+				"period":3,
+				"point_id":81023,
+				"point_name":"Unit Daily Yield",
+				"point_name_new":"Annual Yield",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":199,
+				"period":3,
+				"point_id":81025,
+				"point_name":"Unit Yield (Theoretical)",
+				"point_name_new":"Yearly Yield (Theoretical)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":200,
+				"period":1,
+				"point_id":1,
+				"point_name":"Daily Yield",
+				"point_name_new":"Daily Yield",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":201,
+				"period":1,
+				"point_id":2,
+				"point_name":"Total Yield",
+				"point_name_new":"Total Yield",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":240,
+				"period":1,
+				"point_id":805,
+				"point_name":"Equivalent Power Generating Hours",
+				"point_name_new":"Daily Equivalent Hours",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":242,
+				"period":1,
+				"point_id":67,
+				"point_name":"Daily Yield (Theoretical)",
+				"point_name_new":"Daily Yield (Theoretical)",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":243,
+				"period":1,
+				"point_id":68,
+				"point_name":"Power Generation Hours (Theoretical)",
+				"point_name_new":"Power Generation Hours (Theoretical)",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":263,
+				"period":2,
+				"point_id":1,
+				"point_name":"Daily Yield",
+				"point_name_new":"Monthly Yield",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":303,
+				"period":2,
+				"point_id":805,
+				"point_name":"Equivalent Power Generating Hours",
+				"point_name_new":"Monthly Equivalent Hours",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":305,
+				"period":2,
+				"point_id":67,
+				"point_name":"Daily Yield (Theoretical)",
+				"point_name_new":"Monthly Yield (Theoretical)",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":306,
+				"period":2,
+				"point_id":68,
+				"point_name":"Power Generation Hours (Theoretical)",
+				"point_name_new":"Power Generation Hours (Theoretical)",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":326,
+				"period":3,
+				"point_id":1,
+				"point_name":"Daily Yield",
+				"point_name_new":"Annual Yield",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":366,
+				"period":3,
+				"point_id":805,
+				"point_name":"Equivalent Power Generating Hours",
+				"point_name_new":"Yearly Equivalent Hours",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":368,
+				"period":3,
+				"point_id":67,
+				"point_name":"Daily Yield (Theoretical)",
+				"point_name_new":"Yearly Yield (Theoretical)",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":369,
+				"period":3,
+				"point_id":68,
+				"point_name":"Power Generation Hours (Theoretical)",
+				"point_name_new":"Power Generation Hours (Theoretical)",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":447,
+				"period":1,
+				"point_id":8001,
+				"point_name":"Phase B Voltage",
+				"point_name_new":"Phase B Voltage",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":448,
+				"period":1,
+				"point_id":8002,
+				"point_name":"Phase C Voltage",
+				"point_name_new":"Phase C Voltage",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":449,
+				"period":1,
+				"point_id":8006,
+				"point_name":"Phase A Current",
+				"point_name_new":"Phase A Current",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":450,
+				"period":1,
+				"point_id":8007,
+				"point_name":"Phase B Current",
+				"point_name_new":"Phase B Current",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":451,
+				"period":1,
+				"point_id":8008,
+				"point_name":"Phase C Current",
+				"point_name_new":"Phase C Current",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":452,
+				"period":1,
+				"point_id":8014,
+				"point_name":"PF",
+				"point_name_new":"Power Factor PF",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":453,
+				"period":1,
+				"point_id":8018,
+				"point_name":"Meter Active Power",
+				"point_name_new":"Active Power",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":454,
+				"period":1,
+				"point_id":8022,
+				"point_name":"Reactive Power",
+				"point_name_new":"Reactive Power Qsum",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":455,
+				"period":1,
+				"point_id":8026,
+				"point_name":"Apparent Power",
+				"point_name_new":"Apparent Power Ssum",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":456,
+				"period":1,
+				"point_id":8030,
+				"point_name":"Forward Active Energy",
+				"point_name_new":"Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":457,
+				"period":1,
+				"point_id":8031,
+				"point_name":"Reverse Active Energy",
+				"point_name_new":"Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":458,
+				"period":1,
+				"point_id":8032,
+				"point_name":"Forward Reactive Energy",
+				"point_name_new":"Forward Reactive Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":459,
+				"period":1,
+				"point_id":8033,
+				"point_name":"Reverse Reactive Energy",
+				"point_name_new":"Reverse Reactive Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":460,
+				"period":1,
+				"point_id":8034,
+				"point_name":"Peak Forward Active Energy",
+				"point_name_new":"Peak Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":461,
+				"period":1,
+				"point_id":8035,
+				"point_name":"Peak Reverse Active Energy",
+				"point_name_new":"Peak Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":462,
+				"period":1,
+				"point_id":8038,
+				"point_name":"Valley Forward Active Energy",
+				"point_name_new":"Valley Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":463,
+				"period":1,
+				"point_id":8039,
+				"point_name":"Valley Reverse Active Energy",
+				"point_name_new":"Valley Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":464,
+				"period":1,
+				"point_id":8042,
+				"point_name":"Flat Forward Active Energy",
+				"point_name_new":"Flat Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":465,
+				"period":1,
+				"point_id":8043,
+				"point_name":"Flat Reverse Active Energy",
+				"point_name_new":"Flat Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":466,
+				"period":1,
+				"point_id":8062,
+				"point_name":"Daily Forward Active Energy",
+				"point_name_new":"Daily Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":467,
+				"period":1,
+				"point_id":8063,
+				"point_name":"Daily Reverse Active Energy",
+				"point_name_new":"Daily Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":468,
+				"period":1,
+				"point_id":8064,
+				"point_name":"Frequency",
+				"point_name_new":"Frequency",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":469,
+				"period":1,
+				"point_id":8072,
+				"point_name":"Daily Peak Forward Active Energy",
+				"point_name_new":"Daily Peak Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":470,
+				"period":1,
+				"point_id":8065,
+				"point_name":"Daily Peak Reverse Active Energy",
+				"point_name_new":"Daily Peak Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":471,
+				"period":1,
+				"point_id":8066,
+				"point_name":"Daily Valley Forward Active Energy",
+				"point_name_new":"Daily Valley Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":472,
+				"period":1,
+				"point_id":8067,
+				"point_name":"Daily Valley Reverse Active Energy",
+				"point_name_new":"Daily Valley Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":473,
+				"period":1,
+				"point_id":8068,
+				"point_name":"Daily Flat Forward Active Energy",
+				"point_name_new":"Daily Flat Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":474,
+				"period":1,
+				"point_id":8069,
+				"point_name":"Daily Flat Reverse Active Energy",
+				"point_name_new":"Daily Flat Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":475,
+				"period":1,
+				"point_id":8070,
+				"point_name":"Daily Tip Forward Active Energy",
+				"point_name_new":"Daily Tip Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":476,
+				"period":1,
+				"point_id":8071,
+				"point_name":"Daily Tip Reverse Active Energy",
+				"point_name_new":"Daily Tip Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":477,
+				"period":2,
+				"point_id":8001,
+				"point_name":"Phase B Voltage",
+				"point_name_new":"Phase B Voltage",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":478,
+				"period":2,
+				"point_id":8002,
+				"point_name":"Phase C Voltage",
+				"point_name_new":"Phase C Voltage",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":479,
+				"period":2,
+				"point_id":8006,
+				"point_name":"Phase A Current",
+				"point_name_new":"Phase A Current",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":480,
+				"period":2,
+				"point_id":8007,
+				"point_name":"Phase B Current",
+				"point_name_new":"Phase B Current",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":481,
+				"period":2,
+				"point_id":8008,
+				"point_name":"Phase C Current",
+				"point_name_new":"Phase C Current",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":482,
+				"period":2,
+				"point_id":8014,
+				"point_name":"PF",
+				"point_name_new":"Power Factor PF",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":483,
+				"period":2,
+				"point_id":8018,
+				"point_name":"Meter Active Power",
+				"point_name_new":"Active Power",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":484,
+				"period":2,
+				"point_id":8022,
+				"point_name":"Reactive Power",
+				"point_name_new":"Reactive Power Qsum",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":485,
+				"period":2,
+				"point_id":8026,
+				"point_name":"Apparent Power",
+				"point_name_new":"Apparent Power Ssum",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":486,
+				"period":2,
+				"point_id":8030,
+				"point_name":"Forward Active Energy",
+				"point_name_new":"Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":487,
+				"period":2,
+				"point_id":8031,
+				"point_name":"Reverse Active Energy",
+				"point_name_new":"Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":488,
+				"period":2,
+				"point_id":8032,
+				"point_name":"Forward Reactive Energy",
+				"point_name_new":"Forward Reactive Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":489,
+				"period":2,
+				"point_id":8033,
+				"point_name":"Reverse Reactive Energy",
+				"point_name_new":"Reverse Reactive Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":490,
+				"period":2,
+				"point_id":8034,
+				"point_name":"Peak Forward Active Energy",
+				"point_name_new":"Peak Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":491,
+				"period":2,
+				"point_id":8035,
+				"point_name":"Peak Reverse Active Energy",
+				"point_name_new":"Peak Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":492,
+				"period":2,
+				"point_id":8038,
+				"point_name":"Valley Forward Active Energy",
+				"point_name_new":"Valley Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":493,
+				"period":2,
+				"point_id":8039,
+				"point_name":"Valley Reverse Active Energy",
+				"point_name_new":"Valley Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":494,
+				"period":2,
+				"point_id":8042,
+				"point_name":"Flat Forward Active Energy",
+				"point_name_new":"Flat Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":495,
+				"period":2,
+				"point_id":8043,
+				"point_name":"Flat Reverse Active Energy",
+				"point_name_new":"Flat Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":496,
+				"period":2,
+				"point_id":8062,
+				"point_name":"Daily Forward Active Energy",
+				"point_name_new":"Monthly Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":497,
+				"period":2,
+				"point_id":8063,
+				"point_name":"Daily Reverse Active Energy",
+				"point_name_new":"Monthly Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":498,
+				"period":2,
+				"point_id":8064,
+				"point_name":"Frequency",
+				"point_name_new":"Frequency",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":499,
+				"period":2,
+				"point_id":8072,
+				"point_name":"Daily Peak Forward Active Energy",
+				"point_name_new":"Monthly Peak Forward Active kWh",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":500,
+				"period":2,
+				"point_id":8065,
+				"point_name":"Daily Peak Reverse Active Energy",
+				"point_name_new":"Monthly Peak Reverse Active kWh",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":501,
+				"period":2,
+				"point_id":8066,
+				"point_name":"Daily Valley Forward Active Energy",
+				"point_name_new":"Monthly Valley Forward Active kWh",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":502,
+				"period":2,
+				"point_id":8067,
+				"point_name":"Daily Valley Reverse Active Energy",
+				"point_name_new":"Monthly Valley Reverse Active kWh",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":503,
+				"period":2,
+				"point_id":8068,
+				"point_name":"Daily Flat Forward Active Energy",
+				"point_name_new":"Monthly Flat Forward Active kWh",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":504,
+				"period":2,
+				"point_id":8069,
+				"point_name":"Daily Flat Reverse Active Energy",
+				"point_name_new":"Monthly Flat Reverse Active kWh",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":505,
+				"period":2,
+				"point_id":8070,
+				"point_name":"Daily Tip Forward Active Energy",
+				"point_name_new":"Monthly Tip Forward Active kWh",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":506,
+				"period":2,
+				"point_id":8071,
+				"point_name":"Daily Tip Reverse Active Energy",
+				"point_name_new":"Monthly Tip Reverse Active kWh",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":507,
+				"period":3,
+				"point_id":8001,
+				"point_name":"Phase B Voltage",
+				"point_name_new":"Phase B Voltage",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":508,
+				"period":3,
+				"point_id":8002,
+				"point_name":"Phase C Voltage",
+				"point_name_new":"Phase C Voltage",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":509,
+				"period":3,
+				"point_id":8006,
+				"point_name":"Phase A Current",
+				"point_name_new":"Phase A Current",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":510,
+				"period":3,
+				"point_id":8007,
+				"point_name":"Phase B Current",
+				"point_name_new":"Phase B Current",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":511,
+				"period":3,
+				"point_id":8008,
+				"point_name":"Phase C Current",
+				"point_name_new":"Phase C Current",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":512,
+				"period":3,
+				"point_id":8014,
+				"point_name":"PF",
+				"point_name_new":"Power Factor PF",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":513,
+				"period":3,
+				"point_id":8018,
+				"point_name":"Meter Active Power",
+				"point_name_new":"Active Power",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":514,
+				"period":3,
+				"point_id":8022,
+				"point_name":"Reactive Power",
+				"point_name_new":"Reactive Power Qsum",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":515,
+				"period":3,
+				"point_id":8026,
+				"point_name":"Apparent Power",
+				"point_name_new":"Apparent Power Ssum",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":516,
+				"period":3,
+				"point_id":8030,
+				"point_name":"Forward Active Energy",
+				"point_name_new":"Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":517,
+				"period":3,
+				"point_id":8031,
+				"point_name":"Reverse Active Energy",
+				"point_name_new":"Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":518,
+				"period":3,
+				"point_id":8032,
+				"point_name":"Forward Reactive Energy",
+				"point_name_new":"Forward Reactive Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":519,
+				"period":3,
+				"point_id":8033,
+				"point_name":"Reverse Reactive Energy",
+				"point_name_new":"Reverse Reactive Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":520,
+				"period":3,
+				"point_id":8034,
+				"point_name":"Peak Forward Active Energy",
+				"point_name_new":"Peak Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":521,
+				"period":3,
+				"point_id":8035,
+				"point_name":"Peak Reverse Active Energy",
+				"point_name_new":"Peak Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":522,
+				"period":3,
+				"point_id":8038,
+				"point_name":"Valley Forward Active Energy",
+				"point_name_new":"Valley Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":523,
+				"period":3,
+				"point_id":8039,
+				"point_name":"Valley Reverse Active Energy",
+				"point_name_new":"Valley Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":524,
+				"period":3,
+				"point_id":8042,
+				"point_name":"Flat Forward Active Energy",
+				"point_name_new":"Flat Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":525,
+				"period":3,
+				"point_id":8043,
+				"point_name":"Flat Reverse Active Energy",
+				"point_name_new":"Flat Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":526,
+				"period":3,
+				"point_id":8062,
+				"point_name":"Daily Forward Active Energy",
+				"point_name_new":"Monthly Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":527,
+				"period":3,
+				"point_id":8063,
+				"point_name":"Daily Reverse Active Energy",
+				"point_name_new":"Monthly Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":528,
+				"period":3,
+				"point_id":8064,
+				"point_name":"Frequency",
+				"point_name_new":"Frequency",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":529,
+				"period":3,
+				"point_id":8072,
+				"point_name":"Daily Peak Forward Active Energy",
+				"point_name_new":"Monthly Peak Forward Active kWh",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":530,
+				"period":3,
+				"point_id":8065,
+				"point_name":"Daily Peak Reverse Active Energy",
+				"point_name_new":"Monthly Peak Reverse Active kWh",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":531,
+				"period":3,
+				"point_id":8066,
+				"point_name":"Daily Valley Forward Active Energy",
+				"point_name_new":"Monthly Valley Forward Active kWh",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":532,
+				"period":3,
+				"point_id":8067,
+				"point_name":"Daily Valley Reverse Active Energy",
+				"point_name_new":"Monthly Valley Reverse Active kWh",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":533,
+				"period":3,
+				"point_id":8068,
+				"point_name":"Daily Flat Forward Active Energy",
+				"point_name_new":"Monthly Flat Forward Active kWh",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":534,
+				"period":3,
+				"point_id":8069,
+				"point_name":"Daily Flat Reverse Active Energy",
+				"point_name_new":"Monthly Flat Reverse Active kWh",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":535,
+				"period":3,
+				"point_id":8070,
+				"point_name":"Daily Tip Forward Active Energy",
+				"point_name_new":"Monthly Tip Forward Active kWh",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":7,
+				"id":536,
+				"period":3,
+				"point_id":8071,
+				"point_name":"Daily Tip Reverse Active Energy",
+				"point_name_new":"Monthly Tip Reverse Active kWh",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":540,
+				"period":1,
+				"point_id":1001,
+				"point_name":"DC Bus Voltage",
+				"point_name_new":"DC Bus Voltage",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":541,
+				"period":1,
+				"point_id":1002,
+				"point_name":"Interior Temperature",
+				"point_name_new":"Interior Temperature",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":542,
+				"period":1,
+				"point_id":1005,
+				"point_name":"Total DC Current",
+				"point_name_new":"Total Current",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":543,
+				"period":1,
+				"point_id":1009,
+				"point_name":"Ipv-1",
+				"point_name_new":"Ipv-1",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":544,
+				"period":1,
+				"point_id":1010,
+				"point_name":"Ipv-2",
+				"point_name_new":"Ipv-2",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":545,
+				"period":1,
+				"point_id":1011,
+				"point_name":"Ipv-3",
+				"point_name_new":"Ipv-3",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":546,
+				"period":1,
+				"point_id":1012,
+				"point_name":"Ipv-4",
+				"point_name_new":"Ipv-4",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":547,
+				"period":1,
+				"point_id":1013,
+				"point_name":"Ipv-5",
+				"point_name_new":"Ipv-5",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":548,
+				"period":1,
+				"point_id":1014,
+				"point_name":"Ipv-6",
+				"point_name_new":"Ipv-6",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":549,
+				"period":1,
+				"point_id":1015,
+				"point_name":"Ipv-7",
+				"point_name_new":"Ipv-7",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":550,
+				"period":1,
+				"point_id":1016,
+				"point_name":"Ipv-8",
+				"point_name_new":"Ipv-8",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":551,
+				"period":1,
+				"point_id":1017,
+				"point_name":"Ipv-9",
+				"point_name_new":"Ipv-9",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":552,
+				"period":1,
+				"point_id":1018,
+				"point_name":"Ipv-10",
+				"point_name_new":"Ipv-10",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":553,
+				"period":1,
+				"point_id":1019,
+				"point_name":"Ipv-11",
+				"point_name_new":"Ipv-11",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":554,
+				"period":1,
+				"point_id":1020,
+				"point_name":"Ipv-12",
+				"point_name_new":"Ipv-12",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":555,
+				"period":1,
+				"point_id":1021,
+				"point_name":"Ipv-13",
+				"point_name_new":"Ipv-13",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":556,
+				"period":1,
+				"point_id":1022,
+				"point_name":"Ipv-14",
+				"point_name_new":"Ipv-14",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":557,
+				"period":1,
+				"point_id":1023,
+				"point_name":"Ipv-15",
+				"point_name_new":"Ipv-15",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":558,
+				"period":1,
+				"point_id":1024,
+				"point_name":"Ipv-16",
+				"point_name_new":"Ipv-16",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":559,
+				"period":1,
+				"point_id":1006,
+				"point_name":"Total DC Power",
+				"point_name_new":"Total Power",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":560,
+				"period":2,
+				"point_id":1001,
+				"point_name":"DC Bus Voltage",
+				"point_name_new":"DC Bus Voltage",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":561,
+				"period":2,
+				"point_id":1002,
+				"point_name":"Interior Temperature",
+				"point_name_new":"Interior Temperature",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":562,
+				"period":2,
+				"point_id":1005,
+				"point_name":"Total DC Current",
+				"point_name_new":"Total Current",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":563,
+				"period":2,
+				"point_id":1009,
+				"point_name":"Ipv-1",
+				"point_name_new":"Ipv-1",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":564,
+				"period":2,
+				"point_id":1010,
+				"point_name":"Ipv-2",
+				"point_name_new":"Ipv-2",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":565,
+				"period":2,
+				"point_id":1011,
+				"point_name":"Ipv-3",
+				"point_name_new":"Ipv-3",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":566,
+				"period":2,
+				"point_id":1012,
+				"point_name":"Ipv-4",
+				"point_name_new":"Ipv-4",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":567,
+				"period":2,
+				"point_id":1013,
+				"point_name":"Ipv-5",
+				"point_name_new":"Ipv-5",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":568,
+				"period":2,
+				"point_id":1014,
+				"point_name":"Ipv-6",
+				"point_name_new":"Ipv-6",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":569,
+				"period":2,
+				"point_id":1015,
+				"point_name":"Ipv-7",
+				"point_name_new":"Ipv-7",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":570,
+				"period":2,
+				"point_id":1016,
+				"point_name":"Ipv-8",
+				"point_name_new":"Ipv-8",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":571,
+				"period":2,
+				"point_id":1017,
+				"point_name":"Ipv-9",
+				"point_name_new":"Ipv-9",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":572,
+				"period":2,
+				"point_id":1018,
+				"point_name":"Ipv-10",
+				"point_name_new":"Ipv-10",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":573,
+				"period":2,
+				"point_id":1019,
+				"point_name":"Ipv-11",
+				"point_name_new":"Ipv-11",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":574,
+				"period":2,
+				"point_id":1020,
+				"point_name":"Ipv-12",
+				"point_name_new":"Ipv-12",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":575,
+				"period":2,
+				"point_id":1021,
+				"point_name":"Ipv-13",
+				"point_name_new":"Ipv-13",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":576,
+				"period":2,
+				"point_id":1022,
+				"point_name":"Ipv-14",
+				"point_name_new":"Ipv-14",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":577,
+				"period":2,
+				"point_id":1023,
+				"point_name":"Ipv-15",
+				"point_name_new":"Ipv-15",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":578,
+				"period":2,
+				"point_id":1024,
+				"point_name":"Ipv-16",
+				"point_name_new":"Ipv-16",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":579,
+				"period":2,
+				"point_id":1006,
+				"point_name":"Total DC Power",
+				"point_name_new":"Total Power",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":580,
+				"period":3,
+				"point_id":1001,
+				"point_name":"DC Bus Voltage",
+				"point_name_new":"DC Bus Voltage",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":581,
+				"period":3,
+				"point_id":1002,
+				"point_name":"Interior Temperature",
+				"point_name_new":"Interior Temperature",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":582,
+				"period":3,
+				"point_id":1005,
+				"point_name":"Total DC Current",
+				"point_name_new":"Total Current",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":583,
+				"period":3,
+				"point_id":1009,
+				"point_name":"Ipv-1",
+				"point_name_new":"Ipv-1",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":584,
+				"period":3,
+				"point_id":1010,
+				"point_name":"Ipv-2",
+				"point_name_new":"Ipv-2",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":585,
+				"period":3,
+				"point_id":1011,
+				"point_name":"Ipv-3",
+				"point_name_new":"Ipv-3",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":586,
+				"period":3,
+				"point_id":1012,
+				"point_name":"Ipv-4",
+				"point_name_new":"Ipv-4",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":587,
+				"period":3,
+				"point_id":1013,
+				"point_name":"Ipv-5",
+				"point_name_new":"Ipv-5",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":588,
+				"period":3,
+				"point_id":1014,
+				"point_name":"Ipv-6",
+				"point_name_new":"Ipv-6",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":589,
+				"period":3,
+				"point_id":1015,
+				"point_name":"Ipv-7",
+				"point_name_new":"Ipv-7",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":590,
+				"period":3,
+				"point_id":1016,
+				"point_name":"Ipv-8",
+				"point_name_new":"Ipv-8",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":591,
+				"period":3,
+				"point_id":1017,
+				"point_name":"Ipv-9",
+				"point_name_new":"Ipv-9",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":592,
+				"period":3,
+				"point_id":1018,
+				"point_name":"Ipv-10",
+				"point_name_new":"Ipv-10",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":593,
+				"period":3,
+				"point_id":1019,
+				"point_name":"Ipv-11",
+				"point_name_new":"Ipv-11",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":594,
+				"period":3,
+				"point_id":1020,
+				"point_name":"Ipv-12",
+				"point_name_new":"Ipv-12",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":595,
+				"period":3,
+				"point_id":1021,
+				"point_name":"Ipv-13",
+				"point_name_new":"Ipv-13",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":596,
+				"period":3,
+				"point_id":1022,
+				"point_name":"Ipv-14",
+				"point_name_new":"Ipv-14",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":597,
+				"period":3,
+				"point_id":1023,
+				"point_name":"Ipv-15",
+				"point_name_new":"Ipv-15",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":598,
+				"period":3,
+				"point_id":1024,
+				"point_name":"Ipv-16",
+				"point_name_new":"Ipv-16",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":null,
+				"device_type":4,
+				"id":599,
+				"period":3,
+				"point_id":1006,
+				"point_name":"Total DC Power",
+				"point_name_new":"Total Power",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":"2018-01-20 10:37:23",
+				"device_type":5,
+				"id":600,
+				"period":2,
+				"point_id":2001,
+				"point_name":"Daily Horizontal Irradiation",
+				"point_name_new":"Daily Horizontal Irradiation",
+				"type_name":"Meteo Station"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":601,
+				"period":1,
+				"point_id":83033,
+				"point_name":"Plant Power",
+				"point_name_new":"Power",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2019-04-26 19:13:07",
+				"device_type":14,
+				"id":603,
+				"period":1,
+				"point_id":13112,
+				"point_name":"Daily PV Yield",
+				"point_name_new":"Daily PV Yield",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-26 19:28:39",
+				"device_type":7,
+				"id":604,
+				"period":0,
+				"point_id":8018,
+				"point_name":"Meter Active Power",
+				"point_name_new":"Active Power",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":"2019-04-26 19:44:05",
+				"device_type":1,
+				"id":607,
+				"period":2,
+				"point_id":2,
+				"point_name":"Total Yield",
+				"point_name_new":"Total Yield",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-26 19:44:56",
+				"device_type":1,
+				"id":608,
+				"period":3,
+				"point_id":2,
+				"point_name":"Total Yield",
+				"point_name_new":"Total Yield",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-26 19:45:45",
+				"device_type":11,
+				"id":609,
+				"period":2,
+				"point_id":83004,
+				"point_name":"Inverter Total Yield",
+				"point_name_new":"Total Yield (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2019-04-26 19:49:36",
+				"device_type":11,
+				"id":610,
+				"period":2,
+				"point_id":83020,
+				"point_name":"Meter Total Yield",
+				"point_name_new":"Total Power Consumption (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2019-04-26 19:50:03",
+				"device_type":11,
+				"id":611,
+				"period":2,
+				"point_id":83021,
+				"point_name":"Accumulative Power Consumption by Meter",
+				"point_name_new":"Total Power Consumption (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2019-04-26 19:50:26",
+				"device_type":11,
+				"id":612,
+				"period":2,
+				"point_id":83024,
+				"point_name":"Plant Total Yield",
+				"point_name_new":"Total Yield",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2019-04-26 19:50:47",
+				"device_type":11,
+				"id":613,
+				"period":3,
+				"point_id":83004,
+				"point_name":"Inverter Total Yield",
+				"point_name_new":"Total Yield (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2019-04-26 19:51:28",
+				"device_type":11,
+				"id":614,
+				"period":3,
+				"point_id":83020,
+				"point_name":"Meter Total Yield",
+				"point_name_new":"Total Yield (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2019-04-26 19:51:52",
+				"device_type":11,
+				"id":615,
+				"period":3,
+				"point_id":83021,
+				"point_name":"Accumulative Power Consumption by Meter",
+				"point_name_new":"Total Power Consumption (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2019-04-26 19:52:08",
+				"device_type":11,
+				"id":616,
+				"period":3,
+				"point_id":83024,
+				"point_name":"Plant Total Yield",
+				"point_name_new":"Total Yield",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2019-04-27 14:35:49",
+				"device_type":14,
+				"id":617,
+				"period":1,
+				"point_id":13134,
+				"point_name":"Total PV Yield",
+				"point_name_new":"Total PV Yield",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-27 14:36:13",
+				"device_type":14,
+				"id":618,
+				"period":1,
+				"point_id":13147,
+				"point_name":"Daily Purchased Energy",
+				"point_name_new":"Daily Purchased Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-27 14:37:13",
+				"device_type":14,
+				"id":619,
+				"period":1,
+				"point_id":13148,
+				"point_name":"Total Purchased Energy",
+				"point_name_new":"Total Purchased Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-27 14:37:32",
+				"device_type":14,
+				"id":620,
+				"period":1,
+				"point_id":13122,
+				"point_name":"Daily Feed-in Energy",
+				"point_name_new":"Daily Feed-in Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-27 14:37:44",
+				"device_type":14,
+				"id":621,
+				"period":1,
+				"point_id":13125,
+				"point_name":"Total Feed-in Energy",
+				"point_name_new":"Total Feed-in Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-27 14:38:36",
+				"device_type":14,
+				"id":622,
+				"period":1,
+				"point_id":13116,
+				"point_name":"Daily Load Energy Consumption from PV",
+				"point_name_new":"Daily Load Energy Consumption from PV",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-27 14:38:51",
+				"device_type":14,
+				"id":623,
+				"period":1,
+				"point_id":13137,
+				"point_name":"Total Load Energy Consumption from PV",
+				"point_name_new":"Total Load Energy Consumption from PV",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-27 14:39:13",
+				"device_type":14,
+				"id":624,
+				"period":1,
+				"point_id":13028,
+				"point_name":"Daily Battery Charging Energy",
+				"point_name_new":"Daily Battery Charging Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-27 14:39:35",
+				"device_type":14,
+				"id":625,
+				"period":1,
+				"point_id":13029,
+				"point_name":"Daily Battery Discharging Energy",
+				"point_name_new":"Daily Battery Discharging Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-27 14:58:55",
+				"device_type":14,
+				"id":626,
+				"period":1,
+				"point_id":13034,
+				"point_name":"Total Battery Charging Energy",
+				"point_name_new":"Total Battery Charging Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-27 14:59:10",
+				"device_type":14,
+				"id":627,
+				"period":1,
+				"point_id":13035,
+				"point_name":"Total Battery Discharging Energy",
+				"point_name_new":"Total Battery Discharging Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-27 15:01:17",
+				"device_type":14,
+				"id":628,
+				"period":2,
+				"point_id":13134,
+				"point_name":"Total PV Yield",
+				"point_name_new":"Total PV Yield",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-27 15:07:18",
+				"device_type":14,
+				"id":629,
+				"period":2,
+				"point_id":13034,
+				"point_name":"Total Battery Charging Energy",
+				"point_name_new":"Total Battery Charging Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-27 15:07:38",
+				"device_type":14,
+				"id":630,
+				"period":2,
+				"point_id":13035,
+				"point_name":"Total Battery Discharging Energy",
+				"point_name_new":"Total Battery Discharging Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-27 15:08:05",
+				"device_type":14,
+				"id":631,
+				"period":2,
+				"point_id":13125,
+				"point_name":"Total Feed-in Energy",
+				"point_name_new":"Total Feed-in Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-27 15:08:33",
+				"device_type":14,
+				"id":632,
+				"period":3,
+				"point_id":13134,
+				"point_name":"Total PV Yield",
+				"point_name_new":"Total PV Yield",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-27 15:08:52",
+				"device_type":14,
+				"id":633,
+				"period":3,
+				"point_id":13034,
+				"point_name":"Total Battery Charging Energy",
+				"point_name_new":"Total Battery Charging Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-27 15:09:13",
+				"device_type":14,
+				"id":634,
+				"period":3,
+				"point_id":13035,
+				"point_name":"Total Battery Discharging Energy",
+				"point_name_new":"Total Battery Discharging Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-27 15:09:29",
+				"device_type":14,
+				"id":635,
+				"period":3,
+				"point_id":13125,
+				"point_name":"Total Feed-in Energy",
+				"point_name_new":"Total Feed-in Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":636,
+				"period":0,
+				"point_id":1,
+				"point_name":"Daily Yield",
+				"point_name_new":"Daily Yield",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":637,
+				"period":0,
+				"point_id":24,
+				"point_name":"Total Active Power",
+				"point_name_new":"Total Active Power",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":638,
+				"period":0,
+				"point_id":25,
+				"point_name":"Total Reactive Power",
+				"point_name_new":"Reactive Power",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":639,
+				"period":0,
+				"point_id":805,
+				"point_name":"Equivalent Power Generating Hours",
+				"point_name_new":"Daily Equivalent Hours",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":640,
+				"period":0,
+				"point_id":67,
+				"point_name":"Daily Yield (Theoretical)",
+				"point_name_new":"Daily Yield (Theoretical)",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":641,
+				"period":0,
+				"point_id":68,
+				"point_name":"Power Generation Hours (Theoretical)",
+				"point_name_new":"Power Generation Hours (Theoretical)",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":642,
+				"period":4,
+				"point_id":1,
+				"point_name":"Daily Yield",
+				"point_name_new":"Daily Yield",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":643,
+				"period":4,
+				"point_id":2,
+				"point_name":"Total Yield",
+				"point_name_new":"Total Yield",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":644,
+				"period":4,
+				"point_id":805,
+				"point_name":"Equivalent Power Generating Hours",
+				"point_name_new":"Daily Equivalent Hours",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":645,
+				"period":4,
+				"point_id":67,
+				"point_name":"Daily Yield (Theoretical)",
+				"point_name_new":"Daily Yield (Theoretical)",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":1,
+				"id":646,
+				"period":4,
+				"point_id":68,
+				"point_name":"Power Generation Hours (Theoretical)",
+				"point_name_new":"Power Generation Hours (Theoretical)",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":647,
+				"period":0,
+				"point_id":83022,
+				"point_name":"Daily Yield of Plant",
+				"point_name_new":"Daily Yield",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":648,
+				"period":0,
+				"point_id":83018,
+				"point_name":"Daily Yield (Theoretical)",
+				"point_name_new":"Daily Yield (Theoretical)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":649,
+				"period":0,
+				"point_id":83001,
+				"point_name":"Inverter AC Power Normalization",
+				"point_name_new":"AC Power Normalization (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":650,
+				"period":0,
+				"point_id":83002,
+				"point_name":"Inverter AC Power",
+				"point_name_new":"AC Power (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":651,
+				"period":0,
+				"point_id":83004,
+				"point_name":"Inverter Total Yield",
+				"point_name_new":"Total Yield (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":652,
+				"period":0,
+				"point_id":83009,
+				"point_name":"Daily Yield by Inverter",
+				"point_name_new":"Daily Yield (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":653,
+				"period":0,
+				"point_id":83008,
+				"point_name":"Daily Equivalent Hours of Inverter",
+				"point_name_new":"Daily Yield Equivalent Hour (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":654,
+				"period":0,
+				"point_id":83010,
+				"point_name":"Inverter PR",
+				"point_name_new":"PR (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":655,
+				"period":0,
+				"point_id":83032,
+				"point_name":"Meter AC Power",
+				"point_name_new":"AC Power (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":656,
+				"period":0,
+				"point_id":83020,
+				"point_name":"Meter Total Yield",
+				"point_name_new":"Total Yield (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":657,
+				"period":0,
+				"point_id":83006,
+				"point_name":"Meter Daily Yield",
+				"point_name_new":"Daily Yield (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":658,
+				"period":0,
+				"point_id":83005,
+				"point_name":"Daily Equivalent Hours of Meter",
+				"point_name_new":"Daily Yield Equivalent Hour (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":659,
+				"period":0,
+				"point_id":83007,
+				"point_name":"Meter PR",
+				"point_name_new":"PR (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":660,
+				"period":0,
+				"point_id":83021,
+				"point_name":"Accumulative Power Consumption by Meter",
+				"point_name_new":"Total Power Consumption (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":661,
+				"period":0,
+				"point_id":83011,
+				"point_name":"Meter E-daily Consumption",
+				"point_name_new":"Daily Energy Consumption (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":662,
+				"period":0,
+				"point_id":83019,
+				"point_name":"Power/Installed Power of Plant",
+				"point_name_new":"Power/Load",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":663,
+				"period":0,
+				"point_id":83012,
+				"point_name":"P-radiation-H",
+				"point_name_new":"Transient Horizontal Irradiation",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":664,
+				"period":0,
+				"point_id":83013,
+				"point_name":"Daily Irradiation",
+				"point_name_new":"Daily Irradiation",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":665,
+				"period":0,
+				"point_id":83016,
+				"point_name":"Plant Ambient Temperature",
+				"point_name_new":"Ambient Temperature",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":666,
+				"period":0,
+				"point_id":83017,
+				"point_name":"Plant Module Temperature",
+				"point_name_new":"Temp. (PV module)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":667,
+				"period":0,
+				"point_id":83023,
+				"point_name":"Plant PR",
+				"point_name_new":"PR",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":668,
+				"period":0,
+				"point_id":83024,
+				"point_name":"Plant Total Yield",
+				"point_name_new":"Total Yield",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":669,
+				"period":0,
+				"point_id":83025,
+				"point_name":"Plant Equivalent Hours",
+				"point_name_new":"Daily Equivalent Hours",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":670,
+				"period":0,
+				"point_id":83033,
+				"point_name":"Plant Power",
+				"point_name_new":"Power",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":671,
+				"period":4,
+				"point_id":83022,
+				"point_name":"Daily Yield of Plant",
+				"point_name_new":"Daily Yield",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":672,
+				"period":4,
+				"point_id":83018,
+				"point_name":"Daily Yield (Theoretical)",
+				"point_name_new":"Daily Yield (Theoretical)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":673,
+				"period":4,
+				"point_id":83001,
+				"point_name":"Inverter AC Power Normalization",
+				"point_name_new":"AC Power Normalization (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":674,
+				"period":4,
+				"point_id":83002,
+				"point_name":"Inverter AC Power",
+				"point_name_new":"AC Power (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":675,
+				"period":4,
+				"point_id":83004,
+				"point_name":"Inverter Total Yield",
+				"point_name_new":"Total Yield (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":676,
+				"period":4,
+				"point_id":83009,
+				"point_name":"Daily Yield by Inverter",
+				"point_name_new":"Daily Yield (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":677,
+				"period":4,
+				"point_id":83008,
+				"point_name":"Daily Equivalent Hours of Inverter",
+				"point_name_new":"Daily Yield Equivalent Hour (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":678,
+				"period":4,
+				"point_id":83010,
+				"point_name":"Inverter PR",
+				"point_name_new":"PR (Inverter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":679,
+				"period":4,
+				"point_id":83032,
+				"point_name":"Meter AC Power",
+				"point_name_new":"AC Power (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":680,
+				"period":4,
+				"point_id":83020,
+				"point_name":"Meter Total Yield",
+				"point_name_new":"Total Yield (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":681,
+				"period":4,
+				"point_id":83006,
+				"point_name":"Meter Daily Yield",
+				"point_name_new":"Daily Yield (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":682,
+				"period":4,
+				"point_id":83005,
+				"point_name":"Daily Equivalent Hours of Meter",
+				"point_name_new":"Daily Yield Equivalent Hour (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":683,
+				"period":4,
+				"point_id":83007,
+				"point_name":"Meter PR",
+				"point_name_new":"PR (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":684,
+				"period":4,
+				"point_id":83021,
+				"point_name":"Accumulative Power Consumption by Meter",
+				"point_name_new":"Total Power Consumption (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":685,
+				"period":4,
+				"point_id":83011,
+				"point_name":"Meter E-daily Consumption",
+				"point_name_new":"Daily Energy Consumption (Meter)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":686,
+				"period":4,
+				"point_id":83019,
+				"point_name":"Power/Installed Power of Plant",
+				"point_name_new":"Power/Load",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":687,
+				"period":4,
+				"point_id":83012,
+				"point_name":"P-radiation-H",
+				"point_name_new":"Transient Horizontal Irradiation",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":688,
+				"period":4,
+				"point_id":83013,
+				"point_name":"Daily Irradiation",
+				"point_name_new":"Daily Irradiation",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":689,
+				"period":4,
+				"point_id":83016,
+				"point_name":"Plant Ambient Temperature",
+				"point_name_new":"Ambient Temperature",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":690,
+				"period":4,
+				"point_id":83017,
+				"point_name":"Plant Module Temperature",
+				"point_name_new":"Temp. (PV module)",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":691,
+				"period":4,
+				"point_id":83023,
+				"point_name":"Plant PR",
+				"point_name_new":"PR",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":692,
+				"period":4,
+				"point_id":83024,
+				"point_name":"Plant Total Yield",
+				"point_name_new":"Total Yield",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":693,
+				"period":4,
+				"point_id":83025,
+				"point_name":"Plant Equivalent Hours",
+				"point_name_new":"Daily Equivalent Hours",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":11,
+				"id":694,
+				"period":4,
+				"point_id":83033,
+				"point_name":"Plant Power",
+				"point_name_new":"Power",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":695,
+				"period":0,
+				"point_id":81012,
+				"point_name":"Daily Yield by Inverter",
+				"point_name_new":"Daily Yield (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":696,
+				"period":0,
+				"point_id":81001,
+				"point_name":"Inverter AC Power Normalization",
+				"point_name_new":"AC Power Normalization (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":697,
+				"period":0,
+				"point_id":81002,
+				"point_name":"Inverter AC Power",
+				"point_name_new":"AC Power (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":698,
+				"period":0,
+				"point_id":81003,
+				"point_name":"Inverter DC Power Normalization",
+				"point_name_new":"DC Power Normalization (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":699,
+				"period":0,
+				"point_id":81004,
+				"point_name":"Inverter DC Power",
+				"point_name_new":"DC Power (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":700,
+				"period":0,
+				"point_id":81007,
+				"point_name":"Inverter Total Yield",
+				"point_name_new":"Total Yield (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":701,
+				"period":0,
+				"point_id":81011,
+				"point_name":"Inverter Equivalent Hours",
+				"point_name_new":"Daily Yield Equivalent Hour (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":702,
+				"period":0,
+				"point_id":81022,
+				"point_name":"Unit PR",
+				"point_name_new":"PR",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":703,
+				"period":0,
+				"point_id":81023,
+				"point_name":"Unit Daily Yield",
+				"point_name_new":"Daily Yield",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":704,
+				"period":0,
+				"point_id":81025,
+				"point_name":"Unit Yield (Theoretical)",
+				"point_name_new":"Daily Yield (Theoretical)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":705,
+				"period":4,
+				"point_id":81012,
+				"point_name":"Daily Yield by Inverter",
+				"point_name_new":"Daily Yield (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":706,
+				"period":4,
+				"point_id":81001,
+				"point_name":"Inverter AC Power Normalization",
+				"point_name_new":"AC Power Normalization (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":707,
+				"period":4,
+				"point_id":81002,
+				"point_name":"Inverter AC Power",
+				"point_name_new":"AC Power (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":708,
+				"period":4,
+				"point_id":81003,
+				"point_name":"Inverter DC Power Normalization",
+				"point_name_new":"DC Power Normalization (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":709,
+				"period":4,
+				"point_id":81004,
+				"point_name":"Inverter DC Power",
+				"point_name_new":"DC Power (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":710,
+				"period":4,
+				"point_id":81007,
+				"point_name":"Inverter Total Yield",
+				"point_name_new":"Total Yield (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":711,
+				"period":4,
+				"point_id":81011,
+				"point_name":"Inverter Equivalent Hours",
+				"point_name_new":"Daily Yield Equivalent Hour (Inverter)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":712,
+				"period":4,
+				"point_id":81022,
+				"point_name":"Unit PR",
+				"point_name_new":"PR",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":713,
+				"period":4,
+				"point_id":81023,
+				"point_name":"Unit Daily Yield",
+				"point_name_new":"Daily Yield",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":17,
+				"id":714,
+				"period":4,
+				"point_id":81025,
+				"point_name":"Unit Yield (Theoretical)",
+				"point_name_new":"Daily Yield (Theoretical)",
+				"type_name":"Unit"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":715,
+				"period":0,
+				"point_id":82016,
+				"point_name":"Daily Irradiation at Grid-connecting Point",
+				"point_name_new":"Daily Horizontal Irradiation",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":716,
+				"period":0,
+				"point_id":82001,
+				"point_name":"Inverter AC Power Normalization",
+				"point_name_new":"AC Power Normalization (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":717,
+				"period":0,
+				"point_id":82002,
+				"point_name":"Inverter AC Power",
+				"point_name_new":"AC Power (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":718,
+				"period":0,
+				"point_id":82003,
+				"point_name":"Inverter DC Power Normalization",
+				"point_name_new":"DC Power Normalization (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":719,
+				"period":0,
+				"point_id":82004,
+				"point_name":"Inverter DC Power",
+				"point_name_new":"DC Power (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":720,
+				"period":0,
+				"point_id":82007,
+				"point_name":"Inverter Total Yield",
+				"point_name_new":"Total Yield (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":721,
+				"period":0,
+				"point_id":82012,
+				"point_name":"Daily Yield by Inverter",
+				"point_name_new":"Daily Yield (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":722,
+				"period":0,
+				"point_id":82011,
+				"point_name":"Daily Equivalent Hours of Inverter",
+				"point_name_new":"Daily Yield Equivalent Hour (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":723,
+				"period":0,
+				"point_id":82013,
+				"point_name":"Inverter PR",
+				"point_name_new":"PR (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":724,
+				"period":0,
+				"point_id":82021,
+				"point_name":"Total Yield of Meter",
+				"point_name_new":"Total Yield (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":725,
+				"period":0,
+				"point_id":82008,
+				"point_name":"Daily Equivalent Hours of Meter",
+				"point_name_new":"Daily Yield Equivalent Hour (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":726,
+				"period":0,
+				"point_id":82010,
+				"point_name":"Meter PR",
+				"point_name_new":"PR (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":727,
+				"period":0,
+				"point_id":82022,
+				"point_name":"Total Energy Consumption by Meter",
+				"point_name_new":"Total Energy Consumption (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":728,
+				"period":0,
+				"point_id":82014,
+				"point_name":"Meter E-daily Consumption",
+				"point_name_new":"Daily Energy Consumption (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":729,
+				"period":0,
+				"point_id":82015,
+				"point_name":"Transient Irradiation at Grid-connecting Point",
+				"point_name_new":"Transient Horizontal Irradiation",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":730,
+				"period":0,
+				"point_id":82019,
+				"point_name":"Ambient Temperature",
+				"point_name_new":"Ambient Temperature",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":731,
+				"period":0,
+				"point_id":82020,
+				"point_name":"PV Module Temperature",
+				"point_name_new":"Temp. (PV module)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":732,
+				"period":0,
+				"point_id":82023,
+				"point_name":"Meter Active Power",
+				"point_name_new":"Active Power (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":733,
+				"period":0,
+				"point_id":82034,
+				"point_name":"Daily Yield (Theoretical)",
+				"point_name_new":"Daily Yield (Theoretical)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":734,
+				"period":0,
+				"point_id":82035,
+				"point_name":"Grid-connecting Point PR",
+				"point_name_new":"PR",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":735,
+				"period":0,
+				"point_id":82038,
+				"point_name":"Equivalent Hours of Grid-connecting Point",
+				"point_name_new":"Daily Equivalent Hours",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":736,
+				"period":0,
+				"point_id":82033,
+				"point_name":"Grid-connection Point Daily Yield",
+				"point_name_new":"Grid-connection Point Daily Yield",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":737,
+				"period":0,
+				"point_id":82039,
+				"point_name":"Grid-connection Point Total Yield",
+				"point_name_new":"Grid-connection Point Total Yield",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":738,
+				"period":4,
+				"point_id":82016,
+				"point_name":"Daily Irradiation at Grid-connecting Point",
+				"point_name_new":"Daily Horizontal Irradiation",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":739,
+				"period":4,
+				"point_id":82001,
+				"point_name":"Inverter AC Power Normalization",
+				"point_name_new":"AC Power Normalization (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":740,
+				"period":4,
+				"point_id":82002,
+				"point_name":"Inverter AC Power",
+				"point_name_new":"AC Power (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":741,
+				"period":4,
+				"point_id":82003,
+				"point_name":"Inverter DC Power Normalization",
+				"point_name_new":"DC Power Normalization (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":742,
+				"period":4,
+				"point_id":82004,
+				"point_name":"Inverter DC Power",
+				"point_name_new":"DC Power (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":743,
+				"period":4,
+				"point_id":82007,
+				"point_name":"Inverter Total Yield",
+				"point_name_new":"Total Yield (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":744,
+				"period":4,
+				"point_id":82012,
+				"point_name":"Daily Yield by Inverter",
+				"point_name_new":"Daily Yield (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":745,
+				"period":4,
+				"point_id":82011,
+				"point_name":"Daily Equivalent Hours of Inverter",
+				"point_name_new":"Daily Yield Equivalent Hour (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":746,
+				"period":4,
+				"point_id":82013,
+				"point_name":"Inverter PR",
+				"point_name_new":"PR (Inverter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":747,
+				"period":4,
+				"point_id":82021,
+				"point_name":"Total Yield of Meter",
+				"point_name_new":"Total Yield (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":748,
+				"period":4,
+				"point_id":82008,
+				"point_name":"Daily Equivalent Hours of Meter",
+				"point_name_new":"Daily Yield Equivalent Hour (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":749,
+				"period":4,
+				"point_id":82010,
+				"point_name":"Meter PR",
+				"point_name_new":"PR (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":750,
+				"period":4,
+				"point_id":82022,
+				"point_name":"Total Energy Consumption by Meter",
+				"point_name_new":"Total Energy Consumption (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":751,
+				"period":4,
+				"point_id":82014,
+				"point_name":"Meter E-daily Consumption",
+				"point_name_new":"Daily Energy Consumption (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":752,
+				"period":4,
+				"point_id":82015,
+				"point_name":"Transient Irradiation at Grid-connecting Point",
+				"point_name_new":"Transient Horizontal Irradiation",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":753,
+				"period":4,
+				"point_id":82019,
+				"point_name":"Ambient Temperature",
+				"point_name_new":"Ambient Temperature",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":754,
+				"period":4,
+				"point_id":82020,
+				"point_name":"PV Module Temperature",
+				"point_name_new":"Temp. (PV module)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":755,
+				"period":4,
+				"point_id":82023,
+				"point_name":"Meter Active Power",
+				"point_name_new":"Active Power (Meter)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":756,
+				"period":4,
+				"point_id":82034,
+				"point_name":"Daily Yield (Theoretical)",
+				"point_name_new":"Daily Yield (Theoretical)",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":757,
+				"period":4,
+				"point_id":82035,
+				"point_name":"Grid-connecting Point PR",
+				"point_name_new":"PR",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":758,
+				"period":4,
+				"point_id":82038,
+				"point_name":"Equivalent Hours of Grid-connecting Point",
+				"point_name_new":"Daily Equivalent Hours",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":759,
+				"period":4,
+				"point_id":82033,
+				"point_name":"Grid-connection Point Daily Yield",
+				"point_name_new":"Grid-connection Point Daily Yield",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":null,
+				"device_type":3,
+				"id":760,
+				"period":4,
+				"point_id":82039,
+				"point_name":"Grid-connection Point Total Yield",
+				"point_name_new":"Grid-connection Point Total Yield",
+				"type_name":"Grid-connection Point"
+			},
+			{
+				"create_time":"2019-04-26 09:13:29",
+				"device_type":1,
+				"id":761,
+				"period":0,
+				"point_id":4,
+				"point_name":"Internal Air Temperature",
+				"point_name_new":"Interior Temperature",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":null,
+				"device_type":null,
+				"id":762,
+				"period":0,
+				"point_id":3,
+				"point_name":"Total On-grid Running Time",
+				"point_name_new":null,
+				"type_name":null
+			},
+			{
+				"create_time":"2019-04-26 13:56:10",
+				"device_type":7,
+				"id":763,
+				"period":0,
+				"point_id":8030,
+				"point_name":"Forward Active Energy",
+				"point_name_new":"Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":"2019-04-27 10:28:44",
+				"device_type":7,
+				"id":764,
+				"period":0,
+				"point_id":8062,
+				"point_name":"Daily Forward Active Energy",
+				"point_name_new":"Daily Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":"2019-04-27 10:29:18",
+				"device_type":7,
+				"id":765,
+				"period":0,
+				"point_id":8063,
+				"point_name":"Daily Reverse Active Energy",
+				"point_name_new":"Daily Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":"2019-04-27 10:29:43",
+				"device_type":7,
+				"id":766,
+				"period":0,
+				"point_id":8031,
+				"point_name":"Reverse Active Energy",
+				"point_name_new":"Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":"2019-04-27 10:30:02",
+				"device_type":7,
+				"id":767,
+				"period":0,
+				"point_id":8032,
+				"point_name":"Forward Reactive Energy",
+				"point_name_new":"Forward Reactive Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":"2019-04-27 10:30:19",
+				"device_type":7,
+				"id":768,
+				"period":0,
+				"point_id":8033,
+				"point_name":"Reverse Reactive Energy",
+				"point_name_new":"Reverse Reactive Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":"2019-04-27 10:33:23",
+				"device_type":7,
+				"id":769,
+				"period":4,
+				"point_id":8062,
+				"point_name":"Daily Forward Active Energy",
+				"point_name_new":"Daily Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":"2019-04-27 10:33:43",
+				"device_type":7,
+				"id":770,
+				"period":4,
+				"point_id":8030,
+				"point_name":"Forward Active Energy",
+				"point_name_new":"Forward Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":"2019-04-27 10:33:57",
+				"device_type":7,
+				"id":771,
+				"period":4,
+				"point_id":8063,
+				"point_name":"Daily Reverse Active Energy",
+				"point_name_new":"Daily Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":"2019-04-27 10:34:14",
+				"device_type":7,
+				"id":772,
+				"period":4,
+				"point_id":8031,
+				"point_name":"Reverse Active Energy",
+				"point_name_new":"Reverse Active Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":"2019-04-27 10:34:32",
+				"device_type":7,
+				"id":773,
+				"period":4,
+				"point_id":8032,
+				"point_name":"Forward Reactive Energy",
+				"point_name_new":"Forward Reactive Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":"2019-04-27 10:34:49",
+				"device_type":7,
+				"id":774,
+				"period":4,
+				"point_id":8033,
+				"point_name":"Reverse Reactive Energy",
+				"point_name_new":"Reverse Reactive Energy",
+				"type_name":"Meter"
+			},
+			{
+				"create_time":"2019-04-27 10:45:03",
+				"device_type":1,
+				"id":775,
+				"period":0,
+				"point_id":18,
+				"point_name":"Phase A Voltage",
+				"point_name_new":"Phase A Voltage",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-27 10:45:16",
+				"device_type":1,
+				"id":776,
+				"period":0,
+				"point_id":19,
+				"point_name":"Phase B Voltage",
+				"point_name_new":"Phase B Voltage",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-27 10:45:28",
+				"device_type":1,
+				"id":777,
+				"period":0,
+				"point_id":20,
+				"point_name":"Phase C Voltage",
+				"point_name_new":"Phase C Voltage",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-27 10:45:42",
+				"device_type":1,
+				"id":778,
+				"period":0,
+				"point_id":21,
+				"point_name":"Phase A Current",
+				"point_name_new":"Phase A Current",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-27 10:45:59",
+				"device_type":1,
+				"id":779,
+				"period":0,
+				"point_id":22,
+				"point_name":"Phase B Current",
+				"point_name_new":"Phase B Current",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-27 10:46:12",
+				"device_type":1,
+				"id":780,
+				"period":0,
+				"point_id":23,
+				"point_name":"Phase C Current",
+				"point_name_new":"Phase C Current",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-27 10:54:46",
+				"device_type":1,
+				"id":781,
+				"period":0,
+				"point_id":86,
+				"point_name":"Pac-Nom.",
+				"point_name_new":"AC Power Normalization (Inverter)",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 08:14:27",
+				"device_type":1,
+				"id":782,
+				"period":0,
+				"point_id":5,
+				"point_name":"MPPT1 Voltage",
+				"point_name_new":"Udc-1",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 08:14:45",
+				"device_type":1,
+				"id":783,
+				"period":0,
+				"point_id":6,
+				"point_name":"MPPT1 Current",
+				"point_name_new":"Idc-1",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 08:15:06",
+				"device_type":1,
+				"id":784,
+				"period":0,
+				"point_id":7,
+				"point_name":"MPPT2 Voltage",
+				"point_name_new":"Udc-2",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 08:15:35",
+				"device_type":1,
+				"id":785,
+				"period":0,
+				"point_id":8,
+				"point_name":"MPPT2 Current",
+				"point_name_new":"Idc-2",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 08:15:53",
+				"device_type":1,
+				"id":786,
+				"period":0,
+				"point_id":9,
+				"point_name":"MPPT3 Voltage",
+				"point_name_new":"Udc-3",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 08:17:44",
+				"device_type":1,
+				"id":787,
+				"period":0,
+				"point_id":14,
+				"point_name":"Total DC Power",
+				"point_name_new":"Total DC Power",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 08:19:15",
+				"device_type":1,
+				"id":788,
+				"period":0,
+				"point_id":26,
+				"point_name":"Total Power Factor",
+				"point_name_new":"PF",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 08:19:34",
+				"device_type":1,
+				"id":789,
+				"period":0,
+				"point_id":27,
+				"point_name":"Grid Frequency",
+				"point_name_new":"Grid Frequency",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 08:19:53",
+				"device_type":1,
+				"id":790,
+				"period":0,
+				"point_id":43,
+				"point_name":"Total Apparent Power",
+				"point_name_new":"Apparent Power",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 08:20:16",
+				"device_type":1,
+				"id":791,
+				"period":0,
+				"point_id":45,
+				"point_name":"MPPT4 Voltage",
+				"point_name_new":"Udc-4",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 08:20:42",
+				"device_type":1,
+				"id":792,
+				"period":0,
+				"point_id":46,
+				"point_name":"MPPT4 Current",
+				"point_name_new":"Idc-4",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 08:21:04",
+				"device_type":1,
+				"id":793,
+				"period":0,
+				"point_id":47,
+				"point_name":"MPPT5 Voltage",
+				"point_name_new":"Udc-5",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 08:21:27",
+				"device_type":1,
+				"id":794,
+				"period":0,
+				"point_id":48,
+				"point_name":"MPPT5 Current",
+				"point_name_new":"Idc-5",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 08:21:45",
+				"device_type":1,
+				"id":795,
+				"period":0,
+				"point_id":49,
+				"point_name":"MPPT6 Voltage",
+				"point_name_new":"Udc-6",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 08:22:01",
+				"device_type":1,
+				"id":796,
+				"period":0,
+				"point_id":50,
+				"point_name":"MPPT6 Current",
+				"point_name_new":"Idc-6",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 08:24:27",
+				"device_type":1,
+				"id":797,
+				"period":0,
+				"point_id":90,
+				"point_name":"Negative Voltage to Ground",
+				"point_name_new":"Negative Voltage to Ground",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 08:32:16",
+				"device_type":14,
+				"id":798,
+				"period":0,
+				"point_id":13112,
+				"point_name":"Daily PV Yield",
+				"point_name_new":"Daily PV Yield",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-28 08:32:41",
+				"device_type":14,
+				"id":799,
+				"period":0,
+				"point_id":13147,
+				"point_name":"Daily Purchased Energy",
+				"point_name_new":"Daily Purchased Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-28 08:33:01",
+				"device_type":14,
+				"id":800,
+				"period":0,
+				"point_id":13122,
+				"point_name":"Daily Feed-in Energy",
+				"point_name_new":"Daily Feed-in Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-28 08:33:20",
+				"device_type":14,
+				"id":801,
+				"period":0,
+				"point_id":13116,
+				"point_name":"Daily Load Energy Consumption from PV",
+				"point_name_new":"Daily Load Energy Consumption from PV",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-28 08:33:46",
+				"device_type":14,
+				"id":802,
+				"period":0,
+				"point_id":13028,
+				"point_name":"Daily Battery Charging Energy",
+				"point_name_new":"Daily Battery Charging Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-28 08:34:03",
+				"device_type":14,
+				"id":803,
+				"period":0,
+				"point_id":13174,
+				"point_name":"Daily Battery Charging Energy from PV",
+				"point_name_new":"Daily Battery Charging Energy from PV",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-28 08:37:36",
+				"device_type":14,
+				"id":804,
+				"period":0,
+				"point_id":13029,
+				"point_name":"Daily Battery Discharging Energy",
+				"point_name_new":"Daily Battery Discharging Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-28 08:38:10",
+				"device_type":14,
+				"id":805,
+				"period":4,
+				"point_id":13112,
+				"point_name":"Daily PV Yield",
+				"point_name_new":"Daily PV Yield",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-28 08:38:28",
+				"device_type":14,
+				"id":806,
+				"period":4,
+				"point_id":13134,
+				"point_name":"Total PV Yield",
+				"point_name_new":"Total PV Yield",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-28 08:38:47",
+				"device_type":14,
+				"id":807,
+				"period":4,
+				"point_id":13147,
+				"point_name":"Daily Purchased Energy",
+				"point_name_new":"Daily Purchased Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-28 08:39:02",
+				"device_type":14,
+				"id":808,
+				"period":4,
+				"point_id":13148,
+				"point_name":"Total Purchased Energy",
+				"point_name_new":"Total Purchased Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-28 08:39:16",
+				"device_type":14,
+				"id":809,
+				"period":4,
+				"point_id":13122,
+				"point_name":"Daily Feed-in Energy",
+				"point_name_new":"Daily Feed-in Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-28 08:39:30",
+				"device_type":14,
+				"id":810,
+				"period":4,
+				"point_id":13125,
+				"point_name":"Total Feed-in Energy",
+				"point_name_new":"Total Feed-in Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-28 08:39:45",
+				"device_type":14,
+				"id":811,
+				"period":4,
+				"point_id":13116,
+				"point_name":"Daily Load Energy Consumption from PV",
+				"point_name_new":"Daily Load Energy Consumption from PV",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-28 08:39:59",
+				"device_type":14,
+				"id":812,
+				"period":4,
+				"point_id":13137,
+				"point_name":"Total Load Energy Consumption from PV",
+				"point_name_new":"Total Load Energy Consumption from PV",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-28 08:40:22",
+				"device_type":14,
+				"id":813,
+				"period":4,
+				"point_id":13028,
+				"point_name":"Daily Battery Charging Energy",
+				"point_name_new":"Daily Battery Charging Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-28 08:40:39",
+				"device_type":14,
+				"id":814,
+				"period":4,
+				"point_id":13029,
+				"point_name":"Daily Battery Discharging Energy",
+				"point_name_new":"Daily Battery Discharging Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-28 08:41:04",
+				"device_type":14,
+				"id":815,
+				"period":4,
+				"point_id":13034,
+				"point_name":"Total Battery Charging Energy",
+				"point_name_new":"Total Battery Charging Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-28 08:41:19",
+				"device_type":14,
+				"id":816,
+				"period":4,
+				"point_id":13035,
+				"point_name":"Total Battery Discharging Energy",
+				"point_name_new":"Total Battery Discharging Energy",
+				"type_name":"Energy Storage System"
+			},
+			{
+				"create_time":"2019-04-28 11:19:24",
+				"device_type":1,
+				"id":817,
+				"period":0,
+				"point_id":15,
+				"point_name":"A-B Line Voltage",
+				"point_name_new":"A-B Line Voltage",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 11:19:35",
+				"device_type":1,
+				"id":818,
+				"period":0,
+				"point_id":16,
+				"point_name":"B-C Line Voltage",
+				"point_name_new":"B-C Line Voltage",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 11:19:45",
+				"device_type":1,
+				"id":819,
+				"period":0,
+				"point_id":17,
+				"point_name":"C-A Line Voltage",
+				"point_name_new":"C-A Line Voltage",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 11:20:03",
+				"device_type":1,
+				"id":820,
+				"period":0,
+				"point_id":33,
+				"point_name":"Module 1 Temperature",
+				"point_name_new":"Module Temperature A1",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 11:20:20",
+				"device_type":1,
+				"id":821,
+				"period":0,
+				"point_id":34,
+				"point_name":"Module 2 Temperature",
+				"point_name_new":"Module Temperature A2",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 11:20:36",
+				"device_type":1,
+				"id":822,
+				"period":0,
+				"point_id":35,
+				"point_name":"Module 3 Temperature",
+				"point_name_new":"Module Temperature B1",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 11:20:50",
+				"device_type":1,
+				"id":823,
+				"period":0,
+				"point_id":36,
+				"point_name":"Module 4 Temperature",
+				"point_name_new":"Module Temperature B2",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 11:21:50",
+				"device_type":1,
+				"id":824,
+				"period":0,
+				"point_id":37,
+				"point_name":"Module 5 Temperature",
+				"point_name_new":"Module Temperature C1",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 11:22:04",
+				"device_type":1,
+				"id":825,
+				"period":0,
+				"point_id":38,
+				"point_name":"Module 6 Temperature",
+				"point_name_new":"Module Temperature C2",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 11:22:21",
+				"device_type":1,
+				"id":826,
+				"period":0,
+				"point_id":39,
+				"point_name":"Positive Impedance to Ground",
+				"point_name_new":"Positive Impedance to Ground",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 11:22:36",
+				"device_type":1,
+				"id":827,
+				"period":0,
+				"point_id":40,
+				"point_name":"Negative Impedance to Ground",
+				"point_name_new":"Negative Impedance to Ground",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2019-04-28 11:23:16",
+				"device_type":1,
+				"id":828,
+				"period":0,
+				"point_id":89,
+				"point_name":"Rated Reactive Power",
+				"point_name_new":"Rated Reactive Power Output",
+				"type_name":"Inverter"
+			},
+			{
+				"create_time":"2021-03-30 17:41:37",
+				"device_type":11,
+				"id":829,
+				"period":0,
+				"point_id":83072,
+				"point_name":"Daily Feed-in Energy",
+				"point_name_new":"Daily Feed-in Energy",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2021-03-30 17:41:54",
+				"device_type":11,
+				"id":830,
+				"period":0,
+				"point_id":83075,
+				"point_name":"Total Feed-in Energy",
+				"point_name_new":"Total Feed-in Energy",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2021-03-30 17:42:16",
+				"device_type":11,
+				"id":831,
+				"period":1,
+				"point_id":83072,
+				"point_name":"Daily Feed-in Energy",
+				"point_name_new":"Daily Feed-in Energy",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2021-03-30 17:42:31",
+				"device_type":11,
+				"id":832,
+				"period":3,
+				"point_id":83075,
+				"point_name":"Total Feed-in Energy",
+				"point_name_new":"Total Feed-in Energy",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2021-03-30 17:43:04",
+				"device_type":11,
+				"id":833,
+				"period":2,
+				"point_id":83075,
+				"point_name":"Total Feed-in Energy",
+				"point_name_new":"Total Feed-in Energy",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2021-03-30 17:43:30",
+				"device_type":11,
+				"id":834,
+				"period":2,
+				"point_id":83072,
+				"point_name":"Daily Feed-in Energy",
+				"point_name_new":"Daily Feed-in Energy",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2021-03-30 17:45:27",
+				"device_type":11,
+				"id":835,
+				"period":3,
+				"point_id":83072,
+				"point_name":"Daily Feed-in Energy",
+				"point_name_new":"Daily Feed-in Energy",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2021-03-30 17:46:34",
+				"device_type":11,
+				"id":836,
+				"period":1,
+				"point_id":83075,
+				"point_name":"Total Feed-in Energy",
+				"point_name_new":"Total Feed-in Energy",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2021-03-30 22:47:18",
+				"device_type":11,
+				"id":837,
+				"period":0,
+				"point_id":83102,
+				"point_name":"Daily Purchased Energy",
+				"point_name_new":"Daily Purchased Energy",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2021-03-30 22:47:35",
+				"device_type":11,
+				"id":838,
+				"period":0,
+				"point_id":83105,
+				"point_name":"Total Purchased Energy",
+				"point_name_new":"Total Purchased Energy",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2021-03-30 22:48:25",
+				"device_type":11,
+				"id":839,
+				"period":1,
+				"point_id":83102,
+				"point_name":"Daily Purchased Energy",
+				"point_name_new":"Daily Purchased Energy",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2021-03-30 22:48:39",
+				"device_type":11,
+				"id":840,
+				"period":1,
+				"point_id":83105,
+				"point_name":"Total Purchased Energy",
+				"point_name_new":"Total Purchased Energy",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2021-03-30 22:49:05",
+				"device_type":11,
+				"id":841,
+				"period":2,
+				"point_id":83102,
+				"point_name":"Daily Purchased Energy",
+				"point_name_new":"Daily Purchased Energy",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2021-03-30 22:49:19",
+				"device_type":11,
+				"id":842,
+				"period":2,
+				"point_id":83105,
+				"point_name":"Total Purchased Energy",
+				"point_name_new":"Total Purchased Energy",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2021-03-30 22:49:34",
+				"device_type":11,
+				"id":843,
+				"period":3,
+				"point_id":83102,
+				"point_name":"Daily Purchased Energy",
+				"point_name_new":"Daily Purchased Energy",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2021-03-30 22:49:46",
+				"device_type":11,
+				"id":844,
+				"period":3,
+				"point_id":83105,
+				"point_name":"Total Purchased Energy",
+				"point_name_new":"Total Purchased Energy",
+				"type_name":"Plant"
+			},
+			{
+				"create_time":"2021-04-23 17:42:09",
+				"device_type":4,
+				"id":845,
+				"period":0,
+				"point_id":1001,
+				"point_name":"DC Bus Voltage",
+				"point_name_new":"DC Bus Voltage",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":"2021-04-23 17:42:28",
+				"device_type":4,
+				"id":846,
+				"period":0,
+				"point_id":1006,
+				"point_name":"Total DC Power",
+				"point_name_new":"Total DC Power",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":"2021-04-23 17:42:42",
+				"device_type":4,
+				"id":847,
+				"period":0,
+				"point_id":1005,
+				"point_name":"Total DC Current",
+				"point_name_new":"Total DC Current",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":"2021-04-23 17:43:01",
+				"device_type":4,
+				"id":848,
+				"period":0,
+				"point_id":1002,
+				"point_name":"Interior Temperature",
+				"point_name_new":"Interior Temperature",
+				"type_name":"Combiner Box"
+			},
+			{
+				"create_time":"2021-05-11 11:06:35",
+				"device_type":1,
+				"id":849,
+				"period":0,
+				"point_id":10,
+				"point_name":"MPPT3 Current",
+				"point_name_new":"Idc-3",
+				"type_name":"Inverter"
+			}
+		],
+		"pageSize":0,
+		"totalCounts":527,
+		"totalPages":0
+	},
+	"result_msg":"success"
+}

@@ -1,0 +1,11 @@
+{
+	"req_serial_num":"20220209b40f4c45b672d87f51e16095",
+	"result_code":"1",
+	"result_data":[
+		{
+			"ps_type":5,
+			"sys_scheme":2
+		}
+	],
+	"result_msg":"success"
+}

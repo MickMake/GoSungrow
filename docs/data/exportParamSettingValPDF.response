@@ -1,0 +1,9 @@
+{
+	"req_serial_num":"202202092ad245a0b1799c6e0e95a1ec",
+	"result_code":"1",
+	"result_data":{
+		"code":"1",
+		"return_val_pdf_url":"https://file-au.isolarcloud.com/param_settings/2022020906034403496C7V2.pdf"
+	},
+	"result_msg":"success"
+}

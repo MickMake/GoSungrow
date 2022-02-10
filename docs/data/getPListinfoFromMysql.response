@@ -1,0 +1,24 @@
+{
+	"req_serial_num":"20220209871b4859876921ab848e7273",
+	"result_code":"1",
+	"result_data":{
+		"nowCapacity":{
+			"unit":"kW",
+			"value":"8.629"
+		},
+		"todayPower":{
+			"unit":"kWh",
+			"value":"24.8"
+		},
+		"totalCapacity":{
+			"unit":"kWp",
+			"value":"10"
+		},
+		"totalPower":{
+			"unit":"kWh",
+			"value":"445.6"
+		},
+		"totalStation":1
+	},
+	"result_msg":"success"
+}

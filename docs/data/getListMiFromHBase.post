@@ -1,0 +1,10 @@
+{
+  "user_id": "276937",
+  "valid_flag": "1,3",
+  "lang": "_en_US",
+  "token": "TOKEN_KEY",
+  "appkey": "93D72E60331ABDCDC7B39ADC2D1F32B3",
+  "sys_code": "900",
+  "table": "inverter",
+  "primaryKey": "inverter"
+}

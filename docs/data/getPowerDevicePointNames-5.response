@@ -1,0 +1,77 @@
+{
+	"req_serial_num":"20220209bad34927b7b738eb38da24a8",
+	"result_code":"1",
+	"result_data":[
+		{
+			"point_cal_type":1,
+			"point_id":2003,
+			"point_name":"Transient Horizontal Irradiation"
+		},
+		{
+			"point_cal_type":2,
+			"point_id":2001,
+			"point_name":"Daily Horizontal Irradiation"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":2002,
+			"point_name":"Total Horizontal Irradiation"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":2007,
+			"point_name":"Slope Transient Irradiation"
+		},
+		{
+			"point_cal_type":2,
+			"point_id":2005,
+			"point_name":"Slope Daily Irradiation"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":2006,
+			"point_name":"Total Slope Irradiation"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":2009,
+			"point_name":"Ambient Temperature"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":2010,
+			"point_name":"Temp. (PV module)"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":2016,
+			"point_name":"Wind Speed"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":2011,
+			"point_name":"Wind Speed Scale"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":2012,
+			"point_name":"Wind Angle"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":2014,
+			"point_name":"Atmospheric Pressure"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":2015,
+			"point_name":"Ambient Humidity"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":2019,
+			"point_name":"Transient-radiation"
+		}
+	],
+	"result_msg":"success"
+}

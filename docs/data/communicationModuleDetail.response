@@ -1,0 +1,9 @@
+{
+	"req_serial_num":"20220209b93346d09ba3691d9b93f938",
+	"result_code":"1",
+	"result_data":{
+		"cardFlowInfoList":[],
+		"setMealInfoList":[]
+	},
+	"result_msg":"success"
+}

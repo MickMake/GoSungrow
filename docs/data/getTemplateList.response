@@ -1,0 +1,40 @@
+{
+	"req_serial_num":"20220209c76747e6adb6468d3e4a2fd2",
+	"result_code":"1",
+	"result_data":{
+		"pageList":[
+			{
+				"template_id":7981,
+				"template_name":"Power",
+				"update_time":"2022-02-09 10:03:40"
+			},
+			{
+				"template_id":7983,
+				"template_name":"Meter Power",
+				"update_time":"2022-01-31 08:31:46"
+			},
+			{
+				"template_id":7982,
+				"template_name":"Battery Eff",
+				"update_time":"2022-01-31 08:26:02"
+			},
+			{
+				"template_id":7980,
+				"template_name":"Current",
+				"update_time":"2022-01-31 08:20:44"
+			},
+			{
+				"template_id":7979,
+				"template_name":"Voltages",
+				"update_time":"2022-01-31 08:19:22"
+			},
+			{
+				"template_id":7978,
+				"template_name":"Temperatures",
+				"update_time":"2022-01-31 08:17:58"
+			}
+		],
+		"rowCount":6
+	},
+	"result_msg":"success"
+}

@@ -1,0 +1,212 @@
+{
+	"req_serial_num":"20220209a4174c6da7e7be65b28751a7",
+	"result_code":"1",
+	"result_data":[
+		{
+			"point_cal_type":1,
+			"point_id":8030,
+			"point_name":"Forward Active Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8031,
+			"point_name":"Reverse Active Energy"
+		},
+		{
+			"point_cal_type":2,
+			"point_id":8062,
+			"point_name":"Daily Forward Active Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8063,
+			"point_name":"Daily Reverse Active Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8032,
+			"point_name":"Forward Reactive Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8033,
+			"point_name":"Reverse Reactive Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8034,
+			"point_name":"Peak Forward Active Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8035,
+			"point_name":"Peak Reverse Active Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8038,
+			"point_name":"Valley Forward Active Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8039,
+			"point_name":"Valley Reverse Active Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8042,
+			"point_name":"Flat Forward Active Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8043,
+			"point_name":"Flat Reverse Active Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8058,
+			"point_name":"Wave Forward Active Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8059,
+			"point_name":"Wave Reverse Active Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8036,
+			"point_name":"Peak Forward Reactive Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8037,
+			"point_name":"Peak Reverse Reactive Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8040,
+			"point_name":"Valley Forward Reactive Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8041,
+			"point_name":"Valley Reverse Reactive Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8044,
+			"point_name":"Flat Forward Reactive Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8045,
+			"point_name":"Flat Reverse Reactive Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8000,
+			"point_name":"Phase A Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8001,
+			"point_name":"Phase B Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8002,
+			"point_name":"Phase C Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8003,
+			"point_name":"A-B Line Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8004,
+			"point_name":"B-C Line Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8005,
+			"point_name":"C-A Line Voltage"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8006,
+			"point_name":"Phase A Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8007,
+			"point_name":"Phase B Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8008,
+			"point_name":"Phase C Current"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8018,
+			"point_name":"Meter Active Power"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8022,
+			"point_name":"Reactive Power"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8014,
+			"point_name":"PF"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8026,
+			"point_name":"Apparent Power"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8070,
+			"point_name":"Daily Tip Forward Active Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8069,
+			"point_name":"Daily Flat Reverse Active Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8068,
+			"point_name":"Daily Flat Forward Active Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8067,
+			"point_name":"Daily Valley Reverse Active Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8066,
+			"point_name":"Daily Valley Forward Active Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8065,
+			"point_name":"Daily Peak Reverse Active Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8072,
+			"point_name":"Daily Peak Forward Active Energy"
+		},
+		{
+			"point_cal_type":1,
+			"point_id":8071,
+			"point_name":"Daily Tip Reverse Active Energy"
+		}
+	],
+	"result_msg":"success"
+}

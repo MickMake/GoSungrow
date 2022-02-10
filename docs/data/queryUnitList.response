@@ -1,0 +1,35 @@
+{
+	"req_serial_num":"202202084c354b02ac3fe3afaa64d3c6",
+	"result_code":"1",
+	"result_data":[
+		{
+			"is_basic_unit":1,
+			"target_unit":"Wh/m2",
+			"unit_conver_id":1,
+			"unit_name":"Radiation",
+			"unit_type":1
+		},
+		{
+			"is_basic_unit":0,
+			"target_unit":"MJ/m2",
+			"unit_conver_id":2,
+			"unit_name":"Radiation",
+			"unit_type":1
+		},
+		{
+			"is_basic_unit":1,
+			"target_unit":"℃",
+			"unit_conver_id":3,
+			"unit_name":"Temperature",
+			"unit_type":2
+		},
+		{
+			"is_basic_unit":0,
+			"target_unit":"℉",
+			"unit_conver_id":4,
+			"unit_name":"Temperature",
+			"unit_type":2
+		}
+	],
+	"result_msg":"success"
+}

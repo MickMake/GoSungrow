@@ -224,7 +224,7 @@ func (t *Token) Verify(auth *SunGroAuth) error {
 		}
 
 		if auth.AppKey == "" {
-			t.Error = errors.New("empty AppKey")
+			t.Error = errors.New("API AppKey")
 			break
 		}
 		if auth.Username == "" {

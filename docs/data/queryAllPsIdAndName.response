@@ -1,0 +1,13 @@
+{
+	"req_serial_num":"20220209553c4000bd2c6b754eff88e6",
+	"result_code":"1",
+	"result_data":{
+		"pageList":[
+			{
+				"ps_id":1129147,
+				"ps_name":"MickMake"
+			}
+		]
+	},
+	"result_msg":"success"
+}

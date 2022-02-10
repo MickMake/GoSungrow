@@ -1,0 +1,19 @@
+{
+	"req_serial_num":"20220208a27e4f588d71a8304aee3b78",
+	"result_code":"1",
+	"result_data":{
+		"batteryPlateCom":"--",
+		"environmentCom":"--",
+		"is_platform_default_unit":"1",
+		"normalization":"--",
+		"todayvalue":"Shower",
+		"todayweather":"11",
+		"totalAllPower":{
+			"unit":"kWh",
+			"value":"418.4"
+		},
+		"yestedayvalue":"Cloudy",
+		"yestedayweather":"30"
+	},
+	"result_msg":"success"
+}
