@@ -35,7 +35,7 @@ COPY dist/GoSungro_linux_amd64/GoSungro /usr/local/bin/GoSungro
 COPY .ssh/ /root/.ssh/
 RUN chmod a+x /usr/local/bin/GoSungro && \
 	chmod 500 /root/.ssh && \
-	chmod 400 /root/.ssh/gopbx_rsa /root/.ssh/gopbx_rsa.pub && \
+	chmod 400 /root/.ssh/gosungro_rsa /root/.ssh/gosungro_rsa.pub && \
 	apk add --no-cache colordiff tzdata
 #	echo '00 07  *  *  *    /usr/local/bin/GoSungro sync default' > /etc/crontabs/root
 

@@ -15,6 +15,7 @@ import (
 	"time"
 )
 
+
 //goland:noinspection SpellCheckingInspection
 const (
 	DefaultBinaryName = "GoSungro"
@@ -50,7 +51,8 @@ const (
 	defaultTimeout = time.Duration(time.Second * 30)
 )
 
-var DefaultAreas = []string{"domain", "site", "department", "user", "presence", "device", "model", "profile", "contact"}
+var DefaultAreas = []string{"all"}
+
 
 type CommandArgs struct {
 	ConfigDir   string
@@ -87,6 +89,7 @@ type CommandArgs struct {
 	Valid bool
 	Error error
 }
+
 
 func (ca *CommandArgs) IsValid() error {
 	for range Only.Once {
@@ -342,39 +345,3 @@ func (ca *CommandArgs) GoogleUpdate(entities ...string) error {
 //
 //	return p.Error
 //}
-
-
-//goland:noinspection GoUnusedFunction
-func showArgs(cmd *cobra.Command, args []string) {
-	for range Only.Once {
-		flargs := cmd.Flags().Args()
-		if flargs != nil {
-			fmt.Printf("'%s' called with '%s'\n", cmd.CommandPath(), strings.Join(flargs, " "))
-			break
-		}
-
-		fmt.Printf("'%s' called with '%s'\n", cmd.CommandPath(), strings.Join(args, " "))
-		break
-	}
-
-	fmt.Println("")
-}
-
-func fillArray(count int, args []string) []string {
-	var ret []string
-	for range Only.Once {
-		//
-		//if len(args) == 0 {
-		//	break
-		//}
-		ret = make([]string, count)
-		for i, e := range args {
-			ret[i] = e
-		}
-	}
-	return ret
-}
-
-func AddJsonSuffix(fn string) string {
-	return strings.TrimSuffix(fn, ".json") + ".json"
-}

@@ -30,13 +30,14 @@ func cmdApiFunc(cmd *cobra.Command, args []string) {
 	}
 }
 
+
 // ******************************************************************************** //
 var cmdApiList = &cobra.Command {
 	Use:                   "ls",
 	Aliases:               []string{"list"},
-	Short:                 fmt.Sprintf("List api endpoints on iSolarCloud"),
-	Long:                  fmt.Sprintf("List api endpoints on iSolarCloud"),
-	Example:               PrintExamples("api ls", "", "<endpoint>"),
+	Short:                 fmt.Sprintf("List iSolarCloud api endpoints/areas"),
+	Long:                  fmt.Sprintf("List iSolarCloud api endpoints/areas"),
+	Example:               PrintExamples("api ls", "", "areas", "endpoints", "<area name>"),
 	DisableFlagParsing:    false,
 	DisableFlagsInUseLine: false,
 	PreRunE:               Cmd.ProcessArgs,
@@ -46,12 +47,23 @@ var cmdApiList = &cobra.Command {
 //goland:noinspection GoUnusedParameter
 func cmdApiListFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
-		if len(args) > 0 {
-			fmt.Println("Unknown sub-command.")
+		switch {
+			case len(args) == 0:
+				fmt.Println("Unknown sub-command.")
+				_ = cmd.Help()
+
+			case args[0] == "endpoints":
+				Cmd.Error = SunGro.ListEndpoints("")
+
+			case args[0] == "areas":
+				Cmd.Error = SunGro.ListAreas()
+
+			default:
+				Cmd.Error = SunGro.ListEndpoints(args[0])
 		}
-		_ = cmd.Help()
 	}
 }
+
 
 // ******************************************************************************** //
 var cmdApiGet = &cobra.Command {
@@ -59,18 +71,22 @@ var cmdApiGet = &cobra.Command {
 	//Aliases:               []string{""},
 	Short:                 fmt.Sprintf("Get details from iSolarCloud"),
 	Long:                  fmt.Sprintf("Get details from iSolarCloud"),
-	Example:               PrintExamples("api get", "<endpoint>"),
+	Example:               PrintExamples("api get", "<endpoint> [area]"),
 	DisableFlagParsing:    false,
 	DisableFlagsInUseLine: false,
 	PreRunE:               Cmd.ProcessArgs,
 	Run:                   cmdApiGetFunc,
-	Args:                  cobra.MinimumNArgs(1),
+	Args:                  cobra.MinimumNArgs(2),
 }
 //goland:noinspection GoUnusedParameter
 func cmdApiGetFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
-		args = fillArray(1, args)
-		hey := SunGro.GetEndpoint("getPsList")
+		args = fillArray(2, args)
+		if args[1] == "" {
+			args[1] = "AppService"
+		}
+
+		hey := SunGro.GetEndpoint(args[1], args[0])
 		fmt.Printf("HEY:%v\n", hey)
 		if Cmd.Error != nil {
 			break

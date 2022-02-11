@@ -11,7 +11,7 @@ SUNGRO_GIT_DIR="/SUNGRO"
 SUNGRO_DIFF_CMD="tkdiff"
 # SUNGRO_GIT_TOKEN SUNGRO_HOST SUNGRO_ID SUNGRO_PASSWORD SUNGRO_SECRET SUNGRO_USER SUNGRO_DIFF_CMD
 
-docker build -t gopbx \
+docker build -t gosungro \
 	-f Dockerfile \
 	--build-arg 'GO_REPO_TOKEN=glpat-tFrj4ZD7soVU2fqxuDMh' \
 	--build-arg "SUNGRO_HOST=${SUNGRO_HOST}" \
@@ -25,6 +25,6 @@ docker build -t gopbx \
 	--build-arg "SUNGRO_DIFF_CMD=${SUNGRO_DIFF_CMD}" \
 	.
 
-docker run --rm -it gopbx:latest /usr/local/bin/GoSungro help
-docker run --rm -it gopbx:latest /bin/sh
+docker run --rm -it gosungro:latest /usr/local/bin/GoSungro help
+docker run --rm -it gosungro:latest /bin/sh
 

@@ -37,19 +37,19 @@ To be added:
 ## Use case example:
 ### Record statistics data from SUNGRO to GitHub. (Will clone if not existing.)
 
-	% GoSungro sync 'Updating statistics' statistics
+	% GoSungro git sync 'Updating statistics' statistics
 
 ### Record all changes made to GitHub.
 
-	% GoSungro sync 'Update everything'
+	% GoSungro git sync 'Update everything'
 
 ### Record changes with default commit message.
 
-	% GoSungro sync default
+	% GoSungro git sync default
 
 ### Record changes made every 30 minutes.
 
-	% GoSungro cron run ./30 . . . . sync default
+	% GoSungro cron run ./30 . . . . git sync default
 
 ### List files in repo, (identical to ls).
 
