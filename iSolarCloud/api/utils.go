@@ -83,30 +83,56 @@ func CreateEndPoints(list [][]string) TypeEndPoints {
 	return endpoints
 }
 
-func (an *TypeAreaNames) GetRequest(area AreaName, endpoint EndPointName) interface{} {
-	var ret interface{}
-
+func PackageName(v interface{}) string {
+	var ret string
 	for range Only.Once {
-		err := an.Exists(area, endpoint)
-		if err != nil {
+		if v == nil {
 			break
 		}
-		ret = an.GetEndPoint(area, endpoint).Request
-	}
 
+		val := reflect.ValueOf(v)
+		if val.Kind() == reflect.Ptr {
+			ret = val.Elem().Type().PkgPath()
+			break
+		}
+
+		ret = val.Type().PkgPath()
+	}
 	return ret
 }
 
-func (an *TypeAreaNames) GetResponse(area AreaName, endpoint EndPointName) interface{} {
-	var ret interface{}
-
+func GetArea(v interface{}) AreaName {
+	var ret AreaName
 	for range Only.Once {
-		err := an.Exists(area, endpoint)
-		if err != nil {
+		s := strings.Split(PackageName(v), "/")
+		if len(s) < 2 {
 			break
 		}
-		ret = an.GetEndPoint(area, endpoint).Response
+		ret = AreaName(s[len(s)-1])
 	}
+	return ret
+}
 
+func GetEndPoint(v interface{}) EndPointName {
+	var ret EndPointName
+	for range Only.Once {
+		s := strings.Split(PackageName(v), "/")
+		if len(s) < 2 {
+			break
+		}
+		ret = EndPointName(s[len(s)-1])
+	}
+	return ret
+}
+
+func GetUrl(u string) *url.URL {
+	var ret *url.URL
+	for range Only.Once {
+		var err error
+		ret, err = url.Parse(u)
+		if err != nil {
+			ret = nil
+		}
+	}
 	return ret
 }

@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-var url = ""
+var Url = "/v1/reportService/getPowerDevicePointNames"
 
 var _ api.Resource = (*Resource)(nil)
 
@@ -46,7 +46,24 @@ func (g Resource) Init() *Resource {
 	fmt.Println("Init()")
 	return &Resource{}
 }
+
 func Init() *Resource {
 	fmt.Println("Init()")
-	return &Resource{}
+
+	foo := Resource {
+		api.TypeEndPoint {
+			Area:     api.GetArea(Resource{}),
+			Name:     api.GetEndPoint(Resource{}),
+			Url:      api.GetUrl(Url),
+			// Resource: nil,
+			Request:  Request{},
+			Response: Response{},
+			// Get:      nil,
+			// Put:      nil,
+			Error:    nil,
+		},
+	}
+	fmt.Printf("endpoint: %v\n", foo)
+
+	return &foo
 }

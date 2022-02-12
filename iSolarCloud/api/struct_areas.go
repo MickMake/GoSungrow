@@ -107,3 +107,31 @@ func (an *TypeAreaNames) SetResponse(area AreaName, endpoint EndPointName, ref i
 
 	return err
 }
+
+func (an *TypeAreaNames) GetRequest(area AreaName, endpoint EndPointName) interface{} {
+	var ret interface{}
+
+	for range Only.Once {
+		err := an.Exists(area, endpoint)
+		if err != nil {
+			break
+		}
+		ret = an.GetEndPoint(area, endpoint).Request
+	}
+
+	return ret
+}
+
+func (an *TypeAreaNames) GetResponse(area AreaName, endpoint EndPointName) interface{} {
+	var ret interface{}
+
+	for range Only.Once {
+		err := an.Exists(area, endpoint)
+		if err != nil {
+			break
+		}
+		ret = an.GetEndPoint(area, endpoint).Response
+	}
+
+	return ret
+}

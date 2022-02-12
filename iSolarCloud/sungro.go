@@ -127,7 +127,7 @@ func (p *SunGro) ListEndpoints(area string) error {
 		if area == "" {
 			fmt.Printf("Listing all endpoints from all areas:\n")
 			table := tablewriter.NewWriter(os.Stdout)
-			table.SetHeader([]string{"Area", "EndPoint", "Url"})
+			table.SetHeader([]string{"Area", "Resource", "Url"})
 			table.SetBorder(true)
 			for _, area := range p.AreaNames.SortAreas() {
 				endpoints := p.AreaNames[area]
@@ -150,7 +150,7 @@ func (p *SunGro) ListEndpoints(area string) error {
 
 		fmt.Printf("Listing all endpoints from area '%s':\n", area)
 		table := tablewriter.NewWriter(os.Stdout)
-		table.SetHeader([]string{"EndPoint", "Url"})
+		table.SetHeader([]string{"Resource", "Url"})
 		table.SetBorder(true)
 		endpoints := p.AreaNames[api.AreaName(area)]
 		for _, endpoint := range endpoints.SortEndPoints() {

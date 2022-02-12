@@ -62,14 +62,26 @@ type TypeEndPoint struct {
 	Name       EndPointName `json:"name"`
 	Url        *url.URL     `json:"url"`
 
-	Resource interface{}
+	resource interface{}
 	Request  interface{}
-	Response   interface{}
+	Response interface{}
 
 	Get GetFunc
 	Put SetFunc
 
 	Error      error
+}
+
+// func (p *TypeEndPoint) Call() Json {
+// 	panic("implement me")
+// }
+//
+// func (p *TypeEndPoint) GetResource() interface{} {
+// 	panic("implement me")
+// }
+
+func (ps *TypeEndPoints) SetResource(ref interface{}) {
+
 }
 
 type EndPointName string

@@ -611,10 +611,9 @@ func init() {
 			fmt.Println("HEYHEYHEY")
 			// foo := e.Resource.GetResource()
 			// fmt.Printf("R:%v\n", foo)
-			foo := getPowerDevicePointNames.Resource{}
-			foo.Init()
-			getPowerDevicePointNames.Init()
-			(getPowerDevicePointNames.Resource)(e.Resource).Call()
+			e.Resource = getPowerDevicePointNames.Init()
+			fmt.Printf("Resource: %v\n", e.Resource)
+			// (getPowerDevicePointNames.Resource)(e.Resource).Call()
 			// e.Response = getPowerDevicePointNames.Resource{}
 			// e.Request = getPowerDevicePointNames.Resource{}
 			continue
