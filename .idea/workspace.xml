@@ -5,33 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7d634523-07a9-40e1-bec3-1dc036abc5e9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/cmd/cmd_mqtt.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerDevicePointNames.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iSolarCloud/AppService/init.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iSolarCloud/api/struct_areas.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iSolarCloud/api/struct_endpoint.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iSolarCloud/api/struct_endpoints.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerDevicePointNames/getPowerDevicePointNames.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerDevicePointNames/init.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/iSolarCloud/api/pkgreflect.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/iSolarCloud/api/resourcer.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DockerfileRemote.sh" beforeDir="false" afterPath="$PROJECT_DIR$/DockerfileRemote.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/docker.sh" beforeDir="false" afterPath="$PROJECT_DIR$/bin/docker.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/cmd_api.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_api.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/cmd_git.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_git.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/cmd_google.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_google.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/commands.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/commands.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/root.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/struct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/const.go" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod2" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/TEMPLATE/fix.sh" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/TEMPLATE/fix.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/TEMPLATE_pbx.go.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerDevicePointNames.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/init.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/init.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/api/api.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/api.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/api_endpoints.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/api_endpoints.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/struct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/struct_areas.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/struct_areas.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/struct_endpoint.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/struct_endpoint.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/utils.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/utils.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/sungro.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/sungro.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/utils.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/utils.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/web/get.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/web/get.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -73,6 +62,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/iSolarCloud/AppService/getPowerDevicePointNames" />
       <recent name="$PROJECT_DIR$/iSolarCloud" />
       <recent name="$PROJECT_DIR$/iSolarCloud/api" />
       <recent name="$PROJECT_DIR$/printTable" />
@@ -196,11 +186,42 @@
           <line>102</line>
           <option name="timeStamp" value="83" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/AppService/getPowerDevicePointNames/init.go</url>
+          <line>17</line>
+          <option name="timeStamp" value="111" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/AppService/getPowerDevicePointNames/init.go</url>
+          <line>19</line>
+          <option name="timeStamp" value="112" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/AppService/getPowerDevicePointNames/getPowerDevicePointNames.go</url>
+          <line>30</line>
+          <option name="timeStamp" value="114" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/AppService/getPowerDevicePointNames/getPowerDevicePointNames.go</url>
+          <line>36</line>
+          <option name="timeStamp" value="115" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/AppService/init.go</url>
+          <line>625</line>
+          <option name="timeStamp" value="116" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/AppService/init.go</url>
+          <line>611</line>
+          <option name="timeStamp" value="117" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="GoApplicationRunConfiguration">
         <watch expression="SunGro" language="go" />
+        <watch expression="Area.EndPoints" language="go" />
       </configuration>
     </watches-manager>
   </component>

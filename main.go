@@ -1,6 +1,7 @@
 package main
 
 import (
+	"GoSungro/Only"
 	"GoSungro/cmd"
 	"fmt"
 	"os"
@@ -12,7 +13,7 @@ import (
 func main() {
 	var err error
 
-	for range OnceOnly {
+	for range Only.Once {
 		err = cmd.Execute()
 		if err != nil {
 			break

@@ -1,7 +1,9 @@
 package AppService
 
 import (
+	"GoSungro/iSolarCloud/AppService/getPowerDevicePointNames"
 	"GoSungro/iSolarCloud/api"
+	"fmt"
 	"reflect"
 	"strings"
 )
@@ -597,4 +599,78 @@ func init() {
 	s := ref.Name()
 	Area.Name = api.AreaName(strings.TrimSuffix(p, "." + s))
 	Area.EndPoints = api.CreateEndPoints(endpoints)
+
+	for _, e := range Area.EndPoints {
+		fmt.Printf("%s/%s -> %s\n",
+			e.Area,
+			e.Name,
+			e.Url.String(),
+			)
+
+		if e.Name == "getPowerDevicePointNames" {
+			fmt.Println("HEYHEYHEY")
+			// foo := e.Resource.GetResource()
+			// fmt.Printf("R:%v\n", foo)
+			foo := getPowerDevicePointNames.Resource{}
+			foo.Init()
+			getPowerDevicePointNames.Init()
+			(getPowerDevicePointNames.Resource)(e.Resource).Call()
+			// e.Response = getPowerDevicePointNames.Resource{}
+			// e.Request = getPowerDevicePointNames.Resource{}
+			continue
+		}
+
+	}
+
+
+	fmt.Println("HEY")
+	foo := Area.EndPoints.GetEndPoint("getPowerDevicePointNames")
+	foo.Resource = getPowerDevicePointNames.Resource{}
+	// _ = foo.SetRequest(getPowerDevicePointNames.Request {
+	// 	RequestCommon: api.RequestCommon {
+	// 		Appkey:     "",
+	// 		DeviceType: "",
+	// 		Lang:       "",
+	// 		SysCode:    "",
+	// 		Token:      "",
+	// 		UserID:     "",
+	// 		ValidFlag:  "",
+	// 	},
+	// 	Extra:         "HOWDY",
+	// })
+
+	// foo.Resource = getPowerDevicePointNames.Resource {
+	// 	Request:  getPowerDevicePointNames.Request {
+	// 		RequestCommon: api.RequestCommon {
+	// 			Get:        nil,
+	// 			Set:        nil,
+	// 			Appkey:     "",
+	// 			DeviceType: "",
+	// 			Lang:       "",
+	// 			SysCode:    "",
+	// 			Token:      "",
+	// 			UserID:     "",
+	// 			ValidFlag:  "",
+	// 		},
+	// 		Extra:         "",
+	// 	},
+	// 	Response: getPowerDevicePointNames.Response {
+	// 		ResponseCommon: api.ResponseCommon {
+	// 			Get:          nil,
+	// 			Set:          nil,
+	// 			ReqSerialNum: "",
+	// 			ResultCode:   "",
+	// 			ResultData:   nil,
+	// 			ResultMsg:    "",
+	// 		},
+	// 		Another:        "",
+	// 	},
+	// }
+	// foo.Resource.SetRequest(nil)
+}
+
+
+func PutMe(j api.Json)  {
+	fmt.Println("Hello world!")
+	fmt.Println(j)
 }

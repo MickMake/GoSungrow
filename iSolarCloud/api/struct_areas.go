@@ -50,7 +50,7 @@ func (an *TypeAreaNames) GetEndPoint(area AreaName, name EndPointName) *TypeEndP
 	return ret
 }
 
-func (an *TypeAreaNames) SetFuncPut(area AreaName, endpoint EndPointName, fn PutFunc) error {
+func (an *TypeAreaNames) SetFuncPut(area AreaName, endpoint EndPointName, fn SetFunc) error {
 	var err error
 	for range Only.Once {
 		err = an.Exists(area, endpoint)
