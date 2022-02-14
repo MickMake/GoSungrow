@@ -2,14 +2,17 @@ package web
 
 import (
 	"GoSungro/Only"
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"path/filepath"
 	"reflect"
 	"strings"
+	"time"
 )
 
 
@@ -83,143 +86,197 @@ func (w *Web) SetUrl(u string) error {
 // 	return w.Error
 // }
 
-// func (w *Web) Get(action interface{}, query interface{}, response interface{}) error {
-// 	for range Only.Once {
-// 		if w.Url == nil {
-// 			w.Error = errors.New("SUNGRO API URL is invalid")
-// 			break
-// 		}
-//
-// 		w.Error = VerifyOptionsRequired(query)
-// 		if w.Error != nil {
-// 			break
-// 		}
-//
-// 		objectName, actionName := GetName(action)
-// 		//FindInStruct(action, "Request")
-// 		//FindInStruct(action, "Response")
-//
-// 		//objectName := GetStructName(object)
-// 		if objectName == "" {
-// 			w.Error = errors.New("invalid object name to structure")
-// 			break
-// 		}
-//
-// 		//actionName := GetStructName(action)
-// 		if objectName == "" {
-// 			w.Error = errors.New("invalid action name to structure")
-// 			break
-// 		}
-//
-// 		queryString := Query(query)
-// 		if objectName == "" {
-// 			w.Error = errors.New("invalid query string for structure")
-// 			break
-// 		}
-//
-// 		u := fmt.Sprintf("%s?format=json&object=%s&action=%s%s",
-// 			w.Url.String(),
-// 			objectName,
-// 			actionName,
-// 			queryString,
-// 		)
-// 		// "?format=json&object=subscriber&action=count"
-//
-// 		//fmt.Printf("Object: %s\n", objectName)
-// 		//fmt.Printf("Action: %s\n", actionName)
-// 		////fmt.Printf("Action: %s\n", actionName)
-// 		//fmt.Printf("Query: %s\n", query)
-// 		//fmt.Printf("ApiUrl: %s\n", url)
-//
-// 		w.request, w.Error = http.NewRequest("GET", u, nil)
-// 		if w.Error != nil {
-// 			break
-// 		}
-//
-// 		w.request.Header.Set("Authorization", w.Token.GetAuthHeader())
-//
-// 		for range Only.Twice {
-// 			//w.response, w.Error = http.Get(url)
-// 			w.response, w.Error = w.client.Do(w.request)
-// 			if w.Error != nil {
-// 				break
-// 			}
-//
-// 			if strings.Contains(w.response.Status, "The access token provided is invalid") {
-// 				// 401 Unauthorized The access token provided is invalid.
-// 				// Will first attempt a refresh of the token OR re-login.
-// 				w.Error = w.Login(nil)
-// 				if w.Error != nil {
-// 					w.Error = errors.New(w.response.Status)
-// 					break
-// 				}
-// 				//w.Error = errors.New(fmt.Sprintf("API response is %s", w.response.Status))
-// 				continue
-// 			}
-//
-// 			if w.response.StatusCode == 401 {
-// 				w.Error = errors.New(w.response.Status)
-// 				break
-// 			}
-//
-// 			// All OK.
-// 			break
-// 		}
-// 		//goland:noinspection GoUnhandledErrorResult
-// 		defer w.response.Body.Close()
-// 		if w.Error != nil {
-// 			break
-// 		}
-//
-// 		if w.response.StatusCode != 200 {
-// 			w.Error = errors.New(fmt.Sprintf("API response is %s", w.response.Status))
-// 			break
-// 		}
-//
-// 		w.Body, w.Error = ioutil.ReadAll(w.response.Body)
-// 		if w.Error != nil {
-// 			break
-// 		}
-//
-// 		if len(w.Body) == 0 {
-// 			w.Error = errors.New("empty response")
-// 			break
-// 		}
-//
-// 		w.Error = json.Unmarshal(w.Body, &response)
-// 		if w.Error != nil {
-// 			fmt.Printf("ERROR: Body is:\n%s\n", w.Body)
-// 			break
-// 		}
-// 	}
-//
-// 	return w.Error
-// }
+func (w *Web) Get() error {
+	for range Only.Once {
+		w.HasTokenExpired()
+		if !w.newToken {
+			break
+		}
 
-// func Query(i interface{}) string {
-// 	var ret string
-//
-// 	s := reflect.ValueOf(i) // .Elem()
-// 	typeOf := s.Type()
-// 	for id := 0; id < s.NumField(); id++ {
-// 		value := fmt.Sprintf("%v", s.Field(id).Interface())
-// 		if value == "" {
-// 			continue
-// 		}
-// 		ret += fmt.Sprintf("&%s=%s",
-// 			typeOf.Field(id).Tag.Get("json"),
-// 			value,
-// 		)
-// 		//fmt.Printf("%d: %s %s = %v\n",
-// 		//	i,
-// 		//	typeOfT.Field(i).Name,
-// 		//	s.Field(i).Type(),
-// 		//	s.Field(i).Interface(),
-// 		//)
-// 	}
-//
-// 	return ret
-// }
+		u := fmt.Sprintf("%s%s",
+			t.Url.String(),
+			TokenRequestUrl,
+		)
+		//p, _ := json.Marshal(map[string]string {
+		//	"user_account": t.Request.Username,
+		//	"user_password": t.Request.Password,
+		//	"appkey": t.Request.AppKey,
+		//	"sys_code": "900",
+		//})
+		p, _ := json.Marshal(t.Request)
+
+		var response *http.Response
+		response, t.Error = http.Post(u, "application/json", bytes.NewBuffer(p))
+		if t.Error != nil {
+			break
+		}
+		//goland:noinspection GoUnhandledErrorResult
+		defer response.Body.Close()
+		if response.StatusCode != 200 {
+			t.Error = errors.New(fmt.Sprintf("Status Code is %d", response.StatusCode))
+			break
+		}
+
+		var body []byte
+		body, t.Error = ioutil.ReadAll(response.Body)
+		if t.Error != nil {
+			break
+		}
+
+		t.Error = json.Unmarshal(body, &t.Response)
+		if t.Error != nil {
+			break
+		}
+
+		t.TokenExpiry = time.Now()
+
+		t.Error = t.saveToken()
+		if t.Error != nil {
+			break
+		}
+	}
+
+	return t.Error
+}
+
+// func (w *Web) Get(action interface{}, query interface{}, response interface{}) error {
+func (w *Web) Get(action interface{}) error {
+	for range Only.Once {
+		if w.Url == nil {
+			w.Error = errors.New("SUNGRO API URL is invalid")
+			break
+		}
+
+		w.Error = VerifyOptionsRequired(query)
+		if w.Error != nil {
+			break
+		}
+
+		objectName, actionName := GetName(action)
+		request := FindInStruct(action, "Request")
+		response := FindInStruct(action, "Response")
+
+		//objectName := GetStructName(object)
+		if objectName == "" {
+			w.Error = errors.New("invalid object name to structure")
+			break
+		}
+
+		//actionName := GetStructName(action)
+		if objectName == "" {
+			w.Error = errors.New("invalid action name to structure")
+			break
+		}
+
+		queryString := Query(query)
+		if objectName == "" {
+			w.Error = errors.New("invalid query string for structure")
+			break
+		}
+
+		u := fmt.Sprintf("%s?format=json&object=%s&action=%s%s",
+			w.Url.String(),
+			objectName,
+			actionName,
+			queryString,
+		)
+		// "?format=json&object=subscriber&action=count"
+
+		//fmt.Printf("Object: %s\n", objectName)
+		//fmt.Printf("Action: %s\n", actionName)
+		////fmt.Printf("Action: %s\n", actionName)
+		//fmt.Printf("Query: %s\n", query)
+		//fmt.Printf("ApiUrl: %s\n", url)
+
+		w.request, w.Error = http.NewRequest("GET", u, nil)
+		if w.Error != nil {
+			break
+		}
+
+		// w.request.Header.Set("Authorization", w.Token.GetAuthHeader())
+
+		for range Only.Twice {
+			//w.response, w.Error = http.Get(url)
+			w.response, w.Error = w.client.Do(w.request)
+			if w.Error != nil {
+				break
+			}
+
+			if strings.Contains(w.response.Status, "The access token provided is invalid") {
+				// 401 Unauthorized The access token provided is invalid.
+				// Will first attempt a refresh of the token OR re-login.
+				w.Error = w.Login(nil)
+				if w.Error != nil {
+					w.Error = errors.New(w.response.Status)
+					break
+				}
+				//w.Error = errors.New(fmt.Sprintf("API response is %s", w.response.Status))
+				continue
+			}
+
+			if w.response.StatusCode == 401 {
+				w.Error = errors.New(w.response.Status)
+				break
+			}
+
+			// All OK.
+			break
+		}
+		//goland:noinspection GoUnhandledErrorResult
+		defer w.response.Body.Close()
+		if w.Error != nil {
+			break
+		}
+
+		if w.response.StatusCode != 200 {
+			w.Error = errors.New(fmt.Sprintf("API response is %s", w.response.Status))
+			break
+		}
+
+		w.Body, w.Error = ioutil.ReadAll(w.response.Body)
+		if w.Error != nil {
+			break
+		}
+
+		if len(w.Body) == 0 {
+			w.Error = errors.New("empty response")
+			break
+		}
+
+		w.Error = json.Unmarshal(w.Body, &response)
+		if w.Error != nil {
+			fmt.Printf("ERROR: Body is:\n%s\n", w.Body)
+			break
+		}
+	}
+
+	return w.Error
+}
+
+func Query(i interface{}) string {
+	var ret string
+
+	s := reflect.ValueOf(i) // .Elem()
+	typeOf := s.Type()
+	for id := 0; id < s.NumField(); id++ {
+		value := fmt.Sprintf("%v", s.Field(id).Interface())
+		if value == "" {
+			continue
+		}
+		ret += fmt.Sprintf("&%s=%s",
+			typeOf.Field(id).Tag.Get("json"),
+			value,
+		)
+		//fmt.Printf("%d: %s %s = %v\n",
+		//	i,
+		//	typeOfT.Field(i).Name,
+		//	s.Field(i).Type(),
+		//	s.Field(i).Interface(),
+		//)
+	}
+
+	return ret
+}
 
 func PrintHeader(i interface{}) string {
 	var ret string
@@ -379,35 +436,35 @@ func ReflectAsJson(ref interface{}) string {
 
 	for range Only.Once {
 		switch reflect.TypeOf(ref).Kind() {
-		case reflect.Slice:
-		case reflect.Array:
-			fmt.Println("The interface is a slice.")
-			s := reflect.ValueOf(ref)
-			ret += "["
-			for i := 0; i < s.Len(); i++ {
-				ret += ReflectAsJson(s.Index(i))
-			}
-			ret += "]"
-
-		case reflect.Struct:
-			s := reflect.ValueOf(ref) // .Elem()
-			typeOf := s.Type()
-			for i := 0; i < s.NumField(); i++ {
-				value := fmt.Sprintf("%v", s.Field(i).Interface())
-				if value == "" {
-					continue
+			case reflect.Slice:
+			case reflect.Array:
+				fmt.Println("The interface is a slice.")
+				s := reflect.ValueOf(ref)
+				ret += "["
+				for i := 0; i < s.Len(); i++ {
+					ret += ReflectAsJson(s.Index(i))
 				}
-				ret += fmt.Sprintf("%s:%s\n",
-					typeOf.Field(i).Tag.Get("json"),
-					value,
-				)
-				//fmt.Printf("%d: %s %s = %v\n",
-				//	i,
-				//	typeOfT.Field(i).Name,
-				//	s.Field(i).Type(),
-				//	s.Field(i).Interface(),
-				//)
-			}
+				ret += "]"
+
+			case reflect.Struct:
+				s := reflect.ValueOf(ref) // .Elem()
+				typeOf := s.Type()
+				for i := 0; i < s.NumField(); i++ {
+					value := fmt.Sprintf("%v", s.Field(i).Interface())
+					if value == "" {
+						continue
+					}
+					ret += fmt.Sprintf("%s:%s\n",
+						typeOf.Field(i).Tag.Get("json"),
+						value,
+					)
+					//fmt.Printf("%d: %s %s = %v\n",
+					//	i,
+					//	typeOfT.Field(i).Name,
+					//	s.Field(i).Type(),
+					//	s.Field(i).Interface(),
+					//)
+				}
 		}
 	}
 
@@ -470,12 +527,12 @@ func GetName(ref interface{}) (string, string) {
 	str = strings.ToLower(str)
 	sa := strings.SplitN(str, ".", 2)
 	switch len(sa) {
-	case 0:
-	case 1:
-		packageName = sa[0]
-	case 2:
-		packageName = sa[0]
-		structName = sa[1]
+		case 0:
+		case 1:
+			packageName = sa[0]
+		case 2:
+			packageName = sa[0]
+			structName = sa[1]
 	}
 	return packageName, structName
 }

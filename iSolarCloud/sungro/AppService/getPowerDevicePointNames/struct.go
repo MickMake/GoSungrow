@@ -16,13 +16,19 @@ type EndPoint api.EndPointStruct
 
 type Request struct {
 	api.RequestCommon
-	Extra string
-}
-type Response struct {
-	api.ResponseCommon
-	Another string
+	DeviceType string `json:"device_type"`
 }
 
+type Response struct {
+	api.ResponseCommon
+	ResultData ResultData `json:"result_data"`
+}
+
+type ResultData   []struct {
+	PointCalType int64  `json:"point_cal_type"`
+	PointID      int64  `json:"point_id"`
+	PointName    string `json:"point_name"`
+}
 
 func Init() EndPoint {
 	fmt.Println("Init()")

@@ -133,8 +133,7 @@ type Response struct {
 
 func Init() EndPoint {
 	fmt.Println("Init()")
-
-	foo := EndPoint {
+	return EndPoint {
 		Area:     api.GetArea(EndPoint{}),
 		Name:     api.GetName(EndPoint{}),
 		Url:      api.GetUrl(Url),
@@ -142,32 +141,23 @@ func Init() EndPoint {
 		Response: Response{},
 		Error:    nil,
 	}
-
-	fmt.Printf("endpoint: %v\n", foo)
-
-	return foo
 }
 
 
 func (g EndPoint) GetArea() api.AreaName {
-	fmt.Println("g.GetArea()")
 	return g.Area
 }
 
 func (g EndPoint) GetName() api.EndPointName {
-	fmt.Println("g.GetName()")
 	return g.Name
 }
 
 func (g EndPoint) GetUrl() *url.URL {
-	fmt.Println("g.GetUrl()")
 	return g.Url
 }
 
 func (g EndPoint) SetRequest(ref interface{}) error {
-	fmt.Println("g.SetRequest()")
 	g.Request = ref.(Request)
-	fmt.Printf("ref == %v\n", g.Request)
 	return nil
 }
 
@@ -194,7 +184,6 @@ func (g EndPoint) Call() api.Json {
 }
 
 func (g EndPoint) Init() *EndPoint {
-	fmt.Println("g.Init()")
 	ret := Init()
 	return &ret
 }

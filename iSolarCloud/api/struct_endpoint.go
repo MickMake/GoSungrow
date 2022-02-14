@@ -2,7 +2,6 @@ package api
 
 import (
 	"GoSungro/Only"
-	"GoSungro/iSolarCloud/web"
 	"errors"
 	"net/url"
 )
@@ -34,7 +33,7 @@ type EndPointStruct struct {
 type Common struct {
 	Get GetFunc
 	Set SetFunc
-	Web *web.Web
+	// Web *web.Web
 }
 
 type RequestCommon struct {
