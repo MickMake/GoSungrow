@@ -2,9 +2,8 @@ package cmd
 
 import (
 	"GoSungro/Only"
-	"GoSungro/google"
-	"GoSungro/iSolarCloud"
-	"GoSungro/iSolarCloud/web"
+	"GoSungro/iSolarCloud/sungro"
+	"GoSungro/iSolarCloud/sungro/web"
 	"GoSungro/lsgo"
 	"GoSungro/mmGit"
 	"errors"
@@ -107,7 +106,7 @@ func (ca *CommandArgs) ProcessArgs(cmd *cobra.Command, args []string) error {
 	for range Only.Once {
 		ca.Args = args
 
-		SunGro = iSolarCloud.NewSunGro(ca.ApiUrl)
+		SunGro = sungro.NewSunGro(ca.ApiUrl)
 		if SunGro.Error != nil {
 			break
 		}
@@ -133,9 +132,9 @@ func (ca *CommandArgs) ProcessArgs(cmd *cobra.Command, args []string) error {
 			ca.Error = writeConfig()
 		}
 
-		if Cmd.GoogleSheetUpdate {
-			SunGro.OutputType = iSolarCloud.TypeGoogle
-		}
+		// if Cmd.GoogleSheetUpdate {
+		// 	SunGro.OutputType = iSolarCloud.TypeGoogle
+		// }
 
 		//Git.Error = Cmd.GitSet()
 		//if Cmd.Error != nil {
@@ -256,14 +255,12 @@ func (ca *CommandArgs) GitSave(entities ...string) error {
 		fmt.Printf("Saving %d entities from the SunGro to Git...\n", len(entities))
 
 		//SunGro.OutputType = iSolarCloud.StringTypeJson
-		SunGro.OutputType = iSolarCloud.TypeJson
-		//domain := SunGro.VerifyDomain("")
-		//user := SunGro.VerifyUser("")
+		// SunGro.OutputType = iSolarCloud.TypeJson
 
 		for _, entity := range entities {
 			// Remove plurals.
 			entity = strings.TrimSuffix(entity, "s")
-			SunGro.OutputString = ""
+			// SunGro.OutputString = ""
 
 			switch entity {
 				case "domain":
@@ -274,7 +271,7 @@ func (ca *CommandArgs) GitSave(entities ...string) error {
 			}
 
 			jf := AddJsonSuffix(entity)
-			Cmd.Error = Git.SaveFile(jf, []byte(SunGro.OutputString))
+			Cmd.Error = Git.SaveFile(jf, []byte(ca.OutputFile))
 			if Cmd.Error != nil {
 				break
 			}
@@ -290,9 +287,7 @@ func (ca *CommandArgs) GitSave(entities ...string) error {
 func (ca *CommandArgs) GoogleUpdate(entities ...string) error {
 
 	for range Only.Once {
-		SunGro.OutputType = iSolarCloud.TypeGoogle
-		//domain := SunGro.VerifyDomain("")
-		//user := SunGro.VerifyUser("")
+		// SunGro.OutputType = iSolarCloud.TypeGoogle
 
 		if len(entities) == 0 {
 			entities = DefaultAreas
@@ -308,15 +303,15 @@ func (ca *CommandArgs) GoogleUpdate(entities ...string) error {
 					}
 			}
 
-			sheet := google.Sheet {
-				Id:          "",
-				Credentials: nil,
-				SheetName:   entity,
-				Range:       "",
-				Data:        SunGro.OutputArray,
-			}
-			sheet.Set(sheet)
-			ca.Error = sheet.WriteSheet()
+			// sheet := google.Sheet {
+			// 	Id:          "",
+			// 	Credentials: nil,
+			// 	SheetName:   entity,
+			// 	Range:       "",
+			// 	Data:        ca.OutputFile,
+			// }
+			// sheet.Set(sheet)
+			// ca.Error = sheet.WriteSheet()
 			if ca.Error != nil {
 				break
 			}

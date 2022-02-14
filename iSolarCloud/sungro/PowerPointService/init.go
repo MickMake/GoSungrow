@@ -24,5 +24,5 @@ func init() {
 	p := ref.String()
 	s := ref.Name()
 	Area.Name = api.AreaName(strings.TrimSuffix(p, "." + s))
-	Area.EndPoints = api.CreateEndPoints(endpoints)
+	// Area.EndPoints = api.CreateEndPoints(endpoints)
 }

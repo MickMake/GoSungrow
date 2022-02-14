@@ -14,6 +14,7 @@ import (
 	"time"
 )
 
+
 const (
 	DateTimeFormat       = "2006-01-02T15:04:05"
 	DefaultAuthTokenFile = "SunGroAuthToken.json"
@@ -21,8 +22,8 @@ const (
 
 var (
 	TokenRequestUrl = "/v1/userService/login"
-	GrantPassword   = "password"
-	GrantRefresh    = "refresh_token"
+	// GrantPassword   = "password"
+	// GrantRefresh    = "refresh_token"
 )
 
 type SunGroAuth struct {
@@ -349,23 +350,23 @@ func (t *Token) HasTokenChanged() bool {
 	return ok
 }
 
-func (t *Token) GetAuthHeader() string {
-	var ret string
-
-	for range Only.Once {
-		//if t.Response.TokenType == "" {
-		//	break
-		//}
-		//
-		//if t.Response.AccessToken == "" {
-		//	break
-		//}
-		//
-		//ret = t.Response.TokenType + " " + t.Response.AccessToken
-	}
-
-	return ret
-}
+// func (t *Token) GetAuthHeader() string {
+// 	var ret string
+//
+// 	for range Only.Once {
+// 		//if t.Response.TokenType == "" {
+// 		//	break
+// 		//}
+// 		//
+// 		//if t.Response.AccessToken == "" {
+// 		//	break
+// 		//}
+// 		//
+// 		//ret = t.Response.TokenType + " " + t.Response.AccessToken
+// 	}
+//
+// 	return ret
+// }
 
 func (t *Token) GetToken() string {
 	//return fmt.Sprintf("%s %s", t.Response.TokenType, t.Response.AccessToken)

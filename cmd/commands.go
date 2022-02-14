@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"GoSungro/Only"
-	"GoSungro/iSolarCloud"
+	"GoSungro/iSolarCloud/sungro"
 	"GoSungro/mmGit"
 	"fmt"
 	"github.com/spf13/cobra"
@@ -14,7 +14,7 @@ import (
 )
 
 
-var SunGro *iSolarCloud.SunGro
+var SunGro *sungro.SunGro
 var Git *mmGit.Git
 var Cmd CommandArgs
 var rootViper *viper.Viper

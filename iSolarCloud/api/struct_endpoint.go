@@ -8,24 +8,28 @@ import (
 )
 
 
-// type ResourceType struct {
-// 	Area       AreaName     `json:"area"`
-// 	Name       EndPointName `json:"name"`
-// 	Url        *url.URL     `json:"url"`
-// }
-
-type Resource interface {
+type EndPoint interface {
+	GetArea() AreaName
+	GetName() EndPointName
+	GetUrl() *url.URL
 	Call() Json
 	SetRequest(ref interface{}) error
-	GetResource() interface{}
+	GetRequest() Json
+	GetResponse() Json
+	GetData() Json
+	IsValid() error
+	GetError() error
 }
 
 
-// type Response interface {
-// 	SetFuncPut(fn SetFunc) error
-// 	SetFuncGet(fn GetFunc) error
-// 	SetResponse(ref interface{})
-// }
+type EndPointStruct struct {
+	Area     AreaName     `json:"area"`
+	Name     EndPointName `json:"name"`
+	Url      *url.URL     `json:"url"`
+	Request  interface{}  `json:"request"`
+	Response interface{}  `json:"response"`
+	Error    error        `json:"error"`
+}
 
 type Common struct {
 	Get GetFunc
@@ -34,54 +38,20 @@ type Common struct {
 }
 
 type RequestCommon struct {
-	Get GetFunc
-	Set SetFunc
-
 	Appkey     string `json:"appkey"`
-	DeviceType string `json:"device_type"`
 	Lang       string `json:"lang"`
 	SysCode    string `json:"sys_code"`
 	Token      string `json:"token"`
 	UserID     string `json:"user_id"`
 	ValidFlag  string `json:"valid_flag"`
+	// DeviceType string `json:"device_type"`
 }
 
 type ResponseCommon struct {
-	Get GetFunc
-	Set SetFunc
-
 	ReqSerialNum string        `json:"req_serial_num"`
 	ResultCode   string        `json:"result_code"`
 	ResultData   []interface{} `json:"result_data"`
 	ResultMsg    string        `json:"result_msg"`
-}
-
-
-type TypeEndPoint struct {
-	Area       AreaName     `json:"area"`
-	Name       EndPointName `json:"name"`
-	Url        *url.URL     `json:"url"`
-
-	resource interface{}
-	Request  interface{}
-	Response interface{}
-
-	Get GetFunc
-	Put SetFunc
-
-	Error      error
-}
-
-// func (p *TypeEndPoint) Call() Json {
-// 	panic("implement me")
-// }
-//
-// func (p *TypeEndPoint) GetResource() interface{} {
-// 	panic("implement me")
-// }
-
-func (ps *TypeEndPoints) SetResource(ref interface{}) {
-
 }
 
 type EndPointName string
@@ -91,7 +61,42 @@ type GetFunc func() Json
 type SetFunc func(j Json)
 
 
-func (p *TypeEndPoint) IsValid() error {
+func (p *EndPointStruct) GetArea() AreaName {
+	return p.Area
+}
+
+func (p *EndPointStruct) GetName() EndPointName {
+	return p.Name
+}
+
+func (p *EndPointStruct) GetUrl() *url.URL {
+	return p.Url
+}
+
+func (p *EndPointStruct) Call() Json {
+	panic("implement me")
+}
+
+func (p *EndPointStruct) SetRequest(ref interface{}) error {
+	for range Only.Once {
+		if ref == nil {
+			p.Error = errors.New("endpoint has a nil request structure")
+			break
+		}
+		p.Request = ref
+	}
+	return p.Error
+}
+
+func (p *EndPointStruct) GetRequest() Json {
+	panic("implement me")
+}
+
+func (p *EndPointStruct) GetResponse() Json {
+	panic("implement me")
+}
+
+func (p *EndPointStruct) IsValid() error {
 	var err error
 	for range Only.Once {
 		if p == nil {
@@ -110,53 +115,43 @@ func (p *TypeEndPoint) IsValid() error {
 	return err
 }
 
-func (p *TypeEndPoint) SetFuncPut(fn SetFunc) error {
-	for range Only.Once {
-		if fn == nil {
-			p.Error = errors.New("endpoint put function is nil")
-			break
-		}
-		p.Put = fn
-	}
-	return p.Error
-}
 
-func (p *TypeEndPoint) SetFuncGet(fn GetFunc) error {
-	for range Only.Once {
-		if fn == nil {
-			p.Error = errors.New("endpoint get function is nil")
-			break
-		}
-		p.Get = fn
-	}
-	return p.Error
-}
-
-func (p *TypeEndPoint) SetResponse(ref interface{}) error {
-	for range Only.Once {
-		if ref == nil {
-			p.Error = errors.New("endpoint has a nil response structure")
-			break
-		}
-		p.Response = ref
-	}
-	return p.Error
-}
-
-func (p *TypeEndPoint) SetRequest(ref interface{}) error {
-	for range Only.Once {
-		if ref == nil {
-			p.Error = errors.New("endpoint has a nil request structure")
-			break
-		}
-		p.Request = ref
-	}
-	return p.Error
-}
-
-// func (p *TypeEndPoint) SetResource(ref interface{}) Resource {
+// func (p *EndPointStruct) SetFuncPut(fn SetFunc) error {
 // 	for range Only.Once {
-// 		p.Resource = ref
+// 		if fn == nil {
+// 			p.Error = errors.New("endpoint put function is nil")
+// 			break
+// 		}
+// 		p.Put = fn
 // 	}
-// 	return p.Resource
+// 	return p.Error
+// }
+//
+// func (p *EndPointStruct) SetFuncGet(fn GetFunc) error {
+// 	for range Only.Once {
+// 		if fn == nil {
+// 			p.Error = errors.New("endpoint get function is nil")
+// 			break
+// 		}
+// 		p.Get = fn
+// 	}
+// 	return p.Error
+// }
+//
+// func (p *EndPointStruct) SetResponse(ref interface{}) error {
+// 	for range Only.Once {
+// 		if ref == nil {
+// 			p.Error = errors.New("endpoint has a nil response structure")
+// 			break
+// 		}
+// 		p.Response = ref
+// 	}
+// 	return p.Error
+// }
+//
+// func (p *EndPointStruct) SetResource(ref interface{}) EndPoint {
+// 	for range Only.Once {
+// 		p.EndPoint = ref
+// 	}
+// 	return p.EndPoint
 // }

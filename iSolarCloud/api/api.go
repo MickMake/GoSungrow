@@ -3,6 +3,11 @@
 package api
 
 
+
+
+
+
+
 var ApiFoo = (*Api)(nil)
 
 func LoadMe() bool {

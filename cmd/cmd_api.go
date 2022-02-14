@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"GoSungro/Only"
+	"GoSungro/iSolarCloud/sungro/AppService/login"
 	"fmt"
 	"github.com/spf13/cobra"
 )
@@ -56,7 +57,7 @@ func cmdApiListFunc(cmd *cobra.Command, args []string) {
 				Cmd.Error = SunGro.ListEndpoints("")
 
 			case args[0] == "areas":
-				Cmd.Error = SunGro.ListAreas()
+				SunGro.ListAreas()
 
 			default:
 				Cmd.Error = SunGro.ListEndpoints(args[0])
@@ -86,8 +87,18 @@ func cmdApiGetFunc(cmd *cobra.Command, args []string) {
 			args[1] = "AppService"
 		}
 
+		// foo := AppService.Init()
+		// bar := foo.GetEndPoints()
+		// fmt.Printf("%v\n", bar)
 		hey := SunGro.GetEndpoint(args[1], args[0])
+		hey.SetRequest(login.Request {
+			UserAccount:  "",
+			UserPassword: "",
+		})
 		fmt.Printf("HEY:%v\n", hey)
+		fmt.Printf("HEY:%v\n", hey.GetError())
+		fmt.Printf("HEY:%s\n", hey.GetRequest())
+		fmt.Printf("HEY:%s\n", hey.GetData())
 		if Cmd.Error != nil {
 			break
 		}

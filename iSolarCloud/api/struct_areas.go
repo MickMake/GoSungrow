@@ -3,15 +3,28 @@ package api
 import (
 	"GoSungro/Only"
 	"errors"
+	"fmt"
+	"github.com/olekukonko/tablewriter"
+	"os"
 	"sort"
 )
 
 
-type TypeAreaNames map[AreaName]TypeEndPoints		// Map of EndPoints by area name.
+type Areas map[AreaName]AreaStruct // TypeEndPoints		// Map of EndPoints by area name.
 type AreaName string
+type AreaNames []AreaName
 
 
-func (an *TypeAreaNames) Exists(area AreaName, name EndPointName) error {
+func (an *Areas) Exists(area string) bool {
+	var ok bool
+	_, ok = (*an)[AreaName(area)]
+	return ok
+}
+func (an *Areas) NotExists(area string) bool {
+	return !an.Exists(area)
+}
+
+func (an *Areas) EndpointExists(area AreaName, name EndPointName) error {
 	var err error
 	for range Only.Once {
 		if _, ok := (*an)[area]; !ok {
@@ -25,112 +38,106 @@ func (an *TypeAreaNames) Exists(area AreaName, name EndPointName) error {
 	return err
 }
 
-func (an *TypeAreaNames) SortAreas() []AreaName {
+func (an *Areas) SortAreas() AreaNames {
 	keys := make([]string, 0, len(*an))
 	for k := range *an {
 		keys = append(keys, string(k))
 	}
 	sort.Strings(keys)
-	ret := make([]AreaName, 0, len(keys))
+	ret := make(AreaNames, 0, len(keys))
 	for _, r := range keys {
 		ret = append(ret, AreaName(r))
 	}
 	return ret
 }
 
-func (an *TypeAreaNames) GetEndPoint(area AreaName, name EndPointName) *TypeEndPoint {
-	var ret *TypeEndPoint
+func (an *Areas) GetEndPoint(area AreaName, name EndPointName) EndPoint {
+	var ret EndPoint
 	for range Only.Once {
 		if _, ok := (*an)[area]; !ok {
 			break
 		}
-		point := (*an)[area]
-		ret = point.GetEndPoint(name)
+		ret = (*an)[area].EndPoints[name]
 	}
 	return ret
 }
 
-func (an *TypeAreaNames) SetFuncPut(area AreaName, endpoint EndPointName, fn SetFunc) error {
+func (an Areas) ListAreas() {
+	for range Only.Once {
+		fmt.Println("Listing all endpoint areas:")
+
+		table := tablewriter.NewWriter(os.Stdout)
+		table.SetHeader([]string{"Areas", "EndPoints"})
+		table.SetBorder(true)
+		for _, area := range an.SortAreas() {
+			size := fmt.Sprintf("%d", an[area].CountEndpoints())
+			table.Append([]string{string(area), size})
+		}
+		table.Render()
+	}
+}
+
+func (an Areas) ListEndpoints(area string) error {
 	var err error
 	for range Only.Once {
-		err = an.Exists(area, endpoint)
-		if err != nil {
+		if area == "" {
+			fmt.Printf("Listing all areas:\n")
+			for _, a := range an.SortAreas() {
+				an[a].ListEndpoints()
+			}
 			break
 		}
-		point := (*an)[area][endpoint]
-		err = point.SetFuncPut(fn)
+
+		if an.NotExists(area) {
+			err = errors.New("unknown area name")
+			break
+		}
+
+		an[AreaName(area)].ListEndpoints()
 	}
+
 	return err
 }
 
-func (an *TypeAreaNames) SetFuncGet(area AreaName, endpoint EndPointName, fn GetFunc) error {
-	var err error
-	for range Only.Once {
-		err = an.Exists(area, endpoint)
-		if err != nil {
-			break
-		}
-		point := (*an)[area][endpoint]
-		err = point.SetFuncGet(fn)
-	}
-	return err
-}
-
-func (an *TypeAreaNames) SetRequest(area AreaName, endpoint EndPointName, ref interface{}) error {
+func (an *Areas) SetRequest(area AreaName, name EndPointName, ref interface{}) error {
 	var err error
 
 	for range Only.Once {
-		err = an.Exists(area, endpoint)
+		err = an.EndpointExists(area, name)
 		if err != nil {
 			break
 		}
 
-		point := (*an)[area][endpoint]
+		point := (*an)[area].EndPoints[name]
 		err = point.SetRequest(ref)
 	}
 
 	return err
 }
 
-func (an *TypeAreaNames) SetResponse(area AreaName, endpoint EndPointName, ref interface{}) error {
-	var err error
+func (an *Areas) GetRequest(area AreaName, endpoint EndPointName) Json {
+	var ret Json
 
 	for range Only.Once {
-		err = an.Exists(area, endpoint)
+		err := an.EndpointExists(area, endpoint)
 		if err != nil {
 			break
 		}
-
-		point := (*an)[area][endpoint]
-		err = point.SetResponse(ref)
-	}
-
-	return err
-}
-
-func (an *TypeAreaNames) GetRequest(area AreaName, endpoint EndPointName) interface{} {
-	var ret interface{}
-
-	for range Only.Once {
-		err := an.Exists(area, endpoint)
-		if err != nil {
-			break
-		}
-		ret = an.GetEndPoint(area, endpoint).Request
+		ret = an.GetEndPoint(area, endpoint).GetRequest()
 	}
 
 	return ret
 }
 
-func (an *TypeAreaNames) GetResponse(area AreaName, endpoint EndPointName) interface{} {
-	var ret interface{}
+func (an *Areas) GetResponse(area AreaName, endpoint EndPointName) Json {
+	var ret Json
 
 	for range Only.Once {
-		err := an.Exists(area, endpoint)
+		err := an.EndpointExists(area, endpoint)
 		if err != nil {
 			break
 		}
-		ret = an.GetEndPoint(area, endpoint).Response
+		ret = an.GetEndPoint(area, endpoint).GetResponse()
 	}
 
 	return ret

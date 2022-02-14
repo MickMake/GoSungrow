@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"path/filepath"
@@ -36,191 +35,191 @@ func (w *Web) SetUrl(u string) error {
 	return w.Error
 }
 
-func (w *Web) GetOLD(s interface{}, url string, args ...interface{}) error {
-	for range Only.Once {
-		if w.Url == nil {
-			w.Error = errors.New("SUNGRO API URL is invalid")
-			break
-		}
+// func (w *Web) GetOLD(s interface{}, url string, args ...interface{}) error {
+// 	for range Only.Once {
+// 		if w.Url == nil {
+// 			w.Error = errors.New("SUNGRO API URL is invalid")
+// 			break
+// 		}
+//
+// 		url = fmt.Sprintf(w.Url.String()+url, args...)
+//
+// 		w.request, w.Error = http.NewRequest("GET", url, nil)
+// 		if w.Error != nil {
+// 			break
+// 		}
+//
+// 		w.request.Header.Set("Authorization", w.Token.GetAuthHeader())
+//
+// 		//w.response, w.Error = http.Get(url)
+// 		w.response, w.Error = w.client.Do(w.request)
+// 		if w.Error != nil {
+// 			break
+// 		}
+// 		//goland:noinspection GoUnhandledErrorResult
+// 		defer w.response.Body.Close()
+// 		if w.response.StatusCode != 200 {
+// 			w.Error = errors.New(fmt.Sprintf("API response is %s", w.response.Status))
+// 			break
+// 		}
+//
+// 		w.Body, w.Error = ioutil.ReadAll(w.response.Body)
+// 		if w.Error != nil {
+// 			break
+// 		}
+//
+// 		if len(w.Body) == 0 {
+// 			w.Error = errors.New("empty response")
+// 			break
+// 		}
+//
+// 		w.Error = json.Unmarshal(w.Body, &s)
+// 		if w.Error != nil {
+// 			fmt.Printf("ERROR: Body is:\n%s\n", w.Body)
+// 			break
+// 		}
+// 	}
+//
+// 	return w.Error
+// }
 
-		url = fmt.Sprintf(w.Url.String()+url, args...)
+// func (w *Web) Get(action interface{}, query interface{}, response interface{}) error {
+// 	for range Only.Once {
+// 		if w.Url == nil {
+// 			w.Error = errors.New("SUNGRO API URL is invalid")
+// 			break
+// 		}
+//
+// 		w.Error = VerifyOptionsRequired(query)
+// 		if w.Error != nil {
+// 			break
+// 		}
+//
+// 		objectName, actionName := GetName(action)
+// 		//FindInStruct(action, "Request")
+// 		//FindInStruct(action, "Response")
+//
+// 		//objectName := GetStructName(object)
+// 		if objectName == "" {
+// 			w.Error = errors.New("invalid object name to structure")
+// 			break
+// 		}
+//
+// 		//actionName := GetStructName(action)
+// 		if objectName == "" {
+// 			w.Error = errors.New("invalid action name to structure")
+// 			break
+// 		}
+//
+// 		queryString := Query(query)
+// 		if objectName == "" {
+// 			w.Error = errors.New("invalid query string for structure")
+// 			break
+// 		}
+//
+// 		u := fmt.Sprintf("%s?format=json&object=%s&action=%s%s",
+// 			w.Url.String(),
+// 			objectName,
+// 			actionName,
+// 			queryString,
+// 		)
+// 		// "?format=json&object=subscriber&action=count"
+//
+// 		//fmt.Printf("Object: %s\n", objectName)
+// 		//fmt.Printf("Action: %s\n", actionName)
+// 		////fmt.Printf("Action: %s\n", actionName)
+// 		//fmt.Printf("Query: %s\n", query)
+// 		//fmt.Printf("ApiUrl: %s\n", url)
+//
+// 		w.request, w.Error = http.NewRequest("GET", u, nil)
+// 		if w.Error != nil {
+// 			break
+// 		}
+//
+// 		w.request.Header.Set("Authorization", w.Token.GetAuthHeader())
+//
+// 		for range Only.Twice {
+// 			//w.response, w.Error = http.Get(url)
+// 			w.response, w.Error = w.client.Do(w.request)
+// 			if w.Error != nil {
+// 				break
+// 			}
+//
+// 			if strings.Contains(w.response.Status, "The access token provided is invalid") {
+// 				// 401 Unauthorized The access token provided is invalid.
+// 				// Will first attempt a refresh of the token OR re-login.
+// 				w.Error = w.Login(nil)
+// 				if w.Error != nil {
+// 					w.Error = errors.New(w.response.Status)
+// 					break
+// 				}
+// 				//w.Error = errors.New(fmt.Sprintf("API response is %s", w.response.Status))
+// 				continue
+// 			}
+//
+// 			if w.response.StatusCode == 401 {
+// 				w.Error = errors.New(w.response.Status)
+// 				break
+// 			}
+//
+// 			// All OK.
+// 			break
+// 		}
+// 		//goland:noinspection GoUnhandledErrorResult
+// 		defer w.response.Body.Close()
+// 		if w.Error != nil {
+// 			break
+// 		}
+//
+// 		if w.response.StatusCode != 200 {
+// 			w.Error = errors.New(fmt.Sprintf("API response is %s", w.response.Status))
+// 			break
+// 		}
+//
+// 		w.Body, w.Error = ioutil.ReadAll(w.response.Body)
+// 		if w.Error != nil {
+// 			break
+// 		}
+//
+// 		if len(w.Body) == 0 {
+// 			w.Error = errors.New("empty response")
+// 			break
+// 		}
+//
+// 		w.Error = json.Unmarshal(w.Body, &response)
+// 		if w.Error != nil {
+// 			fmt.Printf("ERROR: Body is:\n%s\n", w.Body)
+// 			break
+// 		}
+// 	}
+//
+// 	return w.Error
+// }
 
-		w.request, w.Error = http.NewRequest("GET", url, nil)
-		if w.Error != nil {
-			break
-		}
-
-		w.request.Header.Set("Authorization", w.Token.GetAuthHeader())
-
-		//w.response, w.Error = http.Get(url)
-		w.response, w.Error = w.client.Do(w.request)
-		if w.Error != nil {
-			break
-		}
-		//goland:noinspection GoUnhandledErrorResult
-		defer w.response.Body.Close()
-		if w.response.StatusCode != 200 {
-			w.Error = errors.New(fmt.Sprintf("API response is %s", w.response.Status))
-			break
-		}
-
-		w.Body, w.Error = ioutil.ReadAll(w.response.Body)
-		if w.Error != nil {
-			break
-		}
-
-		if len(w.Body) == 0 {
-			w.Error = errors.New("empty response")
-			break
-		}
-
-		w.Error = json.Unmarshal(w.Body, &s)
-		if w.Error != nil {
-			fmt.Printf("ERROR: Body is:\n%s\n", w.Body)
-			break
-		}
-	}
-
-	return w.Error
-}
-
-func (w *Web) Get(action interface{}, query interface{}, response interface{}) error {
-	for range Only.Once {
-		if w.Url == nil {
-			w.Error = errors.New("SUNGRO API URL is invalid")
-			break
-		}
-
-		w.Error = VerifyOptionsRequired(query)
-		if w.Error != nil {
-			break
-		}
-
-		objectName, actionName := GetName(action)
-		//FindInStruct(action, "Request")
-		//FindInStruct(action, "Response")
-
-		//objectName := GetStructName(object)
-		if objectName == "" {
-			w.Error = errors.New("invalid object name to structure")
-			break
-		}
-
-		//actionName := GetStructName(action)
-		if objectName == "" {
-			w.Error = errors.New("invalid action name to structure")
-			break
-		}
-
-		queryString := Query(query)
-		if objectName == "" {
-			w.Error = errors.New("invalid query string for structure")
-			break
-		}
-
-		u := fmt.Sprintf("%s?format=json&object=%s&action=%s%s",
-			w.Url.String(),
-			objectName,
-			actionName,
-			queryString,
-		)
-		// "?format=json&object=subscriber&action=count"
-
-		//fmt.Printf("Object: %s\n", objectName)
-		//fmt.Printf("Action: %s\n", actionName)
-		////fmt.Printf("Action: %s\n", actionName)
-		//fmt.Printf("Query: %s\n", query)
-		//fmt.Printf("ApiUrl: %s\n", url)
-
-		w.request, w.Error = http.NewRequest("GET", u, nil)
-		if w.Error != nil {
-			break
-		}
-
-		w.request.Header.Set("Authorization", w.Token.GetAuthHeader())
-
-		for range Only.Twice {
-			//w.response, w.Error = http.Get(url)
-			w.response, w.Error = w.client.Do(w.request)
-			if w.Error != nil {
-				break
-			}
-
-			if strings.Contains(w.response.Status, "The access token provided is invalid") {
-				// 401 Unauthorized The access token provided is invalid.
-				// Will first attempt a refresh of the token OR re-login.
-				w.Error = w.Login(nil)
-				if w.Error != nil {
-					w.Error = errors.New(w.response.Status)
-					break
-				}
-				//w.Error = errors.New(fmt.Sprintf("API response is %s", w.response.Status))
-				continue
-			}
-
-			if w.response.StatusCode == 401 {
-				w.Error = errors.New(w.response.Status)
-				break
-			}
-
-			// All OK.
-			break
-		}
-		//goland:noinspection GoUnhandledErrorResult
-		defer w.response.Body.Close()
-		if w.Error != nil {
-			break
-		}
-
-		if w.response.StatusCode != 200 {
-			w.Error = errors.New(fmt.Sprintf("API response is %s", w.response.Status))
-			break
-		}
-
-		w.Body, w.Error = ioutil.ReadAll(w.response.Body)
-		if w.Error != nil {
-			break
-		}
-
-		if len(w.Body) == 0 {
-			w.Error = errors.New("empty response")
-			break
-		}
-
-		w.Error = json.Unmarshal(w.Body, &response)
-		if w.Error != nil {
-			fmt.Printf("ERROR: Body is:\n%s\n", w.Body)
-			break
-		}
-	}
-
-	return w.Error
-}
-
-func Query(i interface{}) string {
-	var ret string
-
-	s := reflect.ValueOf(i) // .Elem()
-	typeOf := s.Type()
-	for id := 0; id < s.NumField(); id++ {
-		value := fmt.Sprintf("%v", s.Field(id).Interface())
-		if value == "" {
-			continue
-		}
-		ret += fmt.Sprintf("&%s=%s",
-			typeOf.Field(id).Tag.Get("json"),
-			value,
-		)
-		//fmt.Printf("%d: %s %s = %v\n",
-		//	i,
-		//	typeOfT.Field(i).Name,
-		//	s.Field(i).Type(),
-		//	s.Field(i).Interface(),
-		//)
-	}
-
-	return ret
-}
+// func Query(i interface{}) string {
+// 	var ret string
+//
+// 	s := reflect.ValueOf(i) // .Elem()
+// 	typeOf := s.Type()
+// 	for id := 0; id < s.NumField(); id++ {
+// 		value := fmt.Sprintf("%v", s.Field(id).Interface())
+// 		if value == "" {
+// 			continue
+// 		}
+// 		ret += fmt.Sprintf("&%s=%s",
+// 			typeOf.Field(id).Tag.Get("json"),
+// 			value,
+// 		)
+// 		//fmt.Printf("%d: %s %s = %v\n",
+// 		//	i,
+// 		//	typeOfT.Field(i).Name,
+// 		//	s.Field(i).Type(),
+// 		//	s.Field(i).Interface(),
+// 		//)
+// 	}
+//
+// 	return ret
+// }
 
 func PrintHeader(i interface{}) string {
 	var ret string
