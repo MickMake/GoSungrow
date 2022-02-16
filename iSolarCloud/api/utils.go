@@ -3,6 +3,7 @@ package api
 import (
 	"GoSungro/Only"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/url"
 	"reflect"
@@ -213,7 +214,6 @@ func GetUrl(u string) *url.URL {
 	return ret
 }
 
-
 func GetAsJson(r interface{}) Json {
 	var ret Json
 	for range Only.Once {
@@ -226,6 +226,148 @@ func GetAsJson(r interface{}) Json {
 	return ret
 }
 
+
+// Response checks
+func CheckResultCode(rc string) error {
+	var err error
+	for range Only.Once {
+		switch rc {
+			case "1":
+				err = nil
+			case "-1":
+				err = errors.New(fmt.Sprintf("error '%s'", rc))
+			case "010":
+				err = errors.New(fmt.Sprintf("error '%s'", rc))
+			case "000":
+				err = errors.New(fmt.Sprintf("error '%s'", rc))
+			case "201":
+				err = errors.New(fmt.Sprintf("error '%s'", rc))
+			case "E00003":
+				err = errors.New(fmt.Sprintf("need to login again '%s'", rc))
+			default:
+				err = errors.New(fmt.Sprintf("unknown error '%s'", rc))
+		}
+	}
+	return err
+}
+
+func CheckResultMessage(rc string) error {
+	var err error
+	for range Only.Once {
+		switch {
+			case rc == "success":
+				err = nil
+			case rc == "er_token_login_invalid":
+				err = errors.New(fmt.Sprintf("need to login again '%s'", rc))
+			case rc == "er_parameter_value_invalid":
+				err = errors.New(fmt.Sprintf("incorrect request data '%s'", rc))
+			case rc == "er_unknown_exception":
+				err = errors.New(fmt.Sprintf("API error '%s'", rc))
+			case strings.HasPrefix(rc, "Parameter:"):
+				err = errors.New(fmt.Sprintf("incorrect request data '%s'", rc))
+			// case err == nil:
+			// 	err = errors.New(fmt.Sprintf("unknown '%s'", rc))
+			default:
+				err = errors.New(fmt.Sprintf("unknown error '%s'", rc))
+		}
+	}
+	return err
+}
+
+
+// Request checks
+func CheckString(name string, rc string) error {
+	var err error
+	for range Only.Once {
+		if rc == "" {
+			err = errors.New(name + ": empty string")
+			break
+		}
+		if strings.TrimSpace(rc) == "" {
+			err = errors.New(name + ": empty string with spaces")
+			break
+		}
+	}
+	return err
+}
+
+func (req RequestCommon) IsValid() error {
+	var err error
+	for range Only.Once {
+		err = CheckString("Appkey", req.Appkey)
+		if err != nil {
+			break
+		}
+		err = CheckString("Lang", req.Lang)
+		if err != nil {
+			break
+		}
+		err = CheckString("SysCode", req.SysCode)
+		if err != nil {
+			break
+		}
+		err = CheckString("Token", req.Token)
+		if err != nil {
+			break
+		}
+		err = CheckString("UserID", req.UserID)
+		if err != nil {
+			break
+		}
+		err = CheckString("ValidFlag", req.ValidFlag)
+		if err != nil {
+			break
+		}
+	}
+	return err
+}
+
+func (req ResponseCommon) IsValid() error {
+	var err error
+	for range Only.Once {
+		err = CheckResultMessage(req.ResultMsg)
+		if err != nil {
+			break
+		}
+		err = CheckResultCode(req.ResultCode)
+		if err != nil {
+			break
+		}
+		err = CheckString("ReqSerialNum", req.ReqSerialNum)
+		if err != nil {
+			break
+		}
+		if req.ResultData == nil {
+			err = errors.New("zero results")
+			break
+		}
+	}
+	return err
+}
+
+
+// func CheckEmpty(rc string) error {
+// 	var err error
+// 	for range Only.Once {
+// 		// switch rc {
+// 		// 	case "1":
+// 		// 		err = nil
+// 		// 	case "-1":
+// 		// 		err = errors.New(fmt.Sprintf("error '%s'", rc))
+// 		// 	case "010":
+// 		// 		err = errors.New(fmt.Sprintf("error '%s'", rc))
+// 		// 	case "000":
+// 		// 		err = errors.New(fmt.Sprintf("error '%s'", rc))
+// 		// 	case "201":
+// 		// 		err = errors.New(fmt.Sprintf("error '%s'", rc))
+// 		// 	case "E00003":
+// 		// 		err = errors.New(fmt.Sprintf("need to login again '%s'", rc))
+// 		// 	default:
+// 		// 		err = errors.New(fmt.Sprintf("unknown error '%s'", rc))
+// 		// }
+// 	}
+// 	return err
+// }
 
 // func MakeNewFrom(i interface{}) (new interface{}) {
 // 	for range OnlyOnce {

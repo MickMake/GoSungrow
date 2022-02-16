@@ -12,7 +12,6 @@ import (
 	"path/filepath"
 	"reflect"
 	"strings"
-	"time"
 )
 
 
@@ -86,118 +85,118 @@ func (w *Web) SetUrl(u string) error {
 // 	return w.Error
 // }
 
-func (w *Web) Get() error {
-	for range Only.Once {
-		w.HasTokenExpired()
-		if !w.newToken {
-			break
-		}
+// func (w *Web) Get() error {
+// 	for range Only.Once {
+// 		w.HasTokenExpired()
+// 		if !w.newToken {
+// 			break
+// 		}
+//
+// 		u := fmt.Sprintf("%s%s",
+// 			t.Url.String(),
+// 			TokenRequestUrl,
+// 		)
+// 		//p, _ := json.Marshal(map[string]string {
+// 		//	"user_account": t.Request.Username,
+// 		//	"user_password": t.Request.Password,
+// 		//	"appkey": t.Request.AppKey,
+// 		//	"sys_code": "900",
+// 		//})
+// 		p, _ := json.Marshal(t.Request)
+//
+// 		var response *http.Response
+// 		response, t.Error = http.Post(u, "application/json", bytes.NewBuffer(p))
+// 		if t.Error != nil {
+// 			break
+// 		}
+// 		//goland:noinspection GoUnhandledErrorResult
+// 		defer response.Body.Close()
+// 		if response.StatusCode != 200 {
+// 			t.Error = errors.New(fmt.Sprintf("Status Code is %d", response.StatusCode))
+// 			break
+// 		}
+//
+// 		var body []byte
+// 		body, t.Error = ioutil.ReadAll(response.Body)
+// 		if t.Error != nil {
+// 			break
+// 		}
+//
+// 		t.Error = json.Unmarshal(body, &t.Response)
+// 		if t.Error != nil {
+// 			break
+// 		}
+//
+// 		t.TokenExpiry = time.Now()
+//
+// 		t.Error = t.saveToken()
+// 		if t.Error != nil {
+// 			break
+// 		}
+// 	}
+//
+// 	return t.Error
+// }
 
-		u := fmt.Sprintf("%s%s",
-			t.Url.String(),
-			TokenRequestUrl,
-		)
-		//p, _ := json.Marshal(map[string]string {
-		//	"user_account": t.Request.Username,
-		//	"user_password": t.Request.Password,
-		//	"appkey": t.Request.AppKey,
-		//	"sys_code": "900",
-		//})
-		p, _ := json.Marshal(t.Request)
-
-		var response *http.Response
-		response, t.Error = http.Post(u, "application/json", bytes.NewBuffer(p))
-		if t.Error != nil {
-			break
-		}
-		//goland:noinspection GoUnhandledErrorResult
-		defer response.Body.Close()
-		if response.StatusCode != 200 {
-			t.Error = errors.New(fmt.Sprintf("Status Code is %d", response.StatusCode))
-			break
-		}
-
-		var body []byte
-		body, t.Error = ioutil.ReadAll(response.Body)
-		if t.Error != nil {
-			break
-		}
-
-		t.Error = json.Unmarshal(body, &t.Response)
-		if t.Error != nil {
-			break
-		}
-
-		t.TokenExpiry = time.Now()
-
-		t.Error = t.saveToken()
-		if t.Error != nil {
-			break
-		}
-	}
-
-	return t.Error
-}
-
-// func (w *Web) Get(action interface{}, query interface{}, response interface{}) error {
-func (w *Web) Get(action interface{}) error {
+func (w *Web) Get(u *url.URL, request interface{}, response interface{}) error {
+// func (w *Web) Get(action interface{}) error {
 	for range Only.Once {
 		if w.Url == nil {
 			w.Error = errors.New("SUNGRO API URL is invalid")
 			break
 		}
 
-		w.Error = VerifyOptionsRequired(query)
+		w.Error = VerifyOptionsRequired(request)
 		if w.Error != nil {
 			break
 		}
 
-		objectName, actionName := GetName(action)
-		request := FindInStruct(action, "Request")
-		response := FindInStruct(action, "Response")
+		// objectName, actionName := GetName(action)
+		// request := FindInStruct(action, "Request")
+		// response := FindInStruct(action, "Response")
+		//
+		// objectName := GetStructName(object)
+		// if objectName == "" {
+		// 	w.Error = errors.New("invalid object name to structure")
+		// 	break
+		// }
+		//
+		// actionName := GetStructName(action)
+		// if objectName == "" {
+		// 	w.Error = errors.New("invalid action name to structure")
+		// 	break
+		// }
+		//
+		// requestString := Query(request)
+		// if objectName == "" {
+		// 	w.Error = errors.New("invalid request string for structure")
+		// 	break
+		// }
+		//
+		// responseString := Query(response)
+		// if objectName == "" {
+		// 	w.Error = errors.New("invalid response string for structure")
+		// 	break
+		// }
+		//
+		// u := fmt.Sprintf("%s?format=json&object=%s&action=%s%s",
+		// 	w.Url.String(),
+		// 	objectName,
+		// 	actionName,
+		// 	queryString,
+		// )
 
-		//objectName := GetStructName(object)
-		if objectName == "" {
-			w.Error = errors.New("invalid object name to structure")
-			break
-		}
+		p, _ := json.Marshal(request)
 
-		//actionName := GetStructName(action)
-		if objectName == "" {
-			w.Error = errors.New("invalid action name to structure")
-			break
-		}
-
-		queryString := Query(query)
-		if objectName == "" {
-			w.Error = errors.New("invalid query string for structure")
-			break
-		}
-
-		u := fmt.Sprintf("%s?format=json&object=%s&action=%s%s",
-			w.Url.String(),
-			objectName,
-			actionName,
-			queryString,
-		)
-		// "?format=json&object=subscriber&action=count"
-
-		//fmt.Printf("Object: %s\n", objectName)
-		//fmt.Printf("Action: %s\n", actionName)
-		////fmt.Printf("Action: %s\n", actionName)
-		//fmt.Printf("Query: %s\n", query)
-		//fmt.Printf("ApiUrl: %s\n", url)
-
-		w.request, w.Error = http.NewRequest("GET", u, nil)
-		if w.Error != nil {
-			break
-		}
-
+		// w.request, w.Error = http.NewRequest("GET", u, nil)
+		// if w.Error != nil {
+		// 	break
+		// }
+		//
 		// w.request.Header.Set("Authorization", w.Token.GetAuthHeader())
 
 		for range Only.Twice {
-			//w.response, w.Error = http.Get(url)
-			w.response, w.Error = w.client.Do(w.request)
+			w.response, w.Error = http.Post(u.String(), "application/json", bytes.NewBuffer(p))
 			if w.Error != nil {
 				break
 			}

@@ -2,6 +2,7 @@
 package login
 
 import (
+	"GoSungro/Only"
 	"GoSungro/iSolarCloud/api"
 	"fmt"
 	"net/url"
@@ -144,50 +145,97 @@ func Init() EndPoint {
 }
 
 
-func (g EndPoint) GetArea() api.AreaName {
-	return g.Area
+func (e EndPoint) GetArea() api.AreaName {
+	return e.Area
 }
 
-func (g EndPoint) GetName() api.EndPointName {
-	return g.Name
+func (e EndPoint) GetName() api.EndPointName {
+	return e.Name
 }
 
-func (g EndPoint) GetUrl() *url.URL {
-	return g.Url
+func (e EndPoint) GetUrl() *url.URL {
+	return e.Url
 }
 
-func (g EndPoint) SetRequest(ref interface{}) error {
-	g.Request = ref.(Request)
-	return nil
+func (e EndPoint) GetData() api.Json {
+	return api.GetAsJson(e.Response.(Response).ResultData)
 }
 
-func (g EndPoint) GetRequest() api.Json {
-	return api.GetAsJson(g.Request)
-}
-
-func (g EndPoint) GetResponse() api.Json {
-	return api.GetAsJson(g.Response)
-}
-
-func (g EndPoint) GetData() api.Json {
-	return api.GetAsJson(g.Response.(Response).ResultData)
-}
-
-func (g EndPoint) IsValid() error {
-	fmt.Println("g.IsValid() implement me")
-	return nil
-}
-
-func (g EndPoint) Call() api.Json {
-	fmt.Println("g.Call() implement me")
+func (e EndPoint) Call() api.Json {
+	fmt.Println("e.Call() implement me")
 	return ""
 }
 
-func (g EndPoint) Init() *EndPoint {
+func (e EndPoint) GetError() error {
+	return e.Error
+}
+
+func (e EndPoint) Init() *EndPoint {
 	ret := Init()
 	return &ret
 }
 
-func (g EndPoint) GetError() error {
-	return g.Error
+
+func (e EndPoint) SetRequest(ref interface{}) error {
+	e.Request = ref.(Request)
+	return nil
+}
+
+func (e EndPoint) RequestRef() interface{} {
+	return e.Request
+}
+
+func (e EndPoint) GetRequestJson() api.Json {
+	return api.GetAsJson(e.Request)
+}
+
+func (e EndPoint) IsRequestValid() error {
+	for range Only.Once {
+		req := e.GetRequest()
+		e.Error = api.CheckString("SysCode", req.SysCode)
+		if e.Error != nil {
+			break
+		}
+		e.Error = api.CheckString("Appkey", req.Appkey)
+		if e.Error != nil {
+			break
+		}
+		e.Error = api.CheckString("UserAccount", req.UserAccount)
+		if e.Error != nil {
+			break
+		}
+		e.Error = api.CheckString("UserPassword", req.UserPassword)
+		if e.Error != nil {
+			break
+		}
+	}
+	return e.Error
+}
+
+func (e EndPoint) GetRequest() Request {
+	return e.Request.(Request)
+}
+
+
+func (e EndPoint) GetResponseJson() api.Json {
+	return api.GetAsJson(e.Response)
+}
+
+func (e EndPoint) ResponseRef() interface{} {
+	return e.Response
+}
+
+func (e EndPoint) IsResponseValid() error {
+	for range Only.Once {
+		resp := e.GetResponse()
+		e.Error = resp.ResponseCommon.IsValid()
+		if e.Error != nil {
+			break
+		}
+	}
+	return e.Error
+}
+
+func (e EndPoint) GetResponse() Response {
+	return e.Response.(Response)
 }

@@ -12,14 +12,19 @@ type EndPoint interface {
 	GetName() EndPointName
 	GetUrl() *url.URL
 	Call() Json
-	SetRequest(ref interface{}) error
-	GetRequest() Json
-	GetResponse() Json
 	GetData() Json
-	IsValid() error
+
+	SetRequest(ref interface{}) error
+	RequestRef() interface{}
+	GetRequestJson() Json
+	IsRequestValid() error
+
+	ResponseRef() interface{}
+	GetResponseJson() Json
+	IsResponseValid() error
+
 	GetError() error
 }
-
 
 type EndPointStruct struct {
 	Area     AreaName     `json:"area"`

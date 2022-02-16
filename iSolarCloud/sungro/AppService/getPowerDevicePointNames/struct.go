@@ -1,4 +1,3 @@
-// EndPoint
 package getPowerDevicePointNames
 
 import (
@@ -31,9 +30,7 @@ type ResultData   []struct {
 }
 
 func Init() EndPoint {
-	fmt.Println("Init()")
-
-	foo := EndPoint {
+	return EndPoint {
 		Area:     api.GetArea(EndPoint{}),
 		Name:     api.GetName(EndPoint{}),
 		Url:      api.GetUrl(Url),
@@ -41,62 +38,74 @@ func Init() EndPoint {
 		Response: Response{},
 		Error:    nil,
 	}
-
-	fmt.Printf("endpoint: %v\n", foo)
-
-	return foo
 }
 
 
-func (g EndPoint) GetArea() api.AreaName {
-	fmt.Println("g.GetArea()")
-	return g.Area
+func (e EndPoint) GetArea() api.AreaName {
+	return e.Area
 }
 
-func (g EndPoint) GetName() api.EndPointName {
-	fmt.Println("g.GetName()")
-	return g.Name
+func (e EndPoint) GetName() api.EndPointName {
+	return e.Name
 }
 
-func (g EndPoint) GetUrl() *url.URL {
-	fmt.Println("g.GetUrl()")
-	return g.Url
+func (e EndPoint) GetUrl() *url.URL {
+	return e.Url
 }
 
-func (g EndPoint) SetRequest(ref interface{}) error {
-	fmt.Println("g.SetRequest()")
-	fmt.Printf("ref == %v\n", ref)
-	return nil
+func (e EndPoint) GetData() api.Json {
+	return api.GetAsJson(e.Response.(Response).ResultData)
 }
 
-func (g EndPoint) GetRequest() api.Json {
-	return api.GetAsJson(g.Request)
-}
-
-func (g EndPoint) GetResponse() api.Json {
-	return api.GetAsJson(g.Response)
-}
-
-func (g EndPoint) GetData() api.Json {
-	return api.GetAsJson(g.Response.(Response).ResultData)
-}
-
-func (g EndPoint) IsValid() error {
-	fmt.Println("g.IsValid() implement me")
-	return nil
-}
-
-func (g EndPoint) Call() api.Json {
-	fmt.Println("g.Call() implement me")
+func (e EndPoint) Call() api.Json {
+	fmt.Println("e.Call() implement me")
 	return ""
 }
 
-func (g EndPoint) Init() *EndPoint {
-	fmt.Println("g.Init()")
+func (e EndPoint) GetError() error {
+	return e.Error
+}
+
+func (e EndPoint) Init() *EndPoint {
 	ret := Init()
 	return &ret
 }
 
-func (g EndPoint) GetError() error {
-	return g.Error
+
+func (e EndPoint) SetRequest(ref interface{}) error {
+	e.Request = ref.(Request)
+	return nil
+}
+
+func (e EndPoint) RequestRef() interface{} {
+	return e.Request
+}
+
+func (e EndPoint) GetRequestJson() api.Json {
+	return api.GetAsJson(e.Request)
+}
+
+func (e EndPoint) IsRequestValid() error {
+	return e.GetRequest().RequestCommon.IsValid()
+}
+
+func (e EndPoint) GetRequest() Request {
+	return e.Request.(Request)
+}
+
+
+func (e EndPoint) GetResponseJson() api.Json {
+	return api.GetAsJson(e.Response)
+}
+
+func (e EndPoint) ResponseRef() interface{} {
+	return e.Response
+}
+
+func (e EndPoint) IsResponseValid() error {
+	return e.GetResponse().ResponseCommon.IsValid()
+}
+
+func (e EndPoint) GetResponse() Response {
+	return e.Response.(Response)
 }

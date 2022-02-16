@@ -3,7 +3,7 @@
 ## What is it?
 
 This GoLang package has a complete, (almost complete), implementation of the iSolarCloud API.
-There's been no published specs on this, so I've had to figure it all out based on the Android app, using javascript IDEs and various other means.
+There's been no published specs on this, so I've had to figure it all out based on the [Android app](https://play.google.com/store/apps/details?id=com.isolarcloud.manager), using javascript IDEs and various other means.
 
 Note:
 - [iSolarCloud](https://isolarcloud.com) has no interest in developing a public API.

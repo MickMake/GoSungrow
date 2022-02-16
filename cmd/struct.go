@@ -3,6 +3,7 @@ package cmd
 import (
 	"GoSungro/Only"
 	"GoSungro/iSolarCloud/sungro"
+	"GoSungro/iSolarCloud/sungro/AppService/login"
 	"GoSungro/iSolarCloud/sungro/web"
 	"GoSungro/lsgo"
 	"GoSungro/mmGit"
@@ -122,10 +123,18 @@ func (ca *CommandArgs) ProcessArgs(cmd *cobra.Command, args []string) error {
 			Username:    ca.ApiUsername,
 			Password:    ca.ApiPassword,
 		}
-		ca.Error = SunGro.SetAuth(auth)
-		if ca.Error != nil {
-			break
-		}
+		// ca.Error = SunGro.SetAuth(auth)
+		// if ca.Error != nil {
+		// 	break
+		// }
+		hey1 := SunGro.GetEndpoint(args[1], args[0])
+		_ = hey1.SetRequest(login.Request{
+			Appkey:       Cmd.ApiAppKey,
+			SysCode:      "600",
+			UserAccount:  "",
+			UserPassword: "",
+		})
+		_ = SunGro.Web.Get(login.GetUrl(), login.RequestRef(), login.ResponseRef())
 
 		if SunGro.HasTokenChanged() {
 			ca.ApiTokenExpiry = SunGro.GetTokenExpiry()
