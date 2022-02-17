@@ -6,8 +6,9 @@ import (
 	"fmt"
 )
 
+
 type Area interface {
-	Init() AreaStruct
+	Init(*Web) AreaStruct
 	GetAreaName() AreaName
 	GetEndPoints() TypeEndPoints
 	Call(name EndPointName) Json
@@ -20,9 +21,10 @@ type Area interface {
 }
 
 type AreaStruct struct {
-	Name AreaName
+	ApiRoot   interface{}	// *web.Web
+	Name      AreaName
 	EndPoints TypeEndPoints
-	Error error
+	Error     error
 }
 
 

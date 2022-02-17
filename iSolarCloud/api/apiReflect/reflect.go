@@ -1,4 +1,4 @@
-package reflect
+package apiReflect
 
 import (
 	"GoSungro/Only"
@@ -10,6 +10,120 @@ import (
 	"strings"
 )
 
+
+// GetArea Return an Area name if we are given an Area or EndPoint struct.
+func GetArea(trim string, v interface{}) string {
+	var ret string
+	for range Only.Once {
+		if v == nil {
+			break
+		}
+
+		val := reflect.ValueOf(v)
+		ret1 := val.Type().PkgPath()
+		ret1 = strings.TrimPrefix(ret1, trim)
+		ret2 := val.Type().Name()
+		// ret3 := val.Type().String()
+		// fmt.Printf("%s\t%s\t%s\n", ret1, ret2, "")
+
+		if ret2 == "Area" {
+			s := strings.Split(ret1, "/")
+			ret = s[len(s)-1]
+			break
+		}
+
+		if ret2 == "EndPoint" {
+			s := strings.Split(ret1, "/")
+			ret = s[len(s)-2]
+			break
+		}
+
+		ret = ret1
+	}
+	return ret
+}
+
+// GetName Return an endpoint name if we are given an Area or EndPoint struct.
+func GetName(trim string, v interface{}) string {
+	var ret string
+	for range Only.Once {
+		val := reflect.ValueOf(v)
+		ret1 := val.Type().PkgPath()
+		ret1 = strings.TrimPrefix(ret1, trim)
+		ret2 := val.Type().Name()
+		// ret3 := val.Type().String()
+		// fmt.Printf("%s\t%s\t%s\n", ret1, ret2, "")
+
+		if ret2 == "Area" {
+			s := strings.Split(ret1, "/")
+			ret = s[len(s)-2]
+			break
+		}
+
+		if ret2 == "EndPoint" {
+			s := strings.Split(ret1, "/")
+			ret = s[len(s)-1]
+			break
+		}
+
+		ret = ret1
+	}
+	return ret
+}
+
+func GetType(v interface{}) string {
+	var ret string
+	for range Only.Once {
+		if v == nil {
+			break
+		}
+
+		val := reflect.ValueOf(v)
+		ret = val.Type().Name()
+	}
+	return ret
+}
+
+func DoTypesMatch(a interface{}, b interface{}) error {
+	var err error
+	for range Only.Once {
+		aName := GetType(a)
+		bName := GetType(b)
+
+		fmt.Printf("a:%v b:%v\n", aName, bName)
+		if aName == bName {
+			break
+		}
+
+		err = errors.New(fmt.Sprintf("interface '%s' doesn't match '%s'", aName, bName))
+	}
+	return err
+}
+
+
+func PackageName(trim string, v interface{}) string {
+	var ret string
+	for range Only.Once {
+		if v == nil {
+			break
+		}
+
+		val := reflect.ValueOf(v)
+		if val.Kind() == reflect.Ptr {
+			ret = val.Elem().Type().PkgPath()
+			break
+		}
+
+		ret2 := val.Type().Name()
+		ret3 := val.Type().String()
+		ret = val.Type().PkgPath()
+		ret = strings.TrimPrefix(ret, trim)
+
+		fmt.Printf("%s\t%s\t%s\n", ret, ret2, ret3)
+		fmt.Println("")
+	}
+	return ret
+}
 
 func Query(i interface{}) string {
 	var ret string
@@ -276,7 +390,7 @@ func FindInStruct(ref interface{}, name string) interface{} {
 	return ret
 }
 
-func GetName(ref interface{}) (string, string) {
+func GetNameOld(ref interface{}) (string, string) {
 	var packageName string
 	var structName string
 
@@ -297,13 +411,13 @@ func GetName(ref interface{}) (string, string) {
 
 //goland:noinspection GoUnusedFunction,GoUnusedExportedFunction
 func GetPackageName(ref interface{}) string {
-	str, _ := GetName(ref)
+	str, _ := GetNameOld(ref)
 	return str
 }
 
 //goland:noinspection GoUnusedFunction,GoUnusedExportedFunction
 func GetStructName2(ref interface{}) string {
-	str, _ := GetName(ref)
+	str, _ := GetNameOld(ref)
 	return str
 }
 

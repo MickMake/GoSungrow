@@ -41,6 +41,7 @@ func init() {
 		}
 
 		Cmd.ConfigFile = filepath.Join(Cmd.ConfigDir, defaultConfigFile)
+		Cmd.ApiTokenFile = filepath.Join(Cmd.ConfigDir, defaultTokenFile)
 
 		rootCmd.PersistentFlags().StringVarP(&Cmd.ApiUsername, flagApiUsername, "u", "", fmt.Sprintf("SunGro: api username."))
 		rootViper.SetDefault(flagApiUsername, "")
@@ -282,8 +283,8 @@ func readConfig() error {
 
 		_, _ = fmt.Fprintf(os.Stderr, "Api Url:	%v\n", rootViper.Get(flagApiUrl))
 		_, _ = fmt.Fprintf(os.Stderr, "Api AppKey:	%v\n", rootViper.Get(flagApiAppKey))
-		_, _ = fmt.Fprintf(os.Stderr, "Api Username:	%v\n", rootViper.Get(flagApiUsername))
-		_, _ = fmt.Fprintf(os.Stderr, "Api Password:	%v\n", rootViper.Get(flagApiPassword))
+		_, _ = fmt.Fprintf(os.Stderr, "Api UserAccount:	%v\n", rootViper.Get(flagApiUsername))
+		_, _ = fmt.Fprintf(os.Stderr, "Api UserPassword:	%v\n", rootViper.Get(flagApiPassword))
 		_, _ = fmt.Fprintln(os.Stderr)
 
 		_, _ = fmt.Fprintf(os.Stderr, "Git Repo URL:		%v\n", rootViper.Get(flagGitRepo))

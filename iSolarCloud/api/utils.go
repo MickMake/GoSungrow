@@ -2,6 +2,7 @@ package api
 
 import (
 	"GoSungro/Only"
+	"GoSungro/iSolarCloud/api/apiReflect"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -24,6 +25,30 @@ func init() {
 	}
 }
 
+
+// func PackageName(v interface{}) string {
+// 	var ret string
+// 	for range Only.Once {
+// 		if v == nil {
+// 			break
+// 		}
+//
+// 		val := reflect.ValueOf(v)
+// 		if val.Kind() == reflect.Ptr {
+// 			ret = val.Elem().Type().PkgPath()
+// 			break
+// 		}
+//
+// 		ret2 := val.Type().Name()
+// 		ret3 := val.Type().String()
+// 		ret = val.Type().PkgPath()
+// 		ret = strings.TrimPrefix(ret, thisPackagePath)
+//
+// 		fmt.Printf("%s\t%s\t%s\n", ret, ret2, ret3)
+// 		fmt.Println("")
+// 	}
+// 	return ret
+// }
 
 func AppendUrl(host string, endpoint string) *url.URL {
 	var ret *url.URL
@@ -117,118 +142,12 @@ func AppendUrl(host string, endpoint string) *url.URL {
 // 	return &endpoint
 // }
 
-func PackageName(v interface{}) string {
-	var ret string
-	for range Only.Once {
-		if v == nil {
-			break
-		}
-
-		val := reflect.ValueOf(v)
-		if val.Kind() == reflect.Ptr {
-			ret = val.Elem().Type().PkgPath()
-			break
-		}
-
-		ret2 := val.Type().Name()
-		ret3 := val.Type().String()
-		ret = val.Type().PkgPath()
-		ret = strings.TrimPrefix(ret, thisPackagePath)
-
-		fmt.Printf("%s\t%s\t%s\n", ret, ret2, ret3)
-		fmt.Println("")
-	}
-	return ret
-}
-
 func GetArea(v interface{}) AreaName {
-	var ret AreaName
-	for range Only.Once {
-		if v == nil {
-			break
-		}
-
-		val := reflect.ValueOf(v)
-		ret1 := val.Type().PkgPath()
-		ret2 := val.Type().Name()
-		ret3 := val.Type().String()
-		fmt.Printf("%s\t%s\t%s\n", ret1, ret2, ret3)
-
-		if strings.HasSuffix(ret3, "Area") {
-			ret = AreaName(strings.TrimSuffix(ret3, ".Area"))
-			break
-		}
-
-		if strings.HasSuffix(ret3, "EndPoint") {
-			s := strings.Split(ret1, "/")
-			ret = AreaName(s[len(s)-2])
-			break
-		}
-
-		ret = AreaName(strings.TrimPrefix(ret1, thisPackagePath))
-
-		fmt.Println("")
-	}
-	return ret
+	return AreaName(apiReflect.GetArea(thisPackagePath, v))
 }
 
 func GetName(v interface{}) EndPointName {
-	var ret EndPointName
-	for range Only.Once {
-		if v == nil {
-			break
-		}
-
-		val := reflect.ValueOf(v)
-		ret1 := val.Type().PkgPath()
-		ret2 := val.Type().Name()
-		ret3 := val.Type().String()
-		fmt.Printf("%s\t%s\t%s\n", ret1, ret2, ret3)
-
-		if strings.HasSuffix(ret3, "Area") {
-			ret = EndPointName(strings.TrimSuffix(ret3, ".Area"))
-			break
-		}
-
-		if strings.HasSuffix(ret3, "EndPoint") {
-			ret = EndPointName(strings.TrimSuffix(ret3, ".EndPoint"))
-			break
-		}
-
-		ret = EndPointName(strings.TrimPrefix(ret1, thisPackagePath))
-
-		fmt.Println("")
-	}
-	return ret
-}
-
-func GetType(v interface{}) string {
-	var ret string
-	for range Only.Once {
-		if v == nil {
-			break
-		}
-
-		val := reflect.ValueOf(v)
-		ret = val.Type().Name()
-	}
-	return ret
-}
-
-func DoTypesMatch(a interface{}, b interface{}) error {
-	var err error
-	for range Only.Once {
-		aName := GetType(a)
-		bName := GetType(b)
-
-		fmt.Printf("a:%v b:%v\n", aName, bName)
-		if aName == bName {
-			break
-		}
-
-		err = errors.New(fmt.Sprintf("interface '%s' doesn't match '%s'", aName, bName))
-	}
-	return err
+	return EndPointName(apiReflect.GetName(thisPackagePath, v))
 }
 
 
@@ -367,10 +286,10 @@ func (req ResponseCommon) IsValid() error {
 		if err != nil {
 			break
 		}
-		if req.ResultData == nil {
-			err = errors.New("zero results")
-			break
-		}
+		// if req.ResultData == nil {
+		// 	err = errors.New("zero results")
+		// 	break
+		// }
 	}
 	return err
 }

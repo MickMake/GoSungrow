@@ -100,11 +100,11 @@ func cmdApiGetFunc(cmd *cobra.Command, args []string) {
 			UserAccount:  "",
 			UserPassword: "",
 		})
-		a, _ := SunGro.Web.Get(hey1)
+		a := SunGro.ApiRoot.Get(hey1)
 		fmt.Printf("resp: %v\n", a)
 
 		hey := SunGro.GetEndpoint(args[1], args[0])
-		_ = hey.SetRequest(getPowerDevicePointNames.Request{
+		_ = hey.SetRequest(getPowerDevicePointNames.Request {
 			RequestCommon: api.RequestCommon {
 				Appkey:    Cmd.ApiAppKey,
 				Lang:      "_en_US",
@@ -115,7 +115,7 @@ func cmdApiGetFunc(cmd *cobra.Command, args []string) {
 			},
 			DeviceType:    "",
 		})
-		r, _ := SunGro.Web.Get(hey1)
+		r := SunGro.ApiRoot.Get(hey1)
 		fmt.Printf("resp: %v\n", r)
 
 		fmt.Printf("HEY:%v\n", hey)

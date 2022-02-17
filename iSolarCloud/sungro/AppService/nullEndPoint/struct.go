@@ -1,20 +1,23 @@
-// EndPoint
 package nullEndPoint
 
 import (
 	"GoSungro/Only"
 	"GoSungro/iSolarCloud/api"
+	"GoSungro/iSolarCloud/api/apiReflect"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/url"
 )
 
 
-var Url = ""
-
 var _ api.EndPoint = (*EndPoint)(nil)
 
-type EndPoint api.EndPointStruct
+type EndPoint struct {
+	api.EndPointStruct
+	Request Request
+	Response Response
+}
 
 type Request struct {
 	api.RequestCommon
@@ -22,20 +25,44 @@ type Request struct {
 
 type Response struct {
 	api.ResponseCommon
+	ResultData ResultData `json:"result_data"`
 }
 
-func Init() EndPoint {
+func Init(apiRoot *api.Web) EndPoint {
 	fmt.Println("Init()")
 	return EndPoint {
-		Area:     api.GetArea(EndPoint{}),
-		Name:     api.GetName(EndPoint{}),
-		Url:      api.GetUrl(Url),
-		Request:  Request{},
-		Response: Response{},
-		Error:    nil,
+		EndPointStruct: api.EndPointStruct {
+			ApiRoot:  apiRoot,
+			Area:     api.GetArea(EndPoint{}),
+			Name:     api.GetName(EndPoint{}),
+			Url:      api.GetUrl(Url),
+			Request:  Request{},
+			Response: Response{},
+			Error:    nil,
+		},
 	}
 }
 
+
+// ****************************************
+// Methods not scoped by api.EndPoint interface type
+
+func (e EndPoint) Init(apiRoot *api.Web) *EndPoint {
+	ret := Init(apiRoot)
+	return &ret
+}
+
+func (e EndPoint) GetRequest() Request {
+	return e.Request
+}
+
+func (e EndPoint) GetResponse() Response {
+	return e.Response
+}
+
+
+// ****************************************
+// Methods defined by api.EndPoint interface type
 
 func (e EndPoint) GetArea() api.AreaName {
 	return e.Area
@@ -49,13 +76,17 @@ func (e EndPoint) GetUrl() *url.URL {
 	return e.Url
 }
 
-func (e EndPoint) GetData() api.Json {
-	return api.GetAsJson(e.Response.(Response).ResultData)
+func (e EndPoint) Call() api.EndPoint {
+	fmt.Println("e.Call()")
+	return e.ApiRoot.Get(e)
 }
 
-func (e EndPoint) Call() api.Json {
-	fmt.Println("e.Call() implement me")
-	return ""
+func (e EndPoint) GetData() api.Json {
+	return api.GetAsJson(e.Response.ResultData)
+}
+
+func (e EndPoint) SetError(format string, a ...interface{}) {
+	e.Error = errors.New(fmt.Sprintf(format, a...))
 }
 
 func (e EndPoint) GetError() error {
@@ -69,15 +100,9 @@ func (e EndPoint) IsError() bool {
 	return false
 }
 
-func (e EndPoint) Init() *EndPoint {
-	ret := Init()
-	return &ret
-}
-
-
 func (e EndPoint) SetRequest(ref interface{}) api.EndPoint {
 	for range Only.Once {
-		e.Error = api.DoTypesMatch(e.Request, ref)
+		e.Error = apiReflect.DoTypesMatch(e.Request, ref)
 		if e.Error != nil {
 			break
 		}
@@ -95,11 +120,14 @@ func (e EndPoint) GetRequestJson() api.Json {
 }
 
 func (e EndPoint) IsRequestValid() error {
-	return e.GetRequest().RequestCommon.IsValid()
-}
-
-func (e EndPoint) GetRequest() Request {
-	return e.Request.(Request)
+	for range Only.Once {
+		req := e.GetRequest()
+		e.Error = req.RequestCommon.IsValid()
+		if e.Error != nil {
+			break
+		}
+	}
+	return e.Error
 }
 
 func (e EndPoint) SetResponse(ref []byte) api.EndPoint {
@@ -123,9 +151,11 @@ func (e EndPoint) ResponseRef() interface{} {
 }
 
 func (e EndPoint) IsResponseValid() error {
-	return e.GetResponse().ResponseCommon.IsValid()
-}
-
-func (e EndPoint) GetResponse() Response {
-	return e.Response.(Response)
+	for range Only.Once {
+		e.Error = e.Response.ResponseCommon.IsValid()
+		if e.Error != nil {
+			break
+		}
+	}
+	return e.Error
 }

@@ -3,7 +3,6 @@ package cmd
 import (
 	"GoSungro/Only"
 	"GoSungro/iSolarCloud/sungro"
-	"GoSungro/iSolarCloud/sungro/AppService"
 	"GoSungro/iSolarCloud/sungro/AppService/login"
 	"GoSungro/lsgo"
 	"GoSungro/mmGit"
@@ -21,6 +20,7 @@ const (
 	DefaultBinaryName = "GoSungro"
 	EnvPrefix         = "SunGro"
 	defaultConfigFile = "config.json"
+	defaultTokenFile  = "AuthToken.json"
 
 	flagConfigFile     = "config"
 	flagDebug          = "debug"
@@ -70,6 +70,8 @@ type CommandArgs struct {
 	ApiPassword    string
 	ApiAppKey      string
 	ApiTokenExpiry string
+	ApiToken       string
+	ApiTokenFile   string
 
 	// Google sheets
 	GoogleSheet       string
@@ -117,29 +119,40 @@ func (ca *CommandArgs) ProcessArgs(cmd *cobra.Command, args []string) error {
 			break
 		}
 
-		auth := login.Request {
-			Appkey:       Cmd.ApiAppKey,
-			SysCode:      "600",
+		Cmd.Error = SunGro.Login(login.SunGroAuth {
+			AppKey:       ca.ApiAppKey,
 			UserAccount:  ca.ApiUsername,
 			UserPassword: ca.ApiPassword,
-		}
-		// auth := login.SunGroAuth {
-		// 	TokenExpiry: ca.ApiTokenExpiry,
-		// 	AppKey:      ca.ApiAppKey,
-		// 	Username:    ca.ApiUsername,
-		// 	Password:    ca.ApiPassword,
-		// }
-		hey1 := SunGro.GetEndpoint(AppService.GetAreaName(), "login")
-		hey1 = hey1.SetRequest(auth)
-		ca.Error = hey1.GetError()
-		if ca.Error != nil {
+			TokenFile:    ca.ApiTokenFile,
+		})
+		if Cmd.Error != nil {
 			break
 		}
-		r, _ := SunGro.Web.Get(hey1)
-		fmt.Printf("resp: %v\n", r)
+
+		// auth := login.Request {
+		// 	Appkey:       Cmd.ApiAppKey,
+		// 	SysCode:      "600",
+		// 	UserAccount:  ca.ApiUsername,
+		// 	UserPassword: ca.ApiPassword,
+		// }
+		// // auth := login.SunGroAuth {
+		// // 	Expiry: ca.ApiTokenExpiry,
+		// // 	AppKey:      ca.ApiAppKey,
+		// // 	UserAccount:    ca.ApiUsername,
+		// // 	UserPassword:    ca.ApiPassword,
+		// // }
+		// hey1 := SunGro.GetEndpoint(AppService.GetAreaName(), "login")
+		// hey1 = hey1.SetRequest(auth)
+		// ca.Error = hey1.GetError()
+		// if ca.Error != nil {
+		// 	break
+		// }
+		// r, _ := SunGro.ApiRoot.Get(hey1)
+		// fmt.Printf("resp: %v\n", r)
 
 		if SunGro.HasTokenChanged() {
 			ca.ApiTokenExpiry = SunGro.GetTokenExpiry()
+			ca.ApiToken = SunGro.GetToken()
 			ca.Error = writeConfig()
 		}
 

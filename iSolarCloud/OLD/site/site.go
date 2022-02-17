@@ -35,7 +35,7 @@ func (t *Site) Count(domain string) Count {
 			Domain: domain,
 		}
 
-		// 		t.Error = t.Web.Get(t.read, t.read.Request, &t.read.Response)
+		// 		t.Error = t.ApiRoot.Get(t.read, t.read.Request, &t.read.Response)
 		t.count.Error = t.Web.Get(t.count, t.count.Request, &t.count.Response)
 		if t.count.Error != nil {
 			break

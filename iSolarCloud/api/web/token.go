@@ -11,11 +11,11 @@ package web
 // )
 //
 // type SunGroAuth struct {
-// 	TokenExpiry string
+// 	Expiry string
 //
 // 	AppKey      string
-// 	Username    string
-// 	Password    string
+// 	UserAccount    string
+// 	UserPassword    string
 // }
 //
 // type Auth struct {
@@ -25,8 +25,8 @@ package web
 //
 // 	api.EndPoint
 //
-// 	TokenFile   string
-// 	TokenExpiry time.Time
+// 	File   string
+// 	Expiry time.Time
 // 	newToken    bool
 // 	retry       int
 //
@@ -63,11 +63,11 @@ package web
 // 			t.Error = errors.New("API AppKey")
 // 			break
 // 		}
-// 		if auth.Username == "" {
+// 		if auth.UserAccount == "" {
 // 			t.Error = errors.New("empty Client ApiUsername")
 // 			break
 // 		}
-// 		if auth.Password == "" {
+// 		if auth.UserPassword == "" {
 // 			t.Error = errors.New("empty Client ApiPassword")
 // 			break
 // 		}
@@ -76,10 +76,10 @@ package web
 // 			t.newToken = true
 // 		}
 //
-// 		if auth.TokenExpiry == "" {
-// 			auth.TokenExpiry = time.Now().Format(DateTimeFormat)
+// 		if auth.Expiry == "" {
+// 			auth.Expiry = time.Now().Format(DateTimeFormat)
 // 		}
-// 		t.TokenExpiry, t.Error = time.Parse(DateTimeFormat, auth.TokenExpiry)
+// 		t.Expiry, t.Error = time.Parse(DateTimeFormat, auth.Expiry)
 // 		if t.Error != nil {
 // 			t.newToken = true
 // 		}
@@ -87,8 +87,8 @@ package web
 // 		t.Request = login.Request {
 // 			Appkey:   auth.AppKey,
 // 			SysCode:  "900",
-// 			UserAccount: auth.Username,
-// 			UserPassword: auth.Password,
+// 			UserAccount: auth.UserAccount,
+// 			UserPassword: auth.UserPassword,
 // 		}
 //
 // 		t.HasTokenExpired()
@@ -109,8 +109,8 @@ package web
 // 			TokenRequestUrl,
 // 		)
 // 		//p, _ := json.Marshal(map[string]string {
-// 		//	"user_account": t.Request.Username,
-// 		//	"user_password": t.Request.Password,
+// 		//	"user_account": t.Request.UserAccount,
+// 		//	"user_password": t.Request.UserPassword,
 // 		//	"appkey": t.Request.AppKey,
 // 		//	"sys_code": "900",
 // 		//})
@@ -139,7 +139,7 @@ package web
 // 			break
 // 		}
 //
-// 		t.TokenExpiry = time.Now()
+// 		t.Expiry = time.Now()
 //
 // 		t.Error = t.saveToken()
 // 		if t.Error != nil {
@@ -152,7 +152,7 @@ package web
 //
 // func (t *Auth) HasTokenExpired() bool {
 // 	for range Only.Once {
-// 		if t.TokenExpiry.Before(time.Now()) {
+// 		if t.Expiry.Before(time.Now()) {
 // 			t.newToken = true
 // 			break
 // 		}
@@ -198,23 +198,23 @@ package web
 // }
 //
 // func (t *Auth) GetTokenExpiry() time.Time {
-// 	return t.TokenExpiry
+// 	return t.Expiry
 // }
 //
 // // Retrieves a token from a local file.
 // func (t *Auth) readTokenFile() error {
 // 	for range Only.Once {
-// 		if t.TokenFile == "" {
-// 			t.TokenFile, t.Error = os.UserHomeDir()
+// 		if t.File == "" {
+// 			t.File, t.Error = os.UserHomeDir()
 // 			if t.Error != nil {
-// 				t.TokenFile = ""
+// 				t.File = ""
 // 				break
 // 			}
-// 			t.TokenFile = filepath.Join(t.TokenFile, ".GoSungro", DefaultAuthTokenFile)
+// 			t.File = filepath.Join(t.File, ".GoSungro", DefaultAuthTokenFile)
 // 		}
 //
 // 		var f *os.File
-// 		f, t.Error = os.Open(t.TokenFile)
+// 		f, t.Error = os.Open(t.File)
 // 		if t.Error != nil {
 // 			break
 // 		}
@@ -231,18 +231,18 @@ package web
 // // Saves a token to a file path.
 // func (t *Auth) saveToken() error {
 // 	for range Only.Once {
-// 		if t.TokenFile == "" {
-// 			t.TokenFile, t.Error = os.UserHomeDir()
+// 		if t.File == "" {
+// 			t.File, t.Error = os.UserHomeDir()
 // 			if t.Error != nil {
-// 				t.TokenFile = ""
+// 				t.File = ""
 // 				break
 // 			}
-// 			t.TokenFile = filepath.Join(t.TokenFile, ".GoSungro", DefaultAuthTokenFile)
+// 			t.File = filepath.Join(t.File, ".GoSungro", DefaultAuthTokenFile)
 // 		}
 //
-// 		fmt.Printf("Saving token file to: %s\n", t.TokenFile)
+// 		fmt.Printf("Saving token file to: %s\n", t.File)
 // 		var f *os.File
-// 		f, t.Error = os.OpenFile(t.TokenFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
+// 		f, t.Error = os.OpenFile(t.File, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
 // 		if t.Error != nil {
 // 			t.Error = errors.New(fmt.Sprintf("Unable to cache SUNGRO oauth token: %v", t.Error))
 // 			break

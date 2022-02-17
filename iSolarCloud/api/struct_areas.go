@@ -54,6 +54,15 @@ func (an *Areas) SortAreas() AreaNames {
 func (an *Areas) GetEndPoint(area AreaName, name EndPointName) EndPoint {
 	var ret EndPoint
 	for range Only.Once {
+		if area == "" {
+			ret.SetError("empty area name")
+			break
+		}
+		if name == "" {
+			ret.SetError("empty endpoint name")
+			break
+		}
+
 		if _, ok := (*an)[area]; !ok {
 			break
 		}

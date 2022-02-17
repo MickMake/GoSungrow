@@ -5,27 +5,44 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7d634523-07a9-40e1-bec3-1dc036abc5e9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/iSolarCloud/api/reflect/reflect.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iSolarCloud/api/web/token.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/iSolarCloud/api/apiReflect/get.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/iSolarCloud/api/web.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/getPowerDevicePointNames/data.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/getPowerStatistics/data.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/getPsDetailWithPsType/data.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/getPsList/data.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/login/data.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/nullEndPoint/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/cmd_api.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_api.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/commands.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/commands.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/struct.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/OLD/site/site.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/OLD/site/site.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/content_handler.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/content_type.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/init.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/log.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/log.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/mime_type.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/mime_type.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/pkgreflect.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/reflect/reflect.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/apiReflect/reflect.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/resourcer.go" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/api/struct_area.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/struct_area.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/api/struct_areas.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/struct_areas.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/api/struct_endpoint.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/struct_endpoint.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/types.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/types.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/api/utils.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/utils.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/login.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/login.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/something.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/something.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/web/get.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/web/token.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/web/token.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/getPowerDevicePointNames/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/getPowerDevicePointNames/struct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/getPowerStatistics/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/getPowerStatistics/struct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/getPsDetailWithPsType/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/getPsDetailWithPsType/struct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/getPsList/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/getPsList/struct.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/login/funcs.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/login/funcs.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/login/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/login/struct.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/nullEndPoint/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/nullEndPoint/struct.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/sungro/AppService/struct.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/sungro/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/sungro/struct.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/sungro/web/get.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/web/get.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/sungro/web/token.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/sungro/sungro.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/sungro/sungro.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,8 +83,8 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/iSolarCloud/api/reflect" />
       <recent name="$PROJECT_DIR$/iSolarCloud/api" />
+      <recent name="$PROJECT_DIR$/iSolarCloud/api/reflect" />
       <recent name="$PROJECT_DIR$/iSolarCloud/sungro" />
       <recent name="$PROJECT_DIR$/iSolarCloud" />
       <recent name="$PROJECT_DIR$/iSolarCloud/AppService/getPowerDevicePointNames" />
@@ -183,63 +200,58 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/utils.go</url>
-          <line>60</line>
+          <line>85</line>
           <option name="timeStamp" value="135" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/struct_endpoint.go</url>
-          <line>90</line>
+          <line>93</line>
           <option name="timeStamp" value="159" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/struct_endpoint.go</url>
-          <line>86</line>
+          <line>89</line>
           <option name="timeStamp" value="160" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/struct_endpoint.go</url>
-          <line>82</line>
+          <line>85</line>
           <option name="timeStamp" value="161" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/struct_endpoint.go</url>
-          <line>78</line>
+          <line>81</line>
           <option name="timeStamp" value="162" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/struct_endpoint.go</url>
-          <line>105</line>
+          <line>108</line>
           <option name="timeStamp" value="163" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/struct_endpoint.go</url>
-          <line>109</line>
+          <line>112</line>
           <option name="timeStamp" value="164" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/struct_endpoint.go</url>
-          <line>94</line>
+          <line>97</line>
           <option name="timeStamp" value="165" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/struct_endpoint.go</url>
-          <line>114</line>
+          <line>117</line>
           <option name="timeStamp" value="166" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/utils.go</url>
-          <line>249</line>
+          <line>168</line>
           <option name="timeStamp" value="188" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/cmd/cmd_api.go</url>
           <line>123</line>
           <option name="timeStamp" value="191" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/iSolarCloud/api/utils.go</url>
-          <line>138</line>
-          <option name="timeStamp" value="201" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/web/token.go</url>
@@ -258,12 +270,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/sungro/AppService/struct.go</url>
-          <line>620</line>
+          <line>621</line>
           <option name="timeStamp" value="236" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/cmd/struct.go</url>
-          <line>134</line>
+          <line>146</line>
           <option name="timeStamp" value="248" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
@@ -272,14 +284,94 @@
           <option name="timeStamp" value="256" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/iSolarCloud/api/web/get.go</url>
-          <line>255</line>
-          <option name="timeStamp" value="266" />
+          <url>file://$PROJECT_DIR$/cmd/struct.go</url>
+          <line>121</line>
+          <option name="timeStamp" value="272" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/api/apiReflect/reflect.go</url>
+          <line>68</line>
+          <option name="timeStamp" value="297" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/api/apiReflect/reflect.go</url>
+          <line>40</line>
+          <option name="timeStamp" value="303" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/cmd/struct.go</url>
+          <line>152</line>
+          <option name="timeStamp" value="312" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/sungro/AppService/login/funcs.go</url>
+          <line>123</line>
+          <option name="timeStamp" value="315" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/sungro/struct.go</url>
+          <line>58</line>
+          <option name="timeStamp" value="324" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/sungro/struct.go</url>
+          <line>57</line>
+          <option name="timeStamp" value="327" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/sungro/AppService/login/struct.go</url>
-          <line>274</line>
-          <option name="timeStamp" value="269" />
+          <line>69</line>
+          <option name="timeStamp" value="330" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/sungro/AppService/login/funcs.go</url>
+          <line>249</line>
+          <option name="timeStamp" value="331" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/sungro/AppService/login/struct.go</url>
+          <line>41</line>
+          <option name="timeStamp" value="332" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/sungro/AppService/login/funcs.go</url>
+          <line>109</line>
+          <option name="timeStamp" value="338" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/api/web.go</url>
+          <line>96</line>
+          <option name="timeStamp" value="343" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/sungro/AppService/login/funcs.go</url>
+          <line>74</line>
+          <option name="timeStamp" value="349" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/sungro/AppService/login/funcs.go</url>
+          <line>110</line>
+          <option name="timeStamp" value="351" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/sungro/AppService/login/struct.go</url>
+          <line>104</line>
+          <option name="timeStamp" value="352" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/sungro/AppService/login/funcs.go</url>
+          <line>89</line>
+          <option name="timeStamp" value="353" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/sungro/AppService/login/funcs.go</url>
+          <line>241</line>
+          <option name="timeStamp" value="354" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/sungro/AppService/login/struct.go</url>
+          <line>80</line>
+          <option name="timeStamp" value="355" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

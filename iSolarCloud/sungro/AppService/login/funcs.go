@@ -20,60 +20,99 @@ const (
 )
 
 type SunGroAuth struct {
-	TokenExpiry string
+	AppKey       string
+	UserAccount  string
+	UserPassword string
+	TokenFile    string
+	Token        string
 
-	AppKey      string
-	Username    string
-	Password    string
+	expiry       time.Time
+	newToken     bool
+	retry        int
+	err          error
 }
 
-type Token struct {
-	TokenFile   string
-	TokenExpiry time.Time
-	newToken    bool
-	retry       int
-}
+// type Token struct {
+// 	File     string
+// 	Expiry   time.Time
+// 	newToken bool
+// 	retry    int
+// }
 
+
+func (a *SunGroAuth) Verify() error {
+	var err error
+	for range Only.Once {
+		if a == nil {
+			err = errors.New("no auth details")
+			break
+		}
+
+		if a.AppKey == "" {
+			err = errors.New("API AppKey")
+			a.err = err
+			break
+		}
+		if a.UserAccount == "" {
+			err = errors.New("empty API Username")
+			a.err = err
+			break
+		}
+		if a.UserPassword == "" {
+			err = errors.New("empty API Password")
+			a.err = err
+			break
+		}
+	}
+
+	return err
+}
 
 func (e *EndPoint) Login(auth *SunGroAuth) error {
 	for range Only.Once {
-		_ = e.readTokenFile()
+		e.Auth = auth
 
-		if auth == nil {
-			// If nil, then assume we haven'e set anything.
-			break
-		}
-
-		if auth.AppKey == "" {
-			e.Error = errors.New("API AppKey")
-			break
-		}
-		if auth.Username == "" {
-			e.Error = errors.New("empty Client ApiUsername")
-			break
-		}
-		if auth.Password == "" {
-			e.Error = errors.New("empty Client ApiPassword")
-			break
-		}
-
-		if e.GetToken() == "" {
-			e.newToken = true
-		}
-
-		if auth.TokenExpiry == "" {
-			auth.TokenExpiry = time.Now().Format(DateTimeFormat)
-		}
-		e.TokenExpiry, e.Error = time.Parse(DateTimeFormat, auth.TokenExpiry)
+		e.Error = e.Auth.Verify()
 		if e.Error != nil {
-			e.newToken = true
+			break
 		}
+
+		e.Error = e.readTokenFile()
+		if e.Error != nil {
+			break
+		}
+
+		e.Error = e.Auth.Verify()
+		if e.Error != nil {
+			break
+		}
+
+		if e.GetToken() != "" {
+			break
+			// e.Auth.newToken = true
+		}
+
+		// if auth.Expiry == "" {
+		// 	auth.Expiry = time.Now().Format(DateTimeFormat)
+		// }
+		// e.Expiry, e.Error = time.Parse(DateTimeFormat, auth.Expiry)
+		// if e.Error != nil {
+		// 	e.newToken = true
+		// }
 
 		e.Request = Request {
 			Appkey:   auth.AppKey,
 			SysCode:  "900",
-			UserAccount: auth.Username,
-			UserPassword: auth.Password,
+			UserAccount: auth.UserAccount,
+			UserPassword: auth.UserPassword,
+		}
+
+		foo := Assert(e.Call())
+		e.Response = foo.Response
+
+		e.Error = e.saveToken()
+		if e.Error != nil {
+			break
 		}
 
 		e.Error = e.RetrieveToken()
@@ -104,7 +143,7 @@ func (e *EndPoint) GetUserId() string {
 func (e *EndPoint) RetrieveToken() error {
 	for range Only.Once {
 		e.HasTokenExpired()
-		if !e.newToken {
+		if !e.Auth.newToken {
 			break
 		}
 
@@ -136,7 +175,7 @@ func (e *EndPoint) RetrieveToken() error {
 			break
 		}
 
-		e.TokenExpiry = time.Now()
+		e.Auth.expiry = time.Now()
 
 		e.Error = e.saveToken()
 		if e.Error != nil {
@@ -149,53 +188,58 @@ func (e *EndPoint) RetrieveToken() error {
 
 func (e *EndPoint) HasTokenExpired() bool {
 	for range Only.Once {
-		if e.TokenExpiry.Before(time.Now()) {
-			e.newToken = true
+		if e.Auth.expiry.Before(time.Now()) {
+			e.Auth.newToken = true
 			break
 		}
 
 		if e.GetToken() == "" {
-			e.newToken = true
+			e.Auth.newToken = true
 			break
 		}
 	}
 
-	return e.newToken
+	return e.Auth.newToken
 }
 
 func (e *EndPoint) HasTokenChanged() bool {
-	ok := e.newToken
-	if e.newToken {
-		e.newToken = false
+	ok := e.Auth.newToken
+	if e.Auth.newToken {
+		e.Auth.newToken = false
 	}
 	return ok
 }
 
 func (e *EndPoint) GetTokenExpiry() time.Time {
-	return e.TokenExpiry
+	return e.Auth.expiry
 }
 
 // Retrieves a token from a local file.
 func (e *EndPoint) readTokenFile() error {
 	for range Only.Once {
-		if e.TokenFile == "" {
-			e.TokenFile, e.Error = os.UserHomeDir()
+		if e.Auth.TokenFile == "" {
+			e.Auth.TokenFile, e.Error = os.UserHomeDir()
 			if e.Error != nil {
-				e.TokenFile = ""
+				e.Auth.TokenFile = ""
 				break
 			}
-			e.TokenFile = filepath.Join(e.TokenFile, ".GoSungro", DefaultAuthTokenFile)
+			e.Auth.TokenFile = filepath.Join(e.Auth.TokenFile, ".GoSungro", DefaultAuthTokenFile)
 		}
 
 		var f *os.File
-		f, e.Error = os.Open(e.TokenFile)
+		f, e.Error = os.Open(e.Auth.TokenFile)
 		if e.Error != nil {
+			if os.IsNotExist(e.Error) {
+				e.Error = nil
+			}
 			break
 		}
 
 		//goland:noinspection GoUnhandledErrorResult
 		defer f.Close()
-		e.Error = json.NewDecoder(f).Decode(&e.Response)
+		e.Error = json.NewDecoder(f).Decode(&e.Response.ResultData)
+
+		e.Auth.Token = e.GetToken()
 	}
 
 	return e.Error
@@ -204,18 +248,18 @@ func (e *EndPoint) readTokenFile() error {
 // Saves a token to a file path.
 func (e *EndPoint) saveToken() error {
 	for range Only.Once {
-		if e.TokenFile == "" {
-			e.TokenFile, e.Error = os.UserHomeDir()
+		if e.Auth.TokenFile == "" {
+			e.Auth.TokenFile, e.Error = os.UserHomeDir()
 			if e.Error != nil {
-				e.TokenFile = ""
+				e.Auth.TokenFile = ""
 				break
 			}
-			e.TokenFile = filepath.Join(e.TokenFile, ".GoSungro", DefaultAuthTokenFile)
+			e.Auth.TokenFile = filepath.Join(e.Auth.TokenFile, ".GoSungro", DefaultAuthTokenFile)
 		}
 
-		fmt.Printf("Saving token file to: %s\n", e.TokenFile)
+		fmt.Printf("Saving token file to: %s\n", e.Auth.TokenFile)
 		var f *os.File
-		f, e.Error = os.OpenFile(e.TokenFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
+		f, e.Error = os.OpenFile(e.Auth.TokenFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
 		if e.Error != nil {
 			e.Error = errors.New(fmt.Sprintf("Unable to cache SUNGRO oauth token: %v", e.Error))
 			break
@@ -223,7 +267,7 @@ func (e *EndPoint) saveToken() error {
 
 		//goland:noinspection GoUnhandledErrorResult
 		defer f.Close()
-		e.Error = json.NewEncoder(f).Encode(e.GetResponse().ResultData)
+		e.Error = json.NewEncoder(f).Encode(e.Response.ResultData)
 	}
 
 	return e.Error

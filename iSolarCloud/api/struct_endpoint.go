@@ -11,7 +11,7 @@ type EndPoint interface {
 	GetArea() AreaName
 	GetName() EndPointName
 	GetUrl() *url.URL
-	Call() Json
+	Call() EndPoint
 	GetData() Json
 
 	SetRequest(ref interface{}) EndPoint	// EndPointStruct
@@ -24,11 +24,14 @@ type EndPoint interface {
 	GetResponseJson() Json
 	IsResponseValid() error
 
+	SetError(string, ...interface{})
 	GetError() error
 	IsError() bool
 }
 
 type EndPointStruct struct {
+	ApiRoot *Web
+
 	Area     AreaName     `json:"area"`
 	Name     EndPointName `json:"name"`
 	Url      *url.URL     `json:"url"`
@@ -40,7 +43,7 @@ type EndPointStruct struct {
 type Common struct {
 	Get GetFunc
 	Set SetFunc
-	// Web *web.Web
+	// ApiRoot *web.ApiRoot
 }
 
 type Request struct {
