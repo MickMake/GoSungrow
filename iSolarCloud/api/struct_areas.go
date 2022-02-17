@@ -109,7 +109,8 @@ func (an *Areas) SetRequest(area AreaName, name EndPointName, ref interface{}) e
 		}
 
 		point := (*an)[area].EndPoints[name]
-		err = point.SetRequest(ref)
+		point = point.SetRequest(ref)
+		err = point.GetError()
 	}
 
 	return err
@@ -123,7 +124,7 @@ func (an *Areas) GetRequest(area AreaName, endpoint EndPointName) Json {
 		if err != nil {
 			break
 		}
-		ret = an.GetEndPoint(area, endpoint).GetRequest()
+		ret = an.GetEndPoint(area, endpoint).GetRequestJson()
 	}
 
 	return ret
@@ -137,7 +138,7 @@ func (an *Areas) GetResponse(area AreaName, endpoint EndPointName) Json {
 		if err != nil {
 			break
 		}
-		ret = an.GetEndPoint(area, endpoint).GetResponse()
+		ret = an.GetEndPoint(area, endpoint).GetResponseJson()
 	}
 
 	return ret

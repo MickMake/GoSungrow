@@ -94,13 +94,14 @@ func cmdApiGetFunc(cmd *cobra.Command, args []string) {
 		// fmt.Printf("%v\n", bar)
 
 		hey1 := SunGro.GetEndpoint(args[1], args[0])
-		_ = hey1.SetRequest(login.Request{
+		_ = hey1.SetRequest(login.Request {
 			Appkey:       Cmd.ApiAppKey,
 			SysCode:      "600",
 			UserAccount:  "",
 			UserPassword: "",
 		})
-		_ = SunGro.Web.Get(login.GetUrl(), login.RequestRef(), login.ResponseRef())
+		a, _ := SunGro.Web.Get(hey1)
+		fmt.Printf("resp: %v\n", a)
 
 		hey := SunGro.GetEndpoint(args[1], args[0])
 		_ = hey.SetRequest(getPowerDevicePointNames.Request{
@@ -114,11 +115,12 @@ func cmdApiGetFunc(cmd *cobra.Command, args []string) {
 			},
 			DeviceType:    "",
 		})
-		SunGro.Web.Get(hey.GetUrl(), hey.RequestRef(), hey.ResponseRef())
+		r, _ := SunGro.Web.Get(hey1)
+		fmt.Printf("resp: %v\n", r)
 
 		fmt.Printf("HEY:%v\n", hey)
 		fmt.Printf("HEY:%v\n", hey.GetError())
-		fmt.Printf("HEY:%s\n", hey.GetRequest())
+		fmt.Printf("HEY:%s\n", hey.GetRequestJson())
 		fmt.Printf("HEY:%s\n", hey.GetData())
 		if Cmd.Error != nil {
 			break

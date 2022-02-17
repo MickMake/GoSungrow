@@ -2,6 +2,7 @@ package web
 
 import (
 	"GoSungro/Only"
+	"GoSungro/iSolarCloud/sungro/AppService/login"
 	"bytes"
 	"encoding/json"
 	"errors"
@@ -16,7 +17,8 @@ import (
 
 
 type Web struct {
-	Token
+	Auth login.EndPoint
+
 	Body  []byte
 	Error error
 	retry int
@@ -32,7 +34,7 @@ func (w *Web) SetUrl(u string) error {
 	if w.Error != nil {
 		w.Url = nil
 	}
-	w.Token.Url = w.Url
+	w.Auth.Url = w.Url
 
 	return w.Error
 }
@@ -51,7 +53,7 @@ func (w *Web) SetUrl(u string) error {
 // 			break
 // 		}
 //
-// 		w.request.Header.Set("Authorization", w.Token.GetAuthHeader())
+// 		w.request.Header.Set("Authorization", w.Auth.GetAuthHeader())
 //
 // 		//w.response, w.Error = http.Get(url)
 // 		w.response, w.Error = w.client.Do(w.request)
@@ -193,7 +195,7 @@ func (w *Web) Get(u *url.URL, request interface{}, response interface{}) error {
 		// 	break
 		// }
 		//
-		// w.request.Header.Set("Authorization", w.Token.GetAuthHeader())
+		// w.request.Header.Set("Authorization", w.Auth.GetAuthHeader())
 
 		for range Only.Twice {
 			w.response, w.Error = http.Post(u.String(), "application/json", bytes.NewBuffer(p))
@@ -204,7 +206,7 @@ func (w *Web) Get(u *url.URL, request interface{}, response interface{}) error {
 			if strings.Contains(w.response.Status, "The access token provided is invalid") {
 				// 401 Unauthorized The access token provided is invalid.
 				// Will first attempt a refresh of the token OR re-login.
-				w.Error = w.Login(nil)
+				w.Error = w.Auth.Login()
 				if w.Error != nil {
 					w.Error = errors.New(w.response.Status)
 					break
@@ -635,75 +637,75 @@ func (r *Required) IsNotRequired(field string) bool {
 
 // ******************************************************************************** //
 
-func (w *Web) GetDomain() string {
-	return w.Response.ResultMsg
-}
-func (w *Web) VerifyDomain(domain string) string {
-	if domain == "" {
-		domain = w.Response.ResultMsg
-	}
-	if domain == "." {
-		domain = w.Response.ResultMsg
-	}
-	return domain
-}
-
-func (w *Web) GetUser() string {
-	return w.Response.ResultMsg
-}
-func (w *Web) VerifyUser(user string) string {
-	if user == "" {
-		user = w.Response.ResultData.UserID
-	}
-	if user == "." {
-		user = w.Response.ResultData.UserID
-	}
-	return user
-}
-
-func (w *Web) GetUserMac() string {
-	return "."
-}
-func (w *Web) VerifyUserMac(user string) string {
-	// @TODO - Check MAC is sane.
-	return user
-}
-
-func (w *Web) GetUsername() string {
-	return w.Response.ResultData.UserName
-}
-func (w *Web) VerifyUsername(name string) string {
-	if name == "" {
-		name = w.Response.ResultData.UserName
-	}
-	if name == "." {
-		name = w.Response.ResultData.UserName
-	}
-	return name
-}
-
-func (w *Web) GetUserEmail() string {
-	return w.Response.ResultData.Email
-}
-func (w *Web) VerifyUserEmail(email string) string {
-	if email == "" {
-		email = w.Response.ResultData.Email
-	}
-	if email == "." {
-		email = w.Response.ResultData.Email
-	}
-	return email
-}
-
-func (w *Web) GetDisplayName() string {
-	return w.Response.ResultData.UserAccount
-}
-func (w *Web) VerifyDisplayName(name string) string {
-	if name == "" {
-		name = w.Response.ResultData.UserAccount
-	}
-	if name == "." {
-		name = w.Response.ResultData.UserAccount
-	}
-	return name
-}
+// func (w *Web) GetDomain() string {
+// 	return w.Response.ResultMsg
+// }
+// func (w *Web) VerifyDomain(domain string) string {
+// 	if domain == "" {
+// 		domain = w.Response.ResultMsg
+// 	}
+// 	if domain == "." {
+// 		domain = w.Response.ResultMsg
+// 	}
+// 	return domain
+// }
+//
+// func (w *Web) GetUser() string {
+// 	return w.Response.ResultMsg
+// }
+// func (w *Web) VerifyUser(user string) string {
+// 	if user == "" {
+// 		user = w.Response.ResultData.UserID
+// 	}
+// 	if user == "." {
+// 		user = w.Response.ResultData.UserID
+// 	}
+// 	return user
+// }
+//
+// func (w *Web) GetUserMac() string {
+// 	return "."
+// }
+// func (w *Web) VerifyUserMac(user string) string {
+// 	// @TODO - Check MAC is sane.
+// 	return user
+// }
+//
+// func (w *Web) GetUsername() string {
+// 	return w.Response.ResultData.UserName
+// }
+// func (w *Web) VerifyUsername(name string) string {
+// 	if name == "" {
+// 		name = w.Response.ResultData.UserName
+// 	}
+// 	if name == "." {
+// 		name = w.Response.ResultData.UserName
+// 	}
+// 	return name
+// }
+//
+// func (w *Web) GetUserEmail() string {
+// 	return w.Response.ResultData.Email
+// }
+// func (w *Web) VerifyUserEmail(email string) string {
+// 	if email == "" {
+// 		email = w.Response.ResultData.Email
+// 	}
+// 	if email == "." {
+// 		email = w.Response.ResultData.Email
+// 	}
+// 	return email
+// }
+//
+// func (w *Web) GetDisplayName() string {
+// 	return w.Response.ResultData.UserAccount
+// }
+// func (w *Web) VerifyDisplayName(name string) string {
+// 	if name == "" {
+// 		name = w.Response.ResultData.UserAccount
+// 	}
+// 	if name == "." {
+// 		name = w.Response.ResultData.UserAccount
+// 	}
+// 	return name
+// }

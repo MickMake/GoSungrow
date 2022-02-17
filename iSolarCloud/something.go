@@ -96,7 +96,7 @@ package iSolarCloud
 // 		Timezone                     string          `json:"timezone"`
 // 		TimeZoneId                   string          `json:"timezoneid"`
 // 		ToggleFlag                   string          `json:"toggleflag"`
-// 		Token                        string          `json:"token"`
+// 		Auth                        string          `json:"token"`
 // 		UnlockLaveMinute             int64           `json:"unlock_lave_minute"`
 // 		UploadTime                   interface{}     `json:"upload_time"`
 // 		UserAccount                  string          `json:"user_account"`

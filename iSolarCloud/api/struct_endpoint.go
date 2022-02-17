@@ -14,16 +14,18 @@ type EndPoint interface {
 	Call() Json
 	GetData() Json
 
-	SetRequest(ref interface{}) error
+	SetRequest(ref interface{}) EndPoint	// EndPointStruct
 	RequestRef() interface{}
 	GetRequestJson() Json
 	IsRequestValid() error
 
+	SetResponse([]byte) EndPoint	// EndPointStruct
 	ResponseRef() interface{}
 	GetResponseJson() Json
 	IsResponseValid() error
 
 	GetError() error
+	IsError() bool
 }
 
 type EndPointStruct struct {
@@ -39,6 +41,14 @@ type Common struct {
 	Get GetFunc
 	Set SetFunc
 	// Web *web.Web
+}
+
+type Request struct {
+	RequestCommon
+}
+
+type Response struct {
+	ResponseCommon
 }
 
 type RequestCommon struct {

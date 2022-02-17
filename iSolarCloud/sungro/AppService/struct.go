@@ -608,6 +608,30 @@ func Init() Area {
 	return area
 }
 
+
+// ****************************************
+// Methods not scoped by api.EndPoint interface type
+
+func GetAreaName() string {
+	return string(api.GetArea(Area{}))
+}
+
+func (a Area) GetEndPoint(name api.EndPointName) api.EndPoint {
+	var ret api.EndPoint
+	for _, e := range a.EndPoints {
+		// fmt.Printf("endpoint: %v\n", e)
+		if e.GetName() == name {
+			ret = e
+			break
+		}
+	}
+	return ret
+}
+
+
+// ****************************************
+// Methods scoped by api.Area interface type
+
 func (a Area) Init() api.AreaStruct {
 	panic("implement me")
 }

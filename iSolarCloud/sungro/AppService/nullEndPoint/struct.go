@@ -2,7 +2,9 @@
 package nullEndPoint
 
 import (
+	"GoSungro/Only"
 	"GoSungro/iSolarCloud/api"
+	"encoding/json"
 	"fmt"
 	"net/url"
 )
@@ -24,8 +26,7 @@ type Response struct {
 
 func Init() EndPoint {
 	fmt.Println("Init()")
-
-	foo := EndPoint {
+	return EndPoint {
 		Area:     api.GetArea(EndPoint{}),
 		Name:     api.GetName(EndPoint{}),
 		Url:      api.GetUrl(Url),
@@ -33,72 +34,98 @@ func Init() EndPoint {
 		Response: Response{},
 		Error:    nil,
 	}
-
-	fmt.Printf("endpoint: %v\n", foo)
-
-	return foo
 }
 
 
-func (g EndPoint) GetArea() api.AreaName {
-	fmt.Println("g.GetArea() implement me")
-	return g.Area
+func (e EndPoint) GetArea() api.AreaName {
+	return e.Area
 }
 
-func (g EndPoint) GetName() api.EndPointName {
-	fmt.Println("g.GetName() implement me")
-	return g.Name
+func (e EndPoint) GetName() api.EndPointName {
+	return e.Name
 }
 
-func (g EndPoint) GetUrl() *url.URL {
-	fmt.Println("g.GetUrl() implement me")
-	return g.Url
+func (e EndPoint) GetUrl() *url.URL {
+	return e.Url
 }
 
-func (g EndPoint) SetRequest(ref interface{}) error {
-	fmt.Println("g.SetRequest() implement me")
-	fmt.Printf("ref == %v\n", ref)
-	return nil
+func (e EndPoint) GetData() api.Json {
+	return api.GetAsJson(e.Response.(Response).ResultData)
 }
 
-func (g EndPoint) GetRequest() api.Json {
-	return api.GetAsJson(g.Request)
-}
-
-func (g EndPoint) GetResponse() api.Json {
-	return api.GetAsJson(g.Response)
-}
-
-func (g EndPoint) RequestRef() interface{} {
-	return g.Request
-}
-
-func (g EndPoint) ResponseRef() interface{} {
-	return g.Response
-}
-
-func (g EndPoint) GetData() api.Json {
-	fmt.Println("g.GetData() implement me")
-	return api.GetAsJson(g.Response.(Response).ResultData)
-}
-
-func (g EndPoint) IsValid() error {
-	fmt.Println("g.IsValid() implement me")
-	return nil
-}
-
-func (g EndPoint) Call() api.Json {
-	fmt.Println("g.Call() implement me")
+func (e EndPoint) Call() api.Json {
+	fmt.Println("e.Call() implement me")
 	return ""
 }
 
-func (g EndPoint) Init() *EndPoint {
-	fmt.Println("g.Init() implement me")
+func (e EndPoint) GetError() error {
+	return e.Error
+}
+
+func (e EndPoint) IsError() bool {
+	if e.Error != nil {
+		return true
+	}
+	return false
+}
+
+func (e EndPoint) Init() *EndPoint {
 	ret := Init()
 	return &ret
 }
 
-func (g EndPoint) GetError() error {
-	fmt.Println("g.IsValid() implement me")
-	return g.Error
+
+func (e EndPoint) SetRequest(ref interface{}) api.EndPoint {
+	for range Only.Once {
+		e.Error = api.DoTypesMatch(e.Request, ref)
+		if e.Error != nil {
+			break
+		}
+		e.Request = ref.(Request)
+	}
+	return e
+}
+
+func (e EndPoint) RequestRef() interface{} {
+	return e.Request
+}
+
+func (e EndPoint) GetRequestJson() api.Json {
+	return api.GetAsJson(e.Request)
+}
+
+func (e EndPoint) IsRequestValid() error {
+	return e.GetRequest().RequestCommon.IsValid()
+}
+
+func (e EndPoint) GetRequest() Request {
+	return e.Request.(Request)
+}
+
+func (e EndPoint) SetResponse(ref []byte) api.EndPoint {
+	for range Only.Once {
+		r := e.GetResponse()
+		e.Error = json.Unmarshal(ref, &r)
+		if e.Error != nil {
+			break
+		}
+		e.Response = r
+	}
+	return e
+}
+
+func (e EndPoint) GetResponseJson() api.Json {
+	return api.GetAsJson(e.Response)
+}
+
+func (e EndPoint) ResponseRef() interface{} {
+	return e.Response
+}
+
+func (e EndPoint) IsResponseValid() error {
+	return e.GetResponse().ResponseCommon.IsValid()
+}
+
+func (e EndPoint) GetResponse() Response {
+	return e.Response.(Response)
 }

@@ -291,7 +291,7 @@ func readConfig() error {
 		_, _ = fmt.Fprintf(os.Stderr, "Git Repo User:	%v\n", rootViper.Get(flagGitUsername))
 		_, _ = fmt.Fprintf(os.Stderr, "Git Repo ApiPassword:	%v\n", rootViper.Get(flagGitPassword))
 		_, _ = fmt.Fprintf(os.Stderr, "Git SSH keyfile:	%v\n", rootViper.Get(flagGitKeyFile))
-		_, _ = fmt.Fprintf(os.Stderr, "Git Token:	%v\n", rootViper.Get(flagGitToken))
+		_, _ = fmt.Fprintf(os.Stderr, "Git Auth:	%v\n", rootViper.Get(flagGitToken))
 		_, _ = fmt.Fprintf(os.Stderr, "Git Diff Command:	%v\n", rootViper.Get(flagGitDiffCmd))
 		_, _ = fmt.Fprintln(os.Stderr)
 

@@ -2,7 +2,8 @@ package sungro
 
 import (
 	"GoSungro/iSolarCloud/api"
-	"GoSungro/iSolarCloud/sungro/web"
+	"GoSungro/iSolarCloud/api/web"
+	"GoSungro/iSolarCloud/sungro/AppService/login"
 )
 
 
@@ -29,60 +30,32 @@ func NewSunGro(url string) *SunGro {
 	return &p
 }
 
-func (p *SunGro) SetAuth(auth web.SunGroAuth) error {
-	return p.Web.Login(&auth)
+func (p *SunGro) SetAuth(auth login.SunGroAuth) error {
+	return p.Web.Auth.Login(&auth)
 }
 
 func (p *SunGro) GetToken() string {
-	return p.Web.GetToken()
+	return p.Web.Auth.GetToken()
 }
 
 func (p *SunGro) GetTokenExpiry() string {
-	return p.Web.GetTokenExpiry().Format(web.DateTimeFormat)
+	return p.Web.Auth.GetTokenExpiry().Format(login.DateTimeFormat)
 }
 
-func (p *SunGro) GetDomain() string {
-	return p.Web.GetDomain()
+func (p *SunGro) GetUserName() string {
+	return p.Web.Auth.GetUserName()
 }
-func (p *SunGro) VerifyDomain(domain string) string {
-	return p.Web.VerifyDomain(domain)
-}
-
-func (p *SunGro) GetUser() string {
-	return p.Web.GetUser()
-}
-func (p *SunGro) VerifyUser(user string) string {
-	return p.Web.VerifyUser(user)
-}
-
-func (p *SunGro) GetUserMac() string {
-	return p.Web.GetUser()
-}
-func (p *SunGro) VerifyUserMac(user string) string {
-	return p.Web.VerifyUser(user)
-}
-
-func (p *SunGro) GetUsername() string {
-	return p.Web.GetUsername()
-}
-func (p *SunGro) VerifyUsername(user string) string {
-	return p.Web.VerifyUsername(user)
-}
+// func (p *SunGro) VerifyUsername(user string) string {
+// 	return p.Web.Auth.VerifyUsername(user)
+// }
 
 func (p *SunGro) GetUserEmail() string {
-	return p.Web.GetUserEmail()
+	return p.Web.Auth.GetUserEmail()
 }
-func (p *SunGro) VerifyUserEmail(user string) string {
-	return p.Web.VerifyUserEmail(user)
-}
-
-func (p *SunGro) GetDisplayName() string {
-	return p.Web.GetDisplayName()
-}
-func (p *SunGro) VerifyDisplayName(user string) string {
-	return p.Web.VerifyDisplayName(user)
-}
+// func (p *SunGro) VerifyUserEmail(user string) string {
+// 	return p.Web.Auth.VerifyUserEmail(user)
+// }
 
 func (p *SunGro) HasTokenChanged() bool {
-	return p.Web.HasTokenChanged()
+	return p.Web.Auth.HasTokenChanged()
 }

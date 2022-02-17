@@ -46,6 +46,17 @@ func (as *AreaStruct) GetEndPoint(name EndPointName) EndPoint {
 	return as.EndPoints.GetEndPoint(name)
 }
 
+// func (a *Area) GetEndPoint(name EndPointName) EndPoint {
+// 	var ret EndPoint
+// 	for range Only.Once {
+// 		if _, ok := (*an)[area]; !ok {
+// 			break
+// 		}
+// 		ret = (*an)[area].EndPoints[name]
+// 	}
+// 	return ret
+// }
+
 func (as AreaStruct) ListEndpoints() {
 	for range Only.Once {
 		fmt.Printf("Listing all endpoints from area '%s':\n", as.Name)

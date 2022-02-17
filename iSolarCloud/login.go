@@ -1,19 +1,19 @@
 package iSolarCloud
 
 
-// var LoginType = (*Login)(nil)
+// var LoginType = (*Auth)(nil)
 //
 // var _ ResourceHandler = LoginType
 // // var _ api.ContentHandler = LoginType
 //
-// type Login struct {
+// type Auth struct {
 // 	//GuidsAndLinks
 // 	Attributes LoginAttributes
 // 	ResourceType
 // 	// api.ContentType
 // }
 //
-// func (*Login) InitializeResourceType(rt *ResourceType) *ResourceType {
+// func (*Auth) InitializeResourceType(rt *ResourceType) *ResourceType {
 // 	//rt.HasVideos = true
 // 	//rt.HasCaptions = true
 // 	//rt.HasCountries = true
@@ -26,7 +26,7 @@ package iSolarCloud
 // 	return rt
 // }
 //
-// func (*Login) InitializeContentType(ct *api.ContentType) *api.ContentType {
+// func (*Auth) InitializeContentType(ct *api.ContentType) *api.ContentType {
 // 	ct.DownloadPriority = 6
 // 	ct.ResourceType = (*LoginResource)(nil)
 // 	ct.CollectionType = (*LoginCollection)(nil)
@@ -96,7 +96,7 @@ package iSolarCloud
 // 		Timezone                     string          `json:"timezone"`
 // 		TimeZoneId                   string          `json:"timezoneid"`
 // 		ToggleFlag                   string          `json:"toggleflag"`
-// 		Token                        string          `json:"token"`
+// 		Auth                        string          `json:"token"`
 // 		UnlockLaveMinute             int64           `json:"unlock_lave_minute"`
 // 		UploadTime                   interface{}     `json:"upload_time"`
 // 		UserAccount                  string          `json:"user_account"`
@@ -145,9 +145,9 @@ package iSolarCloud
 //
 //
 // type LoginResource struct {
-// 	Data Login
+// 	Data Auth
 // }
 //
 // type LoginCollection struct {
-// 	Data []Login
+// 	Data []Auth
 // }

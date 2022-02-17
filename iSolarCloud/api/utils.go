@@ -202,6 +202,36 @@ func GetName(v interface{}) EndPointName {
 	return ret
 }
 
+func GetType(v interface{}) string {
+	var ret string
+	for range Only.Once {
+		if v == nil {
+			break
+		}
+
+		val := reflect.ValueOf(v)
+		ret = val.Type().Name()
+	}
+	return ret
+}
+
+func DoTypesMatch(a interface{}, b interface{}) error {
+	var err error
+	for range Only.Once {
+		aName := GetType(a)
+		bName := GetType(b)
+
+		fmt.Printf("a:%v b:%v\n", aName, bName)
+		if aName == bName {
+			break
+		}
+
+		err = errors.New(fmt.Sprintf("interface '%s' doesn't match '%s'", aName, bName))
+	}
+	return err
+}
+
+
 func GetUrl(u string) *url.URL {
 	var ret *url.URL
 	for range Only.Once {
@@ -306,7 +336,7 @@ func (req RequestCommon) IsValid() error {
 		if err != nil {
 			break
 		}
-		err = CheckString("Token", req.Token)
+		err = CheckString("Auth", req.Token)
 		if err != nil {
 			break
 		}

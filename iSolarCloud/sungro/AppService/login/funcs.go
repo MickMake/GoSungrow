@@ -14,6 +14,11 @@ import (
 )
 
 
+const (
+	DateTimeFormat       = "2006-01-02T15:04:05"
+	DefaultAuthTokenFile = "SunGroAuthToken.json"
+)
+
 type SunGroAuth struct {
 	TokenExpiry string
 
@@ -23,8 +28,6 @@ type SunGroAuth struct {
 }
 
 type Token struct {
-	EndPoint
-
 	TokenFile   string
 	TokenExpiry time.Time
 	newToken    bool
@@ -36,26 +39,6 @@ func (e *EndPoint) Login(auth *SunGroAuth) error {
 	for range Only.Once {
 		_ = e.readTokenFile()
 
-		e.Error = e.Verify(auth)
-		if e.Error != nil {
-			break
-		}
-
-		e.Error = e.RetrieveToken()
-		if e.Error != nil {
-			break
-		}
-	}
-
-	return e.Error
-}
-
-func (e *EndPoint) GetToken() string {
-	return e.GetResponse().ResultData.Token
-}
-
-func (e *EndPoint) Verify(auth *SunGroAuth) error {
-	for range Only.Once {
 		if auth == nil {
 			// If nil, then assume we haven'e set anything.
 			break
@@ -74,8 +57,7 @@ func (e *EndPoint) Verify(auth *SunGroAuth) error {
 			break
 		}
 
-		e.Token = e.Response.(Response).ResultData.Token
-		if e.Response.ResultData.Token == "" {
+		if e.GetToken() == "" {
 			e.newToken = true
 		}
 
@@ -87,17 +69,36 @@ func (e *EndPoint) Verify(auth *SunGroAuth) error {
 			e.newToken = true
 		}
 
-		e.Request = login.Request {
+		e.Request = Request {
 			Appkey:   auth.AppKey,
 			SysCode:  "900",
 			UserAccount: auth.Username,
 			UserPassword: auth.Password,
 		}
 
-		e.HasTokenExpired()
+		e.Error = e.RetrieveToken()
+		if e.Error != nil {
+			break
+		}
 	}
 
 	return e.Error
+}
+
+func (e *EndPoint) GetToken() string {
+	return e.GetResponse().ResultData.Token
+}
+
+func (e *EndPoint) GetUserEmail() string {
+	return e.GetResponse().ResultData.Email
+}
+
+func (e *EndPoint) GetUserName() string {
+	return e.GetResponse().ResultData.UserName
+}
+
+func (e *EndPoint) GetUserId() string {
+	return e.GetResponse().ResultData.UserID
 }
 
 func (e *EndPoint) RetrieveToken() error {
@@ -107,16 +108,9 @@ func (e *EndPoint) RetrieveToken() error {
 			break
 		}
 
-		u := fmt.Sprintf("%s%s",
-			e.Url.String(),
-			TokenRequestUrl,
+		u := fmt.Sprintf("%s",
+			e.GetUrl(),
 		)
-		//p, _ := json.Marshal(map[string]string {
-		//	"user_account": e.Request.Username,
-		//	"user_password": e.Request.Password,
-		//	"appkey": e.Request.AppKey,
-		//	"sys_code": "900",
-		//})
 		p, _ := json.Marshal(e.Request)
 
 		var response *http.Response
@@ -160,7 +154,7 @@ func (e *EndPoint) HasTokenExpired() bool {
 			break
 		}
 
-		if e.Response.ResultData.Token == "" {
+		if e.GetToken() == "" {
 			e.newToken = true
 			break
 		}
@@ -201,7 +195,6 @@ func (e *EndPoint) readTokenFile() error {
 
 		//goland:noinspection GoUnhandledErrorResult
 		defer f.Close()
-		//ret = &oauth2.token{}
 		e.Error = json.NewDecoder(f).Decode(&e.Response)
 	}
 
@@ -230,7 +223,7 @@ func (e *EndPoint) saveToken() error {
 
 		//goland:noinspection GoUnhandledErrorResult
 		defer f.Close()
-		e.Error = json.NewEncoder(f).Encode(e.Response.ResultData)
+		e.Error = json.NewEncoder(f).Encode(e.GetResponse().ResultData)
 	}
 
 	return e.Error
