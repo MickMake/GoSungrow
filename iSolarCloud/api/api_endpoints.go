@@ -1,3 +1,3 @@
 package api
 
-var SunGro = [][]string{}
+// var SunGro = [][]string{}

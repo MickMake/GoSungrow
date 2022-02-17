@@ -19,8 +19,8 @@ package apiReflect
 // 		}
 //
 // 		// objectName, actionName := GetNameOld(action)
-// 		// httpRequest := FindInStruct(action, "Request")
-// 		// httpResponse := FindInStruct(action, "Response")
+// 		// httpRequest := FindInStruct(action, "RequestCommon")
+// 		// httpResponse := FindInStruct(action, "ResponseCommon")
 // 		//
 // 		// objectName := GetStructName(object)
 // 		// if objectName == "" {

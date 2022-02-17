@@ -24,7 +24,7 @@ type EndPoint interface {
 	GetResponseJson() Json
 	IsResponseValid() error
 
-	SetError(string, ...interface{})
+	SetError(string, ...interface{}) EndPoint
 	GetError() error
 	IsError() bool
 }
@@ -44,31 +44,6 @@ type Common struct {
 	Get GetFunc
 	Set SetFunc
 	// ApiRoot *web.ApiRoot
-}
-
-type Request struct {
-	RequestCommon
-}
-
-type Response struct {
-	ResponseCommon
-}
-
-type RequestCommon struct {
-	Appkey     string `json:"appkey"`
-	Lang       string `json:"lang"`
-	SysCode    string `json:"sys_code"`
-	Token      string `json:"token"`
-	UserID     string `json:"user_id"`
-	ValidFlag  string `json:"valid_flag"`
-	// DeviceType string `json:"device_type"`
-}
-
-type ResponseCommon struct {
-	ReqSerialNum string        `json:"req_serial_num"`
-	ResultCode   string        `json:"result_code"`
-	ResultData   []interface{} `json:"result_data"`
-	ResultMsg    string        `json:"result_msg"`
 }
 
 type EndPointName string
@@ -161,7 +136,7 @@ func (p *EndPointStruct) IsValid() error {
 // 			p.Error = errors.New("endpoint has a nil response structure")
 // 			break
 // 		}
-// 		p.Response = ref
+// 		p.ResponseCommon = ref
 // 	}
 // 	return p.Error
 // }

@@ -71,6 +71,12 @@ func (a *SunGroAuth) Verify() error {
 func (e *EndPoint) Login(auth *SunGroAuth) error {
 	for range Only.Once {
 		e.Auth = auth
+		e.Request.RequestData = RequestData {
+			Appkey:   auth.AppKey,
+			SysCode:  "900",
+			UserAccount: auth.UserAccount,
+			UserPassword: auth.UserPassword,
+		}
 
 		e.Error = e.Auth.Verify()
 		if e.Error != nil {
@@ -100,13 +106,6 @@ func (e *EndPoint) Login(auth *SunGroAuth) error {
 		// 	e.newToken = true
 		// }
 
-		e.Request = Request {
-			Appkey:   auth.AppKey,
-			SysCode:  "900",
-			UserAccount: auth.UserAccount,
-			UserPassword: auth.UserPassword,
-		}
-
 		foo := Assert(e.Call())
 		e.Response = foo.Response
 
@@ -126,6 +125,10 @@ func (e *EndPoint) Login(auth *SunGroAuth) error {
 
 func (e *EndPoint) GetToken() string {
 	return e.GetResponse().ResultData.Token
+}
+
+func (e *EndPoint) GetAppKey() string {
+	return e.GetRequest().RequestData.Appkey
 }
 
 func (e *EndPoint) GetUserEmail() string {

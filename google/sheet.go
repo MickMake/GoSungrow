@@ -40,7 +40,7 @@ func (s *Sheet) getClient() (*http.Client, error) {
 	return ret, err
 }
 
-// Request a token from the web, then returns the retrieved token.
+// RequestCommon a token from the web, then returns the retrieved token.
 func (s *Sheet) getTokenFromWeb() error {
 	var err error
 

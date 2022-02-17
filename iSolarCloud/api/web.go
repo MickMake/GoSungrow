@@ -50,6 +50,11 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 			break
 		}
 
+		w.Error = endpoint.IsRequestValid()
+		if w.Error != nil {
+			break
+		}
+
 		j, _ := json.Marshal(request)
 		postUrl := fmt.Sprintf("%s%s", w.Url.String(), endpoint.GetUrl())
 
@@ -123,27 +128,27 @@ func (w *Web) AppendUrl(endpoint string) *url.URL {
 // ******************************************************************************** //
 
 // func (w *ApiRoot) GetDomain() string {
-// 	return w.Response.ResultMsg
+// 	return w.ResponseCommon.ResultMsg
 // }
 // func (w *ApiRoot) VerifyDomain(domain string) string {
 // 	if domain == "" {
-// 		domain = w.Response.ResultMsg
+// 		domain = w.ResponseCommon.ResultMsg
 // 	}
 // 	if domain == "." {
-// 		domain = w.Response.ResultMsg
+// 		domain = w.ResponseCommon.ResultMsg
 // 	}
 // 	return domain
 // }
 //
 // func (w *ApiRoot) GetUser() string {
-// 	return w.Response.ResultMsg
+// 	return w.ResponseCommon.ResultMsg
 // }
 // func (w *ApiRoot) VerifyUser(user string) string {
 // 	if user == "" {
-// 		user = w.Response.ResultData.UserID
+// 		user = w.ResponseCommon.ResultData.UserID
 // 	}
 // 	if user == "." {
-// 		user = w.Response.ResultData.UserID
+// 		user = w.ResponseCommon.ResultData.UserID
 // 	}
 // 	return user
 // }
@@ -157,40 +162,40 @@ func (w *Web) AppendUrl(endpoint string) *url.URL {
 // }
 //
 // func (w *ApiRoot) GetUsername() string {
-// 	return w.Response.ResultData.UserName
+// 	return w.ResponseCommon.ResultData.UserName
 // }
 // func (w *ApiRoot) VerifyUsername(name string) string {
 // 	if name == "" {
-// 		name = w.Response.ResultData.UserName
+// 		name = w.ResponseCommon.ResultData.UserName
 // 	}
 // 	if name == "." {
-// 		name = w.Response.ResultData.UserName
+// 		name = w.ResponseCommon.ResultData.UserName
 // 	}
 // 	return name
 // }
 //
 // func (w *ApiRoot) GetUserEmail() string {
-// 	return w.Response.ResultData.Email
+// 	return w.ResponseCommon.ResultData.Email
 // }
 // func (w *ApiRoot) VerifyUserEmail(email string) string {
 // 	if email == "" {
-// 		email = w.Response.ResultData.Email
+// 		email = w.ResponseCommon.ResultData.Email
 // 	}
 // 	if email == "." {
-// 		email = w.Response.ResultData.Email
+// 		email = w.ResponseCommon.ResultData.Email
 // 	}
 // 	return email
 // }
 //
 // func (w *ApiRoot) GetDisplayName() string {
-// 	return w.Response.ResultData.UserAccount
+// 	return w.ResponseCommon.ResultData.UserAccount
 // }
 // func (w *ApiRoot) VerifyDisplayName(name string) string {
 // 	if name == "" {
-// 		name = w.Response.ResultData.UserAccount
+// 		name = w.ResponseCommon.ResultData.UserAccount
 // 	}
 // 	if name == "." {
-// 		name = w.Response.ResultData.UserAccount
+// 		name = w.ResponseCommon.ResultData.UserAccount
 // 	}
 // 	return name
 // }

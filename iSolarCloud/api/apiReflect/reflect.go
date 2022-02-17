@@ -72,16 +72,32 @@ func GetName(trim string, v interface{}) string {
 }
 
 func GetType(v interface{}) string {
-	var ret string
-	for range Only.Once {
-		if v == nil {
-			break
-		}
+	return reflect.ValueOf(v).Type().Name()
+	// var ret string
+	// for range Only.Once {
+	// 	if v == nil {
+	// 		break
+	// 	}
+	//
+	// 	val := reflect.ValueOf(v)
+	// 	ret = val.Type().Name()
+	// }
+	// return ret
+}
 
-		val := reflect.ValueOf(v)
-		ret = val.Type().Name()
-	}
-	return ret
+func GetPkgType(v interface{}) string {
+	return reflect.ValueOf(v).Type().String()
+	// var ret string
+	// for range Only.Once {
+	// 	if v == nil {
+	// 		break
+	// 	}
+	//
+	// 	val := reflect.ValueOf(v)
+	// 	// ret = val.Type().Name()
+	// 	ret = val.Type().String()
+	// }
+	// return ret
 }
 
 func DoTypesMatch(a interface{}, b interface{}) error {
@@ -89,12 +105,22 @@ func DoTypesMatch(a interface{}, b interface{}) error {
 	for range Only.Once {
 		aName := GetType(a)
 		bName := GetType(b)
-
-		fmt.Printf("a:%v b:%v\n", aName, bName)
 		if aName == bName {
 			break
 		}
+		err = errors.New(fmt.Sprintf("interface '%s' doesn't match '%s'", aName, bName))
+	}
+	return err
+}
 
+func DoPkgTypesMatch(a interface{}, b interface{}) error {
+	var err error
+	for range Only.Once {
+		aName := GetPkgType(a)
+		bName := GetPkgType(b)
+		if aName == bName {
+			break
+		}
 		err = errors.New(fmt.Sprintf("interface '%s' doesn't match '%s'", aName, bName))
 	}
 	return err

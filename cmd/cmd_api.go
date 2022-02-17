@@ -2,9 +2,7 @@ package cmd
 
 import (
 	"GoSungro/Only"
-	"GoSungro/iSolarCloud/api"
 	"GoSungro/iSolarCloud/sungro/AppService/getPowerDevicePointNames"
-	"GoSungro/iSolarCloud/sungro/AppService/login"
 	"fmt"
 	"github.com/spf13/cobra"
 )
@@ -89,39 +87,30 @@ func cmdApiGetFunc(cmd *cobra.Command, args []string) {
 			args[1] = "AppService"
 		}
 
-		// foo := AppService.Init()
-		// bar := foo.GetEndPoints()
-		// fmt.Printf("%v\n", bar)
+		hey1 := SunGro.GetEndpoint("AppService", "getPowerDevicePointNames")
+		if hey1.IsError() {
+			Cmd.Error = hey1.GetError()
+			break
+		}
 
-		hey1 := SunGro.GetEndpoint(args[1], args[0])
-		_ = hey1.SetRequest(login.Request {
-			Appkey:       Cmd.ApiAppKey,
-			SysCode:      "600",
-			UserAccount:  "",
-			UserPassword: "",
-		})
-		a := SunGro.ApiRoot.Get(hey1)
-		fmt.Printf("resp: %v\n", a)
+		hey1 = hey1.SetRequest(getPowerDevicePointNames.RequestData{ DeviceType: "1" })
+		if hey1.IsError() {
+			Cmd.Error = hey1.GetError()
+			break
+		}
 
-		hey := SunGro.GetEndpoint(args[1], args[0])
-		_ = hey.SetRequest(getPowerDevicePointNames.Request {
-			RequestCommon: api.RequestCommon {
-				Appkey:    Cmd.ApiAppKey,
-				Lang:      "_en_US",
-				SysCode:   "200",
-				Token:     SunGro.GetToken(),
-				UserID:    "",
-				ValidFlag: "",
-			},
-			DeviceType:    "",
-		})
-		r := SunGro.ApiRoot.Get(hey1)
-		fmt.Printf("resp: %v\n", r)
+		hey1 = hey1.Call()
+		if hey1.IsError() {
+			Cmd.Error = hey1.GetError()
+			break
+		}
+		fmt.Printf("resp: %v\n", hey1)
 
-		fmt.Printf("HEY:%v\n", hey)
-		fmt.Printf("HEY:%v\n", hey.GetError())
-		fmt.Printf("HEY:%s\n", hey.GetRequestJson())
-		fmt.Printf("HEY:%s\n", hey.GetData())
+
+		fmt.Printf("HEY:%v\n", hey1)
+		fmt.Printf("HEY:%v\n", hey1.GetError())
+		fmt.Printf("HEY:%s\n", hey1.GetRequestJson())
+		fmt.Printf("HEY:%s\n", hey1.GetData())
 		if Cmd.Error != nil {
 			break
 		}

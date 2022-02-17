@@ -20,8 +20,8 @@ package web
 //
 // type Auth struct {
 // 	// Url *url.URL
-// 	// Request  login.Request
-// 	// Response login.Response
+// 	// RequestCommon  login.RequestCommon
+// 	// ResponseCommon login.ResponseCommon
 //
 // 	api.EndPoint
 //
@@ -72,7 +72,7 @@ package web
 // 			break
 // 		}
 //
-// 		if t.Response.ResultData.Auth == "" {
+// 		if t.ResponseCommon.ResultData.Auth == "" {
 // 			t.newToken = true
 // 		}
 //
@@ -84,7 +84,7 @@ package web
 // 			t.newToken = true
 // 		}
 //
-// 		t.Request = login.Request {
+// 		t.RequestCommon = login.RequestCommon {
 // 			Appkey:   auth.AppKey,
 // 			SysCode:  "900",
 // 			UserAccount: auth.UserAccount,
@@ -109,14 +109,14 @@ package web
 // 			TokenRequestUrl,
 // 		)
 // 		//p, _ := json.Marshal(map[string]string {
-// 		//	"user_account": t.Request.UserAccount,
-// 		//	"user_password": t.Request.UserPassword,
-// 		//	"appkey": t.Request.AppKey,
+// 		//	"user_account": t.RequestCommon.UserAccount,
+// 		//	"user_password": t.RequestCommon.UserPassword,
+// 		//	"appkey": t.RequestCommon.AppKey,
 // 		//	"sys_code": "900",
 // 		//})
-// 		p, _ := json.Marshal(t.Request)
+// 		p, _ := json.Marshal(t.RequestCommon)
 //
-// 		var httpResponse *http.Response
+// 		var httpResponse *http.ResponseCommon
 // 		httpResponse, t.Error = http.Post(u, "application/json", bytes.NewBuffer(p))
 // 		if t.Error != nil {
 // 			break
@@ -134,7 +134,7 @@ package web
 // 			break
 // 		}
 //
-// 		t.Error = json.Unmarshal(body, &t.Response)
+// 		t.Error = json.Unmarshal(body, &t.ResponseCommon)
 // 		if t.Error != nil {
 // 			break
 // 		}
@@ -157,7 +157,7 @@ package web
 // 			break
 // 		}
 //
-// 		if t.Response.ResultData.Auth == "" {
+// 		if t.ResponseCommon.ResultData.Auth == "" {
 // 			t.newToken = true
 // 			break
 // 		}
@@ -178,22 +178,22 @@ package web
 // // 	var ret string
 // //
 // // 	for range Only.Once {
-// // 		//if t.Response.TokenType == "" {
+// // 		//if t.ResponseCommon.TokenType == "" {
 // // 		//	break
 // // 		//}
 // // 		//
-// // 		//if t.Response.AccessToken == "" {
+// // 		//if t.ResponseCommon.AccessToken == "" {
 // // 		//	break
 // // 		//}
 // // 		//
-// // 		//ret = t.Response.TokenType + " " + t.Response.AccessToken
+// // 		//ret = t.ResponseCommon.TokenType + " " + t.ResponseCommon.AccessToken
 // // 	}
 // //
 // // 	return ret
 // // }
 //
 // func (t *Auth) GetToken() string {
-// 	//return fmt.Sprintf("%s %s", t.Response.TokenType, t.Response.AccessToken)
+// 	//return fmt.Sprintf("%s %s", t.ResponseCommon.TokenType, t.ResponseCommon.AccessToken)
 // 	return ""
 // }
 //
@@ -222,7 +222,7 @@ package web
 // 		//goland:noinspection GoUnhandledErrorResult
 // 		defer f.Close()
 // 		//ret = &oauth2.token{}
-// 		t.Error = json.NewDecoder(f).Decode(&t.Response)
+// 		t.Error = json.NewDecoder(f).Decode(&t.ResponseCommon)
 // 	}
 //
 // 	return t.Error
@@ -250,7 +250,7 @@ package web
 //
 // 		//goland:noinspection GoUnhandledErrorResult
 // 		defer f.Close()
-// 		t.Error = json.NewEncoder(f).Encode(t.Response.ResultData)
+// 		t.Error = json.NewEncoder(f).Encode(t.ResponseCommon.ResultData)
 // 	}
 //
 // 	return t.Error

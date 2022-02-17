@@ -1,6 +1,33 @@
 package getPsDetailWithPsType
 
+import (
+	"GoSungro/Only"
+	"GoSungro/iSolarCloud/api"
+	"errors"
+)
+
 const Url = "/v1/powerStationService/getPsDetailWithPsType"
+
+type RequestData struct {
+	PsId string `json:"ps_id"`
+}
+
+func (rd *RequestData) IsValid() error {
+	var err error
+	for range Only.Once {
+		if rd == nil {
+			err = errors.New("empty device type")
+			break
+		}
+		err = api.CheckString("PsId", rd.PsId)
+		if err != nil {
+			err = errors.New("empty device type")
+			break
+		}
+	}
+	return err
+}
+
 
 type ResultData   struct {
 	BatteryLevelPercent         string `json:"battery_level_percent"`

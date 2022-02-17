@@ -21,7 +21,7 @@ type EndPoint struct {
 
 type Request struct {
 	api.RequestCommon
-	PsId string `json:"ps_id"`
+	RequestData
 }
 
 type Response struct {
@@ -30,7 +30,6 @@ type Response struct {
 }
 
 func Init(apiRoot *api.Web) EndPoint {
-	fmt.Println("Init()")
 	return EndPoint {
 		EndPointStruct: api.EndPointStruct {
 			ApiRoot:  apiRoot,
@@ -61,6 +60,10 @@ func (e EndPoint) GetResponse() Response {
 	return e.Response
 }
 
+func Assert(e api.EndPoint) EndPoint {
+	return e.(EndPoint)
+}
+
 
 // ****************************************
 // Methods defined by api.EndPoint interface type
@@ -78,7 +81,6 @@ func (e EndPoint) GetUrl() *url.URL {
 }
 
 func (e EndPoint) Call() api.EndPoint {
-	fmt.Println("e.Call()")
 	return e.ApiRoot.Get(e)
 }
 
@@ -86,8 +88,8 @@ func (e EndPoint) GetData() api.Json {
 	return api.GetAsJson(e.Response.ResultData)
 }
 
-func (e EndPoint) SetError(format string, a ...interface{}) {
-	e.Error = errors.New(fmt.Sprintf(format, a...))
+func (e EndPoint) SetError(format string, a ...interface{}) api.EndPoint {
+	e.EndPointStruct.Error = errors.New(fmt.Sprintf(format, a...))
 }
 
 func (e EndPoint) GetError() error {
@@ -103,10 +105,21 @@ func (e EndPoint) IsError() bool {
 
 func (e EndPoint) SetRequest(ref interface{}) api.EndPoint {
 	for range Only.Once {
-		e.Error = apiReflect.DoTypesMatch(e.Request, ref)
+		if apiReflect.GetPkgType(ref) == "api.RequestCommon" {
+			e.Request.RequestCommon = ref.(api.RequestCommon)
+			break
+		}
+
+		if apiReflect.GetType(ref) == "RequestData" {
+			e.Request.RequestData = ref.(RequestData)
+			break
+		}
+
+		e.Error = apiReflect.DoPkgTypesMatch(e.Request, ref)
 		if e.Error != nil {
 			break
 		}
+
 		e.Request = ref.(Request)
 	}
 	return e
@@ -123,7 +136,12 @@ func (e EndPoint) GetRequestJson() api.Json {
 func (e EndPoint) IsRequestValid() error {
 	for range Only.Once {
 		req := e.GetRequest()
+		// req := e.Request.RequestCommon
 		e.Error = req.RequestCommon.IsValid()
+		if e.Error != nil {
+			break
+		}
+		e.Error = req.RequestData.IsValid()
 		if e.Error != nil {
 			break
 		}
@@ -133,12 +151,13 @@ func (e EndPoint) IsRequestValid() error {
 
 func (e EndPoint) SetResponse(ref []byte) api.EndPoint {
 	for range Only.Once {
-		r := e.GetResponse()
-		e.Error = json.Unmarshal(ref, &r)
+		// r := e.GetResponse()
+		// e.Error = json.Unmarshal(ref, &r)
+		e.Error = json.Unmarshal(ref, &e.Response)
 		if e.Error != nil {
 			break
 		}
-		e.Response = r
+		// e.ResponseCommon = r
 	}
 	return e
 }
@@ -153,6 +172,8 @@ func (e EndPoint) ResponseRef() interface{} {
 
 func (e EndPoint) IsResponseValid() error {
 	for range Only.Once {
+		// resp := e.GetResponse()
+		// e.Error = resp.ResponseCommon.IsValid()
 		e.Error = e.Response.ResponseCommon.IsValid()
 		if e.Error != nil {
 			break

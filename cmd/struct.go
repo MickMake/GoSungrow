@@ -129,27 +129,6 @@ func (ca *CommandArgs) ProcessArgs(cmd *cobra.Command, args []string) error {
 			break
 		}
 
-		// auth := login.Request {
-		// 	Appkey:       Cmd.ApiAppKey,
-		// 	SysCode:      "600",
-		// 	UserAccount:  ca.ApiUsername,
-		// 	UserPassword: ca.ApiPassword,
-		// }
-		// // auth := login.SunGroAuth {
-		// // 	Expiry: ca.ApiTokenExpiry,
-		// // 	AppKey:      ca.ApiAppKey,
-		// // 	UserAccount:    ca.ApiUsername,
-		// // 	UserPassword:    ca.ApiPassword,
-		// // }
-		// hey1 := SunGro.GetEndpoint(AppService.GetAreaName(), "login")
-		// hey1 = hey1.SetRequest(auth)
-		// ca.Error = hey1.GetError()
-		// if ca.Error != nil {
-		// 	break
-		// }
-		// r, _ := SunGro.ApiRoot.Get(hey1)
-		// fmt.Printf("resp: %v\n", r)
-
 		if SunGro.HasTokenChanged() {
 			ca.ApiTokenExpiry = SunGro.GetTokenExpiry()
 			ca.ApiToken = SunGro.GetToken()

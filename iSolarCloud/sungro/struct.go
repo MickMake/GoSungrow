@@ -10,9 +10,9 @@ import (
 
 type SunGro struct {
 	ApiRoot        api.Web
-	Auth           api.EndPoint
-	AuthLogin      login.EndPoint
-	Error          error
+	// Auth           api.EndPoint
+	Auth  login.EndPoint
+	Error error
 
 	Areas          api.Areas
 	ApiTokenExpiry string
@@ -37,7 +37,7 @@ func NewSunGro(url string) *SunGro {
 func (sg *SunGro) Login(auth login.SunGroAuth) error {
 	for range Only.Once {
 		// sg.Auth = sg.GetEndpoint(AppService.GetAreaName(), "login")
-		// sg.Auth = sg.Auth.SetRequest(login.Request {
+		// sg.Auth = sg.Auth.SetRequest(login.RequestCommon {
 		// 	Appkey:       auth.AppKey,
 		// 	SysCode:      "600",
 		// 	UserAccount:  auth.UserAccount,
@@ -52,10 +52,10 @@ func (sg *SunGro) Login(auth login.SunGroAuth) error {
 		//
 		// r := sg.ApiRoot.Get(sg.Auth)
 
-		sg.Auth = sg.GetEndpoint(AppService.GetAreaName(), "login")
-		sg.AuthLogin = login.Assert(sg.Auth)
+		a := sg.GetEndpoint(AppService.GetAreaName(), "login")
+		sg.Auth = login.Assert(a)
 
-		sg.Error = sg.AuthLogin.Login(&auth)
+		sg.Error = sg.Auth.Login(&auth)
 		if sg.Error != nil {
 			break
 		}
@@ -65,21 +65,29 @@ func (sg *SunGro) Login(auth login.SunGroAuth) error {
 }
 
 func (sg *SunGro) GetToken() string {
-	return sg.AuthLogin.GetToken()
+	return sg.Auth.GetToken()
+}
+
+func (sg *SunGro) GetUserId() string {
+	return sg.Auth.GetUserId()
+}
+
+func (sg *SunGro) GetAppKey() string {
+	return sg.Auth.GetAppKey()
 }
 
 func (sg *SunGro) GetTokenExpiry() string {
-	return sg.AuthLogin.GetTokenExpiry().Format(login.DateTimeFormat)
+	return sg.Auth.GetTokenExpiry().Format(login.DateTimeFormat)
 }
 
 func (sg *SunGro) GetUserName() string {
-	return sg.AuthLogin.GetUserName()
+	return sg.Auth.GetUserName()
 }
 
 func (sg *SunGro) GetUserEmail() string {
-	return sg.AuthLogin.GetUserEmail()
+	return sg.Auth.GetUserEmail()
 }
 
 func (sg *SunGro) HasTokenChanged() bool {
-	return sg.AuthLogin.HasTokenChanged()
+	return sg.Auth.HasTokenChanged()
 }

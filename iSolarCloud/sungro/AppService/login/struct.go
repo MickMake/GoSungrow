@@ -23,11 +23,8 @@ type EndPoint struct {
 }
 
 type Request struct {
-	// api.RequestCommon	// login is special as it doesn't have the usual fields.
-	Appkey       string `json:"appkey" required:"true"`
-	SysCode      string `json:"sys_code" required:"true"`
-	UserAccount  string `json:"user_account" required:"true"`
-	UserPassword string `json:"user_password" required:"true"`
+	api.RequestCommon	// login is special as it doesn't have the usual fields.
+	RequestData
 }
 
 type Response struct {
@@ -37,7 +34,6 @@ type Response struct {
 
 
 func Init(apiRoot *api.Web) EndPoint {
-	fmt.Println("Init()")
 	return EndPoint {
 		EndPointStruct: api.EndPointStruct {
 			ApiRoot:  apiRoot,
@@ -72,12 +68,10 @@ func (e EndPoint) Init(apiRoot *api.Web) *EndPoint {
 }
 
 func (e EndPoint) GetRequest() Request {
-	// return e.Request.(Request)
 	return e.Request
 }
 
 func (e EndPoint) GetResponse() Response {
-	// return e.Response.(Response)
 	return e.Response
 }
 
@@ -102,18 +96,16 @@ func (e EndPoint) GetUrl() *url.URL {
 }
 
 func (e EndPoint) Call() api.EndPoint {
-	fmt.Println("e.Call()")
-	// foo := e.ApiRoot.Get(e)
 	return e.ApiRoot.Get(e)
 }
 
 func (e EndPoint) GetData() api.Json {
-	// return api.GetAsJson(e.Response.(Response).ResultData)
 	return api.GetAsJson(e.Response.ResultData)
 }
 
-func (e EndPoint) SetError(format string, a ...interface{}) {
-	e.Error = errors.New(fmt.Sprintf(format, a...))
+func (e EndPoint) SetError(format string, a ...interface{}) api.EndPoint {
+	e.EndPointStruct.Error = errors.New(fmt.Sprintf(format, a...))
+	return e
 }
 
 func (e EndPoint) GetError() error {
@@ -129,10 +121,21 @@ func (e EndPoint) IsError() bool {
 
 func (e EndPoint) SetRequest(ref interface{}) api.EndPoint {
 	for range Only.Once {
-		e.Error = apiReflect.DoTypesMatch(e.Request, ref)
+		if apiReflect.GetPkgType(ref) == "api.RequestCommon" {
+			e.Request.RequestCommon = ref.(api.RequestCommon)
+			break
+		}
+
+		if apiReflect.GetType(ref) == "RequestData" {
+			e.Request.RequestData = ref.(RequestData)
+			break
+		}
+
+		e.Error = apiReflect.DoPkgTypesMatch(e.Request, ref)
 		if e.Error != nil {
 			break
 		}
+
 		e.Request = ref.(Request)
 	}
 	return e
@@ -149,19 +152,12 @@ func (e EndPoint) GetRequestJson() api.Json {
 func (e EndPoint) IsRequestValid() error {
 	for range Only.Once {
 		req := e.GetRequest()
-		e.Error = api.CheckString("SysCode", req.SysCode)
-		if e.Error != nil {
-			break
-		}
-		e.Error = api.CheckString("Appkey", req.Appkey)
-		if e.Error != nil {
-			break
-		}
-		e.Error = api.CheckString("UserAccount", req.UserAccount)
-		if e.Error != nil {
-			break
-		}
-		e.Error = api.CheckString("UserPassword", req.UserPassword)
+		// req := e.Request.RequestCommon
+		// e.Error = req.RequestCommon.IsValid()
+		// if e.Error != nil {
+		// 	break
+		// }
+		e.Error = req.RequestData.IsValid()
 		if e.Error != nil {
 			break
 		}
@@ -177,7 +173,7 @@ func (e EndPoint) SetResponse(ref []byte) api.EndPoint {
 		if e.Error != nil {
 			break
 		}
-		// e.Response = r
+		// e.ResponseCommon = r
 	}
 	return e
 }

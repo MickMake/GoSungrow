@@ -28,7 +28,20 @@ func (sg *SunGro) AppendUrl(endpoint string) *url.URL {
 }
 
 func (sg *SunGro) GetEndpoint(area string, endpoint string) api.EndPoint {
-	return sg.Areas.GetEndPoint(api.AreaName(area), api.EndPointName(endpoint))
+
+	ep := sg.Areas.GetEndPoint(api.AreaName(area), api.EndPointName(endpoint))
+	if sg.Auth.GetToken() != "" {
+		ep = ep.SetRequest(api.RequestCommon {
+			Appkey:    sg.GetAppKey(),	// sg.Auth.RequestCommon.Appkey
+			Lang:      "_en_US",
+			SysCode:   "200",
+			Token:     sg.GetToken(),
+			UserID:    sg.GetUserId(),
+			ValidFlag: "1,3",
+		})
+	}
+
+	return ep
 }
 
 func (sg *SunGro) ListEndpoints(area string) error {
