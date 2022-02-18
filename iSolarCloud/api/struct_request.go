@@ -3,6 +3,7 @@ package api
 import (
 	"GoSungro/Only"
 	"errors"
+	"fmt"
 	"strings"
 )
 
@@ -52,6 +53,18 @@ func (req RequestCommon) IsValid() error {
 	}
 	return err
 }
+
+func (req RequestCommon) String() string {
+	ret := "Request Data (Common)"
+	ret += fmt.Sprintf("UserID:\t%s\n", req.UserID)
+	ret += fmt.Sprintf("Appkey:\t%s\n", req.Appkey)
+	ret += fmt.Sprintf("Token:\t%s\n", req.Token)
+	ret += fmt.Sprintf("Lang:\t%s\n", req.Lang)
+	ret += fmt.Sprintf("SysCode:\t%s\n", req.SysCode)
+	ret += fmt.Sprintf("ValidFlag:\t%s\n", req.ValidFlag)
+	return ret
+}
+
 
 // RequestCommon checks
 func CheckString(name string, rc string) error {

@@ -43,6 +43,15 @@ func (req ResponseCommon) IsValid() error {
 	return err
 }
 
+func (req ResponseCommon) String() string {
+	var ret string
+	ret = fmt.Sprintf("ReqSerialNum:\t%s\n", req.ReqSerialNum)
+	ret += fmt.Sprintf("ResultCode:\t%s\n", req.ResultCode)
+	ret += fmt.Sprintf("ResultMsg:\t%s\n", req.ResultMsg)
+	return ret
+}
+
+
 // ResponseCommon checks
 func CheckResultCode(rc string) error {
 	var err error

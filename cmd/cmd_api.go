@@ -98,6 +98,10 @@ func cmdApiGetFunc(cmd *cobra.Command, args []string) {
 			Cmd.Error = hey1.GetError()
 			break
 		}
+		fmt.Printf("EndPoint: %v\n", hey1)
+		fmt.Printf("EndPoint: %v\n", hey1.GetUrl())
+		fmt.Printf("Request: %s\n", hey1.RequestString())
+		fmt.Printf("EndPoint: %s\n", hey1.ResponseString())
 
 		hey1 = hey1.Call()
 		if hey1.IsError() {

@@ -11,6 +11,7 @@ import (
 
 
 // type TypeEndPoints map[EndPointName]EndPointStruct	// Map of EndPoints by endpoint name.
+
 type TypeEndPoints map[EndPointName]EndPoint	// Map of EndPoints by endpoint name.
 
 

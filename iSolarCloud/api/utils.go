@@ -61,9 +61,55 @@ func GetAsJson(r interface{}) Json {
 	for range Only.Once {
 		j, err := json.Marshal(r)
 		if err != nil {
+			ret = Json(fmt.Sprintf("{ \"error\": \"%s\"", err))
 			break
 		}
 		ret = Json(j)
+	}
+	return ret
+}
+
+func GetAsString(r interface{}) string {
+	var ret string
+	for range Only.Once {
+		j, err := json.MarshalIndent(r, "", "\t")
+		if err != nil {
+			ret = fmt.Sprintf("Error: %s\n", err)
+			break
+		}
+
+		a, e := apiReflect.GetStructName(r)
+		ret += fmt.Sprintf(`"%s.%s": %s`, a, e, j)
+	}
+	return ret
+}
+
+func GetRequestString(r interface{}) string {
+	var ret string
+	for range Only.Once {
+		j, err := json.MarshalIndent(r, "", "\t")
+		if err != nil {
+			ret = fmt.Sprintf("Error: %s\n", err)
+			break
+		}
+
+		a, e := apiReflect.GetStructName(r)
+		ret += fmt.Sprintf(`"%s.%s": %s`, a, e, j)
+	}
+	return ret
+}
+
+func GetEndPointString(r interface{}) string {
+	var ret string
+	for range Only.Once {
+		// endpoint := r.(EndPointStruct)
+		j, err := json.MarshalIndent(r, "", "\t")
+		// j, err := json.Marshal(r)
+		if err != nil {
+			ret = fmt.Sprintf("Error: %s\n", err)
+			break
+		}
+		ret = string(j)
 	}
 	return ret
 }

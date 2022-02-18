@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/url"
 )
 
 
@@ -35,7 +34,7 @@ func Init(apiRoot *api.Web) EndPoint {
 			ApiRoot:  apiRoot,
 			Area:     api.GetArea(EndPoint{}),
 			Name:     api.GetName(EndPoint{}),
-			Url:      api.GetUrl(Url),
+			Url:      api.SetUrl(Url),
 			Request:  Request{},
 			Response: Response{},
 			Error:    nil,
@@ -76,7 +75,7 @@ func (e EndPoint) GetName() api.EndPointName {
 	return e.Name
 }
 
-func (e EndPoint) GetUrl() *url.URL {
+func (e EndPoint) GetUrl() api.EndPointUrl {
 	return e.Url
 }
 
@@ -181,4 +180,34 @@ func (e EndPoint) IsResponseValid() error {
 		}
 	}
 	return e.Error
+}
+
+func (e EndPoint) String() string {
+	return api.GetEndPointString(e)
+}
+
+func (e EndPoint) RequestString() string {
+	return api.GetRequestString(e.Request)
+}
+
+func (e EndPoint) ResponseString() string {
+	return api.GetRequestString(e.Response)
+}
+
+func (e EndPoint) MarshalJSON() ([]byte, error) {
+	return json.Marshal(&struct {
+		Area     string   `json:"api_area"`
+		EndPoint string   `json:"endpoint_name"`
+		Host     string   `json:"api_host"`
+		Url      string   `json:"endpoint_url"`
+		Request  interface{}  `json:"request"`
+		Response interface{} `json:"response"`
+	}{
+		Area:     string(e.Area),
+		EndPoint: string(e.Name),
+		Host:     e.ApiRoot.Url.String(),
+		Url:      e.Url.String(),
+		Request:  e.Request,
+		Response: e.Response,
+	})
 }

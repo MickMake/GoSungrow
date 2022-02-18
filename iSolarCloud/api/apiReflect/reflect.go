@@ -100,6 +100,32 @@ func GetPkgType(v interface{}) string {
 	// return ret
 }
 
+func GetStructName(v interface{}) (string, string) {
+	var area string
+	var endpoint string
+	for range Only.Once {
+		val := reflect.ValueOf(v)
+		// ret = val.Type().Name()		// Returns structure, (EndPoint name).
+		// ret = val.Type().PkgPath()	// Returns structure path.
+		// ret = val.Type().String()	// Returns
+
+		// @TODO - Need to check for pointers to struct
+		// 	if t := reflect.TypeOf(ref); t.Kind() == reflect.Ptr {
+		// 		ret = strings.ToLower(t.Elem().Name())
+		// 	} else {
+		// 		ret = strings.ToLower(t.Name())
+		// 	}
+
+		s := strings.Split(val.Type().String(), ".")
+		if len(s) < 2 {
+			break
+		}
+		area = s[0]
+		endpoint = s[1]
+	}
+	return area, endpoint
+}
+
 func DoTypesMatch(a interface{}, b interface{}) error {
 	var err error
 	for range Only.Once {
@@ -455,17 +481,17 @@ func GetCmdName2(ref interface{}) string {
 	return str
 }
 
-func GetStructName(ref interface{}) string {
-	var ret string
-
-	if t := reflect.TypeOf(ref); t.Kind() == reflect.Ptr {
-		ret = strings.ToLower(t.Elem().Name())
-	} else {
-		ret = strings.ToLower(t.Name())
-	}
-
-	return ret
-}
+// func GetStructName(ref interface{}) string {
+// 	var ret string
+//
+// 	if t := reflect.TypeOf(ref); t.Kind() == reflect.Ptr {
+// 		ret = strings.ToLower(t.Elem().Name())
+// 	} else {
+// 		ret = strings.ToLower(t.Name())
+// 	}
+//
+// 	return ret
+// }
 
 // VerifyOptionsRequired Verify fields within the structure that are required.
 func VerifyOptionsRequired(ref interface{}) error {

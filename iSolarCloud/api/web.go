@@ -10,36 +10,43 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 )
 
 
 type Web struct {
-	// Auth login.EndPoint
+	Url          EndPointUrl
+	Body         []byte
+	Error        error
 
-	Body  []byte
-	Error error
-	retry int
-
-	Url      *url.URL
-	client      http.Client
+	retry        int
+	client       http.Client
 	httpRequest  *http.Request
 	httpResponse *http.Response
 }
 
 func (w *Web) SetUrl(u string) error {
-	w.Url, w.Error = url.Parse(u)
-	if w.Error != nil {
-		w.Url = nil
-	}
-	// w.Auth.Url = w.Url
-
+	w.Url = SetUrl(u)
+	// w.Error = w.Url.Error
 	return w.Error
+}
+
+func (w *Web) AppendUrl(endpoint string) EndPointUrl {
+	// var ret EndPointUrl
+	// for range Only.Once {
+	// 	endpoint = fmt.Sprintf("%s%s", w.Url.String(), endpoint)
+	// 	ret, w.Error = url.Parse(endpoint)
+	// 	if w.Error != nil {
+	// 		break
+	// 	}
+	// }
+	// return ret
+	return w.Url.AppendPath(endpoint)
 }
 
 func (w *Web) Get(endpoint EndPoint) EndPoint {
 	for range Only.Once {
-		if w.Url == nil {
+		w.Error = w.Url.IsValid()
+		if w.Error != nil {
 			w.Error = errors.New("SUNGRO API URL is invalid")
 			break
 		}
@@ -56,7 +63,8 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 		}
 
 		j, _ := json.Marshal(request)
-		postUrl := fmt.Sprintf("%s%s", w.Url.String(), endpoint.GetUrl())
+		postUrl := w.Url.AppendPath(endpoint.String()).String()
+		// postUrl := fmt.Sprintf("%s%s", w.Url.String(), endpoint.GetUrl())
 
 		w.httpResponse, w.Error = http.Post(postUrl, "application/json", bytes.NewBuffer(j))
 		if w.Error != nil {
@@ -101,101 +109,3 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 	endpoint.SetError("%s", w.Error)
 	return endpoint
 }
-
-func (w *Web) GetUrl(u string) error {
-	w.Url, w.Error = url.Parse(u)
-	if w.Error != nil {
-		w.Url = nil
-	}
-	// w.Auth.Url = w.Url
-
-	return w.Error
-}
-
-func (w *Web) AppendUrl(endpoint string) *url.URL {
-	var ret *url.URL
-	for range Only.Once {
-		endpoint = fmt.Sprintf("%s%s", w.Url.String(), endpoint)
-		ret, w.Error = url.Parse(endpoint)
-		if w.Error != nil {
-			break
-		}
-	}
-	return ret
-}
-
-
-// ******************************************************************************** //
-
-// func (w *ApiRoot) GetDomain() string {
-// 	return w.ResponseCommon.ResultMsg
-// }
-// func (w *ApiRoot) VerifyDomain(domain string) string {
-// 	if domain == "" {
-// 		domain = w.ResponseCommon.ResultMsg
-// 	}
-// 	if domain == "." {
-// 		domain = w.ResponseCommon.ResultMsg
-// 	}
-// 	return domain
-// }
-//
-// func (w *ApiRoot) GetUser() string {
-// 	return w.ResponseCommon.ResultMsg
-// }
-// func (w *ApiRoot) VerifyUser(user string) string {
-// 	if user == "" {
-// 		user = w.ResponseCommon.ResultData.UserID
-// 	}
-// 	if user == "." {
-// 		user = w.ResponseCommon.ResultData.UserID
-// 	}
-// 	return user
-// }
-//
-// func (w *ApiRoot) GetUserMac() string {
-// 	return "."
-// }
-// func (w *ApiRoot) VerifyUserMac(user string) string {
-// 	// @TODO - Check MAC is sane.
-// 	return user
-// }
-//
-// func (w *ApiRoot) GetUsername() string {
-// 	return w.ResponseCommon.ResultData.UserName
-// }
-// func (w *ApiRoot) VerifyUsername(name string) string {
-// 	if name == "" {
-// 		name = w.ResponseCommon.ResultData.UserName
-// 	}
-// 	if name == "." {
-// 		name = w.ResponseCommon.ResultData.UserName
-// 	}
-// 	return name
-// }
-//
-// func (w *ApiRoot) GetUserEmail() string {
-// 	return w.ResponseCommon.ResultData.Email
-// }
-// func (w *ApiRoot) VerifyUserEmail(email string) string {
-// 	if email == "" {
-// 		email = w.ResponseCommon.ResultData.Email
-// 	}
-// 	if email == "." {
-// 		email = w.ResponseCommon.ResultData.Email
-// 	}
-// 	return email
-// }
-//
-// func (w *ApiRoot) GetDisplayName() string {
-// 	return w.ResponseCommon.ResultData.UserAccount
-// }
-// func (w *ApiRoot) VerifyDisplayName(name string) string {
-// 	if name == "" {
-// 		name = w.ResponseCommon.ResultData.UserAccount
-// 	}
-// 	if name == "." {
-// 		name = w.ResponseCommon.ResultData.UserAccount
-// 	}
-// 	return name
-// }

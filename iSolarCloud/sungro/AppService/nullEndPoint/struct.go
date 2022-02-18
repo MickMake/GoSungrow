@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/url"
 )
 
 
@@ -35,7 +34,7 @@ func Init(apiRoot *api.Web) EndPoint {
 			ApiRoot:  apiRoot,
 			Area:     api.GetArea(EndPoint{}),
 			Name:     api.GetName(EndPoint{}),
-			Url:      api.GetUrl(Url),
+			Url:      api.SetUrl(Url),
 			Request:  Request{},
 			Response: Response{},
 			Error:    nil,
@@ -76,7 +75,7 @@ func (e EndPoint) GetName() api.EndPointName {
 	return e.Name
 }
 
-func (e EndPoint) GetUrl() *url.URL {
+func (e EndPoint) GetUrl() api.EndPointUrl {
 	return e.Url
 }
 
@@ -181,4 +180,22 @@ func (e EndPoint) IsResponseValid() error {
 		}
 	}
 	return e.Error
+}
+
+func (e EndPoint) String() string {
+	ret := e.RequestString()
+	ret += e.ResponseString()
+	return ret
+}
+
+func (e EndPoint) RequestString() string {
+	ret := e.Request.RequestCommon.String()
+	// ret += e.Request.RequestData.String()
+	return ret
+}
+
+func (e EndPoint) ResponseString() string {
+	ret := e.Request.RequestCommon.String()
+	// ret += e.Request.RequestData.String()
+	return ret
 }

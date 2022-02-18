@@ -4,7 +4,6 @@ import (
 	"GoSungro/Only"
 	"GoSungro/iSolarCloud/api"
 	"GoSungro/iSolarCloud/sungro/AppService"
-	"net/url"
 )
 
 
@@ -23,7 +22,7 @@ func (sg *SunGro) Init() error {
 	return sg.Error
 }
 
-func (sg *SunGro) AppendUrl(endpoint string) *url.URL {
+func (sg *SunGro) AppendUrl(endpoint string) api.EndPointUrl {
 	return sg.ApiRoot.AppendUrl(endpoint)
 }
 

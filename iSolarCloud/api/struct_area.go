@@ -7,19 +7,6 @@ import (
 )
 
 
-type Area interface {
-	Init(*Web) AreaStruct
-	GetAreaName() AreaName
-	GetEndPoints() TypeEndPoints
-	Call(name EndPointName) Json
-	SetRequest(name EndPointName, ref interface{}) error
-	GetRequest(name EndPointName) Json
-	GetResponse(name EndPointName) Json
-	GetData(name EndPointName) Json
-	IsValid(name EndPointName) error
-	GetError(name EndPointName) error
-}
-
 type AreaStruct struct {
 	ApiRoot   interface{}	// *web.Web
 	Name      AreaName
@@ -47,17 +34,6 @@ func (as *AreaStruct) SortEndPoints() []EndPointName {
 func (as *AreaStruct) GetEndPoint(name EndPointName) EndPoint {
 	return as.EndPoints.GetEndPoint(name)
 }
-
-// func (a *Area) GetEndPoint(name EndPointName) EndPoint {
-// 	var ret EndPoint
-// 	for range Only.Once {
-// 		if _, ok := (*an)[area]; !ok {
-// 			break
-// 		}
-// 		ret = (*an)[area].EndPoints[name]
-// 	}
-// 	return ret
-// }
 
 func (as AreaStruct) ListEndpoints() {
 	for range Only.Once {
