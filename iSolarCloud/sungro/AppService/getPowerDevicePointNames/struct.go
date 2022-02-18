@@ -151,7 +151,6 @@ func (e EndPoint) IsRequestValid() error {
 		}
 		e.Error = req.RequestData.IsValid()
 		if e.Error != nil {
-			// e.Error = errors.New(fmt.Sprintf("%s\n%s\n", e.Error, e.Help()))
 			break
 		}
 	}

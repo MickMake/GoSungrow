@@ -68,7 +68,10 @@ func Assert(e api.EndPoint) EndPoint {
 // Methods defined by api.EndPoint interface type
 
 func (e EndPoint) Help() string {
-	return apiReflect.HelpOptions(e.Request.RequestData)
+	ret := apiReflect.HelpOptions(e.Request.RequestData)
+	ret += "JSON request:\n"
+	ret += e.GetRequestJson().String()
+	return ret
 }
 
 func (e EndPoint) GetArea() api.AreaName {
@@ -97,7 +100,7 @@ func (e EndPoint) SetError(format string, a ...interface{}) api.EndPoint {
 }
 
 func (e EndPoint) GetError() error {
-	return e.Error
+	return e.EndPointStruct.Error
 }
 
 func (e EndPoint) IsError() bool {
@@ -116,6 +119,7 @@ func (e EndPoint) SetRequest(ref interface{}) api.EndPoint {
 
 		if apiReflect.GetType(ref) == "RequestData" {
 			e.Request.RequestData = ref.(RequestData)
+			e.Error = e.IsRequestValid()
 			break
 		}
 
@@ -134,7 +138,7 @@ func (e EndPoint) RequestRef() interface{} {
 }
 
 func (e EndPoint) GetRequestJson() api.Json {
-	return api.GetAsJson(e.Request)
+	return api.GetAsJson(e.Request.RequestData)
 }
 
 func (e EndPoint) IsRequestValid() error {
@@ -147,6 +151,7 @@ func (e EndPoint) IsRequestValid() error {
 		}
 		e.Error = req.RequestData.IsValid()
 		if e.Error != nil {
+			// e.Error = errors.New(fmt.Sprintf("%s\n%s\n", e.Error, e.Help()))
 			break
 		}
 	}

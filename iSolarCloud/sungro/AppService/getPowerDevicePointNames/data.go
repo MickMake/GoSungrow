@@ -29,7 +29,7 @@ func (rd *RequestData) IsValid() error {
 	var err error
 	for range Only.Once {
 		if rd == nil {
-			err = errors.New("empty device type")
+			err = errors.New("empty request data")
 			break
 		}
 		err = apiReflect.VerifyOptionsRequired(*rd)

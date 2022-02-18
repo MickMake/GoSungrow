@@ -16,13 +16,13 @@ var _ api.EndPoint = (*EndPoint)(nil)
 
 type EndPoint struct {
 	api.EndPointStruct
-	Auth *SunGroAuth
 	Request Request
 	Response Response
+	Auth *SunGroAuth
 }
 
 type Request struct {
-	api.RequestCommon	// login is special as it doesn't have the usual fields.
+	api.RequestCommon
 	RequestData
 }
 
@@ -31,12 +31,10 @@ type Response struct {
 	ResultData ResultData `json:"result_data"`
 }
 
-
 func Init(apiRoot *api.Web) EndPoint {
 	return EndPoint {
 		EndPointStruct: api.EndPointStruct {
 			ApiRoot:  apiRoot,
-
 			Area:     api.GetArea(EndPoint{}),
 			Name:     api.GetName(EndPoint{}),
 			Url:      api.SetUrl(Url),
@@ -83,7 +81,10 @@ func Assert(e api.EndPoint) EndPoint {
 // Methods defined by api.EndPoint interface type
 
 func (e EndPoint) Help() string {
-	return apiReflect.HelpOptions(e.Request.RequestData)
+	ret := apiReflect.HelpOptions(e.Request.RequestData)
+	ret += "JSON request:\n"
+	ret += e.GetRequestJson().String()
+	return ret
 }
 
 func (e EndPoint) GetArea() api.AreaName {
@@ -112,7 +113,7 @@ func (e EndPoint) SetError(format string, a ...interface{}) api.EndPoint {
 }
 
 func (e EndPoint) GetError() error {
-	return e.Error
+	return e.EndPointStruct.Error
 }
 
 func (e EndPoint) IsError() bool {
@@ -131,6 +132,7 @@ func (e EndPoint) SetRequest(ref interface{}) api.EndPoint {
 
 		if apiReflect.GetType(ref) == "RequestData" {
 			e.Request.RequestData = ref.(RequestData)
+			e.Error = e.IsRequestValid()
 			break
 		}
 
@@ -149,7 +151,7 @@ func (e EndPoint) RequestRef() interface{} {
 }
 
 func (e EndPoint) GetRequestJson() api.Json {
-	return api.GetAsJson(e.Request)
+	return api.GetAsJson(e.Request.RequestData)
 }
 
 func (e EndPoint) IsRequestValid() error {
@@ -214,21 +216,21 @@ func (e EndPoint) ResponseString() string {
 }
 
 func (e EndPoint) MarshalJSON() ([]byte, error) {
-	// return api.MarshalJSON(e)
+	return api.MarshalJSON(e)
 
-	return json.Marshal(&struct {
-		Area     string   `json:"area"`
-		EndPoint string   `json:"endpoint"`
-		Host     string   `json:"api_host"`
-		Url      string   `json:"endpoint_url"`
-		Request  interface{}  `json:"request"`
-		Response interface{} `json:"response"`
-	}{
-		Area:     string(e.Area),
-		EndPoint: string(e.Name),
-		Host:     e.ApiRoot.Url.String(),
-		Url:      e.Url.String(),
-		Request:  e.Request,
-		Response: e.Response,
-	})
+	// return json.Marshal(&struct {
+	// 	Area     string   `json:"area"`
+	// 	EndPoint string   `json:"endpoint"`
+	// 	Host     string   `json:"api_host"`
+	// 	Url      string   `json:"endpoint_url"`
+	// 	Request  interface{}  `json:"request"`
+	// 	Response interface{} `json:"response"`
+	// }{
+	// 	Area:     string(e.Area),
+	// 	EndPoint: string(e.Name),
+	// 	Host:     e.ApiRoot.Url.String(),
+	// 	Url:      e.Url.String(),
+	// 	Request:  e.Request,
+	// 	Response: e.Response,
+	// })
 }

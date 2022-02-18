@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/url"
 )
 
 
@@ -35,7 +34,7 @@ func Init(apiRoot *api.Web) EndPoint {
 			ApiRoot:  apiRoot,
 			Area:     api.GetArea(EndPoint{}),
 			Name:     api.GetName(EndPoint{}),
-			Url:      api.GetUrl(Url),
+			Url:      api.SetUrl(Url),
 			Request:  Request{},
 			Response: Response{},
 			Error:    nil,
@@ -68,6 +67,13 @@ func Assert(e api.EndPoint) EndPoint {
 // ****************************************
 // Methods defined by api.EndPoint interface type
 
+func (e EndPoint) Help() string {
+	ret := apiReflect.HelpOptions(e.Request.RequestData)
+	ret += "JSON request:\n"
+	ret += e.GetRequestJson().String()
+	return ret
+}
+
 func (e EndPoint) GetArea() api.AreaName {
 	return e.Area
 }
@@ -90,10 +96,11 @@ func (e EndPoint) GetData() api.Json {
 
 func (e EndPoint) SetError(format string, a ...interface{}) api.EndPoint {
 	e.EndPointStruct.Error = errors.New(fmt.Sprintf(format, a...))
+	return e
 }
 
 func (e EndPoint) GetError() error {
-	return e.Error
+	return e.EndPointStruct.Error
 }
 
 func (e EndPoint) IsError() bool {
@@ -112,6 +119,7 @@ func (e EndPoint) SetRequest(ref interface{}) api.EndPoint {
 
 		if apiReflect.GetType(ref) == "RequestData" {
 			e.Request.RequestData = ref.(RequestData)
+			e.Error = e.IsRequestValid()
 			break
 		}
 
@@ -130,7 +138,7 @@ func (e EndPoint) RequestRef() interface{} {
 }
 
 func (e EndPoint) GetRequestJson() api.Json {
-	return api.GetAsJson(e.Request)
+	return api.GetAsJson(e.Request.RequestData)
 }
 
 func (e EndPoint) IsRequestValid() error {
@@ -143,6 +151,7 @@ func (e EndPoint) IsRequestValid() error {
 		}
 		e.Error = req.RequestData.IsValid()
 		if e.Error != nil {
+			// e.Error = errors.New(fmt.Sprintf("%s\n%s\n", e.Error, e.Help()))
 			break
 		}
 	}
