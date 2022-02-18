@@ -9,8 +9,8 @@ import (
 const Url = "/v1/userService/login"
 
 type RequestData struct {
-	Appkey       string `json:"appkey" required:"true"`
-	SysCode      string `json:"sys_code" required:"true"`
+	// Appkey       string `json:"appkey" required:"true"`
+	// SysCode      string `json:"sys_code" required:"true"`
 	UserAccount  string `json:"user_account" required:"true"`
 	UserPassword string `json:"user_password" required:"true"`
 }
@@ -22,14 +22,14 @@ func (rd *RequestData) IsValid() error {
 			err = errors.New("empty device type")
 			break
 		}
-		err = api.CheckString("SysCode", rd.SysCode)
-		if err != nil {
-			break
-		}
-		err = api.CheckString("Appkey", rd.Appkey)
-		if err != nil {
-			break
-		}
+		// err = api.CheckString("SysCode", rd.SysCode)
+		// if err != nil {
+		// 	break
+		// }
+		// err = api.CheckString("Appkey", rd.Appkey)
+		// if err != nil {
+		// 	break
+		// }
 		err = api.CheckString("UserAccount", rd.UserAccount)
 		if err != nil {
 			break
@@ -147,3 +147,76 @@ type ResultData struct {
 	Wgs84Longitude               interface{}   `json:"wgs84_longitude"`
 	WorkTel                      interface{}   `json:"work_tel"`
 }
+
+
+// func (e *EndPoint) GetToken() string {
+// 	return e.GetResponse().ResultData.Token
+// }
+//
+// func (e *EndPoint) GetUserEmail() string {
+// 	return e.GetResponse().ResultData.Email
+// }
+//
+// func (e *EndPoint) GetUserName() string {
+// 	return e.GetResponse().ResultData.UserName
+// }
+
+func (e *EndPoint) AppKey() string {
+	return e.Request.RequestCommon.Appkey
+}
+
+func (e *EndPoint) UserId() string {
+	return e.Response.ResultData.UserID
+}
+
+func (e *EndPoint) Email() string {
+	return e.Response.ResultData.Email
+}
+func (e *EndPoint) CreateDate() string {
+	return e.Response.ResultData.Createdate
+}
+func (e *EndPoint) IsOnline() string {
+	return e.Response.ResultData.IsOnline
+}
+func (e *EndPoint) LoginLastDate() string {
+	return e.Response.ResultData.LoginLastDate
+}
+func (e *EndPoint) LoginLastIP() string {
+	return e.Response.ResultData.LoginLastIP
+}
+func (e *EndPoint) LoginState() string {
+	return e.Response.ResultData.LoginState
+}
+func (e *EndPoint) Token() string {
+	return e.Response.ResultData.Token
+}
+func (e *EndPoint) UserAccount() string {
+	return e.Response.ResultData.UserAccount
+}
+func (e *EndPoint) UserID() string {
+	return e.Response.ResultData.UserID
+}
+func (e *EndPoint) UserName() string {
+	return e.Response.ResultData.UserName
+}
+
+
+// func (e ResultData) MarshalJSON() ([]byte, error) {
+// 	// return api.MarshalJSON(e)
+//
+// 	return json.Marshal(&struct {
+// 		Area     string   `json:"area"`
+// 		EndPoint string   `json:"endpoint"`
+// 		Host     string   `json:"api_host"`
+// 		Url      string   `json:"endpoint_url"`
+// 		Request  interface{}  `json:"request"`
+// 		Response interface{} `json:"response"`
+// 	}{
+// 		Area:     string(e.Area),
+// 		EndPoint: string(e.Name),
+// 		Host:     e.ApiRoot.Url.String(),
+// 		Url:      e.Url.String(),
+// 		Request:  e.Request,
+// 		Response: e.Response,
+// 	})
+// }

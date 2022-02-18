@@ -77,47 +77,51 @@ var cmdApiGet = &cobra.Command {
 	DisableFlagsInUseLine: false,
 	PreRunE:               Cmd.ProcessArgs,
 	Run:                   cmdApiGetFunc,
-	Args:                  cobra.MinimumNArgs(2),
+	Args:                  cobra.MinimumNArgs(1),
 }
 //goland:noinspection GoUnusedParameter
 func cmdApiGetFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
-		args = fillArray(2, args)
-		if args[1] == "" {
-			args[1] = "AppService"
-		}
-
-		hey1 := SunGro.GetEndpoint("AppService", "getPowerDevicePointNames")
+		hey1 := SunGro.GetEndpoint(args[0])
 		if hey1.IsError() {
 			Cmd.Error = hey1.GetError()
 			break
 		}
 
-		hey1 = hey1.SetRequest(getPowerDevicePointNames.RequestData{ DeviceType: "1" })
+		hey1 = hey1.SetRequest(getPowerDevicePointNames.RequestData{ DeviceType: "" })
 		if hey1.IsError() {
+			fmt.Println(hey1.Help())
 			Cmd.Error = hey1.GetError()
 			break
 		}
-		fmt.Printf("EndPoint: %v\n", hey1)
-		fmt.Printf("EndPoint: %v\n", hey1.GetUrl())
-		fmt.Printf("Request: %s\n", hey1.RequestString())
-		fmt.Printf("EndPoint: %s\n", hey1.ResponseString())
 
 		hey1 = hey1.Call()
 		if hey1.IsError() {
+			hey1.Help()
 			Cmd.Error = hey1.GetError()
 			break
 		}
-		fmt.Printf("resp: %v\n", hey1)
 
+		fmt.Printf("EndPoint: %v\n", hey1)
+		fmt.Printf("EndPoint: %v\n", hey1.GetUrl())
+		// fmt.Printf("Request: %s\n", hey1.RequestString())
+		// fmt.Printf("EndPoint: %s\n", hey1.ResponseString())
 
-		fmt.Printf("HEY:%v\n", hey1)
-		fmt.Printf("HEY:%v\n", hey1.GetError())
-		fmt.Printf("HEY:%s\n", hey1.GetRequestJson())
-		fmt.Printf("HEY:%s\n", hey1.GetData())
-		if Cmd.Error != nil {
-			break
-		}
+		// hey1 = hey1.Call()
+		// if hey1.IsError() {
+		// 	Cmd.Error = hey1.GetError()
+		// 	break
+		// }
+		// fmt.Printf("resp: %v\n", hey1)
+		//
+		//
+		// fmt.Printf("HEY:%v\n", hey1)
+		// fmt.Printf("HEY:%v\n", hey1.GetError())
+		// fmt.Printf("HEY:%s\n", hey1.GetRequestJson())
+		// fmt.Printf("HEY:%s\n", hey1.GetData())
+		// if Cmd.Error != nil {
+		// 	break
+		// }
 	}
 }
 

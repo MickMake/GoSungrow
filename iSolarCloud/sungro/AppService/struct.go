@@ -14,17 +14,17 @@ type Area api.AreaStruct
 
 
 func init() {
-	name := api.GetArea(Area{})
-	fmt.Printf("Name: %s\n", name)
+	// name := api.GetArea(Area{})
+	// fmt.Printf("Name: %s\n", name)
 }
 
 func Init(apiRoot *api.Web) Area {
-	fmt.Println("Init(apiRoot)")
-	name := api.GetArea(Area{})
-	fmt.Printf("Name: %s\n", name)
+	// fmt.Println("Init(apiRoot)")
+	// name := api.GetArea(Area{})
+	// fmt.Printf("Name: %s\n", name)
 
 	area := Area {
-		ApiRoot: apiRoot,
+		ApiRoot:   apiRoot,
 		Name:      api.GetArea(Area{}),
 		EndPoints: api.TypeEndPoints {
 			"acceptPsSharing":                                   nullEndPoint.Init(apiRoot), // "/v1/powerStationService/acceptPsSharing"}

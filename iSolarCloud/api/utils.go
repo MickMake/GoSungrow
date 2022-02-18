@@ -59,7 +59,7 @@ func GetUrl(u string) *url.URL {
 func GetAsJson(r interface{}) Json {
 	var ret Json
 	for range Only.Once {
-		j, err := json.Marshal(r)
+		j, err := json.MarshalIndent(r, "", "\t")
 		if err != nil {
 			ret = Json(fmt.Sprintf("{ \"error\": \"%s\"", err))
 			break

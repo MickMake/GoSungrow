@@ -49,7 +49,7 @@ func Init(apiRoot *api.Web) EndPoint {
 			UserAccount:  "",
 			UserPassword: "",
 			TokenFile:    DefaultAuthTokenFile,
-			expiry:       time.Now(),
+			lastLogin:    time.Time{},
 			newToken:     false,
 			retry:        0,
 			err:          nil,
@@ -81,6 +81,10 @@ func Assert(e api.EndPoint) EndPoint {
 
 // ****************************************
 // Methods defined by api.EndPoint interface type
+
+func (e EndPoint) Help() string {
+	return apiReflect.HelpOptions(e.Request.RequestData)
+}
 
 func (e EndPoint) GetArea() api.AreaName {
 	return e.Area
@@ -198,19 +202,33 @@ func (e EndPoint) IsResponseValid() error {
 }
 
 func (e EndPoint) String() string {
-	ret := e.RequestString()
-	ret += e.ResponseString()
-	return ret
+	return api.GetEndPointString(e)
 }
 
 func (e EndPoint) RequestString() string {
-	ret := api.GetAsString(e.Request.RequestCommon)
-	ret += api.GetAsString(e.Request.RequestData)
-	return ret
+	return api.GetRequestString(e.Request)
 }
 
 func (e EndPoint) ResponseString() string {
-	ret := api.GetAsString(e.Response.ResponseCommon)
-	ret += api.GetAsString(e.Response.ResultData)
-	return ret
+	return api.GetRequestString(e.Response)
+}
+
+func (e EndPoint) MarshalJSON() ([]byte, error) {
+	// return api.MarshalJSON(e)
+
+	return json.Marshal(&struct {
+		Area     string   `json:"area"`
+		EndPoint string   `json:"endpoint"`
+		Host     string   `json:"api_host"`
+		Url      string   `json:"endpoint_url"`
+		Request  interface{}  `json:"request"`
+		Response interface{} `json:"response"`
+	}{
+		Area:     string(e.Area),
+		EndPoint: string(e.Name),
+		Host:     e.ApiRoot.Url.String(),
+		Url:      e.Url.String(),
+		Request:  e.Request,
+		Response: e.Response,
+	})
 }

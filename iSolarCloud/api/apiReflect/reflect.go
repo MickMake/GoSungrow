@@ -523,6 +523,26 @@ func VerifyOptionsRequired(ref interface{}) error {
 	return err
 }
 
+func HelpOptions(ref interface{}) string {
+	var ret string
+
+	for range Only.Once {
+		t := reflect.TypeOf(ref)
+		for i := 0; i < t.NumField(); i++ {
+			field := t.Field(i)
+			required := field.Tag.Get("required")
+			if required == "" {
+				ret += fmt.Sprintf("%s: optional\n", field.Name)
+				continue
+			}
+
+			ret += fmt.Sprintf("%s: required\n", field.Name)
+		}
+	}
+
+	return ret
+}
+
 type Required []string
 
 //goland:noinspection GoUnusedFunction,GoUnusedExportedFunction
@@ -535,7 +555,7 @@ func GetOptionsRequired(ref interface{}) Required {
 			field := t.Field(i)
 			required := field.Tag.Get("required")
 			if required == "" {
-				break
+				continue
 			}
 
 			ret = append(ret, field.Name)

@@ -1,12 +1,6 @@
 package iSolarCloud
 
-import "GoSungro/iSolarCloud/sungro"
-
-var SunGro sungro.SunGro
-
-// type Areas struct {
-// 	domain.Domain
-// }
+// var SunGro sungro.SunGro
 
 const (
 	TypeGit    = iota
@@ -19,7 +13,6 @@ const (
 	StringTypeHuman = "human"
 	StringTypeGoogle = "google"
 )
-
 
 
 type OutputType int

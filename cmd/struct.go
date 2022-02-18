@@ -30,8 +30,8 @@ const (
 	flagApiTimeout     = "timeout"
 	flagApiUsername    = "user"
 	flagApiPassword    = "password"
-	flagApiAppKey      = "appkey"
-	flagApiTokenExpiry = "token-expiry"
+	flagApiAppKey    = "appkey"
+	flagApiLastLogin = "token-expiry"
 
 	flagGoogleSheet       = "google-sheet"
 	flagGoogleSheetUpdate = "update"
@@ -69,7 +69,7 @@ type CommandArgs struct {
 	ApiUsername    string
 	ApiPassword    string
 	ApiAppKey      string
-	ApiTokenExpiry string
+	ApiLastLogin   string
 	ApiToken       string
 	ApiTokenFile   string
 
@@ -129,8 +129,12 @@ func (ca *CommandArgs) ProcessArgs(cmd *cobra.Command, args []string) error {
 			break
 		}
 
+		if Cmd.Debug {
+			SunGro.Auth.Print()
+		}
+
 		if SunGro.HasTokenChanged() {
-			ca.ApiTokenExpiry = SunGro.GetTokenExpiry()
+			ca.ApiLastLogin = SunGro.GetLastLogin()
 			ca.ApiToken = SunGro.GetToken()
 			ca.Error = writeConfig()
 		}

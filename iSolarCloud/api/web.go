@@ -31,15 +31,6 @@ func (w *Web) SetUrl(u string) error {
 }
 
 func (w *Web) AppendUrl(endpoint string) EndPointUrl {
-	// var ret EndPointUrl
-	// for range Only.Once {
-	// 	endpoint = fmt.Sprintf("%s%s", w.Url.String(), endpoint)
-	// 	ret, w.Error = url.Parse(endpoint)
-	// 	if w.Error != nil {
-	// 		break
-	// 	}
-	// }
-	// return ret
 	return w.Url.AppendPath(endpoint)
 }
 
@@ -63,8 +54,7 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 		}
 
 		j, _ := json.Marshal(request)
-		postUrl := w.Url.AppendPath(endpoint.String()).String()
-		// postUrl := fmt.Sprintf("%s%s", w.Url.String(), endpoint.GetUrl())
+		postUrl := w.Url.AppendPath(endpoint.GetUrl().String()).String()
 
 		w.httpResponse, w.Error = http.Post(postUrl, "application/json", bytes.NewBuffer(j))
 		if w.Error != nil {
@@ -101,11 +91,13 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 
 		w.Error = endpoint.IsResponseValid()
 		if w.Error != nil {
-			fmt.Printf("ERROR: Body is:\n%s\n", w.Body)
+			// fmt.Printf("ERROR: Body is:\n%s\n", w.Body)
 			break
 		}
 	}
 
-	endpoint.SetError("%s", w.Error)
+	if w.Error != nil {
+		endpoint = endpoint.SetError("%s", w.Error)
+	}
 	return endpoint
 }

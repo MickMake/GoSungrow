@@ -13,9 +13,9 @@ type Request struct {
 }
 
 type RequestCommon struct {
-	Appkey     string `json:"appkey"`
+	Appkey     string `json:"appkey" required:"true"`
 	Lang       string `json:"lang"`
-	SysCode    string `json:"sys_code"`
+	SysCode    string `json:"sys_code" required:"true"`
 	Token      string `json:"token"`
 	UserID     string `json:"user_id"`
 	ValidFlag  string `json:"valid_flag"`

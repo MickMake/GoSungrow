@@ -54,9 +54,9 @@ func init() {
 		rootViper.SetDefault(flagApiUrl, "")
 		rootCmd.PersistentFlags().DurationVarP(&Cmd.ApiTimeout, flagApiTimeout, "", defaultTimeout, fmt.Sprintf("SunGro: API timeout."))
 		rootViper.SetDefault(flagApiTimeout, "")
-		rootCmd.PersistentFlags().StringVar(&Cmd.ApiTokenExpiry, flagApiTokenExpiry, "", "SunGro: token expiry.")
-		rootViper.SetDefault(flagApiTokenExpiry, "")
-		_ = rootCmd.PersistentFlags().MarkHidden(flagApiTokenExpiry)
+		rootCmd.PersistentFlags().StringVar(&Cmd.ApiLastLogin, flagApiLastLogin, "", "SunGro: last login.")
+		rootViper.SetDefault(flagApiLastLogin, "")
+		_ = rootCmd.PersistentFlags().MarkHidden(flagApiLastLogin)
 
 		rootCmd.PersistentFlags().StringVarP(&Cmd.GoogleSheet, flagGoogleSheet, "", "", fmt.Sprintf("Google: Sheet URL for updates."))
 		rootViper.SetDefault(flagGoogleSheet, "")
@@ -189,7 +189,7 @@ func openConfig() error {
 		if os.IsNotExist(err) {
 			rootViper.SetDefault(flagDebug, Cmd.Debug)
 			rootViper.SetDefault(flagQuiet, Cmd.Quiet)
-			rootViper.SetDefault(flagApiTokenExpiry, Cmd.ApiTokenExpiry)
+			rootViper.SetDefault(flagApiLastLogin, Cmd.ApiLastLogin)
 
 			rootViper.SetDefault(flagApiUrl, Cmd.ApiUrl)
 			rootViper.SetDefault(flagApiTimeout, Cmd.ApiTimeout)
@@ -242,7 +242,7 @@ func writeConfig() error {
 
 		rootViper.Set(flagDebug, Cmd.Debug)
 		rootViper.Set(flagQuiet, Cmd.Quiet)
-		rootViper.Set(flagApiTokenExpiry, Cmd.ApiTokenExpiry)
+		rootViper.Set(flagApiLastLogin, Cmd.ApiLastLogin)
 
 		rootViper.Set(flagApiUrl, Cmd.ApiUrl)
 		rootViper.Set(flagApiTimeout, Cmd.ApiTimeout)

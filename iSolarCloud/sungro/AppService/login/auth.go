@@ -2,12 +2,10 @@ package login
 
 import (
 	"GoSungro/Only"
-	"bytes"
+	"GoSungro/iSolarCloud/api"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 	"os"
 	"path/filepath"
 	"time"
@@ -17,6 +15,8 @@ import (
 const (
 	DateTimeFormat       = "2006-01-02T15:04:05"
 	DefaultAuthTokenFile = "SunGroAuthToken.json"
+	TokenValidHours      = 24
+	LastLoginDateFormat  = "2006-01-02 15:04:05"
 )
 
 type SunGroAuth struct {
@@ -26,18 +26,11 @@ type SunGroAuth struct {
 	TokenFile    string
 	Token        string
 
-	expiry       time.Time
+	lastLogin    time.Time
 	newToken     bool
 	retry        int
 	err          error
 }
-
-// type Token struct {
-// 	File     string
-// 	Expiry   time.Time
-// 	newToken bool
-// 	retry    int
-// }
 
 
 func (a *SunGroAuth) Verify() error {
@@ -72,10 +65,12 @@ func (e *EndPoint) Login(auth *SunGroAuth) error {
 	for range Only.Once {
 		e.Auth = auth
 		e.Request.RequestData = RequestData {
-			Appkey:   auth.AppKey,
-			SysCode:  "900",
 			UserAccount: auth.UserAccount,
 			UserPassword: auth.UserPassword,
+		}
+		e.Request.RequestCommon = api.RequestCommon {
+			Appkey:   auth.AppKey,
+			SysCode:  "900",
 		}
 
 		e.Error = e.Auth.Verify()
@@ -93,116 +88,87 @@ func (e *EndPoint) Login(auth *SunGroAuth) error {
 			break
 		}
 
-		if e.GetToken() != "" {
+		if !e.HasTokenExpired() {
 			break
-			// e.Auth.newToken = true
 		}
 
-		// if auth.Expiry == "" {
-		// 	auth.Expiry = time.Now().Format(DateTimeFormat)
-		// }
-		// e.Expiry, e.Error = time.Parse(DateTimeFormat, auth.Expiry)
-		// if e.Error != nil {
-		// 	e.newToken = true
-		// }
-
 		foo := Assert(e.Call())
+		e.Error = foo.GetError()
+		e.Request = foo.Request
 		e.Response = foo.Response
 
 		e.Error = e.saveToken()
 		if e.Error != nil {
 			break
 		}
-
-		e.Error = e.RetrieveToken()
-		if e.Error != nil {
-			break
-		}
 	}
 
 	return e.Error
 }
 
-func (e *EndPoint) GetToken() string {
-	return e.GetResponse().ResultData.Token
-}
-
-func (e *EndPoint) GetAppKey() string {
-	return e.GetRequest().RequestData.Appkey
-}
-
-func (e *EndPoint) GetUserEmail() string {
-	return e.GetResponse().ResultData.Email
-}
-
-func (e *EndPoint) GetUserName() string {
-	return e.GetResponse().ResultData.UserName
-}
-
-func (e *EndPoint) GetUserId() string {
-	return e.GetResponse().ResultData.UserID
-}
-
-func (e *EndPoint) RetrieveToken() error {
-	for range Only.Once {
-		e.HasTokenExpired()
-		if !e.Auth.newToken {
-			break
-		}
-
-		u := fmt.Sprintf("%s",
-			e.GetUrl(),
-		)
-		p, _ := json.Marshal(e.Request)
-
-		var response *http.Response
-		response, e.Error = http.Post(u, "application/json", bytes.NewBuffer(p))
-		if e.Error != nil {
-			break
-		}
-		//goland:noinspection GoUnhandledErrorResult
-		defer response.Body.Close()
-		if response.StatusCode != 200 {
-			e.Error = errors.New(fmt.Sprintf("Status Code is %d", response.StatusCode))
-			break
-		}
-
-		var body []byte
-		body, e.Error = ioutil.ReadAll(response.Body)
-		if e.Error != nil {
-			break
-		}
-
-		e.Error = json.Unmarshal(body, &e.Response)
-		if e.Error != nil {
-			break
-		}
-
-		e.Auth.expiry = time.Now()
-
-		e.Error = e.saveToken()
-		if e.Error != nil {
-			break
-		}
-	}
-
-	return e.Error
-}
+// func (e *EndPoint) RetrieveToken() error {
+// 	for range Only.Once {
+// 		e.HasTokenExpired()
+// 		if !e.Auth.newToken {
+// 			break
+// 		}
+//
+// 		u := fmt.Sprintf("%s",
+// 			e.GetUrl(),
+// 		)
+// 		p, _ := json.Marshal(e.Request)
+//
+// 		var response *http.Response
+// 		response, e.Error = http.Post(u, "application/json", bytes.NewBuffer(p))
+// 		if e.Error != nil {
+// 			break
+// 		}
+// 		//goland:noinspection GoUnhandledErrorResult
+// 		defer response.Body.Close()
+// 		if response.StatusCode != 200 {
+// 			e.Error = errors.New(fmt.Sprintf("Status Code is %d", response.StatusCode))
+// 			break
+// 		}
+//
+// 		var body []byte
+// 		body, e.Error = ioutil.ReadAll(response.Body)
+// 		if e.Error != nil {
+// 			break
+// 		}
+//
+// 		e.Error = json.Unmarshal(body, &e.Response)
+// 		if e.Error != nil {
+// 			break
+// 		}
+//
+// 		e.Auth.lastLogin = time.Now()
+//
+// 		e.Error = e.saveToken()
+// 		if e.Error != nil {
+// 			break
+// 		}
+// 	}
+//
+// 	return e.Error
+// }
 
 func (e *EndPoint) HasTokenExpired() bool {
 	for range Only.Once {
-		if e.Auth.expiry.Before(time.Now()) {
+		if e.Token() == "" {
 			e.Auth.newToken = true
 			break
 		}
-
-		if e.GetToken() == "" {
+		if e.HoursFromLastLogin() > TokenValidHours {
 			e.Auth.newToken = true
 			break
 		}
 	}
 
 	return e.Auth.newToken
+}
+
+func (e *EndPoint) HoursFromLastLogin() time.Duration {
+	return time.Now().Sub(e.Auth.lastLogin)
 }
 
 func (e *EndPoint) HasTokenChanged() bool {
@@ -213,8 +179,22 @@ func (e *EndPoint) HasTokenChanged() bool {
 	return ok
 }
 
-func (e *EndPoint) GetTokenExpiry() time.Time {
-	return e.Auth.expiry
+func (e *EndPoint) LastLogin() time.Time {
+	return e.Auth.lastLogin
+}
+
+func (e *EndPoint) Print() {
+	fmt.Printf("Email:\t%s\n", e.Email())
+	fmt.Printf("Create Date:\t%s\n", e.CreateDate())
+	fmt.Printf("Login Last Date:\t%s\n", e.LoginLastDate())
+	fmt.Printf("Login Last IP:\t%s\n", e.LoginLastIP())
+	fmt.Printf("Login State:\t%s\n", e.LoginState())
+	fmt.Printf("User Account:\t%s\n", e.UserAccount())
+	fmt.Printf("User Id:\t%s\n", e.UserID())
+	fmt.Printf("User Name:\t%s\n", e.UserName())
+	fmt.Printf("Is Online:\t%s\n", e.IsOnline())
+	fmt.Printf("Token:\t%s\n", e.Token())
+	fmt.Printf("Token File:\t%s\n", e.Auth.TokenFile)
 }
 
 // Retrieves a token from a local file.
@@ -242,7 +222,9 @@ func (e *EndPoint) readTokenFile() error {
 		defer f.Close()
 		e.Error = json.NewDecoder(f).Decode(&e.Response.ResultData)
 
-		e.Auth.Token = e.GetToken()
+		e.Auth.Token = e.Token()
+		// 2022-02-17 14:27:03
+		e.Auth.lastLogin, e.Error = time.Parse(LastLoginDateFormat, e.Response.ResultData.LoginLastDate)
 	}
 
 	return e.Error

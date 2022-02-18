@@ -75,20 +75,40 @@ func (p *EndPointStruct) IsValid() error {
 	return err
 }
 
-func (p EndPointStruct) MarshalJSON() ([]byte, error) {
-	return json.Marshal(&struct {
-		Area     string   `json:"api_area"`
-		EndPoint string   `json:"endpoint_name"`
-		Host     string   `json:"api_host"`
-		Url      string   `json:"endpoint_url"`
-		Request  interface{}  `json:"request"`
+// func (p EndPointStruct) MarshalJSON() ([]byte, error) {
+// 	return json.Marshal(&struct {
+// 		Area     string      `json:"area"`
+// 		EndPoint string      `json:"endpoint"`
+// 		Host     string      `json:"api_host"`
+// 		Url      string      `json:"endpoint_url"`
+// 		Request  interface{} `json:"request"`
+// 		Response interface{} `json:"response"`
+// 	}{
+// 		Area:     string(p.Area),
+// 		EndPoint: string(p.Name),
+// 		Host:     p.ApiRoot.Url.String(),
+// 		Url:      p.Url.String(),
+// 		Request:  p.Request,
+// 		Response: p.Response,
+// 	})
+// }
+
+func MarshalJSON(endpoint EndPoint) ([]byte, error) {
+	e := endpoint.SetError("")
+	j, err := json.Marshal(&struct {
+		Area     string      `json:"area"`
+		EndPoint string      `json:"endpoint"`
+		Host     string      `json:"api_host"`
+		Url      string      `json:"endpoint_url"`
+		Request  interface{} `json:"request"`
 		Response interface{} `json:"response"`
 	}{
-		Area:     string(p.Area),
-		EndPoint: string(p.Name),
-		Host:     p.ApiRoot.Url.String(),
-		Url:      p.Url.String(),
-		Request:  p.Request,
-		Response: p.Response,
+		Area:     string(e.GetArea()),
+		EndPoint: string(e.GetName()),
+		Host:     e.GetUrl().String(),
+		Url:      e.GetUrl().String(),
+		Request:  e.RequestRef(),
+		Response: e.ResponseRef(),
 	})
+	return j, err
 }

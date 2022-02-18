@@ -2,7 +2,7 @@ package getPowerDevicePointNames
 
 import (
 	"GoSungro/Only"
-	"GoSungro/iSolarCloud/api"
+	"GoSungro/iSolarCloud/api/apiReflect"
 	"errors"
 )
 
@@ -22,7 +22,7 @@ const (
 
 
 type RequestData struct {
-	DeviceType string `json:"device_type"`
+	DeviceType string `json:"device_type" required:"true"`
 }
 
 func (rd *RequestData) IsValid() error {
@@ -32,9 +32,8 @@ func (rd *RequestData) IsValid() error {
 			err = errors.New("empty device type")
 			break
 		}
-		err = api.CheckString("DeviceType", rd.DeviceType)
+		err = apiReflect.VerifyOptionsRequired(*rd)
 		if err != nil {
-			err = errors.New("empty device type")
 			break
 		}
 	}

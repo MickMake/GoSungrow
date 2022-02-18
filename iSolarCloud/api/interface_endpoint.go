@@ -5,6 +5,7 @@ type EndPoint interface {
 	GetArea() AreaName
 	GetName() EndPointName
 	GetUrl() EndPointUrl
+	Help() string
 
 	Call() EndPoint
 	GetData() Json

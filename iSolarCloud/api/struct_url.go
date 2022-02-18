@@ -10,7 +10,7 @@ import (
 
 
 type EndPointUrl struct {
-	EndPoint url.URL	`json:"endpoint"`
+	EndPoint *url.URL	`json:"endpoint"`
 	Error error	`json:"error"`
 }
 
@@ -82,7 +82,7 @@ func SetUrl(endpoint string) EndPointUrl {
 	var ret EndPointUrl
 	// ret.URL, ret.Error = url.Parse(endpoint)
 	u, e := url.Parse(endpoint)
-	ret.EndPoint = *u
+	ret.EndPoint = u
 	ret.Error = e
 	return ret
 }

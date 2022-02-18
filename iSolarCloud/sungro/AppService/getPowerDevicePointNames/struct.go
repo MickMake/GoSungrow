@@ -67,6 +67,13 @@ func Assert(e api.EndPoint) EndPoint {
 // ****************************************
 // Methods defined by api.EndPoint interface type
 
+func (e EndPoint) Help() string {
+	ret := apiReflect.HelpOptions(e.Request.RequestData)
+	ret += "JSON request:\n"
+	ret += e.GetRequestJson().String()
+	return ret
+}
+
 func (e EndPoint) GetArea() api.AreaName {
 	return e.Area
 }
@@ -112,6 +119,7 @@ func (e EndPoint) SetRequest(ref interface{}) api.EndPoint {
 
 		if apiReflect.GetType(ref) == "RequestData" {
 			e.Request.RequestData = ref.(RequestData)
+			e.Error = e.IsRequestValid()
 			break
 		}
 
@@ -130,7 +138,7 @@ func (e EndPoint) RequestRef() interface{} {
 }
 
 func (e EndPoint) GetRequestJson() api.Json {
-	return api.GetAsJson(e.Request)
+	return api.GetAsJson(e.Request.RequestData)
 }
 
 func (e EndPoint) IsRequestValid() error {
@@ -143,6 +151,7 @@ func (e EndPoint) IsRequestValid() error {
 		}
 		e.Error = req.RequestData.IsValid()
 		if e.Error != nil {
+			// e.Error = errors.New(fmt.Sprintf("%s\n%s\n", e.Error, e.Help()))
 			break
 		}
 	}
@@ -195,19 +204,5 @@ func (e EndPoint) ResponseString() string {
 }
 
 func (e EndPoint) MarshalJSON() ([]byte, error) {
-	return json.Marshal(&struct {
-		Area     string   `json:"api_area"`
-		EndPoint string   `json:"endpoint_name"`
-		Host     string   `json:"api_host"`
-		Url      string   `json:"endpoint_url"`
-		Request  interface{}  `json:"request"`
-		Response interface{} `json:"response"`
-	}{
-		Area:     string(e.Area),
-		EndPoint: string(e.Name),
-		Host:     e.ApiRoot.Url.String(),
-		Url:      e.Url.String(),
-		Request:  e.Request,
-		Response: e.Response,
-	})
+	return api.MarshalJSON(e)
 }

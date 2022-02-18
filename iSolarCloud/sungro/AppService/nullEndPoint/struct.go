@@ -67,6 +67,10 @@ func Assert(e api.EndPoint) EndPoint {
 // ****************************************
 // Methods defined by api.EndPoint interface type
 
+func (e EndPoint) Help() string {
+	return apiReflect.HelpOptions(e.Request.RequestData)
+}
+
 func (e EndPoint) GetArea() api.AreaName {
 	return e.Area
 }
@@ -183,19 +187,17 @@ func (e EndPoint) IsResponseValid() error {
 }
 
 func (e EndPoint) String() string {
-	ret := e.RequestString()
-	ret += e.ResponseString()
-	return ret
+	return api.GetEndPointString(e)
 }
 
 func (e EndPoint) RequestString() string {
-	ret := e.Request.RequestCommon.String()
-	// ret += e.Request.RequestData.String()
-	return ret
+	return api.GetRequestString(e.Request)
 }
 
 func (e EndPoint) ResponseString() string {
-	ret := e.Request.RequestCommon.String()
-	// ret += e.Request.RequestData.String()
-	return ret
+	return api.GetRequestString(e.Response)
+}
+
+func (e EndPoint) MarshalJSON() ([]byte, error) {
+	return api.MarshalJSON(e)
 }
