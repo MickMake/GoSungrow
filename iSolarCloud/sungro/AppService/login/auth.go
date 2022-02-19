@@ -25,6 +25,7 @@ type SunGroAuth struct {
 	UserPassword string
 	TokenFile    string
 	Token        string
+	Force        bool
 
 	lastLogin    time.Time
 	newToken     bool
@@ -86,6 +87,10 @@ func (e *EndPoint) Login(auth *SunGroAuth) error {
 		e.Error = e.Auth.Verify()
 		if e.Error != nil {
 			break
+		}
+
+		if auth.Force {
+			e.Auth.newToken = true
 		}
 
 		if !e.HasTokenExpired() {

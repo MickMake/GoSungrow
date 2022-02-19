@@ -1,9 +1,8 @@
 package getPowerDevicePointNames
 
 import (
-	"GoSungro/Only"
 	"GoSungro/iSolarCloud/api/apiReflect"
-	"errors"
+	"fmt"
 )
 
 
@@ -25,19 +24,23 @@ type RequestData struct {
 	DeviceType string `json:"device_type" required:"true"`
 }
 
-func (rd *RequestData) IsValid() error {
-	var err error
-	for range Only.Once {
-		if rd == nil {
-			err = errors.New("empty request data")
-			break
-		}
-		err = apiReflect.VerifyOptionsRequired(*rd)
-		if err != nil {
-			break
-		}
-	}
-	return err
+func (rd RequestData) IsValid() error {
+	return apiReflect.VerifyOptionsRequired(rd)
+}
+
+func (rd RequestData) Help() string {
+	ret := fmt.Sprintf("device_type can be one of:\n")
+	ret += fmt.Sprintf("%s, %s, %s, %s, %s, %s, %s, %s\n",
+		DeviceType1,
+		DeviceType3,
+		DeviceType4,
+		DeviceType5,
+		DeviceType7,
+		DeviceType11,
+		DeviceType14,
+		DeviceType17,
+		)
+	return ret
 }
 
 

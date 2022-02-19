@@ -1,31 +1,23 @@
 package getPowerStatistics
 
 import (
-	"GoSungro/Only"
-	"GoSungro/iSolarCloud/api"
-	"errors"
+	"GoSungro/iSolarCloud/api/apiReflect"
+	"fmt"
 )
 
 const Url = "/v1/powerStationService/getPowerStatistics"
 
 type RequestData struct {
-	PsId string `json:"ps_id"`
+	PsId string `json:"ps_id" required:"true"`
 }
 
-func (rd *RequestData) IsValid() error {
-	var err error
-	for range Only.Once {
-		if rd == nil {
-			err = errors.New("empty device type")
-			break
-		}
-		err = api.CheckString("PsId", rd.PsId)
-		if err != nil {
-			err = errors.New("empty device type")
-			break
-		}
-	}
-	return err
+func (rd RequestData) IsValid() error {
+	return apiReflect.VerifyOptionsRequired(rd)
+}
+
+func (rd RequestData) Help() string {
+	ret := fmt.Sprintf("ps_id: Can be fetched from getPsList")
+	return ret
 }
 
 

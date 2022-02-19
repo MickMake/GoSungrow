@@ -1,8 +1,8 @@
 package getPsList
 
 import (
-	"GoSungro/Only"
-	"errors"
+	"GoSungro/iSolarCloud/api/apiReflect"
+	"fmt"
 )
 
 const Url = "/v1/powerStationService/getPsList"
@@ -10,20 +10,13 @@ const Url = "/v1/powerStationService/getPsList"
 type RequestData struct {
 }
 
-func (rd *RequestData) IsValid() error {
-	var err error
-	for range Only.Once {
-		if rd == nil {
-			err = errors.New("empty device type")
-			break
-		}
-		// err = api.CheckString("PsId", rd.PsId)
-		// if err != nil {
-		// 	err = errors.New("empty device type")
-		// 	break
-		// }
-	}
-	return err
+func (rd RequestData) IsValid() error {
+	return apiReflect.VerifyOptionsRequired(rd)
+}
+
+func (rd RequestData) Help() string {
+	ret := fmt.Sprintf("")
+	return ret
 }
 
 
@@ -55,7 +48,7 @@ type ResultData   struct {
 		DailyIrradiationVirgin interface{} `json:"daily_irradiation_virgin"`
 		DesignCapacity         string      `json:"design_capacity"`
 		DesignCapacityUnit     string      `json:"design_capacity_unit"`
-		DesignCapacityVirgin   int64       `json:"design_capacity_virgin"`
+		DesignCapacityVirgin   float64     `json:"design_capacity_virgin"`
 		EquivalentHour         struct {
 			Unit  string `json:"unit"`
 			Value string `json:"value"`
@@ -103,13 +96,13 @@ type ResultData   struct {
 			Unit  string `json:"unit"`
 			Value string `json:"value"`
 		} `json:"installed_power_map"`
-		InstalledPowerVirgin   int64       `json:"installed_power_virgin"`
+		InstalledPowerVirgin   float64     `json:"installed_power_virgin"`
 		InstallerAlarmCount    int64       `json:"installer_alarm_count"`
 		InstallerFaultCount    int64       `json:"installer_fault_count"`
 		InstallerPsFaultStatus int64       `json:"installer_ps_fault_status"`
 		IsBankPs               int64       `json:"is_bank_ps"`
 		IsTuv                  int64       `json:"is_tuv"`
-		JoinYearInitElec       int64       `json:"join_year_init_elec"`
+		JoinYearInitElec       float64     `json:"join_year_init_elec"`
 		Latitude               float64     `json:"latitude"`
 		Location               string      `json:"location"`
 		Longitude              float64     `json:"longitude"`
@@ -133,22 +126,22 @@ type ResultData   struct {
 		P83055                 interface{} `json:"p83055"`
 		P83067                 interface{} `json:"p83067"`
 		P83070                 interface{} `json:"p83070"`
-		P83076                 int64       `json:"p83076"`
-		P83077                 int64       `json:"p83077"`
-		P83081                 int64       `json:"p83081"`
-		P83089                 int64       `json:"p83089"`
-		P83095                 int64       `json:"p83095"`
-		P83118                 int64       `json:"p83118"`
-		P83120                 int64       `json:"p83120"`
-		P83127                 int64       `json:"p83127"`
+		P83076                 float64     `json:"p83076"`
+		P83077                 float64     `json:"p83077"`
+		P83081                 float64     `json:"p83081"`
+		P83089                 float64     `json:"p83089"`
+		P83095                 float64     `json:"p83095"`
+		P83118                 float64     `json:"p83118"`
+		P83120                 float64     `json:"p83120"`
+		P83127                 float64     `json:"p83127"`
 		ParamCo2               float64     `json:"param_co2"`
 		ParamCoal              float64     `json:"param_coal"`
-		ParamIncome            int64       `json:"param_income"`
+		ParamIncome            float64     `json:"param_income"`
 		ParamMeter             float64     `json:"param_meter"`
 		ParamNox               float64     `json:"param_nox"`
 		ParamPowder            float64     `json:"param_powder"`
 		ParamSo2               float64     `json:"param_so2"`
-		ParamTree              int64       `json:"param_tree"`
+		ParamTree              float64     `json:"param_tree"`
 		ParamWater             float64     `json:"param_water"`
 		PrScale                string      `json:"pr_scale"`
 		Producer               interface{} `json:"producer"`
@@ -201,9 +194,9 @@ type ResultData   struct {
 			Unit  string `json:"unit"`
 			Value string `json:"value"`
 		} `json:"total_income"`
-		TotalInitCo2Accelerate int64 `json:"total_init_co2_accelerate"`
-		TotalInitElec          int64 `json:"total_init_elec"`
-		TotalInitProfit        int64 `json:"total_init_profit"`
+		TotalInitCo2Accelerate float64     `json:"total_init_co2_accelerate"`
+		TotalInitElec          float64     `json:"total_init_elec"`
+		TotalInitProfit        float64     `json:"total_init_profit"`
 		UseEnergy              struct {
 			Unit  string `json:"unit"`
 			Value string `json:"value"`

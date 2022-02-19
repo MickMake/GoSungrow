@@ -124,7 +124,7 @@ func InitCommands() error {
 		cmdMqtt.AddCommand(cmdMqttSync)
 		cmdCron.AddCommand(cmdCronRun, cmdCronAdd, cmdCronRemove, cmdCronList)
 
-		cmdApi.AddCommand(cmdApiList, cmdApiPut, cmdApiGet)
+		cmdApi.AddCommand(cmdApiList, cmdApiLogin, cmdApiPut, cmdApiGet)
 
 		//foo := rootCmd.HelpTemplate()
 		//foo := rootCmd.UsageTemplate()

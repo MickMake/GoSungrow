@@ -82,8 +82,8 @@ func Assert(e api.EndPoint) EndPoint {
 
 func (e EndPoint) Help() string {
 	ret := apiReflect.HelpOptions(e.Request.RequestData)
-	ret += "JSON request:\n"
-	ret += e.GetRequestJson().String()
+	ret += fmt.Sprintf("JSON request:\t%s\n", e.GetRequestJson())
+	ret += e.Request.Help()
 	return ret
 }
 
@@ -104,7 +104,7 @@ func (e EndPoint) Call() api.EndPoint {
 }
 
 func (e EndPoint) GetData() api.Json {
-	return api.GetAsJson(e.Response.ResultData)
+	return api.GetAsPrettyJson(e.Response.ResultData)
 }
 
 func (e EndPoint) SetError(format string, a ...interface{}) api.EndPoint {
@@ -142,6 +142,16 @@ func (e EndPoint) SetRequest(ref interface{}) api.EndPoint {
 		}
 
 		e.Request = ref.(Request)
+	}
+	return e
+}
+
+func (e EndPoint) SetRequestByJson(j api.Json) api.EndPoint {
+	for range Only.Once {
+		e.Error = json.Unmarshal([]byte(j), &e.Request.RequestData)
+		if e.Error != nil {
+			break
+		}
 	}
 	return e
 }
@@ -184,7 +194,7 @@ func (e EndPoint) SetResponse(ref []byte) api.EndPoint {
 }
 
 func (e EndPoint) GetResponseJson() api.Json {
-	return api.GetAsJson(e.Response)
+	return api.GetAsPrettyJson(e.Response)
 }
 
 func (e EndPoint) ResponseRef() interface{} {

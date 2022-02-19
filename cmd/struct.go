@@ -124,6 +124,7 @@ func (ca *CommandArgs) ProcessArgs(cmd *cobra.Command, args []string) error {
 			UserAccount:  ca.ApiUsername,
 			UserPassword: ca.ApiPassword,
 			TokenFile:    ca.ApiTokenFile,
+			Force:        false,
 		})
 		if Cmd.Error != nil {
 			break

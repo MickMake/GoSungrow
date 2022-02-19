@@ -1,45 +1,24 @@
 package login
 
 import (
-	"GoSungro/Only"
-	"GoSungro/iSolarCloud/api"
-	"errors"
+	"GoSungro/iSolarCloud/api/apiReflect"
+	"fmt"
 )
 
 const Url = "/v1/userService/login"
 
 type RequestData struct {
-	// Appkey       string `json:"appkey" required:"true"`
-	// SysCode      string `json:"sys_code" required:"true"`
 	UserAccount  string `json:"user_account" required:"true"`
 	UserPassword string `json:"user_password" required:"true"`
 }
 
-func (rd *RequestData) IsValid() error {
-	var err error
-	for range Only.Once {
-		if rd == nil {
-			err = errors.New("empty device type")
-			break
-		}
-		// err = api.CheckString("SysCode", rd.SysCode)
-		// if err != nil {
-		// 	break
-		// }
-		// err = api.CheckString("Appkey", rd.Appkey)
-		// if err != nil {
-		// 	break
-		// }
-		err = api.CheckString("UserAccount", rd.UserAccount)
-		if err != nil {
-			break
-		}
-		err = api.CheckString("UserPassword", rd.UserPassword)
-		if err != nil {
-			break
-		}
-	}
-	return err
+func (rd RequestData) IsValid() error {
+	return apiReflect.VerifyOptionsRequired(rd)
+}
+
+func (rd RequestData) Help() string {
+	ret := fmt.Sprintf("")
+	return ret
 }
 
 

@@ -1,8 +1,8 @@
 package nullEndPoint
 
 import (
-	"GoSungro/Only"
-	"errors"
+	"GoSungro/iSolarCloud/api/apiReflect"
+	"fmt"
 )
 
 
@@ -10,22 +10,16 @@ const Url = ""
 
 
 type RequestData struct {
+	// DeviceType string `json:"device_type" required:"true"`
 }
 
-func (rd *RequestData) IsValid() error {
-	var err error
-	for range Only.Once {
-		if rd == nil {
-			err = errors.New("empty device type")
-			break
-		}
-		// err = api.CheckString("PsId", rd.PsId)
-		// if err != nil {
-		// 	err = errors.New("empty device type")
-		// 	break
-		// }
-	}
-	return err
+func (rd RequestData) IsValid() error {
+	return apiReflect.VerifyOptionsRequired(rd)
+}
+
+func (rd RequestData) Help() string {
+	ret := fmt.Sprintf("")
+	return ret
 }
 
 

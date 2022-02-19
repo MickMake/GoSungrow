@@ -2,7 +2,8 @@ package cmd
 
 import (
 	"GoSungro/Only"
-	"GoSungro/iSolarCloud/sungro/AppService/getPowerDevicePointNames"
+	"GoSungro/iSolarCloud/api"
+	"GoSungro/iSolarCloud/sungro/AppService/login"
 	"fmt"
 	"github.com/spf13/cobra"
 )
@@ -12,12 +13,12 @@ import (
 var cmdApi = &cobra.Command {
 	Use:                   "api",
 	Aliases:               []string{},
-	Short:                 fmt.Sprintf("List SunGro areas."),
-	Long:                  fmt.Sprintf("List SunGro areas."),
+	Short:                 fmt.Sprintf("Interact with the SunGro api."),
+	Long:                  fmt.Sprintf("Interact with the SunGro api."),
 	Example:               PrintExamples("api", "get <endpoint>", "put <endpoint>"),
 	DisableFlagParsing:    false,
 	DisableFlagsInUseLine: false,
-	PreRunE:               Cmd.ProcessArgs,
+	// PreRunE:               Cmd.ProcessArgs,
 	Run:                   cmdApiFunc,
 	Args:                  cobra.MinimumNArgs(1),
 }
@@ -82,46 +83,69 @@ var cmdApiGet = &cobra.Command {
 //goland:noinspection GoUnusedParameter
 func cmdApiGetFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
-		hey1 := SunGro.GetEndpoint(args[0])
-		if hey1.IsError() {
-			Cmd.Error = hey1.GetError()
+		args = fillArray(2, args)
+		if args[1] == "" {
+			args[1] = "{}"
+		}
+
+		ep := SunGro.GetEndpoint(args[0])
+		if ep.IsError() {
+			Cmd.Error = ep.GetError()
 			break
 		}
 
-		hey1 = hey1.SetRequest(getPowerDevicePointNames.RequestData{ DeviceType: "" })
-		if hey1.IsError() {
-			fmt.Println(hey1.Help())
-			Cmd.Error = hey1.GetError()
+		ep = ep.SetRequestByJson(api.Json(args[1]))
+		if ep.IsError() {
+			fmt.Println(ep.Help())
+			Cmd.Error = ep.GetError()
 			break
 		}
 
-		hey1 = hey1.Call()
-		if hey1.IsError() {
-			hey1.Help()
-			Cmd.Error = hey1.GetError()
+		ep = ep.Call()
+		if ep.IsError() {
+			fmt.Println(ep.Help())
+			Cmd.Error = ep.GetError()
 			break
 		}
 
-		fmt.Printf("EndPoint: %v\n", hey1)
-		fmt.Printf("EndPoint: %v\n", hey1.GetUrl())
-		// fmt.Printf("Request: %s\n", hey1.RequestString())
-		// fmt.Printf("EndPoint: %s\n", hey1.ResponseString())
+		fmt.Printf("%v", ep.GetData())
+	}
+}
 
-		// hey1 = hey1.Call()
-		// if hey1.IsError() {
-		// 	Cmd.Error = hey1.GetError()
-		// 	break
-		// }
-		// fmt.Printf("resp: %v\n", hey1)
-		//
-		//
-		// fmt.Printf("HEY:%v\n", hey1)
-		// fmt.Printf("HEY:%v\n", hey1.GetError())
-		// fmt.Printf("HEY:%s\n", hey1.GetRequestJson())
-		// fmt.Printf("HEY:%s\n", hey1.GetData())
-		// if Cmd.Error != nil {
-		// 	break
-		// }
+// ******************************************************************************** //
+var cmdApiLogin = &cobra.Command {
+	Use:                   "login",
+	//Aliases:               []string{""},
+	Short:                 fmt.Sprintf("Login to iSolarCloud"),
+	Long:                  fmt.Sprintf("Login to iSolarCloud"),
+	Example:               PrintExamples("api login", ""),
+	DisableFlagParsing:    false,
+	DisableFlagsInUseLine: false,
+	PreRunE:               Cmd.ProcessArgs,
+	Run:                   cmdApiLoginFunc,
+	Args:                  cobra.MinimumNArgs(0),
+}
+//goland:noinspection GoUnusedParameter
+func cmdApiLoginFunc(cmd *cobra.Command, args []string) {
+	for range Only.Once {
+		Cmd.Error = SunGro.Login(login.SunGroAuth {
+			AppKey:       Cmd.ApiAppKey,
+			UserAccount:  Cmd.ApiUsername,
+			UserPassword: Cmd.ApiPassword,
+			TokenFile:    Cmd.ApiTokenFile,
+			Force:        true,
+		})
+		if Cmd.Error != nil {
+			break
+		}
+
+		SunGro.Auth.Print()
+
+		if SunGro.HasTokenChanged() {
+			Cmd.ApiLastLogin = SunGro.GetLastLogin()
+			Cmd.ApiToken = SunGro.GetToken()
+			Cmd.Error = writeConfig()
+		}
 	}
 }
 
@@ -141,10 +165,11 @@ var cmdApiPut = &cobra.Command {
 //goland:noinspection GoUnusedParameter
 func cmdApiPutFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
-		args = fillArray(1, args)
-		Cmd.Error = SunGro.Init()
-		if Cmd.Error != nil {
-			break
-		}
+		fmt.Println("Not yet implemented.")
+		// args = fillArray(1, args)
+		// Cmd.Error = SunGro.Init()
+		// if Cmd.Error != nil {
+		// 	break
+		// }
 	}
 }

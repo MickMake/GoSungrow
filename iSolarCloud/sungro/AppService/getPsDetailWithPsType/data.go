@@ -1,31 +1,23 @@
 package getPsDetailWithPsType
 
 import (
-	"GoSungro/Only"
-	"GoSungro/iSolarCloud/api"
-	"errors"
+	"GoSungro/iSolarCloud/api/apiReflect"
+	"fmt"
 )
 
 const Url = "/v1/powerStationService/getPsDetailWithPsType"
 
 type RequestData struct {
-	PsId string `json:"ps_id"`
+	PsId string `json:"ps_id" required:"true"`
 }
 
-func (rd *RequestData) IsValid() error {
-	var err error
-	for range Only.Once {
-		if rd == nil {
-			err = errors.New("empty device type")
-			break
-		}
-		err = api.CheckString("PsId", rd.PsId)
-		if err != nil {
-			err = errors.New("empty device type")
-			break
-		}
-	}
-	return err
+func (rd RequestData) IsValid() error {
+	return apiReflect.VerifyOptionsRequired(rd)
+}
+
+func (rd RequestData) Help() string {
+	ret := fmt.Sprintf("")
+	return ret
 }
 
 
@@ -182,7 +174,7 @@ type ResultData   struct {
 	} `json:"pv_power_map_virgin"`
 	RobotNumSweepCapacity struct {
 		Num           int64 `json:"num"`
-		SweepCapacity int64 `json:"sweep_capacity"`
+		SweepCapacity float64 `json:"sweep_capacity"`
 	} `json:"robot_num_sweep_capacity"`
 	SelfConsumptionOffsetReminder int64 `json:"self_consumption_offset_reminder"`
 	So2ReduceTotal                struct {

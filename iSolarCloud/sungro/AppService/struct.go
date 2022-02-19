@@ -3,6 +3,9 @@ package AppService
 import (
 	"GoSungro/iSolarCloud/api"
 	"GoSungro/iSolarCloud/sungro/AppService/getPowerDevicePointNames"
+	"GoSungro/iSolarCloud/sungro/AppService/getPowerStatistics"
+	"GoSungro/iSolarCloud/sungro/AppService/getPsDetailWithPsType"
+	"GoSungro/iSolarCloud/sungro/AppService/getPsList"
 	"GoSungro/iSolarCloud/sungro/AppService/login"
 	"GoSungro/iSolarCloud/sungro/AppService/nullEndPoint"
 	"fmt"
@@ -316,7 +319,7 @@ func Init(apiRoot *api.Web) Area {
 			"getPowerStationPR":                                 nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPowerStationPR"}
 			"getPowerStationTableDataSql":                       nullEndPoint.Init(apiRoot), // "/v1/devService/getPowerStationTableDataSql"}
 			"getPowerStationTableDataSqlCount":                  nullEndPoint.Init(apiRoot), // "/v1/devService/getPowerStationTableDataSqlCount"}
-			"getPowerStatistics":                                nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPowerStatistics"}
+			api.GetName(getPowerStatistics.EndPoint{}): getPowerStatistics.Init(apiRoot),
 			"getPowerTrendDayData":                              nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPowerTrendDayData"}
 			"getPrivateCloudValidityPeriod":                     nullEndPoint.Init(apiRoot), // "/v1/commonService/getPrivateCloudValidityPeriod"}
 			"getProvInfoListByNationCode":                       nullEndPoint.Init(apiRoot), // "/v1/commonService/getProvInfoListByNationCode"}
@@ -326,11 +329,11 @@ func Init(apiRoot *api.Web) Area {
 			"getPsDetail":                                       nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsDetail"}
 			"getPsDetailByUserTokens":                           nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsDetailByUserTokens"}
 			"getPsDetailForSinglePage":                          nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsDetailForSinglePage"}
-			"getPsDetailWithPsType":                             nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsDetailWithPsType"}
+			api.GetName(getPsDetailWithPsType.EndPoint{}): getPsDetailWithPsType.Init(apiRoot),
 			"getPsHealthState":                                  nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsHealthState"}
 			"getPsInstallerByPsId":                              nullEndPoint.Init(apiRoot), // "/v1/orgService/getPsInstallerByPsId"}
 			"getPsInstallerOrgInfoByPsId":                       nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsInstallerOrgInfoByPsId"}
-			"getPsList":                                         nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsList"}
+			api.GetName(getPsList.EndPoint{}): getPsList.Init(apiRoot),
 			"getPsListByName":                                   nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsListByName"}
 			"getPsListForPsDataByPsId":                          nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsListForPsDataByPsId"}
 			"getPsListStaticData":                               nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsListStaticData"}

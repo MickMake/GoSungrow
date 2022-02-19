@@ -23,11 +23,11 @@ type ResponseCommon struct {
 func (req ResponseCommon) IsValid() error {
 	var err error
 	for range Only.Once {
-		err = CheckResultMessage(req.ResultMsg)
+		err = req.CheckResultMessage()
 		if err != nil {
 			break
 		}
-		err = CheckResultCode(req.ResultCode)
+		err = req.CheckResultCode()
 		if err != nil {
 			break
 		}
@@ -43,6 +43,21 @@ func (req ResponseCommon) IsValid() error {
 	return err
 }
 
+func (req ResponseCommon) IsTokenValid() bool {
+	var ok bool
+	for range Only.Once {
+		switch {
+			case req.ResultMsg == "success":
+				ok = true
+			case req.ResultMsg == "er_token_login_invalid":
+				ok = false
+			default:
+				ok = false
+		}
+	}
+	return ok
+}
+
 func (req ResponseCommon) String() string {
 	var ret string
 	ret = fmt.Sprintf("ReqSerialNum:\t%s\n", req.ReqSerialNum)
@@ -51,51 +66,47 @@ func (req ResponseCommon) String() string {
 	return ret
 }
 
-
-// ResponseCommon checks
-func CheckResultCode(rc string) error {
+func (req ResponseCommon) CheckResultCode() error {
 	var err error
 	for range Only.Once {
-		switch rc {
+		switch req.ResultCode {
 			case "1":
 				err = nil
 			case "-1":
-				err = errors.New(fmt.Sprintf("error '%s'", rc))
+				err = errors.New(fmt.Sprintf("error '%s'", req.ResultCode))
 			case "010":
-				err = errors.New(fmt.Sprintf("error '%s'", rc))
+				err = errors.New(fmt.Sprintf("error '%s'", req.ResultCode))
 			case "000":
-				err = errors.New(fmt.Sprintf("error '%s'", rc))
+				err = errors.New(fmt.Sprintf("error '%s'", req.ResultCode))
 			case "201":
-				err = errors.New(fmt.Sprintf("error '%s'", rc))
+				err = errors.New(fmt.Sprintf("error '%s'", req.ResultCode))
 			case "E00003":
-				err = errors.New(fmt.Sprintf("need to login again '%s'", rc))
+				err = errors.New(fmt.Sprintf("need to login again '%s'", req.ResultCode))
 			default:
-				err = errors.New(fmt.Sprintf("unknown error '%s'", rc))
+				err = errors.New(fmt.Sprintf("unknown error '%s'", req.ResultCode))
 		}
 	}
 	return err
 }
 
-func CheckResultMessage(rc string) error {
+func (req ResponseCommon) CheckResultMessage() error {
 	var err error
 	for range Only.Once {
 		switch {
-			case rc == "success":
+			case req.ResultMsg == "success":
 				err = nil
-			case rc == "er_invalid_appkey":
-				err = errors.New(fmt.Sprintf("appkey is incorrect '%s'", rc))
-			case rc == "er_token_login_invalid":
-				err = errors.New(fmt.Sprintf("need to login again '%s'", rc))
-			case rc == "er_parameter_value_invalid":
-				err = errors.New(fmt.Sprintf("incorrect request data '%s'", rc))
-			case rc == "er_unknown_exception":
-				err = errors.New(fmt.Sprintf("API error '%s'", rc))
-			case strings.HasPrefix(rc, "Parameter:"):
-				err = errors.New(fmt.Sprintf("incorrect request data '%s'", rc))
-			// case err == nil:
-			// 	err = errors.New(fmt.Sprintf("unknown '%s'", rc))
+			case req.ResultMsg == "er_invalid_appkey":
+				err = errors.New(fmt.Sprintf("appkey is incorrect '%s'", req.ResultMsg))
+			case req.ResultMsg == "er_token_login_invalid":
+				err = errors.New(fmt.Sprintf("need to login again '%s'", req.ResultMsg))
+			case req.ResultMsg == "er_parameter_value_invalid":
+				err = errors.New(fmt.Sprintf("incorrect request data '%s'", req.ResultMsg))
+			case req.ResultMsg == "er_unknown_exception":
+				err = errors.New(fmt.Sprintf("API error '%s'", req.ResultMsg))
+			case strings.HasPrefix(req.ResultMsg, "Parameter:"):
+				err = errors.New(fmt.Sprintf("incorrect request data '%s'", req.ResultMsg))
 			default:
-				err = errors.New(fmt.Sprintf("unknown error '%s'", rc))
+				err = errors.New(fmt.Sprintf("unknown error '%s'", req.ResultMsg))
 		}
 	}
 	return err

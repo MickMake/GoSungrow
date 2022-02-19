@@ -59,6 +59,19 @@ func GetUrl(u string) *url.URL {
 func GetAsJson(r interface{}) Json {
 	var ret Json
 	for range Only.Once {
+		j, err := json.Marshal(r)
+		if err != nil {
+			ret = Json(fmt.Sprintf("{ \"error\": \"%s\"", err))
+			break
+		}
+		ret = Json(j)
+	}
+	return ret
+}
+
+func GetAsPrettyJson(r interface{}) Json {
+	var ret Json
+	for range Only.Once {
 		j, err := json.MarshalIndent(r, "", "\t")
 		if err != nil {
 			ret = Json(fmt.Sprintf("{ \"error\": \"%s\"", err))

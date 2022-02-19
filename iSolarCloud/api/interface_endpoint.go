@@ -16,6 +16,7 @@ type EndPoint interface {
 	MarshalJSON() ([]byte, error)
 
 	SetRequest(ref interface{}) EndPoint	// EndPointStruct
+	SetRequestByJson(j Json) EndPoint
 	RequestRef() interface{}
 	GetRequestJson() Json
 	IsRequestValid() error
