@@ -35,6 +35,19 @@ To be added:
 
 
 ## Use case example:
+### Fetch PV data from the API.
+
+```
+./bin/GoSungro api get findPsType '{"ps_id":"1129147"}'
+./bin/GoSungro api get getPsDetailWithPsType '{"ps_id":"1129147"}'
+./bin/GoSungro api get getPowerStatistics '{"ps_id":"1129147"}'
+./bin/GoSungro api get getPowerDevicePointNames '{"device_type":"1"}'
+./bin/GoSungro api get getPowerDevicePointNames '{"device_type":"2"}'
+./bin/GoSungro api get getPowerDevicePointNames '{"device_type":"7"}'
+./bin/GoSungro api get getPsList
+./bin/GoSungro api get WebAppService.showPSView '{"ps_id":"1129147"}'
+```
+
 ### Record statistics data from SUNGRO to GitHub. (Will clone if not existing.)
 
 	% GoSungro git sync 'Updating statistics' statistics
