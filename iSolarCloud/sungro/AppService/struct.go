@@ -2,6 +2,7 @@ package AppService
 
 import (
 	"GoSungro/iSolarCloud/api"
+	"GoSungro/iSolarCloud/sungro/AppService/findPsType"
 	"GoSungro/iSolarCloud/sungro/AppService/getPowerDevicePointNames"
 	"GoSungro/iSolarCloud/sungro/AppService/getPowerStatistics"
 	"GoSungro/iSolarCloud/sungro/AppService/getPsDetailWithPsType"
@@ -10,6 +11,7 @@ import (
 	"GoSungro/iSolarCloud/sungro/AppService/nullEndPoint"
 	"fmt"
 )
+
 
 var _ api.Area = (*Area)(nil)
 
@@ -22,10 +24,6 @@ func init() {
 }
 
 func Init(apiRoot *api.Web) Area {
-	// fmt.Println("Init(apiRoot)")
-	// name := api.GetArea(Area{})
-	// fmt.Printf("Name: %s\n", name)
-
 	area := Area {
 		ApiRoot:   apiRoot,
 		Name:      api.GetArea(Area{}),
@@ -169,7 +167,7 @@ func Init(apiRoot *api.Web) Area {
 			"findInfoByuuid":                                    nullEndPoint.Init(apiRoot), // "/v1/devService/findInfoByuuid"}
 			"findLossAnalysisList":                              nullEndPoint.Init(apiRoot), // "/v1/powerStationService/findLossAnalysisList"}
 			"findOnDutyInfo":                                    nullEndPoint.Init(apiRoot), // "/v1/otherService/findOnDutyInfo"}
-			"findPsType":                                        nullEndPoint.Init(apiRoot), // "/v1/powerStationService/findPsType"}
+			api.GetName(findPsType.EndPoint{}): findPsType.Init(apiRoot),
 			"findSingleStationPR":                               nullEndPoint.Init(apiRoot), // "/v1/powerStationService/findSingleStationPR"}
 			"findUserPassword":                                  nullEndPoint.Init(apiRoot), // "/v1/devService/findUserPassword"}
 			"genTLSUserSigByUserAccount":                        nullEndPoint.Init(apiRoot), // "/v1/userService/genTLSUserSigByUserAccount"}
@@ -606,8 +604,6 @@ func Init(apiRoot *api.Web) Area {
 			"userRegister":                                      nullEndPoint.Init(apiRoot), // "/v1/userService/userRegister"}
 		},
 	}
-
-	// fmt.Printf("area[%s]: %v\n", name, area)
 
 	return area
 }

@@ -53,8 +53,14 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 			break
 		}
 
+		u := endpoint.GetUrl()
+		w.Error = u.IsValid()
+		if w.Error != nil {
+			break
+		}
+
+		postUrl := w.Url.AppendPath(u.String()).String()
 		j, _ := json.Marshal(request)
-		postUrl := w.Url.AppendPath(endpoint.GetUrl().String()).String()
 
 		w.httpResponse, w.Error = http.Post(postUrl, "application/json", bytes.NewBuffer(j))
 		if w.Error != nil {
@@ -86,6 +92,10 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 			w.Error = errors.New("empty httpResponse")
 			break
 		}
+
+		// fmt.Printf("URL: %s\n\n", postUrl)
+		// fmt.Printf("REQUEST: %s\n\n", j)
+		// fmt.Printf("RESPONSE: %s\n\n", w.Body)
 
 		endpoint = endpoint.SetResponse(w.Body)
 

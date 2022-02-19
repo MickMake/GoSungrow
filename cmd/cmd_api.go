@@ -84,9 +84,9 @@ var cmdApiGet = &cobra.Command {
 func cmdApiGetFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
 		args = fillArray(2, args)
-		if args[1] == "" {
-			args[1] = "{}"
-		}
+		// if args[1] == "" {
+		// 	args[1] = "{}"
+		// }
 
 		ep := SunGro.GetEndpoint(args[0])
 		if ep.IsError() {
@@ -94,11 +94,13 @@ func cmdApiGetFunc(cmd *cobra.Command, args []string) {
 			break
 		}
 
-		ep = ep.SetRequestByJson(api.Json(args[1]))
-		if ep.IsError() {
-			fmt.Println(ep.Help())
-			Cmd.Error = ep.GetError()
-			break
+		if args[1] != "" {
+			ep = ep.SetRequestByJson(api.Json(args[1]))
+			if ep.IsError() {
+				fmt.Println(ep.Help())
+				Cmd.Error = ep.GetError()
+				break
+			}
 		}
 
 		ep = ep.Call()

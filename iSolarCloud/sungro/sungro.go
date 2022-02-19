@@ -3,7 +3,12 @@ package sungro
 import (
 	"GoSungro/Only"
 	"GoSungro/iSolarCloud/api"
+	"GoSungro/iSolarCloud/sungro/AliSmsService"
 	"GoSungro/iSolarCloud/sungro/AppService"
+	"GoSungro/iSolarCloud/sungro/MttvScreenService"
+	"GoSungro/iSolarCloud/sungro/PowerPointService"
+	"GoSungro/iSolarCloud/sungro/WebAppService"
+	"GoSungro/iSolarCloud/sungro/WebIscmAppService"
 	"errors"
 	"strings"
 )
@@ -13,12 +18,12 @@ func (sg *SunGro) Init() error {
 	for range Only.Once {
 		sg.Areas = make(api.Areas)
 
-		// sg.Areas[AliSmsService.Area.Name] = AliSmsService.Area.EndPoints
+		sg.Areas[api.GetArea(AliSmsService.Area{})] = api.AreaStruct(AliSmsService.Init(&sg.ApiRoot))
 		sg.Areas[api.GetArea(AppService.Area{})] = api.AreaStruct(AppService.Init(&sg.ApiRoot))
-		// sg.Areas[MttvScreenService.Area.Name] = MttvScreenService.Area.EndPoints
-		// sg.Areas[PowerPointService.Area.Name] = PowerPointService.Area.EndPoints
-		// sg.Areas[WebAppService.Area.Name] = WebAppService.Area.EndPoints
-		// sg.Areas[WebIscmAppService.Area.Name] = WebIscmAppService.Area.EndPoints
+		sg.Areas[api.GetArea(MttvScreenService.Area{})] = api.AreaStruct(MttvScreenService.Init(&sg.ApiRoot))
+		sg.Areas[api.GetArea(PowerPointService.Area{})] = api.AreaStruct(PowerPointService.Init(&sg.ApiRoot))
+		sg.Areas[api.GetArea(WebAppService.Area{})] = api.AreaStruct(WebAppService.Init(&sg.ApiRoot))
+		sg.Areas[api.GetArea(WebIscmAppService.Area{})] = api.AreaStruct(WebIscmAppService.Init(&sg.ApiRoot))
 	}
 
 	return sg.Error
