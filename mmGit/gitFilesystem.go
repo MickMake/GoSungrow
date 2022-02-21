@@ -1,7 +1,7 @@
 package mmGit
 
 import (
-	"GoSungro/Only"
+	"GoSungrow/Only"
 	"bufio"
 	"context"
 	"errors"

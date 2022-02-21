@@ -1,8 +1,8 @@
 package login
 
 import (
-	"GoSungro/Only"
-	"GoSungro/iSolarCloud/api"
+	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -11,15 +11,14 @@ import (
 	"time"
 )
 
-
 const (
 	DateTimeFormat       = "2006-01-02T15:04:05"
-	DefaultAuthTokenFile = "SunGroAuthToken.json"
+	DefaultAuthTokenFile = "AuthToken.json"
 	TokenValidHours      = 24
 	LastLoginDateFormat  = "2006-01-02 15:04:05"
 )
 
-type SunGroAuth struct {
+type SunGrowAuth struct {
 	AppKey       string
 	UserAccount  string
 	UserPassword string
@@ -27,14 +26,13 @@ type SunGroAuth struct {
 	Token        string
 	Force        bool
 
-	lastLogin    time.Time
-	newToken     bool
-	retry        int
-	err          error
+	lastLogin time.Time
+	newToken  bool
+	retry     int
+	err       error
 }
 
-
-func (a *SunGroAuth) Verify() error {
+func (a *SunGrowAuth) Verify() error {
 	var err error
 	for range Only.Once {
 		if a == nil {
@@ -62,16 +60,16 @@ func (a *SunGroAuth) Verify() error {
 	return err
 }
 
-func (e *EndPoint) Login(auth *SunGroAuth) error {
+func (e *EndPoint) Login(auth *SunGrowAuth) error {
 	for range Only.Once {
 		e.Auth = auth
-		e.Request.RequestData = RequestData {
-			UserAccount: auth.UserAccount,
+		e.Request.RequestData = RequestData{
+			UserAccount:  auth.UserAccount,
 			UserPassword: auth.UserPassword,
 		}
-		e.Request.RequestCommon = api.RequestCommon {
-			Appkey:   auth.AppKey,
-			SysCode:  "900",
+		e.Request.RequestCommon = api.RequestCommon{
+			Appkey:  auth.AppKey,
+			SysCode: "900",
 		}
 
 		e.Error = e.Auth.Verify()
@@ -84,21 +82,19 @@ func (e *EndPoint) Login(auth *SunGroAuth) error {
 			break
 		}
 
-		e.Error = e.Auth.Verify()
-		if e.Error != nil {
-			break
-		}
-
 		if auth.Force {
-			e.Auth.newToken = true
+			e.Auth.Token = ""
 		}
 
-		if !e.HasTokenExpired() {
+		if e.IsTokenValid() {
 			break
 		}
 
 		foo := Assert(e.Call())
 		e.Error = foo.GetError()
+		if e.Error != nil {
+			break
+		}
 		e.Request = foo.Request
 		e.Response = foo.Response
 
@@ -113,7 +109,7 @@ func (e *EndPoint) Login(auth *SunGroAuth) error {
 
 // func (e *EndPoint) RetrieveToken() error {
 // 	for range Only.Once {
-// 		e.HasTokenExpired()
+// 		e.IsTokenInvalid()
 // 		if !e.Auth.newToken {
 // 			break
 // 		}
@@ -157,7 +153,7 @@ func (e *EndPoint) Login(auth *SunGroAuth) error {
 // 	return e.Error
 // }
 
-func (e *EndPoint) HasTokenExpired() bool {
+func (e *EndPoint) IsTokenInvalid() bool {
 	for range Only.Once {
 		if e.Token() == "" {
 			e.Auth.newToken = true
@@ -170,6 +166,9 @@ func (e *EndPoint) HasTokenExpired() bool {
 	}
 
 	return e.Auth.newToken
+}
+func (e *EndPoint) IsTokenValid() bool {
+	return !e.IsTokenInvalid()
 }
 
 func (e *EndPoint) HoursFromLastLogin() time.Duration {
@@ -211,7 +210,7 @@ func (e *EndPoint) readTokenFile() error {
 				e.Auth.TokenFile = ""
 				break
 			}
-			e.Auth.TokenFile = filepath.Join(e.Auth.TokenFile, ".GoSungro", DefaultAuthTokenFile)
+			e.Auth.TokenFile = filepath.Join(e.Auth.TokenFile, ".GoSungrow", DefaultAuthTokenFile)
 		}
 
 		var f *os.File
@@ -228,8 +227,18 @@ func (e *EndPoint) readTokenFile() error {
 		e.Error = json.NewDecoder(f).Decode(&e.Response.ResultData)
 
 		e.Auth.Token = e.Token()
+		if e.Auth.Token == "" {
+			e.Auth.newToken = true
+			break
+		}
+
 		// 2022-02-17 14:27:03
 		e.Auth.lastLogin, e.Error = time.Parse(LastLoginDateFormat, e.Response.ResultData.LoginLastDate)
+		if e.Error != nil {
+			e.Auth.newToken = true
+			e.Error = nil
+			break
+		}
 	}
 
 	return e.Error
@@ -244,7 +253,7 @@ func (e *EndPoint) saveToken() error {
 				e.Auth.TokenFile = ""
 				break
 			}
-			e.Auth.TokenFile = filepath.Join(e.Auth.TokenFile, ".GoSungro", DefaultAuthTokenFile)
+			e.Auth.TokenFile = filepath.Join(e.Auth.TokenFile, ".GoSungrow", DefaultAuthTokenFile)
 		}
 
 		fmt.Printf("Saving token file to: %s\n", e.Auth.TokenFile)

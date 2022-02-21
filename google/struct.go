@@ -1,7 +1,7 @@
 package google
 
 import (
-	"GoSungro/Only"
+	"GoSungrow/Only"
 	"context"
 	"errors"
 	"fmt"
@@ -77,7 +77,7 @@ func (s *Sheet) Verify() bool {
 				s.TokenFile = ""
 				break
 			}
-			s.TokenFile = filepath.Join(s.TokenFile, ".GoSungro", DefaultAuthTokenFile)
+			s.TokenFile = filepath.Join(s.TokenFile, ".GoSungrow", DefaultAuthTokenFile)
 		}
 
 		ok = true

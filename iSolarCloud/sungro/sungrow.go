@@ -1,19 +1,19 @@
 package sungro
 
 import (
-	"GoSungro/Only"
-	"GoSungro/iSolarCloud/api"
-	"GoSungro/iSolarCloud/sungro/AliSmsService"
-	"GoSungro/iSolarCloud/sungro/AppService"
-	"GoSungro/iSolarCloud/sungro/MttvScreenService"
-	"GoSungro/iSolarCloud/sungro/PowerPointService"
-	"GoSungro/iSolarCloud/sungro/WebAppService"
-	"GoSungro/iSolarCloud/sungro/WebIscmAppService"
+	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api"
+	"GoSungrow/iSolarCloud/sungro/AliSmsService"
+	"GoSungrow/iSolarCloud/sungro/AppService"
+	"GoSungrow/iSolarCloud/sungro/MttvScreenService"
+	"GoSungrow/iSolarCloud/sungro/PowerPointService"
+	"GoSungrow/iSolarCloud/sungro/WebAppService"
+	"GoSungrow/iSolarCloud/sungro/WebIscmAppService"
 	"errors"
 	"strings"
 )
 
-func (sg *SunGro) Init() error {
+func (sg *SunGrow) Init() error {
 	for range Only.Once {
 		sg.Areas = make(api.Areas)
 
@@ -28,11 +28,11 @@ func (sg *SunGro) Init() error {
 	return sg.Error
 }
 
-func (sg *SunGro) AppendUrl(endpoint string) api.EndPointUrl {
+func (sg *SunGrow) AppendUrl(endpoint string) api.EndPointUrl {
 	return sg.ApiRoot.AppendUrl(endpoint)
 }
 
-func (sg *SunGro) GetEndpoint(ae string) api.EndPoint {
+func (sg *SunGrow) GetEndpoint(ae string) api.EndPoint {
 	var ep api.EndPoint
 	for range Only.Once {
 		area, endpoint := sg.SplitEndPoint(ae)
@@ -59,7 +59,7 @@ func (sg *SunGro) GetEndpoint(ae string) api.EndPoint {
 	return ep
 }
 
-func (sg *SunGro) SplitEndPoint(ae string) (string, string) {
+func (sg *SunGrow) SplitEndPoint(ae string) (string, string) {
 	var area string
 	var endpoint string
 
@@ -85,17 +85,17 @@ func (sg *SunGro) SplitEndPoint(ae string) (string, string) {
 	return area, endpoint
 }
 
-func (sg *SunGro) ListEndpoints(area string) error {
+func (sg *SunGrow) ListEndpoints(area string) error {
 	return sg.Areas.ListEndpoints(area)
 }
 
-func (sg *SunGro) ListAreas() {
+func (sg *SunGrow) ListAreas() {
 	sg.Areas.ListAreas()
 }
 
-func (sg *SunGro) AreaExists(area string) bool {
+func (sg *SunGrow) AreaExists(area string) bool {
 	return sg.Areas.Exists(area)
 }
-func (sg *SunGro) AreaNotExists(area string) bool {
+func (sg *SunGrow) AreaNotExists(area string) bool {
 	return sg.Areas.NotExists(area)
 }

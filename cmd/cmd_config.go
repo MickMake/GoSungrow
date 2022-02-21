@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"GoSungro/Only"
+	"GoSungrow/Only"
 	"fmt"
 	"github.com/spf13/cobra"
 	"os"

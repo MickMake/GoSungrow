@@ -1,7 +1,7 @@
 package queryOrgInfoList
 
 import (
-	"GoSungro/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
 

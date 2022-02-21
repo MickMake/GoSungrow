@@ -1,7 +1,7 @@
 package google
 
 import (
-	"GoSungro/Only"
+	"GoSungrow/Only"
 	"context"
 	"encoding/json"
 	"errors"

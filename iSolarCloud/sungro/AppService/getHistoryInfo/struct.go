@@ -1,20 +1,19 @@
 package getHistoryInfo
 
 import (
-	"GoSungro/Only"
-	"GoSungro/iSolarCloud/api"
-	"GoSungro/iSolarCloud/api/apiReflect"
+	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api"
+	"GoSungrow/iSolarCloud/api/apiReflect"
 	"encoding/json"
 	"errors"
 	"fmt"
 )
 
-
 var _ api.EndPoint = (*EndPoint)(nil)
 
 type EndPoint struct {
 	api.EndPointStruct
-	Request Request
+	Request  Request
 	Response Response
 }
 
@@ -29,8 +28,8 @@ type Response struct {
 }
 
 func Init(apiRoot *api.Web) EndPoint {
-	return EndPoint {
-		EndPointStruct: api.EndPointStruct {
+	return EndPoint{
+		EndPointStruct: api.EndPointStruct{
 			ApiRoot:  apiRoot,
 			Area:     api.GetArea(EndPoint{}),
 			Name:     api.GetName(EndPoint{}),
@@ -41,7 +40,6 @@ func Init(apiRoot *api.Web) EndPoint {
 		},
 	}
 }
-
 
 // ****************************************
 // Methods not scoped by api.EndPoint interface type
@@ -62,7 +60,6 @@ func (e EndPoint) GetResponse() Response {
 func Assert(e api.EndPoint) EndPoint {
 	return e.(EndPoint)
 }
-
 
 // ****************************************
 // Methods defined by api.EndPoint interface type
@@ -90,8 +87,12 @@ func (e EndPoint) Call() api.EndPoint {
 	return e.ApiRoot.Get(e)
 }
 
-func (e EndPoint) GetData() api.Json {
-	return api.GetAsPrettyJson(e.Response.ResultData)
+func (e EndPoint) GetData(raw bool) api.Json {
+	if raw {
+		return api.Json(e.ApiRoot.Body)
+	} else {
+		return api.GetAsPrettyJson(e.Response.ResultData)
+	}
 }
 
 func (e EndPoint) SetError(format string, a ...interface{}) api.EndPoint {
@@ -139,10 +140,6 @@ func (e EndPoint) SetRequestByJson(j api.Json) api.EndPoint {
 		if e.Error != nil {
 			break
 		}
-		e.Error = e.IsRequestValid()
-		if e.Error != nil {
-			break
-		}
 	}
 	return e
 }
@@ -157,13 +154,13 @@ func (e EndPoint) GetRequestJson() api.Json {
 
 func (e EndPoint) IsRequestValid() error {
 	for range Only.Once {
-		req := e.GetRequest()
-		// req := e.Request.RequestCommon
-		e.Error = req.RequestCommon.IsValid()
+		//req := e.GetRequest()
+		//req := e.Request.RequestCommon
+		e.Error = e.Request.RequestCommon.IsValid()
 		if e.Error != nil {
 			break
 		}
-		e.Error = req.RequestData.IsValid()
+		e.Error = e.Request.RequestData.IsValid()
 		if e.Error != nil {
 			break
 		}
@@ -173,13 +170,10 @@ func (e EndPoint) IsRequestValid() error {
 
 func (e EndPoint) SetResponse(ref []byte) api.EndPoint {
 	for range Only.Once {
-		// r := e.GetResponse()
-		// e.Error = json.Unmarshal(ref, &r)
 		e.Error = json.Unmarshal(ref, &e.Response)
 		if e.Error != nil {
 			break
 		}
-		// e.ResponseCommon = r
 	}
 	return e
 }
@@ -194,9 +188,11 @@ func (e EndPoint) ResponseRef() interface{} {
 
 func (e EndPoint) IsResponseValid() error {
 	for range Only.Once {
-		// resp := e.GetResponse()
-		// e.Error = resp.ResponseCommon.IsValid()
 		e.Error = e.Response.ResponseCommon.IsValid()
+		if e.Error != nil {
+			break
+		}
+		e.Error = e.Response.ResultData.IsValid()
 		if e.Error != nil {
 			break
 		}
@@ -218,4 +214,20 @@ func (e EndPoint) ResponseString() string {
 
 func (e EndPoint) MarshalJSON() ([]byte, error) {
 	return api.MarshalJSON(e)
+
+	// return json.Marshal(&struct {
+	// 	Area     string   `json:"area"`
+	// 	EndPoint string   `json:"endpoint"`
+	// 	Host     string   `json:"api_host"`
+	// 	Url      string   `json:"endpoint_url"`
+	// 	Request  interface{}  `json:"request"`
+	// 	Response interface{} `json:"response"`
+	// }{
+	// 	Area:     string(e.Area),
+	// 	EndPoint: string(e.Name),
+	// 	Host:     e.ApiRoot.Url.String(),
+	// 	Url:      e.Url.String(),
+	// 	Request:  e.Request,
+	// 	Response: e.Response,
+	// })
 }

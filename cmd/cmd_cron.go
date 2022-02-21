@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"GoSungro/Only"
+	"GoSungrow/Only"
 	"fmt"
 	"github.com/go-co-op/gocron"
 	"github.com/spf13/cobra"

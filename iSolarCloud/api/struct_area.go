@@ -1,7 +1,7 @@
 package api
 
 import (
-	"GoSungro/Only"
+	"GoSungrow/Only"
 	"errors"
 	"fmt"
 )

@@ -1,7 +1,7 @@
 package mmGit
 
 import (
-	"GoSungro/Only"
+	"GoSungrow/Only"
 	"fmt"
 	memfs "github.com/go-git/go-billy/v5/memfs"
 	git "github.com/go-git/go-git/v5"

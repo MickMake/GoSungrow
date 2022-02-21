@@ -1,5 +1,5 @@
 ################################################################################
-project_name: GoSungro
+project_name: GoSungrow
 
 
 ################################################################################
@@ -14,7 +14,7 @@ builds:
 - env:
   - CGO_ENABLED=0
 
-  binary: GoSungro
+  binary: GoSungrow
 
   goos:
     - linux
@@ -33,7 +33,7 @@ archives:
   -
     # ID of this archive.
     # Defaults to `default`.
-    #id: GoSungro-archive
+    #id: GoSungrow-archive
 
     # Builds reference which build instances should be archived in this archive.
     #builds:

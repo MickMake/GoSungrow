@@ -1,8 +1,8 @@
 package web
 
 import (
-	"GoSungro/Only"
-	"GoSungro/iSolarCloud/sungro/AppService/login"
+	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/sungro/AppService/login"
 	"bytes"
 	"encoding/json"
 	"errors"

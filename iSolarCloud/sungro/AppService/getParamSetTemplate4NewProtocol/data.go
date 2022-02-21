@@ -1,7 +1,7 @@
 package getParamSetTemplate4NewProtocol
 
 import (
-	"GoSungro/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
 

@@ -1,11 +1,11 @@
 package cmd
 
 import (
-	"GoSungro/Only"
-	"GoSungro/iSolarCloud/sungro"
-	"GoSungro/iSolarCloud/sungro/AppService/login"
-	"GoSungro/lsgo"
-	"GoSungro/mmGit"
+	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/sungro"
+	"GoSungrow/iSolarCloud/sungro/AppService/login"
+	"GoSungrow/lsgo"
+	"GoSungrow/mmGit"
 	"errors"
 	"fmt"
 	"github.com/spf13/cobra"
@@ -16,8 +16,8 @@ import (
 
 //goland:noinspection SpellCheckingInspection
 const (
-	DefaultBinaryName = "GoSungro"
-	EnvPrefix         = "SunGro"
+	DefaultBinaryName = "GoSungrow"
+	EnvPrefix         = "SunGrow"
 	defaultConfigFile = "config.json"
 	defaultTokenFile  = "AuthToken.json"
 
@@ -44,9 +44,10 @@ const (
 	flagGitRepoDir  = "git-dir"
 	flagGitDiffCmd  = "diff-cmd"
 
-	defaultHost     = "https://augateway.isolarcloud.com"
-	defaultUsername = "harry@potter.net"
-	defaultPassword = "hogwarts"
+	defaultHost      = "https://augateway.isolarcloud.com"
+	defaultUsername  = "harry@potter.net"
+	defaultPassword  = "hogwarts"
+	defaultApiAppKey = "93D72E60331ABDCDC7B39ADC2D1F32B3"
 
 	defaultTimeout = time.Duration(time.Second * 30)
 )
@@ -103,22 +104,47 @@ func (ca *CommandArgs) IsValid() error {
 	return ca.Error
 }
 
-//goland:noinspection GoUnusedParameter
 func (ca *CommandArgs) ProcessArgs(cmd *cobra.Command, args []string) error {
 	for range Only.Once {
 		ca.Args = args
 
-		SunGro = sungro.NewSunGro(ca.ApiUrl)
-		if SunGro.Error != nil {
+		SunGrow = sungro.NewSunGro(ca.ApiUrl)
+		if SunGrow.Error != nil {
 			break
 		}
 
-		Cmd.Error = SunGro.Init()
+		Cmd.Error = SunGrow.Init()
 		if Cmd.Error != nil {
 			break
 		}
 
-		Cmd.Error = SunGro.Login(login.SunGroAuth{
+		if ca.ApiAppKey == "" {
+			ca.ApiAppKey = defaultApiAppKey
+		}
+
+		// if Cmd.GoogleSheetUpdate {
+		// 	SunGrow.OutputType = iSolarCloud.TypeGoogle
+		// }
+
+		// Git.Error = Cmd.GitSet()
+		// if Cmd.Error != nil {
+		//	break
+		// }
+
+		ca.Valid = true
+	}
+
+	return ca.Error
+}
+
+func (ca *CommandArgs) SunGrowArgs(cmd *cobra.Command, args []string) error {
+	for range Only.Once {
+		Cmd.Error = Cmd.ProcessArgs(cmd, args)
+		if Cmd.Error != nil {
+			break
+		}
+
+		Cmd.Error = SunGrow.Login(login.SunGrowAuth{
 			AppKey:       ca.ApiAppKey,
 			UserAccount:  ca.ApiUsername,
 			UserPassword: ca.ApiPassword,
@@ -130,17 +156,17 @@ func (ca *CommandArgs) ProcessArgs(cmd *cobra.Command, args []string) error {
 		}
 
 		if Cmd.Debug {
-			SunGro.Auth.Print()
+			SunGrow.Auth.Print()
 		}
 
-		if SunGro.HasTokenChanged() {
-			ca.ApiLastLogin = SunGro.GetLastLogin()
-			ca.ApiToken = SunGro.GetToken()
+		if SunGrow.HasTokenChanged() {
+			ca.ApiLastLogin = SunGrow.GetLastLogin()
+			ca.ApiToken = SunGrow.GetToken()
 			ca.Error = writeConfig()
 		}
 
 		// if Cmd.GoogleSheetUpdate {
-		// 	SunGro.OutputType = iSolarCloud.TypeGoogle
+		// 	SunGrow.OutputType = iSolarCloud.TypeGoogle
 		// }
 
 		// Git.Error = Cmd.GitSet()
@@ -259,21 +285,21 @@ func (ca *CommandArgs) GitSave(entities ...string) error {
 		if len(entities) == 0 {
 			entities = DefaultAreas
 		}
-		fmt.Printf("Saving %d entities from the SunGro to Git...\n", len(entities))
+		fmt.Printf("Saving %d entities from the SunGrow to Git...\n", len(entities))
 
-		// SunGro.OutputType = iSolarCloud.StringTypeJson
-		// SunGro.OutputType = iSolarCloud.TypeJson
+		// SunGrow.OutputType = iSolarCloud.StringTypeJson
+		// SunGrow.OutputType = iSolarCloud.TypeJson
 
 		for _, entity := range entities {
 			// Remove plurals.
 			entity = strings.TrimSuffix(entity, "s")
-			// SunGro.OutputString = ""
+			// SunGrow.OutputString = ""
 
 			switch entity {
 			case "domain":
-				SunGro.Error = SunGro.Init()
+				SunGrow.Error = SunGrow.Init()
 			}
-			if SunGro.Error != nil {
+			if SunGrow.Error != nil {
 				break
 			}
 
@@ -293,17 +319,17 @@ func (ca *CommandArgs) GitSave(entities ...string) error {
 func (ca *CommandArgs) GoogleUpdate(entities ...string) error {
 
 	for range Only.Once {
-		// SunGro.OutputType = iSolarCloud.TypeGoogle
+		// SunGrow.OutputType = iSolarCloud.TypeGoogle
 
 		if len(entities) == 0 {
 			entities = DefaultAreas
 		}
-		fmt.Printf("Saving %d entities from the SunGro to Google Docs...\n", len(entities))
+		fmt.Printf("Saving %d entities from the SunGrow to Google Docs...\n", len(entities))
 
 		for _, entity := range entities {
 			switch entity {
 			case "domain":
-				ca.Error = SunGro.Init()
+				ca.Error = SunGrow.Init()
 				if ca.Error != nil {
 					break
 				}

@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"GoSungro/Only"
-	"GoSungro/iSolarCloud/api"
-	"GoSungro/iSolarCloud/sungro/AppService/login"
+	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api"
+	"GoSungrow/iSolarCloud/sungro/AppService/login"
 	"fmt"
 	"github.com/spf13/cobra"
 )
@@ -12,14 +12,14 @@ import (
 var cmdApi = &cobra.Command{
 	Use:                   "api",
 	Aliases:               []string{},
-	Short:                 fmt.Sprintf("Interact with the SunGro api."),
-	Long:                  fmt.Sprintf("Interact with the SunGro api."),
+	Short:                 fmt.Sprintf("Interact with the SunGrow api."),
+	Long:                  fmt.Sprintf("Interact with the SunGrow api."),
 	Example:               PrintExamples("api", "get <endpoint>", "put <endpoint>"),
 	DisableFlagParsing:    false,
 	DisableFlagsInUseLine: false,
-	// PreRunE:               Cmd.ProcessArgs,
-	Run:  cmdApiFunc,
-	Args: cobra.MinimumNArgs(1),
+	PreRunE:               Cmd.ProcessArgs,
+	Run:                   cmdApiFunc,
+	Args:                  cobra.MinimumNArgs(1),
 }
 
 //goland:noinspection GoUnusedParameter
@@ -41,7 +41,7 @@ var cmdApiList = &cobra.Command{
 	Example:               PrintExamples("api ls", "", "areas", "endpoints", "<area name>"),
 	DisableFlagParsing:    false,
 	DisableFlagsInUseLine: false,
-	PreRunE:               Cmd.ProcessArgs,
+	PreRunE:               Cmd.SunGrowArgs,
 	Run:                   cmdApiListFunc,
 	Args:                  cobra.RangeArgs(0, 1),
 }
@@ -55,13 +55,13 @@ func cmdApiListFunc(cmd *cobra.Command, args []string) {
 			_ = cmd.Help()
 
 		case args[0] == "endpoints":
-			Cmd.Error = SunGro.ListEndpoints("")
+			Cmd.Error = SunGrow.ListEndpoints("")
 
 		case args[0] == "areas":
-			SunGro.ListAreas()
+			SunGrow.ListAreas()
 
 		default:
-			Cmd.Error = SunGro.ListEndpoints(args[0])
+			Cmd.Error = SunGrow.ListEndpoints(args[0])
 		}
 	}
 }
@@ -75,7 +75,7 @@ var cmdApiGet = &cobra.Command{
 	Example:               PrintExamples("api get", "<endpoint> [area]"),
 	DisableFlagParsing:    false,
 	DisableFlagsInUseLine: false,
-	PreRunE:               Cmd.ProcessArgs,
+	PreRunE:               Cmd.SunGrowArgs,
 	Run:                   cmdApiGetFunc,
 	Args:                  cobra.MinimumNArgs(1),
 }
@@ -88,9 +88,9 @@ func cmdApiGetFunc(cmd *cobra.Command, args []string) {
 		// 	args[1] = "{}"
 		// }
 
-		ep := SunGro.GetEndpoint(args[0])
-		if SunGro.Error != nil {
-			Cmd.Error = SunGro.Error
+		ep := SunGrow.GetEndpoint(args[0])
+		if SunGrow.Error != nil {
+			Cmd.Error = SunGrow.Error
 			break
 		}
 		if ep.IsError() {
@@ -134,7 +134,7 @@ var cmdApiLogin = &cobra.Command{
 	Example:               PrintExamples("api login", ""),
 	DisableFlagParsing:    false,
 	DisableFlagsInUseLine: false,
-	PreRunE:               Cmd.ProcessArgs,
+	PreRunE:               Cmd.SunGrowArgs,
 	Run:                   cmdApiLoginFunc,
 	Args:                  cobra.MinimumNArgs(0),
 }
@@ -142,7 +142,7 @@ var cmdApiLogin = &cobra.Command{
 //goland:noinspection GoUnusedParameter
 func cmdApiLoginFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
-		Cmd.Error = SunGro.Login(login.SunGroAuth{
+		Cmd.Error = SunGrow.Login(login.SunGrowAuth{
 			AppKey:       Cmd.ApiAppKey,
 			UserAccount:  Cmd.ApiUsername,
 			UserPassword: Cmd.ApiPassword,
@@ -153,11 +153,11 @@ func cmdApiLoginFunc(cmd *cobra.Command, args []string) {
 			break
 		}
 
-		SunGro.Auth.Print()
+		SunGrow.Auth.Print()
 
-		if SunGro.HasTokenChanged() {
-			Cmd.ApiLastLogin = SunGro.GetLastLogin()
-			Cmd.ApiToken = SunGro.GetToken()
+		if SunGrow.HasTokenChanged() {
+			Cmd.ApiLastLogin = SunGrow.GetLastLogin()
+			Cmd.ApiToken = SunGrow.GetToken()
 			Cmd.Error = writeConfig()
 		}
 	}
@@ -172,7 +172,7 @@ var cmdApiPut = &cobra.Command{
 	Example:               PrintExamples("api put", "<endpoint> <value>"),
 	DisableFlagParsing:    false,
 	DisableFlagsInUseLine: false,
-	PreRunE:               Cmd.ProcessArgs,
+	PreRunE:               Cmd.SunGrowArgs,
 	Run:                   cmdApiPutFunc,
 	Args:                  cobra.RangeArgs(0, 1),
 }
@@ -182,7 +182,7 @@ func cmdApiPutFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
 		fmt.Println("Not yet implemented.")
 		// args = fillArray(1, args)
-		// Cmd.Error = SunGro.Init()
+		// Cmd.Error = SunGrow.Init()
 		// if Cmd.Error != nil {
 		// 	break
 		// }

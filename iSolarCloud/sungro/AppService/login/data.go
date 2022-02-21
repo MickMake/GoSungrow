@@ -1,7 +1,9 @@
 package login
 
 import (
-	"GoSungro/iSolarCloud/api/apiReflect"
+	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api/apiReflect"
+	"errors"
 	"fmt"
 )
 
@@ -20,7 +22,6 @@ func (rd RequestData) Help() string {
 	ret := fmt.Sprintf("")
 	return ret
 }
-
 
 type ResultData struct {
 	AcceptOrderNum         int64       `json:"accept_order_num"`
@@ -61,6 +62,7 @@ type ResultData struct {
 	LoginLastIP            string      `json:"loginLastIp"`
 	LoginTimes             int64       `json:"loginTimes"`
 	LoginState             string      `json:"login_state"`
+	Msg                    string      `json:"msg"`
 	Logo                   interface{} `json:"logo"`
 	LogoHTTPSURL           interface{} `json:"logo_https_url"`
 	MapType                string      `json:"map_type"`
@@ -127,18 +129,20 @@ type ResultData struct {
 	WorkTel                      interface{}   `json:"work_tel"`
 }
 
-
-// func (e *EndPoint) GetToken() string {
-// 	return e.GetResponse().ResultData.Token
-// }
-//
-// func (e *EndPoint) GetUserEmail() string {
-// 	return e.GetResponse().ResultData.Email
-// }
-//
-// func (e *EndPoint) GetUserName() string {
-// 	return e.GetResponse().ResultData.UserName
-// }
+func (e *ResultData) IsValid() error {
+	var err error
+	for range Only.Once {
+		switch {
+		case e.Msg == `账号不存在`:
+			err = errors.New(fmt.Sprintf("Account does not exist '%s'", e.Msg))
+		case e.Msg == "":
+			break
+		default:
+			err = errors.New(fmt.Sprintf("unknown error '%s'", e.Msg))
+		}
+	}
+	return err
+}
 
 func (e *EndPoint) AppKey() string {
 	return e.Request.RequestCommon.Appkey
@@ -178,24 +182,3 @@ func (e *EndPoint) UserID() string {
 func (e *EndPoint) UserName() string {
 	return e.Response.ResultData.UserName
 }
-
-
-// func (e ResultData) MarshalJSON() ([]byte, error) {
-// 	// return api.MarshalJSON(e)
-//
-// 	return json.Marshal(&struct {
-// 		Area     string   `json:"area"`
-// 		EndPoint string   `json:"endpoint"`
-// 		Host     string   `json:"api_host"`
-// 		Url      string   `json:"endpoint_url"`
-// 		Request  interface{}  `json:"request"`
-// 		Response interface{} `json:"response"`
-// 	}{
-// 		Area:     string(e.Area),
-// 		EndPoint: string(e.Name),
-// 		Host:     e.ApiRoot.Url.String(),
-// 		Url:      e.Url.String(),
-// 		Request:  e.Request,
-// 		Response: e.Response,
-// 	})
-// }

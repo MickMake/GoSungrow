@@ -1,17 +1,18 @@
 package AppService
 
 import (
-	"GoSungro/iSolarCloud/api"
-	"GoSungro/iSolarCloud/sungro/AppService/communicationModuleDetail"
-	"GoSungro/iSolarCloud/sungro/AppService/findPsType"
-	"GoSungro/iSolarCloud/sungro/AppService/getHouseholdStoragePsReport"
-	"GoSungro/iSolarCloud/sungro/AppService/getPowerDevicePointNames"
-	"GoSungro/iSolarCloud/sungro/AppService/getPowerStatistics"
-	"GoSungro/iSolarCloud/sungro/AppService/getPsDetailWithPsType"
-	"GoSungro/iSolarCloud/sungro/AppService/getPsList"
-	"GoSungro/iSolarCloud/sungro/AppService/login"
-	"GoSungro/iSolarCloud/sungro/AppService/queryMutiPointDataList"
-	"GoSungro/iSolarCloud/sungro/AppService/queryUnitList"
+	"GoSungrow/iSolarCloud/api"
+	"GoSungrow/iSolarCloud/sungro/AppService/communicationModuleDetail"
+	"GoSungrow/iSolarCloud/sungro/AppService/findPsType"
+	"GoSungrow/iSolarCloud/sungro/AppService/getHistoryInfo"
+	"GoSungrow/iSolarCloud/sungro/AppService/getHouseholdStoragePsReport"
+	"GoSungrow/iSolarCloud/sungro/AppService/getPowerDevicePointNames"
+	"GoSungrow/iSolarCloud/sungro/AppService/getPowerStatistics"
+	"GoSungrow/iSolarCloud/sungro/AppService/getPsDetailWithPsType"
+	"GoSungrow/iSolarCloud/sungro/AppService/getPsList"
+	"GoSungrow/iSolarCloud/sungro/AppService/login"
+	"GoSungrow/iSolarCloud/sungro/AppService/queryMutiPointDataList"
+	"GoSungrow/iSolarCloud/sungro/AppService/queryUnitList"
 	"fmt"
 )
 
@@ -39,6 +40,8 @@ func Init(apiRoot *api.Web) Area {
 			api.GetName(queryUnitList.EndPoint{}):               queryUnitList.Init(apiRoot),
 			api.GetName(queryMutiPointDataList.EndPoint{}):      queryMutiPointDataList.Init(apiRoot),
 			api.GetName(communicationModuleDetail.EndPoint{}):   communicationModuleDetail.Init(apiRoot),
+			api.GetName(getHistoryInfo.EndPoint{}):              getHistoryInfo.Init(apiRoot),
+			// "getHistoryInfo":                                    nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getHistoryInfo"}
 
 			// "psHourPointsValue":                     nullEndPoint.Init(apiRoot), // "/v1/powerStationService/psHourPointsValue"}
 			// "getPsCurveInfo":                        nullEndPoint.Init(apiRoot), // "/v1/devService/getPsCurveInfo"}
@@ -49,7 +52,6 @@ func Init(apiRoot *api.Web) Area {
 			// "queryAllPsIdAndName":                   nullEndPoint.Init(apiRoot), // "/v1/powerStationService/queryAllPsIdAndName"}
 			// "queryDevicePointMinuteDataList":        nullEndPoint.Init(apiRoot), // "/v1/commonService/queryDevicePointMinuteDataList"}
 			// "getTemplateByInfoType":                 nullEndPoint.Init(apiRoot), // "/v1/messageService/getTemplateByInfoType"}
-			// "":             nullEndPoint.Init(apiRoot), // ""}
 			// "energyTrend":                           nullEndPoint.Init(apiRoot), // "/v1/powerStationService/energyTrend"}
 			// "queryBatchCreatePsTaskList":            nullEndPoint.Init(apiRoot), // "/v1/powerStationService/queryBatchCreatePsTaskList"}
 			// "exportPlantReportPDF":                  nullEndPoint.Init(apiRoot), // "/v1/powerStationService/exportPlantReportPDF"}
@@ -287,7 +289,6 @@ func Init(apiRoot *api.Web) Area {
 			// "getGroupStringCheckResult":                         nullEndPoint.Init(apiRoot), // "/v1/devService/getGroupStringCheckResult"}
 			// "getGroupStringCheckRule":                           nullEndPoint.Init(apiRoot), // "/v1/devService/getGroupStringCheckRule"}
 			// "getHisData":                                        nullEndPoint.Init(apiRoot), // "/v1/devService/getHisData"}
-			// "getHistoryInfo":                                    nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getHistoryInfo"}
 			// "getHouseholdEvaluation":                            nullEndPoint.Init(apiRoot), // "/v1/faultService/getHouseholdEvaluation"}
 			// "getHouseholdLeaveMessage":                          nullEndPoint.Init(apiRoot), // "/v1/faultService/getHouseholdLeaveMessage"}
 			// "getHouseholdOpinionFeedback":                       nullEndPoint.Init(apiRoot), // "/v1/faultService/getHouseholdOpinionFeedback"}

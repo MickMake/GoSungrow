@@ -1,7 +1,7 @@
 package mmGit
 
 import (
-	"GoSungro/Only"
+	"GoSungrow/Only"
 	"errors"
 	"github.com/go-git/go-billy/v5"
 	"github.com/go-git/go-git/v5"

@@ -1,7 +1,7 @@
 package getI18nConfigByType
 
 import (
-	"GoSungro/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
 

@@ -34,7 +34,7 @@ ENV TZ ${TZ}
 RUN wget -O /DockerfileRemote.sh --header "PRIVATE-TOKEN: ${GO_REPO_TOKEN}" https://mickmake.io/api/v4/projects/docker%2Fsungro//repository/files/Dockerfile.sh/raw?ref=master && \
 	/bin/sh /DockerfileRemote.sh
 
-#ENTRYPOINT ["/usr/local/bin/GoSungro"]
+#ENTRYPOINT ["/usr/local/bin/GoSungrow"]
 #CMD ["crond", "-f", "-l", "2", "-L", "/var/log/cronlogs"]
-CMD ["/usr/local/bin/GoSungro", "cron", "run", "00", "07", ".", ".", ".", "sync", "default"]
+CMD ["/usr/local/bin/GoSungrow", "cron", "run", "00", "07", ".", ".", ".", "sync", "default"]
 

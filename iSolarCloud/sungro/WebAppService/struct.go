@@ -2,9 +2,9 @@
 package WebAppService
 
 import (
-	"GoSungro/iSolarCloud/api"
-	"GoSungro/iSolarCloud/sungro/WebAppService/queryUserCurveTemplateData"
-	"GoSungro/iSolarCloud/sungro/WebAppService/showPSView"
+	"GoSungrow/iSolarCloud/api"
+	"GoSungrow/iSolarCloud/sungro/WebAppService/queryUserCurveTemplateData"
+	"GoSungrow/iSolarCloud/sungro/WebAppService/showPSView"
 	"fmt"
 )
 

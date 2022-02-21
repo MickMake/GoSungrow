@@ -1,21 +1,19 @@
 package iSolarCloud
 
-// var SunGro sungro.SunGro
-
 const (
 	TypeGit    = iota
 	TypeJson   = iota
 	TypeHuman  = iota
 	TypeGoogle = iota
 
-	StringTypeGit = "git"
-	StringTypeJson = "json"
-	StringTypeHuman = "human"
+	StringTypeGit    = "git"
+	StringTypeJson   = "json"
+	StringTypeHuman  = "human"
 	StringTypeGoogle = "google"
 )
 
-
 type OutputType int
+
 func (out *OutputType) IsGit() bool {
 	if *out == TypeGit {
 		return true

@@ -2,7 +2,7 @@
 package PowerPointService
 
 import (
-	"GoSungro/iSolarCloud/api"
+	"GoSungrow/iSolarCloud/api"
 	"fmt"
 )
 

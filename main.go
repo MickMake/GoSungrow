@@ -1,8 +1,8 @@
 package main
 
 import (
-	"GoSungro/Only"
-	"GoSungro/cmd"
+	"GoSungrow/Only"
+	"GoSungrow/cmd"
 	"fmt"
 	"os"
 )

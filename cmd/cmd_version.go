@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"GoSungro/Only"
-	"GoSungro/defaults"
+	"GoSungrow/Only"
+	"GoSungrow/defaults"
 	"fmt"
 	"github.com/spf13/cobra"
 )

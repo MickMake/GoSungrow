@@ -1,14 +1,13 @@
 package sungro
 
 import (
-	"GoSungro/Only"
-	"GoSungro/iSolarCloud/api"
-	"GoSungro/iSolarCloud/sungro/AppService"
-	"GoSungro/iSolarCloud/sungro/AppService/login"
+	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api"
+	"GoSungrow/iSolarCloud/sungro/AppService"
+	"GoSungrow/iSolarCloud/sungro/AppService/login"
 )
 
-
-type SunGro struct {
+type SunGrow struct {
 	ApiRoot api.Web
 	Auth    login.EndPoint
 	Areas   api.Areas
@@ -19,9 +18,8 @@ type SunGro struct {
 	// OutputType
 }
 
-
-func NewSunGro(url string) *SunGro {
-	var p SunGro
+func NewSunGro(url string) *SunGrow {
+	var p SunGrow
 
 	p.Error = p.ApiRoot.SetUrl(url)
 	// p.OutputType = TypeHuman
@@ -31,7 +29,7 @@ func NewSunGro(url string) *SunGro {
 	return &p
 }
 
-func (sg *SunGro) Login(auth login.SunGroAuth) error {
+func (sg *SunGrow) Login(auth login.SunGrowAuth) error {
 	for range Only.Once {
 		a := sg.GetEndpoint(AppService.GetAreaName() + ".login")
 		sg.Auth = login.Assert(a)
@@ -45,30 +43,30 @@ func (sg *SunGro) Login(auth login.SunGroAuth) error {
 	return sg.Error
 }
 
-func (sg *SunGro) GetToken() string {
+func (sg *SunGrow) GetToken() string {
 	return sg.Auth.Token()
 }
 
-func (sg *SunGro) GetUserId() string {
+func (sg *SunGrow) GetUserId() string {
 	return sg.Auth.UserId()
 }
 
-func (sg *SunGro) GetAppKey() string {
+func (sg *SunGrow) GetAppKey() string {
 	return sg.Auth.AppKey()
 }
 
-func (sg *SunGro) GetLastLogin() string {
+func (sg *SunGrow) GetLastLogin() string {
 	return sg.Auth.LastLogin().Format(login.DateTimeFormat)
 }
 
-func (sg *SunGro) GetUserName() string {
+func (sg *SunGrow) GetUserName() string {
 	return sg.Auth.UserName()
 }
 
-func (sg *SunGro) GetUserEmail() string {
+func (sg *SunGrow) GetUserEmail() string {
 	return sg.Auth.Email()
 }
 
-func (sg *SunGro) HasTokenChanged() bool {
+func (sg *SunGrow) HasTokenChanged() bool {
 	return sg.Auth.HasTokenChanged()
 }

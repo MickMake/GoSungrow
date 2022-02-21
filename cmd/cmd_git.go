@@ -1,27 +1,27 @@
 package cmd
 
 import (
-	"GoSungro/Only"
+	"GoSungrow/Only"
 	"fmt"
 	"github.com/spf13/cobra"
 	"os/user"
 	"strings"
 )
 
-
 // ******************************************************************************** //
 var cmdGit = &cobra.Command{
-	Use:                   "git",
+	Use: "git",
 	//Aliases:               []string{""},
 	Short:                 fmt.Sprintf("Git related commands."),
 	Long:                  fmt.Sprintf("Git related commands. "),
-	Example:               PrintExamples("git", "clone", "ls -la", "diff generate.org.au.json", "commit"),
+	Example:               PrintExamples("git", "clone", "ls -la", "diff foo.json", "commit"),
 	DisableFlagParsing:    false,
 	DisableFlagsInUseLine: false,
 	PreRunE:               Cmd.ProcessArgs,
 	Run:                   cmdGitFunc,
 	//Args:                  cobra.MinimumNArgs(1),
 }
+
 //goland:noinspection GoUnusedParameter
 func cmdGitFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
@@ -31,23 +31,26 @@ func cmdGitFunc(cmd *cobra.Command, args []string) {
 	}
 }
 
-
 // ******************************************************************************** //
 var cmdSave = &cobra.Command{
 	Use:                   "save [area]",
 	Aliases:               []string{},
-	Short:                 fmt.Sprintf("Save SunGro areas as JSON files."),
-	Long:                  fmt.Sprintf("Save SunGro areas as JSON files."),
-	Example:               PrintExamples("save", "all", "site", "presence", "device"),
+	Short:                 fmt.Sprintf("Save SunGrow areas as JSON files."),
+	Long:                  fmt.Sprintf("Save SunGrow areas as JSON files."),
+	Example:               PrintExamples("save", "all", "unit", "device"),
 	DisableFlagParsing:    false,
 	DisableFlagsInUseLine: false,
 	PreRunE:               Cmd.ProcessArgs,
 	Run:                   cmdSaveFunc,
 	Args:                  cobra.MinimumNArgs(1),
 }
+
 //goland:noinspection GoUnusedParameter
 func cmdSaveFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
+		fmt.Println("Not yet implemented.")
+		return
+
 		if len(args) == 0 {
 			args = DefaultAreas
 		}
@@ -67,10 +70,9 @@ func cmdSaveFunc(cmd *cobra.Command, args []string) {
 	}
 }
 
-
 // ******************************************************************************** //
 var cmdGitClone = &cobra.Command{
-	Use:                   "clone",
+	Use: "clone",
 	//Aliases:               []string{"ls"},
 	Short:                 fmt.Sprintf("Clone git repo."),
 	Long:                  fmt.Sprintf("Clone git repo. "),
@@ -81,6 +83,7 @@ var cmdGitClone = &cobra.Command{
 	Run:                   cmdGitCloneFunc,
 	//Args:                  cobra.MinimumNArgs(1),
 }
+
 //goland:noinspection GoUnusedParameter
 func cmdGitCloneFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
@@ -91,10 +94,9 @@ func cmdGitCloneFunc(cmd *cobra.Command, args []string) {
 	}
 }
 
-
 // ******************************************************************************** //
 var cmdGitCommit = &cobra.Command{
-	Use:                   "commit [message]",
+	Use: "commit [message]",
 	//Aliases:               []string{"ls"},
 	Short:                 fmt.Sprintf("Commit git changes."),
 	Long:                  fmt.Sprintf("Commit git changes. "),
@@ -105,6 +107,7 @@ var cmdGitCommit = &cobra.Command{
 	Run:                   cmdGitCommitFunc,
 	Args:                  cobra.MinimumNArgs(1),
 }
+
 //goland:noinspection GoUnusedParameter
 func cmdGitCommitFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
@@ -126,20 +129,20 @@ func cmdGitCommitFunc(cmd *cobra.Command, args []string) {
 	}
 }
 
-
 // ******************************************************************************** //
 var cmdGitAdd = &cobra.Command{
-	Use:                   "add <filename>",
+	Use: "add <filename>",
 	//Aliases:               []string{"write"},
 	Short:                 fmt.Sprintf("Add files to Git repo."),
 	Long:                  fmt.Sprintf("Add files to Git repo. "),
-	Example:               PrintExamples("git add", ".", "generate.org.au.json"),
+	Example:               PrintExamples("git add", ".", "foo.json"),
 	DisableFlagParsing:    false,
 	DisableFlagsInUseLine: false,
 	PreRunE:               Cmd.ProcessArgs,
 	Run:                   cmdGitAddFunc,
 	Args:                  cobra.MinimumNArgs(1),
 }
+
 //goland:noinspection GoUnusedParameter
 func cmdGitAddFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
@@ -161,10 +164,9 @@ func cmdGitAddFunc(cmd *cobra.Command, args []string) {
 	}
 }
 
-
 // ******************************************************************************** //
 var cmdGitPull = &cobra.Command{
-	Use:                   "pull",
+	Use: "pull",
 	//Aliases:               []string{"write"},
 	Short:                 fmt.Sprintf("Pull Git repo."),
 	Long:                  fmt.Sprintf("Pull Git repo. "),
@@ -175,6 +177,7 @@ var cmdGitPull = &cobra.Command{
 	Run:                   cmdGitPullFunc,
 	Args:                  cobra.MaximumNArgs(0),
 }
+
 //goland:noinspection GoUnusedParameter
 func cmdGitPullFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
@@ -190,10 +193,9 @@ func cmdGitPullFunc(cmd *cobra.Command, args []string) {
 	}
 }
 
-
 // ******************************************************************************** //
 var cmdGitPush = &cobra.Command{
-	Use:                   "push",
+	Use: "push",
 	//Aliases:               []string{"write"},
 	Short:                 fmt.Sprintf("Push Git repo."),
 	Long:                  fmt.Sprintf("Push Git repo. "),
@@ -204,6 +206,7 @@ var cmdGitPush = &cobra.Command{
 	Run:                   cmdGitPushFunc,
 	Args:                  cobra.MaximumNArgs(0),
 }
+
 //goland:noinspection GoUnusedParameter
 func cmdGitPushFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
@@ -219,20 +222,20 @@ func cmdGitPushFunc(cmd *cobra.Command, args []string) {
 	}
 }
 
-
 // ******************************************************************************** //
 var cmdGitDiff = &cobra.Command{
-	Use:                   "diff <filename>",
+	Use: "diff <filename>",
 	//Aliases:               []string{"write"},
 	Short:                 fmt.Sprintf("Show diffs between current and last version."),
 	Long:                  fmt.Sprintf("Show diffs between current and last version. "),
-	Example:               PrintExamples("git diff", "generate.org.au.json"),
+	Example:               PrintExamples("git diff", "foo.json"),
 	DisableFlagParsing:    false,
 	DisableFlagsInUseLine: false,
 	PreRunE:               Cmd.ProcessArgs,
 	Run:                   cmdGitDiffFunc,
 	Args:                  cobra.MinimumNArgs(1),
 }
+
 //goland:noinspection GoUnusedParameter
 func cmdGitDiffFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
@@ -255,7 +258,6 @@ func cmdGitDiffFunc(cmd *cobra.Command, args []string) {
 	}
 }
 
-
 // ******************************************************************************** //
 var cmdGitLs = &cobra.Command{
 	Use:                   "ls <filename>",
@@ -269,6 +271,7 @@ var cmdGitLs = &cobra.Command{
 	Run:                   cmdGitLsFunc,
 	//Args:                  cobra.MinimumNArgs(1),
 }
+
 //goland:noinspection GoUnusedParameter
 func cmdGitLsFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
@@ -280,13 +283,12 @@ func cmdGitLsFunc(cmd *cobra.Command, args []string) {
 	}
 }
 
-
 // ******************************************************************************** //
 var cmdGitSync = &cobra.Command{
 	Use:                   "sync <commit msg | default> [area]",
 	Aliases:               []string{},
-	Short:                 fmt.Sprintf("Sync SunGro to Git repo."),
-	Long:                  fmt.Sprintf("Sync SunGro to Git repo."),
+	Short:                 fmt.Sprintf("Sync SunGrow to Git repo."),
+	Long:                  fmt.Sprintf("Sync SunGrow to Git repo."),
 	Example:               PrintExamples("sync", "default", "'updated everything'", "'this is an update' users"),
 	DisableFlagParsing:    false,
 	DisableFlagsInUseLine: false,
@@ -294,9 +296,13 @@ var cmdGitSync = &cobra.Command{
 	Run:                   cmdGitSyncFunc,
 	Args:                  cobra.MinimumNArgs(1),
 }
+
 //goland:noinspection GoUnusedParameter
 func cmdGitSyncFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
+		fmt.Println("Not yet implemented.")
+		return
+
 		if len(args) < 1 {
 			Cmd.Error = cmd.Help()
 			break
@@ -304,13 +310,13 @@ func cmdGitSyncFunc(cmd *cobra.Command, args []string) {
 
 		var msg string
 		switch {
-			case args[0] == "":
-				fallthrough
-			case args[0] == "default":
-				u, _ := user.Current()
-				msg = fmt.Sprintf("Regular sync by %s", u.Username)
-			default:
-				msg = args[0]
+		case args[0] == "":
+			fallthrough
+		case args[0] == "default":
+			u, _ := user.Current()
+			msg = fmt.Sprintf("Regular sync by %s", u.Username)
+		default:
+			msg = args[0]
 		}
 
 		args = args[1:]

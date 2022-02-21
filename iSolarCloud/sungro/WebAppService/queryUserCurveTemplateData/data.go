@@ -1,8 +1,8 @@
 package queryUserCurveTemplateData
 
 import (
-	"GoSungro/Only"
-	"GoSungro/iSolarCloud/api/apiReflect"
+	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api/apiReflect"
 	"encoding/json"
 	"fmt"
 )

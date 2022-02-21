@@ -1,7 +1,7 @@
 package apiReflect
 
 import (
-	"GoSungro/Only"
+	"GoSungrow/Only"
 	"encoding/json"
 	"errors"
 	"fmt"

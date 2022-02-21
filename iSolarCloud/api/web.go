@@ -1,9 +1,9 @@
 package api
 
 import (
-	"GoSungro/Only"
-	"GoSungro/iSolarCloud/api/apiReflect"
-	// "GoSungro/iSolarCloud/sungro/AppService/login"
+	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api/apiReflect"
+	// "GoSungrow/iSolarCloud/sungro/AppService/login"
 	"bytes"
 	"encoding/json"
 	"errors"
@@ -12,11 +12,10 @@ import (
 	"net/http"
 )
 
-
 type Web struct {
-	Url          EndPointUrl
-	Body         []byte
-	Error        error
+	Url   EndPointUrl
+	Body  []byte
+	Error error
 
 	retry        int
 	client       http.Client
@@ -38,7 +37,7 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 	for range Only.Once {
 		w.Error = w.Url.IsValid()
 		if w.Error != nil {
-			w.Error = errors.New("SUNGRO API URL is invalid")
+			w.Error = errors.New("SUNGRO API EndPoint not yet implemented")
 			break
 		}
 

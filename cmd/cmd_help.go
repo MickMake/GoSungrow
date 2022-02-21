@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"GoSungro/Only"
+	"GoSungrow/Only"
 	"fmt"
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
@@ -9,7 +9,6 @@ import (
 	"os"
 	"strings"
 )
-
 
 const DefaultHelpTemplate = `{{with (or .Long .Short)}}{{. | trimTrailingWhitespaces}}
 
@@ -46,7 +45,7 @@ const DefaultFlagHelpTemplate = `{{if .HasAvailableInheritedFlags}}Flags availab
 
 // ******************************************************************************** //
 var cmdHelpFlags = &cobra.Command{
-	Use:                   "help-all",
+	Use: "help-all",
 	//Aliases:               []string{"flags"},
 	Short:                 fmt.Sprintf("Extended help"),
 	Long:                  fmt.Sprintf("Extended help"),
@@ -56,6 +55,7 @@ var cmdHelpFlags = &cobra.Command{
 	Run:                   cmdHelpFlagsFunc,
 	Args:                  cobra.RangeArgs(0, 0),
 }
+
 //goland:noinspection GoUnusedParameter
 func cmdHelpFlagsFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
@@ -155,30 +155,30 @@ func PrintFlagEnv(flag string) string {
 	return ret
 }
 
-func ExtendedHelp()  {
+func ExtendedHelp() {
 	var str = `
-DefaultBinaryName - Over The Wire SunGro to Gitlab syncing tool.
+DefaultBinaryName - Over The Wire SunGrow to Gitlab syncing tool.
 
 This tool does several things:
-1. Pull a Gitlab repo that holds SunGro data.
-2. Fetch all data available from the SunGro.
+1. Pull a Gitlab repo that holds SunGrow data.
+2. Fetch all data available from the SunGrow.
 3. Save this data as a JSON file.
 4. Commit changes to the Gitlab repo.
 5. Push changes to remote.
 
-It is intended to provide full revision history for any changes made to the SunGro.
+It is intended to provide full revision history for any changes made to the SunGrow.
 
 Use case example:
-# Record changes made to user data on SunGro. (Will clone if not existing.)
+# Record changes made to user data on SunGrow. (Will clone if not existing.)
 	% DefaultBinaryName sync 'Updated users' users
 
-# Record changes made to all SunGro manually.
+# Record changes made to all SunGrow manually.
 	% DefaultBinaryName sync 'Updated all zones'
 
-# Record changes made to the SunGro with default commit message.
+# Record changes made to the SunGrow with default commit message.
 	% DefaultBinaryName sync default
 
-# Record changes made to the SunGro via every 30 minutes.
+# Record changes made to the SunGrow via every 30 minutes.
 	% DefaultBinaryName cron run ./30 . . . . sync default
 
 # Show changes made to a zone JSON file.
@@ -213,7 +213,7 @@ Use case example:
 	Change Git repo url.
 	% DefaultBinaryName --git-url=https://github.com/MickMake/iSolarData config write
 
-	Change SunGro API token.
+	Change SunGrow API token.
 	% DefaultBinaryName --cf-token='this is a token string' config write
 
 `

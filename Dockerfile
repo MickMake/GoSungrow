@@ -31,15 +31,15 @@ ENV SUNGRO_DIFF_CMD ${SUNGRO_DIFF_CMD}
 ARG TZ
 ENV TZ ${TZ}
 
-COPY dist/GoSungro_linux_amd64/GoSungro /usr/local/bin/GoSungro
+COPY dist/GoSungrow_linux_amd64/GoSungrow /usr/local/bin/GoSungrow
 COPY .ssh/ /root/.ssh/
-RUN chmod a+x /usr/local/bin/GoSungro && \
+RUN chmod a+x /usr/local/bin/GoSungrow && \
 	chmod 500 /root/.ssh && \
 	chmod 400 /root/.ssh/gosungro_rsa /root/.ssh/gosungro_rsa.pub && \
 	apk add --no-cache colordiff tzdata
-#	echo '00 07  *  *  *    /usr/local/bin/GoSungro sync default' > /etc/crontabs/root
+#	echo '00 07  *  *  *    /usr/local/bin/GoSungrow sync default' > /etc/crontabs/root
 
-#ENTRYPOINT ["/usr/local/bin/GoSungro"]
+#ENTRYPOINT ["/usr/local/bin/GoSungrow"]
 #CMD ["crond", "-f", "-l", "2", "-L", "/var/log/cronlogs"]
-CMD ["/usr/local/bin/GoSungro", "cron", "run", "00", "07", ".", ".", ".", "sync", "default"]
+CMD ["/usr/local/bin/GoSungrow", "cron", "run", "00", "07", ".", ".", ".", "sync", "default"]
 

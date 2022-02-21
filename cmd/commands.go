@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"GoSungro/Only"
-	"GoSungro/iSolarCloud/sungro"
-	"GoSungro/mmGit"
+	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/sungro"
+	"GoSungrow/mmGit"
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -13,7 +13,7 @@ import (
 	"strings"
 )
 
-var SunGro *sungro.SunGro
+var SunGrow *sungro.SunGrow
 var Git *mmGit.Git
 var Cmd CommandArgs
 var rootViper *viper.Viper
@@ -41,20 +41,20 @@ func init() {
 		Cmd.ConfigFile = filepath.Join(Cmd.ConfigDir, defaultConfigFile)
 		Cmd.ApiTokenFile = filepath.Join(Cmd.ConfigDir, defaultTokenFile)
 
-		rootCmd.PersistentFlags().StringVarP(&Cmd.ApiUsername, flagApiUsername, "u", "", fmt.Sprintf("SunGro: api username."))
+		rootCmd.PersistentFlags().StringVarP(&Cmd.ApiUsername, flagApiUsername, "u", "", fmt.Sprintf("SunGrow: api username."))
 		rootViper.SetDefault(flagApiUsername, "")
-		rootCmd.PersistentFlags().StringVarP(&Cmd.ApiPassword, flagApiPassword, "p", "", fmt.Sprintf("SunGro: api password."))
+		rootCmd.PersistentFlags().StringVarP(&Cmd.ApiPassword, flagApiPassword, "p", "", fmt.Sprintf("SunGrow: api password."))
 		rootViper.SetDefault(flagApiPassword, "")
-		rootCmd.PersistentFlags().StringVarP(&Cmd.ApiAppKey, flagApiAppKey, "", "", fmt.Sprintf("SunGro: api application key."))
-		rootViper.SetDefault(flagApiAppKey, "")
+		rootCmd.PersistentFlags().StringVarP(&Cmd.ApiAppKey, flagApiAppKey, "", defaultApiAppKey, fmt.Sprintf("SunGrow: api application key."))
+		rootViper.SetDefault(flagApiAppKey, defaultApiAppKey)
 
-		rootCmd.PersistentFlags().StringVarP(&Cmd.ApiUrl, flagApiUrl, "", defaultHost, fmt.Sprintf("SunGro: Provider API URL."))
-		rootViper.SetDefault(flagApiUrl, "")
-		rootCmd.PersistentFlags().DurationVarP(&Cmd.ApiTimeout, flagApiTimeout, "", defaultTimeout, fmt.Sprintf("SunGro: API timeout."))
-		rootViper.SetDefault(flagApiTimeout, "")
-		rootCmd.PersistentFlags().StringVar(&Cmd.ApiLastLogin, flagApiLastLogin, "", "SunGro: last login.")
+		rootCmd.PersistentFlags().StringVarP(&Cmd.ApiUrl, flagApiUrl, "", defaultHost, fmt.Sprintf("SunGrow: Provider API URL."))
+		rootViper.SetDefault(flagApiUrl, defaultHost)
+		rootCmd.PersistentFlags().DurationVarP(&Cmd.ApiTimeout, flagApiTimeout, "", defaultTimeout, fmt.Sprintf("SunGrow: API timeout."))
+		rootViper.SetDefault(flagApiTimeout, defaultTimeout)
+		rootCmd.PersistentFlags().StringVar(&Cmd.ApiLastLogin, flagApiLastLogin, "", "SunGrow: last login.")
 		rootViper.SetDefault(flagApiLastLogin, "")
-		_ = rootCmd.PersistentFlags().MarkHidden(flagApiLastLogin)
+		//_ = rootCmd.PersistentFlags().MarkHidden(flagApiLastLogin)
 
 		rootCmd.PersistentFlags().StringVarP(&Cmd.GoogleSheet, flagGoogleSheet, "", "", fmt.Sprintf("Google: Sheet URL for updates."))
 		rootViper.SetDefault(flagGoogleSheet, "")
@@ -116,14 +116,15 @@ func InitCommands() error {
 	var err error
 
 	for range Only.Once {
-		rootCmd.AddCommand(cmdConfig, cmdApi, cmdGit, cmdMqtt, cmdCron, cmdVersion, cmdHelpFlags)
+		rootCmd.AddCommand(cmdConfig, cmdApi, cmdGit, cmdMqtt, cmdGoogle, cmdCron, cmdVersion, cmdHelpFlags)
 		cmdConfig.AddCommand(cmdConfigWrite, cmdConfigRead)
 		cmdGit.AddCommand(cmdGitSync, cmdSave, cmdGitLs, cmdGitDiff, cmdGitClone, cmdGitPull, cmdGitPush, cmdGitCommit, cmdGitAdd)
+		cmdGoogle.AddCommand(cmdGoogleSync)
 		cmdMqtt.AddCommand(cmdMqttSync)
 		cmdCron.AddCommand(cmdCronRun, cmdCronAdd, cmdCronRemove, cmdCronList)
 
 		cmdApi.AddCommand(cmdApiList, cmdApiLogin, cmdApiPut, cmdApiGet)
-		cmdApi.PersistentFlags().BoolVarP(&Cmd.ApiGetRaw, flagApiGetRaw, "", false, fmt.Sprintf("SunGro: api raw data, (not parsed nor evaluated)."))
+		cmdApi.PersistentFlags().BoolVarP(&Cmd.ApiGetRaw, flagApiGetRaw, "", false, fmt.Sprintf("SunGrow: api raw data, (not parsed nor evaluated)."))
 		rootViper.SetDefault(flagApiGetRaw, false)
 
 		// foo := rootCmd.HelpTemplate()

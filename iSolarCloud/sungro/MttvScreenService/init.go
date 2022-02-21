@@ -2,7 +2,7 @@
 package MttvScreenService
 
 import (
-	"GoSungro/iSolarCloud/api"
+	"GoSungrow/iSolarCloud/api"
 	"fmt"
 )
 

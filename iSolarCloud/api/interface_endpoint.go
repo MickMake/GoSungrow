@@ -4,6 +4,7 @@ type EndPoint interface {
 	GetArea() AreaName
 	GetName() EndPointName
 	GetUrl() EndPointUrl
+	IsDisabled() bool
 	Help() string
 
 	Call() EndPoint

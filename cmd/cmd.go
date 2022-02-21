@@ -1,16 +1,15 @@
 package cmd
 
 import (
-	"GoSungro/Only"
+	"GoSungrow/Only"
 	"fmt"
 	"github.com/spf13/cobra"
 )
 
-
-var rootCmd = &cobra.Command {
+var rootCmd = &cobra.Command{
 	Use:              DefaultBinaryName,
-	Short:            fmt.Sprintf("%s - Manage an SunGro instance", DefaultBinaryName),
-	Long:             fmt.Sprintf("%s - Manage an SunGro instance", DefaultBinaryName),
+	Short:            fmt.Sprintf("%s - Manage an SunGrow  instance", DefaultBinaryName),
+	Long:             fmt.Sprintf("%s - Manage an SunGrow  instance", DefaultBinaryName),
 	Run:              gbRootFunc,
 	TraverseChildren: true,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
@@ -18,6 +17,7 @@ var rootCmd = &cobra.Command {
 		return initConfig(cmd)
 	},
 }
+
 func gbRootFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
 		if len(args) == 0 {

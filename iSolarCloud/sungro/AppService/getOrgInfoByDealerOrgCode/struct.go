@@ -1,9 +1,9 @@
 package getOrgInfoByDealerOrgCode
 
 import (
-	"GoSungro/Only"
-	"GoSungro/iSolarCloud/api"
-	"GoSungro/iSolarCloud/api/apiReflect"
+	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api"
+	"GoSungrow/iSolarCloud/api/apiReflect"
 	"encoding/json"
 	"errors"
 	"fmt"

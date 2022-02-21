@@ -1,7 +1,7 @@
 package mmGit
 
 import (
-	"GoSungro/Only"
+	"GoSungrow/Only"
 	"crypto/md5"
 	"encoding/hex"
 	"errors"

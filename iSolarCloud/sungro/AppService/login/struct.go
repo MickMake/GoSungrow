@@ -2,9 +2,9 @@
 package login
 
 import (
-	"GoSungro/Only"
-	"GoSungro/iSolarCloud/api"
-	"GoSungro/iSolarCloud/api/apiReflect"
+	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api"
+	"GoSungrow/iSolarCloud/api/apiReflect"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -17,7 +17,7 @@ type EndPoint struct {
 	api.EndPointStruct
 	Request  Request
 	Response Response
-	Auth     *SunGroAuth
+	Auth     *SunGrowAuth
 }
 
 type Request struct {
@@ -41,7 +41,7 @@ func Init(apiRoot *api.Web) EndPoint {
 			Response: Response{},
 			Error:    nil,
 		},
-		Auth: &SunGroAuth{
+		Auth: &SunGrowAuth{
 			AppKey:       "",
 			UserAccount:  "",
 			UserPassword: "",
@@ -207,6 +207,10 @@ func (e EndPoint) IsResponseValid() error {
 		// resp := e.GetResponse()
 		// e.Error = resp.ResponseCommon.IsValid()
 		e.Error = e.Response.ResponseCommon.IsValid()
+		if e.Error != nil {
+			break
+		}
+		e.Error = e.Response.ResultData.IsValid()
 		if e.Error != nil {
 			break
 		}
