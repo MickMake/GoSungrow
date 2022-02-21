@@ -8,9 +8,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-
 // ******************************************************************************** //
-var cmdApi = &cobra.Command {
+var cmdApi = &cobra.Command{
 	Use:                   "api",
 	Aliases:               []string{},
 	Short:                 fmt.Sprintf("Interact with the SunGro api."),
@@ -19,9 +18,10 @@ var cmdApi = &cobra.Command {
 	DisableFlagParsing:    false,
 	DisableFlagsInUseLine: false,
 	// PreRunE:               Cmd.ProcessArgs,
-	Run:                   cmdApiFunc,
-	Args:                  cobra.MinimumNArgs(1),
+	Run:  cmdApiFunc,
+	Args: cobra.MinimumNArgs(1),
 }
+
 //goland:noinspection GoUnusedParameter
 func cmdApiFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
@@ -32,9 +32,8 @@ func cmdApiFunc(cmd *cobra.Command, args []string) {
 	}
 }
 
-
 // ******************************************************************************** //
-var cmdApiList = &cobra.Command {
+var cmdApiList = &cobra.Command{
 	Use:                   "ls",
 	Aliases:               []string{"list"},
 	Short:                 fmt.Sprintf("List iSolarCloud api endpoints/areas"),
@@ -46,31 +45,31 @@ var cmdApiList = &cobra.Command {
 	Run:                   cmdApiListFunc,
 	Args:                  cobra.RangeArgs(0, 1),
 }
+
 //goland:noinspection GoUnusedParameter
 func cmdApiListFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
 		switch {
-			case len(args) == 0:
-				fmt.Println("Unknown sub-command.")
-				_ = cmd.Help()
+		case len(args) == 0:
+			fmt.Println("Unknown sub-command.")
+			_ = cmd.Help()
 
-			case args[0] == "endpoints":
-				Cmd.Error = SunGro.ListEndpoints("")
+		case args[0] == "endpoints":
+			Cmd.Error = SunGro.ListEndpoints("")
 
-			case args[0] == "areas":
-				SunGro.ListAreas()
+		case args[0] == "areas":
+			SunGro.ListAreas()
 
-			default:
-				Cmd.Error = SunGro.ListEndpoints(args[0])
+		default:
+			Cmd.Error = SunGro.ListEndpoints(args[0])
 		}
 	}
 }
 
-
 // ******************************************************************************** //
-var cmdApiGet = &cobra.Command {
-	Use:                   "get",
-	//Aliases:               []string{""},
+var cmdApiGet = &cobra.Command{
+	Use: "get",
+	// Aliases:               []string{""},
 	Short:                 fmt.Sprintf("Get details from iSolarCloud"),
 	Long:                  fmt.Sprintf("Get details from iSolarCloud"),
 	Example:               PrintExamples("api get", "<endpoint> [area]"),
@@ -80,6 +79,7 @@ var cmdApiGet = &cobra.Command {
 	Run:                   cmdApiGetFunc,
 	Args:                  cobra.MinimumNArgs(1),
 }
+
 //goland:noinspection GoUnusedParameter
 func cmdApiGetFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
@@ -89,6 +89,10 @@ func cmdApiGetFunc(cmd *cobra.Command, args []string) {
 		// }
 
 		ep := SunGro.GetEndpoint(args[0])
+		if SunGro.Error != nil {
+			Cmd.Error = SunGro.Error
+			break
+		}
 		if ep.IsError() {
 			Cmd.Error = ep.GetError()
 			break
@@ -105,19 +109,26 @@ func cmdApiGetFunc(cmd *cobra.Command, args []string) {
 
 		ep = ep.Call()
 		if ep.IsError() {
+			if Cmd.ApiGetRaw {
+				fmt.Printf("\n%v\n", ep.GetData(true))
+			}
 			fmt.Println(ep.Help())
 			Cmd.Error = ep.GetError()
 			break
 		}
 
-		fmt.Printf("%v", ep.GetData())
+		if Cmd.ApiGetRaw {
+			fmt.Printf("\n%v\n", ep.GetData(true))
+		} else {
+			fmt.Printf("\n%v\n", ep.GetData(false))
+		}
 	}
 }
 
 // ******************************************************************************** //
-var cmdApiLogin = &cobra.Command {
-	Use:                   "login",
-	//Aliases:               []string{""},
+var cmdApiLogin = &cobra.Command{
+	Use: "login",
+	// Aliases:               []string{""},
 	Short:                 fmt.Sprintf("Login to iSolarCloud"),
 	Long:                  fmt.Sprintf("Login to iSolarCloud"),
 	Example:               PrintExamples("api login", ""),
@@ -127,10 +138,11 @@ var cmdApiLogin = &cobra.Command {
 	Run:                   cmdApiLoginFunc,
 	Args:                  cobra.MinimumNArgs(0),
 }
+
 //goland:noinspection GoUnusedParameter
 func cmdApiLoginFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
-		Cmd.Error = SunGro.Login(login.SunGroAuth {
+		Cmd.Error = SunGro.Login(login.SunGroAuth{
 			AppKey:       Cmd.ApiAppKey,
 			UserAccount:  Cmd.ApiUsername,
 			UserPassword: Cmd.ApiPassword,
@@ -152,7 +164,7 @@ func cmdApiLoginFunc(cmd *cobra.Command, args []string) {
 }
 
 // ******************************************************************************** //
-var cmdApiPut = &cobra.Command {
+var cmdApiPut = &cobra.Command{
 	Use:                   "put",
 	Aliases:               []string{"write"},
 	Short:                 fmt.Sprintf("Put details onto iSolarCloud"),
@@ -164,6 +176,7 @@ var cmdApiPut = &cobra.Command {
 	Run:                   cmdApiPutFunc,
 	Args:                  cobra.RangeArgs(0, 1),
 }
+
 //goland:noinspection GoUnusedParameter
 func cmdApiPutFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {

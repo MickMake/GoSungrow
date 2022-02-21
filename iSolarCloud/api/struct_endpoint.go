@@ -4,8 +4,8 @@ import (
 	"GoSungro/Only"
 	"encoding/json"
 	"errors"
+	"fmt"
 )
-
 
 type EndPointName string
 
@@ -19,7 +19,6 @@ type EndPointStruct struct {
 	Response interface{}  `json:"-"`
 	Error    error        `json:"-"`
 }
-
 
 func (p *EndPointStruct) GetArea() AreaName {
 	return p.Area
@@ -73,6 +72,32 @@ func (p *EndPointStruct) IsValid() error {
 		}
 	}
 	return err
+}
+
+func (p EndPointStruct) String() string {
+	var ret string
+	for range Only.Once {
+		if p.Name == NullEndPoint {
+			break
+		}
+
+		ret += fmt.Sprintf("Area:\t%s\nEndPoint:\t%s\nUrl:\t%s\n",
+			p.Area,
+			p.Name,
+			p.Url,
+		)
+
+		foo := p.GetRequest()
+		ret += fmt.Sprintf("Request JSON:\t%s\n",
+			foo,
+		)
+
+		foo = p.GetResponse()
+		ret += fmt.Sprintf("Response JSON:\t%s\n",
+			foo,
+		)
+	}
+	return ret
 }
 
 // func (p EndPointStruct) MarshalJSON() ([]byte, error) {

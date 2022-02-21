@@ -1,5 +1,4 @@
-// EndPoint
-package login
+package nullEndPoint
 
 import (
 	"GoSungro/Only"
@@ -8,7 +7,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"time"
 )
 
 var _ api.EndPoint = (*EndPoint)(nil)
@@ -17,7 +15,6 @@ type EndPoint struct {
 	api.EndPointStruct
 	Request  Request
 	Response Response
-	Auth     *SunGroAuth
 }
 
 type Request struct {
@@ -40,16 +37,6 @@ func Init(apiRoot *api.Web) EndPoint {
 			Request:  Request{},
 			Response: Response{},
 			Error:    nil,
-		},
-		Auth: &SunGroAuth{
-			AppKey:       "",
-			UserAccount:  "",
-			UserPassword: "",
-			TokenFile:    DefaultAuthTokenFile,
-			lastLogin:    time.Time{},
-			newToken:     false,
-			retry:        0,
-			err:          nil,
 		},
 	}
 }
@@ -100,12 +87,8 @@ func (e EndPoint) Call() api.EndPoint {
 	return e.ApiRoot.Get(e)
 }
 
-func (e EndPoint) GetData(raw bool) api.Json {
-	if raw {
-		return api.Json(e.ApiRoot.Body)
-	} else {
-		return api.GetAsPrettyJson(e.Response.ResultData)
-	}
+func (e EndPoint) GetData() api.Json {
+	return api.GetAsPrettyJson(e.Response.ResultData)
 }
 
 func (e EndPoint) SetError(format string, a ...interface{}) api.EndPoint {
@@ -153,6 +136,10 @@ func (e EndPoint) SetRequestByJson(j api.Json) api.EndPoint {
 		if e.Error != nil {
 			break
 		}
+		e.Error = e.IsRequestValid()
+		if e.Error != nil {
+			break
+		}
 	}
 	return e
 }
@@ -169,10 +156,10 @@ func (e EndPoint) IsRequestValid() error {
 	for range Only.Once {
 		req := e.GetRequest()
 		// req := e.Request.RequestCommon
-		// e.Error = req.RequestCommon.IsValid()
-		// if e.Error != nil {
-		// 	break
-		// }
+		e.Error = req.RequestCommon.IsValid()
+		if e.Error != nil {
+			break
+		}
 		e.Error = req.RequestData.IsValid()
 		if e.Error != nil {
 			break
@@ -228,20 +215,4 @@ func (e EndPoint) ResponseString() string {
 
 func (e EndPoint) MarshalJSON() ([]byte, error) {
 	return api.MarshalJSON(e)
-
-	// return json.Marshal(&struct {
-	// 	Area     string   `json:"area"`
-	// 	EndPoint string   `json:"endpoint"`
-	// 	Host     string   `json:"api_host"`
-	// 	Url      string   `json:"endpoint_url"`
-	// 	Request  interface{}  `json:"request"`
-	// 	Response interface{} `json:"response"`
-	// }{
-	// 	Area:     string(e.Area),
-	// 	EndPoint: string(e.Name),
-	// 	Host:     e.ApiRoot.Url.String(),
-	// 	Url:      e.Url.String(),
-	// 	Request:  e.Request,
-	// 	Response: e.Response,
-	// })
 }

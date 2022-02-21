@@ -9,11 +9,9 @@ import (
 	"sort"
 )
 
-
 type Areas map[AreaName]AreaStruct // TypeEndPoints		// Map of EndPoints by area name.
 type AreaName string
 type AreaNames []AreaName
-
 
 func (an *Areas) Exists(area string) bool {
 	var ok bool
@@ -40,13 +38,23 @@ func (an *Areas) EndpointExists(area AreaName, name EndPointName) error {
 
 func (an *Areas) SortAreas() AreaNames {
 	keys := make([]string, 0, len(*an))
-	for k := range *an {
-		keys = append(keys, string(k))
+	for _, k := range *an {
+		keys = append(keys, string(k.Name))
 	}
 	sort.Strings(keys)
 	ret := make(AreaNames, 0, len(keys))
 	for _, r := range keys {
 		ret = append(ret, AreaName(r))
+	}
+	return ret
+}
+
+func (an *Areas) GetArea(area AreaName) *Area {
+	var ret *Area
+	for range Only.Once {
+		if _, ok := (*an)[area]; !ok {
+			break
+		}
 	}
 	return ret
 }
@@ -62,10 +70,10 @@ func (an *Areas) GetEndPoint(area AreaName, name EndPointName) EndPoint {
 			ret.SetError("empty endpoint name")
 			break
 		}
-
 		if _, ok := (*an)[area]; !ok {
 			break
 		}
+
 		ret = (*an)[area].EndPoints[name]
 	}
 	return ret

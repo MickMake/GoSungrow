@@ -1,14 +1,15 @@
-package communicationModuleDetail
+package nullEndPoint
 
 import (
 	"GoSungro/iSolarCloud/api/apiReflect"
 	"fmt"
 )
 
-const Url = "/v1/devService/communicationModuleDetail"
+const Url = ""
+const Name = "nullEndPoint"
 
 type RequestData struct {
-	Sn string `json:"sn" required:"true"`
+	// DeviceType string `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -21,6 +22,4 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	CardFlowInfoList []interface{} `json:"cardFlowInfoList"`
-	SetMealInfoList  []interface{} `json:"setMealInfoList"`
 }

@@ -13,7 +13,6 @@ import (
 	"strings"
 )
 
-
 func (sg *SunGro) Init() error {
 	for range Only.Once {
 		sg.Areas = make(api.Areas)
@@ -42,6 +41,10 @@ func (sg *SunGro) GetEndpoint(ae string) api.EndPoint {
 		}
 
 		ep = sg.Areas.GetEndPoint(api.AreaName(area), api.EndPointName(endpoint))
+		if ep == nil {
+			sg.Error = errors.New("EndPoint not found")
+			break
+		}
 		if sg.Auth.Token() != "" {
 			ep = ep.SetRequest(api.RequestCommon{
 				Appkey:    sg.GetAppKey(), // sg.Auth.RequestCommon.Appkey
@@ -63,19 +66,19 @@ func (sg *SunGro) SplitEndPoint(ae string) (string, string) {
 	for range Only.Once {
 		s := strings.Split(ae, ".")
 		switch len(s) {
-			case 0:
-				sg.Error = errors.New("empty endpoint")
+		case 0:
+			sg.Error = errors.New("empty endpoint")
 
-			case 1:
-				area = "AppService"
-				endpoint = s[0]
+		case 1:
+			area = "AppService"
+			endpoint = s[0]
 
-			case 2:
-				area = s[0]
-				endpoint = s[1]
+		case 2:
+			area = s[0]
+			endpoint = s[1]
 
-			default:
-				sg.Error = errors.New("too many delimeters defined, (only one '.' allowed)")
+		default:
+			sg.Error = errors.New("too many delimeters defined, (only one '.' allowed)")
 		}
 	}
 

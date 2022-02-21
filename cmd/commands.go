@@ -13,12 +13,10 @@ import (
 	"strings"
 )
 
-
 var SunGro *sungro.SunGro
 var Git *mmGit.Git
 var Cmd CommandArgs
 var rootViper *viper.Viper
-
 
 func init() {
 	for range Only.Once {
@@ -80,13 +78,13 @@ func init() {
 		rootViper.SetDefault(flagGitDiffCmd, "tkdiff")
 
 		rootCmd.PersistentFlags().StringVar(&Cmd.ConfigFile, flagConfigFile, Cmd.ConfigFile, fmt.Sprintf("%s: config file.", DefaultBinaryName))
-		//_ = rootCmd.PersistentFlags().MarkHidden(flagConfigFile)
+		// _ = rootCmd.PersistentFlags().MarkHidden(flagConfigFile)
 		rootCmd.PersistentFlags().BoolVarP(&Cmd.Debug, flagDebug, "", false, fmt.Sprintf("%s: Debug mode.", DefaultBinaryName))
 		rootViper.SetDefault(flagDebug, false)
 		rootCmd.PersistentFlags().BoolVarP(&Cmd.Quiet, flagQuiet, "q", false, fmt.Sprintf("%s: Silence all messages.", DefaultBinaryName))
 		rootViper.SetDefault(flagQuiet, false)
 
-		//cobra.OnInitialize(initConfig)
+		// cobra.OnInitialize(initConfig)
 		cobra.EnableCommandSorting = false
 		rootCmd.PersistentFlags().SortFlags = false
 		rootCmd.Flags().SortFlags = false
@@ -125,11 +123,13 @@ func InitCommands() error {
 		cmdCron.AddCommand(cmdCronRun, cmdCronAdd, cmdCronRemove, cmdCronList)
 
 		cmdApi.AddCommand(cmdApiList, cmdApiLogin, cmdApiPut, cmdApiGet)
+		cmdApi.PersistentFlags().BoolVarP(&Cmd.ApiGetRaw, flagApiGetRaw, "", false, fmt.Sprintf("SunGro: api raw data, (not parsed nor evaluated)."))
+		rootViper.SetDefault(flagApiGetRaw, false)
 
-		//foo := rootCmd.HelpTemplate()
-		//foo := rootCmd.UsageTemplate()
-		//foo := rootCmd.VersionTemplate()
-		//fmt.Println(foo)
+		// foo := rootCmd.HelpTemplate()
+		// foo := rootCmd.UsageTemplate()
+		// foo := rootCmd.VersionTemplate()
+		// fmt.Println(foo)
 
 		rootCmd.SetHelpTemplate(DefaultHelpTemplate)
 		rootCmd.SetUsageTemplate(DefaultUsageTemplate)
@@ -150,7 +150,7 @@ func initConfig(cmd *cobra.Command) error {
 		rootViper = viper.New()
 		rootViper.AddConfigPath(Cmd.ConfigDir)
 		rootViper.SetConfigFile(Cmd.ConfigFile)
-		//rootViper.SetConfigName("config")
+		// rootViper.SetConfigName("config")
 
 		// If a config file is found, read it in.
 		err = openConfig()
@@ -225,7 +225,7 @@ func openConfig() error {
 			break
 		}
 
-		//err = viper.Unmarshal(Cmd)
+		// err = viper.Unmarshal(Cmd)
 	}
 
 	return err
@@ -345,9 +345,9 @@ func fillArray(count int, args []string) []string {
 	var ret []string
 	for range Only.Once {
 		//
-		//if len(args) == 0 {
+		// if len(args) == 0 {
 		//	break
-		//}
+		// }
 		ret = make([]string, count)
 		for i, e := range args {
 			ret[i] = e

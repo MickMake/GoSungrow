@@ -5,9 +5,7 @@ import (
 	"fmt"
 )
 
-
 const Url = "/v1/powerStationService/findPsType"
-
 
 type RequestData struct {
 	PsId string `json:"ps_id" required:"true"`
@@ -22,10 +20,7 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData []Data
-
-type Data struct {
+type ResultData []struct {
 	PsType    int64 `json:"ps_type"`
 	SysScheme int64 `json:"sys_scheme"`
 }

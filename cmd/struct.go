@@ -14,7 +14,6 @@ import (
 	"time"
 )
 
-
 //goland:noinspection SpellCheckingInspection
 const (
 	DefaultBinaryName = "GoSungro"
@@ -22,16 +21,17 @@ const (
 	defaultConfigFile = "config.json"
 	defaultTokenFile  = "AuthToken.json"
 
-	flagConfigFile     = "config"
-	flagDebug          = "debug"
-	flagQuiet          = "quiet"
+	flagConfigFile = "config"
+	flagDebug      = "debug"
+	flagQuiet      = "quiet"
 
-	flagApiUrl         = "host"
-	flagApiTimeout     = "timeout"
-	flagApiUsername    = "user"
-	flagApiPassword    = "password"
+	flagApiUrl       = "host"
+	flagApiTimeout   = "timeout"
+	flagApiUsername  = "user"
+	flagApiPassword  = "password"
 	flagApiAppKey    = "appkey"
 	flagApiLastLogin = "token-expiry"
+	flagApiGetRaw    = "raw"
 
 	flagGoogleSheet       = "google-sheet"
 	flagGoogleSheetUpdate = "update"
@@ -53,25 +53,25 @@ const (
 
 var DefaultAreas = []string{"all"}
 
-
 type CommandArgs struct {
 	ConfigDir   string
 	ConfigFile  string
 	WriteConfig bool
-	Quiet   bool
-	Debug   bool
-	OutputType string
-	OutputFile string
+	Quiet       bool
+	Debug       bool
+	OutputType  string
+	OutputFile  string
 
 	// iSolarCloud api
-	ApiTimeout     time.Duration
-	ApiUrl         string
-	ApiUsername    string
-	ApiPassword    string
-	ApiAppKey      string
-	ApiLastLogin   string
-	ApiToken       string
-	ApiTokenFile   string
+	ApiTimeout   time.Duration
+	ApiUrl       string
+	ApiUsername  string
+	ApiPassword  string
+	ApiAppKey    string
+	ApiLastLogin string
+	ApiToken     string
+	ApiTokenFile string
+	ApiGetRaw    bool
 
 	// Google sheets
 	GoogleSheet       string
@@ -91,7 +91,6 @@ type CommandArgs struct {
 	Valid bool
 	Error error
 }
-
 
 func (ca *CommandArgs) IsValid() error {
 	for range Only.Once {
@@ -119,7 +118,7 @@ func (ca *CommandArgs) ProcessArgs(cmd *cobra.Command, args []string) error {
 			break
 		}
 
-		Cmd.Error = SunGro.Login(login.SunGroAuth {
+		Cmd.Error = SunGro.Login(login.SunGroAuth{
 			AppKey:       ca.ApiAppKey,
 			UserAccount:  ca.ApiUsername,
 			UserPassword: ca.ApiPassword,
@@ -144,10 +143,10 @@ func (ca *CommandArgs) ProcessArgs(cmd *cobra.Command, args []string) error {
 		// 	SunGro.OutputType = iSolarCloud.TypeGoogle
 		// }
 
-		//Git.Error = Cmd.GitSet()
-		//if Cmd.Error != nil {
+		// Git.Error = Cmd.GitSet()
+		// if Cmd.Error != nil {
 		//	break
-		//}
+		// }
 
 		ca.Valid = true
 	}
@@ -167,10 +166,10 @@ func (ca *CommandArgs) GitSet() error {
 			break
 		}
 
-		//Cmd.Error = Git.SetAuth(ca.GitUsername, ca.GitPassword)
-		//if Cmd.Error != nil {
+		// Cmd.Error = Git.SetAuth(ca.GitUsername, ca.GitPassword)
+		// if Cmd.Error != nil {
 		//	break
-		//}
+		// }
 
 		Cmd.Error = Git.SetKeyFile(ca.GitKeyFile)
 		if Cmd.Error != nil {
@@ -262,7 +261,7 @@ func (ca *CommandArgs) GitSave(entities ...string) error {
 		}
 		fmt.Printf("Saving %d entities from the SunGro to Git...\n", len(entities))
 
-		//SunGro.OutputType = iSolarCloud.StringTypeJson
+		// SunGro.OutputType = iSolarCloud.StringTypeJson
 		// SunGro.OutputType = iSolarCloud.TypeJson
 
 		for _, entity := range entities {
@@ -271,8 +270,8 @@ func (ca *CommandArgs) GitSave(entities ...string) error {
 			// SunGro.OutputString = ""
 
 			switch entity {
-				case "domain":
-					SunGro.Error = SunGro.Init()
+			case "domain":
+				SunGro.Error = SunGro.Init()
 			}
 			if SunGro.Error != nil {
 				break
@@ -291,7 +290,6 @@ func (ca *CommandArgs) GitSave(entities ...string) error {
 	return Cmd.Error
 }
 
-
 func (ca *CommandArgs) GoogleUpdate(entities ...string) error {
 
 	for range Only.Once {
@@ -304,11 +302,11 @@ func (ca *CommandArgs) GoogleUpdate(entities ...string) error {
 
 		for _, entity := range entities {
 			switch entity {
-				case "domain":
-					ca.Error = SunGro.Init()
-					if ca.Error != nil {
-						break
-					}
+			case "domain":
+				ca.Error = SunGro.Init()
+				if ca.Error != nil {
+					break
+				}
 			}
 
 			// sheet := google.Sheet {
@@ -329,7 +327,7 @@ func (ca *CommandArgs) GoogleUpdate(entities ...string) error {
 	return ca.Error
 }
 
-//func (ca *CommandArgs) UpdateGoogleSheet(name string, data [][]interface{}) error {
+// func (ca *CommandArgs) UpdateGoogleSheet(name string, data [][]interface{}) error {
 //
 //	for range Only.Once {
 //		sheet := google.Sheet{
@@ -347,4 +345,4 @@ func (ca *CommandArgs) GoogleUpdate(entities ...string) error {
 //	}
 //
 //	return p.Error
-//}
+// }

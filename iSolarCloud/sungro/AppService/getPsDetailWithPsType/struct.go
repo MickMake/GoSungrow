@@ -9,12 +9,11 @@ import (
 	"fmt"
 )
 
-
 var _ api.EndPoint = (*EndPoint)(nil)
 
 type EndPoint struct {
 	api.EndPointStruct
-	Request Request
+	Request  Request
 	Response Response
 }
 
@@ -29,8 +28,8 @@ type Response struct {
 }
 
 func Init(apiRoot *api.Web) EndPoint {
-	return EndPoint {
-		EndPointStruct: api.EndPointStruct {
+	return EndPoint{
+		EndPointStruct: api.EndPointStruct{
 			ApiRoot:  apiRoot,
 			Area:     api.GetArea(EndPoint{}),
 			Name:     api.GetName(EndPoint{}),
@@ -41,7 +40,6 @@ func Init(apiRoot *api.Web) EndPoint {
 		},
 	}
 }
-
 
 // ****************************************
 // Methods not scoped by api.EndPoint interface type
@@ -62,7 +60,6 @@ func (e EndPoint) GetResponse() Response {
 func Assert(e api.EndPoint) EndPoint {
 	return e.(EndPoint)
 }
-
 
 // ****************************************
 // Methods defined by api.EndPoint interface type
@@ -90,8 +87,12 @@ func (e EndPoint) Call() api.EndPoint {
 	return e.ApiRoot.Get(e)
 }
 
-func (e EndPoint) GetData() api.Json {
-	return api.GetAsPrettyJson(e.Response.ResultData)
+func (e EndPoint) GetData(raw bool) api.Json {
+	if raw {
+		return api.Json(e.ApiRoot.Body)
+	} else {
+		return api.GetAsPrettyJson(e.Response.ResultData)
+	}
 }
 
 func (e EndPoint) SetError(format string, a ...interface{}) api.EndPoint {

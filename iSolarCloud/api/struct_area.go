@@ -6,14 +6,12 @@ import (
 	"fmt"
 )
 
-
 type AreaStruct struct {
-	ApiRoot   interface{}	// *web.Web
+	ApiRoot   interface{} // *web.Web
 	Name      AreaName
 	EndPoints TypeEndPoints
 	Error     error
 }
-
 
 func (as AreaStruct) Exists(name EndPointName) error {
 	var err error
@@ -38,19 +36,8 @@ func (as *AreaStruct) GetEndPoint(name EndPointName) EndPoint {
 func (as AreaStruct) ListEndpoints() {
 	for range Only.Once {
 		fmt.Printf("Listing all endpoints from area '%s':\n", as.Name)
-		as.EndPoints.ListEndpoints()
-
-		// table := tablewriter.NewWriter(os.Stdout)
-		// table.SetHeader([]string{"Area", "EndPoint", "Url"})
-		// table.SetBorder(true)
-		// for _, endpoint := range as.SortEndPoints() {
-		// 	table.Append([]string{
-		// 		string(as.Name),
-		// 		string(as.EndPoints[endpoint].GetName()),
-		// 		as.EndPoints[endpoint].GetUrl().String(),
-		// 	})
-		// }
-		// table.Render()
+		// as.EndPoints.ListEndpoints()
+		fmt.Printf("%v", as.EndPoints)
 	}
 }
 
