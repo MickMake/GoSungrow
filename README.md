@@ -22,13 +22,28 @@ So far I have mapped out all the API calls, but now figuring out JSON POST data 
 
 It's tricky as their "API" changes regularly.
 
+I've currently mapped out these API EndPoints:
+```
++-------------------+-------------------+--------------------+------------+
+|       AREAS       | ENABLED ENDPOINTS | DISABLED ENDPOINTS | COVERAGE % |
++-------------------+-------------------+--------------------+------------+
+| AliSmsService     |                 0 |                  1 | 0.0 %      |
+| AppService        |                41 |                533 | 7.7 %      |
+| MttvScreenService |                 0 |                 30 | 0.0 %      |
+| PowerPointService |                 0 |                  1 | 0.0 %      |
+| WebAppService     |                 2 |                187 | 1.1 %      |
+| WebIscmAppService |                 0 |                184 | 0.0 %      |
+| ----------------  | ----------------  | -----------------  | ---------  |
+| Total             |                43 |                936 | 4.6 %      |
++-------------------+-------------------+--------------------+------------+
+```
 
 ## What does it do?
 
 This GoLang package does several things:
-1. Update a GitHub repo with SunGrow PV data, (provide full revision history for any changes made to the SunGrow PV).
-2. Update a Google sheet with SunGrow PV data.
-3. Provides ready access to all API calls via a simple get/put framework.
+1. Provides ready access to all API calls via a simple get/put framework.
+2. Update a GitHub repo with SunGrow PV data, (provide full revision history for any changes made to the SunGrow PV).
+3. Update a Google sheet with SunGrow PV data.
 
 To be added:
 1. MQTT client to push to things like [HomeAssistant](https://www.home-assistant.io/).

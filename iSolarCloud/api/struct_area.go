@@ -41,6 +41,10 @@ func (as AreaStruct) ListEndpoints() {
 	}
 }
 
-func (as AreaStruct) CountEndpoints() int {
-	return as.EndPoints.CountEndpoints()
+func (as AreaStruct) CountEnabled() int {
+	return len(as.EndPoints.GetEnabled())
+}
+
+func (as AreaStruct) CountDisabled() int {
+	return len(as.EndPoints.GetDisabled())
 }

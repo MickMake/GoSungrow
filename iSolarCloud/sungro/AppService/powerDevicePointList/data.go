@@ -2,15 +2,13 @@ package powerDevicePointList
 
 import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"errors"
 	"fmt"
 )
 
 const Url = "/v1/reportService/powerDevicePointList"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -22,19 +20,31 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
-	Dummy string `json:"dummy"`
+	CurrentPage  int64 `json:"currentPage"`
+	PageDataList []struct {
+		CreateTime   string `json:"create_time"`
+		DeviceType   int64  `json:"device_type"`
+		ID           int64  `json:"id"`
+		Period       int64  `json:"period"`
+		PointID      int64  `json:"point_id"`
+		PointName    string `json:"point_name"`
+		PointNameNew string `json:"point_name_new"`
+		TypeName     string `json:"type_name"`
+	} `json:"pageDataList"`
+	PageSize    int64 `json:"pageSize"`
+	TotalCounts int64 `json:"totalCounts"`
+	TotalPages  int64 `json:"totalPages"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
+	//switch {
+	//case e.Dummy == "":
+	//	break
+	//default:
+	//	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
+	//}
 	return err
 }
 

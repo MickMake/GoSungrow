@@ -84,12 +84,33 @@ func (an Areas) ListAreas() {
 		fmt.Println("Listing all endpoint areas:")
 
 		table := tablewriter.NewWriter(os.Stdout)
-		table.SetHeader([]string{"Areas", "EndPoints"})
+		table.SetHeader([]string{"Areas", "Enabled EndPoints", "Disabled EndPoints", "Coverage %"})
 		table.SetBorder(true)
+		te := 0
+		td := 0
 		for _, area := range an.SortAreas() {
-			size := fmt.Sprintf("%d", an[area].CountEndpoints())
-			table.Append([]string{string(area), size})
+			e := an[area].CountEnabled()
+			d := an[area].CountDisabled()
+			p := (float64(e) / float64(d)) * 100
+			table.Append([]string{
+				string(area),
+				fmt.Sprintf("%d", e),
+				fmt.Sprintf("%d", d),
+				fmt.Sprintf("%.1f %%", p),
+			})
+			te += e
+			td += d
 		}
+
+		table.Append([]string{"----------------", "----------------", "-----------------", "---------"})
+
+		p := (float64(te) / float64(td)) * 100
+		table.Append([]string{
+			"Total",
+			fmt.Sprintf("%d", te),
+			fmt.Sprintf("%d", td),
+			fmt.Sprintf("%.1f %%", p),
+		})
 		table.Render()
 	}
 }

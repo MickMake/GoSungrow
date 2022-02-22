@@ -1,9 +1,47 @@
+./bin/GoSungrow api get WebAppService.showPSView '{"ps_id":"1129147"}'
+./bin/GoSungrow api get checkUnitStatus
+./bin/GoSungrow api get energyTrend
 ./bin/GoSungrow api get findPsType '{"ps_id":"1129147"}'
-./bin/GoSungrow api get getPsDetailWithPsType '{"ps_id":"1129147"}'
-./bin/GoSungrow api get getPowerStatistics '{"ps_id":"1129147"}'
+./bin/GoSungrow api get getAllPowerDeviceSetName
+./bin/GoSungrow api get getAreaList
+./bin/GoSungrow api get getCloudList
+./bin/GoSungrow api get getConfigList
+./bin/GoSungrow api get getDeviceInfo
+./bin/GoSungrow api get getDeviceList
+./bin/GoSungrow api get getDeviceModelInfoList
+./bin/GoSungrow api get getDevicePoints '{"point_id":"13003"}'
+./bin/GoSungrow api get getDeviceTypeInfoList
+./bin/GoSungrow api get getDeviceTypeList
+./bin/GoSungrow api get getInvertDataList
+./bin/GoSungrow api get getOrgListByName
 ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"1"}'
 ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"2"}'
 ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"7"}'
+./bin/GoSungrow api get getPowerPictureList
+./bin/GoSungrow api get getPowerStatistics '{"ps_id":"1129147"}'
+./bin/GoSungrow api get getPsDetail
+./bin/GoSungrow api get getPsDetail '{"ps_id":"1129147"}'
+./bin/GoSungrow api get getPsDetailWithPsType '{"ps_id":"1129147"}'
+./bin/GoSungrow api get getPsHealthState '{"ps_id":"1129147"}'
 ./bin/GoSungrow api get getPsList
-./bin/GoSungrow api get WebAppService.showPSView '{"ps_id":"1129147"}'
-
+./bin/GoSungrow api get getPsListByName
+./bin/GoSungrow api get getPsListStaticData '{"ps_id":"1129147"}'
+./bin/GoSungrow api get getPsReport '{"report_type":"1","date_id":"20220201","date_type":"1","ps_id":"1129147"}'
+./bin/GoSungrow api get getPsReport '{"report_type":"1","date_id":"20220201","date_type":"2","ps_id":"1129147"}'
+./bin/GoSungrow api get getPsReport '{"report_type":"1","date_id":"20220201","date_type":"3","ps_id":"1129147"}'
+./bin/GoSungrow api get getPsUser
+./bin/GoSungrow api get getPsWeatherList '{"ps_id":"1129147"}'
+./bin/GoSungrow api get getTemplateList
+./bin/GoSungrow api get getUserList
+./bin/GoSungrow api get getUserPsOrderList
+./bin/GoSungrow api get powerDevicePointList
+./bin/GoSungrow api get queryAllPsIdAndName '{"ps_id":"1129147"}'
+./bin/GoSungrow api get queryDeviceList
+./bin/GoSungrow api get queryDeviceListByUserId '{"ps_id":"1129147"}'
+./bin/GoSungrow api get queryDeviceListForApp '{"ps_id":"1129147"}'
+./bin/GoSungrow api get queryUserList
+./bin/GoSungrow api get reportList '{"ps_id":"1129147","report_type":"1"}'
+./bin/GoSungrow api get reportList '{"ps_id":"1129147","report_type":"2"}'
+./bin/GoSungrow api get reportList '{"ps_id":"1129147","report_type":"3"}'
+./bin/GoSungrow api get reportList '{"ps_id":"1129147","report_type":"4"}'
+./bin/GoSungrow api login

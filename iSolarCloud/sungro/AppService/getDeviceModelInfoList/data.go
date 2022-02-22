@@ -2,12 +2,11 @@ package getDeviceModelInfoList
 
 import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"errors"
 	"fmt"
 )
 
 const Url = "/v1/devService/getDeviceModelInfoList"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
 	// DeviceType string `json:"device_type" required:"true"`
@@ -22,19 +21,25 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData struct {
-	Dummy string `json:"dummy"`
+type ResultData []struct {
+	ComType           string `json:"com_type"`
+	DeviceFactoryID   string `json:"device_factory_id"`
+	DeviceFactoryName string `json:"device_factory_name"`
+	DeviceModel       string `json:"device_model"`
+	DeviceModelCode   string `json:"device_model_code"`
+	DeviceModelID     int64  `json:"device_model_id"`
+	DeviceType        int64  `json:"device_type"`
+	IsRemoteUpgrade   int64  `json:"is_remote_upgrade"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
+	//switch {
+	//case e.Dummy == "":
+	//	break
+	//default:
+	//	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
+	//}
 	return err
 }
 

@@ -22,7 +22,6 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
 	Dummy string `json:"dummy"`
 }

@@ -2,15 +2,14 @@ package getPsWeatherList
 
 import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"errors"
 	"fmt"
 )
 
 const Url = "/v1/powerStationService/getPsWeatherList"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
+	PsId string `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -22,19 +21,36 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
-	Dummy string `json:"dummy"`
+	WeatherList []struct {
+		Chill      string `json:"chill"`
+		Code       string `json:"code"`
+		CodeName   string `json:"code_name"`
+		DateTime   string `json:"date_time"`
+		Direction  string `json:"direction"`
+		High       string `json:"high"`
+		Highc      string `json:"highc"`
+		Humidity   string `json:"humidity"`
+		Low        string `json:"low"`
+		Lowc       string `json:"lowc"`
+		Pressure   string `json:"pressure"`
+		PsID       string `json:"ps_id"`
+		Rising     string `json:"rising"`
+		Speed      string `json:"speed"`
+		Sunrise    string `json:"sunrise"`
+		Sunset     string `json:"sunset"`
+		Visibility string `json:"visibility"`
+	} `json:"weather_list"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
+	//switch {
+	//case e.Dummy == "":
+	//	break
+	//default:
+	//	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
+	//}
 	return err
 }
 

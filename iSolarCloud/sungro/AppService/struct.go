@@ -616,210 +616,224 @@ func Init(apiRoot *api.Web) Area {
 			api.GetName(checkUnitStatus.EndPoint{}):             checkUnitStatus.Init(apiRoot), // @TODO - Returns 404 error. Disabled.
 			api.GetName(getDeviceInfo.EndPoint{}):               getDeviceInfo.Init(apiRoot),   // @TODO - Returns null.
 			api.GetName(getDeviceList.EndPoint{}):               getDeviceList.Init(apiRoot),
+			api.GetName(powerDevicePointList.EndPoint{}):        powerDevicePointList.Init(apiRoot),  // @TODO - CRITICAL - Get all point_id definitions.
+			api.GetName(queryDeviceListForApp.EndPoint{}):       queryDeviceListForApp.Init(apiRoot), // @TODO - CRITICAL - Show more detail info on devices.
+			api.GetName(queryDeviceListByUserId.EndPoint{}):     queryDeviceListByUserId.Init(apiRoot),
+			api.GetName(getPsListStaticData.EndPoint{}):         getPsListStaticData.Init(apiRoot),
+			api.GetName(getPsReport.EndPoint{}):                 getPsReport.Init(apiRoot),
+			api.GetName(getPsUser.EndPoint{}):                   getPsUser.Init(apiRoot),
+			api.GetName(getPsWeatherList.EndPoint{}):            getPsWeatherList.Init(apiRoot),
+			api.GetName(getAreaList.EndPoint{}):                 getAreaList.Init(apiRoot),
+			api.GetName(getCloudList.EndPoint{}):                getCloudList.Init(apiRoot),
+			api.GetName(getConfigList.EndPoint{}):               getConfigList.Init(apiRoot),          // @TODO - Returns 404 error. Disabled.
+			api.GetName(getDeviceModelInfoList.EndPoint{}):      getDeviceModelInfoList.Init(apiRoot), // @TODO - CRITICAL - Show all device model info.
+			api.GetName(getDeviceTypeList.EndPoint{}):           getDeviceTypeList.Init(apiRoot),
+			api.GetName(getDeviceTypeInfoList.EndPoint{}):       getDeviceTypeInfoList.Init(apiRoot), // @TODO - CRITICAL - Show all device types.
+			api.GetName(getInvertDataList.EndPoint{}):           getInvertDataList.Init(apiRoot),
+			api.GetName(queryUserList.EndPoint{}):               queryUserList.Init(apiRoot),
+			api.GetName(getPowerPictureList.EndPoint{}):         getPowerPictureList.Init(apiRoot),
+			api.GetName(getUserList.EndPoint{}):                 getUserList.Init(apiRoot),
+			api.GetName(getUserPsOrderList.EndPoint{}):          getUserPsOrderList.Init(apiRoot),
+			api.GetName(reportList.EndPoint{}):                  reportList.Init(apiRoot),
 
 			// Use the following for all critical data every 5 minutes.
 			api.GetName(queryDeviceList.EndPoint{}): queryDeviceList.Init(apiRoot), // #TODO - This gives you ALL info at 5 min intervals.
 
 			// Disabled from here on.
-			api.GetName(psHourPointsValue.EndPoint{}):                                 psHourPointsValue.Init(apiRoot),
-			api.GetName(getPsCurveInfo.EndPoint{}):                                    getPsCurveInfo.Init(apiRoot),
-			api.GetName(queryDevicePointMinuteDataList.EndPoint{}):                    queryDevicePointMinuteDataList.Init(apiRoot),
-			api.GetName(getTemplateByInfoType.EndPoint{}):                             getTemplateByInfoType.Init(apiRoot),
-			api.GetName(queryBatchCreatePsTaskList.EndPoint{}):                        queryBatchCreatePsTaskList.Init(apiRoot),
-			api.GetName(exportPlantReportPDF.EndPoint{}):                              exportPlantReportPDF.Init(apiRoot),
-			api.GetName(getTableDataSql.EndPoint{}):                                   getTableDataSql.Init(apiRoot),
-			api.GetName(getTableDataSqlCount.EndPoint{}):                              getTableDataSqlCount.Init(apiRoot),
-			api.GetName(getPListinfoFromMysql.EndPoint{}):                             getPListinfoFromMysql.Init(apiRoot),
-			api.GetName(getDataFromHBase.EndPoint{}):                                  getDataFromHBase.Init(apiRoot),
-			api.GetName(getListMiFromHBase.EndPoint{}):                                getListMiFromHBase.Init(apiRoot),
-			api.GetName(getMapMiFromHBase.EndPoint{}):                                 getMapMiFromHBase.Init(apiRoot),
-			api.GetName(getValFromHBase.EndPoint{}):                                   getValFromHBase.Init(apiRoot),
-			api.GetName(getPowerStationTableDataSql.EndPoint{}):                       getPowerStationTableDataSql.Init(apiRoot),
-			api.GetName(getPowerStationTableDataSqlCount.EndPoint{}):                  getPowerStationTableDataSqlCount.Init(apiRoot),
-			api.GetName(getDataFromHbaseByRowKey.EndPoint{}):                          getDataFromHbaseByRowKey.Init(apiRoot),
-			api.GetName(findInfoByuuid.EndPoint{}):                                    findInfoByuuid.Init(apiRoot),
-			api.GetName(getStationInfoSql.EndPoint{}):                                 getStationInfoSql.Init(apiRoot),
-			api.GetName(getDevicePointMinuteDataList.EndPoint{}):                      getDevicePointMinuteDataList.Init(apiRoot),
-			api.GetName(powerDevicePointList.EndPoint{}):                              powerDevicePointList.Init(apiRoot),
-			api.GetName(getPowerTrendDayData.EndPoint{}):                              getPowerTrendDayData.Init(apiRoot),
-			api.GetName(powerTrendChartData.EndPoint{}):                               powerTrendChartData.Init(apiRoot),
-			api.GetName(getUpTimePoint.EndPoint{}):                                    getUpTimePoint.Init(apiRoot),
-			api.GetName(getSerialNum.EndPoint{}):                                      getSerialNum.Init(apiRoot),
-			api.GetName(getModuleLogTaskList.EndPoint{}):                              getModuleLogTaskList.Init(apiRoot),
-			api.GetName(queryParamSettingTask.EndPoint{}):                             queryParamSettingTask.Init(apiRoot),
-			api.GetName(queryCtrlTaskById.EndPoint{}):                                 queryCtrlTaskById.Init(apiRoot),
-			api.GetName(queryDeviceInfo.EndPoint{}):                                   queryDeviceInfo.Init(apiRoot),
-			api.GetName(queryDeviceInfoForApp.EndPoint{}):                             queryDeviceInfoForApp.Init(apiRoot),
-			api.GetName(queryDeviceListByUserId.EndPoint{}):                           queryDeviceListByUserId.Init(apiRoot),
-			api.GetName(queryDeviceListForApp.EndPoint{}):                             queryDeviceListForApp.Init(apiRoot),
-			api.GetName(queryDeviceModelTechnical.EndPoint{}):                         queryDeviceModelTechnical.Init(apiRoot),
-			api.GetName(getPsDataSupplementTaskList.EndPoint{}):                       getPsDataSupplementTaskList.Init(apiRoot),
-			api.GetName(getPowerDeviceSetTaskDetailList.EndPoint{}):                   getPowerDeviceSetTaskDetailList.Init(apiRoot),
-			api.GetName(getPowerDeviceSetTaskList.EndPoint{}):                         getPowerDeviceSetTaskList.Init(apiRoot),
-			api.GetName(getPsAuthKey.EndPoint{}):                                      getPsAuthKey.Init(apiRoot),
-			api.GetName(getApiCallsForAppkeys.EndPoint{}):                             getApiCallsForAppkeys.Init(apiRoot),
-			api.GetName(exportParamSettingValPDF.EndPoint{}):                          exportParamSettingValPDF.Init(apiRoot),
-			api.GetName(devicePointsDataFromMySql.EndPoint{}):                         devicePointsDataFromMySql.Init(apiRoot),
-			api.GetName(queryDevicePointDayMonthYearDataList.EndPoint{}):              queryDevicePointDayMonthYearDataList.Init(apiRoot),
-			api.GetName(queryDevicePointsDayMonthYearDataList.EndPoint{}):             queryDevicePointsDayMonthYearDataList.Init(apiRoot),
-			api.GetName(queryDeviceRealTimeDataByPsKeys.EndPoint{}):                   queryDeviceRealTimeDataByPsKeys.Init(apiRoot),
-			api.GetName(acceptPsSharing.EndPoint{}):                                   acceptPsSharing.Init(apiRoot),
-			api.GetName(activateEmail.EndPoint{}):                                     activateEmail.Init(apiRoot),
-			api.GetName(addConfig.EndPoint{}):                                         addConfig.Init(apiRoot),
-			api.GetName(addDeviceRepair.EndPoint{}):                                   addDeviceRepair.Init(apiRoot),
-			api.GetName(addDeviceToStructureForHousehold.EndPoint{}):                  addDeviceToStructureForHousehold.Init(apiRoot),
-			api.GetName(addDeviceToStructureForHouseholdByPsIdS.EndPoint{}):           addDeviceToStructureForHouseholdByPsIdS.Init(apiRoot),
-			api.GetName(addFault.EndPoint{}):                                          addFault.Init(apiRoot),
-			api.GetName(addFaultOrder.EndPoint{}):                                     addFaultOrder.Init(apiRoot),
-			api.GetName(addFaultPlan.EndPoint{}):                                      addFaultPlan.Init(apiRoot),
-			api.GetName(addFaultRepairSteps.EndPoint{}):                               addFaultRepairSteps.Init(apiRoot),
-			api.GetName(addHouseholdEvaluation.EndPoint{}):                            addHouseholdEvaluation.Init(apiRoot),
-			api.GetName(addHouseholdLeaveMessage.EndPoint{}):                          addHouseholdLeaveMessage.Init(apiRoot),
-			api.GetName(addHouseholdOpinionFeedback.EndPoint{}):                       addHouseholdOpinionFeedback.Init(apiRoot),
-			api.GetName(addHouseholdWorkOrder.EndPoint{}):                             addHouseholdWorkOrder.Init(apiRoot),
-			api.GetName(addOnDutyInfo.EndPoint{}):                                     addOnDutyInfo.Init(apiRoot),
-			api.GetName(addOperRule.EndPoint{}):                                       addOperRule.Init(apiRoot),
-			api.GetName(addOrDelPsStructure.EndPoint{}):                               addOrDelPsStructure.Init(apiRoot),
-			api.GetName(addOrderStep.EndPoint{}):                                      addOrderStep.Init(apiRoot),
-			api.GetName(addPowerStationForHousehold.EndPoint{}):                       addPowerStationForHousehold.Init(apiRoot),
-			api.GetName(addPowerStationInfo.EndPoint{}):                               addPowerStationInfo.Init(apiRoot),
-			api.GetName(addReportConfigEmail.EndPoint{}):                              addReportConfigEmail.Init(apiRoot),
-			api.GetName(addSysAdvancedParam.EndPoint{}):                               addSysAdvancedParam.Init(apiRoot),
-			api.GetName(addSysOrgNew.EndPoint{}):                                      addSysOrgNew.Init(apiRoot),
-			api.GetName(aliPayAppTest.EndPoint{}):                                     aliPayAppTest.Init(apiRoot),
-			api.GetName(auditOperRule.EndPoint{}):                                     auditOperRule.Init(apiRoot),
-			api.GetName(batchAddStationBySn.EndPoint{}):                               batchAddStationBySn.Init(apiRoot),
-			api.GetName(batchImportSN.EndPoint{}):                                     batchImportSN.Init(apiRoot),
-			api.GetName(batchInsertUserAndOrg.EndPoint{}):                             batchInsertUserAndOrg.Init(apiRoot),
-			api.GetName(batchModifyDevicesInfoAndPropertis.EndPoint{}):                batchModifyDevicesInfoAndPropertis.Init(apiRoot),
-			api.GetName(batchProcessPlantReport.EndPoint{}):                           batchProcessPlantReport.Init(apiRoot),
-			api.GetName(batchUpdateDeviceSim.EndPoint{}):                              batchUpdateDeviceSim.Init(apiRoot),
-			api.GetName(batchUpdateUserIsAgreeGdpr.EndPoint{}):                        batchUpdateUserIsAgreeGdpr.Init(apiRoot),
-			api.GetName(boundMobilePhone.EndPoint{}):                                  boundMobilePhone.Init(apiRoot),
-			api.GetName(boundUserMail.EndPoint{}):                                     boundUserMail.Init(apiRoot),
-			api.GetName(caculateDeviceInputDiscrete.EndPoint{}):                       caculateDeviceInputDiscrete.Init(apiRoot),
-			api.GetName(calculateDeviceDiscrete.EndPoint{}):                           calculateDeviceDiscrete.Init(apiRoot),
-			api.GetName(calculateInitialCompensationData.EndPoint{}):                  calculateInitialCompensationData.Init(apiRoot),
-			api.GetName(cancelDeliverMail.EndPoint{}):                                 cancelDeliverMail.Init(apiRoot),
-			api.GetName(cancelOrderScan.EndPoint{}):                                   cancelOrderScan.Init(apiRoot),
-			api.GetName(cancelParamSetTask.EndPoint{}):                                cancelParamSetTask.Init(apiRoot),
-			api.GetName(cancelPsSharing.EndPoint{}):                                   cancelPsSharing.Init(apiRoot),
-			api.GetName(cancelRechargeOrder.EndPoint{}):                               cancelRechargeOrder.Init(apiRoot),
-			api.GetName(changRechargeOrderToCancel.EndPoint{}):                        changRechargeOrderToCancel.Init(apiRoot),
-			api.GetName(changeHouseholdUser2Installer.EndPoint{}):                     changeHouseholdUser2Installer.Init(apiRoot),
-			api.GetName(changeRemoteParam.EndPoint{}):                                 changeRemoteParam.Init(apiRoot),
-			api.GetName(checkDealerOrgCode.EndPoint{}):                                checkDealerOrgCode.Init(apiRoot),
-			api.GetName(checkDevSnIsBelongsToUser.EndPoint{}):                         checkDevSnIsBelongsToUser.Init(apiRoot),
-			api.GetName(checkInverterResult.EndPoint{}):                               checkInverterResult.Init(apiRoot),
-			api.GetName(checkIsCanDoParamSet.EndPoint{}):                              checkIsCanDoParamSet.Init(apiRoot),
-			api.GetName(checkIsIvScan.EndPoint{}):                                     checkIsIvScan.Init(apiRoot),
-			api.GetName(checkOssObjectExist.EndPoint{}):                               checkOssObjectExist.Init(apiRoot),
-			api.GetName(checkServiceIsConnect.EndPoint{}):                             checkServiceIsConnect.Init(apiRoot),
-			api.GetName(checkTechnicalParameters.EndPoint{}):                          checkTechnicalParameters.Init(apiRoot),
-			api.GetName(checkUpRechargeDevicePaying.EndPoint{}):                       checkUpRechargeDevicePaying.Init(apiRoot),
-			api.GetName(checkUserAccountUnique.EndPoint{}):                            checkUserAccountUnique.Init(apiRoot),
-			api.GetName(checkUserAccountUniqueAll.EndPoint{}):                         checkUserAccountUniqueAll.Init(apiRoot),
-			api.GetName(checkUserInfoUnique.EndPoint{}):                               checkUserInfoUnique.Init(apiRoot),
-			api.GetName(checkUserIsExist.EndPoint{}):                                  checkUserIsExist.Init(apiRoot),
-			api.GetName(checkUserListIsExist.EndPoint{}):                              checkUserListIsExist.Init(apiRoot),
-			api.GetName(checkUserPassword.EndPoint{}):                                 checkUserPassword.Init(apiRoot),
-			api.GetName(cloudDeploymentRecord.EndPoint{}):                             cloudDeploymentRecord.Init(apiRoot),
-			api.GetName(comfirmParamModel.EndPoint{}):                                 comfirmParamModel.Init(apiRoot),
-			api.GetName(compareValidateCode.EndPoint{}):                               compareValidateCode.Init(apiRoot),
-			api.GetName(componentInfo2Cloud.EndPoint{}):                               componentInfo2Cloud.Init(apiRoot),
-			api.GetName(confirmFault.EndPoint{}):                                      confirmFault.Init(apiRoot),
-			api.GetName(confirmIvFault.EndPoint{}):                                    confirmIvFault.Init(apiRoot),
-			api.GetName(confirmReportConfig.EndPoint{}):                               confirmReportConfig.Init(apiRoot),
-			api.GetName(createAppkeyInfo.EndPoint{}):                                  createAppkeyInfo.Init(apiRoot),
-			api.GetName(createRenewInvoice.EndPoint{}):                                createRenewInvoice.Init(apiRoot),
-			api.GetName(dealCommandReply.EndPoint{}):                                  dealCommandReply.Init(apiRoot),
-			api.GetName(dealDeletePsFailPsDelete.EndPoint{}):                          dealDeletePsFailPsDelete.Init(apiRoot),
-			api.GetName(dealFailRemoteUpgradeSubTasks.EndPoint{}):                     dealFailRemoteUpgradeSubTasks.Init(apiRoot),
-			api.GetName(dealFailRemoteUpgradeTasks.EndPoint{}):                        dealFailRemoteUpgradeTasks.Init(apiRoot),
-			api.GetName(dealFaultOrder.EndPoint{}):                                    dealFaultOrder.Init(apiRoot),
-			api.GetName(dealGroupStringDisableOrEnable.EndPoint{}):                    dealGroupStringDisableOrEnable.Init(apiRoot),
-			api.GetName(dealNumberOfServiceCalls2Mysql.EndPoint{}):                    dealNumberOfServiceCalls2Mysql.Init(apiRoot),
-			api.GetName(dealParamSettingAfterComplete.EndPoint{}):                     dealParamSettingAfterComplete.Init(apiRoot),
-			api.GetName(dealPsDataSupplement.EndPoint{}):                              dealPsDataSupplement.Init(apiRoot),
-			api.GetName(dealPsReportEmailSend.EndPoint{}):                             dealPsReportEmailSend.Init(apiRoot),
-			api.GetName(dealRemoteUpgrade.EndPoint{}):                                 dealRemoteUpgrade.Init(apiRoot),
-			api.GetName(dealSnElectrifyCheck.EndPoint{}):                              dealSnElectrifyCheck.Init(apiRoot),
-			api.GetName(dealSysDeviceSimFlowInfo.EndPoint{}):                          dealSysDeviceSimFlowInfo.Init(apiRoot),
-			api.GetName(dealSysDeviceSimInfo.EndPoint{}):                              dealSysDeviceSimInfo.Init(apiRoot),
-			api.GetName(definiteTimeDealSnExpRemind.EndPoint{}):                       definiteTimeDealSnExpRemind.Init(apiRoot),
-			api.GetName(definiteTimeDealSnStatus.EndPoint{}):                          definiteTimeDealSnStatus.Init(apiRoot),
-			api.GetName(delDeviceRepair.EndPoint{}):                                   delDeviceRepair.Init(apiRoot),
-			api.GetName(delOperRule.EndPoint{}):                                       delOperRule.Init(apiRoot),
-			api.GetName(delayCallApiResidueTimes.EndPoint{}):                          delayCallApiResidueTimes.Init(apiRoot),
-			api.GetName(deleteComponent.EndPoint{}):                                   deleteComponent.Init(apiRoot),
-			api.GetName(deleteCustomerEmployee.EndPoint{}):                            deleteCustomerEmployee.Init(apiRoot),
-			api.GetName(deleteDeviceAccount.EndPoint{}):                               deleteDeviceAccount.Init(apiRoot),
-			api.GetName(deleteDeviceSimById.EndPoint{}):                               deleteDeviceSimById.Init(apiRoot),
-			api.GetName(deleteElectricitySettlementData.EndPoint{}):                   deleteElectricitySettlementData.Init(apiRoot),
-			api.GetName(deleteFaultPlan.EndPoint{}):                                   deleteFaultPlan.Init(apiRoot),
-			api.GetName(deleteFirmwareFiles.EndPoint{}):                               deleteFirmwareFiles.Init(apiRoot),
-			api.GetName(deleteHouseholdEvaluation.EndPoint{}):                         deleteHouseholdEvaluation.Init(apiRoot),
-			api.GetName(deleteHouseholdLeaveMessage.EndPoint{}):                       deleteHouseholdLeaveMessage.Init(apiRoot),
-			api.GetName(deleteHouseholdWorkOrder.EndPoint{}):                          deleteHouseholdWorkOrder.Init(apiRoot),
-			api.GetName(deleteInverterSnInChnnl.EndPoint{}):                           deleteInverterSnInChnnl.Init(apiRoot),
-			api.GetName(deleteModuleLog.EndPoint{}):                                   deleteModuleLog.Init(apiRoot),
-			api.GetName(deleteOnDutyInfo.EndPoint{}):                                  deleteOnDutyInfo.Init(apiRoot),
-			api.GetName(deleteOperateBillFile.EndPoint{}):                             deleteOperateBillFile.Init(apiRoot),
-			api.GetName(deleteOssObject.EndPoint{}):                                   deleteOssObject.Init(apiRoot),
-			api.GetName(deletePowerDevicePointById.EndPoint{}):                        deletePowerDevicePointById.Init(apiRoot),
-			api.GetName(deletePowerPicture.EndPoint{}):                                deletePowerPicture.Init(apiRoot),
-			api.GetName(deletePowerRobotInfoBySnAndPsId.EndPoint{}):                   deletePowerRobotInfoBySnAndPsId.Init(apiRoot),
-			api.GetName(deletePowerRobotSweepStrategy.EndPoint{}):                     deletePowerRobotSweepStrategy.Init(apiRoot),
-			api.GetName(deleteProductionData.EndPoint{}):                              deleteProductionData.Init(apiRoot),
-			api.GetName(deletePs.EndPoint{}):                                          deletePs.Init(apiRoot),
-			api.GetName(deleteRechargeOrder.EndPoint{}):                               deleteRechargeOrder.Init(apiRoot),
-			api.GetName(deleteRegularlyConnectionInfo.EndPoint{}):                     deleteRegularlyConnectionInfo.Init(apiRoot),
-			api.GetName(deleteReportConfigEmailAddr.EndPoint{}):                       deleteReportConfigEmailAddr.Init(apiRoot),
-			api.GetName(deleteSysAdvancedParam.EndPoint{}):                            deleteSysAdvancedParam.Init(apiRoot),
-			api.GetName(deleteSysOrgNew.EndPoint{}):                                   deleteSysOrgNew.Init(apiRoot),
-			api.GetName(deleteTemplate.EndPoint{}):                                    deleteTemplate.Init(apiRoot),
-			api.GetName(deleteUserInfoAllByUserId.EndPoint{}):                         deleteUserInfoAllByUserId.Init(apiRoot),
-			api.GetName(deviceInputDiscreteDeleteTime.EndPoint{}):                     deviceInputDiscreteDeleteTime.Init(apiRoot),
-			api.GetName(deviceInputDiscreteGetTime.EndPoint{}):                        deviceInputDiscreteGetTime.Init(apiRoot),
-			api.GetName(deviceInputDiscreteInsertTime.EndPoint{}):                     deviceInputDiscreteInsertTime.Init(apiRoot),
-			api.GetName(deviceInputDiscreteUpdateTime.EndPoint{}):                     deviceInputDiscreteUpdateTime.Init(apiRoot),
-			api.GetName(deviceReplace.EndPoint{}):                                     deviceReplace.Init(apiRoot),
-			api.GetName(editDeviceRepair.EndPoint{}):                                  editDeviceRepair.Init(apiRoot),
-			api.GetName(editOperRule.EndPoint{}):                                      editOperRule.Init(apiRoot),
-			api.GetName(energyPovertyAlleviation.EndPoint{}):                          energyPovertyAlleviation.Init(apiRoot),
-			api.GetName(faultAutoClose.EndPoint{}):                                    faultAutoClose.Init(apiRoot),
-			api.GetName(faultCloseRemindOrderHandler.EndPoint{}):                      faultCloseRemindOrderHandler.Init(apiRoot),
-			api.GetName(findCodeValueList.EndPoint{}):                                 findCodeValueList.Init(apiRoot),
-			api.GetName(findEmgOrgInfo.EndPoint{}):                                    findEmgOrgInfo.Init(apiRoot),
-			api.GetName(findEnvironmentInfo.EndPoint{}):                               findEnvironmentInfo.Init(apiRoot),
-			api.GetName(findFromHbaseAndRedis.EndPoint{}):                             findFromHbaseAndRedis.Init(apiRoot),
-			api.GetName(findLossAnalysisList.EndPoint{}):                              findLossAnalysisList.Init(apiRoot),
-			api.GetName(findOnDutyInfo.EndPoint{}):                                    findOnDutyInfo.Init(apiRoot),
-			api.GetName(findSingleStationPR.EndPoint{}):                               findSingleStationPR.Init(apiRoot),
-			api.GetName(findUserPassword.EndPoint{}):                                  findUserPassword.Init(apiRoot),
-			api.GetName(genTLSUserSigByUserAccount.EndPoint{}):                        genTLSUserSigByUserAccount.Init(apiRoot),
-			api.GetName(generateRandomPassword.EndPoint{}):                            generateRandomPassword.Init(apiRoot),
-			api.GetName(getAPIServiceInfo.EndPoint{}):                                 getAPIServiceInfo.Init(apiRoot),
-			api.GetName(getAccessedPermission.EndPoint{}):                             getAccessedPermission.Init(apiRoot),
-			api.GetName(getAllDeviceByPsId.EndPoint{}):                                getAllDeviceByPsId.Init(apiRoot),
-			api.GetName(getAllPowerRobotViewInfoByPsId.EndPoint{}):                    getAllPowerRobotViewInfoByPsId.Init(apiRoot),
-			api.GetName(getAllPsIdByOrgIds.EndPoint{}):                                getAllPsIdByOrgIds.Init(apiRoot),
-			api.GetName(getAllUserRemindCount.EndPoint{}):                             getAllUserRemindCount.Init(apiRoot),
-			api.GetName(getAndOutletsAndUnit.EndPoint{}):                              getAndOutletsAndUnit.Init(apiRoot),
-			api.GetName(getAreaInfoCodeByCounty.EndPoint{}):                           getAreaInfoCodeByCounty.Init(apiRoot),
-			api.GetName(getAreaList.EndPoint{}):                                       getAreaList.Init(apiRoot),
-			api.GetName(getAutoCreatePowerStation.EndPoint{}):                         getAutoCreatePowerStation.Init(apiRoot),
-			api.GetName(getBackReadValue.EndPoint{}):                                  getBackReadValue.Init(apiRoot),
-			api.GetName(getBatchNewestPointData.EndPoint{}):                           getBatchNewestPointData.Init(apiRoot),
-			api.GetName(getCallApiResidueTimes.EndPoint{}):                            getCallApiResidueTimes.Init(apiRoot),
-			api.GetName(getChangedPsListByTime.EndPoint{}):                            getChangedPsListByTime.Init(apiRoot),
-			api.GetName(getChnnlListByPsId.EndPoint{}):                                getChnnlListByPsId.Init(apiRoot),
-			api.GetName(getCloudList.EndPoint{}):                                      getCloudList.Init(apiRoot),
-			api.GetName(getCloudServiceMappingConfig.EndPoint{}):                      getCloudServiceMappingConfig.Init(apiRoot),
-			api.GetName(getCommunicationDeviceConfigInfo.EndPoint{}):                  getCommunicationDeviceConfigInfo.Init(apiRoot),
-			api.GetName(getCommunicationModuleMonitorData.EndPoint{}):                 getCommunicationModuleMonitorData.Init(apiRoot),
-			api.GetName(getComponentModelFactory.EndPoint{}):                          getComponentModelFactory.Init(apiRoot),
-			api.GetName(getConfigList.EndPoint{}):                                     getConfigList.Init(apiRoot),
+			api.GetName(psHourPointsValue.EndPoint{}):                       psHourPointsValue.Init(apiRoot),
+			api.GetName(getPsCurveInfo.EndPoint{}):                          getPsCurveInfo.Init(apiRoot),
+			api.GetName(queryDevicePointMinuteDataList.EndPoint{}):          queryDevicePointMinuteDataList.Init(apiRoot),
+			api.GetName(getTemplateByInfoType.EndPoint{}):                   getTemplateByInfoType.Init(apiRoot),
+			api.GetName(queryBatchCreatePsTaskList.EndPoint{}):              queryBatchCreatePsTaskList.Init(apiRoot),
+			api.GetName(exportPlantReportPDF.EndPoint{}):                    exportPlantReportPDF.Init(apiRoot),
+			api.GetName(getTableDataSql.EndPoint{}):                         getTableDataSql.Init(apiRoot),
+			api.GetName(getTableDataSqlCount.EndPoint{}):                    getTableDataSqlCount.Init(apiRoot),
+			api.GetName(getPListinfoFromMysql.EndPoint{}):                   getPListinfoFromMysql.Init(apiRoot),
+			api.GetName(getDataFromHBase.EndPoint{}):                        getDataFromHBase.Init(apiRoot),
+			api.GetName(getListMiFromHBase.EndPoint{}):                      getListMiFromHBase.Init(apiRoot),
+			api.GetName(getMapMiFromHBase.EndPoint{}):                       getMapMiFromHBase.Init(apiRoot),
+			api.GetName(getValFromHBase.EndPoint{}):                         getValFromHBase.Init(apiRoot),
+			api.GetName(getPowerStationTableDataSql.EndPoint{}):             getPowerStationTableDataSql.Init(apiRoot),
+			api.GetName(getPowerStationTableDataSqlCount.EndPoint{}):        getPowerStationTableDataSqlCount.Init(apiRoot),
+			api.GetName(getDataFromHbaseByRowKey.EndPoint{}):                getDataFromHbaseByRowKey.Init(apiRoot),
+			api.GetName(findInfoByuuid.EndPoint{}):                          findInfoByuuid.Init(apiRoot),
+			api.GetName(getStationInfoSql.EndPoint{}):                       getStationInfoSql.Init(apiRoot),
+			api.GetName(getDevicePointMinuteDataList.EndPoint{}):            getDevicePointMinuteDataList.Init(apiRoot),
+			api.GetName(getPowerTrendDayData.EndPoint{}):                    getPowerTrendDayData.Init(apiRoot),
+			api.GetName(powerTrendChartData.EndPoint{}):                     powerTrendChartData.Init(apiRoot),
+			api.GetName(getUpTimePoint.EndPoint{}):                          getUpTimePoint.Init(apiRoot),
+			api.GetName(getSerialNum.EndPoint{}):                            getSerialNum.Init(apiRoot),
+			api.GetName(getModuleLogTaskList.EndPoint{}):                    getModuleLogTaskList.Init(apiRoot),
+			api.GetName(queryParamSettingTask.EndPoint{}):                   queryParamSettingTask.Init(apiRoot),
+			api.GetName(queryCtrlTaskById.EndPoint{}):                       queryCtrlTaskById.Init(apiRoot),
+			api.GetName(queryDeviceInfo.EndPoint{}):                         queryDeviceInfo.Init(apiRoot),
+			api.GetName(queryDeviceInfoForApp.EndPoint{}):                   queryDeviceInfoForApp.Init(apiRoot),
+			api.GetName(queryDeviceModelTechnical.EndPoint{}):               queryDeviceModelTechnical.Init(apiRoot),
+			api.GetName(getPsDataSupplementTaskList.EndPoint{}):             getPsDataSupplementTaskList.Init(apiRoot),
+			api.GetName(getPowerDeviceSetTaskDetailList.EndPoint{}):         getPowerDeviceSetTaskDetailList.Init(apiRoot),
+			api.GetName(getPowerDeviceSetTaskList.EndPoint{}):               getPowerDeviceSetTaskList.Init(apiRoot),
+			api.GetName(getPsAuthKey.EndPoint{}):                            getPsAuthKey.Init(apiRoot),
+			api.GetName(getApiCallsForAppkeys.EndPoint{}):                   getApiCallsForAppkeys.Init(apiRoot),
+			api.GetName(exportParamSettingValPDF.EndPoint{}):                exportParamSettingValPDF.Init(apiRoot),
+			api.GetName(devicePointsDataFromMySql.EndPoint{}):               devicePointsDataFromMySql.Init(apiRoot),
+			api.GetName(queryDevicePointDayMonthYearDataList.EndPoint{}):    queryDevicePointDayMonthYearDataList.Init(apiRoot),
+			api.GetName(queryDevicePointsDayMonthYearDataList.EndPoint{}):   queryDevicePointsDayMonthYearDataList.Init(apiRoot),
+			api.GetName(queryDeviceRealTimeDataByPsKeys.EndPoint{}):         queryDeviceRealTimeDataByPsKeys.Init(apiRoot),
+			api.GetName(acceptPsSharing.EndPoint{}):                         acceptPsSharing.Init(apiRoot),
+			api.GetName(activateEmail.EndPoint{}):                           activateEmail.Init(apiRoot),
+			api.GetName(addConfig.EndPoint{}):                               addConfig.Init(apiRoot),
+			api.GetName(addDeviceRepair.EndPoint{}):                         addDeviceRepair.Init(apiRoot),
+			api.GetName(addDeviceToStructureForHousehold.EndPoint{}):        addDeviceToStructureForHousehold.Init(apiRoot),
+			api.GetName(addDeviceToStructureForHouseholdByPsIdS.EndPoint{}): addDeviceToStructureForHouseholdByPsIdS.Init(apiRoot),
+			api.GetName(addFault.EndPoint{}):                                addFault.Init(apiRoot),
+			api.GetName(addFaultOrder.EndPoint{}):                           addFaultOrder.Init(apiRoot),
+			api.GetName(addFaultPlan.EndPoint{}):                            addFaultPlan.Init(apiRoot),
+			api.GetName(addFaultRepairSteps.EndPoint{}):                     addFaultRepairSteps.Init(apiRoot),
+			api.GetName(addHouseholdEvaluation.EndPoint{}):                  addHouseholdEvaluation.Init(apiRoot),
+			api.GetName(addHouseholdLeaveMessage.EndPoint{}):                addHouseholdLeaveMessage.Init(apiRoot),
+			api.GetName(addHouseholdOpinionFeedback.EndPoint{}):             addHouseholdOpinionFeedback.Init(apiRoot),
+			api.GetName(addHouseholdWorkOrder.EndPoint{}):                   addHouseholdWorkOrder.Init(apiRoot),
+			api.GetName(addOnDutyInfo.EndPoint{}):                           addOnDutyInfo.Init(apiRoot),
+			api.GetName(addOperRule.EndPoint{}):                             addOperRule.Init(apiRoot),
+			api.GetName(addOrDelPsStructure.EndPoint{}):                     addOrDelPsStructure.Init(apiRoot),
+			api.GetName(addOrderStep.EndPoint{}):                            addOrderStep.Init(apiRoot),
+			api.GetName(addPowerStationForHousehold.EndPoint{}):             addPowerStationForHousehold.Init(apiRoot),
+			api.GetName(addPowerStationInfo.EndPoint{}):                     addPowerStationInfo.Init(apiRoot),
+			api.GetName(addReportConfigEmail.EndPoint{}):                    addReportConfigEmail.Init(apiRoot),
+			api.GetName(addSysAdvancedParam.EndPoint{}):                     addSysAdvancedParam.Init(apiRoot),
+			api.GetName(addSysOrgNew.EndPoint{}):                            addSysOrgNew.Init(apiRoot),
+			api.GetName(aliPayAppTest.EndPoint{}):                           aliPayAppTest.Init(apiRoot),
+			api.GetName(auditOperRule.EndPoint{}):                           auditOperRule.Init(apiRoot),
+			api.GetName(batchAddStationBySn.EndPoint{}):                     batchAddStationBySn.Init(apiRoot),
+			api.GetName(batchImportSN.EndPoint{}):                           batchImportSN.Init(apiRoot),
+			api.GetName(batchInsertUserAndOrg.EndPoint{}):                   batchInsertUserAndOrg.Init(apiRoot),
+			api.GetName(batchModifyDevicesInfoAndPropertis.EndPoint{}):      batchModifyDevicesInfoAndPropertis.Init(apiRoot),
+			api.GetName(batchProcessPlantReport.EndPoint{}):                 batchProcessPlantReport.Init(apiRoot),
+			api.GetName(batchUpdateDeviceSim.EndPoint{}):                    batchUpdateDeviceSim.Init(apiRoot),
+			api.GetName(batchUpdateUserIsAgreeGdpr.EndPoint{}):              batchUpdateUserIsAgreeGdpr.Init(apiRoot),
+			api.GetName(boundMobilePhone.EndPoint{}):                        boundMobilePhone.Init(apiRoot),
+			api.GetName(boundUserMail.EndPoint{}):                           boundUserMail.Init(apiRoot),
+			api.GetName(caculateDeviceInputDiscrete.EndPoint{}):             caculateDeviceInputDiscrete.Init(apiRoot),
+			api.GetName(calculateDeviceDiscrete.EndPoint{}):                 calculateDeviceDiscrete.Init(apiRoot),
+			api.GetName(calculateInitialCompensationData.EndPoint{}):        calculateInitialCompensationData.Init(apiRoot),
+			api.GetName(cancelDeliverMail.EndPoint{}):                       cancelDeliverMail.Init(apiRoot),
+			api.GetName(cancelOrderScan.EndPoint{}):                         cancelOrderScan.Init(apiRoot),
+			api.GetName(cancelParamSetTask.EndPoint{}):                      cancelParamSetTask.Init(apiRoot),
+			api.GetName(cancelPsSharing.EndPoint{}):                         cancelPsSharing.Init(apiRoot),
+			api.GetName(cancelRechargeOrder.EndPoint{}):                     cancelRechargeOrder.Init(apiRoot),
+			api.GetName(changRechargeOrderToCancel.EndPoint{}):              changRechargeOrderToCancel.Init(apiRoot),
+			api.GetName(changeHouseholdUser2Installer.EndPoint{}):           changeHouseholdUser2Installer.Init(apiRoot),
+			api.GetName(changeRemoteParam.EndPoint{}):                       changeRemoteParam.Init(apiRoot),
+			api.GetName(checkDealerOrgCode.EndPoint{}):                      checkDealerOrgCode.Init(apiRoot),
+			api.GetName(checkDevSnIsBelongsToUser.EndPoint{}):               checkDevSnIsBelongsToUser.Init(apiRoot),
+			api.GetName(checkInverterResult.EndPoint{}):                     checkInverterResult.Init(apiRoot),
+			api.GetName(checkIsCanDoParamSet.EndPoint{}):                    checkIsCanDoParamSet.Init(apiRoot),
+			api.GetName(checkIsIvScan.EndPoint{}):                           checkIsIvScan.Init(apiRoot),
+			api.GetName(checkOssObjectExist.EndPoint{}):                     checkOssObjectExist.Init(apiRoot),
+			api.GetName(checkServiceIsConnect.EndPoint{}):                   checkServiceIsConnect.Init(apiRoot),
+			api.GetName(checkTechnicalParameters.EndPoint{}):                checkTechnicalParameters.Init(apiRoot),
+			api.GetName(checkUpRechargeDevicePaying.EndPoint{}):             checkUpRechargeDevicePaying.Init(apiRoot),
+			api.GetName(checkUserAccountUnique.EndPoint{}):                  checkUserAccountUnique.Init(apiRoot),
+			api.GetName(checkUserAccountUniqueAll.EndPoint{}):               checkUserAccountUniqueAll.Init(apiRoot),
+			api.GetName(checkUserInfoUnique.EndPoint{}):                     checkUserInfoUnique.Init(apiRoot),
+			api.GetName(checkUserIsExist.EndPoint{}):                        checkUserIsExist.Init(apiRoot),
+			api.GetName(checkUserListIsExist.EndPoint{}):                    checkUserListIsExist.Init(apiRoot),
+			api.GetName(checkUserPassword.EndPoint{}):                       checkUserPassword.Init(apiRoot),
+			api.GetName(cloudDeploymentRecord.EndPoint{}):                   cloudDeploymentRecord.Init(apiRoot),
+			api.GetName(comfirmParamModel.EndPoint{}):                       comfirmParamModel.Init(apiRoot),
+			api.GetName(compareValidateCode.EndPoint{}):                     compareValidateCode.Init(apiRoot),
+			api.GetName(componentInfo2Cloud.EndPoint{}):                     componentInfo2Cloud.Init(apiRoot),
+			api.GetName(confirmFault.EndPoint{}):                            confirmFault.Init(apiRoot),
+			api.GetName(confirmIvFault.EndPoint{}):                          confirmIvFault.Init(apiRoot),
+			api.GetName(confirmReportConfig.EndPoint{}):                     confirmReportConfig.Init(apiRoot),
+			api.GetName(createAppkeyInfo.EndPoint{}):                        createAppkeyInfo.Init(apiRoot),
+			api.GetName(createRenewInvoice.EndPoint{}):                      createRenewInvoice.Init(apiRoot),
+			api.GetName(dealCommandReply.EndPoint{}):                        dealCommandReply.Init(apiRoot),
+			api.GetName(dealDeletePsFailPsDelete.EndPoint{}):                dealDeletePsFailPsDelete.Init(apiRoot),
+			api.GetName(dealFailRemoteUpgradeSubTasks.EndPoint{}):           dealFailRemoteUpgradeSubTasks.Init(apiRoot),
+			api.GetName(dealFailRemoteUpgradeTasks.EndPoint{}):              dealFailRemoteUpgradeTasks.Init(apiRoot),
+			api.GetName(dealFaultOrder.EndPoint{}):                          dealFaultOrder.Init(apiRoot),
+			api.GetName(dealGroupStringDisableOrEnable.EndPoint{}):          dealGroupStringDisableOrEnable.Init(apiRoot),
+			api.GetName(dealNumberOfServiceCalls2Mysql.EndPoint{}):          dealNumberOfServiceCalls2Mysql.Init(apiRoot),
+			api.GetName(dealParamSettingAfterComplete.EndPoint{}):           dealParamSettingAfterComplete.Init(apiRoot),
+			api.GetName(dealPsDataSupplement.EndPoint{}):                    dealPsDataSupplement.Init(apiRoot),
+			api.GetName(dealPsReportEmailSend.EndPoint{}):                   dealPsReportEmailSend.Init(apiRoot),
+			api.GetName(dealRemoteUpgrade.EndPoint{}):                       dealRemoteUpgrade.Init(apiRoot),
+			api.GetName(dealSnElectrifyCheck.EndPoint{}):                    dealSnElectrifyCheck.Init(apiRoot),
+			api.GetName(dealSysDeviceSimFlowInfo.EndPoint{}):                dealSysDeviceSimFlowInfo.Init(apiRoot),
+			api.GetName(dealSysDeviceSimInfo.EndPoint{}):                    dealSysDeviceSimInfo.Init(apiRoot),
+			api.GetName(definiteTimeDealSnExpRemind.EndPoint{}):             definiteTimeDealSnExpRemind.Init(apiRoot),
+			api.GetName(definiteTimeDealSnStatus.EndPoint{}):                definiteTimeDealSnStatus.Init(apiRoot),
+			api.GetName(delDeviceRepair.EndPoint{}):                         delDeviceRepair.Init(apiRoot),
+			api.GetName(delOperRule.EndPoint{}):                             delOperRule.Init(apiRoot),
+			api.GetName(delayCallApiResidueTimes.EndPoint{}):                delayCallApiResidueTimes.Init(apiRoot),
+			api.GetName(deleteComponent.EndPoint{}):                         deleteComponent.Init(apiRoot),
+			api.GetName(deleteCustomerEmployee.EndPoint{}):                  deleteCustomerEmployee.Init(apiRoot),
+			api.GetName(deleteDeviceAccount.EndPoint{}):                     deleteDeviceAccount.Init(apiRoot),
+			api.GetName(deleteDeviceSimById.EndPoint{}):                     deleteDeviceSimById.Init(apiRoot),
+			api.GetName(deleteElectricitySettlementData.EndPoint{}):         deleteElectricitySettlementData.Init(apiRoot),
+			api.GetName(deleteFaultPlan.EndPoint{}):                         deleteFaultPlan.Init(apiRoot),
+			api.GetName(deleteFirmwareFiles.EndPoint{}):                     deleteFirmwareFiles.Init(apiRoot),
+			api.GetName(deleteHouseholdEvaluation.EndPoint{}):               deleteHouseholdEvaluation.Init(apiRoot),
+			api.GetName(deleteHouseholdLeaveMessage.EndPoint{}):             deleteHouseholdLeaveMessage.Init(apiRoot),
+			api.GetName(deleteHouseholdWorkOrder.EndPoint{}):                deleteHouseholdWorkOrder.Init(apiRoot),
+			api.GetName(deleteInverterSnInChnnl.EndPoint{}):                 deleteInverterSnInChnnl.Init(apiRoot),
+			api.GetName(deleteModuleLog.EndPoint{}):                         deleteModuleLog.Init(apiRoot),
+			api.GetName(deleteOnDutyInfo.EndPoint{}):                        deleteOnDutyInfo.Init(apiRoot),
+			api.GetName(deleteOperateBillFile.EndPoint{}):                   deleteOperateBillFile.Init(apiRoot),
+			api.GetName(deleteOssObject.EndPoint{}):                         deleteOssObject.Init(apiRoot),
+			api.GetName(deletePowerDevicePointById.EndPoint{}):              deletePowerDevicePointById.Init(apiRoot),
+			api.GetName(deletePowerPicture.EndPoint{}):                      deletePowerPicture.Init(apiRoot),
+			api.GetName(deletePowerRobotInfoBySnAndPsId.EndPoint{}):         deletePowerRobotInfoBySnAndPsId.Init(apiRoot),
+			api.GetName(deletePowerRobotSweepStrategy.EndPoint{}):           deletePowerRobotSweepStrategy.Init(apiRoot),
+			api.GetName(deleteProductionData.EndPoint{}):                    deleteProductionData.Init(apiRoot),
+			api.GetName(deletePs.EndPoint{}):                                deletePs.Init(apiRoot),
+			api.GetName(deleteRechargeOrder.EndPoint{}):                     deleteRechargeOrder.Init(apiRoot),
+			api.GetName(deleteRegularlyConnectionInfo.EndPoint{}):           deleteRegularlyConnectionInfo.Init(apiRoot),
+			api.GetName(deleteReportConfigEmailAddr.EndPoint{}):             deleteReportConfigEmailAddr.Init(apiRoot),
+			api.GetName(deleteSysAdvancedParam.EndPoint{}):                  deleteSysAdvancedParam.Init(apiRoot),
+			api.GetName(deleteSysOrgNew.EndPoint{}):                         deleteSysOrgNew.Init(apiRoot),
+			api.GetName(deleteTemplate.EndPoint{}):                          deleteTemplate.Init(apiRoot),
+			api.GetName(deleteUserInfoAllByUserId.EndPoint{}):               deleteUserInfoAllByUserId.Init(apiRoot),
+			api.GetName(deviceInputDiscreteDeleteTime.EndPoint{}):           deviceInputDiscreteDeleteTime.Init(apiRoot),
+			api.GetName(deviceInputDiscreteGetTime.EndPoint{}):              deviceInputDiscreteGetTime.Init(apiRoot),
+			api.GetName(deviceInputDiscreteInsertTime.EndPoint{}):           deviceInputDiscreteInsertTime.Init(apiRoot),
+			api.GetName(deviceInputDiscreteUpdateTime.EndPoint{}):           deviceInputDiscreteUpdateTime.Init(apiRoot),
+			api.GetName(deviceReplace.EndPoint{}):                           deviceReplace.Init(apiRoot),
+			api.GetName(editDeviceRepair.EndPoint{}):                        editDeviceRepair.Init(apiRoot),
+			api.GetName(editOperRule.EndPoint{}):                            editOperRule.Init(apiRoot),
+			api.GetName(energyPovertyAlleviation.EndPoint{}):                energyPovertyAlleviation.Init(apiRoot),
+			api.GetName(faultAutoClose.EndPoint{}):                          faultAutoClose.Init(apiRoot),
+			api.GetName(faultCloseRemindOrderHandler.EndPoint{}):            faultCloseRemindOrderHandler.Init(apiRoot),
+			api.GetName(findCodeValueList.EndPoint{}):                       findCodeValueList.Init(apiRoot),
+			api.GetName(findEmgOrgInfo.EndPoint{}):                          findEmgOrgInfo.Init(apiRoot),
+			api.GetName(findEnvironmentInfo.EndPoint{}):                     findEnvironmentInfo.Init(apiRoot),
+			api.GetName(findFromHbaseAndRedis.EndPoint{}):                   findFromHbaseAndRedis.Init(apiRoot),
+			api.GetName(findLossAnalysisList.EndPoint{}):                    findLossAnalysisList.Init(apiRoot),
+			api.GetName(findOnDutyInfo.EndPoint{}):                          findOnDutyInfo.Init(apiRoot),
+			api.GetName(findSingleStationPR.EndPoint{}):                     findSingleStationPR.Init(apiRoot),
+			api.GetName(findUserPassword.EndPoint{}):                        findUserPassword.Init(apiRoot),
+			api.GetName(genTLSUserSigByUserAccount.EndPoint{}):              genTLSUserSigByUserAccount.Init(apiRoot),
+			api.GetName(generateRandomPassword.EndPoint{}):                  generateRandomPassword.Init(apiRoot),
+			api.GetName(getAPIServiceInfo.EndPoint{}):                       getAPIServiceInfo.Init(apiRoot),
+			api.GetName(getAccessedPermission.EndPoint{}):                   getAccessedPermission.Init(apiRoot),
+			api.GetName(getAllDeviceByPsId.EndPoint{}):                      getAllDeviceByPsId.Init(apiRoot),
+			api.GetName(getAllPowerRobotViewInfoByPsId.EndPoint{}):          getAllPowerRobotViewInfoByPsId.Init(apiRoot),
+			api.GetName(getAllPsIdByOrgIds.EndPoint{}):                      getAllPsIdByOrgIds.Init(apiRoot),
+			api.GetName(getAllUserRemindCount.EndPoint{}):                   getAllUserRemindCount.Init(apiRoot),
+			api.GetName(getAndOutletsAndUnit.EndPoint{}):                    getAndOutletsAndUnit.Init(apiRoot),
+			api.GetName(getAreaInfoCodeByCounty.EndPoint{}):                 getAreaInfoCodeByCounty.Init(apiRoot),
+			api.GetName(getAutoCreatePowerStation.EndPoint{}):               getAutoCreatePowerStation.Init(apiRoot),
+			api.GetName(getBackReadValue.EndPoint{}):                        getBackReadValue.Init(apiRoot),
+			api.GetName(getBatchNewestPointData.EndPoint{}):                 getBatchNewestPointData.Init(apiRoot),
+			api.GetName(getCallApiResidueTimes.EndPoint{}):                  getCallApiResidueTimes.Init(apiRoot),
+			api.GetName(getChangedPsListByTime.EndPoint{}):                  getChangedPsListByTime.Init(apiRoot),
+			api.GetName(getChnnlListByPsId.EndPoint{}):                      getChnnlListByPsId.Init(apiRoot),
+			api.GetName(getCloudServiceMappingConfig.EndPoint{}):            getCloudServiceMappingConfig.Init(apiRoot),
+			api.GetName(getCommunicationDeviceConfigInfo.EndPoint{}):        getCommunicationDeviceConfigInfo.Init(apiRoot),
+			api.GetName(getCommunicationModuleMonitorData.EndPoint{}):       getCommunicationModuleMonitorData.Init(apiRoot),
+			api.GetName(getComponentModelFactory.EndPoint{}):                getComponentModelFactory.Init(apiRoot),
+
 			api.GetName(getConnectionInfoBySnAndLocalPort.EndPoint{}):                 getConnectionInfoBySnAndLocalPort.Init(apiRoot),
 			api.GetName(getCountDown.EndPoint{}):                                      getCountDown.Init(apiRoot),
 			api.GetName(getCountryServiceInfo.EndPoint{}):                             getCountryServiceInfo.Init(apiRoot),
@@ -833,12 +847,9 @@ func Init(apiRoot *api.Web) Area {
 			api.GetName(getDevSimList.EndPoint{}):                                     getDevSimList.Init(apiRoot),
 			api.GetName(getDeviceAccountById.EndPoint{}):                              getDeviceAccountById.Init(apiRoot),
 			api.GetName(getDeviceFaultStatisticsData.EndPoint{}):                      getDeviceFaultStatisticsData.Init(apiRoot),
-			api.GetName(getDeviceModelInfoList.EndPoint{}):                            getDeviceModelInfoList.Init(apiRoot),
 			api.GetName(getDevicePropertys.EndPoint{}):                                getDevicePropertys.Init(apiRoot),
 			api.GetName(getDeviceRepairDetail.EndPoint{}):                             getDeviceRepairDetail.Init(apiRoot),
 			api.GetName(getDeviceTechBranchCount.EndPoint{}):                          getDeviceTechBranchCount.Init(apiRoot),
-			api.GetName(getDeviceTypeInfoList.EndPoint{}):                             getDeviceTypeInfoList.Init(apiRoot),
-			api.GetName(getDeviceTypeList.EndPoint{}):                                 getDeviceTypeList.Init(apiRoot),
 			api.GetName(getDstInfo.EndPoint{}):                                        getDstInfo.Init(apiRoot),
 			api.GetName(getElectricitySettlementData.EndPoint{}):                      getElectricitySettlementData.Init(apiRoot),
 			api.GetName(getElectricitySettlementDetailData.EndPoint{}):                getElectricitySettlementDetailData.Init(apiRoot),
@@ -870,7 +881,6 @@ func Init(apiRoot *api.Web) Area {
 			api.GetName(getInfomationFromRedis.EndPoint{}):                            getInfomationFromRedis.Init(apiRoot),
 			api.GetName(getInstallInfoList.EndPoint{}):                                getInstallInfoList.Init(apiRoot),
 			api.GetName(getInstallerInfoByDealerOrgCodeOrId.EndPoint{}):               getInstallerInfoByDealerOrgCodeOrId.Init(apiRoot),
-			api.GetName(getInvertDataList.EndPoint{}):                                 getInvertDataList.Init(apiRoot),
 			api.GetName(getInverterDataCount.EndPoint{}):                              getInverterDataCount.Init(apiRoot),
 			api.GetName(getInverterProcess.EndPoint{}):                                getInverterProcess.Init(apiRoot),
 			api.GetName(getInverterUuidBytotalId.EndPoint{}):                          getInverterUuidBytotalId.Init(apiRoot),
@@ -912,7 +922,6 @@ func Init(apiRoot *api.Web) Area {
 			api.GetName(getPowerDeviceModelTree.EndPoint{}):                           getPowerDeviceModelTree.Init(apiRoot),
 			api.GetName(getPowerDevicePointInfo.EndPoint{}):                           getPowerDevicePointInfo.Init(apiRoot),
 			api.GetName(getPowerFormulaFaultAnalyse.EndPoint{}):                       getPowerFormulaFaultAnalyse.Init(apiRoot),
-			api.GetName(getPowerPictureList.EndPoint{}):                               getPowerPictureList.Init(apiRoot),
 			api.GetName(getPowerRobotInfoByRobotSn.EndPoint{}):                        getPowerRobotInfoByRobotSn.Init(apiRoot),
 			api.GetName(getPowerRobotSweepAttrByPsId.EndPoint{}):                      getPowerRobotSweepAttrByPsId.Init(apiRoot),
 			api.GetName(getPowerRobotSweepStrategy.EndPoint{}):                        getPowerRobotSweepStrategy.Init(apiRoot),
@@ -931,10 +940,6 @@ func Init(apiRoot *api.Web) Area {
 			api.GetName(getPsInstallerByPsId.EndPoint{}):                              getPsInstallerByPsId.Init(apiRoot),
 			api.GetName(getPsInstallerOrgInfoByPsId.EndPoint{}):                       getPsInstallerOrgInfoByPsId.Init(apiRoot),
 			api.GetName(getPsListForPsDataByPsId.EndPoint{}):                          getPsListForPsDataByPsId.Init(apiRoot),
-			api.GetName(getPsListStaticData.EndPoint{}):                               getPsListStaticData.Init(apiRoot),
-			api.GetName(getPsReport.EndPoint{}):                                       getPsReport.Init(apiRoot),
-			api.GetName(getPsUser.EndPoint{}):                                         getPsUser.Init(apiRoot),
-			api.GetName(getPsWeatherList.EndPoint{}):                                  getPsWeatherList.Init(apiRoot),
 			api.GetName(getRechargeOrderDetail.EndPoint{}):                            getRechargeOrderDetail.Init(apiRoot),
 			api.GetName(getRechargeOrderItemDeviceList.EndPoint{}):                    getRechargeOrderItemDeviceList.Init(apiRoot),
 			api.GetName(getRechargeOrderList.EndPoint{}):                              getRechargeOrderList.Init(apiRoot),
@@ -972,8 +977,6 @@ func Init(apiRoot *api.Web) Area {
 			api.GetName(getUserGDPRAttrs.EndPoint{}):                                  getUserGDPRAttrs.Init(apiRoot),
 			api.GetName(getUserHavePowerStationCount.EndPoint{}):                      getUserHavePowerStationCount.Init(apiRoot),
 			api.GetName(getUserInfoByUserAccounts.EndPoint{}):                         getUserInfoByUserAccounts.Init(apiRoot),
-			api.GetName(getUserList.EndPoint{}):                                       getUserList.Init(apiRoot),
-			api.GetName(getUserPsOrderList.EndPoint{}):                                getUserPsOrderList.Init(apiRoot),
 			api.GetName(getValidateCode.EndPoint{}):                                   getValidateCode.Init(apiRoot),
 			api.GetName(getValidateCodeAtRegister.EndPoint{}):                         getValidateCodeAtRegister.Init(apiRoot),
 			api.GetName(getWeatherInfo.EndPoint{}):                                    getWeatherInfo.Init(apiRoot),
@@ -1076,13 +1079,11 @@ func Init(apiRoot *api.Web) Area {
 			api.GetName(queryUserByUserIds.EndPoint{}):                                queryUserByUserIds.Init(apiRoot),
 			api.GetName(queryUserExtensionAttribute.EndPoint{}):                       queryUserExtensionAttribute.Init(apiRoot),
 			api.GetName(queryUserForStep.EndPoint{}):                                  queryUserForStep.Init(apiRoot),
-			api.GetName(queryUserList.EndPoint{}):                                     queryUserList.Init(apiRoot),
 			api.GetName(queryUserProcessPri.EndPoint{}):                               queryUserProcessPri.Init(apiRoot),
 			api.GetName(queryUserWechatBindRel.EndPoint{}):                            queryUserWechatBindRel.Init(apiRoot),
 			api.GetName(queryUuidByTotalIdAndUuid.EndPoint{}):                         queryUuidByTotalIdAndUuid.Init(apiRoot),
 			api.GetName(rechargeOrderSetMeal.EndPoint{}):                              rechargeOrderSetMeal.Init(apiRoot),
 			api.GetName(renewSendReportConfirmEmail.EndPoint{}):                       renewSendReportConfirmEmail.Init(apiRoot),
-			api.GetName(reportList.EndPoint{}):                                        reportList.Init(apiRoot),
 			api.GetName(saveCustomerEmployee.EndPoint{}):                              saveCustomerEmployee.Init(apiRoot),
 			api.GetName(saveDevSimList.EndPoint{}):                                    saveDevSimList.Init(apiRoot),
 			api.GetName(saveDeviceAccountBatchData.EndPoint{}):                        saveDeviceAccountBatchData.Init(apiRoot),
@@ -1171,571 +1172,6 @@ func Init(apiRoot *api.Web) Area {
 			api.GetName(userInfoUniqueCheck.EndPoint{}):                               userInfoUniqueCheck.Init(apiRoot),
 			api.GetName(userMailHasBound.EndPoint{}):                                  userMailHasBound.Init(apiRoot),
 			api.GetName(userRegister.EndPoint{}):                                      userRegister.Init(apiRoot),
-
-			// "psHourPointsValue":                     nullEndPoint.Init(apiRoot), // "/v1/powerStationService/psHourPointsValue"}
-			// "getPsCurveInfo":                        nullEndPoint.Init(apiRoot), // "/v1/devService/getPsCurveInfo"}
-			// "queryMutiPointDataList":                nullEndPoint.Init(apiRoot), // "/v1/commonService/queryMutiPointDataList"}
-			// "getTemplateList":                       nullEndPoint.Init(apiRoot), // "/v1/devService/getTemplateList"}
-			// "getDevicePoints":                       nullEndPoint.Init(apiRoot), // "/v1/devService/getDevicePoints"}
-			// "getAllPowerDeviceSetName":              nullEndPoint.Init(apiRoot), // "/v1/devService/getAllPowerDeviceSetName"}
-			// "queryAllPsIdAndName":                   nullEndPoint.Init(apiRoot), // "/v1/powerStationService/queryAllPsIdAndName"}
-			// "queryDevicePointMinuteDataList":        nullEndPoint.Init(apiRoot), // "/v1/commonService/queryDevicePointMinuteDataList"}
-			// "getTemplateByInfoType":                 nullEndPoint.Init(apiRoot), // "/v1/messageService/getTemplateByInfoType"}
-			// "energyTrend":                           nullEndPoint.Init(apiRoot), // "/v1/powerStationService/energyTrend"}
-			// "queryBatchCreatePsTaskList":            nullEndPoint.Init(apiRoot), // "/v1/powerStationService/queryBatchCreatePsTaskList"}
-			// "exportPlantReportPDF":                  nullEndPoint.Init(apiRoot), // "/v1/powerStationService/exportPlantReportPDF"}
-			// "getTableDataSql":                       nullEndPoint.Init(apiRoot), // "/v1/devService/getTableDataSql"}
-			// "getTableDataSqlCount":                  nullEndPoint.Init(apiRoot), // "/v1/devService/getTableDataSqlCount"}
-			// "getPListinfoFromMysql":                 nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPListinfoFromMysql"}
-			// "getDataFromHBase":                      nullEndPoint.Init(apiRoot), // "/v1/commonService/getDataFromHBase"}
-			// "getListMiFromHBase":                    nullEndPoint.Init(apiRoot), // "/v1/commonService/getListMiFromHBase"}
-			// "getMapMiFromHBase":                     nullEndPoint.Init(apiRoot), // "/v1/commonService/getMapMiFromHBase"}
-			// "getValFromHBase":                       nullEndPoint.Init(apiRoot), // "/v1/commonService/getValFromHBase"}
-			// "getPowerStationTableDataSql":           nullEndPoint.Init(apiRoot), // "/v1/devService/getPowerStationTableDataSql"}
-			// "getPowerStationTableDataSqlCount":      nullEndPoint.Init(apiRoot), // "/v1/devService/getPowerStationTableDataSqlCount"}
-			// "getDataFromHbaseByRowKey":              nullEndPoint.Init(apiRoot), // "/v1/commonService/getDataFromHbaseByRowKey"}
-			// "findInfoByuuid":                        nullEndPoint.Init(apiRoot), // "/v1/devService/findInfoByuuid"}
-			// "getStationInfoSql":                     nullEndPoint.Init(apiRoot), // "/v1/devService/getStationInfoSql"}
-			// "getDevicePointMinuteDataList":          nullEndPoint.Init(apiRoot), // "/v1/commonService/getDevicePointMinuteDataList"}
-			// "powerDevicePointList":                  nullEndPoint.Init(apiRoot), // "/v1/reportService/powerDevicePointList"}
-			// "getPowerTrendDayData":                  nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPowerTrendDayData"}
-			// "powerTrendChartData":                   nullEndPoint.Init(apiRoot), // "/v1/powerStationService/powerTrendChartData"}
-			// "getUpTimePoint":                        nullEndPoint.Init(apiRoot), // "/v1/devService/getUpTimePoint"}
-			// "getSerialNum":                          nullEndPoint.Init(apiRoot), // "/v1/devService/getSerialNum"}
-			// "getModuleLogTaskList":                  nullEndPoint.Init(apiRoot), // "/integrationService/getModuleLogTaskList"}
-			// "queryParamSettingTask":                 nullEndPoint.Init(apiRoot), // "/v1/devService/queryParamSettingTask"}
-			// "queryCtrlTaskById":                     nullEndPoint.Init(apiRoot), // "/v1/devService/queryCtrlTaskById"}
-			// "queryDeviceInfo":                       nullEndPoint.Init(apiRoot), // "/v1/devService/queryDeviceInfoForApp"}
-			// "queryDeviceInfoForApp":                 nullEndPoint.Init(apiRoot), // "/v1/devService/queryDeviceInfoForApp"}
-			// "queryDeviceList":                       nullEndPoint.Init(apiRoot), // "/v1/devService/queryDeviceList"}
-			// "queryDeviceListByUserId":               nullEndPoint.Init(apiRoot), // "/v1/devService/queryDeviceListByUserId"}
-			// "queryDeviceListForApp":                 nullEndPoint.Init(apiRoot), // "/v1/devService/queryDeviceListForApp"}
-			// "queryDeviceModelTechnical":             nullEndPoint.Init(apiRoot), // "/v1/devService/queryDeviceModelTechnical"}
-			// "getPsDataSupplementTaskList":           nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsDataSupplementTaskList"}
-			// "getPsDetail":                           nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsDetail"}
-			// "getPsHealthState":                      nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsHealthState"}
-			// "getPowerDeviceSetTaskDetailList":       nullEndPoint.Init(apiRoot), // "/v1/devService/getPowerDeviceSetTaskDetailList"}
-			// "getPowerDeviceSetTaskList":             nullEndPoint.Init(apiRoot), // "/v1/devService/getPowerDeviceSetTaskList"}
-			// "getPsAuthKey":                          nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsAuthKey"}
-			// "getApiCallsForAppkeys":                 nullEndPoint.Init(apiRoot), // "/v1/commonService/getApiCallsForAppkeys"}
-			// "exportParamSettingValPDF":              nullEndPoint.Init(apiRoot), // "/v1/devService/exportParamSettingValPDF"}
-			// "checkUnitStatus":                       nullEndPoint.Init(apiRoot), // "/v1/devService/checkUnitStatus"}
-			// "devicePointsDataFromMySql":             nullEndPoint.Init(apiRoot), // "/v1/devService/devicePointsDataFromMySql"}
-			// "queryDevicePointDayMonthYearDataList":  nullEndPoint.Init(apiRoot), // "/v1/commonService/queryDevicePointDayMonthYearDataList"}
-			// "queryDevicePointsDayMonthYearDataList": nullEndPoint.Init(apiRoot), // "/v1/commonService/queryDevicePointsDayMonthYearDataList"}
-			// "queryDeviceRealTimeDataByPsKeys":       nullEndPoint.Init(apiRoot), // "/v1/devService/queryDeviceRealTimeDataByPsKeys"}
-			// "acceptPsSharing":                                   nullEndPoint.Init(apiRoot), // "/v1/powerStationService/acceptPsSharing"}
-			// "activateEmail":                                     nullEndPoint.Init(apiRoot), // "/v1/userService/activateEmail"}
-			// "addConfig":                                         nullEndPoint.Init(apiRoot), // "/devDataHandleService/addConfig"}
-			// "addDeviceRepair":                                   nullEndPoint.Init(apiRoot), // "/v1/devService/addDeviceRepair"}
-			// "addDeviceToStructureForHousehold":                  nullEndPoint.Init(apiRoot), // "/devDataHandleService/addDeviceToStructureForHousehold"}
-			// "addDeviceToStructureForHouseholdByPsIdS":           nullEndPoint.Init(apiRoot), // "/devDataHandleService/addDeviceToStructureForHouseholdByPsIdS"}
-			// "addFault":                                          nullEndPoint.Init(apiRoot), // "/v1/faultService/addFault"}
-			// "addFaultOrder":                                     nullEndPoint.Init(apiRoot), // "/v1/faultService/addFaultOrder"}
-			// "addFaultPlan":                                      nullEndPoint.Init(apiRoot), // "/v1/faultService/addFaultPlan"}
-			// "addFaultRepairSteps":                               nullEndPoint.Init(apiRoot), // "/v1/faultService/addFaultRepairSteps"}
-			// "addHouseholdEvaluation":                            nullEndPoint.Init(apiRoot), // "/v1/faultService/addHouseholdEvaluation"}
-			// "addHouseholdLeaveMessage":                          nullEndPoint.Init(apiRoot), // "/v1/faultService/addHouseholdLeaveMessage"}
-			// "addHouseholdOpinionFeedback":                       nullEndPoint.Init(apiRoot), // "/v1/faultService/addHouseholdOpinionFeedback"}
-			// "addHouseholdWorkOrder":                             nullEndPoint.Init(apiRoot), // "/v1/faultService/addHouseholdWorkOrder"}
-			// "addOnDutyInfo":                                     nullEndPoint.Init(apiRoot), // "/v1/otherService/addOnDutyInfo"}
-			// "addOperRule":                                       nullEndPoint.Init(apiRoot), // "/v1/faultService/addOperRule"}
-			// "addOrDelPsStructure":                               nullEndPoint.Init(apiRoot), // "/v1/devService/addOrDelPsStructure"}
-			// "addOrderStep":                                      nullEndPoint.Init(apiRoot), // "/v1/faultService/addOrderStep"}
-			// "addPowerStationForHousehold":                       nullEndPoint.Init(apiRoot), // "/v1/powerStationService/addPowerStationForHousehold"}
-			// "addPowerStationInfo":                               nullEndPoint.Init(apiRoot), // "/v1/powerStationService/addPowerStationInfo"}
-			// "addReportConfigEmail":                              nullEndPoint.Init(apiRoot), // "/v1/reportService/addReportConfigEmail"}
-			// "addSysAdvancedParam":                               nullEndPoint.Init(apiRoot), // "/v1/devService/addSysAdvancedParam"}
-			// "addSysOrgNew":                                      nullEndPoint.Init(apiRoot), // "/v1/otherService/addSysOrgNew"}
-			// "aliPayAppTest":                                     nullEndPoint.Init(apiRoot), // "/onlinepay/aliPayAppTest"}
-			// "auditOperRule":                                     nullEndPoint.Init(apiRoot), // "/v1/faultService/auditOperRule"}
-			// "batchAddStationBySn":                               nullEndPoint.Init(apiRoot), // "/v1/powerStationService/batchAddStationBySn"}
-			// "batchImportSN":                                     nullEndPoint.Init(apiRoot), // "/v1/devService/batchImportSN"}
-			// "batchInsertUserAndOrg":                             nullEndPoint.Init(apiRoot), // "/v1/userService/batchInsertUserAndOrg"}
-			// "batchModifyDevicesInfoAndPropertis":                nullEndPoint.Init(apiRoot), // "/v1/devService/batchModifyDevicesInfoAndPropertis"}
-			// "batchProcessPlantReport":                           nullEndPoint.Init(apiRoot), // "/v1/powerStationService/batchProcessPlantReport"}
-			// "batchUpdateDeviceSim":                              nullEndPoint.Init(apiRoot), // "/v1/devService/batchUpdateDeviceSim"}
-			// "batchUpdateUserIsAgreeGdpr":                        nullEndPoint.Init(apiRoot), // "/v1/userService/batchUpdateUserIsAgreeGdpr"}
-			// "boundMobilePhone":                                  nullEndPoint.Init(apiRoot), // "/v1/userService/boundMobilePhone"}
-			// "boundUserMail":                                     nullEndPoint.Init(apiRoot), // "/v1/userService/boundUserMail"}
-			// "caculateDeviceInputDiscrete":                       nullEndPoint.Init(apiRoot), // "/v1/devService/caculateDeviceInputDiscrete"}
-			// "calculateDeviceDiscrete":                           nullEndPoint.Init(apiRoot), // "/v1/devService/calculateDeviceDiscrete"}
-			// "calculateInitialCompensationData":                  nullEndPoint.Init(apiRoot), // "/v1/powerStationService/calculateInitialCompensationData"}
-			// "cancelDeliverMail":                                 nullEndPoint.Init(apiRoot), // "/v1/messageService/cancelDeliverMail"}
-			// "cancelOrderScan":                                   nullEndPoint.Init(apiRoot), // "/v1/devService/cancelOrderScan"}
-			// "cancelParamSetTask":                                nullEndPoint.Init(apiRoot), // "/v1/devService/cancelParamSetTask"}
-			// "cancelPsSharing":                                   nullEndPoint.Init(apiRoot), // "/v1/powerStationService/cancelPsSharing"}
-			// "cancelRechargeOrder":                               nullEndPoint.Init(apiRoot), // "/onlinepay/cancelRechargeOrder"}
-			// "changRechargeOrderToCancel":                        nullEndPoint.Init(apiRoot), // "/onlinepay/changRechargeOrderToCancel"}
-			// "changeHouseholdUser2Installer":                     nullEndPoint.Init(apiRoot), // "/v1/orgService/changeHouseholdUser2Installer"}
-			// "changeRemoteParam":                                 nullEndPoint.Init(apiRoot), // "/v1/devService/changeRemoteParam"}
-			// "checkDealerOrgCode":                                nullEndPoint.Init(apiRoot), // "/v1/orgService/checkDealerOrgCode"}
-			// "checkDevSnIsBelongsToUser":                         nullEndPoint.Init(apiRoot), // "/v1/userService/checkDevSnIsBelongsToUser"}
-			// "checkInverterResult":                               nullEndPoint.Init(apiRoot), // "/v1/devService/checkInverterResult"}
-			// "checkIsCanDoParamSet":                              nullEndPoint.Init(apiRoot), // "/v1/devService/checkIsCanDoParamSet"}
-			// "checkIsIvScan":                                     nullEndPoint.Init(apiRoot), // "/v1/devService/checkIsIvScan"}
-			// "checkOssObjectExist":                               nullEndPoint.Init(apiRoot), // "/v1/commonService/checkOssObjectExist"}
-			// "checkServiceIsConnect":                             nullEndPoint.Init(apiRoot), // "/v1/commonService/checkServiceIsConnect"}
-			// "checkTechnicalParameters":                          nullEndPoint.Init(apiRoot), // "/v1/devService/checkTechnicalParameters"}
-			// "checkUpRechargeDevicePaying":                       nullEndPoint.Init(apiRoot), // "/onlinepay/checkUpRechargeDevicePaying"}
-			// "checkUserAccountUnique":                            nullEndPoint.Init(apiRoot), // "/v1/userService/checkUserAccountUnique"}
-			// "checkUserAccountUniqueAll":                         nullEndPoint.Init(apiRoot), // "/v1/userService/checkUserAccountUniqueAll"}
-			// "checkUserInfoUnique":                               nullEndPoint.Init(apiRoot), // "/v1/userService/checkUserInfoUnique"}
-			// "checkUserIsExist":                                  nullEndPoint.Init(apiRoot), // "/v1/userService/checkUserIsExist"}
-			// "checkUserListIsExist":                              nullEndPoint.Init(apiRoot), // "/v1/userService/checkUserListIsExist"}
-			// "checkUserPassword":                                 nullEndPoint.Init(apiRoot), // "/v1/userService/checkUserPassword"}
-			// "cloudDeploymentRecord":                             nullEndPoint.Init(apiRoot), // "/v1/commonService/cloudDeploymentRecord"}
-			// "comfirmParamModel":                                 nullEndPoint.Init(apiRoot), // "/v1/devService/comfirmParamModel"}
-			// "compareValidateCode":                               nullEndPoint.Init(apiRoot), // "/v1/userService/compareValidateCode"}
-			// "componentInfo2Cloud":                               nullEndPoint.Init(apiRoot), // "/v1/devService/componentInfo2Cloud"}
-			// "confirmFault":                                      nullEndPoint.Init(apiRoot), // "/v1/faultService/confirmFault"}
-			// "confirmIvFault":                                    nullEndPoint.Init(apiRoot), // "/v1/devService/confirmIvFault"}
-			// "confirmReportConfig":                               nullEndPoint.Init(apiRoot), // "/v1/reportService/confirmReportConfig"}
-			// "createAppkeyInfo":                                  nullEndPoint.Init(apiRoot), // "/v1/userService/createAppkeyInfo"}
-			// "createRenewInvoice":                                nullEndPoint.Init(apiRoot), // "/onlinepay/createRenewInvoice"}
-			// "dealCommandReply":                                  nullEndPoint.Init(apiRoot), // "/devDataHandleService/dealCommandReply"}
-			// "dealDeletePsFailPsDelete":                          nullEndPoint.Init(apiRoot), // "/v1/powerStationService/dealDeletePsFailPsDelete"}
-			// "dealFailRemoteUpgradeSubTasks":                     nullEndPoint.Init(apiRoot), // "/v1/devService/dealFailRemoteUpgradeSubTasks"}
-			// "dealFailRemoteUpgradeTasks":                        nullEndPoint.Init(apiRoot), // "/v1/devService/dealFailRemoteUpgradeTasks"}
-			// "dealFaultOrder":                                    nullEndPoint.Init(apiRoot), // "/v1/faultService/dealFaultOrder"}
-			// "dealGroupStringDisableOrEnable":                    nullEndPoint.Init(apiRoot), // "/v1/devService/dealGroupStringDisableOrEnable"}
-			// "dealNumberOfServiceCalls2Mysql":                    nullEndPoint.Init(apiRoot), // "/v1/commonService/dealNumberOfServiceCalls2Mysql"}
-			// "dealParamSettingAfterComplete":                     nullEndPoint.Init(apiRoot), // "/v1/devService/dealParamSettingAfterComplete"}
-			// "dealPsDataSupplement":                              nullEndPoint.Init(apiRoot), // "/v1/powerStationService/dealPsDataSupplement"}
-			// "dealPsReportEmailSend":                             nullEndPoint.Init(apiRoot), // "/v1/reportService/dealPsReportEmailSend"}
-			// "dealRemoteUpgrade":                                 nullEndPoint.Init(apiRoot), // "/v1/devService/dealRemoteUpgrade"}
-			// "dealSnElectrifyCheck":                              nullEndPoint.Init(apiRoot), // "/v1/devService/dealSnElectrifyCheck"}
-			// "dealSysDeviceSimFlowInfo":                          nullEndPoint.Init(apiRoot), // "/v1/devService/dealSysDeviceSimFlowInfo"}
-			// "dealSysDeviceSimInfo":                              nullEndPoint.Init(apiRoot), // "/v1/devService/dealSysDeviceSimInfo"}
-			// "definiteTimeDealSnExpRemind":                       nullEndPoint.Init(apiRoot), // "/v1/devService/definiteTimeDealSnExpRemind"}
-			// "definiteTimeDealSnStatus":                          nullEndPoint.Init(apiRoot), // "/v1/devService/definiteTimeDealSnStatus"}
-			// "delDeviceRepair":                                   nullEndPoint.Init(apiRoot), // "/v1/devService/delDeviceRepair"}
-			// "delOperRule":                                       nullEndPoint.Init(apiRoot), // "/v1/faultService/delOperRule"}
-			// "delayCallApiResidueTimes":                          nullEndPoint.Init(apiRoot), // "/v1/commonService/delayCallApiResidueTimes"}
-			// "deleteComponent":                                   nullEndPoint.Init(apiRoot), // "/v1/devService/deleteComponent"}
-			// "deleteCustomerEmployee":                            nullEndPoint.Init(apiRoot), // "/v1/devService/deleteCustomerEmployee"}
-			// "deleteDeviceAccount":                               nullEndPoint.Init(apiRoot), // "/v1/devService/deleteDeviceAccount"}
-			// "deleteDeviceSimById":                               nullEndPoint.Init(apiRoot), // "/v1/devService/deleteDeviceSimById"}
-			// "deleteElectricitySettlementData":                   nullEndPoint.Init(apiRoot), // "/v1/otherService/deleteElectricitySettlementData"}
-			// "deleteFaultPlan":                                   nullEndPoint.Init(apiRoot), // "/v1/faultService/deleteFaultPlan"}
-			// "deleteFirmwareFiles":                               nullEndPoint.Init(apiRoot), // "/v1/commonService/deleteFirmwareFiles"}
-			// "deleteHouseholdEvaluation":                         nullEndPoint.Init(apiRoot), // "/v1/faultService/deleteHouseholdEvaluation"}
-			// "deleteHouseholdLeaveMessage":                       nullEndPoint.Init(apiRoot), // "/v1/faultService/deleteHouseholdLeaveMessage"}
-			// "deleteHouseholdWorkOrder":                          nullEndPoint.Init(apiRoot), // "/v1/faultService/deleteHouseholdWorkOrder"}
-			// "deleteInverterSnInChnnl":                           nullEndPoint.Init(apiRoot), // "/devDataHandleService/deleteInverterSnInChnnl"}
-			// "deleteModuleLog":                                   nullEndPoint.Init(apiRoot), // "/integrationService/deleteModuleLog"}
-			// "deleteOnDutyInfo":                                  nullEndPoint.Init(apiRoot), // "/v1/otherService/deleteOnDutyInfo"}
-			// "deleteOperateBillFile":                             nullEndPoint.Init(apiRoot), // "/v1/faultService/deleteOperateBillFile"}
-			// "deleteOssObject":                                   nullEndPoint.Init(apiRoot), // "/v1/commonService/deleteOssObject"}
-			// "deletePowerDevicePointById":                        nullEndPoint.Init(apiRoot), // "/v1/reportService/deletePowerDevicePointById"}
-			// "deletePowerPicture":                                nullEndPoint.Init(apiRoot), // "/v1/powerStationService/deletePowerPicture"}
-			// "deletePowerRobotInfoBySnAndPsId":                   nullEndPoint.Init(apiRoot), // "/v1/devService/deletePowerRobotInfoBySnAndPsId"}
-			// "deletePowerRobotSweepStrategy":                     nullEndPoint.Init(apiRoot), // "/v1/devService/deletePowerRobotSweepStrategy"}
-			// "deleteProductionData":                              nullEndPoint.Init(apiRoot), // "/v1/devService/deleteProductionData"}
-			// "deletePs":                                          nullEndPoint.Init(apiRoot), // "/v1/powerStationService/deletePs"}
-			// "deleteRechargeOrder":                               nullEndPoint.Init(apiRoot), // "/onlinepay/deleteRechargeOrder"}
-			// "deleteRegularlyConnectionInfo":                     nullEndPoint.Init(apiRoot), // "/v1/commonService/deleteRegularlyConnectionInfo"}
-			// "deleteReportConfigEmailAddr":                       nullEndPoint.Init(apiRoot), // "/v1/reportService/deleteReportConfigEmailAddr"}
-			// "deleteSysAdvancedParam":                            nullEndPoint.Init(apiRoot), // "/v1/devService/deleteSysAdvancedParam"}
-			// "deleteSysOrgNew":                                   nullEndPoint.Init(apiRoot), // "/v1/otherService/deleteSysOrgNew"}
-			// "deleteTemplate":                                    nullEndPoint.Init(apiRoot), // "/v1/devService/deleteTemplate"}
-			// "deleteUserInfoAllByUserId":                         nullEndPoint.Init(apiRoot), // "/v1/userService/deleteUserInfoAllByUserId"}
-			// "deviceInputDiscreteDeleteTime":                     nullEndPoint.Init(apiRoot), // "/v1/devService/deviceInputDiscreteDeleteTime"}
-			// "deviceInputDiscreteGetTime":                        nullEndPoint.Init(apiRoot), // "/v1/devService/deviceInputDiscreteGetTime"}
-			// "deviceInputDiscreteInsertTime":                     nullEndPoint.Init(apiRoot), // "/v1/devService/deviceInputDiscreteInsertTime"}
-			// "deviceInputDiscreteUpdateTime":                     nullEndPoint.Init(apiRoot), // "/v1/devService/deviceInputDiscreteUpdateTime"}
-			// "deviceReplace":                                     nullEndPoint.Init(apiRoot), // "/v1/devService/deviceReplace"}
-			// "editDeviceRepair":                                  nullEndPoint.Init(apiRoot), // "/v1/devService/editDeviceRepair"}
-			// "editOperRule":                                      nullEndPoint.Init(apiRoot), // "/v1/faultService/editOperRule"}
-			// "energyPovertyAlleviation":                          nullEndPoint.Init(apiRoot), // "/v1/orgService/energyPovertyAlleviation"}
-			// "faultAutoClose":                                    nullEndPoint.Init(apiRoot), // "/v1/faultService/faultAutoClose"}
-			// "faultCloseRemindOrderHandler":                      nullEndPoint.Init(apiRoot), // "/v1/faultService/faultCloseRemindOrderHandler"}
-			// "findCodeValueList":                                 nullEndPoint.Init(apiRoot), // "/v1/commonService/findCodeValueList"}
-			// "findEmgOrgInfo":                                    nullEndPoint.Init(apiRoot), // "/v1/otherService/findEmgOrgInfo"}
-			// "findEnvironmentInfo":                               nullEndPoint.Init(apiRoot), // "/v1/devService/findEnvironmentInfo"}
-			// "findFromHbaseAndRedis":                             nullEndPoint.Init(apiRoot), // "/v1/commonService/findFromHbaseAndRedis"}
-			// "findLossAnalysisList":                              nullEndPoint.Init(apiRoot), // "/v1/powerStationService/findLossAnalysisList"}
-			// "findOnDutyInfo":                                    nullEndPoint.Init(apiRoot), // "/v1/otherService/findOnDutyInfo"}
-			// "findSingleStationPR":                               nullEndPoint.Init(apiRoot), // "/v1/powerStationService/findSingleStationPR"}
-			// "findUserPassword":                                  nullEndPoint.Init(apiRoot), // "/v1/devService/findUserPassword"}
-			// "genTLSUserSigByUserAccount":                        nullEndPoint.Init(apiRoot), // "/v1/userService/genTLSUserSigByUserAccount"}
-			// "generateRandomPassword":                            nullEndPoint.Init(apiRoot), // "/v1/userService/generateRandomPassword"}
-			// "getAPIServiceInfo":                                 nullEndPoint.Init(apiRoot), // "/v1/commonService/getAPIServiceInfo"}
-			// "getAccessedPermission":                             nullEndPoint.Init(apiRoot), // "/v1/commonService/getAccessedPermission"}
-			// "getAllDeviceByPsId":                                nullEndPoint.Init(apiRoot), // "/v1/devService/getAllDeviceByPsId"}
-			// "getAllPowerRobotViewInfoByPsId":                    nullEndPoint.Init(apiRoot), // "/v1/devService/getAllPowerRobotViewInfoByPsId"}
-			// "getAllPsIdByOrgIds":                                nullEndPoint.Init(apiRoot), // "/v1/devService/getAllPsIdByOrgIds"}
-			// "getAllUserRemindCount":                             nullEndPoint.Init(apiRoot), // "/v1/devService/getAllUserRemindCount"}
-			// "getAndOutletsAndUnit":                              nullEndPoint.Init(apiRoot), // "/v1/devService/getAndOutletsAndUnit"}
-			// "getAreaInfoCodeByCounty":                           nullEndPoint.Init(apiRoot), // "/v1/commonService/getAreaInfoCodeByCounty"}
-			// "getAreaList":                                       nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getAreaList"}
-			// "getAutoCreatePowerStation":                         nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getAutoCreatePowerStation"}
-			// "getBackReadValue":                                  nullEndPoint.Init(apiRoot), // "/v1/devService/getBackReadValue"}
-			// "getBatchNewestPointData":                           nullEndPoint.Init(apiRoot), // "/v1/devService/getBatchNewestPointData"}
-			// "getCallApiResidueTimes":                            nullEndPoint.Init(apiRoot), // "/v1/commonService/getCallApiResidueTimes"}
-			// "getChangedPsListByTime":                            nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getChangedPsListByTime"}
-			// "getChnnlListByPsId":                                nullEndPoint.Init(apiRoot), // "/v1/devService/getChnnlListByPsId"}
-			// "getCloudList":                                      nullEndPoint.Init(apiRoot), // "/v1/commonService/getCloudList"}
-			// "getCloudServiceMappingConfig":                      nullEndPoint.Init(apiRoot), // "/v1/commonService/getCloudServiceMappingConfig"}
-			// "getCommunicationDeviceConfigInfo":                  nullEndPoint.Init(apiRoot), // "/v1/devService/getCommunicationDeviceConfigInfo"}
-			// "getCommunicationModuleMonitorData":                 nullEndPoint.Init(apiRoot), // "/v1/devService/getCommunicationModuleMonitorData"}
-			// "getComponentModelFactory":                          nullEndPoint.Init(apiRoot), // "/v1/devService/getComponentModelFactory"}
-			// "getConfigList":                                     nullEndPoint.Init(apiRoot), // "/devDataHandleService/getConfigList"}
-			// "getConnectionInfoBySnAndLocalPort":                 nullEndPoint.Init(apiRoot), // "/v1/commonService/getConnectionInfoBySnAndLocalPort"}
-			// "getCountDown":                                      nullEndPoint.Init(apiRoot), // "/v1/devService/getCountDown"}
-			// "getCountryServiceInfo":                             nullEndPoint.Init(apiRoot), // "/v1/commonService/getCountryServiceInfo"}
-			// "getCounty":                                         nullEndPoint.Init(apiRoot), // "/v1/commonService/getCounty"}
-			// "getCustomerEmployee":                               nullEndPoint.Init(apiRoot), // "/v1/devService/getCustomerEmployee"}
-			// "getCustomerList":                                   nullEndPoint.Init(apiRoot), // "/v1/devService/getCustomerList"}
-			// "getDevInstalledPowerByPsId":                        nullEndPoint.Init(apiRoot), // "/v1/devService/getDevInstalledPowerByPsId"}
-			// "getDevRecord":                                      nullEndPoint.Init(apiRoot), // "/v1/devService/getDevRecord"}
-			// "getDevRunRecordList":                               nullEndPoint.Init(apiRoot), // "/v1/devService/getDevRunRecordList"}
-			// "getDevSimByList":                                   nullEndPoint.Init(apiRoot), // "/v1/devService/getDevSimByList"}
-			// "getDevSimList":                                     nullEndPoint.Init(apiRoot), // "/v1/devService/getDevSimList"}
-			// "getDeviceAccountById":                              nullEndPoint.Init(apiRoot), // "/v1/devService/getDeviceAccountById"}
-			// "getDeviceFaultStatisticsData":                      nullEndPoint.Init(apiRoot), // "/v1/devService/getDeviceFaultStatisticsData"}
-			// "getDeviceInfo":                                     nullEndPoint.Init(apiRoot), // "/v1/devService/getDeviceInfo"}
-			// "getDeviceList":                                     nullEndPoint.Init(apiRoot), // "/v1/devService/getDeviceList"}
-			// "getDeviceModelInfoList":                            nullEndPoint.Init(apiRoot), // "/v1/devService/getDeviceModelInfoList"}
-			// "getDevicePropertys":                                nullEndPoint.Init(apiRoot), // "/v1/devService/getDevicePropertys"}
-			// "getDeviceRepairDetail":                             nullEndPoint.Init(apiRoot), // "/v1/devService/getDeviceRepairDetail"}
-			// "getDeviceTechBranchCount":                          nullEndPoint.Init(apiRoot), // "/v1/devService/getDeviceTechBranchCount"}
-			// "getDeviceTypeInfoList":                             nullEndPoint.Init(apiRoot), // "/v1/devService/getDeviceTypeInfoList"}
-			// "getDeviceTypeList":                                 nullEndPoint.Init(apiRoot), // "/v1/devService/getDeviceTypeList"}
-			// "getDstInfo":                                        nullEndPoint.Init(apiRoot), // "/v1/userService/getDstInfo"}
-			// "getElectricitySettlementData":                      nullEndPoint.Init(apiRoot), // "/v1/otherService/getElectricitySettlementData"}
-			// "getElectricitySettlementDetailData":                nullEndPoint.Init(apiRoot), // "/v1/otherService/getElectricitySettlementDetailData"}
-			// "getEncryptPublicKey":                               nullEndPoint.Init(apiRoot), // "/v1/commonService/getEncryptPublicKey"}
-			// "getFaultCount":                                     nullEndPoint.Init(apiRoot), // "/v1/faultService/getFaultCount"}
-			// "getFaultDetail":                                    nullEndPoint.Init(apiRoot), // "/v1/faultService/getFaultDetail"}
-			// "getFaultMsgByFaultCode":                            nullEndPoint.Init(apiRoot), // "/v1/faultService/getFaultMsgByFaultCode"}
-			// "getFaultMsgListByPageWithYYYYMM":                   nullEndPoint.Init(apiRoot), // "/v1/faultService/getFaultMsgListByPageWithYYYYMM"}
-			// "getFaultMsgListWithYYYYMM":                         nullEndPoint.Init(apiRoot), // "/v1/faultService/getFaultMsgListWithYYYYMM"}
-			// "getFaultPlanList":                                  nullEndPoint.Init(apiRoot), // "/v1/faultService/getFaultPlanList"}
-			// "getFileOperationRecordOne":                         nullEndPoint.Init(apiRoot), // "/v1/commonService/getFileOperationRecordOne"}
-			// "getFormulaFaultAnalyseList":                        nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getFormulaFaultAnalyseList"}
-			// "getGroupStringCheckResult":                         nullEndPoint.Init(apiRoot), // "/v1/devService/getGroupStringCheckResult"}
-			// "getGroupStringCheckRule":                           nullEndPoint.Init(apiRoot), // "/v1/devService/getGroupStringCheckRule"}
-			// "getHisData":                                        nullEndPoint.Init(apiRoot), // "/v1/devService/getHisData"}
-			// "getHouseholdEvaluation":                            nullEndPoint.Init(apiRoot), // "/v1/faultService/getHouseholdEvaluation"}
-			// "getHouseholdLeaveMessage":                          nullEndPoint.Init(apiRoot), // "/v1/faultService/getHouseholdLeaveMessage"}
-			// "getHouseholdOpinionFeedback":                       nullEndPoint.Init(apiRoot), // "/v1/faultService/getHouseholdOpinionFeedback"}
-			// "getHouseholdPsInstallerByUserId":                   nullEndPoint.Init(apiRoot), // "/v1/userService/getHouseholdPsInstallerByUserId"}
-			// "getHouseholdUserInfo":                              nullEndPoint.Init(apiRoot), // "/v1/userService/getHouseholdUserInfo"}
-			// "getHouseholdWorkOrderInfo":                         nullEndPoint.Init(apiRoot), // "/v1/faultService/getHouseholdWorkOrderInfo"}
-			// "getHouseholdWorkOrderList":                         nullEndPoint.Init(apiRoot), // "/v1/faultService/getHouseholdWorkOrderList"}
-			// "getI18nConfigByType":                               nullEndPoint.Init(apiRoot), // "/integrationService/i18nfile/getI18nConfigByType"}
-			// "getI18nFileInfo":                                   nullEndPoint.Init(apiRoot), // "/integrationService/i18nfile/getI18nFileInfo"}
-			// "getI18nInfoByKey":                                  nullEndPoint.Init(apiRoot), // "/integrationService/i18nfile/getI18nInfoByKey"}
-			// "getI18nVersion":                                    nullEndPoint.Init(apiRoot), // "/integrationService/international/getI18nVersion"}
-			// "getIncomeSettingInfos":                             nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getIncomeSettingInfos"}
-			// "getInfoFromAMap":                                   nullEndPoint.Init(apiRoot), // "/v1/commonService/getInfoFromAMap"}
-			// "getInfomationFromRedis":                            nullEndPoint.Init(apiRoot), // "/v1/devService/getInfomationFromRedis"}
-			// "getInstallInfoList":                                nullEndPoint.Init(apiRoot), // "/v1/orgService/getInstallInfoList"}
-			// "getInstallerInfoByDealerOrgCodeOrId":               nullEndPoint.Init(apiRoot), // "/v1/orgService/getInstallerInfoByDealerOrgCodeOrId"}
-			// "getInvertDataList":                                 nullEndPoint.Init(apiRoot), // "/v1/devService/getInvertDataList"}
-			// "getInverterDataCount":                              nullEndPoint.Init(apiRoot), // "/v1/devService/getInverterDataCount"}
-			// "getInverterProcess":                                nullEndPoint.Init(apiRoot), // "/v1/devService/getInverterProcess"}
-			// "getInverterUuidBytotalId":                          nullEndPoint.Init(apiRoot), // "/v1/devService/getInverterUuidBytotalId"}
-			// "getIvEchartsData":                                  nullEndPoint.Init(apiRoot), // "/v1/devService/getIvEchartsData"}
-			// "getIvEchartsDataById":                              nullEndPoint.Init(apiRoot), // "/v1/devService/getIvEchartsDataById"}
-			// "getKpiInfo":                                        nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getKpiInfo"}
-			// "getMapInfo":                                        nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getMapInfo"}
-			// "getMenuAndPrivileges":                              nullEndPoint.Init(apiRoot), // "/v1/userService/getMenuAndPrivileges"}
-			// "getMicrogridEStoragePsReport":                      nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getMicrogridEStoragePsReport"}
-			// "getModuleLogInfo":                                  nullEndPoint.Init(apiRoot), // "/integrationService/getModuleLogInfo"}
-			// "getNationProvJSON":                                 nullEndPoint.Init(apiRoot), // "/v1/commonService/getNationProvJSON"}
-			// "getNeedOpAsynOpRecordList":                         nullEndPoint.Init(apiRoot), // "/v1/commonService/getNeedOpAsynOpRecordList"}
-			// "getNoticeInfo":                                     nullEndPoint.Init(apiRoot), // "/v1/otherService/getNoticeInfo"}
-			// "getNumberOfServiceCalls":                           nullEndPoint.Init(apiRoot), // "/v1/commonService/getNumberOfServiceCalls"}
-			// "getOSSConfig":                                      nullEndPoint.Init(apiRoot), // "/v1/commonService/getOSSConfig"}
-			// "getOperRuleDetail":                                 nullEndPoint.Init(apiRoot), // "/v1/faultService/getOperRuleDetail"}
-			// "getOperateBillFileId":                              nullEndPoint.Init(apiRoot), // "/v1/faultService/getOperateBillFileId"}
-			// "getOperateTicketForDetail":                         nullEndPoint.Init(apiRoot), // "/v1/faultService/getOperateTicketForDetail"}
-			// "getOrCreateNetEaseUserToken":                       nullEndPoint.Init(apiRoot), // "/v1/userService/getOrCreateNetEaseUserToken"}
-			// "getOrderDataList":                                  nullEndPoint.Init(apiRoot), // "/v1/faultService/getOrderDataList"}
-			// "getOrderDataSql2":                                  nullEndPoint.Init(apiRoot), // "/v1/devService/getOrderDataSql2"}
-			// "getOrderDatas":                                     nullEndPoint.Init(apiRoot), // "/v1/devService/getOrderDatas"}
-			// "getOrderDetail":                                    nullEndPoint.Init(apiRoot), // "/v1/faultService/getOrderDetail"}
-			// "getOrderStatistics":                                nullEndPoint.Init(apiRoot), // "/v1/faultService/getOrderStatistics"}
-			// "getOrgIdNameByUserId":                              nullEndPoint.Init(apiRoot), // "/v1/orgService/getOrgIdNameByUserId"}
-			// "getOrgInfoByDealerOrgCode":                         nullEndPoint.Init(apiRoot), // "/v1/orgService/getOrgInfoByDealerOrgCode"}
-			// "getOrgListByName":                                  nullEndPoint.Init(apiRoot), // "/v1/orgService/getOrgListByName"}
-			// "getOrgListByUserId":                                nullEndPoint.Init(apiRoot), // "/v1/userService/getOrgListByUserId"}
-			// "getOrgListForUser":                                 nullEndPoint.Init(apiRoot), // "/v1/orgService/getOrgListForUser"}
-			// "getOssObjectStream":                                nullEndPoint.Init(apiRoot), // "/v1/commonService/getOssObjectStream"}
-			// "getOwnerFaultConfigList":                           nullEndPoint.Init(apiRoot), // "/v1/faultService/getOwnerFaultConfigList"}
-			// "getParamSetTemplate4NewProtocol":                   nullEndPoint.Init(apiRoot), // "/v1/devService/getParamSetTemplate4NewProtocol"}
-			// "getParamSetTemplatePointInfo":                      nullEndPoint.Init(apiRoot), // "/v1/devService/getParamSetTemplatePointInfo"}
-			// "getParamterSettingBase":                            nullEndPoint.Init(apiRoot), // "/v1/devService/getParamterSettingBase"}
-			// "getPhotoInfo":                                      nullEndPoint.Init(apiRoot), // "/v1/otherService/getPhotoInfo"}
-			// "getPlanedOrNotPsList":                              nullEndPoint.Init(apiRoot), // "/v1/faultService/getPlanedOrNotPsList"}
-			// "getPlantReportPDFList":                             nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPlantReportPDFList"}
-			// "getPowerChargeSettingInfo":                         nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPowerChargeSettingInfo"}
-			// "getPowerDeviceModelTechList":                       nullEndPoint.Init(apiRoot), // "/v1/devService/getPowerDeviceModelTechList"}
-			// "getPowerDeviceModelTree":                           nullEndPoint.Init(apiRoot), // "/v1/devService/getPowerDeviceModelTree"}
-			// "getPowerDevicePointInfo":                           nullEndPoint.Init(apiRoot), // "/v1/reportService/getPowerDevicePointInfo"}
-			// "getPowerFormulaFaultAnalyse":                       nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPowerFormulaFaultAnalyse"}
-			// "getPowerPictureList":                               nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPowerPictureList"}
-			// "getPowerRobotInfoByRobotSn":                        nullEndPoint.Init(apiRoot), // "/v1/devService/getPowerRobotInfoByRobotSn"}
-			// "getPowerRobotSweepAttrByPsId":                      nullEndPoint.Init(apiRoot), // "/v1/devService/getPowerRobotSweepAttrByPsId"}
-			// "getPowerRobotSweepStrategy":                        nullEndPoint.Init(apiRoot), // "/v1/devService/getPowerRobotSweepStrategy"}
-			// "getPowerRobotSweepStrategyList":                    nullEndPoint.Init(apiRoot), // "/v1/devService/getPowerRobotSweepStrategyList"}
-			// "getPowerSettingCharges":                            nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPowerSettingCharges"}
-			// "getPowerSettingHistoryRecords":                     nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPowerSettingHistoryRecords"}
-			// "getPowerStationBasicInfo":                          nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPowerStationBasicInfo"}
-			// "getPowerStationData":                               nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPowerStationData"}
-			// "getPowerStationForHousehold":                       nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPowerStationForHousehold"}
-			// "getPowerStationInfo":                               nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPowerStationInfo"}
-			// "getPowerStationPR":                                 nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPowerStationPR"}
-			// "getPrivateCloudValidityPeriod":                     nullEndPoint.Init(apiRoot), // "/v1/commonService/getPrivateCloudValidityPeriod"}
-			// "getProvInfoListByNationCode":                       nullEndPoint.Init(apiRoot), // "/v1/commonService/getProvInfoListByNationCode"}
-			// "getPsDetailByUserTokens":                           nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsDetailByUserTokens"}
-			// "getPsDetailForSinglePage":                          nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsDetailForSinglePage"}
-			// "getPsInstallerByPsId":                              nullEndPoint.Init(apiRoot), // "/v1/orgService/getPsInstallerByPsId"}
-			// "getPsInstallerOrgInfoByPsId":                       nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsInstallerOrgInfoByPsId"}
-			// "getPsListByName":                                   nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsListByName"}
-			// "getPsListForPsDataByPsId":                          nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsListForPsDataByPsId"}
-			// "getPsListStaticData":                               nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsListStaticData"}
-			// "getPsReport":                                       nullEndPoint.Init(apiRoot), // "/v1/reportService/getPsReport"}
-			// "getPsUser":                                         nullEndPoint.Init(apiRoot), // "/v1/userService/getPsUser"}
-			// "getPsWeatherList":                                  nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getPsWeatherList"}
-			// "getRechargeOrderDetail":                            nullEndPoint.Init(apiRoot), // "/onlinepay/getRechargeOrderDetail"}
-			// "getRechargeOrderItemDeviceList":                    nullEndPoint.Init(apiRoot), // "/onlinepay/getRechargeOrderItemDeviceList"}
-			// "getRechargeOrderList":                              nullEndPoint.Init(apiRoot), // "/onlinepay/getRechargeOrderList"}
-			// "getRegionalTree":                                   nullEndPoint.Init(apiRoot), // "/v1/orgService/getRegionalTree"}
-			// "getRemoteParamSettingList":                         nullEndPoint.Init(apiRoot), // "/v1/devService/getRemoteParamSettingList"}
-			// "getRemoteUpgradeDeviceList":                        nullEndPoint.Init(apiRoot), // "/v1/devService/getRemoteUpgradeDeviceList"}
-			// "getRemoteUpgradeScheduleDetails":                   nullEndPoint.Init(apiRoot), // "/v1/devService/getRemoteUpgradeScheduleDetails"}
-			// "getRemoteUpgradeSubTasksList":                      nullEndPoint.Init(apiRoot), // "/v1/devService/getRemoteUpgradeSubTasksList"}
-			// "getRemoteUpgradeTaskList":                          nullEndPoint.Init(apiRoot), // "/v1/devService/getRemoteUpgradeTaskList"}
-			// "getReportData":                                     nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getReportData"}
-			// "getReportEmailConfigInfo":                          nullEndPoint.Init(apiRoot), // "/v1/reportService/getReportEmailConfigInfo"}
-			// "getReportExportColumns":                            nullEndPoint.Init(apiRoot), // "/v1/reportService/getReportExportColumns"}
-			// "getReportListByUserId":                             nullEndPoint.Init(apiRoot), // "/v1/reportService/getReportListByUserId"}
-			// "getRobotDynamicCleaningView":                       nullEndPoint.Init(apiRoot), // "/v1/devService/getRobotDynamicCleaningView"}
-			// "getRobotNumAndSweepCapacity":                       nullEndPoint.Init(apiRoot), // "/v1/devService/getRobotNumAndSweepCapacity"}
-			// "getRuleUnit":                                       nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getRuleUnit"}
-			// "getSendReportConfigCron":                           nullEndPoint.Init(apiRoot), // "/v1/reportService/getSendReportConfigCron"}
-			// "getShieldMapConditionList":                         nullEndPoint.Init(apiRoot), // "/v1/commonService/getShieldMapConditionList"}
-			// "getSimIdBySnList":                                  nullEndPoint.Init(apiRoot), // "/v1/devService/getSimIdBySnList"}
-			// "getSingleIVData":                                   nullEndPoint.Init(apiRoot), // "/v1/devService/getSingleIVData"}
-			// "getSnChangeRecord":                                 nullEndPoint.Init(apiRoot), // "/v1/devService/getSnChangeRecord"}
-			// "getSnConnectionInfo":                               nullEndPoint.Init(apiRoot), // "/v1/commonService/getSnConnectionInfo"}
-			// "getSungwsConfigCache":                              nullEndPoint.Init(apiRoot), // "/v1/commonService/getSungwsConfigCache"}
-			// "getSungwsGlobalConfigCache":                        nullEndPoint.Init(apiRoot), // "/v1/commonService/getSungwsGlobalConfigCache"}
-			// "getSweepDevParamSetTemplate":                       nullEndPoint.Init(apiRoot), // "/v1/devService/getSweepDevParamSetTemplate"}
-			// "getSweepRobotDevList":                              nullEndPoint.Init(apiRoot), // "/v1/devService/getSweepRobotDevList"}
-			// "getSysMsg":                                         nullEndPoint.Init(apiRoot), // "/v1/otherService/getSysMsg"}
-			// "getSysOrgNewList":                                  nullEndPoint.Init(apiRoot), // "/v1/otherService/getSysOrgNewList"}
-			// "getSysOrgNewOne":                                   nullEndPoint.Init(apiRoot), // "/v1/otherService/getSysOrgNewOne"}
-			// "getSysUserById":                                    nullEndPoint.Init(apiRoot), // "/v1/userService/getSysUserById"}
-			// "getUUIDByUpuuid":                                   nullEndPoint.Init(apiRoot), // "/v1/devService/getUUIDByUpuuid"}
-			// "getUserById":                                       nullEndPoint.Init(apiRoot), // "/v1/userService/getUserById"}
-			// "getUserByInstaller":                                nullEndPoint.Init(apiRoot), // "/v1/userService/getUserByInstaller"}
-			// "getUserDevOnlineOffineCount":                       nullEndPoint.Init(apiRoot), // "/v1/devService/getUserDevOnlineOffineCount"}
-			// "getUserGDPRAttrs":                                  nullEndPoint.Init(apiRoot), // "/v1/userService/getUserGDPRAttrs"}
-			// "getUserHavePowerStationCount":                      nullEndPoint.Init(apiRoot), // "/v1/userService/getUserHavePowerStationCount"}
-			// "getUserInfoByUserAccounts":                         nullEndPoint.Init(apiRoot), // "/v1/userService/getUserInfoByUserAccounts"}
-			// "getUserList":                                       nullEndPoint.Init(apiRoot), // "/v1/userService/getUserList"}
-			// "getUserPsOrderList":                                nullEndPoint.Init(apiRoot), // "/v1/faultService/getUserPsOrderList"}
-			// "getValidateCode":                                   nullEndPoint.Init(apiRoot), // "/v1/userService/getValidateCode"}
-			// "getValidateCodeAtRegister":                         nullEndPoint.Init(apiRoot), // "/v1/userService/getValidateCodeAtRegister"}
-			// "getWeatherInfo":                                    nullEndPoint.Init(apiRoot), // "/v1/powerStationService/getWeatherInfo"}
-			// "getWechatPushConfig":                               nullEndPoint.Init(apiRoot), // "/v1/userService/getWechatPushConfig"}
-			// "getWorkInfo":                                       nullEndPoint.Init(apiRoot), // "/v1/otherService/getWorkInfo"}
-			// "groupStringCheck":                                  nullEndPoint.Init(apiRoot), // "/v1/devService/groupStringCheck"}
-			// "handleDevByCommunicationSN":                        nullEndPoint.Init(apiRoot), // "/devDataHandleService/handleDevByCommunicationSN"}
-			// "householdResetPassBySN":                            nullEndPoint.Init(apiRoot), // "/v1/userService/householdResetPassBySN"}
-			// "immediatePayment":                                  nullEndPoint.Init(apiRoot), // "/onlinepay/immediatePayment"}
-			// "importExcelData":                                   nullEndPoint.Init(apiRoot), // "/v1/devService/importExcelData"}
-			// "incomeStatistics":                                  nullEndPoint.Init(apiRoot), // "/v1/powerStationService/incomeStatistics"}
-			// "informPush":                                        nullEndPoint.Init(apiRoot), // "/v1/messageService/informPush"}
-			// "insertEmgOrgInfo":                                  nullEndPoint.Init(apiRoot), // "/v1/otherService/insertEmgOrgInfo"}
-			// "insightSynDeviceStructure2Cloud":                   nullEndPoint.Init(apiRoot), // "/v1/powerStationService/insightSynDeviceStructure2Cloud"}
-			// "intoDataToHbase":                                   nullEndPoint.Init(apiRoot), // "/v1/commonService/intoDataToHbase"}
-			// "ipLocationQuery":                                   nullEndPoint.Init(apiRoot), // "/v1/commonService/ipLocationQuery"}
-			// "isHave2GSn":                                        nullEndPoint.Init(apiRoot), // "/v1/devService/isHave2GSn"}
-			// "judgeDevIsHasInitSetTemplate":                      nullEndPoint.Init(apiRoot), // "/v1/devService/judgeDevIsHasInitSetTemplate"}
-			// "judgeIsSettingMan":                                 nullEndPoint.Init(apiRoot), // "/v1/faultService/judgeIsSettingMan"}
-			// "listOssFiles":                                      nullEndPoint.Init(apiRoot), // "/v1/commonService/listOssFiles"}
-			// "loadAreaInfo":                                      nullEndPoint.Init(apiRoot), // "/v1/commonService/loadAreaInfo"}
-			// "loadPowerStation":                                  nullEndPoint.Init(apiRoot), // "/v1/powerStationService/loadPowerStation"}
-			// "loginByToken":                                      nullEndPoint.Init(apiRoot), // "/v1/userService/loginByToken"}
-			// "logout":                                            nullEndPoint.Init(apiRoot), // "/v1/userService/logout"}
-			// "mobilePhoneHasBound":                               nullEndPoint.Init(apiRoot), // "/v1/userService/mobilePhoneHasBound"}
-			// "modifiedDeviceInfo":                                nullEndPoint.Init(apiRoot), // "/v1/devService/modifiedDeviceInfo"}
-			// "modifyEmgOrgStruc":                                 nullEndPoint.Init(apiRoot), // "/v1/otherService/modifyEmgOrgStruc"}
-			// "modifyFaultPlan":                                   nullEndPoint.Init(apiRoot), // "/v1/faultService/modifyFaultPlan"}
-			// "modifyOnDutyInfo":                                  nullEndPoint.Init(apiRoot), // "/v1/otherService/modifyOnDutyInfo"}
-			// "modifyPassword":                                    nullEndPoint.Init(apiRoot), // "/v1/userService/modifyPassword"}
-			// "modifyPersonalUnitList":                            nullEndPoint.Init(apiRoot), // "/v1/userService/modifyPersonalUnitList"}
-			// "modifyPsUser":                                      nullEndPoint.Init(apiRoot), // "/v1/userService/modifyPsUser"}
-			// "moduleLogParamSet":                                 nullEndPoint.Init(apiRoot), // "/integrationService/moduleLogParamSet"}
-			// "operateOssFile":                                    nullEndPoint.Init(apiRoot), // "/v1/commonService/operateOssFile"}
-			// "operationPowerRobotSweepStrategy":                  nullEndPoint.Init(apiRoot), // "/v1/devService/operationPowerRobotSweepStrategy"}
-			// "orgPowerReport":                                    nullEndPoint.Init(apiRoot), // "/v1/orgService/orgPowerReport"}
-			// "paramSetTryAgain":                                  nullEndPoint.Init(apiRoot), // "/v1/devService/paramSetTryAgain"}
-			// "paramSetting":                                      nullEndPoint.Init(apiRoot), // "/v1/devService/paramSetting"}
-			// "planPower":                                         nullEndPoint.Init(apiRoot), // "/v1/powerStationService/planPower"}
-			// "psForcastInfo":                                     nullEndPoint.Init(apiRoot), // "/v1/powerStationService/psForcastInfo"}
-			// "queryBatchSpeedyAddPowerStationResult":             nullEndPoint.Init(apiRoot), // "/v1/powerStationService/queryBatchSpeedyAddPowerStationResult"}
-			// "queryCardStatusCTCC":                               nullEndPoint.Init(apiRoot), // "/v1/devService/queryCardStatusCTCC"}
-			// "queryChildAccountList":                             nullEndPoint.Init(apiRoot), // "/v1/userService/queryChildAccountList"}
-			// "queryCompensationRecordData":                       nullEndPoint.Init(apiRoot), // "/v1/powerStationService/queryCompensationRecordData"}
-			// "queryCompensationRecordList":                       nullEndPoint.Init(apiRoot), // "/v1/powerStationService/queryCompensationRecordList"}
-			// "queryComponent":                                    nullEndPoint.Init(apiRoot), // "/v1/devService/queryComponent"}
-			// "queryComponentTechnicalParam":                      nullEndPoint.Init(apiRoot), // "/v1/devService/queryComponentTechnicalParam"}
-			// "queryCountryGridAndRelation":                       nullEndPoint.Init(apiRoot), // "/v1/devService/queryCountryGridAndRelation"}
-			// "queryCountryList":                                  nullEndPoint.Init(apiRoot), // "/v1/commonService/queryCountryList"}
-			// "queryDeviceRepairList":                             nullEndPoint.Init(apiRoot), // "/v1/devService/queryDeviceRepairList"}
-			// "queryDeviceTypeInfoList":                           nullEndPoint.Init(apiRoot), // "/v1/devService/queryDeviceTypeInfoList"}
-			// "queryEnvironmentList":                              nullEndPoint.Init(apiRoot), // "/v1/devService/queryEnvironmentList"}
-			// "queryFaultList":                                    nullEndPoint.Init(apiRoot), // "/v1/faultService/queryFaultList"}
-			// "queryFaultPlanDetail":                              nullEndPoint.Init(apiRoot), // "/v1/faultService/queryFaultPlanDetail"}
-			// "queryFaultRepairSteps":                             nullEndPoint.Init(apiRoot), // "/v1/faultService/queryFaultRepairSteps"}
-			// "queryFaultTypeAndLevelByCode":                      nullEndPoint.Init(apiRoot), // "/v1/faultService/queryFaultTypeAndLevelByCode"}
-			// "queryFaultTypeByDevice":                            nullEndPoint.Init(apiRoot), // "/v1/faultService/queryFaultTypeByDevice"}
-			// "queryFaultTypeByDevicePage":                        nullEndPoint.Init(apiRoot), // "/v1/faultService/queryFaultTypeByDevicePage"}
-			// "queryFirmwareFilesPage":                            nullEndPoint.Init(apiRoot), // "/v1/commonService/queryFirmwareFilesPage"}
-			// "queryInfotoAlert":                                  nullEndPoint.Init(apiRoot), // "/v1/devService/queryInfotoAlert"}
-			// "queryInverterModelList":                            nullEndPoint.Init(apiRoot), // "/v1/devService/queryInverterModelList"}
-			// "queryInverterVersionList":                          nullEndPoint.Init(apiRoot), // "/v1/devService/queryInverterVersionList"}
-			// "queryM2MCardInfoCMCC":                              nullEndPoint.Init(apiRoot), // "/v1/devService/queryM2MCardInfoCMCC"}
-			// "queryM2MCardTermInfoCMCC":                          nullEndPoint.Init(apiRoot), // "/v1/devService/queryM2MCardTermInfoCMCC"}
-			// "queryModelInfoByModelId":                           nullEndPoint.Init(apiRoot), // "/v1/devService/queryModelInfoByModelId"}
-			// "queryNoticeList":                                   nullEndPoint.Init(apiRoot), // "/v1/otherService/queryNoticeList"}
-			// "queryNumberOfRenewalReminders":                     nullEndPoint.Init(apiRoot), // "/v1/devService/queryNumberOfRenewalReminders"}
-			// "queryOperRules":                                    nullEndPoint.Init(apiRoot), // "/v1/faultService/queryOperRules"}
-			// "queryOrderList":                                    nullEndPoint.Init(apiRoot), // "/v1/faultService/queryOrderList"}
-			// "queryOrderStep":                                    nullEndPoint.Init(apiRoot), // "/v1/faultService/queryOrderStep"}
-			// "queryOrgGenerationReport":                          nullEndPoint.Init(apiRoot), // "/v1/orgService/queryOrgGenerationReport"}
-			// "queryOrgInfoList":                                  nullEndPoint.Init(apiRoot), // "/v1/userService/queryOrgInfoList"}
-			// "queryOrgPowerElecPercent":                          nullEndPoint.Init(apiRoot), // "/v1/orgService/queryOrgPowerElecPercent"}
-			// "queryOrgPsCompensationRecordList":                  nullEndPoint.Init(apiRoot), // "/v1/powerStationService/queryOrgPsCompensationRecordList"}
-			// "queryPersonalUnitList":                             nullEndPoint.Init(apiRoot), // "/v1/userService/queryPersonalUnitList"}
-			// "queryPointDataTopOne":                              nullEndPoint.Init(apiRoot), // "/v1/devService/queryPointDataTopOne"}
-			// "queryPowerStationInfo":                             nullEndPoint.Init(apiRoot), // "/v1/powerStationService/queryPowerStationInfo"}
-			// "queryPsAreaByUserIdAndAreaCode":                    nullEndPoint.Init(apiRoot), // "/v1/powerStationService/queryPsAreaByUserIdAndAreaCode"}
-			// "queryPsCompensationRecordList":                     nullEndPoint.Init(apiRoot), // "/v1/powerStationService/queryPsCompensationRecordList"}
-			// "queryPsDataByDate":                                 nullEndPoint.Init(apiRoot), // "/v1/powerStationService/queryPsDataByDate"}
-			// "queryPsIdList":                                     nullEndPoint.Init(apiRoot), // "/v1/powerStationService/queryPsIdList"}
-			// "queryPsListByUserIdAndAreaCode":                    nullEndPoint.Init(apiRoot), // "/v1/powerStationService/queryPsListByUserIdAndAreaCode"}
-			// "queryPsNameByPsId":                                 nullEndPoint.Init(apiRoot), // "/v1/devService/queryPsNameByPsId"}
-			// "queryPsPrByDate":                                   nullEndPoint.Init(apiRoot), // "/v1/powerStationService/queryPsPrByDate"}
-			// "queryPsProfit":                                     nullEndPoint.Init(apiRoot), // "/v1/powerStationService/queryPsProfit"}
-			// "queryPsReportComparativeAnalysisOfPowerGeneration": nullEndPoint.Init(apiRoot), // "/v1/powerStationService/queryPsReportComparativeAnalysisOfPowerGeneration"}
-			// "queryPsStructureList":                              nullEndPoint.Init(apiRoot), // "/v1/devService/queryPsStructureList"}
-			// "queryPuuidsByCommandTotalId":                       nullEndPoint.Init(apiRoot), // "/v1/devService/queryPuuidsByCommandTotalId"}
-			// "queryPuuidsByCommandTotalId2":                      nullEndPoint.Init(apiRoot), // "/v1/devService/queryPuuidsByCommandTotalId2"}
-			// "queryRepairRuleList":                               nullEndPoint.Init(apiRoot), // "/v1/devService/queryRepairRuleList"}
-			// "queryReportListForManagementPage":                  nullEndPoint.Init(apiRoot), // "/v1/reportService/queryReportListForManagementPage"}
-			// "queryReportMsg":                                    nullEndPoint.Init(apiRoot), // "/v1/reportService/queryReportMsg"}
-			// "querySharingPs":                                    nullEndPoint.Init(apiRoot), // "/v1/powerStationService/querySharingPs"}
-			// "querySysAdvancedParam":                             nullEndPoint.Init(apiRoot), // "/v1/devService/querySysAdvancedParam"}
-			// "queryTimeBySN":                                     nullEndPoint.Init(apiRoot), // "/v1/devService/queryTimeBySN"}
-			// "queryTrafficByDateCTCC":                            nullEndPoint.Init(apiRoot), // "/v1/devService/queryTrafficByDateCTCC"}
-			// "queryTrafficCTCC":                                  nullEndPoint.Init(apiRoot), // "/v1/devService/queryTrafficCTCC"}
-			// "queryUnitUuidBytotalId":                            nullEndPoint.Init(apiRoot), // "/v1/devService/queryUnitUuidBytotalId"}
-			// "queryUserBtnPri":                                   nullEndPoint.Init(apiRoot), // "/v1/userService/queryUserBtnPri"}
-			// "queryUserByUserIds":                                nullEndPoint.Init(apiRoot), // "/v1/userService/queryUserByUserIds"}
-			// "queryUserExtensionAttribute":                       nullEndPoint.Init(apiRoot), // "/v1/userService/queryUserExtensionAttribute"}
-			// "queryUserForStep":                                  nullEndPoint.Init(apiRoot), // "/v1/userService/queryUserForStep"}
-			// "queryUserList":                                     nullEndPoint.Init(apiRoot), // "/v1/userService/queryUserList"}
-			// "queryUserProcessPri":                               nullEndPoint.Init(apiRoot), // "/v1/userService/queryUserProcessPri"}
-			// "queryUserWechatBindRel":                            nullEndPoint.Init(apiRoot), // "/v1/userService/queryUserWechatBindRel"}
-			// "queryUuidByTotalIdAndUuid":                         nullEndPoint.Init(apiRoot), // "/v1/devService/queryUuidByTotalIdAndUuid"}
-			// "rechargeOrderSetMeal":                              nullEndPoint.Init(apiRoot), // "/v1/devService/rechargeOrderSetMeal"}
-			// "renewSendReportConfirmEmail":                       nullEndPoint.Init(apiRoot), // "/v1/reportService/renewSendReportConfirmEmail"}
-			// "reportList":                                        nullEndPoint.Init(apiRoot), // "/v1/powerStationService/reportList"}
-			// "saveCustomerEmployee":                              nullEndPoint.Init(apiRoot), // "/v1/devService/saveCustomerEmployee"}
-			// "saveDevSimList":                                    nullEndPoint.Init(apiRoot), // "/v1/devService/saveDevSimList"}
-			// "saveDeviceAccountBatchData":                        nullEndPoint.Init(apiRoot), // "/v1/devService/saveDeviceAccountBatchData"}
-			// "saveEnviromentIncomeInfos":                         nullEndPoint.Init(apiRoot), // "/v1/powerStationService/saveEnviromentIncomeInfos"}
-			// "saveEnvironmentCurve":                              nullEndPoint.Init(apiRoot), // "/v1/devService/saveEnvironmentCurve"}
-			// "saveFirmwareFile":                                  nullEndPoint.Init(apiRoot), // "/v1/commonService/saveFirmwareFile"}
-			// "saveIncomeSettingInfos":                            nullEndPoint.Init(apiRoot), // "/v1/powerStationService/saveIncomeSettingInfos"}
-			// "saveOrUpdateGroupStringCheckRule":                  nullEndPoint.Init(apiRoot), // "/v1/devService/saveOrUpdateGroupStringCheckRule"}
-			// "saveParamModel":                                    nullEndPoint.Init(apiRoot), // "/v1/devService/saveParamModel"}
-			// "savePowerCharges":                                  nullEndPoint.Init(apiRoot), // "/v1/powerStationService/savePowerCharges"}
-			// "savePowerDevicePoint":                              nullEndPoint.Init(apiRoot), // "/v1/reportService/savePowerDevicePoint"}
-			// "savePowerRobotInfo":                                nullEndPoint.Init(apiRoot), // "/v1/devService/savePowerRobotInfo"}
-			// "savePowerRobotSweepAttr":                           nullEndPoint.Init(apiRoot), // "/v1/devService/savePowerRobotSweepAttr"}
-			// "savePowerSettingCharges":                           nullEndPoint.Init(apiRoot), // "/v1/powerStationService/savePowerSettingCharges"}
-			// "savePowerSettingInfo":                              nullEndPoint.Init(apiRoot), // "/v1/powerStationService/savePowerSettingInfo"}
-			// "saveProductionBatchData":                           nullEndPoint.Init(apiRoot), // "/v1/devService/saveProductionBatchData"}
-			// "saveRechargeOrderObj":                              nullEndPoint.Init(apiRoot), // "/onlinepay/saveRechargeOrderObj"}
-			// "saveRechargeOrderOtherInfo":                        nullEndPoint.Init(apiRoot), // "/onlinepay/saveRechargeOrderOtherInfo"}
-			// "saveRepair":                                        nullEndPoint.Init(apiRoot), // "/v1/faultService/saveRepair"}
-			// "saveReportExportColumns":                           nullEndPoint.Init(apiRoot), // "/v1/reportService/saveReportExportColumns"}
-			// "saveSetParam":                                      nullEndPoint.Init(apiRoot), // "/v1/devService/saveSetParam"}
-			// "saveSysUserMsg":                                    nullEndPoint.Init(apiRoot), // "/v1/otherService/saveSysUserMsg"}
-			// "saveTemplate":                                      nullEndPoint.Init(apiRoot), // "/v1/devService/saveTemplate"}
-			// "searchM2MMonthFlowCMCC":                            nullEndPoint.Init(apiRoot), // "/v1/devService/searchM2MMonthFlowCMCC"}
-			// "selectSysTranslationNames":                         nullEndPoint.Init(apiRoot), // "/v1/reportService/selectSysTranslationNames"}
-			// "sendPsTimeZoneInstruction":                         nullEndPoint.Init(apiRoot), // "/devDataHandleService/sendPsTimeZoneInstruction"}
-			// "setUpFormulaFaultAnalyse":                          nullEndPoint.Init(apiRoot), // "/v1/powerStationService/setUpFormulaFaultAnalyse"}
-			// "setUserGDPRAttrs":                                  nullEndPoint.Init(apiRoot), // "/v1/userService/setUserGDPRAttrs"}
-			// "settingNotice":                                     nullEndPoint.Init(apiRoot), // "/v1/userService/settingNotice"}
-			// "shareMyPs":                                         nullEndPoint.Init(apiRoot), // "/v1/powerStationService/shareMyPs"}
-			// "sharePsBySN":                                       nullEndPoint.Init(apiRoot), // "/v1/powerStationService/sharePsBySN"}
-			// "showInverterByUnit":                                nullEndPoint.Init(apiRoot), // "/v1/devService/showInverterByUnit"}
-			// "showOnlineUsers":                                   nullEndPoint.Init(apiRoot), // "/v1/userService/showOnlineUsers"}
-			// "showWarning":                                       nullEndPoint.Init(apiRoot), // "/v1/userService/showWarning"}
-			// "snIsExist":                                         nullEndPoint.Init(apiRoot), // "/v1/devService/snIsExist"}
-			// "snsIsExist":                                        nullEndPoint.Init(apiRoot), // "/v1/devService/snsIsExist"}
-			// "speedyAddPowerStation":                             nullEndPoint.Init(apiRoot), // "/v1/powerStationService/speedyAddPowerStation"}
-			// "stationDeviceHistoryDataList":                      nullEndPoint.Init(apiRoot), // "/v1/powerStationService/stationDeviceHistoryDataList"}
-			// "stationUnitsList":                                  nullEndPoint.Init(apiRoot), // "/v1/powerStationService/stationUnitsList"}
-			// "stationsDiscreteData":                              nullEndPoint.Init(apiRoot), // "/v1/devService/stationsDiscreteData"}
-			// "stationsIncomeList":                                nullEndPoint.Init(apiRoot), // "/v1/powerStationService/stationsIncomeList"}
-			// "stationsPointReport":                               nullEndPoint.Init(apiRoot), // "/v1/powerStationService/stationsPointReport"}
-			// "stationsYearPlanReport":                            nullEndPoint.Init(apiRoot), // "/v1/reportService/stationsYearPlanReport"}
-			// "sureAndImportSelettlementData":                     nullEndPoint.Init(apiRoot), // "/v1/otherService/sureAndImportSelettlementData"}
-			// "sweepDevParamSet":                                  nullEndPoint.Init(apiRoot), // "/v1/devService/sweepDevParamSet"}
-			// "sweepDevRunControl":                                nullEndPoint.Init(apiRoot), // "/v1/devService/sweepDevRunControl"}
-			// "sweepDevStrategyIssue":                             nullEndPoint.Init(apiRoot), // "/v1/devService/sweepDevStrategyIssue"}
-			// "sysTimeZoneList":                                   nullEndPoint.Init(apiRoot), // "/v1/commonService/sysTimeZoneList"}
-			// "unLockUser":                                        nullEndPoint.Init(apiRoot), // "/v1/userService/unLockUser"}
-			// "unlockChildAccount":                                nullEndPoint.Init(apiRoot), // "/v1/userService/unlockChildAccount"}
-			// "updateCommunicationModuleState":                    nullEndPoint.Init(apiRoot), // "/v1/devService/updateCommunicationModuleState"}
-			// "updateDevInstalledPower":                           nullEndPoint.Init(apiRoot), // "/v1/devService/updateDevInstalledPower"}
-			// "updateFault":                                       nullEndPoint.Init(apiRoot), // "/v1/faultService/updateFaultStatus"}
-			// "updateFaultData":                                   nullEndPoint.Init(apiRoot), // "/v1/faultService/updateFaultData"}
-			// "updateFaultMsgByFaultCode":                         nullEndPoint.Init(apiRoot), // "/v1/faultService/updateFaultMsgByFaultCode"}
-			// "updateFaultStatus":                                 nullEndPoint.Init(apiRoot), // "/v1/faultService/updateFaultStatus"}
-			// "updateHouseholdWorkOrder":                          nullEndPoint.Init(apiRoot), // "/v1/faultService/updateHouseholdWorkOrder"}
-			// "updateInverterSn2ModuleSn":                         nullEndPoint.Init(apiRoot), // "/devDataHandleService/updateInverterSn2ModuleSn"}
-			// "updateOperateTicketAttachmentId":                   nullEndPoint.Init(apiRoot), // "/v1/faultService/updateOperateTicketAttachmentId"}
-			// "updateOrderDeviceByCustomerService":                nullEndPoint.Init(apiRoot), // "/onlinepay/updateOrderDeviceByCustomerService"}
-			// "updateOwnerFaultConfig":                            nullEndPoint.Init(apiRoot), // "/v1/faultService/updateOwnerFaultConfig"}
-			// "updateParamSettingSysMsg":                          nullEndPoint.Init(apiRoot), // "/v1/devService/updateParamSettingSysMsg"}
-			// "updatePlatformLevelFaultLevel":                     nullEndPoint.Init(apiRoot), // "/v1/faultService/updatePlatformLevelFaultLevel"}
-			// "updatePowerDevicePoint":                            nullEndPoint.Init(apiRoot), // "/v1/reportService/updatePowerDevicePoint"}
-			// "updatePowerRobotInfo":                              nullEndPoint.Init(apiRoot), // "/v1/devService/updatePowerRobotInfo"}
-			// "updatePowerRobotSweepAttr":                         nullEndPoint.Init(apiRoot), // "/v1/devService/updatePowerRobotSweepAttr"}
-			// "updatePowerStationForHousehold":                    nullEndPoint.Init(apiRoot), // "/v1/powerStationService/updatePowerStationForHousehold"}
-			// "updatePowerStationInfo":                            nullEndPoint.Init(apiRoot), // "/v1/powerStationService/updatePowerStationInfo"}
-			// "updatePowerUserInfo":                               nullEndPoint.Init(apiRoot), // "/v1/userService/updatePowerUserInfo"}
-			// "updateReportConfigByEmailAddr":                     nullEndPoint.Init(apiRoot), // "/v1/reportService/updateReportConfigByEmailAddr"}
-			// "updateShareAttr":                                   nullEndPoint.Init(apiRoot), // "/v1/powerStationService/updateShareAttr"}
-			// "updateSnIsSureFlag":                                nullEndPoint.Init(apiRoot), // "/devDataHandleService/updateSnIsSureFlag"}
-			// "updateStationPics":                                 nullEndPoint.Init(apiRoot), // "/v1/powerStationService/updateStationPics"}
-			// "updateSysAdvancedParam":                            nullEndPoint.Init(apiRoot), // "/v1/devService/updateSysAdvancedParam"}
-			// "updateSysOrgNew":                                   nullEndPoint.Init(apiRoot), // "/v1/otherService/updateSysOrgNew"}
-			// "updateTemplate":                                    nullEndPoint.Init(apiRoot), // "/v1/devService/updateDataCurveTemplate"}
-			// "updateUinfoNetEaseUser":                            nullEndPoint.Init(apiRoot), // "/v1/userService/updateUinfoNetEaseUser"}
-			// "updateUserExtensionAttribute":                      nullEndPoint.Init(apiRoot), // "/v1/userService/updateUserExtensionAttribute"}
-			// "updateUserLanguage":                                nullEndPoint.Init(apiRoot), // "/v1/userService/updateUserLanguage"}
-			// "updateUserPosition":                                nullEndPoint.Init(apiRoot), // "/v1/userService/updateUserPosition"}
-			// "updateUserUpOrg":                                   nullEndPoint.Init(apiRoot), // "/v1/orgService/updateUserUpOrg"}
-			// "upgrade":                                           nullEndPoint.Init(apiRoot), // "/v1/userService/upgrade"}
-			// "upgrate":                                           nullEndPoint.Init(apiRoot), // "/v1/userService/upgrade"}
-			// "uploadFileToOss":                                   nullEndPoint.Init(apiRoot), // "/v1/commonService/uploadFileToOss"}
-			// "userAgreeGdprProtocol":                             nullEndPoint.Init(apiRoot), // "/v1/userService/userAgreeGdprProtocol"}
-			// "userInfoUniqueCheck":                               nullEndPoint.Init(apiRoot), // "/v1/userService/userInfoUniqueCheck"}
-			// "userMailHasBound":                                  nullEndPoint.Init(apiRoot), // "/v1/userService/userMailHasBound"}
-			// "userRegister":                                      nullEndPoint.Init(apiRoot), // "/v1/userService/userRegister"}
 		},
 	}
 

@@ -116,11 +116,11 @@ func (e EndPoint) IsError() bool {
 }
 
 func (e EndPoint) ReadFile() error {
-	return e.FileRead("", &e.Response)
+	return e.FileRead("", &e.Response.ResultData)
 }
 
 func (e EndPoint) WriteFile() error {
-	return e.FileWrite("", e.Response, api.DefaultFileMode)
+	return e.FileWrite("", e.Response.ResultData, api.DefaultFileMode)
 }
 
 func (e EndPoint) SetRequest(ref interface{}) api.EndPoint {

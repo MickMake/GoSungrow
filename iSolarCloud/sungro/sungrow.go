@@ -102,6 +102,7 @@ func (sg *SunGrow) ListAreas() {
 func (sg *SunGrow) AreaExists(area string) bool {
 	return sg.Areas.Exists(area)
 }
+
 func (sg *SunGrow) AreaNotExists(area string) bool {
 	return sg.Areas.NotExists(area)
 }

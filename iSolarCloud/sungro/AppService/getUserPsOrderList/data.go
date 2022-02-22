@@ -2,15 +2,13 @@ package getUserPsOrderList
 
 import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"errors"
 	"fmt"
 )
 
 const Url = "/v1/faultService/getUserPsOrderList"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -22,19 +20,24 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
-	Dummy string `json:"dummy"`
+	CurPage    int64         `json:"curPage"`
+	IsMore     interface{}   `json:"isMore"`
+	PageList   []interface{} `json:"pageList"`
+	RowCount   int64         `json:"rowCount"`
+	Size       int64         `json:"size"`
+	StartIndex interface{}   `json:"startIndex"`
+	TotalPage  interface{}   `json:"totalPage"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
+	//switch {
+	//case e.Dummy == "":
+	//	break
+	//default:
+	//	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
+	//}
 	return err
 }
 

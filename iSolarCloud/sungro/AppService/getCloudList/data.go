@@ -2,15 +2,13 @@ package getCloudList
 
 import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"errors"
 	"fmt"
 )
 
 const Url = "/v1/commonService/getCloudList"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -22,19 +20,65 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
-	Dummy string `json:"dummy"`
+	CloudList []struct {
+		CloudID    int64  `json:"cloud_id"`
+		CloudName  string `json:"cloud_name"`
+		GatewayURL string `json:"gateway_url"`
+		OrderID    int64  `json:"order_id"`
+		ServiceURL string `json:"service_url"`
+		Value      string `json:"value"`
+		ValueDeDe  string `json:"value_de_de"`
+		ValueEnUs  string `json:"value_en_us"`
+		ValueEsEs  string `json:"value_es_es"`
+		ValueFrFr  string `json:"value_fr_fr"`
+		ValueItIt  string `json:"value_it_it"`
+		ValueJaJp  string `json:"value_ja_jp"`
+		ValueKoKr  string `json:"value_ko_kr"`
+		ValueNlNl  string `json:"value_nl_nl"`
+		ValuePlPl  string `json:"value_pl_pl"`
+		ValuePtBr  string `json:"value_pt_br"`
+		ValuePtPt  string `json:"value_pt_pt"`
+		ValueTrTr  string `json:"value_tr_tr"`
+		ValueViVn  string `json:"value_vi_vn"`
+		ValueZhCn  string `json:"value_zh_cn"`
+		ValueZhTw  string `json:"value_zh_tw"`
+		WebURL     string `json:"web_url"`
+	} `json:"cloud_list"`
+	CurrentCloud struct {
+		CloudID    int64  `json:"cloud_id"`
+		CloudName  string `json:"cloud_name"`
+		GatewayURL string `json:"gateway_url"`
+		OrderID    int64  `json:"order_id"`
+		ServiceURL string `json:"service_url"`
+		Value      string `json:"value"`
+		ValueDeDe  string `json:"value_de_de"`
+		ValueEnUs  string `json:"value_en_us"`
+		ValueEsEs  string `json:"value_es_es"`
+		ValueFrFr  string `json:"value_fr_fr"`
+		ValueItIt  string `json:"value_it_it"`
+		ValueJaJp  string `json:"value_ja_jp"`
+		ValueKoKr  string `json:"value_ko_kr"`
+		ValueNlNl  string `json:"value_nl_nl"`
+		ValuePlPl  string `json:"value_pl_pl"`
+		ValuePtBr  string `json:"value_pt_br"`
+		ValuePtPt  string `json:"value_pt_pt"`
+		ValueTrTr  string `json:"value_tr_tr"`
+		ValueViVn  string `json:"value_vi_vn"`
+		ValueZhCn  string `json:"value_zh_cn"`
+		ValueZhTw  string `json:"value_zh_tw"`
+		WebURL     string `json:"web_url"`
+	} `json:"current_cloud"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
+	//switch {
+	//case e.Dummy == "":
+	//	break
+	//default:
+	//	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
+	//}
 	return err
 }
 
