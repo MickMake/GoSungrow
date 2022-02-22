@@ -2,15 +2,14 @@ package getPsHealthState
 
 import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"errors"
 	"fmt"
 )
 
 const Url = "/v1/powerStationService/getPsHealthState"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
+	PsId string `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -23,17 +22,19 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	Dummy string `json:"dummy"`
+	PsFaultStatus  string `json:"ps_fault_status"`
+	PsHealthStatus string `json:"ps_health_status"`
+	PsState        string `json:"ps_state"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
+	//switch {
+	//case e.Dummy == "":
+	//	break
+	//default:
+	//	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
+	//}
 	return err
 }
 

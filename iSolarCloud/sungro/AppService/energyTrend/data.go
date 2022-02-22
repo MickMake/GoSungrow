@@ -2,12 +2,11 @@ package energyTrend
 
 import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"errors"
 	"fmt"
 )
 
 const Url = "/v1/powerStationService/energyTrend"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
 	// DeviceType string `json:"device_type" required:"true"`
@@ -23,17 +22,27 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	Dummy string `json:"dummy"`
+	Echartunit string `json:"echartunit"`
+	EndTime    string `json:"endTime"`
+	EnergyMap  struct {
+		ValStr string `json:"valStr"`
+	} `json:"energyMap"`
+	Energyunit string `json:"energyunit"`
+	PowerMap   struct {
+		Dates  []interface{} `json:"dates"`
+		Units  string        `json:"units"`
+		ValStr string        `json:"valStr"`
+	} `json:"powerMap"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
+	//switch {
+	//case e.Dummy == "":
+	//	break
+	//default:
+	//	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
+	//}
 	return err
 }
 
@@ -55,3 +64,4 @@ func (e *ResultData) IsValid() error {
 //
 //	return err
 //}
+

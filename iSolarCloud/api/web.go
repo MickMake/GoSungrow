@@ -97,6 +97,10 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 		// fmt.Printf("RESPONSE: %s\n\n", w.Body)
 
 		endpoint = endpoint.SetResponse(w.Body)
+		//w.Error = endpoint.GetError()
+		//if w.Error != nil {
+		//	break
+		//}
 
 		w.Error = endpoint.IsResponseValid()
 		if w.Error != nil {

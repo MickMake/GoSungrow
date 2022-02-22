@@ -2,15 +2,13 @@ package getTemplateList
 
 import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"errors"
 	"fmt"
 )
 
 const Url = "/v1/devService/getTemplateList"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -23,17 +21,22 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	Dummy string `json:"dummy"`
+	PageList []struct {
+		TemplateID   int64  `json:"template_id"`
+		TemplateName string `json:"template_name"`
+		UpdateTime   string `json:"update_time"`
+	} `json:"pageList"`
+	RowCount int64 `json:"rowCount"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
+	//switch {
+	//case e.Dummy == "":
+	//	break
+	//default:
+	//	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
+	//}
 	return err
 }
 

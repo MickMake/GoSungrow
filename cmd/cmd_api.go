@@ -117,6 +117,11 @@ func cmdApiGetFunc(cmd *cobra.Command, args []string) {
 			break
 		}
 
+		Cmd.Error = ep.WriteFile()
+		if Cmd.Error != nil {
+			break
+		}
+
 		if Cmd.ApiGetRaw {
 			fmt.Printf("\n%v\n", ep.GetData(true))
 		} else {
@@ -134,7 +139,7 @@ var cmdApiLogin = &cobra.Command{
 	Example:               PrintExamples("api login", ""),
 	DisableFlagParsing:    false,
 	DisableFlagsInUseLine: false,
-	PreRunE:               Cmd.SunGrowArgs,
+	PreRunE:               Cmd.ProcessArgs,
 	Run:                   cmdApiLoginFunc,
 	Args:                  cobra.MinimumNArgs(0),
 }

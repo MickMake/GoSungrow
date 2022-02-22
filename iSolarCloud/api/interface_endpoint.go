@@ -14,6 +14,8 @@ type EndPoint interface {
 	GetError() error
 	IsError() bool
 	MarshalJSON() ([]byte, error)
+	ReadFile() error
+	WriteFile() error
 
 	SetRequest(ref interface{}) EndPoint // EndPointStruct
 	SetRequestByJson(j Json) EndPoint

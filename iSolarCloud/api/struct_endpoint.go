@@ -20,79 +20,79 @@ type EndPointStruct struct {
 	Error    error        `json:"-"`
 }
 
-func (p *EndPointStruct) GetArea() AreaName {
-	return p.Area
+func (ep *EndPointStruct) GetArea() AreaName {
+	return ep.Area
 }
 
-func (p *EndPointStruct) GetName() EndPointName {
-	return p.Name
+func (ep *EndPointStruct) GetName() EndPointName {
+	return ep.Name
 }
 
-func (p *EndPointStruct) GetUrl() EndPointUrl {
-	return p.Url
+func (ep *EndPointStruct) GetUrl() EndPointUrl {
+	return ep.Url
 }
 
-func (p *EndPointStruct) Call() Json {
+func (ep *EndPointStruct) Call() Json {
 	panic("implement me")
 }
 
-func (p *EndPointStruct) SetRequest(ref interface{}) error {
+func (ep *EndPointStruct) SetRequest(ref interface{}) error {
 	for range Only.Once {
 		if ref == nil {
-			p.Error = errors.New("endpoint has a nil request structure")
+			ep.Error = errors.New("endpoint has a nil request structure")
 			break
 		}
-		p.Request = ref
+		ep.Request = ref
 	}
-	return p.Error
+	return ep.Error
 }
 
-func (p *EndPointStruct) GetRequest() Json {
+func (ep *EndPointStruct) GetRequest() Json {
 	panic("implement me")
 }
 
-func (p *EndPointStruct) GetResponse() Json {
+func (ep *EndPointStruct) GetResponse() Json {
 	panic("implement me")
 }
 
-func (p *EndPointStruct) IsValid() error {
+func (ep *EndPointStruct) IsValid() error {
 	var err error
 	for range Only.Once {
-		if p == nil {
-			p.Error = errors.New("endpoint has a nil structure")
+		if ep == nil {
+			ep.Error = errors.New("endpoint has a nil structure")
 			break
 		}
-		if p.Request == nil {
-			p.Error = errors.New("endpoint has a nil request structure")
+		if ep.Request == nil {
+			ep.Error = errors.New("endpoint has a nil request structure")
 			break
 		}
-		if p.Response == nil {
-			p.Error = errors.New("endpoint has a nil response structure")
+		if ep.Response == nil {
+			ep.Error = errors.New("endpoint has a nil response structure")
 			break
 		}
 	}
 	return err
 }
 
-func (p EndPointStruct) String() string {
+func (ep EndPointStruct) String() string {
 	var ret string
 	for range Only.Once {
-		if p.Name == NullEndPoint {
+		if ep.Name == NullEndPoint {
 			break
 		}
 
 		ret += fmt.Sprintf("Area:\t%s\nEndPoint:\t%s\nUrl:\t%s\n",
-			p.Area,
-			p.Name,
-			p.Url,
+			ep.Area,
+			ep.Name,
+			ep.Url,
 		)
 
-		foo := p.GetRequest()
+		foo := ep.GetRequest()
 		ret += fmt.Sprintf("Request JSON:\t%s\n",
 			foo,
 		)
 
-		foo = p.GetResponse()
+		foo = ep.GetResponse()
 		ret += fmt.Sprintf("Response JSON:\t%s\n",
 			foo,
 		)

@@ -187,3 +187,4 @@ func (e *EndPoint) UserID() string {
 func (e *EndPoint) UserName() string {
 	return e.Response.ResultData.UserName
 }
+

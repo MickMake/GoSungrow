@@ -2,12 +2,11 @@ package getPsListByName
 
 import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"errors"
 	"fmt"
 )
 
 const Url = "/v1/powerStationService/getPsListByName"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
 	// DeviceType string `json:"device_type" required:"true"`
@@ -22,18 +21,23 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-type ResultData struct {
-	Dummy string `json:"dummy"`
+type ResultData []struct {
+	PsID         int64  `json:"ps_id"`
+	PsName       string `json:"ps_name"`
+	PsShortName  string `json:"ps_short_name"`
+	PsTimezone   string `json:"ps_timezone"`
+	PsTimezoneID int64  `json:"ps_timezone_id"`
+	ShareType    string `json:"share_type"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
+	//switch {
+	//case e.Dummy == "":
+	//	break
+	//default:
+	//	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
+	//}
 	return err
 }
 

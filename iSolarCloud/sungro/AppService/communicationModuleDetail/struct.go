@@ -115,6 +115,14 @@ func (e EndPoint) IsError() bool {
 	return false
 }
 
+func (e EndPoint) ReadFile() error {
+	return e.FileRead("", &e.Response)
+}
+
+func (e EndPoint) WriteFile() error {
+	return e.FileWrite("", e.Response, api.DefaultFileMode)
+}
+
 func (e EndPoint) SetRequest(ref interface{}) api.EndPoint {
 	for range Only.Once {
 		if apiReflect.GetPkgType(ref) == "api.RequestCommon" {
@@ -162,13 +170,13 @@ func (e EndPoint) GetRequestJson() api.Json {
 
 func (e EndPoint) IsRequestValid() error {
 	for range Only.Once {
-		req := e.GetRequest()
-		// req := e.Request.RequestCommon
-		e.Error = req.RequestCommon.IsValid()
+		//req := e.GetRequest()
+		//req := e.Request.RequestCommon
+		e.Error = e.Request.RequestCommon.IsValid()
 		if e.Error != nil {
 			break
 		}
-		e.Error = req.RequestData.IsValid()
+		e.Error = e.Request.RequestData.IsValid()
 		if e.Error != nil {
 			break
 		}
@@ -178,13 +186,10 @@ func (e EndPoint) IsRequestValid() error {
 
 func (e EndPoint) SetResponse(ref []byte) api.EndPoint {
 	for range Only.Once {
-		// r := e.GetResponse()
-		// e.Error = json.Unmarshal(ref, &r)
 		e.Error = json.Unmarshal(ref, &e.Response)
 		if e.Error != nil {
 			break
 		}
-		// e.ResponseCommon = r
 	}
 	return e
 }
@@ -199,9 +204,11 @@ func (e EndPoint) ResponseRef() interface{} {
 
 func (e EndPoint) IsResponseValid() error {
 	for range Only.Once {
-		// resp := e.GetResponse()
-		// e.Error = resp.ResponseCommon.IsValid()
 		e.Error = e.Response.ResponseCommon.IsValid()
+		if e.Error != nil {
+			break
+		}
+		e.Error = e.Response.ResultData.IsValid()
 		if e.Error != nil {
 			break
 		}
@@ -223,4 +230,20 @@ func (e EndPoint) ResponseString() string {
 
 func (e EndPoint) MarshalJSON() ([]byte, error) {
 	return api.MarshalJSON(e)
+
+	// return json.Marshal(&struct {
+	// 	Area     string   `json:"area"`
+	// 	EndPoint string   `json:"endpoint"`
+	// 	Host     string   `json:"api_host"`
+	// 	Url      string   `json:"endpoint_url"`
+	// 	Request  interface{}  `json:"request"`
+	// 	Response interface{} `json:"response"`
+	// }{
+	// 	Area:     string(e.Area),
+	// 	EndPoint: string(e.Name),
+	// 	Host:     e.ApiRoot.Url.String(),
+	// 	Url:      e.Url.String(),
+	// 	Request:  e.Request,
+	// 	Response: e.Response,
+	// })
 }

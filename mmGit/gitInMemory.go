@@ -8,10 +8,8 @@ import (
 	"github.com/go-git/go-git/v5/plumbing/transport/ssh"
 	memory "github.com/go-git/go-git/v5/storage/memory"
 	"os"
-
 	//"net/http"
 )
-
 
 func (z *Git) MemConnect() error {
 
@@ -41,14 +39,14 @@ func (z *Git) MemConnect() error {
 		//}
 
 		//s := fmt.Sprintf("%s/.ssh/id_rsa", os.Getenv("HOME"))
-		//sshKey, err = ioutil.ReadFile(s)
+		//sshKey, err = ioutil.FileRead(s)
 		//signer, err := ssh.ParsePrivateKey([]byte(sshKey))
 		//auth = &gitssh.PublicKeys{User: "git", Signer: signer}
 
 		z.storer = memory.NewStorage()
 		z.fs = memfs.New()
 
-		z.repo, z.Error = git.Clone(z.storer, z.fs, &git.CloneOptions {
+		z.repo, z.Error = git.Clone(z.storer, z.fs, &git.CloneOptions{
 			URL:  z.RepoUrl,
 			Auth: auth,
 		})

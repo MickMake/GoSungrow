@@ -115,6 +115,14 @@ func (e EndPoint) IsError() bool {
 	return false
 }
 
+func (e EndPoint) ReadFile() error {
+	return e.FileRead("", &e.Response)
+}
+
+func (e EndPoint) WriteFile() error {
+	return e.FileWrite("", e.Response, api.DefaultFileMode)
+}
+
 func (e EndPoint) SetRequest(ref interface{}) api.EndPoint {
 	for range Only.Once {
 		if apiReflect.GetPkgType(ref) == "api.RequestCommon" {
@@ -141,6 +149,10 @@ func (e EndPoint) SetRequest(ref interface{}) api.EndPoint {
 func (e EndPoint) SetRequestByJson(j api.Json) api.EndPoint {
 	for range Only.Once {
 		e.Error = json.Unmarshal([]byte(j), &e.Request.RequestData)
+		if e.Error != nil {
+			break
+		}
+		e.Error = e.IsRequestValid()
 		if e.Error != nil {
 			break
 		}

@@ -41,30 +41,30 @@ type ResultData struct {
 }
 
 type DayData struct {
-	JthdMap         KeyValue `json:"jthd_map"`
-	JthdMapVirgin   KeyValue `json:"jthd_map_virgin"`
-	JtydMap         KeyValue `json:"jtyd_map"`
-	JtydMapVirgin   KeyValue `json:"jtyd_map_virgin"`
-	P83072Map       KeyValue `json:"p83072_map"`
-	P83072MapVirgin KeyValue `json:"p83072_map_virgin"`
-	P83077Map       KeyValue `json:"p83077_map"`
-	P83077MapVirgin KeyValue `json:"p83077_map_virgin"`
-	P83088Map       KeyValue `json:"p83088_map"`
-	P83088MapVirgin KeyValue `json:"p83088_map_virgin"`
-	P83089Map       KeyValue `json:"p83089_map"`
-	P83089MapVirgin KeyValue `json:"p83089_map_virgin"`
-	P83097Map       KeyValue `json:"p83097_map"`
-	P83097MapVirgin KeyValue `json:"p83097_map_virgin"`
-	P83102Map       KeyValue `json:"p83102_map"`
-	P83102MapVirgin KeyValue `json:"p83102_map_virgin"`
-	P83118Map       KeyValue `json:"p83118_map"`
-	P83118MapVirgin KeyValue `json:"p83118_map_virgin"`
-	P83119Map       KeyValue `json:"p83119_map"`
-	P83119MapVirgin KeyValue `json:"p83119_map_virgin"`
-	P83120Map       KeyValue `json:"p83120_map"`
-	P83120MapVirgin KeyValue `json:"p83120_map_virgin"`
-	P83121          string   `json:"p83121"`
-	P83122          string   `json:"p83122"`
+	JthdMap         api.UnitValue `json:"jthd_map"`
+	JthdMapVirgin   api.UnitValue `json:"jthd_map_virgin"`
+	JtydMap         api.UnitValue `json:"jtyd_map"`
+	JtydMapVirgin   api.UnitValue `json:"jtyd_map_virgin"`
+	P83072Map       api.UnitValue `json:"p83072_map"`
+	P83072MapVirgin api.UnitValue `json:"p83072_map_virgin"`
+	P83077Map       api.UnitValue `json:"p83077_map"`
+	P83077MapVirgin api.UnitValue `json:"p83077_map_virgin"`
+	P83088Map       api.UnitValue `json:"p83088_map"`
+	P83088MapVirgin api.UnitValue `json:"p83088_map_virgin"`
+	P83089Map       api.UnitValue `json:"p83089_map"`
+	P83089MapVirgin api.UnitValue `json:"p83089_map_virgin"`
+	P83097Map       api.UnitValue `json:"p83097_map"`
+	P83097MapVirgin api.UnitValue `json:"p83097_map_virgin"`
+	P83102Map       api.UnitValue `json:"p83102_map"`
+	P83102MapVirgin api.UnitValue `json:"p83102_map_virgin"`
+	P83118Map       api.UnitValue `json:"p83118_map"`
+	P83118MapVirgin api.UnitValue `json:"p83118_map_virgin"`
+	P83119Map       api.UnitValue `json:"p83119_map"`
+	P83119MapVirgin api.UnitValue `json:"p83119_map_virgin"`
+	P83120Map       api.UnitValue `json:"p83120_map"`
+	P83120MapVirgin api.UnitValue `json:"p83120_map_virgin"`
+	P83121          string        `json:"p83121"`
+	P83122          string        `json:"p83122"`
 	PointData15List []struct {
 		P83076     string `json:"p83076"`
 		P83076Unit string `json:"p83076_unit"`
@@ -86,17 +86,17 @@ type DayData struct {
 		Zfzy       string `json:"zfzy"`
 		ZfzyUnit   string `json:"zfzy_unit"`
 	} `json:"point_data_15_list"`
-	ZfzyMap       KeyValue `json:"zfzy_map"`
-	ZfzyMapVirgin KeyValue `json:"zfzy_map_virgin"`
-	ZjzzMap       KeyValue `json:"zjzz_map"`
-	ZjzzMapVirgin KeyValue `json:"zjzz_map_virgin"`
+	ZfzyMap       api.UnitValue `json:"zfzy_map"`
+	ZfzyMapVirgin api.UnitValue `json:"zfzy_map_virgin"`
+	ZjzzMap       api.UnitValue `json:"zjzz_map"`
+	ZjzzMapVirgin api.UnitValue `json:"zjzz_map_virgin"`
 }
 
 type MonthData struct {
-	JthdMap          KeyValue `json:"jthd_map"`
-	JthdMapVirgin    KeyValue `json:"jthd_map_virgin"`
-	JtydMap          KeyValue `json:"jtyd_map"`
-	JtydMapVirgin    KeyValue `json:"jtyd_map_virgin"`
+	JthdMap          api.UnitValue `json:"jthd_map"`
+	JthdMapVirgin    api.UnitValue `json:"jthd_map_virgin"`
+	JtydMap          api.UnitValue `json:"jtyd_map"`
+	JtydMapVirgin    api.UnitValue `json:"jtyd_map_virgin"`
 	MonthDataDayList []struct {
 		DateID                   int64       `json:"date_id"`
 		Jthd                     string      `json:"jthd"`
@@ -128,57 +128,57 @@ type MonthData struct {
 		SelfConsumptionYieldUnit string      `json:"self_consumption_yield_unit"`
 		TimeStamp                string      `json:"time_stamp"`
 	} `json:"month_data_day_list"`
-	P83073Map       KeyValue `json:"p83073_map"`
-	P83073MapVirgin KeyValue `json:"p83073_map_virgin"`
-	P83078Map       KeyValue `json:"p83078_map"`
-	P83078MapVirgin KeyValue `json:"p83078_map_virgin"`
-	P83088Map       KeyValue `json:"p83088_map"`
-	P83088MapVirgin KeyValue `json:"p83088_map_virgin"`
-	P83091Map       KeyValue `json:"p83091_map"`
-	P83091MapVirgin KeyValue `json:"p83091_map_virgin"`
-	P83097Map       KeyValue `json:"p83097_map"`
-	P83097MapVirgin KeyValue `json:"p83097_map_virgin"`
-	P83103Map       KeyValue `json:"p83103_map"`
-	P83103MapVirgin KeyValue `json:"p83103_map_virgin"`
-	P83118Map       KeyValue `json:"p83118_map"`
-	P83118MapVirgin KeyValue `json:"p83118_map_virgin"`
-	P83119Map       KeyValue `json:"p83119_map"`
-	P83119MapVirgin KeyValue `json:"p83119_map_virgin"`
-	P83120Map       KeyValue `json:"p83120_map"`
-	P83120MapVirgin KeyValue `json:"p83120_map_virgin"`
-	P83121          string   `json:"p83121"`
-	P83122          string   `json:"p83122"`
-	ZfzyMap         KeyValue `json:"zfzy_map"`
-	ZfzyMapVirgin   KeyValue `json:"zfzy_map_virgin"`
-	ZjzzMap         KeyValue `json:"zjzz_map"`
-	ZjzzMapVirgin   KeyValue `json:"zjzz_map_virgin"`
+	P83073Map       api.UnitValue `json:"p83073_map"`
+	P83073MapVirgin api.UnitValue `json:"p83073_map_virgin"`
+	P83078Map       api.UnitValue `json:"p83078_map"`
+	P83078MapVirgin api.UnitValue `json:"p83078_map_virgin"`
+	P83088Map       api.UnitValue `json:"p83088_map"`
+	P83088MapVirgin api.UnitValue `json:"p83088_map_virgin"`
+	P83091Map       api.UnitValue `json:"p83091_map"`
+	P83091MapVirgin api.UnitValue `json:"p83091_map_virgin"`
+	P83097Map       api.UnitValue `json:"p83097_map"`
+	P83097MapVirgin api.UnitValue `json:"p83097_map_virgin"`
+	P83103Map       api.UnitValue `json:"p83103_map"`
+	P83103MapVirgin api.UnitValue `json:"p83103_map_virgin"`
+	P83118Map       api.UnitValue `json:"p83118_map"`
+	P83118MapVirgin api.UnitValue `json:"p83118_map_virgin"`
+	P83119Map       api.UnitValue `json:"p83119_map"`
+	P83119MapVirgin api.UnitValue `json:"p83119_map_virgin"`
+	P83120Map       api.UnitValue `json:"p83120_map"`
+	P83120MapVirgin api.UnitValue `json:"p83120_map_virgin"`
+	P83121          string        `json:"p83121"`
+	P83122          string        `json:"p83122"`
+	ZfzyMap         api.UnitValue `json:"zfzy_map"`
+	ZfzyMapVirgin   api.UnitValue `json:"zfzy_map_virgin"`
+	ZjzzMap         api.UnitValue `json:"zjzz_map"`
+	ZjzzMapVirgin   api.UnitValue `json:"zjzz_map_virgin"`
 }
 
 type YearData struct {
-	JthdMap           KeyValue `json:"jthd_map"`
-	JthdMapVirgin     KeyValue `json:"jthd_map_virgin"`
-	JtydMap           KeyValue `json:"jtyd_map"`
-	JtydMapVirgin     KeyValue `json:"jtyd_map_virgin"`
-	P83074Map         KeyValue `json:"p83074_map"`
-	P83074MapVirgin   KeyValue `json:"p83074_map_virgin"`
-	P83079Map         KeyValue `json:"p83079_map"`
-	P83079MapVirgin   KeyValue `json:"p83079_map_virgin"`
-	P83088Map         KeyValue `json:"p83088_map"`
-	P83088MapVirgin   KeyValue `json:"p83088_map_virgin"`
-	P83093Map         KeyValue `json:"p83093_map"`
-	P83093MapVirgin   KeyValue `json:"p83093_map_virgin"`
-	P83097Map         KeyValue `json:"p83097_map"`
-	P83097MapVirgin   KeyValue `json:"p83097_map_virgin"`
-	P83104Map         KeyValue `json:"p83104_map"`
-	P83104MapVirgin   KeyValue `json:"p83104_map_virgin"`
-	P83118Map         KeyValue `json:"p83118_map"`
-	P83118MapVirgin   KeyValue `json:"p83118_map_virgin"`
-	P83119Map         KeyValue `json:"p83119_map"`
-	P83119MapVirgin   KeyValue `json:"p83119_map_virgin"`
-	P83120Map         KeyValue `json:"p83120_map"`
-	P83120MapVirgin   KeyValue `json:"p83120_map_virgin"`
-	P83121            string   `json:"p83121"`
-	P83122            string   `json:"p83122"`
+	JthdMap           api.UnitValue `json:"jthd_map"`
+	JthdMapVirgin     api.UnitValue `json:"jthd_map_virgin"`
+	JtydMap           api.UnitValue `json:"jtyd_map"`
+	JtydMapVirgin     api.UnitValue `json:"jtyd_map_virgin"`
+	P83074Map         api.UnitValue `json:"p83074_map"`
+	P83074MapVirgin   api.UnitValue `json:"p83074_map_virgin"`
+	P83079Map         api.UnitValue `json:"p83079_map"`
+	P83079MapVirgin   api.UnitValue `json:"p83079_map_virgin"`
+	P83088Map         api.UnitValue `json:"p83088_map"`
+	P83088MapVirgin   api.UnitValue `json:"p83088_map_virgin"`
+	P83093Map         api.UnitValue `json:"p83093_map"`
+	P83093MapVirgin   api.UnitValue `json:"p83093_map_virgin"`
+	P83097Map         api.UnitValue `json:"p83097_map"`
+	P83097MapVirgin   api.UnitValue `json:"p83097_map_virgin"`
+	P83104Map         api.UnitValue `json:"p83104_map"`
+	P83104MapVirgin   api.UnitValue `json:"p83104_map_virgin"`
+	P83118Map         api.UnitValue `json:"p83118_map"`
+	P83118MapVirgin   api.UnitValue `json:"p83118_map_virgin"`
+	P83119Map         api.UnitValue `json:"p83119_map"`
+	P83119MapVirgin   api.UnitValue `json:"p83119_map_virgin"`
+	P83120Map         api.UnitValue `json:"p83120_map"`
+	P83120MapVirgin   api.UnitValue `json:"p83120_map_virgin"`
+	P83121            string        `json:"p83121"`
+	P83122            string        `json:"p83122"`
 	YearDataMonthList []struct {
 		DateID                   int64  `json:"date_id"`
 		Jthd                     string `json:"jthd"`
@@ -210,95 +210,35 @@ type YearData struct {
 		SelfConsumptionYieldUnit string `json:"self_consumption_yield_unit"`
 		TimeStamp                string `json:"time_stamp"`
 	} `json:"year_data_month_list"`
-	ZfzyMap       KeyValue `json:"zfzy_map"`
-	ZfzyMapVirgin KeyValue `json:"zfzy_map_virgin"`
-	ZjzzMap       KeyValue `json:"zjzz_map"`
-	ZjzzMapVirgin KeyValue `json:"zjzz_map_virgin"`
+	ZfzyMap       api.UnitValue `json:"zfzy_map"`
+	ZfzyMapVirgin api.UnitValue `json:"zfzy_map_virgin"`
+	ZjzzMap       api.UnitValue `json:"zjzz_map"`
+	ZjzzMapVirgin api.UnitValue `json:"zjzz_map_virgin"`
 }
 
 type TotalData struct {
-	JthdMap struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"jthd_map"`
-	JthdMapVirgin struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"jthd_map_virgin"`
-	JtydMap struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"jtyd_map"`
-	JtydMapVirgin struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"jtyd_map_virgin"`
-	P83075Map struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"p83075_map"`
-	P83075MapVirgin struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"p83075_map_virgin"`
-	P83094Map struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"p83094_map"`
-	P83094MapVirgin struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"p83094_map_virgin"`
-	P83095Map struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"p83095_map"`
-	P83095MapVirgin struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"p83095_map_virgin"`
-	P83105Map struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"p83105_map"`
-	P83105MapVirgin struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"p83105_map_virgin"`
-	P83107Map struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"p83107_map"`
-	P83107MapVirgin struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"p83107_map_virgin"`
-	P83123Map struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"p83123_map"`
-	P83123MapVirgin struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"p83123_map_virgin"`
-	P83124Map struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"p83124_map"`
-	P83124MapVirgin struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"p83124_map_virgin"`
-	P83125    string `json:"p83125"`
-	P83126    string `json:"p83126"`
-	P83127Map struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"p83127_map"`
-	P83127MapVirgin struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"p83127_map_virgin"`
+	JthdMap           api.UnitValue `json:"jthd_map"`
+	JthdMapVirgin     api.UnitValue `json:"jthd_map_virgin"`
+	JtydMap           api.UnitValue `json:"jtyd_map"`
+	JtydMapVirgin     api.UnitValue `json:"jtyd_map_virgin"`
+	P83075Map         api.UnitValue `json:"p83075_map"`
+	P83075MapVirgin   api.UnitValue `json:"p83075_map_virgin"`
+	P83094Map         api.UnitValue `json:"p83094_map"`
+	P83094MapVirgin   api.UnitValue `json:"p83094_map_virgin"`
+	P83095Map         api.UnitValue `json:"p83095_map"`
+	P83095MapVirgin   api.UnitValue `json:"p83095_map_virgin"`
+	P83105Map         api.UnitValue `json:"p83105_map"`
+	P83105MapVirgin   api.UnitValue `json:"p83105_map_virgin"`
+	P83107Map         api.UnitValue `json:"p83107_map"`
+	P83107MapVirgin   api.UnitValue `json:"p83107_map_virgin"`
+	P83123Map         api.UnitValue `json:"p83123_map"`
+	P83123MapVirgin   api.UnitValue `json:"p83123_map_virgin"`
+	P83124Map         api.UnitValue `json:"p83124_map"`
+	P83124MapVirgin   api.UnitValue `json:"p83124_map_virgin"`
+	P83125            string        `json:"p83125"`
+	P83126            string        `json:"p83126"`
+	P83127Map         api.UnitValue `json:"p83127_map"`
+	P83127MapVirgin   api.UnitValue `json:"p83127_map_virgin"`
 	TotalDataYearList []struct {
 		DateID                   int64  `json:"date_id"`
 		Jthd                     string `json:"jthd"`
@@ -330,27 +270,10 @@ type TotalData struct {
 		SelfConsumptionYieldUnit string `json:"self_consumption_yield_unit"`
 		TimeStamp                string `json:"time_stamp"`
 	} `json:"total_data_year_list"`
-	ZfzyMap struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"zfzy_map"`
-	ZfzyMapVirgin struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"zfzy_map_virgin"`
-	ZjzzMap struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"zjzz_map"`
-	ZjzzMapVirgin struct {
-		Unit  string `json:"unit"`
-		Value string `json:"value"`
-	} `json:"zjzz_map_virgin"`
-}
-
-type KeyValue struct {
-	Unit  string `json:"unit"`
-	Value string `json:"value"`
+	ZfzyMap       api.UnitValue `json:"zfzy_map"`
+	ZfzyMapVirgin api.UnitValue `json:"zfzy_map_virgin"`
+	ZjzzMap       api.UnitValue `json:"zjzz_map"`
+	ZjzzMapVirgin api.UnitValue `json:"zjzz_map_virgin"`
 }
 
 type DecodeResultData ResultData
@@ -402,3 +325,33 @@ func (p *ResultData) UnmarshalJSON(data []byte) error {
 
 	return err
 }
+
+func (e *ResultData) IsValid() error {
+	var err error
+	//switch {
+	//case e.Dummy == "":
+	//	break
+	//default:
+	//	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
+	//}
+	return err
+}
+
+//type DecodeResultData ResultData
+//
+//func (e *ResultData) UnmarshalJSON(data []byte) error {
+//	var err error
+//
+//	for range Only.Once {
+//		if len(data) == 0 {
+//			break
+//		}
+//		var pd DecodeResultData
+//
+//		// Store ResultData
+//		_ = json.Unmarshal(data, &pd)
+//		e.Dummy = pd.Dummy
+//	}
+//
+//	return err
+//}

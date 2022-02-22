@@ -130,6 +130,14 @@ func (e EndPoint) IsError() bool {
 	return false
 }
 
+func (e EndPoint) ReadFile() error {
+	return e.FileRead("", &e)
+}
+
+func (e EndPoint) WriteFile() error {
+	return e.FileWrite("", e, api.DefaultFileMode)
+}
+
 func (e EndPoint) SetRequest(ref interface{}) api.EndPoint {
 	for range Only.Once {
 		if apiReflect.GetPkgType(ref) == "api.RequestCommon" {
@@ -254,4 +262,26 @@ func (e EndPoint) MarshalJSON() ([]byte, error) {
 	// 	Request:  e.Request,
 	// 	Response: e.Response,
 	// })
+}
+
+func (e *EndPoint) Read() error {
+	for range Only.Once {
+		e.Error = e.FileRead(e.GetFilename(), &e.Response.ResultData)
+		if e.Error != nil {
+			break
+		}
+	}
+
+	return e.Error
+}
+
+func (e *EndPoint) Write() error {
+	for range Only.Once {
+		e.Error = e.FileWrite(e.GetFilename(), e.Response.ResultData, 0644)
+		if e.Error != nil {
+			break
+		}
+	}
+
+	return e.Error
 }
