@@ -2,6 +2,7 @@ package getHouseholdStoragePsReport
 
 import (
 	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"encoding/json"
 	"fmt"
@@ -23,12 +24,7 @@ func (rd RequestData) IsValid() error {
 
 func (rd RequestData) Help() string {
 	ret := fmt.Sprintln("ps_id: Can be fetched from getPsList.")
-	ret += fmt.Sprintln("date_type: Day = 1")
-	ret += fmt.Sprintln("\tdate_id: Format YYYYmmdd")
-	ret += fmt.Sprintln("date_type: Month = 2")
-	ret += fmt.Sprintln("\tdate_id: Format YYYYmm")
-	ret += fmt.Sprintln("date_type: Year = 3")
-	ret += fmt.Sprintln("\tdate_id: Format YYYY")
+	ret += api.HelpDataType()
 	return ret
 }
 

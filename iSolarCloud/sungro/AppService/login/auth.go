@@ -98,6 +98,10 @@ func (e *EndPoint) Login(auth *SunGrowAuth) error {
 		e.Request = foo.Request
 		e.Response = foo.Response
 
+		//e.Auth.UserAccount = e.Response.ResultData.UserAccount
+		e.Auth.Token = e.Response.ResultData.Token
+		e.Auth.lastLogin, _ = time.Parse(LastLoginDateFormat, e.Response.ResultData.LoginLastDate)
+
 		e.Error = e.saveToken()
 		if e.Error != nil {
 			break
@@ -226,6 +230,10 @@ func (e *EndPoint) readTokenFile() error {
 		defer f.Close()
 		e.Error = json.NewDecoder(f).Decode(&e.Response.ResultData)
 
+		e.Response.ResultData.Msg = ""
+		e.Response.ResultMsg = ""
+		e.Response.ResultCode = ""
+
 		e.Auth.Token = e.Token()
 		if e.Auth.Token == "" {
 			e.Auth.newToken = true
@@ -239,6 +247,7 @@ func (e *EndPoint) readTokenFile() error {
 			e.Error = nil
 			break
 		}
+
 	}
 
 	return e.Error

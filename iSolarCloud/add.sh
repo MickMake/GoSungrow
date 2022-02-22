@@ -44,14 +44,14 @@ else
 #	exit
 fi
 
-if [ -f "${DIRNAME}/data.go" ]
+if [ ! -f "${DIRNAME}/data.go" ]
 then
 	perl -pe "s#nullEndPoint#${NAME}#g; s#%URL%#${URL}#g" ${TEMPLATE}/data.go > "${DIRNAME}/data.go"
 else
 	echo "File ${DIRNAME}/data.go exists"
 fi
 
-if [ -f "${DIRNAME}/struct.go" ]
+if [ ! -f "${DIRNAME}/struct.go" ]
 then
 	perl -pe "s/nullEndPoint/${NAME}/g" ${TEMPLATE}/struct.go > "${DIRNAME}/struct.go"
 else

@@ -46,6 +46,8 @@ func Init(apiRoot *api.Web) EndPoint {
 			UserAccount:  "",
 			UserPassword: "",
 			TokenFile:    DefaultAuthTokenFile,
+			Token:        "",
+			Force:        false,
 			lastLogin:    time.Time{},
 			newToken:     false,
 			retry:        0,

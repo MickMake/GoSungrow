@@ -1,6 +1,5 @@
 ./add.sh AppService psHourPointsValue /v1/powerStationService/psHourPointsValue
 ./add.sh AppService getPsCurveInfo /v1/devService/getPsCurveInfo
-./add.sh AppService queryMutiPointDataList /v1/commonService/queryMutiPointDataList
 ./add.sh AppService getTemplateList /v1/devService/getTemplateList
 ./add.sh AppService getDevicePoints /v1/devService/getDevicePoints
 ./add.sh AppService getAllPowerDeviceSetName /v1/devService/getAllPowerDeviceSetName

@@ -603,7 +603,7 @@ func Init(apiRoot *api.Web) Area {
 			api.GetName(queryUnitList.EndPoint{}):               queryUnitList.Init(apiRoot),
 			api.GetName(queryMutiPointDataList.EndPoint{}):      queryMutiPointDataList.Init(apiRoot),
 			api.GetName(communicationModuleDetail.EndPoint{}):   communicationModuleDetail.Init(apiRoot),
-			api.GetName(getHistoryInfo.EndPoint{}):              getHistoryInfo.Init(apiRoot),
+			api.GetName(getHistoryInfo.EndPoint{}):              getHistoryInfo.Init(apiRoot), // @TODO - Not working.
 
 			// Disabled from here on.
 			api.GetName(psHourPointsValue.EndPoint{}):                                 psHourPointsValue.Init(apiRoot),

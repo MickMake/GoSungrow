@@ -1,16 +1,18 @@
 package getHistoryInfo
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"errors"
 	"fmt"
 )
 
 const Url = "/v1/powerStationService/getHistoryInfo"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
+	DateType string `json:"date_type" required:"true"`
+	DateID   string `json:"date_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -19,6 +21,7 @@ func (rd RequestData) IsValid() error {
 
 func (rd RequestData) Help() string {
 	ret := fmt.Sprintf("")
+	ret += api.HelpDataType()
 	return ret
 }
 
