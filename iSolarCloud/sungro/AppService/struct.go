@@ -605,9 +605,9 @@ func Init(apiRoot *api.Web) Area {
 			api.GetName(communicationModuleDetail.EndPoint{}):   communicationModuleDetail.Init(apiRoot),
 			api.GetName(getHistoryInfo.EndPoint{}):              getHistoryInfo.Init(apiRoot),
 
+			// Disabled from here on.
 			api.GetName(psHourPointsValue.EndPoint{}):                                 psHourPointsValue.Init(apiRoot),
 			api.GetName(getPsCurveInfo.EndPoint{}):                                    getPsCurveInfo.Init(apiRoot),
-			api.GetName(queryMutiPointDataList.EndPoint{}):                            queryMutiPointDataList.Init(apiRoot),
 			api.GetName(getTemplateList.EndPoint{}):                                   getTemplateList.Init(apiRoot),
 			api.GetName(getDevicePoints.EndPoint{}):                                   getDevicePoints.Init(apiRoot),
 			api.GetName(getAllPowerDeviceSetName.EndPoint{}):                          getAllPowerDeviceSetName.Init(apiRoot),

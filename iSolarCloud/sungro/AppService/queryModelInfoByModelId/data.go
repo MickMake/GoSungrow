@@ -2,12 +2,12 @@ package queryModelInfoByModelId
 
 import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"errors"
 	"fmt"
 )
 
-
-const Url = ""
-
+const Url = "/v1/devService/queryModelInfoByModelId"
+const Disabled = true
 
 type RequestData struct {
 	// DeviceType string `json:"device_type" required:"true"`
@@ -22,6 +22,36 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
+	Dummy string `json:"dummy"`
 }
+
+func (e *ResultData) IsValid() error {
+	var err error
+	switch {
+	case e.Dummy == "":
+		break
+	default:
+		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
+	}
+	return err
+}
+
+//type DecodeResultData ResultData
+//
+//func (e *ResultData) UnmarshalJSON(data []byte) error {
+//	var err error
+//
+//	for range Only.Once {
+//		if len(data) == 0 {
+//			break
+//		}
+//		var pd DecodeResultData
+//
+//		// Store ResultData
+//		_ = json.Unmarshal(data, &pd)
+//		e.Dummy = pd.Dummy
+//	}
+//
+//	return err
+//}

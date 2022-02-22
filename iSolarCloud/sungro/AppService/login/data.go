@@ -25,6 +25,11 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
+	ErrTimes    string `json:"err_times"`
+	LoginState  string `json:"login_state"`
+	Msg         string `json:"msg"`
+	RemainTimes string `json:"remain_times"`
+
 	AcceptOrderNum         int64       `json:"accept_order_num"`
 	BackgroundColor        int64       `json:"background_color"`
 	Countryid              string      `json:"countryid"`
@@ -34,7 +39,6 @@ type ResultData struct {
 	DisableTime            string      `json:"disable_time"`
 	Email                  string      `json:"email"`
 	Englishname            interface{} `json:"englishname"`
-	ErrTimes               string      `json:"err_times"`
 	GcjLatitude            interface{} `json:"gcj_latitude"`
 	GcjLongitude           interface{} `json:"gcj_longitude"`
 	ImToken                interface{} `json:"im_token"`
@@ -62,8 +66,6 @@ type ResultData struct {
 	LoginLastDate          string      `json:"loginLastDate"`
 	LoginLastIP            string      `json:"loginLastIp"`
 	LoginTimes             int64       `json:"loginTimes"`
-	LoginState             string      `json:"login_state"`
-	Msg                    string      `json:"msg"`
 	Logo                   interface{} `json:"logo"`
 	LogoHTTPSURL           interface{} `json:"logo_https_url"`
 	MapType                string      `json:"map_type"`
@@ -136,6 +138,8 @@ func (e *ResultData) IsValid() error {
 		switch {
 		case e.Msg == `账号不存在`:
 			err = errors.New(fmt.Sprintf("Account does not exist '%s'", e.Msg))
+		case e.Msg == fmt.Sprintf(`账号或密码输入错误，还剩%s次机会`, e.RemainTimes):
+			err = errors.New(fmt.Sprintf("The account number or password is entered incorrectly, there are %s chances left '%s'", e.RemainTimes, e.Msg))
 		case e.Msg == "":
 			break
 		default:
