@@ -6,6 +6,7 @@ import (
 )
 
 const Url = "/v1/devService/communicationModuleDetail"
+const Disabled = false
 
 type RequestData struct {
 	Sn string `json:"sn" required:"true"`

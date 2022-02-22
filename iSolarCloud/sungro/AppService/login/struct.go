@@ -84,6 +84,10 @@ func (e EndPoint) Help() string {
 	return ret
 }
 
+func (e EndPoint) IsDisabled() bool {
+	return Disabled
+}
+
 func (e EndPoint) GetArea() api.AreaName {
 	return e.Area
 }

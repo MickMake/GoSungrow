@@ -6,6 +6,7 @@ import (
 )
 
 const Url = "/v1/powerStationService/getPsList"
+const Disabled = false
 
 type RequestData struct {
 }

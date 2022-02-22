@@ -9,6 +9,7 @@ import (
 )
 
 const Url = "/v1/powerStationService/getHouseholdStoragePsReport"
+const Disabled = false
 
 type RequestData struct {
 	DateID   string `json:"date_id" required:"true"`

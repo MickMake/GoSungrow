@@ -22,15 +22,25 @@ then
 fi
 
 
+CMD="$(realpath $0)"
+CMD="$(dirname ${CMD})"
 
-DIRNAME="$(realpath "${AREA}/${NAME}")"
-TEMPLATE="$(realpath "../api/nullEndPoint/")"
+DIRNAME="$(realpath "sungro/${AREA}/${NAME}/")"
+DIRNAME="$(echo "${DIRNAME}" | perl -pe "s#^${CMD}/##")"
+TEMPLATE="$(realpath "api/nullEndPoint/")"
+TEMPLATE="$(echo "${TEMPLATE}" | perl -pe "s#^${CMD}/##")"
+
+echo "Template: ${TEMPLATE}"
+echo "EndPoint: ${DIRNAME}"
+
 
 if [ ! -d "${DIRNAME}" ]
 then
 	mkdir "${DIRNAME}"
 else
 	echo "Directory ${DIRNAME} exists"
+	echo ""
+	diff "${TEMPLATE}" "${DIRNAME}"
 	exit
 fi
 

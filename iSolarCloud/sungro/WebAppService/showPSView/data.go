@@ -7,6 +7,7 @@ import (
 
 
 const Url = "/v1/powerStationService/showPSView"
+const Disabled = false
 
 
 type RequestData struct {

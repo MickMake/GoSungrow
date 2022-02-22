@@ -7,6 +7,7 @@ import (
 
 
 const Url = "/v1/reportService/getPowerDevicePointNames"
+const Disabled = false
 
 const (
 	DeviceType1 = "1"

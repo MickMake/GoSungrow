@@ -8,6 +8,7 @@ import (
 )
 
 const Url = "/v1/userService/login"
+const Disabled = false
 
 type RequestData struct {
 	UserAccount  string `json:"user_account" required:"true"`

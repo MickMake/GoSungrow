@@ -8,6 +8,7 @@ import (
 )
 
 const Url = "/v1/devService/queryUserCurveTemplateData"
+const Disabled = false
 
 // {"template_id":"","date_type":"","start_time":"","end_time":""}
 type RequestData struct {

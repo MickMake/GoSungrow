@@ -6,6 +6,7 @@ import (
 )
 
 const Url = "/v1/powerStationService/getPowerStatistics"
+const Disabled = false
 
 type RequestData struct {
 	PsId string `json:"ps_id" required:"true"`

@@ -9,6 +9,7 @@ import (
 )
 
 const Url = "/v1/powerStationService/psHourPointsValue"
+const Disabled = false
 
 type RequestData struct {
 	PsID           string `json:"ps_id" required:"true"`

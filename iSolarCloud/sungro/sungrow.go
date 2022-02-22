@@ -45,6 +45,12 @@ func (sg *SunGrow) GetEndpoint(ae string) api.EndPoint {
 			sg.Error = errors.New("EndPoint not found")
 			break
 		}
+
+		if ep.IsDisabled() {
+			sg.Error = errors.New("API EndPoint is not implemented")
+			break
+		}
+
 		if sg.Auth.Token() != "" {
 			ep = ep.SetRequest(api.RequestCommon{
 				Appkey:    sg.GetAppKey(), // sg.Auth.RequestCommon.Appkey
