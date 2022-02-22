@@ -35,10 +35,10 @@ func (ps TypeEndPoints) String() string {
 			table := tablewriter.NewWriter(buf)
 			table.SetHeader([]string{"EndPoint", "Url"})
 			table.SetBorder(true)
-			for _, endpoint := range ep {
-				u := endpoint.GetUrl().String()
+			for _, endpoint := range ep.SortEndPoints() {
+				u := ep[endpoint].GetUrl().String()
 				table.Append([]string{
-					string(endpoint.GetName()),
+					string(ep[endpoint].GetName()),
 					u,
 				})
 			}
@@ -53,10 +53,10 @@ func (ps TypeEndPoints) String() string {
 			table := tablewriter.NewWriter(buf)
 			table.SetHeader([]string{"EndPoint", "Url"})
 			table.SetBorder(true)
-			for _, endpoint := range dp {
-				u := endpoint.GetUrl().String()
+			for _, endpoint := range dp.SortEndPoints() {
+				u := dp[endpoint].GetUrl().String()
 				table.Append([]string{
-					string(endpoint.GetName()),
+					string(dp[endpoint].GetName()),
 					u,
 				})
 			}
@@ -91,9 +91,9 @@ func (ps *TypeEndPoints) SortEndPoints() []EndPointName {
 	return ret
 }
 
-//func (ps *TypeEndPoints) CountEndpoints() int {
+// func (ps *TypeEndPoints) CountEndpoints() int {
 //	return len(*ps)
-//}
+// }
 
 func (ps *TypeEndPoints) GetEnabled() TypeEndPoints {
 	ret := make(TypeEndPoints)

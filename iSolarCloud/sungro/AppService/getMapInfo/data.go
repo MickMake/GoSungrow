@@ -2,15 +2,13 @@ package getMapInfo
 
 import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"errors"
 	"fmt"
 )
 
 const Url = "/v1/powerStationService/getMapInfo"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -22,25 +20,24 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
-	Dummy string `json:"dummy"`
+	// Dummy string `json:"dummy"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
+	// switch {
+	// case e.Dummy == "":
+	// 	break
+	// default:
+	// 	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
+	// }
 	return err
 }
 
-//type DecodeResultData ResultData
+// type DecodeResultData ResultData
 //
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
+// func (e *ResultData) UnmarshalJSON(data []byte) error {
 //	var err error
 //
 //	for range Only.Once {
@@ -55,4 +52,4 @@ func (e *ResultData) IsValid() error {
 //	}
 //
 //	return err
-//}
+// }
