@@ -36,7 +36,7 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-// ResultData -> PointsData -> []Devices -> []Points
+// ResultData -> PointsData -> []dDevices -> []Points
 type ResultData struct {
 	CreateTime   string     `json:"create_time"`
 	Cycle        string     `json:"cycle"`
@@ -70,7 +70,7 @@ func (p *PointsData) UnmarshalJSON(data []byte) error {
 		err = json.Unmarshal(data, &pd)
 		p.Order = pd.Order
 
-		// Store PointsData.Devices
+		// Store PointsData.dDevices
 		_ = json.Unmarshal(data, &pd.Devices)
 		for i, k := range pd.Devices {
 			if k.DeviceName == "" {

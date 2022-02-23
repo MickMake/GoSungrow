@@ -58,6 +58,35 @@ func (sg *SunGrow) Get(endpoint string, request string) api.EndPoint {
 	return ret
 }
 
+func (sg *SunGrow) RefGet(endpoint string, request interface{}) api.EndPoint {
+	var ret api.EndPoint
+	for range Only.Once {
+		ret = sg.GetEndpoint(endpoint)
+		if sg.Error != nil {
+			break
+		}
+		if ret.IsError() {
+			sg.Error = ret.GetError()
+			break
+		}
+
+		if request != nil {
+			ret = ret.SetRequest(request)
+			if ret.IsError() {
+				sg.Error = ret.GetError()
+				break
+			}
+		}
+
+		ret = ret.Call()
+		if ret.IsError() {
+			sg.Error = ret.GetError()
+			break
+		}
+	}
+	return ret
+}
+
 func (sg *SunGrow) GetHighLevel(name string, args ...string) error {
 	for range Only.Once {
 		name = strings.ToLower(name)
@@ -225,49 +254,23 @@ func (sg *SunGrow) GetCurrentStats() error {
 
 func (sg *SunGrow) GetData(date string, template string) error {
 	for range Only.Once {
-		ep := sg.GetEndpoint("WebAppService.queryUserCurveTemplateData")
-		if ep.IsError() {
-			sg.Error = ep.GetError()
-			break
-		}
-
 		if template == "" {
 			template = "8042"
 		}
 
-		ep = ep.SetRequest(queryUserCurveTemplateData.RequestData{
+		ep := sg.RefGet("WebAppService.queryUserCurveTemplateData", queryUserCurveTemplateData.RequestData{
 			TemplateID: template,
-			// DateType:   when.DateType,
-			// DateType:  "2",
-			// StartTime: when.GetDayStartTimestamp(),
-			// EndTime:   when.GetDayEndTimestamp(),
-		})
-		if ep.IsError() {
-			sg.Error = ep.GetError()
-			break
-		}
-
-		ep = ep.Call()
-		if ep.IsError() {
-			sg.Error = ep.GetError()
-			break
-		}
-
-		csv := api.NewCsv()
-		csv = csv.SetHeader([]string{
-			"Date/Time",
-			"Point Name",
-			"Value",
-			"Units",
 		})
 
 		data := queryUserCurveTemplateData.AssertResultData(ep)
 		var pskeys string
 		var points string
-		pointIds := make(map[string]string)
+		pointNames := make(map[string]string)
+		pointUnits := make(map[string]string)
 		for dn, dr := range data.PointsData.Devices {
 			for pn, pr := range dr.Points {
-				pointIds["p"+pr.PointID] = pr.PointName
+				pointNames["p"+pr.PointID] = pr.PointName
+				pointUnits["p"+pr.PointID] = pr.Unit
 				pskeys += "," + dn
 				points += "," + pn
 			}
@@ -275,19 +278,14 @@ func (sg *SunGrow) GetData(date string, template string) error {
 		pskeys = strings.TrimPrefix(pskeys, ",")
 		points = strings.TrimPrefix(points, ",")
 
-		ep2 := sg.GetEndpoint("AppService.queryMutiPointDataList")
-		if ep.IsError() {
-			sg.Error = ep.GetError()
-			break
-		}
-
+		//
 		if date == "" {
 			date = api.NewDateTime("").String()
 		}
 		when := api.NewDateTime(date)
-
 		psId := sg.GetPsId()
-		ep2 = ep2.SetRequest(queryMutiPointDataList.RequestData{
+
+		ep2 := sg.RefGet("AppService.queryMutiPointDataList", queryMutiPointDataList.RequestData{
 			PsID:           psId,
 			PsKey:          pskeys,
 			Points:         points,
@@ -295,29 +293,29 @@ func (sg *SunGrow) GetData(date string, template string) error {
 			StartTimeStamp: when.GetDayStartTimestamp(),
 			EndTimeStamp:   when.GetDayEndTimestamp(),
 		})
-		if ep2.IsError() {
-			sg.Error = ep2.GetError()
-			break
-		}
 
-		ep2 = ep2.Call()
-		if ep2.IsError() {
-			sg.Error = ep2.GetError()
-			break
-		}
+		//
+		csv := api.NewCsv()
+		csv = csv.SetHeader([]string{
+			"Date/Time",
+			"Device Name",
+			"Point Name",
+			"Value",
+			"Units",
+		})
 
 		data2 := queryMutiPointDataList.AssertResultData(ep2)
-		for point_id, dpr := range data2.Points {
-			for _, lr := range dpr.List {
-				// name := pointIds[point_id]
-
-				csv = csv.AddRow([]string{
-					// api.NewDateTime(d.TimeStamp).String(),
-					// fmt.Sprintf("%s (%s)", p.PointName, p.PointID),
-					point_id,
-					lr,
-					dpr.Unit,
-				})
+		for deviceName, deviceRef := range data2.Devices {
+			for pointId, pointRef := range deviceRef.Points {
+				for _, tim := range pointRef.Times {
+					csv = csv.AddRow([]string{
+						tim.Key.String(),
+						deviceName,
+						fmt.Sprintf("%s (%s)", pointNames[pointId], pointId),
+						tim.Value,
+						pointUnits[pointId],
+					})
+				}
 			}
 		}
 
