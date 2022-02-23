@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"GoSungrow/Only"
-	"GoSungrow/iSolarCloud/sungro"
+	"GoSungrow/iSolarCloud"
 	"GoSungrow/mmGit"
 	"fmt"
 	"github.com/spf13/cobra"
@@ -13,7 +13,7 @@ import (
 	"strings"
 )
 
-var SunGrow *sungro.SunGrow
+var SunGrow *iSolarCloud.SunGrow
 var Git *mmGit.Git
 var Cmd CommandArgs
 var rootViper *viper.Viper
@@ -47,14 +47,13 @@ func init() {
 		rootViper.SetDefault(flagApiPassword, "")
 		rootCmd.PersistentFlags().StringVarP(&Cmd.ApiAppKey, flagApiAppKey, "", defaultApiAppKey, fmt.Sprintf("SunGrow: api application key."))
 		rootViper.SetDefault(flagApiAppKey, defaultApiAppKey)
-
 		rootCmd.PersistentFlags().StringVarP(&Cmd.ApiUrl, flagApiUrl, "", defaultHost, fmt.Sprintf("SunGrow: Provider API URL."))
 		rootViper.SetDefault(flagApiUrl, defaultHost)
 		rootCmd.PersistentFlags().DurationVarP(&Cmd.ApiTimeout, flagApiTimeout, "", defaultTimeout, fmt.Sprintf("SunGrow: API timeout."))
 		rootViper.SetDefault(flagApiTimeout, defaultTimeout)
 		rootCmd.PersistentFlags().StringVar(&Cmd.ApiLastLogin, flagApiLastLogin, "", "SunGrow: last login.")
 		rootViper.SetDefault(flagApiLastLogin, "")
-		//_ = rootCmd.PersistentFlags().MarkHidden(flagApiLastLogin)
+		// _ = rootCmd.PersistentFlags().MarkHidden(flagApiLastLogin)
 
 		rootCmd.PersistentFlags().StringVarP(&Cmd.GoogleSheet, flagGoogleSheet, "", "", fmt.Sprintf("Google: Sheet URL for updates."))
 		rootViper.SetDefault(flagGoogleSheet, "")
@@ -116,16 +115,18 @@ func InitCommands() error {
 	var err error
 
 	for range Only.Once {
-		rootCmd.AddCommand(cmdConfig, cmdApi, cmdGit, cmdMqtt, cmdGoogle, cmdCron, cmdVersion, cmdHelpFlags)
+		rootCmd.AddCommand(cmdConfig, cmdApi, cmdData, cmdGit, cmdMqtt, cmdGoogle, cmdCron, cmdVersion, cmdHelpFlags)
 		cmdConfig.AddCommand(cmdConfigWrite, cmdConfigRead)
 		cmdGit.AddCommand(cmdGitSync, cmdSave, cmdGitLs, cmdGitDiff, cmdGitClone, cmdGitPull, cmdGitPush, cmdGitCommit, cmdGitAdd)
 		cmdGoogle.AddCommand(cmdGoogleSync)
 		cmdMqtt.AddCommand(cmdMqttSync)
 		cmdCron.AddCommand(cmdCronRun, cmdCronAdd, cmdCronRemove, cmdCronList)
 
-		cmdApi.AddCommand(cmdApiList, cmdApiLogin, cmdApiPut, cmdApiGet)
-		cmdApi.PersistentFlags().BoolVarP(&Cmd.ApiGetRaw, flagApiGetRaw, "", false, fmt.Sprintf("SunGrow: api raw data, (not parsed nor evaluated)."))
-		rootViper.SetDefault(flagApiGetRaw, false)
+		cmdApi.AddCommand(cmdApiList, cmdApiLogin, cmdApiPut, cmdApiGet, cmdApiRaw, cmdApiSave)
+		cmdApi.PersistentFlags().StringVarP(&Cmd.ApiOutputType, flagApiOutputType, "o", "", fmt.Sprintf("Output type: 'json', 'raw', 'file'"))
+		_ = cmdApi.PersistentFlags().MarkHidden(flagApiOutputType)
+
+		cmdData.AddCommand(cmdDataList, cmdDataLogin, cmdDataPut, cmdDataGet, cmdDataRaw, cmdDataSave)
 
 		// foo := rootCmd.HelpTemplate()
 		// foo := rootCmd.UsageTemplate()

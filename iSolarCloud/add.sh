@@ -25,7 +25,7 @@ fi
 CMD="$(realpath $0)"
 CMD="$(dirname ${CMD})"
 
-DIRNAME="$(realpath "sungro/${AREA}/${NAME}/")"
+DIRNAME="$(realpath "${AREA}/${NAME}/")"
 DIRNAME="$(echo "${DIRNAME}" | perl -pe "s#^${CMD}/##")"
 TEMPLATE="$(realpath "api/nullEndPoint/")"
 TEMPLATE="$(echo "${TEMPLATE}" | perl -pe "s#^${CMD}/##")"

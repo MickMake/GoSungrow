@@ -2,13 +2,14 @@ package cmd
 
 import (
 	"GoSungrow/Only"
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/sungro/AppService/login"
+	"GoSungrow/iSolarCloud/AppService/login"
 	"fmt"
 	"github.com/spf13/cobra"
 )
 
-// ******************************************************************************** //
+//
+// ********************************************************************************
+//
 var cmdApi = &cobra.Command{
 	Use:                   "api",
 	Aliases:               []string{},
@@ -32,7 +33,9 @@ func cmdApiFunc(cmd *cobra.Command, args []string) {
 	}
 }
 
-// ******************************************************************************** //
+//
+// ********************************************************************************
+//
 var cmdApiList = &cobra.Command{
 	Use:                   "ls",
 	Aliases:               []string{"list"},
@@ -66,71 +69,9 @@ func cmdApiListFunc(cmd *cobra.Command, args []string) {
 	}
 }
 
-// ******************************************************************************** //
-var cmdApiGet = &cobra.Command{
-	Use: "get",
-	// Aliases:               []string{""},
-	Short:                 fmt.Sprintf("Get details from iSolarCloud"),
-	Long:                  fmt.Sprintf("Get details from iSolarCloud"),
-	Example:               PrintExamples("api get", "<endpoint> [area]"),
-	DisableFlagParsing:    false,
-	DisableFlagsInUseLine: false,
-	PreRunE:               Cmd.SunGrowArgs,
-	Run:                   cmdApiGetFunc,
-	Args:                  cobra.MinimumNArgs(1),
-}
-
-//goland:noinspection GoUnusedParameter
-func cmdApiGetFunc(cmd *cobra.Command, args []string) {
-	for range Only.Once {
-		args = fillArray(2, args)
-		// if args[1] == "" {
-		// 	args[1] = "{}"
-		// }
-
-		ep := SunGrow.GetEndpoint(args[0])
-		if SunGrow.Error != nil {
-			Cmd.Error = SunGrow.Error
-			break
-		}
-		if ep.IsError() {
-			Cmd.Error = ep.GetError()
-			break
-		}
-
-		if args[1] != "" {
-			ep = ep.SetRequestByJson(api.Json(args[1]))
-			if ep.IsError() {
-				fmt.Println(ep.Help())
-				Cmd.Error = ep.GetError()
-				break
-			}
-		}
-
-		ep = ep.Call()
-		if ep.IsError() {
-			if Cmd.ApiGetRaw {
-				fmt.Printf("\n%v\n", ep.GetData(true))
-			}
-			fmt.Println(ep.Help())
-			Cmd.Error = ep.GetError()
-			break
-		}
-
-		Cmd.Error = ep.WriteFile()
-		if Cmd.Error != nil {
-			break
-		}
-
-		if Cmd.ApiGetRaw {
-			fmt.Printf("\n%v\n", ep.GetData(true))
-		} else {
-			fmt.Printf("\n%v\n", ep.GetData(false))
-		}
-	}
-}
-
-// ******************************************************************************** //
+//
+// ********************************************************************************
+//
 var cmdApiLogin = &cobra.Command{
 	Use: "login",
 	// Aliases:               []string{""},
@@ -168,7 +109,111 @@ func cmdApiLoginFunc(cmd *cobra.Command, args []string) {
 	}
 }
 
-// ******************************************************************************** //
+//
+// ********************************************************************************
+//
+var cmdApiGet = &cobra.Command{
+	Use: "get",
+	// Aliases:               []string{""},
+	Short:                 fmt.Sprintf("Get details from iSolarCloud"),
+	Long:                  fmt.Sprintf("Get details from iSolarCloud"),
+	Example:               PrintExamples("api get", "<endpoint> [area]"),
+	DisableFlagParsing:    false,
+	DisableFlagsInUseLine: false,
+	PreRunE:               Cmd.SunGrowArgs,
+	Run:                   cmdApiGetFunc,
+	Args:                  cobra.MinimumNArgs(1),
+}
+
+//goland:noinspection GoUnusedParameter
+func cmdApiGetFunc(cmd *cobra.Command, args []string) {
+	for range Only.Once {
+		SunGrow.OutputType.SetJson()
+
+		args = fillArray(2, args)
+		if args[0] == "all" {
+			Cmd.Error = SunGrow.AllCritical()
+			break
+		}
+
+		Cmd.Error = SunGrow.Get(args[0], args[1]).GetError()
+		if Cmd.Error != nil {
+			break
+		}
+	}
+}
+
+//
+// ********************************************************************************
+//
+var cmdApiRaw = &cobra.Command{
+	Use: "raw",
+	// Aliases:               []string{""},
+	Short:                 fmt.Sprintf("Raw details from iSolarCloud"),
+	Long:                  fmt.Sprintf("Raw details from iSolarCloud"),
+	Example:               PrintExamples("api get", "<endpoint> [area]"),
+	DisableFlagParsing:    false,
+	DisableFlagsInUseLine: false,
+	PreRunE:               Cmd.SunGrowArgs,
+	Run:                   cmdApiRawFunc,
+	Args:                  cobra.MinimumNArgs(1),
+}
+
+//goland:noinspection GoUnusedParameter
+func cmdApiRawFunc(cmd *cobra.Command, args []string) {
+	for range Only.Once {
+		SunGrow.OutputType.SetRaw()
+
+		args = fillArray(2, args)
+		if args[0] == "all" {
+			Cmd.Error = SunGrow.AllCritical()
+			break
+		}
+
+		Cmd.Error = SunGrow.Get(args[0], args[1]).GetError()
+		if Cmd.Error != nil {
+			break
+		}
+	}
+}
+
+//
+// ********************************************************************************
+//
+var cmdApiSave = &cobra.Command{
+	Use: "save",
+	// Aliases:               []string{""},
+	Short:                 fmt.Sprintf("Save details from iSolarCloud"),
+	Long:                  fmt.Sprintf("Save details from iSolarCloud"),
+	Example:               PrintExamples("api save", "<endpoint> [area]"),
+	DisableFlagParsing:    false,
+	DisableFlagsInUseLine: false,
+	PreRunE:               Cmd.SunGrowArgs,
+	Run:                   cmdApiSaveFunc,
+	Args:                  cobra.MinimumNArgs(1),
+}
+
+//goland:noinspection GoUnusedParameter
+func cmdApiSaveFunc(cmd *cobra.Command, args []string) {
+	for range Only.Once {
+		SunGrow.OutputType.SetFile()
+
+		args = fillArray(2, args)
+		if args[0] == "all" {
+			Cmd.Error = SunGrow.AllCritical()
+			break
+		}
+
+		Cmd.Error = SunGrow.Get(args[0], args[1]).GetError()
+		if Cmd.Error != nil {
+			break
+		}
+	}
+}
+
+//
+// ********************************************************************************
+//
 var cmdApiPut = &cobra.Command{
 	Use:                   "put",
 	Aliases:               []string{"write"},

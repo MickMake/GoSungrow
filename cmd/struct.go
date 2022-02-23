@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"GoSungrow/Only"
-	"GoSungrow/iSolarCloud/sungro"
-	"GoSungrow/iSolarCloud/sungro/AppService/login"
+	"GoSungrow/iSolarCloud"
+	"GoSungrow/iSolarCloud/AppService/login"
 	"GoSungrow/lsgo"
 	"GoSungrow/mmGit"
 	"errors"
@@ -25,13 +25,13 @@ const (
 	flagDebug      = "debug"
 	flagQuiet      = "quiet"
 
-	flagApiUrl       = "host"
-	flagApiTimeout   = "timeout"
-	flagApiUsername  = "user"
-	flagApiPassword  = "password"
-	flagApiAppKey    = "appkey"
-	flagApiLastLogin = "token-expiry"
-	flagApiGetRaw    = "raw"
+	flagApiUrl        = "host"
+	flagApiTimeout    = "timeout"
+	flagApiUsername   = "user"
+	flagApiPassword   = "password"
+	flagApiAppKey     = "appkey"
+	flagApiLastLogin  = "token-expiry"
+	flagApiOutputType = "out"
 
 	flagGoogleSheet       = "google-sheet"
 	flagGoogleSheetUpdate = "update"
@@ -64,15 +64,15 @@ type CommandArgs struct {
 	OutputFile  string
 
 	// iSolarCloud api
-	ApiTimeout   time.Duration
-	ApiUrl       string
-	ApiUsername  string
-	ApiPassword  string
-	ApiAppKey    string
-	ApiLastLogin string
-	ApiToken     string
-	ApiTokenFile string
-	ApiGetRaw    bool
+	ApiTimeout    time.Duration
+	ApiUrl        string
+	ApiUsername   string
+	ApiPassword   string
+	ApiAppKey     string
+	ApiLastLogin  string
+	ApiToken      string
+	ApiTokenFile  string
+	ApiOutputType string
 
 	// Google sheets
 	GoogleSheet       string
@@ -108,7 +108,7 @@ func (ca *CommandArgs) ProcessArgs(cmd *cobra.Command, args []string) error {
 	for range Only.Once {
 		ca.Args = args
 
-		SunGrow = sungro.NewSunGro(ca.ApiUrl)
+		SunGrow = iSolarCloud.NewSunGro(ca.ApiUrl)
 		if SunGrow.Error != nil {
 			break
 		}
@@ -116,6 +116,17 @@ func (ca *CommandArgs) ProcessArgs(cmd *cobra.Command, args []string) error {
 		Cmd.Error = SunGrow.Init()
 		if Cmd.Error != nil {
 			break
+		}
+
+		switch Cmd.ApiOutputType {
+		case "json":
+			SunGrow.OutputType.SetJson()
+		case "raw":
+			SunGrow.OutputType.SetRaw()
+		case "file":
+			SunGrow.OutputType.SetFile()
+		default:
+			SunGrow.OutputType.SetJson()
 		}
 
 		if ca.ApiAppKey == "" {

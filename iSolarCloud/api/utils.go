@@ -10,11 +10,11 @@ import (
 	"strings"
 )
 
-
 type Api struct{}
 
 // This is used to trim the sub-packages imported under the API.
 var thisPackagePath string
+
 func init() {
 	for range Only.Once {
 		val := reflect.ValueOf(Api{})
@@ -25,7 +25,6 @@ func init() {
 		thisPackagePath = strings.TrimSuffix(val.Type().PkgPath(), "api")
 	}
 }
-
 
 func AppendUrl(host string, endpoint string) *url.URL {
 	var ret *url.URL

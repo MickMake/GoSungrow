@@ -61,6 +61,10 @@ func Assert(e api.EndPoint) EndPoint {
 	return e.(EndPoint)
 }
 
+func AssertResultData(e api.EndPoint) ResultData {
+	return e.(EndPoint).Response.ResultData
+}
+
 // ****************************************
 // Methods defined by api.EndPoint interface type
 
@@ -170,8 +174,8 @@ func (e EndPoint) GetRequestJson() api.Json {
 
 func (e EndPoint) IsRequestValid() error {
 	for range Only.Once {
-		//req := e.GetRequest()
-		//req := e.Request.RequestCommon
+		// req := e.GetRequest()
+		// req := e.Request.RequestCommon
 		e.Error = e.Request.RequestCommon.IsValid()
 		if e.Error != nil {
 			break

@@ -1,3 +1,4 @@
+./bin/GoSungrow api get WebAppService.getDeviceUuid '{"ps_key":"1129147_11_0_0"}'
 ./bin/GoSungrow api get WebAppService.showPSView '{"ps_id":"1129147"}'
 ./bin/GoSungrow api get checkUnitStatus
 ./bin/GoSungrow api get energyTrend
@@ -7,18 +8,25 @@
 ./bin/GoSungrow api get getCloudList
 ./bin/GoSungrow api get getConfigList
 ./bin/GoSungrow api get getDeviceInfo
-./bin/GoSungrow api get getDeviceList
+./bin/GoSungrow api get getDeviceList '{"ps_id":"1129147"}'
 ./bin/GoSungrow api get getDeviceModelInfoList
 ./bin/GoSungrow api get getDevicePoints '{"point_id":"13003"}'
 ./bin/GoSungrow api get getDeviceTypeInfoList
 ./bin/GoSungrow api get getDeviceTypeList
 ./bin/GoSungrow api get getInvertDataList
+./bin/GoSungrow api get getKpiInfo ''
 ./bin/GoSungrow api get getOrgListByName
 ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"1"}'
 ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"2"}'
 ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"7"}'
+./bin/GoSungrow api get getPowerDeviceSetTaskDetailList '{"query_type":"2","task_id":"1","uuid":"844763"}'
+./bin/GoSungrow api get getPowerDeviceSetTaskDetailList '{"query_type":"7","task_id":"1","uuid":"844763"}'
+./bin/GoSungrow api get getPowerDeviceSetTaskDetailList '{"size":0,"curPage":0}'
+./bin/GoSungrow api get getPowerDeviceSetTaskList '{"size":0,"curPage":0}'
+./bin/GoSungrow api get getPowerDeviceSetTaskList '{"size":0,"curPage":1}'
 ./bin/GoSungrow api get getPowerPictureList
 ./bin/GoSungrow api get getPowerStatistics '{"ps_id":"1129147"}'
+./bin/GoSungrow api get getPsDataSupplementTaskList
 ./bin/GoSungrow api get getPsDetail
 ./bin/GoSungrow api get getPsDetail '{"ps_id":"1129147"}'
 ./bin/GoSungrow api get getPsDetailWithPsType '{"ps_id":"1129147"}'
@@ -36,6 +44,7 @@
 ./bin/GoSungrow api get getUserPsOrderList
 ./bin/GoSungrow api get powerDevicePointList
 ./bin/GoSungrow api get queryAllPsIdAndName '{"ps_id":"1129147"}'
+./bin/GoSungrow api get queryBatchCreatePsTaskList
 ./bin/GoSungrow api get queryDeviceList
 ./bin/GoSungrow api get queryDeviceListByUserId '{"ps_id":"1129147"}'
 ./bin/GoSungrow api get queryDeviceListForApp '{"ps_id":"1129147"}'
@@ -45,3 +54,10 @@
 ./bin/GoSungrow api get reportList '{"ps_id":"1129147","report_type":"3"}'
 ./bin/GoSungrow api get reportList '{"ps_id":"1129147","report_type":"4"}'
 ./bin/GoSungrow api login
+
+./bin/GoSungrow api get getRemoteUpgradeSubTasksList '{"query_type":"1","task_id":"1577700"}'
+./bin/GoSungrow api get getRemoteUpgradeTaskList '{"ps_id_list":"1129147"}'
+./bin/GoSungrow api get getModuleLogTaskList
+./bin/GoSungrow api save WebAppService.queryUserCurveTemplateData '{"template_id":"8042","date_type":"1","start_time":"20220223000000","end_time":"20220223235900"}'
+./bin/GoSungrow data get template > foo.csv
+
