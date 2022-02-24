@@ -3,6 +3,10 @@ package api
 import (
 	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"os"
+	"path/filepath"
+	"time"
+
 	// "GoSungrow/iSolarCloud/AppService/login"
 	"bytes"
 	"encoding/json"
@@ -17,6 +21,8 @@ type Web struct {
 	Body  []byte
 	Error error
 
+	cacheDir     string
+	cacheTimeout time.Duration
 	retry        int
 	client       http.Client
 	httpRequest  *http.Request
@@ -97,10 +103,10 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 		// fmt.Printf("RESPONSE: %s\n\n", w.Body)
 
 		endpoint = endpoint.SetResponse(w.Body)
-		//w.Error = endpoint.GetError()
-		//if w.Error != nil {
+		// w.Error = endpoint.GetError()
+		// if w.Error != nil {
 		//	break
-		//}
+		// }
 
 		w.Error = endpoint.IsResponseValid()
 		if w.Error != nil {
@@ -113,4 +119,34 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 		endpoint = endpoint.SetError("%s", w.Error)
 	}
 	return endpoint
+}
+
+func (w *Web) SetCacheDir(basedir string) error {
+	for range Only.Once {
+		w.cacheDir = filepath.Join(basedir)
+		_, w.Error = os.Stat(w.cacheDir)
+		if os.IsExist(w.Error) {
+			w.Error = nil
+			break
+		}
+
+		w.Error = os.MkdirAll(w.cacheDir, 0700)
+		if w.Error != nil {
+			break
+		}
+	}
+
+	return w.Error
+}
+
+func (w *Web) GetCacheDir() string {
+	return w.cacheDir
+}
+
+func (w *Web) SetCacheTimeout(duration time.Duration) {
+	w.cacheTimeout = duration
+}
+
+func (w *Web) GetCacheTimeout() time.Duration {
+	return w.cacheTimeout
 }

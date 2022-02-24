@@ -27,13 +27,25 @@ func init() {
 			break
 		}
 		Cmd.ConfigDir = filepath.Join(Cmd.ConfigDir, "."+DefaultBinaryName)
-
 		_, Cmd.Error = os.Stat(Cmd.ConfigDir)
 		if os.IsExist(Cmd.Error) {
 			break
 		}
-
 		Cmd.Error = os.MkdirAll(Cmd.ConfigDir, 0700)
+		if Cmd.Error != nil {
+			break
+		}
+
+		Cmd.CacheDir, Cmd.Error = os.UserHomeDir()
+		if Cmd.Error != nil {
+			break
+		}
+		Cmd.CacheDir = filepath.Join(Cmd.CacheDir, "."+DefaultBinaryName, "cache")
+		_, Cmd.Error = os.Stat(Cmd.CacheDir)
+		if os.IsExist(Cmd.Error) {
+			break
+		}
+		Cmd.Error = os.MkdirAll(Cmd.CacheDir, 0700)
 		if Cmd.Error != nil {
 			break
 		}

@@ -99,11 +99,12 @@ func (e *ResultData) UnmarshalJSON(data []byte) error {
 					return times[i].Key.Before(times[j].Key.Time)
 				})
 				points[pointName] = Point{
+					Name:  "",
 					Units: "",
 					Times: times,
 				}
 			}
-			
+
 			e.Devices[deviceName] = Device{
 				Points: points,
 			}

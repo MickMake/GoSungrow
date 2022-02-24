@@ -1,10 +1,16 @@
 package api
 
-import "fmt"
+import (
+	"GoSungrow/Only"
+	"errors"
+	"fmt"
+	"os"
+)
 
 type Csv struct {
 	Data   [][]string
 	Header []string
+	Error  error
 }
 
 func NewCsv() Csv {
@@ -16,6 +22,10 @@ func (c Csv) String() string {
 	ret += c.HeaderString()
 	ret += c.DataString()
 	return ret
+}
+
+func (c Csv) Print() {
+	fmt.Println(c)
 }
 
 func (c Csv) HeaderString() string {
@@ -46,4 +56,16 @@ func (c Csv) AddRow(row []string) Csv {
 func (c Csv) SetHeader(header []string) Csv {
 	c.Header = header
 	return c
+}
+
+func (c *Csv) WriteFile(fn string, perm os.FileMode) error {
+	for range Only.Once {
+		c.Error = os.WriteFile(fn, []byte(c.String()), perm)
+		if c.Error != nil {
+			c.Error = errors.New(fmt.Sprintf("Unable to write to file %s - %v", fn, c.Error))
+			break
+		}
+	}
+
+	return c.Error
 }

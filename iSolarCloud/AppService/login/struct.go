@@ -30,7 +30,7 @@ type Response struct {
 	ResultData ResultData `json:"result_data"`
 }
 
-func Init(apiRoot *api.Web) EndPoint {
+func Init(apiRoot api.Web) EndPoint {
 	return EndPoint{
 		EndPointStruct: api.EndPointStruct{
 			ApiRoot:  apiRoot,
@@ -59,7 +59,7 @@ func Init(apiRoot *api.Web) EndPoint {
 // ****************************************
 // Methods not scoped by api.EndPoint interface type
 
-func (e EndPoint) Init(apiRoot *api.Web) *EndPoint {
+func (e EndPoint) Init(apiRoot api.Web) *EndPoint {
 	ret := Init(apiRoot)
 	return &ret
 }
@@ -130,12 +130,12 @@ func (e EndPoint) IsError() bool {
 	return false
 }
 
-func (e EndPoint) ReadFile() error {
-	return e.FileRead("", &e)
+func (e EndPoint) ReadDataFile() error {
+	return e.FileRead("", &e.Response.ResultData)
 }
 
-func (e EndPoint) WriteFile() error {
-	return e.FileWrite("", e, api.DefaultFileMode)
+func (e EndPoint) WriteDataFile() error {
+	return e.FileWrite("", e.Response.ResultData, api.DefaultFileMode)
 }
 
 func (e EndPoint) SetRequest(ref interface{}) api.EndPoint {
@@ -264,24 +264,46 @@ func (e EndPoint) MarshalJSON() ([]byte, error) {
 	// })
 }
 
-func (e *EndPoint) Read() error {
-	for range Only.Once {
-		e.Error = e.FileRead(e.GetFilename(), &e.Response.ResultData)
-		if e.Error != nil {
-			break
-		}
-	}
-
-	return e.Error
+func (e EndPoint) CheckCacheFile() bool {
+	return e.IsCacheFileOk(e.Request.RequestData)
 }
 
-func (e *EndPoint) Write() error {
-	for range Only.Once {
-		e.Error = e.FileWrite(e.GetFilename(), e.Response.ResultData, 0644)
-		if e.Error != nil {
-			break
-		}
-	}
-
-	return e.Error
+func (e EndPoint) ReadCacheFile() api.EndPoint {
+	e.Error = e.CacheRead(e.Request.RequestData, &e)
+	return e
 }
+
+func (e EndPoint) WriteCacheFile() error {
+	return e.CacheWrite(e.Request.RequestData, e)
+}
+
+func (e EndPoint) SetCacheTimeout(duration time.Duration) api.EndPoint {
+	e.ApiRoot.SetCacheTimeout(duration)
+	return e
+}
+
+func (e EndPoint) GetCacheTimeout() time.Duration {
+	return e.ApiRoot.GetCacheTimeout()
+}
+
+// func (e *EndPoint) Read() error {
+// 	for range Only.Once {
+// 		e.Error = e.FileRead(e.GetFilename(""), &e.Response.ResultData)
+// 		if e.Error != nil {
+// 			break
+// 		}
+// 	}
+//
+// 	return e.Error
+// }
+//
+// func (e *EndPoint) Write() error {
+// 	for range Only.Once {
+// 		e.Error = e.FileWrite(e.GetFilename(""), e.Response.ResultData, 0644)
+// 		if e.Error != nil {
+// 			break
+// 		}
+// 	}
+//
+// 	return e.Error
+// }

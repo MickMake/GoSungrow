@@ -115,8 +115,8 @@ func cmdApiLoginFunc(cmd *cobra.Command, args []string) {
 var cmdApiGet = &cobra.Command{
 	Use: "get",
 	// Aliases:               []string{""},
-	Short:                 fmt.Sprintf("Get details from iSolarCloud"),
-	Long:                  fmt.Sprintf("Get details from iSolarCloud"),
+	Short:                 fmt.Sprintf("GetByJson details from iSolarCloud"),
+	Long:                  fmt.Sprintf("GetByJson details from iSolarCloud"),
 	Example:               PrintExamples("api get", "<endpoint> [area]"),
 	DisableFlagParsing:    false,
 	DisableFlagsInUseLine: false,
@@ -136,7 +136,7 @@ func cmdApiGetFunc(cmd *cobra.Command, args []string) {
 			break
 		}
 
-		Cmd.Error = SunGrow.Get(args[0], args[1]).GetError()
+		Cmd.Error = SunGrow.GetByJson(args[0], args[1]).GetError()
 		if Cmd.Error != nil {
 			break
 		}
@@ -170,7 +170,7 @@ func cmdApiRawFunc(cmd *cobra.Command, args []string) {
 			break
 		}
 
-		Cmd.Error = SunGrow.Get(args[0], args[1]).GetError()
+		Cmd.Error = SunGrow.GetByJson(args[0], args[1]).GetError()
 		if Cmd.Error != nil {
 			break
 		}
@@ -204,7 +204,7 @@ func cmdApiSaveFunc(cmd *cobra.Command, args []string) {
 			break
 		}
 
-		Cmd.Error = SunGrow.Get(args[0], args[1]).GetError()
+		Cmd.Error = SunGrow.GetByJson(args[0], args[1]).GetError()
 		if Cmd.Error != nil {
 			break
 		}

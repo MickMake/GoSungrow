@@ -172,3 +172,11 @@ func (e *ResultData) IsValid() error {
 //
 //	return err
 // }
+
+// func (rd *RequestData) GetRequestMd5() string {
+// 	return apiReflect.GetRequestMd5(*rd)
+// }
+//
+// func (e EndPoint) GetRequestMd5() string {
+// 	return apiReflect.GetRequestMd5(e.Request.RequestData)
+// }

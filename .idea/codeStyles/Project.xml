@@ -1,8 +1,0 @@
-<component name="ProjectCodeStyleConfiguration">
-  <code_scheme name="Project" version="173">
-    <GoCodeStyleSettings>
-      <option name="RUN_GO_FMT_ON_REFORMAT" value="false" />
-      <option name="LOCAL_PACKAGE_PREFIXES" />
-    </GoCodeStyleSettings>
-  </code_scheme>
-</component>

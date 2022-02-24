@@ -96,7 +96,7 @@ func (e *EndPoint) Login(auth *SunGrowAuth) error {
 		e.Request = foo.Request
 		e.Response = foo.Response
 
-		//e.Auth.UserAccount = e.Response.ResultData.UserAccount
+		// e.Auth.UserAccount = e.Response.ResultData.UserAccount
 		e.Auth.Token = e.Response.ResultData.Token
 		e.Auth.lastLogin, _ = time.Parse(LastLoginDateFormat, e.Response.ResultData.LoginLastDate)
 
@@ -218,7 +218,7 @@ func (e *EndPoint) Print() {
 // Retrieves a token from a local file.
 func (e *EndPoint) readTokenFile() error {
 	for range Only.Once {
-		e.Auth.TokenFile = e.GetFilepath()
+		e.Auth.TokenFile = e.GetFilePath()
 
 		e.Error = e.FileRead(e.Auth.TokenFile, &e.Response.ResultData)
 		if e.Error != nil {
@@ -243,34 +243,34 @@ func (e *EndPoint) readTokenFile() error {
 			break
 		}
 
-		//if e.Auth.TokenFile == "" {
+		// if e.Auth.TokenFile == "" {
 		//	e.Auth.TokenFile, e.Error = os.UserHomeDir()
 		//	if e.Error != nil {
 		//		e.Auth.TokenFile = ""
 		//		break
 		//	}
 		//	e.Auth.TokenFile = filepath.Join(e.Auth.TokenFile, ".GoSungrow", DefaultAuthTokenFile)
-		//}
+		// }
 		//
-		//var f *os.File
-		//f, e.Error = os.Open(e.Auth.TokenFile)
-		//if e.Error != nil {
+		// var f *os.File
+		// f, e.Error = os.Open(e.Auth.TokenFile)
+		// if e.Error != nil {
 		//	if os.IsNotExist(e.Error) {
 		//		e.Error = nil
 		//	}
 		//	break
-		//}
+		// }
 		//
-		////goland:noinspection GoUnhandledErrorResult
-		//defer f.Close()
+		// //goland:noinspection GoUnhandledErrorResult
+		// defer f.Close()
 		//
-		//e.Error = json.NewDecoder(f).Decode(&e.Response.ResultData)
+		// e.Error = json.NewDecoder(f).Decode(&e.Response.ResultData)
 
-		//e.Error = json.Unmarshal(data, &e.Response.ResultData)
-		//if e.Error != nil {
+		// e.Error = json.Unmarshal(data, &e.Response.ResultData)
+		// if e.Error != nil {
 		//	e.Auth.TokenFile = ""
 		//	break
-		//}
+		// }
 	}
 
 	return e.Error
@@ -279,38 +279,38 @@ func (e *EndPoint) readTokenFile() error {
 // Saves a token to a file path.
 func (e *EndPoint) saveToken() error {
 	for range Only.Once {
-		e.Auth.TokenFile = e.GetFilepath()
+		e.Auth.TokenFile = e.GetFilePath()
 
 		e.Error = e.FileWrite(e.Auth.TokenFile, e.Response.ResultData, 0644)
 		if e.Error != nil {
 			break
 		}
 
-		//if e.Auth.TokenFile == "" {
+		// if e.Auth.TokenFile == "" {
 		//	e.Auth.TokenFile, e.Error = os.UserHomeDir()
 		//	if e.Error != nil {
 		//		e.Auth.TokenFile = ""
 		//		break
 		//	}
 		//	e.Auth.TokenFile = filepath.Join(e.Auth.TokenFile, ".GoSungrow", DefaultAuthTokenFile)
-		//}
+		// }
 		//
-		//fmt.Printf("Saving token file to: %s\n", e.Auth.TokenFile)
-		//var f *os.File
-		//f, e.Error = os.OpenFile(e.Auth.TokenFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
-		//if e.Error != nil {
+		// fmt.Printf("Saving token file to: %s\n", e.Auth.TokenFile)
+		// var f *os.File
+		// f, e.Error = os.OpenFile(e.Auth.TokenFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
+		// if e.Error != nil {
 		//	e.Error = errors.New(fmt.Sprintf("Unable to cache SUNGRO oauth token: %v", e.Error))
 		//	break
-		//}
+		// }
 		//
-		////goland:noinspection GoUnhandledErrorResult
-		//defer f.Close()
-		//e.Error = json.NewEncoder(f).Encode(e.Response.ResultData)
+		// //goland:noinspection GoUnhandledErrorResult
+		// defer f.Close()
+		// e.Error = json.NewEncoder(f).Encode(e.Response.ResultData)
 
-		//e.Error = json.Unmarshal(data, &e.Response.ResultData)
+		// e.Error = json.Unmarshal(data, &e.Response.ResultData)
 		//
-		//var data []byte
-		//e.Error = e.FileWrite(data, 0600)
+		// var data []byte
+		// e.Error = e.FileWrite(data, 0600)
 	}
 
 	return e.Error

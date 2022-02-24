@@ -27,14 +27,20 @@ type SunGrow struct {
 	// OutputType
 }
 
-func NewSunGro(url string) *SunGrow {
+func NewSunGro(baseUrl string, cacheDir string) *SunGrow {
 	var p SunGrow
 
-	p.Error = p.ApiRoot.SetUrl(url)
-	// p.OutputType = TypeHuman
+	for range Only.Once {
+		p.Error = p.ApiRoot.SetUrl(baseUrl)
+		if p.Error != nil {
+			break
+		}
 
-	// p.Areas.Domain.ApiRoot = &p.ApiRoot
-
+		p.Error = p.ApiRoot.SetCacheDir(cacheDir)
+		if p.Error != nil {
+			break
+		}
+	}
 	return &p
 }
 
@@ -42,12 +48,12 @@ func (sg *SunGrow) Init() error {
 	for range Only.Once {
 		sg.Areas = make(api.Areas)
 
-		sg.Areas[api.GetArea(AliSmsService.Area{})] = api.AreaStruct(AliSmsService.Init(&sg.ApiRoot))
-		sg.Areas[api.GetArea(AppService.Area{})] = api.AreaStruct(AppService.Init(&sg.ApiRoot))
-		sg.Areas[api.GetArea(MttvScreenService.Area{})] = api.AreaStruct(MttvScreenService.Init(&sg.ApiRoot))
-		sg.Areas[api.GetArea(PowerPointService.Area{})] = api.AreaStruct(PowerPointService.Init(&sg.ApiRoot))
-		sg.Areas[api.GetArea(WebAppService.Area{})] = api.AreaStruct(WebAppService.Init(&sg.ApiRoot))
-		sg.Areas[api.GetArea(WebIscmAppService.Area{})] = api.AreaStruct(WebIscmAppService.Init(&sg.ApiRoot))
+		sg.Areas[api.GetArea(AliSmsService.Area{})] = api.AreaStruct(AliSmsService.Init(sg.ApiRoot))
+		sg.Areas[api.GetArea(AppService.Area{})] = api.AreaStruct(AppService.Init(sg.ApiRoot))
+		sg.Areas[api.GetArea(MttvScreenService.Area{})] = api.AreaStruct(MttvScreenService.Init(sg.ApiRoot))
+		sg.Areas[api.GetArea(PowerPointService.Area{})] = api.AreaStruct(PowerPointService.Init(sg.ApiRoot))
+		sg.Areas[api.GetArea(WebAppService.Area{})] = api.AreaStruct(WebAppService.Init(sg.ApiRoot))
+		sg.Areas[api.GetArea(WebIscmAppService.Area{})] = api.AreaStruct(WebIscmAppService.Init(sg.ApiRoot))
 	}
 
 	return sg.Error

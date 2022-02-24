@@ -2,6 +2,7 @@ package apiReflect
 
 import (
 	"GoSungrow/Only"
+	"crypto/md5"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -9,7 +10,6 @@ import (
 	"reflect"
 	"strings"
 )
-
 
 // GetArea Return an Area name if we are given an Area or EndPoint struct.
 func GetArea(trim string, v interface{}) string {
@@ -152,7 +152,6 @@ func DoPkgTypesMatch(a interface{}, b interface{}) error {
 	return err
 }
 
-
 func PackageName(trim string, v interface{}) string {
 	var ret string
 	for range Only.Once {
@@ -191,12 +190,12 @@ func Query(i interface{}) string {
 			typeOf.Field(id).Tag.Get("json"),
 			value,
 		)
-		//fmt.Printf("%d: %s %s = %v\n",
+		// fmt.Printf("%d: %s %s = %v\n",
 		//	i,
 		//	typeOfT.Field(i).Name,
 		//	s.Field(i).Type(),
 		//	s.Field(i).Interface(),
-		//)
+		// )
 	}
 
 	return ret
@@ -212,20 +211,20 @@ func PrintHeader(i interface{}) string {
 		ret = fmt.Sprintf("%v", s)
 	default:
 		for id := 0; id < s.NumField(); id++ {
-			//value := fmt.Sprintf("%v", s.Field(id).Interface())
-			//if value == "" {
+			// value := fmt.Sprintf("%v", s.Field(id).Interface())
+			// if value == "" {
 			//	continue
-			//}
+			// }
 			ret += fmt.Sprintf("%s (%s),",
 				typeOf.Field(id).Name,
 				typeOf.Field(id).Tag.Get("json"),
 			)
-			//fmt.Printf("%d: %s %s = %v\n",
+			// fmt.Printf("%d: %s %s = %v\n",
 			//	i,
 			//	typeOfT.Field(i).Name,
 			//	s.Field(i).Type(),
 			//	s.Field(i).Interface(),
-			//)
+			// )
 		}
 	}
 
@@ -312,14 +311,14 @@ func rowAsArray(ref interface{}) []interface{} {
 	return ret
 }
 
-//var headerStyleTable = map[string]json2csv.KeyStyle{
+// var headerStyleTable = map[string]json2csv.KeyStyle{
 //	"jsonpointer": json2csv.JSONPointerStyle,
 //	"slash":       json2csv.SlashStyle,
 //	"dot":         json2csv.DotNotationStyle,
 //	"dot-bracket": json2csv.DotBracketStyle,
-//}
+// }
 //
-//func PrintAsCsv(ref interface{}) (string, error) {
+// func PrintAsCsv(ref interface{}) (string, error) {
 //	var c string
 //	var err error
 //
@@ -352,7 +351,7 @@ func rowAsArray(ref interface{}) []interface{} {
 //	}
 //
 //	return c, err
-//}
+// }
 
 //goland:noinspection GoUnusedFunction,GoUnusedExportedFunction
 func ReflectAsJson(ref interface{}) string {
@@ -382,12 +381,12 @@ func ReflectAsJson(ref interface{}) string {
 					typeOf.Field(i).Tag.Get("json"),
 					value,
 				)
-				//fmt.Printf("%d: %s %s = %v\n",
+				// fmt.Printf("%d: %s %s = %v\n",
 				//	i,
 				//	typeOfT.Field(i).Name,
 				//	s.Field(i).Type(),
 				//	s.Field(i).Interface(),
-				//)
+				// )
 			}
 		}
 	}
@@ -409,7 +408,7 @@ func FindInStruct(ref interface{}, name string) interface{} {
 		if kind == reflect.Ptr {
 			e = v.Elem()
 			if e.Kind().String() == "ptr" {
-				//PrintflnCyan("POINTER TO POINTER")	@TODO - DEBUG
+				// PrintflnCyan("POINTER TO POINTER")	@TODO - DEBUG
 				ret = FindInStruct(e.Addr().Elem().Interface(), name)
 				break
 			}
@@ -417,7 +416,7 @@ func FindInStruct(ref interface{}, name string) interface{} {
 			// We can't handle a non-pointer, otherwise we get this...
 			// reflect.flag.mustBeAssignable using unaddressable value
 			e = v
-			//Panic(PanicErrorNotGivenAPointer, v.String())
+			// Panic(PanicErrorNotGivenAPointer, v.String())
 		} else {
 			break
 		}
@@ -429,13 +428,13 @@ func FindInStruct(ref interface{}, name string) interface{} {
 				break
 			}
 
-			//if typeOfT.Field(i).Name == name {
+			// if typeOfT.Field(i).Name == name {
 			//	state = e.Field(i).Interface().(*State)
 			//	if state == nil {
 			//		e.Field(i).Set(reflect.ValueOf(state))
 			//	}
 			//	break
-			//}
+			// }
 		}
 	}
 
@@ -451,12 +450,12 @@ func GetNameOld(ref interface{}) (string, string) {
 	str = strings.ToLower(str)
 	sa := strings.SplitN(str, ".", 2)
 	switch len(sa) {
-		case 0:
-		case 1:
-			packageName = sa[0]
-		case 2:
-			packageName = sa[0]
-			structName = sa[1]
+	case 0:
+	case 1:
+		packageName = sa[0]
+	case 2:
+		packageName = sa[0]
+		structName = sa[1]
 	}
 	return packageName, structName
 }
@@ -498,7 +497,7 @@ func VerifyOptionsRequired(ref interface{}) error {
 	var err error
 
 	for range Only.Once {
-		//required := GetOptionsRequired(ref)
+		// required := GetOptionsRequired(ref)
 
 		vo := reflect.ValueOf(ref)
 		to := reflect.TypeOf(ref)
@@ -538,6 +537,58 @@ func HelpOptions(ref interface{}) string {
 
 			ret += fmt.Sprintf("%s: required\n", field.Name)
 		}
+	}
+
+	return ret
+}
+
+func FindRequestData(ref interface{}) string {
+	var ret string
+
+	for range Only.Once {
+		vo := reflect.ValueOf(ref)
+		to := reflect.TypeOf(ref)
+
+		// Iterate over all available fields and read the tag value
+		for i := 0; i < vo.NumField(); i++ {
+			fieldTo := to.Field(i)
+			// required := fieldTo.Tag.GetByJson("required")
+			fmt.Printf(">%s\t", fieldTo.Name)
+
+			fieldVo := vo.Field(i)
+
+			fmt.Printf(">%s\n", fieldVo.String())
+			value := fmt.Sprintf("%v", fieldVo.Interface())
+			if value == "" {
+				break
+			}
+		}
+	}
+
+	return ret
+}
+
+func GetRequestString(ref interface{}) string {
+	var ret string
+
+	for range Only.Once {
+		vo := reflect.ValueOf(ref)
+		// Iterate over all available fields and read the tag value
+		for i := 0; i < vo.NumField(); i++ {
+			fieldVo := vo.Field(i)
+			ret += fmt.Sprintf("-%v", fieldVo.Interface())
+		}
+	}
+
+	return ret
+}
+
+func GetRequestMd5(ref interface{}) string {
+	var ret string
+
+	for range Only.Once {
+		hash := md5.New().Sum([]byte(GetRequestString(ref)))
+		ret = fmt.Sprintf("%x", hash)
 	}
 
 	return ret

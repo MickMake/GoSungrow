@@ -70,8 +70,8 @@ var cmdDataLogin = &cobra.Command{
 var cmdDataGet = &cobra.Command{
 	Use: "get",
 	// Aliases:               []string{""},
-	Short:                 fmt.Sprintf("Get high-level data from iSolarCloud"),
-	Long:                  fmt.Sprintf("Get high-level data from iSolarCloud"),
+	Short:                 fmt.Sprintf("GetByJson high-level data from iSolarCloud"),
+	Long:                  fmt.Sprintf("GetByJson high-level data from iSolarCloud"),
 	Example:               PrintExamples("data get", "<endpoint>"),
 	DisableFlagParsing:    false,
 	DisableFlagsInUseLine: false,

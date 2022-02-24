@@ -10,7 +10,7 @@ import (
 type EndPointName string
 
 type EndPointStruct struct {
-	ApiRoot *Web `json:"-"`
+	ApiRoot Web `json:"-"`
 
 	Area     AreaName     `json:"area"`
 	Name     EndPointName `json:"name"`
@@ -99,24 +99,6 @@ func (ep EndPointStruct) String() string {
 	}
 	return ret
 }
-
-// func (p EndPointStruct) MarshalJSON() ([]byte, error) {
-// 	return json.Marshal(&struct {
-// 		Area     string      `json:"area"`
-// 		EndPoint string      `json:"endpoint"`
-// 		Host     string      `json:"api_host"`
-// 		Url      string      `json:"endpoint_url"`
-// 		Request  interface{} `json:"request"`
-// 		Response interface{} `json:"response"`
-// 	}{
-// 		Area:     string(p.Area),
-// 		EndPoint: string(p.Name),
-// 		Host:     p.ApiRoot.Url.String(),
-// 		Url:      p.Url.String(),
-// 		Request:  p.Request,
-// 		Response: p.Response,
-// 	})
-// }
 
 func MarshalJSON(endpoint EndPoint) ([]byte, error) {
 	e := endpoint.SetError("")

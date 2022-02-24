@@ -588,7 +588,7 @@ func init() {
 	// fmt.Printf("Name: %s\n", name)
 }
 
-func Init(apiRoot *api.Web) Area {
+func Init(apiRoot api.Web) Area {
 	area := Area{
 		ApiRoot: apiRoot,
 		Name:    api.GetArea(Area{}),
@@ -616,7 +616,7 @@ func Init(apiRoot *api.Web) Area {
 			api.GetName(checkUnitStatus.EndPoint{}):             checkUnitStatus.Init(apiRoot), // @TODO - Returns 404 error. Disabled.
 			api.GetName(getDeviceInfo.EndPoint{}):               getDeviceInfo.Init(apiRoot),   // @TODO - Returns null.
 			api.GetName(getDeviceList.EndPoint{}):               getDeviceList.Init(apiRoot),
-			api.GetName(powerDevicePointList.EndPoint{}):        powerDevicePointList.Init(apiRoot),  // @TODO - CRITICAL - Get all point_id definitions.
+			api.GetName(powerDevicePointList.EndPoint{}):        powerDevicePointList.Init(apiRoot),  // @TODO - CRITICAL - GetByJson all point_id definitions.
 			api.GetName(queryDeviceListForApp.EndPoint{}):       queryDeviceListForApp.Init(apiRoot), // @TODO - CRITICAL - Show more detail info on devices.
 			api.GetName(queryDeviceListByUserId.EndPoint{}):     queryDeviceListByUserId.Init(apiRoot),
 			api.GetName(getPsListStaticData.EndPoint{}):         getPsListStaticData.Init(apiRoot),

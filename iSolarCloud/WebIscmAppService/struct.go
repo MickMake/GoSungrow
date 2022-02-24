@@ -2,7 +2,6 @@
 package WebIscmAppService
 
 import (
-	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/WebIscmAppService/addPowerDeviceModel"
 	"GoSungrow/iSolarCloud/WebIscmAppService/addPowerPointManage"
 	"GoSungrow/iSolarCloud/WebIscmAppService/addSubTypeDevice"
@@ -187,6 +186,7 @@ import (
 	"GoSungrow/iSolarCloud/WebIscmAppService/workFlowImplementStep"
 	"GoSungrow/iSolarCloud/WebIscmAppService/workFlowIsStart"
 	"GoSungrow/iSolarCloud/WebIscmAppService/workFlowTransferStep"
+	"GoSungrow/iSolarCloud/api"
 	"fmt"
 )
 
@@ -199,7 +199,7 @@ func init() {
 	// fmt.Printf("Name: %s\n", name)
 }
 
-func Init(apiRoot *api.Web) Area {
+func Init(apiRoot api.Web) Area {
 	area := Area{
 		ApiRoot: apiRoot,
 		Name:    api.GetArea(Area{}),

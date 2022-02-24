@@ -56,6 +56,7 @@ var DefaultAreas = []string{"all"}
 
 type CommandArgs struct {
 	ConfigDir   string
+	CacheDir    string
 	ConfigFile  string
 	WriteConfig bool
 	Quiet       bool
@@ -108,7 +109,7 @@ func (ca *CommandArgs) ProcessArgs(cmd *cobra.Command, args []string) error {
 	for range Only.Once {
 		ca.Args = args
 
-		SunGrow = iSolarCloud.NewSunGro(ca.ApiUrl)
+		SunGrow = iSolarCloud.NewSunGro(ca.ApiUrl, ca.CacheDir)
 		if SunGrow.Error != nil {
 			break
 		}

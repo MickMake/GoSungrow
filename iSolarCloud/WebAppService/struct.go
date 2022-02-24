@@ -2,7 +2,6 @@
 package WebAppService
 
 import (
-	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/WebAppService/addMaterial"
 	"GoSungrow/iSolarCloud/WebAppService/addOptTicketInfo"
 	"GoSungrow/iSolarCloud/WebAppService/addSpareParts"
@@ -192,6 +191,7 @@ import (
 	"GoSungrow/iSolarCloud/WebAppService/updateSpareParts"
 	"GoSungrow/iSolarCloud/WebAppService/updateStopReason"
 	"GoSungrow/iSolarCloud/WebAppService/updateTemplate"
+	"GoSungrow/iSolarCloud/api"
 	"fmt"
 )
 
@@ -204,7 +204,7 @@ func init() {
 	// fmt.Printf("Name: %s\n", name)
 }
 
-func Init(apiRoot *api.Web) Area {
+func Init(apiRoot api.Web) Area {
 	area := Area{
 		ApiRoot: apiRoot,
 		Name:    api.GetArea(Area{}),

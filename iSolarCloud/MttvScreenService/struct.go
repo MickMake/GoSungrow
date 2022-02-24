@@ -2,7 +2,6 @@
 package MttvScreenService
 
 import (
-	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/MttvScreenService/accumEnergyPsKpiData"
 	"GoSungrow/iSolarCloud/MttvScreenService/addBuildProgressing"
 	"GoSungrow/iSolarCloud/MttvScreenService/deleteBuildProgressing"
@@ -33,6 +32,7 @@ import (
 	"GoSungrow/iSolarCloud/MttvScreenService/queryScreenUserMdIfo"
 	"GoSungrow/iSolarCloud/MttvScreenService/saveOrUpdatePosition"
 	"GoSungrow/iSolarCloud/MttvScreenService/updateBuildProgressing"
+	"GoSungrow/iSolarCloud/api"
 	"fmt"
 )
 
@@ -45,7 +45,7 @@ func init() {
 	// fmt.Printf("Name: %s\n", name)
 }
 
-func Init(apiRoot *api.Web) Area {
+func Init(apiRoot api.Web) Area {
 	area := Area{
 		ApiRoot: apiRoot,
 		Name:    api.GetArea(Area{}),

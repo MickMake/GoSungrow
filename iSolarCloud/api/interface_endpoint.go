@@ -1,5 +1,7 @@
 package api
 
+import "time"
+
 type EndPoint interface {
 	GetArea() AreaName
 	GetName() EndPointName
@@ -14,8 +16,8 @@ type EndPoint interface {
 	GetError() error
 	IsError() bool
 	MarshalJSON() ([]byte, error)
-	ReadFile() error
-	WriteFile() error
+	ReadDataFile() error
+	WriteDataFile() error
 
 	SetRequest(ref interface{}) EndPoint // EndPointStruct
 	SetRequestByJson(j Json) EndPoint
@@ -29,4 +31,10 @@ type EndPoint interface {
 	GetResponseJson() Json
 	IsResponseValid() error
 	ResponseString() string
+
+	CheckCacheFile() bool
+	ReadCacheFile() EndPoint
+	WriteCacheFile() error
+	SetCacheTimeout(duration time.Duration) EndPoint
+	GetCacheTimeout() time.Duration
 }

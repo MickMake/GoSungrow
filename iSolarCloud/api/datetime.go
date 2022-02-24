@@ -59,6 +59,20 @@ func (dt *DateTime) GetDayEndTimestamp() string {
 }
 
 func (dt DateTime) String() string {
+	// return dt.Time.Format(DtLayout)
+	var ret string
+	switch dt.DateType {
+	case "3":
+		ret = dt.Time.Format(DtLayoutYear)
+	case "2":
+		ret = dt.Time.Format(DtLayoutMonth)
+	case "1":
+		ret = dt.Time.Format(DtLayoutDay)
+	}
+	return ret
+}
+
+func (dt DateTime) PrintFull() string {
 	return dt.Time.Format(DtLayout)
 }
 
@@ -73,6 +87,25 @@ func (dt DateTime) getDateType() string {
 		ret = "2"
 	case len(DtLayoutDay):
 		ret = "1"
+	case len(DtLayoutHour):
+		ret = "1"
+	case len(DtLayoutMinute):
+		ret = "1"
+	case len(DtLayoutSecond):
+		ret = "1"
 	}
 	return ret
 }
+
+// func (dt DateTime) GetFilenameSuffix() string {
+// 	var ret string
+// 	switch dt.DateType {
+// 	case "3":
+// 		ret = dt.Time.Format(DtLayoutYear)
+// 	case "2":
+// 		ret = dt.Time.Format(DtLayoutMonth)
+// 	case "1":
+// 		ret = dt.Time.Format(DtLayoutDay)
+// 	}
+// 	return ret
+// }

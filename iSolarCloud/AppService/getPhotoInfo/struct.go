@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 )
 
 var _ api.EndPoint = (*EndPoint)(nil)
@@ -27,7 +28,7 @@ type Response struct {
 	ResultData ResultData `json:"result_data"`
 }
 
-func Init(apiRoot *api.Web) EndPoint {
+func Init(apiRoot api.Web) EndPoint {
 	return EndPoint{
 		EndPointStruct: api.EndPointStruct{
 			ApiRoot:  apiRoot,
@@ -44,7 +45,7 @@ func Init(apiRoot *api.Web) EndPoint {
 // ****************************************
 // Methods not scoped by api.EndPoint interface type
 
-func (e EndPoint) Init(apiRoot *api.Web) *EndPoint {
+func (e EndPoint) Init(apiRoot api.Web) *EndPoint {
 	ret := Init(apiRoot)
 	return &ret
 }
@@ -57,10 +58,12 @@ func (e EndPoint) GetResponse() Response {
 	return e.Response
 }
 
+//goland:noinspection GoUnusedExportedFunction
 func Assert(e api.EndPoint) EndPoint {
 	return e.(EndPoint)
 }
 
+//goland:noinspection GoUnusedExportedFunction
 func AssertResultData(e api.EndPoint) ResultData {
 	return e.(EndPoint).Response.ResultData
 }
@@ -119,11 +122,11 @@ func (e EndPoint) IsError() bool {
 	return false
 }
 
-func (e EndPoint) ReadFile() error {
+func (e EndPoint) ReadDataFile() error {
 	return e.FileRead("", &e.Response.ResultData)
 }
 
-func (e EndPoint) WriteFile() error {
+func (e EndPoint) WriteDataFile() error {
 	return e.FileWrite("", e.Response.ResultData, api.DefaultFileMode)
 }
 
@@ -170,6 +173,10 @@ func (e EndPoint) RequestRef() interface{} {
 
 func (e EndPoint) GetRequestJson() api.Json {
 	return api.GetAsJson(e.Request.RequestData)
+}
+
+func (e EndPoint) GetRequestMd5() string {
+	return apiReflect.GetRequestMd5(e.Request.RequestData)
 }
 
 func (e EndPoint) IsRequestValid() error {
@@ -250,4 +257,26 @@ func (e EndPoint) MarshalJSON() ([]byte, error) {
 	// 	Request:  e.Request,
 	// 	Response: e.Response,
 	// })
+}
+
+func (e EndPoint) CheckCacheFile() bool {
+	return e.IsCacheFileOk(e.Request.RequestData)
+}
+
+func (e EndPoint) ReadCacheFile() api.EndPoint {
+	e.Error = e.CacheRead(e.Request.RequestData, &e)
+	return e
+}
+
+func (e EndPoint) WriteCacheFile() error {
+	return e.CacheWrite(e.Request.RequestData, e)
+}
+
+func (e EndPoint) SetCacheTimeout(duration time.Duration) api.EndPoint {
+	e.ApiRoot.SetCacheTimeout(duration)
+	return e
+}
+
+func (e EndPoint) GetCacheTimeout() time.Duration {
+	return e.ApiRoot.GetCacheTimeout()
 }

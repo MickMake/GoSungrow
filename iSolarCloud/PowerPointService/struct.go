@@ -2,8 +2,8 @@
 package PowerPointService
 
 import (
-	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/PowerPointService/queryPointDataTopOne"
+	"GoSungrow/iSolarCloud/api"
 	"fmt"
 )
 
@@ -16,7 +16,7 @@ func init() {
 	// fmt.Printf("Name: %s\n", name)
 }
 
-func Init(apiRoot *api.Web) Area {
+func Init(apiRoot api.Web) Area {
 	area := Area{
 		ApiRoot: apiRoot,
 		Name:    api.GetArea(Area{}),
