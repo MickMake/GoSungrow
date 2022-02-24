@@ -173,10 +173,10 @@ func (e *ResultData) IsValid() error {
 //	return err
 // }
 
-// func (rd *RequestData) GetRequestMd5() string {
-// 	return apiReflect.GetRequestMd5(*rd)
+// func (rd *RequestData) GetFingerprint() string {
+// 	return apiReflect.GetFingerprint(*rd)
 // }
 //
-// func (e EndPoint) GetRequestMd5() string {
-// 	return apiReflect.GetRequestMd5(e.Request.RequestData)
+// func (e EndPoint) GetFingerprint() string {
+// 	return apiReflect.GetFingerprint(e.Request.RequestData)
 // }

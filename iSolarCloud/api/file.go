@@ -160,7 +160,7 @@ func (ep *EndPointStruct) FileWrite(fn string, ref interface{}, perm os.FileMode
 //
 
 func (ep *EndPointStruct) GetCacheFilename(request interface{}) string {
-	postfix := apiReflect.GetRequestMd5(request)
+	postfix := apiReflect.GetFingerprint(request)
 	return fmt.Sprintf("%s_%s-%s.json", ep.Area, ep.Name, postfix)
 }
 

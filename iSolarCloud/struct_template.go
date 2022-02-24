@@ -17,7 +17,7 @@ type TemplatePoint struct {
 	PointId     string
 	Unit        string
 }
-type TemplatePoints map[string]TemplatePoint
+type TemplatePoints []TemplatePoint
 
 // type TemplateDevices map[string]TemplatePoints
 
@@ -51,26 +51,34 @@ func (t *TemplatePoints) PrintKeys() string {
 func (t *TemplatePoints) PrintPoints() string {
 	var ret string
 	for _, p := range *t {
-		ret += fmt.Sprintf("p%s,", p.PointId)
+		ret += fmt.Sprintf("%s,", p.PointId)
 	}
 	ret = strings.TrimSuffix(ret, ",")
 	return ret
 }
 
-func (t TemplatePoints) GetPoint(pskey string, point string) TemplatePoint {
+func (t *TemplatePoints) GetPoint(pskey string, point string) TemplatePoint {
 	var ret TemplatePoint
-	if _, ok := t[SetPointName(pskey, point)]; ok {
-		ret = t[SetPointName(pskey, point)]
+	for _, k := range *t {
+		if k.PsKey != pskey {
+			continue
+		}
+		if k.PointId != point {
+			continue
+		}
+		ret = k
+		break
 	}
 	return ret
 }
 
 func SetPointName(pskey string, point string) string {
-	return pskey + "." + point
+	point = strings.TrimPrefix(point, "p")
+	return pskey + ".p" + point
 }
 
 func (sg *SunGrow) GetPointNamesFromTemplate(template string) TemplatePoints {
-	ret := make(TemplatePoints)
+	var ret TemplatePoints
 
 	for range Only.Once {
 		if template == "" {
@@ -89,16 +97,13 @@ func (sg *SunGrow) GetPointNamesFromTemplate(template string) TemplatePoints {
 
 		data := queryUserCurveTemplateData.AssertResultData(ep)
 		for dn, dr := range data.PointsData.Devices {
-			// if _, ok := ret[dn]; !ok {
-			// 	ret[dn] = make(TemplateDevices)
-			// }
 			for _, pr := range dr.Points {
-				ret[SetPointName(dn, pr.PointID)] = TemplatePoint{
+					ret = append(ret, TemplatePoint {
 					PsKey:       dn,
-					PointId:     pr.PointID,
+					PointId:     "p"+pr.PointID,
 					Description: pr.PointName,
 					Unit:        pr.Unit,
-				}
+				})
 			}
 		}
 	}
@@ -113,7 +118,8 @@ func (sg *SunGrow) GetTemplateData(date string, template string) error {
 		}
 
 		pointNames := sg.GetPointNamesFromTemplate(template)
-		fmt.Printf("%v", pointNames)
+		// fmt.Printf("Keys: %s\n", pointNames.PrintKeys())
+		// fmt.Printf("Points: %s\n", pointNames.PrintPoints())
 
 		if date == "" {
 			date = api.NewDateTime("").String()
@@ -133,8 +139,7 @@ func (sg *SunGrow) GetTemplateData(date string, template string) error {
 			},
 			DefaultCacheTimeout,
 		)
-		if ep2.IsError() {
-			sg.Error = ep2.GetError()
+		if sg.Error != nil {
 			break
 		}
 
@@ -152,14 +157,24 @@ func (sg *SunGrow) GetTemplateData(date string, template string) error {
 		for deviceName, deviceRef := range data2.Devices {
 			for pointId, pointRef := range deviceRef.Points {
 				for _, tim := range pointRef.Times {
-					foo := []string{
+					gp := pointNames.GetPoint(deviceName, pointId)
+					csv = csv.AddRow([]string {
 						tim.Key.PrintFull(),
 						deviceName,
-						fmt.Sprintf("%s (%s)", pointNames[SetPointName(deviceName, pointId)].Description, pointId),
+						fmt.Sprintf("%s (%s)", gp.Description, pointId),
 						tim.Value,
-						pointNames[SetPointName(deviceName, pointId)].Unit,
-					}
-					csv = csv.AddRow(foo)
+						gp.Unit,
+					})
+
+					// fu := fmt.Sprintf("%s (%s)", pointNames[SetPointName(deviceName, pointId)].Description, pointId)
+					// foo := []string{
+					// 	tim.Key.PrintFull(),
+					// 	deviceName,
+					// 	fu,
+					// 	tim.Value,
+					// 	pointNames[SetPointName(deviceName, pointId)].Unit,
+					// }
+					// csv = csv.AddRow(foo)
 				}
 			}
 		}

@@ -4,10 +4,10 @@ go 1.17
 
 require (
 	github.com/acarl005/textcol v0.0.0
-	github.com/davecgh/go-spew v1.1.1
 	github.com/go-co-op/gocron v1.12.0
 	github.com/go-git/go-billy/v5 v5.3.1
 	github.com/go-git/go-git/v5 v5.4.2
+	github.com/google/uuid v1.1.2
 	github.com/mattn/go-colorable v0.1.12
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/spf13/cobra v1.3.0

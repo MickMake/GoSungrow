@@ -60,6 +60,7 @@ func (c Csv) SetHeader(header []string) Csv {
 
 func (c *Csv) WriteFile(fn string, perm os.FileMode) error {
 	for range Only.Once {
+		fmt.Printf("Writing file '%s'\n", fn)
 		c.Error = os.WriteFile(fn, []byte(c.String()), perm)
 		if c.Error != nil {
 			c.Error = errors.New(fmt.Sprintf("Unable to write to file %s - %v", fn, c.Error))

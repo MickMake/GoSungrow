@@ -82,13 +82,10 @@ func (e *ResultData) UnmarshalJSON(data []byte) error {
 
 		e.Devices = make(Devices)
 		for deviceName, deviceRef := range d {
-
 			points := Points{}
 			for pointName, pointRef := range deviceRef {
-
 				times := Times{}
 				for time, value := range pointRef {
-
 					times = append(times, Time{
 						Key:   api.NewDateTime(time),
 						Value: value,

@@ -6,6 +6,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"hash/fnv"
+
+	// "github.com/google/uuid"
 	"path/filepath"
 	"reflect"
 	"strings"
@@ -583,15 +586,22 @@ func GetRequestString(ref interface{}) string {
 	return ret
 }
 
-func GetRequestMd5(ref interface{}) string {
+func GetFingerprint(ref interface{}) string {
 	var ret string
 
 	for range Only.Once {
-		hash := md5.New().Sum([]byte(GetRequestString(ref)))
-		ret = fmt.Sprintf("%x", hash)
+		// h := hash(GetRequestString(ref))
+		h := md5.Sum([]byte(GetRequestString(ref)))
+		ret = fmt.Sprintf("%x", h)
 	}
 
 	return ret
+}
+
+func hash(s string) uint32 {
+	h := fnv.New32a()
+	_, _ = h.Write([]byte(s))
+	return h.Sum32()
 }
 
 type Required []string

@@ -175,8 +175,8 @@ func (e EndPoint) GetRequestJson() api.Json {
 	return api.GetAsJson(e.Request.RequestData)
 }
 
-func (e EndPoint) GetRequestMd5() string {
-	return apiReflect.GetRequestMd5(e.Request.RequestData)
+func (e EndPoint) GetFingerprint() string {
+	return apiReflect.GetFingerprint(e.Request.RequestData)
 }
 
 func (e EndPoint) IsRequestValid() error {
