@@ -52,36 +52,80 @@ To be added:
 ## Use case example:
 ### Fetch PV data from the API.
 
+Get basic inverter information for inverter id 1129147
 ```
 ./bin/GoSungrow api get findPsType '{"ps_id":"1129147"}'
+```
+
+```
 ./bin/GoSungrow api get getPsDetailWithPsType '{"ps_id":"1129147"}'
+```
+
+Get basic power stats for inverter
+```
 ./bin/GoSungrow api get getPowerStatistics '{"ps_id":"1129147"}'
+```
+
+Get point_id to point names for different device types
+```
 ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"1"}'
+```
+
+```
 ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"2"}'
+```
+
+```
 ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"7"}'
+```
+
+Get all inverters
+```
 ./bin/GoSungrow api get getPsList
+```
+
+```
 ./bin/GoSungrow api get WebAppService.showPSView '{"ps_id":"1129147"}'
+```
+
+Produce basic storage report
+```
 ./bin/GoSungrow api get queryMutiPointDataList '{"ps_key":"1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_11_0_0","points":"p13150,p13126,p13142,p13143,p13019,p13141,p13121,p13003,p13149,p83106","minute_interval":"5","start_time_stamp":"20220215000000","end_time_stamp":"20220215235900", "ps_id":"1129147"}'
+```
+
+Get the household storage report
+```
 ./bin/GoSungrow api get getHouseholdStoragePsReport '{"date_id":"2022","date_type":"4","ps_id":"1129147"}'
 ```
 
-### Record statistics data from iSolarCloud to GitHub. (Will clone if not existing.)
+Produce daily report for template 8042 for date 2022/02/24 and save as a CSV file 
+```
+./bin/GoSungrow data save template 20220224 8042
+```
+
+Produce daily report for template 8042 for date 2022/02/24 spit out CSV to STDOUT
+```
+./bin/GoSungrow data get template 20220224 8042
+```
+
+### Git commands
+Record statistics data from iSolarCloud to GitHub. (Will clone if not existing.)
 
 	% GoSungrow git sync 'Updating statistics' statistics
 
-### Record all changes made to GitHub.
+Record all changes made to GitHub.
 
 	% GoSungrow git sync 'Update everything'
 
-### Record changes with default commit message.
+Record changes with default commit message.
 
 	% GoSungrow git sync default
 
-### Record changes made every 30 minutes.
+Record changes made every 30 minutes.
 
 	% GoSungrow cron run ./30 . . . . git sync default
 
-### List files in repo, (identical to ls).
+List files in repo, (identical to ls).
 
 ```
 % GoSungrow git ls -l
@@ -97,7 +141,7 @@ To be added:
  - rw- rw- r--  admin-mickh admin-mickh  16.70K 10.Jan'22 13:31 user.json
 ```
 
-### Show changes made to a JSON file.
+Show changes made to a JSON file.
 
 	% GoSungrow git diff devices.json
 
