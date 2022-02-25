@@ -65,8 +65,7 @@ func (req RequestCommon) String() string {
 	return ret
 }
 
-
-// RequestCommon checks
+// CheckString RequestCommon checks
 func CheckString(name string, rc string) error {
 	var err error
 	for range Only.Once {

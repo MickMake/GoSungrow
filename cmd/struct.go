@@ -14,47 +14,13 @@ import (
 	"time"
 )
 
-//goland:noinspection SpellCheckingInspection
-const (
-	DefaultBinaryName = "GoSungrow"
-	EnvPrefix         = "SunGrow"
-	defaultConfigFile = "config.json"
-	defaultTokenFile  = "AuthToken.json"
-
-	flagConfigFile = "config"
-	flagDebug      = "debug"
-	flagQuiet      = "quiet"
-
-	flagApiUrl        = "host"
-	flagApiTimeout    = "timeout"
-	flagApiUsername   = "user"
-	flagApiPassword   = "password"
-	flagApiAppKey     = "appkey"
-	flagApiLastLogin  = "token-expiry"
-	flagApiOutputType = "out"
-
-	flagGoogleSheet       = "google-sheet"
-	flagGoogleSheetUpdate = "update"
-
-	flagGitUsername = "git-username"
-	flagGitPassword = "git-password"
-	flagGitKeyFile  = "git-sshkey"
-	flagGitToken    = "git-token"
-	flagGitRepo     = "git-repo"
-	flagGitRepoDir  = "git-dir"
-	flagGitDiffCmd  = "diff-cmd"
-
-	defaultHost      = "https://augateway.isolarcloud.com"
-	defaultUsername  = "harry@potter.net"
-	defaultPassword  = "hogwarts"
-	defaultApiAppKey = "93D72E60331ABDCDC7B39ADC2D1F32B3"
-
-	defaultTimeout = time.Duration(time.Second * 30)
-)
 
 var DefaultAreas = []string{"all"}
 
 type CommandArgs struct {
+	SunGrow *iSolarCloud.SunGrow
+	Git *mmGit.Git
+
 	ConfigDir   string
 	CacheDir    string
 	ConfigFile  string
@@ -94,6 +60,9 @@ type CommandArgs struct {
 	Error error
 }
 
+var Cmd CommandArgs
+
+
 func (ca *CommandArgs) IsValid() error {
 	for range Only.Once {
 		if !ca.Valid {
@@ -105,29 +74,29 @@ func (ca *CommandArgs) IsValid() error {
 	return ca.Error
 }
 
-func (ca *CommandArgs) ProcessArgs(cmd *cobra.Command, args []string) error {
+func (ca *CommandArgs) ProcessArgs(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		ca.Args = args
 
-		SunGrow = iSolarCloud.NewSunGro(ca.ApiUrl, ca.CacheDir)
-		if SunGrow.Error != nil {
+		ca.SunGrow = iSolarCloud.NewSunGro(ca.ApiUrl, ca.CacheDir)
+		if ca.SunGrow.Error != nil {
 			break
 		}
 
-		Cmd.Error = SunGrow.Init()
-		if Cmd.Error != nil {
+		ca.Error = ca.SunGrow.Init()
+		if ca.Error != nil {
 			break
 		}
 
-		switch Cmd.ApiOutputType {
-		case "json":
-			SunGrow.OutputType.SetJson()
-		case "raw":
-			SunGrow.OutputType.SetRaw()
-		case "file":
-			SunGrow.OutputType.SetFile()
-		default:
-			SunGrow.OutputType.SetJson()
+		switch ca.ApiOutputType {
+			case "json":
+				ca.SunGrow.OutputType.SetJson()
+			case "raw":
+				ca.SunGrow.OutputType.SetRaw()
+			case "file":
+				ca.SunGrow.OutputType.SetFile()
+			default:
+				ca.SunGrow.OutputType.SetJson()
 		}
 
 		if ca.ApiAppKey == "" {
@@ -151,29 +120,29 @@ func (ca *CommandArgs) ProcessArgs(cmd *cobra.Command, args []string) error {
 
 func (ca *CommandArgs) SunGrowArgs(cmd *cobra.Command, args []string) error {
 	for range Only.Once {
-		Cmd.Error = Cmd.ProcessArgs(cmd, args)
-		if Cmd.Error != nil {
+		ca.Error = ca.ProcessArgs(cmd, args)
+		if ca.Error != nil {
 			break
 		}
 
-		Cmd.Error = SunGrow.Login(login.SunGrowAuth{
+		ca.Error = ca.SunGrow.Login(login.SunGrowAuth{
 			AppKey:       ca.ApiAppKey,
 			UserAccount:  ca.ApiUsername,
 			UserPassword: ca.ApiPassword,
 			TokenFile:    ca.ApiTokenFile,
 			Force:        false,
 		})
-		if Cmd.Error != nil {
+		if ca.Error != nil {
 			break
 		}
 
-		if Cmd.Debug {
-			SunGrow.Auth.Print()
+		if ca.Debug {
+			ca.SunGrow.Auth.Print()
 		}
 
-		if SunGrow.HasTokenChanged() {
-			ca.ApiLastLogin = SunGrow.GetLastLogin()
-			ca.ApiToken = SunGrow.GetToken()
+		if ca.SunGrow.HasTokenChanged() {
+			ca.ApiLastLogin = ca.SunGrow.GetLastLogin()
+			ca.ApiToken = ca.SunGrow.GetToken()
 			ca.Error = writeConfig()
 		}
 
@@ -194,13 +163,13 @@ func (ca *CommandArgs) SunGrowArgs(cmd *cobra.Command, args []string) error {
 
 func (ca *CommandArgs) GitSet() error {
 	for range Only.Once {
-		if Git != nil {
+		if ca.Git != nil {
 			break
 		}
 
-		Git = mmGit.New()
-		if Git.Error != nil {
-			ca.Error = Git.Error
+		ca.Git = mmGit.New()
+		if ca.Git.Error != nil {
+			ca.Error = ca.Git.Error
 			break
 		}
 
@@ -209,33 +178,33 @@ func (ca *CommandArgs) GitSet() error {
 		//	break
 		// }
 
-		Cmd.Error = Git.SetKeyFile(ca.GitKeyFile)
-		if Cmd.Error != nil {
+		ca.Error = ca.Git.SetKeyFile(ca.GitKeyFile)
+		if ca.Error != nil {
 			break
 		}
 
-		Cmd.Error = Git.SetToken(ca.GitToken)
-		if Cmd.Error != nil {
+		ca.Error = ca.Git.SetToken(ca.GitToken)
+		if ca.Error != nil {
 			break
 		}
 
-		Cmd.Error = Git.SetRepo(ca.GitRepo)
-		if Cmd.Error != nil {
+		ca.Error = ca.Git.SetRepo(ca.GitRepo)
+		if ca.Error != nil {
 			break
 		}
 
-		Cmd.Error = Git.SetDir(ca.GitRepoDir)
-		if Cmd.Error != nil {
+		ca.Error = ca.Git.SetDir(ca.GitRepoDir)
+		if ca.Error != nil {
 			break
 		}
 
-		Cmd.Error = Git.SetDiffCmd(ca.GitDiffCmd)
-		if Cmd.Error != nil {
+		ca.Error = ca.Git.SetDiffCmd(ca.GitDiffCmd)
+		if ca.Error != nil {
 			break
 		}
 	}
 
-	return Cmd.Error
+	return ca.Error
 }
 
 func (ca *CommandArgs) GitLs(options ...string) error {
@@ -255,41 +224,41 @@ func (ca *CommandArgs) GitLs(options ...string) error {
 		}
 	}
 
-	return Cmd.Error
+	return ca.Error
 }
 
 func (ca *CommandArgs) GitSync(msg string, entities ...string) error {
 	for range Only.Once {
-		Cmd.Error = Git.Pull()
-		if Cmd.Error != nil {
+		ca.Error = ca.Git.Pull()
+		if ca.Error != nil {
 			break
 		}
 
-		Cmd.Error = ca.GitSave(entities...)
-		if Cmd.Error != nil {
+		ca.Error = ca.GitSave(entities...)
+		if ca.Error != nil {
 			break
 		}
 
-		Cmd.Error = Git.Add(".")
-		if Cmd.Error != nil {
+		ca.Error = ca.Git.Add(".")
+		if ca.Error != nil {
 			break
 		}
 
 		if msg == "" {
 			msg = fmt.Sprintf("Updated %d files.", len(entities))
 		}
-		Cmd.Error = Git.Commit(msg)
-		if Cmd.Error != nil {
+		ca.Error = ca.Git.Commit(msg)
+		if ca.Error != nil {
 			break
 		}
 
-		Cmd.Error = Git.Push()
-		if Cmd.Error != nil {
+		ca.Error = ca.Git.Push()
+		if ca.Error != nil {
 			break
 		}
 	}
 
-	return Cmd.Error
+	return ca.Error
 }
 
 func (ca *CommandArgs) GitSave(entities ...string) error {
@@ -309,15 +278,15 @@ func (ca *CommandArgs) GitSave(entities ...string) error {
 
 			switch entity {
 			case "domain":
-				SunGrow.Error = SunGrow.Init()
+				ca.SunGrow.Error = ca.SunGrow.Init()
 			}
-			if SunGrow.Error != nil {
+			if ca.SunGrow.Error != nil {
 				break
 			}
 
 			jf := AddJsonSuffix(entity)
-			Cmd.Error = Git.SaveFile(jf, []byte(ca.OutputFile))
-			if Cmd.Error != nil {
+			ca.Error = ca.Git.SaveFile(jf, []byte(ca.OutputFile))
+			if ca.Error != nil {
 				break
 			}
 		}
@@ -325,7 +294,7 @@ func (ca *CommandArgs) GitSave(entities ...string) error {
 		fmt.Printf("Saved %d files.", len(entities))
 	}
 
-	return Cmd.Error
+	return ca.Error
 }
 
 func (ca *CommandArgs) GoogleUpdate(entities ...string) error {
@@ -341,7 +310,7 @@ func (ca *CommandArgs) GoogleUpdate(entities ...string) error {
 		for _, entity := range entities {
 			switch entity {
 			case "domain":
-				ca.Error = SunGrow.Init()
+				ca.Error = ca.SunGrow.Init()
 				if ca.Error != nil {
 					break
 				}

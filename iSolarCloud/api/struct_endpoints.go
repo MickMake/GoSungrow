@@ -9,7 +9,6 @@ import (
 	"sort"
 )
 
-// type TypeEndPoints map[EndPointName]EndPointStruct	// Map of EndPoints by endpoint name.
 
 type TypeEndPoints map[EndPointName]EndPoint // Map of EndPoints by endpoint name.
 
@@ -79,7 +78,7 @@ func (ps *TypeEndPoints) SortEndPoints() []EndPointName {
 	ret := make([]EndPointName, 0, len(*ps))
 	for range Only.Once {
 		keys := make([]string, 0, len(*ps))
-		for k, _ := range *ps {
+		for k := range *ps {
 			keys = append(keys, string(k))
 		}
 		sort.Strings(keys)

@@ -15,7 +15,7 @@ import (
 	"path/filepath"
 )
 
-const DefaultId = "1R4OmGyQJZJWBZVgEazNS3UZE5YVkXBa_XFulut3pohQ"
+const DefaultId = "SUPERSECRETKEY"
 
 type Sheet struct {
 	Id          string

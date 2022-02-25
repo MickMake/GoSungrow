@@ -7,20 +7,42 @@ import (
 )
 
 
-// ******************************************************************************** //
-var cmdMqtt = &cobra.Command{
-	Use:                   "mqtt",
-	//Aliases:               []string{"refresh"},
-	Short:                 fmt.Sprintf("All things MQTT related."),
-	Long:                  fmt.Sprintf("All things MQTT related."),
-	Example:               PrintExamples("mqtt", "sync", "sync all"),
-	DisableFlagParsing:    false,
-	DisableFlagsInUseLine: false,
-	PreRunE:               Cmd.ProcessArgs,
-	Run:                   cmdMqttFunc,
-	Args:                  cobra.RangeArgs(0, 1),
+func AttachCmdMqtt(cmd *cobra.Command) *cobra.Command {
+	// ******************************************************************************** //
+	var cmdMqtt = &cobra.Command{
+		Use:                   "mqtt",
+		Aliases:               []string{""},
+		Short:                 fmt.Sprintf("All things MQTT related."),
+		Long:                  fmt.Sprintf("All things MQTT related."),
+		DisableFlagParsing:    false,
+		DisableFlagsInUseLine: false,
+		PreRunE:               Cmd.ProcessArgs,
+		Run:                   cmdMqttFunc,
+		Args:                  cobra.RangeArgs(0, 1),
+	}
+	cmd.AddCommand(cmdMqtt)
+	cmdMqtt.Example = PrintExamples(cmdMqtt, "sync", "sync all")
+
+
+	// ******************************************************************************** //
+	var cmdMqttSync = &cobra.Command{
+		Use:                   "update",
+		Aliases:               []string{""},
+		Short:                 fmt.Sprintf("Sync to an MQTT broker."),
+		Long:                  fmt.Sprintf("Sync to an MQTT broker."),
+		DisableFlagParsing:    false,
+		DisableFlagsInUseLine: false,
+		PreRunE:               Cmd.ProcessArgs,
+		Run:                   cmdMqttSyncFunc,
+		Args:                  cobra.RangeArgs(0, 1),
+	}
+	cmdMqtt.AddCommand(cmdMqttSync)
+	cmdMqttSync.Example = PrintExamples(cmdMqttSync, "", "all")
+
+	return cmdMqtt
 }
-//goland:noinspection GoUnusedParameter
+
+
 func cmdMqttFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
 		switch {
@@ -37,21 +59,6 @@ func cmdMqttFunc(cmd *cobra.Command, args []string) {
 	}
 }
 
-
-// ******************************************************************************** //
-var cmdMqttSync = &cobra.Command{
-	Use:                   "update",
-	//Aliases:               []string{"refresh"},
-	Short:                 fmt.Sprintf("Sync to an MQTT broker."),
-	Long:                  fmt.Sprintf("Sync to an MQTT broker."),
-	Example:               PrintExamples("mqtt sync", "", "all"),
-	DisableFlagParsing:    false,
-	DisableFlagsInUseLine: false,
-	PreRunE:               Cmd.ProcessArgs,
-	Run:                   cmdMqttSyncFunc,
-	Args:                  cobra.RangeArgs(0, 1),
-}
-//goland:noinspection GoUnusedParameter
 func cmdMqttSyncFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
 		switch {

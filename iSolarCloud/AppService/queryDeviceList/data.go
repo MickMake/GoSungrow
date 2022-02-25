@@ -208,8 +208,8 @@ func (e *ResultData) GetDataByName(name string) PointData {
 	return ret
 }
 
-func (e *ResultData) GetCsvByName(name string) api.Csv {
-	var ret api.Csv
+func (e *ResultData) GetCsvByName(name string) api.Table {
+	var ret api.Table
 	for range Only.Once {
 		points := e.GetDataByName(name)
 		ret = ret.SetHeader([]string{

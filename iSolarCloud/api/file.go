@@ -13,6 +13,7 @@ import (
 
 const DefaultFileMode = 0644
 
+
 func (ep *EndPointStruct) GetCsvFilename(postfix string) string {
 	if postfix == "" {
 		return fmt.Sprintf("%s_%s.csv", ep.Area, ep.Name)
@@ -43,11 +44,8 @@ func (ep *EndPointStruct) GetFilePath() string {
 	return ret
 }
 
-//
-//
-//
 
-// Retrieves data from a local file.
+// FileExists Checks for existance of a local file.
 func (ep *EndPointStruct) FileExists(fn string) bool {
 	var ok bool
 
@@ -78,7 +76,7 @@ func (ep *EndPointStruct) FileExists(fn string) bool {
 	return ok
 }
 
-// Retrieves data from a local file.
+// FileRead Retrieves data from a local file.
 func (ep *EndPointStruct) FileRead(fn string, ref interface{}) error {
 	// var ret []byte
 
@@ -99,7 +97,7 @@ func (ep *EndPointStruct) FileRead(fn string, ref interface{}) error {
 			break
 		}
 
-		//goland:noinspection GoUnhandledErrorResult
+		//goland:noinspection GoUnhandledErrorResult,GoDeferInLoop
 		defer f.Close()
 
 		ep.Error = json.NewDecoder(f).Decode(&ref)
@@ -120,7 +118,7 @@ func (ep *EndPointStruct) FileRead(fn string, ref interface{}) error {
 	return ep.Error
 }
 
-// Saves data to a file path.
+// FileWrite Saves data to a file path.
 func (ep *EndPointStruct) FileWrite(fn string, ref interface{}, perm os.FileMode) error {
 	for range Only.Once {
 		if fn == "" {
@@ -137,7 +135,7 @@ func (ep *EndPointStruct) FileWrite(fn string, ref interface{}, perm os.FileMode
 			break
 		}
 
-		//goland:noinspection GoUnhandledErrorResult
+		//goland:noinspection GoUnhandledErrorResult,GoDeferInLoop
 		defer f.Close()
 		ep.Error = json.NewEncoder(f).Encode(ref)
 
@@ -155,9 +153,6 @@ func (ep *EndPointStruct) FileWrite(fn string, ref interface{}, perm os.FileMode
 	return ep.Error
 }
 
-//
-//
-//
 
 func (ep *EndPointStruct) GetCacheFilename(request interface{}) string {
 	postfix := apiReflect.GetFingerprint(request)
@@ -168,7 +163,7 @@ func (ep *EndPointStruct) GetCacheFilePath(request interface{}) string {
 	return filepath.Join(ep.ApiRoot.GetCacheDir(), ep.GetCacheFilename(request))
 }
 
-// Retrieves cache data from a local file.
+// IsCacheFileOk Retrieves cache data from a local file.
 func (ep *EndPointStruct) IsCacheFileOk(request interface{}) bool {
 	var ok bool
 	for range Only.Once {
@@ -202,7 +197,7 @@ func (ep *EndPointStruct) IsCacheFileOk(request interface{}) bool {
 	return ok
 }
 
-// Retrieves cache data from a local file.
+// CacheRead Retrieves cache data from a local file.
 func (ep *EndPointStruct) CacheRead(request interface{}, ref interface{}) error {
 	for range Only.Once {
 		fn := ep.GetCacheFilePath(request)
@@ -213,7 +208,7 @@ func (ep *EndPointStruct) CacheRead(request interface{}, ref interface{}) error 
 	return ep.Error
 }
 
-// Saves cache data to a file path.
+// CacheWrite Saves cache data to a file path.
 func (ep *EndPointStruct) CacheWrite(request interface{}, ref interface{}) error {
 	for range Only.Once {
 		fn := ep.GetCacheFilePath(request)
@@ -225,7 +220,7 @@ func (ep *EndPointStruct) CacheWrite(request interface{}, ref interface{}) error
 			break
 		}
 
-		//goland:noinspection GoUnhandledErrorResult
+		//goland:noinspection GoUnhandledErrorResult,GoDeferInLoop
 		defer f.Close()
 		ep.Error = json.NewEncoder(f).Encode(ref)
 	}

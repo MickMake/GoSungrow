@@ -10,6 +10,7 @@ import (
 	"strings"
 )
 
+
 type Api struct{}
 
 // This is used to trim the sub-packages imported under the API.
@@ -26,6 +27,7 @@ func init() {
 	}
 }
 
+//goland:noinspection GoUnusedExportedFunction
 func AppendUrl(host string, endpoint string) *url.URL {
 	var ret *url.URL
 	for range Only.Once {
@@ -81,6 +83,7 @@ func GetAsPrettyJson(r interface{}) Json {
 	return ret
 }
 
+//goland:noinspection GoUnusedExportedFunction
 func GetAsString(r interface{}) string {
 	var ret string
 	for range Only.Once {

@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+
 type TemplatePoint struct {
 	Description string
 	PsKey       string
@@ -19,25 +20,6 @@ type TemplatePoint struct {
 }
 type TemplatePoints []TemplatePoint
 
-// type TemplateDevices map[string]TemplatePoints
-
-// func (t *TemplateDevices) PrintKeys() string {
-// 	var ret string
-// 	for _, p := range *t {
-// 		ret += fmt.Sprintf("%s,", p.PrintKeys())
-// 	}
-// 	ret = strings.TrimSuffix(ret, ",")
-// 	return ret
-// }
-//
-// func (t *TemplateDevices) PrintPoints() string {
-// 	var ret string
-// 	for p := range *t {
-// 		ret += fmt.Sprintf("%s,", p)
-// 	}
-// 	ret = strings.TrimSuffix(ret, ",")
-// 	return ret
-// }
 
 func (t *TemplatePoints) PrintKeys() string {
 	var ret string
@@ -68,6 +50,26 @@ func (t *TemplatePoints) GetPoint(pskey string, point string) TemplatePoint {
 		}
 		ret = k
 		break
+	}
+	return ret
+}
+
+func CreatePoints(points []string) TemplatePoints {
+	var ret TemplatePoints
+	for range Only.Once {
+		// Feed in a string array and generate points data.
+		// strings can be either "pskey/point_id", "pskey.point_id", "pskey:point_id",
+		for _, p := range points {
+			pa := strings.Split(p, ".")
+			if len(pa) == 2 {
+				ret = append(ret, TemplatePoint{
+					Description: "",
+					PsKey:       pa[0],
+					PointId:     pa[1],
+					Unit:        "",
+				})
+			}
+		}
 	}
 	return ret
 }
@@ -111,25 +113,22 @@ func (sg *SunGrow) GetPointNamesFromTemplate(template string) TemplatePoints {
 	return ret
 }
 
-func (sg *SunGrow) GetTemplateData(date string, template string) error {
+func (sg *SunGrow) GetTemplateData(date string, template string, filter string) error {
 	for range Only.Once {
 		if template == "" {
 			template = "8042"
 		}
-
-		pointNames := sg.GetPointNamesFromTemplate(template)
-		// fmt.Printf("Keys: %s\n", pointNames.PrintKeys())
-		// fmt.Printf("Points: %s\n", pointNames.PrintPoints())
 
 		if date == "" {
 			date = api.NewDateTime("").String()
 		}
 		when := api.NewDateTime(date)
 		psId := sg.GetPsId()
+		pointNames := sg.GetPointNamesFromTemplate(template)
 
-		ep2 := sg.GetByStruct(
+		ep := sg.GetByStruct(
 			"AppService.queryMutiPointDataList",
-			queryMutiPointDataList.RequestData{
+			queryMutiPointDataList.RequestData {
 				PsID:           psId,
 				PsKey:          pointNames.PrintKeys(),
 				Points:         pointNames.PrintPoints(),
@@ -145,59 +144,65 @@ func (sg *SunGrow) GetTemplateData(date string, template string) error {
 
 		//
 		csv := api.NewCsv()
-		csv = csv.SetHeader([]string{
+		csv = csv.SetHeader(
 			"Date/Time",
 			"PointId Name",
 			"Point Name",
 			"Value",
 			"Units",
-		})
+		)
 
-		data2 := queryMutiPointDataList.AssertResultData(ep2)
-		for deviceName, deviceRef := range data2.Devices {
+		data := queryMutiPointDataList.AssertResultData(ep)
+		for deviceName, deviceRef := range data.Devices {
 			for pointId, pointRef := range deviceRef.Points {
 				for _, tim := range pointRef.Times {
 					gp := pointNames.GetPoint(deviceName, pointId)
-					csv = csv.AddRow([]string {
+					csv = csv.AddRow(
 						tim.Key.PrintFull(),
-						deviceName,
-						fmt.Sprintf("%s (%s)", gp.Description, pointId),
+						fmt.Sprintf("%s.%s", deviceName, pointId),
+						gp.Description,
 						tim.Value,
 						gp.Unit,
-					})
-
-					// fu := fmt.Sprintf("%s (%s)", pointNames[SetPointName(deviceName, pointId)].Description, pointId)
-					// foo := []string{
-					// 	tim.Key.PrintFull(),
-					// 	deviceName,
-					// 	fu,
-					// 	tim.Value,
-					// 	pointNames[SetPointName(deviceName, pointId)].Unit,
-					// }
-					// csv = csv.AddRow(foo)
+					)
 				}
 			}
 		}
 
 		switch {
-		case sg.OutputType.IsNone():
+			case sg.OutputType.IsNone():
 
-		case sg.OutputType.IsHuman():
-			csv.Print()
+			case sg.OutputType.IsHuman():
+				csv.Print()
 
-		case sg.OutputType.IsFile():
-			a := queryMutiPointDataList.Assert(ep2)
-			suffix := fmt.Sprintf("%s-%s", when, template)
-			fn := a.GetCsvFilename(suffix)
-			sg.Error = csv.WriteFile(fn, api.DefaultFileMode)
+			case sg.OutputType.IsGraph():
+				gr := api.JsonToGraphRequest(filter)
+				if gr.Error != nil {
+					sg.Error = gr.Error
+					break
+				}
+				sg.Error = csv.Graph(gr)
+				// api.GraphRequest {
+				// 	Title:        "Testing 1. 2. 3.",
+				// 	TimeColumn:   1,
+				// 	ValueColumn:  4,
+				// 	SearchColumn: 3,
+				// 	SearchString: "p83106",
+				// 	FileName:     "foo.png",
+				// }
 
-		case sg.OutputType.IsRaw():
-			fmt.Println(ep2.GetData(true))
+			case sg.OutputType.IsFile():
+				a := queryMutiPointDataList.Assert(ep)
+				suffix := fmt.Sprintf("%s-%s", when, template)
+				fn := a.GetCsvFilename(suffix)
+				sg.Error = csv.WriteFile(fn, api.DefaultFileMode)
 
-		case sg.OutputType.IsJson():
-			fmt.Println(ep2.GetData(false))
+			case sg.OutputType.IsRaw():
+				fmt.Println(ep.GetData(true))
 
-		default:
+			case sg.OutputType.IsJson():
+				fmt.Println(ep.GetData(false))
+
+			default:
 		}
 	}
 

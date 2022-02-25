@@ -17,20 +17,92 @@ type CronStruct struct {
 }
 var Cron CronStruct
 
-// ******************************************************************************** //
-var cmdCron = &cobra.Command{
-	Use:                   "cron",
-	//Aliases:               []string{},
-	Short:                 fmt.Sprintf("Run a command via schedule."),
-	Long:                  fmt.Sprintf("Run a command via schedule."),
-	Example:               PrintExamples("cron","run 00 18 . . . sync default", "run 42 02 04 . . list all"),
-	DisableFlagParsing:    false,
-	DisableFlagsInUseLine: false,
-	PreRunE:               Cmd.ProcessArgs,
-	Run:                   cmdCronFunc,
-	Args:                  cobra.MinimumNArgs(1),
+
+func AttachCmdCron(cmd *cobra.Command) *cobra.Command {
+	// ******************************************************************************** //
+	var cmdCron = &cobra.Command{
+		Use:                   "cron",
+		Aliases:               []string{""},
+		Short:                 fmt.Sprintf("Run a command via schedule."),
+		Long:                  fmt.Sprintf("Run a command via schedule."),
+		DisableFlagParsing:    false,
+		DisableFlagsInUseLine: false,
+		PreRunE:               Cmd.ProcessArgs,
+		Run:                   cmdCronFunc,
+		Args:                  cobra.MinimumNArgs(1),
+	}
+	cmd.AddCommand(cmdCron)
+	cmdCron.Example = PrintExamples(cmdCron, "run 00 18 . . . sync default", "run 42 02 04 . . list all")
+
+
+	// ******************************************************************************** //
+	var cmdCronRun = &cobra.Command{
+		Use:                   "run <minute> <hour> <month day> <month> <week day>  <command ...>",
+		Aliases:               []string{""},
+		Short:                 fmt.Sprintf("Run scheduled a command."),
+		Long:                  fmt.Sprintf("Run scheduled a command."),
+		DisableFlagParsing:    false,
+		DisableFlagsInUseLine: false,
+		PreRunE:               Cmd.ProcessArgs,
+		Run:                   cmdCronRunFunc,
+		Args:                  cobra.MinimumNArgs(6),
+	}
+	cmdCron.AddCommand(cmdCronRun)
+	cmdCronRun.Example = PrintExamples(cmdCronRun, "00 18 . . . sync default", "42 02 04 . . list all", "./1 . . . . list all")
+
+	// ******************************************************************************** //
+	var cmdConfigRead = &cobra.Command{}
+	cmdCron.AddCommand(cmdConfigRead)
+	cmdConfigRead.Example = PrintExamples(cmdConfigRead, "")
+
+	// ******************************************************************************** //
+	var cmdCronAdd = &cobra.Command{
+		Use:                   "add",
+		Aliases:               []string{""},
+		Short:                 fmt.Sprintf("Add scheduled a command."),
+		Long:                  fmt.Sprintf("Add scheduled a command."),
+		DisableFlagParsing:    false,
+		DisableFlagsInUseLine: false,
+		PreRunE:               Cmd.ProcessArgs,
+		Run:                   cmdCronAddFunc,
+		Args:                  cobra.MinimumNArgs(1),
+	}
+	cmdCron.AddCommand(cmdCronAdd)
+	cmdCronAdd.Example = PrintExamples(cmdCronAdd, "add")
+
+	// ******************************************************************************** //
+	var cmdCronRemove = &cobra.Command{
+		Use:                   "del",
+		Aliases:               []string{"remove"},
+		Short:                 fmt.Sprintf("Remove a scheduled command."),
+		Long:                  fmt.Sprintf("Remove a scheduled command."),
+		DisableFlagParsing:    false,
+		DisableFlagsInUseLine: false,
+		PreRunE:               Cmd.ProcessArgs,
+		Run:                   cmdCronRemoveFunc,
+		Args:                  cobra.MinimumNArgs(1),
+	}
+	cmdCron.AddCommand(cmdCronRemove)
+	cmdCronRemove.Example = PrintExamples(cmdCronRemove, "del")
+
+	// ******************************************************************************** //
+	var cmdCronList = &cobra.Command{
+		Use:                   "list",
+		Aliases:               []string{""},
+		Short:                 fmt.Sprintf("List scheduled commands."),
+		Long:                  fmt.Sprintf("List scheduled commands."),
+		DisableFlagParsing:    false,
+		DisableFlagsInUseLine: false,
+		PreRunE:               Cmd.ProcessArgs,
+		Run:                   cmdCronListFunc,
+		Args:                  cobra.MinimumNArgs(1),
+	}
+	cmdCron.AddCommand(cmdCronList)
+	cmdCronList.Example = PrintExamples(cmdCronList, "list")
+
+	return cmdCron
 }
-//goland:noinspection GoUnusedParameter
+
 func cmdCronFunc(cmd *cobra.Command, args []string) {
 	for range Only.Once {
 		if len(args) == 0 {
@@ -40,22 +112,7 @@ func cmdCronFunc(cmd *cobra.Command, args []string) {
 	}
 }
 
-
-// ******************************************************************************** //
-var cmdCronRun = &cobra.Command{
-	Use:                   "run <minute> <hour> <month day> <month> <week day>  <command ...>",
-	//Aliases:               []string{},
-	Short:                 fmt.Sprintf("Run scheduled a command."),
-	Long:                  fmt.Sprintf("Run scheduled a command."),
-	Example:               PrintExamples("cron run","00 18 . . . sync default", "42 02 04 . . list all", "./1 . . . . list all"),
-	DisableFlagParsing:    false,
-	DisableFlagsInUseLine: false,
-	PreRunE:               Cmd.ProcessArgs,
-	Run:                   cmdCronRunFunc,
-	Args:                  cobra.MinimumNArgs(6),
-}
-//goland:noinspection GoUnusedParameter
-func cmdCronRunFunc(cmd *cobra.Command, args []string) {
+func cmdCronRunFunc(_ *cobra.Command, args []string) {
 	for range Only.Once {
 		// */1 * * * * /dir/command args args
 		cronString := strings.Join(args[0:5], " ")
@@ -81,120 +138,75 @@ func cmdCronRunFunc(cmd *cobra.Command, args []string) {
 	}
 }
 
-
-// ******************************************************************************** //
-var cmdCronAdd = &cobra.Command{
-	Use:                   "add",
-	//Aliases:               []string{},
-	Short:                 fmt.Sprintf("Add scheduled a command."),
-	Long:                  fmt.Sprintf("Add scheduled a command."),
-	Example:               PrintExamples("cron", "add "),
-	DisableFlagParsing:    false,
-	DisableFlagsInUseLine: false,
-	PreRunE:               Cmd.ProcessArgs,
-	Run:                   cmdCronAddFunc,
-	//Args:                  cobra.MinimumNArgs(1),
-}
-//goland:noinspection GoUnusedParameter
-func cmdCronAddFunc(cmd *cobra.Command, args []string) {
+func cmdCronAddFunc(_ *cobra.Command, _ []string) {
 	for range Only.Once {
 		fmt.Println("Not yet implemented.")
 
-		//var msg string
-		//switch {
-		//	case args[0] == "":
-		//		fallthrough
-		//	case args[0] == "default":
-		//		//u, _ := user.Current()
-		//		//msg = fmt.Sprintf("Regular sync by %s", u.ApiUsername)
-		//	default:
-		//		msg = args[0]
-		//}
+		// var msg string
+		// switch {
+		// 	case args[0] == "":
+		// 		fallthrough
+		// 	case args[0] == "default":
+		// 		//u, _ := user.Current()
+		// 		//msg = fmt.Sprintf("Regular sync by %s", u.ApiUsername)
+		// 	default:
+		// 		msg = args[0]
+		// }
 		//
-		//args = args[1:]
+		// args = args[1:]
 		//
-		////Cmd.Error = Cmd.CronAdd(msg, args...)
-		//if Cmd.Error != nil {
-		//	break
-		//}
+		// //Cmd.Error = Cmd.CronAdd(msg, args...)
+		// if Cmd.Error != nil {
+		// 	break
+		// }
 	}
 }
 
-
-// ******************************************************************************** //
-var cmdCronRemove = &cobra.Command{
-	Use:                   "del",
-	Aliases:               []string{"remove"},
-	Short:                 fmt.Sprintf("Remove a scheduled command."),
-	Long:                  fmt.Sprintf("Remove a scheduled command."),
-	Example:               PrintExamples("cron", "del "),
-	DisableFlagParsing:    false,
-	DisableFlagsInUseLine: false,
-	PreRunE:               Cmd.ProcessArgs,
-	Run:                   cmdCronRemoveFunc,
-	//Args:                  cobra.MinimumNArgs(1),
-}
-//goland:noinspection GoUnusedParameter
-func cmdCronRemoveFunc(cmd *cobra.Command, args []string) {
+func cmdCronRemoveFunc(_ *cobra.Command, _ []string) {
 	for range Only.Once {
 		fmt.Println("Not yet implemented.")
 
-		//var msg string
-		//switch {
-		//	case args[0] == "":
-		//		fallthrough
-		//	case args[0] == "default":
-		//		//u, _ := user.Current()
-		//		//msg = fmt.Sprintf("Regular sync by %s", u.ApiUsername)
-		//	default:
-		//		msg = args[0]
-		//}
+		// var msg string
+		// switch {
+		// 	case args[0] == "":
+		// 		fallthrough
+		// 	case args[0] == "default":
+		// 		//u, _ := user.Current()
+		// 		//msg = fmt.Sprintf("Regular sync by %s", u.ApiUsername)
+		// 	default:
+		// 		msg = args[0]
+		// }
 		//
-		//args = args[1:]
+		// args = args[1:]
 		//
-		////Cmd.Error = Cmd.CronAdd(msg, args...)
-		//if Cmd.Error != nil {
-		//	break
-		//}
+		// //Cmd.Error = Cmd.CronAdd(msg, args...)
+		// if Cmd.Error != nil {
+		// 	break
+		// }
 	}
 }
 
-
-// ******************************************************************************** //
-var cmdCronList = &cobra.Command{
-	Use:                   "list",
-	//Aliases:               []string{},
-	Short:                 fmt.Sprintf("List scheduled commands."),
-	Long:                  fmt.Sprintf("List scheduled commands."),
-	Example:               PrintExamples("cron", "list "),
-	DisableFlagParsing:    false,
-	DisableFlagsInUseLine: false,
-	PreRunE:               Cmd.ProcessArgs,
-	Run:                   cmdCronListFunc,
-	//Args:                  cobra.MinimumNArgs(1),
-}
-//goland:noinspection GoUnusedParameter
-func cmdCronListFunc(cmd *cobra.Command, args []string) {
+func cmdCronListFunc(_ *cobra.Command, _ []string) {
 	for range Only.Once {
 		fmt.Println("Not yet implemented.")
 
-		//var msg string
-		//	switch {
-		//		case args[0] == "":
-		//			fallthrough
-		//		case args[0] == "default":
-		//			//u, _ := user.Current()
-		//			//msg = fmt.Sprintf("Regular sync by %s", u.ApiUsername)
-		//		default:
-		//			msg = args[0]
-		//}
+		// var msg string
+		// 	switch {
+		// 		case args[0] == "":
+		// 			fallthrough
+		// 		case args[0] == "default":
+		// 			//u, _ := user.Current()
+		// 			//msg = fmt.Sprintf("Regular sync by %s", u.ApiUsername)
+		// 		default:
+		// 			msg = args[0]
+		// }
 		//
-		//args = args[1:]
+		// args = args[1:]
 		//
-		//Cmd.Error = Cmd.CronList(msg, args...)
-		//if Cmd.Error != nil {
-		//	break
-		//}
+		// Cmd.Error = Cmd.CronList(msg, args...)
+		// if Cmd.Error != nil {
+		// 	break
+		// }
 	}
 }
 
@@ -210,7 +222,7 @@ func LogPrint(format string, args ...interface{}) {
 func ReExecute() error {
 	for range Only.Once {
 		LogPrint("Running scheduled command '%s'\n", strings.Join(os.Args, " "))
-		//LogPrint("Last run '%s'\n", Cron.Job.LastRun().Format(time.UnixDate))
+		// LogPrint("Last run '%s'\n", Cron.Job.LastRun().Format(time.UnixDate))
 		LogPrint("Next run '%s'\n", Cron.Job.ScheduledTime().Format(time.UnixDate))
 		LogPrint("Run count '%d'\n", Cron.Job.RunCount())
 
@@ -226,10 +238,10 @@ func ReExecute() error {
 
 func ResetArgs(args ...string) {
 	for range Only.Once {
-		//fmt.Printf("oldArgs: %v\n", os.Args)
+		// fmt.Printf("oldArgs: %v\n", os.Args)
 		newArgs := []string{os.Args[0]}
 		newArgs = append(newArgs, args...)
 		os.Args = newArgs
-		//fmt.Printf("newArgs: %v\n", os.Args)
+		// fmt.Printf("newArgs: %v\n", os.Args)
 	}
 }

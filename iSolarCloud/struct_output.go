@@ -6,15 +6,18 @@ const (
 	TypeFile  = iota
 	TypeRaw   = iota
 	TypeHuman = iota
+	TypeGraph = iota
 
 	StringTypeNone  = ""
 	StringTypeJson  = "json"
 	StringTypeFile  = "file"
 	StringTypeRaw   = "raw"
 	StringTypeHuman = "human"
+	StringTypeGraph = "graph"
 )
 
 type OutputType int
+
 
 func (out *OutputType) SetNone() {
 	*out = TypeNone
@@ -30,6 +33,9 @@ func (out *OutputType) SetRaw() {
 }
 func (out *OutputType) SetHuman() {
 	*out = TypeHuman
+}
+func (out *OutputType) SetGraph() {
+	*out = TypeGraph
 }
 
 func (out *OutputType) IsNone() bool {
@@ -62,6 +68,12 @@ func (out *OutputType) IsHuman() bool {
 	}
 	return false
 }
+func (out *OutputType) IsGraph() bool {
+	if *out == TypeGraph {
+		return true
+	}
+	return false
+}
 
 func (out *OutputType) IsStrNone(t string) bool {
 	if t == StringTypeNone {
@@ -89,6 +101,12 @@ func (out *OutputType) IsStrRaw(t string) bool {
 }
 func (out *OutputType) IsStrHuman(t string) bool {
 	if t == StringTypeHuman {
+		return true
+	}
+	return false
+}
+func (out *OutputType) IsStrGraph(t string) bool {
+	if t == StringTypeGraph {
 		return true
 	}
 	return false

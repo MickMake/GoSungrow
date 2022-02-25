@@ -109,52 +109,6 @@ func (e *EndPoint) Login(auth *SunGrowAuth) error {
 	return e.Error
 }
 
-// func (e *EndPoint) RetrieveToken() error {
-// 	for range Only.Once {
-// 		e.IsTokenInvalid()
-// 		if !e.Auth.newToken {
-// 			break
-// 		}
-//
-// 		u := fmt.Sprintf("%s",
-// 			e.GetUrl(),
-// 		)
-// 		p, _ := json.Marshal(e.Request)
-//
-// 		var response *http.Response
-// 		response, e.Error = http.Post(u, "application/json", bytes.NewBuffer(p))
-// 		if e.Error != nil {
-// 			break
-// 		}
-// 		//goland:noinspection GoUnhandledErrorResult
-// 		defer response.Body.Close()
-// 		if response.StatusCode != 200 {
-// 			e.Error = errors.New(fmt.Sprintf("Status Code is %d", response.StatusCode))
-// 			break
-// 		}
-//
-// 		var body []byte
-// 		body, e.Error = ioutil.ReadAll(response.Body)
-// 		if e.Error != nil {
-// 			break
-// 		}
-//
-// 		e.Error = json.Unmarshal(body, &e.Response)
-// 		if e.Error != nil {
-// 			break
-// 		}
-//
-// 		e.Auth.lastLogin = time.Now()
-//
-// 		e.Error = e.saveToken()
-// 		if e.Error != nil {
-// 			break
-// 		}
-// 	}
-//
-// 	return e.Error
-// }
-
 func (e *EndPoint) IsTokenInvalid() bool {
 	for range Only.Once {
 		if e.Token() == "" {
@@ -242,35 +196,6 @@ func (e *EndPoint) readTokenFile() error {
 			e.Error = nil
 			break
 		}
-
-		// if e.Auth.TokenFile == "" {
-		//	e.Auth.TokenFile, e.Error = os.UserHomeDir()
-		//	if e.Error != nil {
-		//		e.Auth.TokenFile = ""
-		//		break
-		//	}
-		//	e.Auth.TokenFile = filepath.Join(e.Auth.TokenFile, ".GoSungrow", DefaultAuthTokenFile)
-		// }
-		//
-		// var f *os.File
-		// f, e.Error = os.Open(e.Auth.TokenFile)
-		// if e.Error != nil {
-		//	if os.IsNotExist(e.Error) {
-		//		e.Error = nil
-		//	}
-		//	break
-		// }
-		//
-		// //goland:noinspection GoUnhandledErrorResult
-		// defer f.Close()
-		//
-		// e.Error = json.NewDecoder(f).Decode(&e.Response.ResultData)
-
-		// e.Error = json.Unmarshal(data, &e.Response.ResultData)
-		// if e.Error != nil {
-		//	e.Auth.TokenFile = ""
-		//	break
-		// }
 	}
 
 	return e.Error
@@ -285,32 +210,6 @@ func (e *EndPoint) saveToken() error {
 		if e.Error != nil {
 			break
 		}
-
-		// if e.Auth.TokenFile == "" {
-		//	e.Auth.TokenFile, e.Error = os.UserHomeDir()
-		//	if e.Error != nil {
-		//		e.Auth.TokenFile = ""
-		//		break
-		//	}
-		//	e.Auth.TokenFile = filepath.Join(e.Auth.TokenFile, ".GoSungrow", DefaultAuthTokenFile)
-		// }
-		//
-		// fmt.Printf("Saving token file to: %s\n", e.Auth.TokenFile)
-		// var f *os.File
-		// f, e.Error = os.OpenFile(e.Auth.TokenFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
-		// if e.Error != nil {
-		//	e.Error = errors.New(fmt.Sprintf("Unable to cache SUNGRO oauth token: %v", e.Error))
-		//	break
-		// }
-		//
-		// //goland:noinspection GoUnhandledErrorResult
-		// defer f.Close()
-		// e.Error = json.NewEncoder(f).Encode(e.Response.ResultData)
-
-		// e.Error = json.Unmarshal(data, &e.Response.ResultData)
-		//
-		// var data []byte
-		// e.Error = e.FileWrite(data, 0600)
 	}
 
 	return e.Error

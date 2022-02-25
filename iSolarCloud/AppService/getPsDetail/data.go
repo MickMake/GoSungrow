@@ -286,8 +286,8 @@ func (e *ResultData) IsValid() error {
 //	return err
 // }
 
-// func (e *ResultData) GetCsv(name string) api.Csv {
-// 	var ret api.Csv
+// func (e *ResultData) GetCsv(name string) api.Table {
+// 	var ret api.Table
 // 	for range Only.Once {
 // 		points := e.GetDataByName(name)
 // 		ret = ret.SetHeader([]string{

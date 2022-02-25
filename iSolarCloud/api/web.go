@@ -77,7 +77,7 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 			break
 		}
 
-		//goland:noinspection GoUnhandledErrorResult
+		//goland:noinspection GoUnhandledErrorResult,GoDeferInLoop
 		defer w.httpResponse.Body.Close()
 		if w.Error != nil {
 			break

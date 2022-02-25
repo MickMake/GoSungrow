@@ -5,7 +5,6 @@ import (
 	"GoSungrow/iSolarCloud/AppService/getPsList"
 	"GoSungrow/iSolarCloud/AppService/queryDeviceList"
 	"GoSungrow/iSolarCloud/AppService/queryMutiPointDataList"
-	"GoSungrow/iSolarCloud/WebAppService/queryUserCurveTemplateData"
 	"GoSungrow/iSolarCloud/api"
 	"errors"
 	"fmt"
@@ -110,33 +109,51 @@ func (sg *SunGrow) GetByStruct(endpoint string, request interface{}, cache time.
 func (sg *SunGrow) GetHighLevel(name string, args ...string) error {
 	for range Only.Once {
 		name = strings.ToLower(name)
-		switch name {
-		case "stats":
+		if name == "stats" {
 			sg.Error = sg.GetCurrentStats()
-		case "template":
-			args = fillArray(2, args)
-			sg.Error = sg.GetTemplateData(args[0], args[1])
-		case "points":
-			args = fillArray(2, args)
-			sg.Error = sg.GetPointData(args[0], []string{})
-		default:
-			sg.Error = errors.New("unknown high-level command")
+			break
 		}
+
+		if name == "template" {
+			args = fillArray(3, args)
+			if args[0] == "" {
+				sg.Error = errors.New("need a date")
+				break
+			}
+			sg.Error = sg.GetTemplateData(args[0], args[1], args[2])
+			break
+		}
+
+		if name == "points" {
+			args = fillArray(2, args)
+			if args[0] == "" {
+				sg.Error = errors.New("need a date")
+				break
+			}
+			points := CreatePoints(args)
+			sg.Error = sg.GetPointData(args[0], points)
+			break
+		}
+
+		sg.Error = errors.New("unknown high-level command")
 	}
 	return sg.Error
 }
 
 func (sg *SunGrow) ListHighLevel() {
-	fmt.Println("stats - GetByJson current inverter stats, (last 5 minutes).")
+	fmt.Println("stats - Get current inverter stats, (last 5 minutes).")
 	fmt.Println("\tdata get stats")
 	fmt.Println("")
 
-	fmt.Println("template [date] [template_id] - GetByJson data from template.")
-	fmt.Println("\tdata get template - GetByJson data using default template 8042 for today.")
-	fmt.Println("\tdata get template 2022 8040 - GetByJson year data for template 8040 for the year 2022.")
-	fmt.Println("\tdata get template 202202 8040 - GetByJson month data for template 8040 for the month 202202.")
-	fmt.Println("\tdata get template 20220202 8040 - GetByJson day data for template 8040 for the day 20220202.")
-	fmt.Println("\tdata get template 2022 - GetByJson year data for default template 8042 for the year 2022.")
+	fmt.Println("template [date] [template_id] - Get data from template.")
+	fmt.Println("\tdata get template - Get data using default template 8042 for today.")
+	fmt.Println("\tdata get template 2022 8040 - Get year data for template 8040 for the year 2022.")
+	fmt.Println("\tdata get template 202202 8040 - Get month data for template 8040 for the month 202202.")
+	fmt.Println("\tdata get template 20220202 8040 - Get day data for template 8040 for the day 20220202.")
+	fmt.Println("\tdata get template 2022 - Get year data for default template 8042 for the year 2022.")
+	fmt.Println("")
+
+	fmt.Println("points <date> <device_id.point_id> ... - Get data from points list.")
 	fmt.Println("")
 }
 
@@ -248,26 +265,6 @@ func (sg *SunGrow) GetCurrentStats() error {
 			}
 		}
 
-		// ep = sg.GetByJson("AppService.getPsDetail", fmt.Sprintf(`{"ps_id":"%d"}`, psId))
-		// if ep.IsError() {
-		// 	break
-		// }
-		//
-		// if sg.OutputType.IsHuman() {
-		// 	_queryDeviceList := getPsDetail.AssertResultData(ep)
-		// 	points := _queryDeviceList.GetDataByName("SH10RT")
-		// 	for _, p := range points {
-		// 		t := api.NewDateTime(p.TimeStamp)
-		// 		fmt.Printf("\"%v\",\"%s\",\"%s\",\"%s\",\"%s\"\n",
-		// 			t,
-		// 			p.PointGroupName,
-		// 			p.PointName,
-		// 			p.Value,
-		// 			p.Unit,
-		// 		)
-		// 	}
-		// }
-
 		ep = sg.GetByJson("AppService.queryDeviceList", fmt.Sprintf(`{"ps_id":"%d"}`, psId))
 		if ep.IsError() {
 			break
@@ -284,49 +281,25 @@ func (sg *SunGrow) GetCurrentStats() error {
 	return sg.Error
 }
 
-func (sg *SunGrow) GetPointData(date string, points []string) error {
+func (sg *SunGrow) GetPointData(date string, pointNames TemplatePoints) error {
 	for range Only.Once {
-		if len(points) == 0 {
+		if len(pointNames) == 0 {
 			sg.Error = errors.New("no points defined")
 			break
 		}
-		template := "8042"
 
-		ep := sg.GetByStruct(
-			"WebAppService.queryUserCurveTemplateData",
-			queryUserCurveTemplateData.RequestData{TemplateID: template},
-			DefaultCacheTimeout,
-		)
-
-		data := queryUserCurveTemplateData.AssertResultData(ep)
-		var pskeys string
-		var points string
-		pointNames := make(map[string]string)
-		pointUnits := make(map[string]string)
-		for dn, dr := range data.PointsData.Devices {
-			for pn, pr := range dr.Points {
-				pointNames["p"+pr.PointID] = pr.PointName
-				pointUnits["p"+pr.PointID] = pr.Unit
-				pskeys += "," + dn
-				points += "," + pn
-			}
-		}
-		pskeys = strings.TrimPrefix(pskeys, ",")
-		points = strings.TrimPrefix(points, ",")
-
-		//
 		if date == "" {
 			date = api.NewDateTime("").String()
 		}
 		when := api.NewDateTime(date)
 		psId := sg.GetPsId()
 
-		ep2 := sg.GetByStruct(
+		ep := sg.GetByStruct(
 			"AppService.queryMutiPointDataList",
-			queryMutiPointDataList.RequestData{
+			queryMutiPointDataList.RequestData {
 				PsID:           psId,
-				PsKey:          pskeys,
-				Points:         points,
+				PsKey:          pointNames.PrintKeys(),
+				Points:         pointNames.PrintPoints(),
 				MinuteInterval: "5",
 				StartTimeStamp: when.GetDayStartTimestamp(),
 				EndTimeStamp:   when.GetDayEndTimestamp(),
@@ -344,40 +317,42 @@ func (sg *SunGrow) GetPointData(date string, points []string) error {
 			"Units",
 		})
 
-		data2 := queryMutiPointDataList.AssertResultData(ep2)
-		for deviceName, deviceRef := range data2.Devices {
+		data := queryMutiPointDataList.AssertResultData(ep)
+
+		for deviceName, deviceRef := range data.Devices {
 			for pointId, pointRef := range deviceRef.Points {
 				for _, tim := range pointRef.Times {
-					csv = csv.AddRow([]string{
-						tim.Key.String(),
+					gp := pointNames.GetPoint(deviceName, pointId)
+					csv = csv.AddRow([]string {
+						tim.Key.PrintFull(),
 						deviceName,
-						fmt.Sprintf("%s (%s)", pointNames[pointId], pointId),
+						fmt.Sprintf("%s (%s)", gp.Description, pointId),
 						tim.Value,
-						pointUnits[pointId],
+						gp.Unit,
 					})
 				}
 			}
 		}
 
 		switch {
-		case sg.OutputType.IsNone():
+			case sg.OutputType.IsNone():
 
-		case sg.OutputType.IsHuman():
-			csv.Print()
+			case sg.OutputType.IsHuman():
+				csv.Print()
 
-		case sg.OutputType.IsFile():
-			a := queryMutiPointDataList.Assert(ep2)
-			suffix := fmt.Sprintf("%s-%s", when, template)
-			fn := a.GetCsvFilename(suffix)
-			sg.Error = csv.WriteFile(fn, api.DefaultFileMode)
+			case sg.OutputType.IsFile():
+				a := queryMutiPointDataList.Assert(ep)
+				suffix := fmt.Sprintf("%s-%s", when, "data")
+				fn := a.GetCsvFilename(suffix)
+				sg.Error = csv.WriteFile(fn, api.DefaultFileMode)
 
-		case sg.OutputType.IsRaw():
-			fmt.Println(ep2.GetData(true))
+			case sg.OutputType.IsRaw():
+				fmt.Println(ep.GetData(true))
 
-		case sg.OutputType.IsJson():
-			fmt.Println(ep2.GetData(false))
+			case sg.OutputType.IsJson():
+				fmt.Println(ep.GetData(false))
 
-		default:
+			default:
 		}
 	}
 
@@ -419,3 +394,33 @@ func fillArray(count int, args []string) []string {
 	}
 	return ret
 }
+
+// func (sg *SunGrow) Graph(csv api.Table, timeCol int, ) {
+// 	foo := New("Testing 1. 2. 3.")
+//
+// 	err := foo.SetFilename("HelloWorld.png")
+// 	fmt.Println(err)
+//
+// 	now := time.Now()
+// 	var times []time.Time
+// 	for i := 0; i < 16; i++ {
+// 		now = now.Add(time.Minute * 5)
+// 		times = append(times, now)
+// 	}
+// 	err = foo.SetX("Date", times...)
+// 	fmt.Println(err)
+//
+// 	var values []float64
+// 	for i := 0; i < 16; i++ {
+// 		then := (float64(i) * Randy(-200, 500)) +  Randy(-5000, 10000)
+// 		values = append(values, then)
+// 	}
+//
+// 	err = foo.SetY("Power", values...)
+// 	fmt.Println(err)
+//
+// 	foo.SetRangeY(-6000, 12000)
+//
+// 	err = foo.Generate()
+// 	fmt.Println(err)
+// }
