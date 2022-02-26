@@ -2,6 +2,7 @@ package api
 
 import (
 	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api/output"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -12,12 +13,13 @@ type EndPointName string
 type EndPointStruct struct {
 	ApiRoot Web `json:"-"`
 
-	Area     AreaName     `json:"area"`
-	Name     EndPointName `json:"name"`
-	Url      EndPointUrl  `json:"url"`
-	Request  interface{}  `json:"-"`
-	Response interface{}  `json:"-"`
-	Error    error        `json:"-"`
+	Area           AreaName     `json:"area"`
+	Name           EndPointName `json:"name"`
+	Url            EndPointUrl  `json:"url"`
+	FileNamePrefix string
+	Request        interface{} `json:"-"`
+	Response       interface{} `json:"-"`
+	Error          error       `json:"-"`
 }
 
 func (ep *EndPointStruct) GetArea() AreaName {
@@ -32,7 +34,7 @@ func (ep *EndPointStruct) GetUrl() EndPointUrl {
 	return ep.Url
 }
 
-func (ep *EndPointStruct) Call() Json {
+func (ep *EndPointStruct) Call() output.Json {
 	panic("implement me")
 }
 
@@ -47,11 +49,11 @@ func (ep *EndPointStruct) SetRequest(ref interface{}) error {
 	return ep.Error
 }
 
-func (ep *EndPointStruct) GetRequest() Json {
+func (ep *EndPointStruct) GetRequest() output.Json {
 	panic("implement me")
 }
 
-func (ep *EndPointStruct) GetResponse() Json {
+func (ep *EndPointStruct) GetResponse() output.Json {
 	panic("implement me")
 }
 

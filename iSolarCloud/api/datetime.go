@@ -62,12 +62,12 @@ func (dt DateTime) String() string {
 	// return dt.Time.Format(DtLayout)
 	var ret string
 	switch dt.DateType {
-	case "3":
-		ret = dt.Time.Format(DtLayoutYear)
-	case "2":
-		ret = dt.Time.Format(DtLayoutMonth)
-	case "1":
-		ret = dt.Time.Format(DtLayoutDay)
+		case "3":
+			ret = dt.Time.Format(DtLayoutYear)
+		case "2":
+			ret = dt.Time.Format(DtLayoutMonth)
+		case "1":
+			ret = dt.Time.Format(DtLayoutDay)
 	}
 	return ret
 }
@@ -79,20 +79,20 @@ func (dt DateTime) PrintFull() string {
 func (dt DateTime) getDateType() string {
 	var ret string
 	switch len(dt.date) {
-	case len(DtLayout):
-		ret = "1"
-	case len(DtLayoutYear):
-		ret = "3"
-	case len(DtLayoutMonth):
-		ret = "2"
-	case len(DtLayoutDay):
-		ret = "1"
-	case len(DtLayoutHour):
-		ret = "1"
-	case len(DtLayoutMinute):
-		ret = "1"
-	case len(DtLayoutSecond):
-		ret = "1"
+		case len(DtLayout):
+			ret = "1"
+		case len(DtLayoutYear):
+			ret = "3"
+		case len(DtLayoutMonth):
+			ret = "2"
+		case len(DtLayoutDay):
+			ret = "1"
+		case len(DtLayoutHour):
+			ret = "1"
+		case len(DtLayoutMinute):
+			ret = "1"
+		case len(DtLayoutSecond):
+			ret = "1"
 	}
 	return ret
 }

@@ -10,6 +10,7 @@ import (
 	"GoSungrow/iSolarCloud/WebAppService"
 	"GoSungrow/iSolarCloud/WebIscmAppService"
 	"GoSungrow/iSolarCloud/api"
+	"GoSungrow/iSolarCloud/api/output"
 	"errors"
 	"strings"
 )
@@ -20,7 +21,8 @@ type SunGrow struct {
 	Areas   api.Areas
 	Error   error
 
-	OutputType OutputType
+	OutputType output.OutputType
+	// EndPoint api.EndPoint
 
 	// OutputString string
 	// OutputArray  [][]interface{}
@@ -103,19 +105,19 @@ func (sg *SunGrow) SplitEndPoint(ae string) (string, string) {
 	for range Only.Once {
 		s := strings.Split(ae, ".")
 		switch len(s) {
-		case 0:
-			sg.Error = errors.New("empty endpoint")
+			case 0:
+				sg.Error = errors.New("empty endpoint")
 
-		case 1:
-			area = "AppService"
-			endpoint = s[0]
+			case 1:
+				area = "AppService"
+				endpoint = s[0]
 
-		case 2:
-			area = s[0]
-			endpoint = s[1]
+			case 2:
+				area = s[0]
+				endpoint = s[1]
 
-		default:
-			sg.Error = errors.New("too many delimeters defined, (only one '.' allowed)")
+			default:
+				sg.Error = errors.New("too many delimeters defined, (only one '.' allowed)")
 		}
 	}
 

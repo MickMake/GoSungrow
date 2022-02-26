@@ -8,6 +8,7 @@ import (
 	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/output"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -54,6 +55,7 @@ func Init(apiRoot api.Web) EndPoint {
 
 
 // ******************************************************************************** //
+
 // Methods not scoped by api.EndPoint interface type
 
 // Init - If the endpoint needs to be re-initialized.
@@ -86,6 +88,7 @@ func AssertResultData(e api.EndPoint) ResultData {
 
 
 // ******************************************************************************** //
+
 // Methods defined by api.EndPoint interface type
 
 // Help - Return help information on the JSON structure used to populate RequestData.
@@ -121,12 +124,12 @@ func (e EndPoint) Call() api.EndPoint {
 	return e.ApiRoot.Get(e)
 }
 
-// GetData - Get the JSON representation of ResultData, either as condensed or "pretty".
-func (e EndPoint) GetData(raw bool) api.Json {
+// GetJsonData - Get the JSON representation of ResultData, either as condensed or "pretty".
+func (e EndPoint) GetJsonData(raw bool) output.Json {
 	if raw {
-		return api.Json(e.ApiRoot.Body)
+		return output.Json(e.ApiRoot.Body)
 	} else {
-		return api.GetAsPrettyJson(e.Response.ResultData)
+		return output.GetAsPrettyJson(e.Response.ResultData)
 	}
 }
 
@@ -152,14 +155,19 @@ func (e EndPoint) IsError() bool {
 // ReadDataFile - Read a JSON file and populate the ResultData structure.
 // (File names will default to AREA-ENDPOINT.json )
 func (e EndPoint) ReadDataFile() error {
-	return e.FileRead("", &e.Response.ResultData)
+	// return e.FileRead("", &e.Response.ResultData)
+	return e.ApiReadDataFile(&e.Response.ResultData)
 }
 
 // WriteDataFile - Write to a file, the contents of ResultData as JSON.
 // (File names will default to AREA-ENDPOINT.json )
 func (e EndPoint) WriteDataFile() error {
-	return e.FileWrite("", e.Response.ResultData, api.DefaultFileMode)
+	// return e.FileWrite("", e.Response.ResultData, output.DefaultFileMode)
+	return e.ApiWriteDataFile(e.Response.ResultData)
 }
+
+
+// ********************************************************************************
 
 // SetRequest - Save an interface reference as either api.RequestCommon or RequestData.
 func (e EndPoint) SetRequest(ref interface{}) api.EndPoint {
@@ -186,7 +194,7 @@ func (e EndPoint) SetRequest(ref interface{}) api.EndPoint {
 }
 
 // SetRequestByJson - Save RequestData from a JSON string.
-func (e EndPoint) SetRequestByJson(j api.Json) api.EndPoint {
+func (e EndPoint) SetRequestByJson(j output.Json) api.EndPoint {
 	for range Only.Once {
 		e.Error = json.Unmarshal([]byte(j), &e.Request.RequestData)
 		if e.Error != nil {
@@ -206,8 +214,8 @@ func (e EndPoint) RequestRef() interface{} {
 }
 
 // GetRequestJson - Return the Request structure as a JSON string.
-func (e EndPoint) GetRequestJson() api.Json {
-	return api.GetAsJson(e.Request.RequestData)
+func (e EndPoint) GetRequestJson() output.Json {
+	return output.GetAsJson(e.Request.RequestData)
 }
 
 // // GetFingerprint - Used to formulate cache filenames.
@@ -232,6 +240,9 @@ func (e EndPoint) IsRequestValid() error {
 	return e.Error
 }
 
+
+// ********************************************************************************
+
 // SetResponse - Save a JSON string to the Response structure.
 // (Used by the web call method.)
 func (e EndPoint) SetResponse(ref []byte) api.EndPoint {
@@ -245,8 +256,8 @@ func (e EndPoint) SetResponse(ref []byte) api.EndPoint {
 }
 
 // GetResponseJson - Return the Response structure as a JSON string.
-func (e EndPoint) GetResponseJson() api.Json {
-	return api.GetAsPrettyJson(e.Response)
+func (e EndPoint) GetResponseJson() output.Json {
+	return output.GetAsPrettyJson(e.Response)
 }
 
 // ResponseRef - Return the locally scoped Response structure.
@@ -271,18 +282,21 @@ func (e EndPoint) IsResponseValid() error {
 
 // String - Stringer method for this EndPoint.
 func (e EndPoint) String() string {
-	return api.GetEndPointString(e)
+	return output.GetEndPointString(e)
 }
 
 // RequestString - Return the Request structure as a human-readable string.
 func (e EndPoint) RequestString() string {
-	return api.GetRequestString(e.Request)
+	return output.GetRequestString(e.Request)
 }
 
 // ResponseString - Return the Response structure as a human-readable string.
 func (e EndPoint) ResponseString() string {
-	return api.GetRequestString(e.Response)
+	return output.GetRequestString(e.Response)
 }
+
+
+// ********************************************************************************
 
 // MarshalJSON - Marshall the EndPoint.
 func (e EndPoint) MarshalJSON() ([]byte, error) {
@@ -305,20 +319,23 @@ func (e EndPoint) MarshalJSON() ([]byte, error) {
 	// })
 }
 
+
+// ********************************************************************************
+
 // CheckCacheFile - Check if a cache file exists for this EndPoint.
-func (e EndPoint) CheckCacheFile() bool {
-	return e.IsCacheFileOk(e.Request.RequestData)
+func (e EndPoint) CheckCache() bool {
+	return e.ApiCheckCache(e.Request.RequestData)
 }
 
 // ReadCacheFile - Read a cache file and return it as an EndPoint structure.
-func (e EndPoint) ReadCacheFile() api.EndPoint {
-	e.Error = e.CacheRead(e.Request.RequestData, &e)
+func (e EndPoint) ReadCache() api.EndPoint {
+	e.Error = e.ApiReadCache(e.Request.RequestData, &e)
 	return e
 }
 
 // WriteCacheFile - Write this EndPoint structure out to a cache file.
-func (e EndPoint) WriteCacheFile() error {
-	return e.CacheWrite(e.Request.RequestData, e)
+func (e EndPoint) WriteCache() error {
+	return e.ApiWriteCache(e.Request.RequestData, e)
 }
 
 // SetCacheTimeout - Set the cache timeout for this EndPoint. (Defaults to 1 hour.)

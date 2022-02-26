@@ -1,14 +1,113 @@
-package graph
+package output
 
 import (
 	"GoSungrow/Only"
+	"encoding/json"
 	"errors"
 	"github.com/wcharczuk/go-chart/v2"
-	"math/rand"
+	"go.pennock.tech/tabular"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
+
+
+type GraphRequest struct {
+	Title        string  `json:"title"`
+	TimeColumn   int     `json:"time_column"`
+	ValueColumn  int     `json:"value_column"`
+	SearchColumn int     `json:"search_column"`
+	SearchString string  `json:"search_string"`
+	FileName     string  `json:"file_name"`
+	MaxLeftAxis  float64 `json:"max_left_axis"`
+	MinLeftAxis  float64 `json:"min_left_axis"`
+	Error        error   `json:"-"`
+}
+
+func JsonToGraphRequest(j string) GraphRequest {
+	var ret GraphRequest
+	for range Only.Once {
+		ret.Error = json.Unmarshal([]byte(j), &ret)
+		if ret.Error != nil {
+			break
+		}
+	}
+	// {"title":"","time_column":"","value_column":"","search_column":"","search_string":"","file_name":""}
+	return ret
+}
+
+func (t *Table) WriteGraphFile(req GraphRequest) error {
+	// func (t Table) Graph(name string, timeColumn int, valueColumn int, searchString string, searchColumn int, fileName string) error {
+	for range Only.Once {
+		foo := New(req.Title)
+
+		t.Error = foo.SetFilename(t.filePrefix + ".png")
+		if t.Error != nil {
+			break
+		}
+
+		var times []time.Time
+		var values []float64
+		for row := 0; row < t.table.NRows(); row++ {
+			// Get the search column
+			var cell *tabular.Cell
+			cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: req.SearchColumn})
+			if t.Error != nil {
+				continue
+			}
+			if !strings.Contains(cell.String(), req.SearchString) {
+				continue
+			}
+
+
+			cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: req.TimeColumn})
+			if t.Error != nil {
+				continue
+			}
+			var tim time.Time
+			tim, t.Error = time.Parse(DateTimeSearchLayout, cell.String())
+			if t.Error != nil {
+				continue
+			}
+			times = append(times, tim)
+
+
+			cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: req.ValueColumn})
+			if t.Error != nil {
+				continue
+			}
+			var val float64
+			val, t.Error = strconv.ParseFloat(cell.String(), 64)
+			if t.Error != nil {
+				val = 0
+			}
+			values = append(values, val)
+		}
+
+		t.Error = foo.SetX("Date", times...)
+		if t.Error != nil {
+			break
+		}
+
+		t.Error = foo.SetY("kWh", values...)
+		if t.Error != nil {
+			break
+		}
+
+		foo.SetRangeY(req.MinLeftAxis, req.MaxLeftAxis)
+		if t.Error != nil {
+			break
+		}
+
+		t.Error = foo.Generate()
+		if t.Error != nil {
+			break
+		}
+	}
+
+	return t.Error
+}
 
 
 type Chart struct {
@@ -20,40 +119,41 @@ type Chart struct {
 }
 
 
-func Randy(min int, max int) float64 {
-	r := rand.Intn(max - min) + min
-	return float64(r)
-}
+// func Randy(min int, max int) float64 {
+// 	r := rand.Intn(max - min) + min
+// 	return float64(r)
+// }
+//
+// func Test() {
+// 	foo := New("Testing 1. 2. 3.")
+//
+// 	err := foo.SetFilename("HelloWorld.png")
+// 	fmt.Println(err)
+//
+// 	now := time.Now()
+// 	var times []time.Time
+// 	for i := 0; i < 16; i++ {
+// 		now = now.Add(time.Minute * 5)
+// 		times = append(times, now)
+// 	}
+// 	err = foo.SetX("Date", times...)
+// 	fmt.Println(err)
+//
+// 	var values []float64
+// 	for i := 0; i < 16; i++ {
+// 		then := (float64(i) * Randy(-200, 500)) +  Randy(-5000, 10000)
+// 		values = append(values, then)
+// 	}
+//
+// 	err = foo.SetY("Power", values...)
+// 	fmt.Println(err)
+//
+// 	foo.SetRangeY(-6000, 12000)
+//
+// 	err = foo.Generate()
+// 	fmt.Println(err)
+// }
 
-func Test() {
-	// foo := New("Testing 1. 2. 3.")
-	//
-	// err := foo.SetFilename("HelloWorld.png")
-	// fmt.Println(err)
-	//
-	// now := time.Now()
-	// var times []time.Time
-	// for i := 0; i < 16; i++ {
-	// 	now = now.Add(time.Minute * 5)
-	// 	times = append(times, now)
-	// }
-	// err = foo.SetX("Date", times...)
-	// fmt.Println(err)
-	//
-	// var values []float64
-	// for i := 0; i < 16; i++ {
-	// 	then := (float64(i) * Randy(-200, 500)) +  Randy(-5000, 10000)
-	// 	values = append(values, then)
-	// }
-	//
-	// err = foo.SetY("Power", values...)
-	// fmt.Println(err)
-	//
-	// foo.SetRangeY(-6000, 12000)
-	//
-	// err = foo.Generate()
-	// fmt.Println(err)
-}
 
 func New(title string) *Chart {
 	var c Chart

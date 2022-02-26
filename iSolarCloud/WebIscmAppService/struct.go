@@ -187,6 +187,7 @@ import (
 	"GoSungrow/iSolarCloud/WebIscmAppService/workFlowIsStart"
 	"GoSungrow/iSolarCloud/WebIscmAppService/workFlowTransferStep"
 	"GoSungrow/iSolarCloud/api"
+	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
 )
 
@@ -430,7 +431,7 @@ func (a Area) GetEndPoints() api.TypeEndPoints {
 	return a.EndPoints
 }
 
-func (a Area) Call(name api.EndPointName) api.Json {
+func (a Area) Call(name api.EndPointName) output.Json {
 	panic("implement me")
 }
 
@@ -438,15 +439,15 @@ func (a Area) SetRequest(name api.EndPointName, ref interface{}) error {
 	panic("implement me")
 }
 
-func (a Area) GetRequest(name api.EndPointName) api.Json {
+func (a Area) GetRequest(name api.EndPointName) output.Json {
 	panic("implement me")
 }
 
-func (a Area) GetResponse(name api.EndPointName) api.Json {
+func (a Area) GetResponse(name api.EndPointName) output.Json {
 	panic("implement me")
 }
 
-func (a Area) GetData(name api.EndPointName) api.Json {
+func (a Area) GetData(name api.EndPointName) output.Json {
 	panic("implement me")
 }
 

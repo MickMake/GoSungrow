@@ -4,6 +4,7 @@ import (
 	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/output"
 	"encoding/json"
 	"fmt"
 	"sort"
@@ -111,25 +112,6 @@ func (e *ResultData) UnmarshalJSON(data []byte) error {
 	return err
 }
 
-// type DecodeResultData ResultData
-//
-// func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-// }
-
 func (e *ResultData) String() string {
 	var ret string
 
@@ -177,4 +159,56 @@ func (e *ResultData) String() string {
 	// }
 
 	return ret
+}
+
+func (e *EndPoint) GetDataTable(points api.TemplatePoints) output.Table {
+	var table output.Table
+
+	for range Only.Once {
+		table = output.NewTable()
+		e.Error = table.SetTitle("")
+		if e.Error != nil {
+			break
+		}
+
+		fn := e.SetFilenamePrefix("%s-", api.NewDateTime(e.Request.StartTimeStamp).String())
+		e.Error = table.SetFilePrefix(fn)
+		if e.Error != nil {
+			break
+		}
+
+		e.Error = table.SetHeader(
+			"Date/Time",
+			"PointId Name",
+			"Point Name",
+			"Value",
+			"Units",
+		)
+		if e.Error != nil {
+			break
+		}
+
+		t := api.NewDateTime(e.Request.RequestData.StartTimeStamp)
+		e.SetFilenamePrefix(t.String())
+
+		for deviceName, deviceRef := range e.Response.ResultData.Devices {
+			for pointId, pointRef := range deviceRef.Points {
+				for _, tim := range pointRef.Times {
+					gp := points.GetPoint(deviceName, pointId)
+					_ = table.AddRow(
+						tim.Key.PrintFull(),
+						fmt.Sprintf("%s.%s", deviceName, pointId),
+						gp.Description,
+						tim.Value,
+						gp.Unit,
+					)
+					if table.Error != nil {
+						continue
+					}
+				}
+			}
+		}
+	}
+
+	return table
 }

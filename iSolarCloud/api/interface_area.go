@@ -1,15 +1,16 @@
 package api
 
+import "GoSungrow/iSolarCloud/api/output"
 
 type Area interface {
 	Init(*Web) AreaStruct
 	GetAreaName() AreaName
 	GetEndPoints() TypeEndPoints
-	Call(name EndPointName) Json
+	Call(name EndPointName) output.Json
 	SetRequest(name EndPointName, ref interface{}) error
-	GetRequest(name EndPointName) Json
-	GetResponse(name EndPointName) Json
-	GetData(name EndPointName) Json
+	GetRequest(name EndPointName) output.Json
+	GetResponse(name EndPointName) output.Json
+	GetData(name EndPointName) output.Json
 	IsValid(name EndPointName) error
 	GetError(name EndPointName) error
 }

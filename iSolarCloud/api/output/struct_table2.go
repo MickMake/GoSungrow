@@ -1,4 +1,4 @@
-package api
+package output
 
 
 // type Table struct {

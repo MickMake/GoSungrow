@@ -1,6 +1,9 @@
 package api
 
-import "time"
+import (
+	"GoSungrow/iSolarCloud/api/output"
+	"time"
+)
 
 type EndPoint interface {
 	GetArea() AreaName
@@ -10,31 +13,33 @@ type EndPoint interface {
 	Help() string
 
 	Call() EndPoint
-	GetData(bool) Json
-	String() string
 	SetError(string, ...interface{}) EndPoint
 	GetError() error
 	IsError() bool
 	MarshalJSON() ([]byte, error)
 	ReadDataFile() error
 	WriteDataFile() error
+	String() string
+	GetJsonData(bool) output.Json
+	// GetTableData(filter interface{}) Table
+	// GetData(bool) Json
 
 	SetRequest(ref interface{}) EndPoint // EndPointStruct
-	SetRequestByJson(j Json) EndPoint
+	SetRequestByJson(j output.Json) EndPoint
 	RequestRef() interface{}
-	GetRequestJson() Json
+	GetRequestJson() output.Json
 	IsRequestValid() error
 	RequestString() string
 
 	SetResponse([]byte) EndPoint // EndPointStruct
 	ResponseRef() interface{}
-	GetResponseJson() Json
+	GetResponseJson() output.Json
 	IsResponseValid() error
 	ResponseString() string
 
-	CheckCacheFile() bool
-	ReadCacheFile() EndPoint
-	WriteCacheFile() error
+	CheckCache() bool
+	ReadCache() EndPoint
+	WriteCache() error
 	SetCacheTimeout(duration time.Duration) EndPoint
 	GetCacheTimeout() time.Duration
 }

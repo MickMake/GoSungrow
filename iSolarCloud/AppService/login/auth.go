@@ -3,6 +3,7 @@ package login
 import (
 	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api"
+	"GoSungrow/iSolarCloud/api/output"
 	"errors"
 	"fmt"
 	"time"
@@ -174,7 +175,8 @@ func (e *EndPoint) readTokenFile() error {
 	for range Only.Once {
 		e.Auth.TokenFile = e.GetFilePath()
 
-		e.Error = e.FileRead(e.Auth.TokenFile, &e.Response.ResultData)
+		// e.Error = e.ApiReadDataFile(e.Auth.TokenFile, &e.Response.ResultData)
+		e.Error = output.FileRead(e.Auth.TokenFile, &e.Response.ResultData)
 		if e.Error != nil {
 			break
 		}
@@ -206,7 +208,8 @@ func (e *EndPoint) saveToken() error {
 	for range Only.Once {
 		e.Auth.TokenFile = e.GetFilePath()
 
-		e.Error = e.FileWrite(e.Auth.TokenFile, e.Response.ResultData, 0644)
+		e.Error = output.FileWrite(e.Auth.TokenFile, e.Response.ResultData, output.DefaultFileMode)
+		// e.Error = e.ApiWriteDataFile(e.Auth.TokenFile, e.Response.ResultData, 0644)
 		if e.Error != nil {
 			break
 		}

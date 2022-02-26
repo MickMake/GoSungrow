@@ -3,7 +3,7 @@ package api
 import (
 	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"encoding/json"
+	"GoSungrow/iSolarCloud/api/output"
 	"errors"
 	"fmt"
 	"os"
@@ -11,21 +11,37 @@ import (
 	"time"
 )
 
-const DefaultFileMode = 0644
 
-
-func (ep *EndPointStruct) GetCsvFilename(postfix string) string {
-	if postfix == "" {
-		return fmt.Sprintf("%s_%s.csv", ep.Area, ep.Name)
+func (ep *EndPointStruct) SetFilenamePrefix(format string, args ...interface{}) string {
+	if format != "" {
+		ep.FileNamePrefix = fmt.Sprintf(format, args...)
+		// ep.FileNamePrefix = fmt.Sprintf("%s_%s-%s", ep.Area, ep.Name, ep.FileNamePrefix)
+		ep.FileNamePrefix = string(ep.Area) + "_" + string(ep.Name) + "-" + ep.FileNamePrefix
+	} else {
+		ep.FileNamePrefix = string(ep.Area) + "_" + string(ep.Name)
 	}
-	return fmt.Sprintf("%s_%s-%s.csv", ep.Area, ep.Name, postfix)
+	return ep.FileNamePrefix
 }
 
-func (ep *EndPointStruct) GetFilename(postfix string) string {
-	if postfix == "" {
-		return fmt.Sprintf("%s_%s.json", ep.Area, ep.Name)
+func (ep *EndPointStruct) GetCsvFilename() string {
+	if ep.FileNamePrefix == "" {
+		ep.SetFilenamePrefix("")
 	}
-	return fmt.Sprintf("%s_%s-%s.json", ep.Area, ep.Name, postfix)
+	return ep.FileNamePrefix + ".csv"
+}
+
+func (ep *EndPointStruct) GetJsonFilename() string {
+	if ep.FileNamePrefix == "" {
+		ep.SetFilenamePrefix("")
+	}
+	return ep.FileNamePrefix + ".json"
+}
+
+func (ep *EndPointStruct) GetImageFilename() string {
+	if ep.FileNamePrefix == "" {
+		ep.SetFilenamePrefix("")
+	}
+	return ep.FileNamePrefix + ".png"
 }
 
 func (ep *EndPointStruct) GetFilePath() string {
@@ -38,7 +54,7 @@ func (ep *EndPointStruct) GetFilePath() string {
 			break
 		}
 
-		ret = filepath.Join(hd, ".GoSungrow", ep.GetFilename(""))
+		ret = filepath.Join(hd, ".GoSungrow", ep.GetJsonFilename())
 	}
 
 	return ret
@@ -51,7 +67,7 @@ func (ep *EndPointStruct) FileExists(fn string) bool {
 
 	for range Only.Once {
 		if fn == "" {
-			fn = ep.GetFilename("")
+			fn = ep.GetJsonFilename()
 			if ep.Error != nil {
 				break
 			}
@@ -77,80 +93,52 @@ func (ep *EndPointStruct) FileExists(fn string) bool {
 }
 
 // FileRead Retrieves data from a local file.
-func (ep *EndPointStruct) FileRead(fn string, ref interface{}) error {
-	// var ret []byte
+func (ep *EndPointStruct) ApiReadDataFile(ref interface{}) error {
+	return output.FileRead(ep.GetJsonFilename(), ref)
 
-	for range Only.Once {
-		if fn == "" {
-			fn = ep.GetFilename("")
-			if ep.Error != nil {
-				break
-			}
-		}
-
-		var f *os.File
-		f, ep.Error = os.Open(fn)
-		if ep.Error != nil {
-			if os.IsNotExist(ep.Error) {
-				ep.Error = nil
-			}
-			break
-		}
-
-		//goland:noinspection GoUnhandledErrorResult,GoDeferInLoop
-		defer f.Close()
-
-		ep.Error = json.NewDecoder(f).Decode(&ref)
-	}
-
-	// for range Only.Once {
-	//	fn := ep.GetFilename()
-	//	if ep.Error != nil {
-	//		break
-	//	}
+	// // var ret []byte
 	//
-	//	ret, ep.Error = os.FileRead(fn)
-	//	if ep.Error != nil {
-	//		break
-	//	}
+	// for range Only.Once {
+	// 	if fn == "" {
+	// 		fn = ep.GetJsonFilename()
+	// 		if ep.Error != nil {
+	// 			break
+	// 		}
+	// 	}
+	//
+	// 	var f *os.File
+	// 	f, ep.Error = os.Open(fn)
+	// 	if ep.Error != nil {
+	// 		if os.IsNotExist(ep.Error) {
+	// 			ep.Error = nil
+	// 		}
+	// 		break
+	// 	}
+	//
+	// 	//goland:noinspection GoUnhandledErrorResult,GoDeferInLoop
+	// 	defer f.Close()
+	//
+	// 	ep.Error = json.NewDecoder(f).Decode(&ref)
 	// }
-
-	return ep.Error
+	//
+	// // for range Only.Once {
+	// //	fn := ep.GetFilename()
+	// //	if ep.Error != nil {
+	// //		break
+	// //	}
+	// //
+	// //	ret, ep.Error = os.FileRead(fn)
+	// //	if ep.Error != nil {
+	// //		break
+	// //	}
+	// // }
+	//
+	// return ep.Error
 }
 
 // FileWrite Saves data to a file path.
-func (ep *EndPointStruct) FileWrite(fn string, ref interface{}, perm os.FileMode) error {
-	for range Only.Once {
-		if fn == "" {
-			fn = ep.GetFilename("")
-			if ep.Error != nil {
-				break
-			}
-		}
-
-		var f *os.File
-		f, ep.Error = os.OpenFile(fn, os.O_RDWR|os.O_CREATE|os.O_TRUNC, perm)
-		if ep.Error != nil {
-			ep.Error = errors.New(fmt.Sprintf("Unable to write to file %s - %v", fn, ep.Error))
-			break
-		}
-
-		//goland:noinspection GoUnhandledErrorResult,GoDeferInLoop
-		defer f.Close()
-		ep.Error = json.NewEncoder(f).Encode(ref)
-
-		// fn := ep.GetFilename()
-		// if ep.Error != nil {
-		//	break
-		// }
-		//
-		// ep.Error = os.FileWrite(fn, data, perm)
-		// if ep.Error != nil {
-		//	break
-		// }
-	}
-
-	return ep.Error
+func (ep *EndPointStruct) ApiWriteDataFile(ref interface{}) error {
+	return output.FileWrite(ep.GetJsonFilename(), ref, output.DefaultFileMode)
 }
 
 
@@ -164,7 +152,7 @@ func (ep *EndPointStruct) GetCacheFilePath(request interface{}) string {
 }
 
 // IsCacheFileOk Retrieves cache data from a local file.
-func (ep *EndPointStruct) IsCacheFileOk(request interface{}) bool {
+func (ep *EndPointStruct) ApiCheckCache(request interface{}) bool {
 	var ok bool
 	for range Only.Once {
 		fn := ep.GetCacheFilePath(request)
@@ -198,32 +186,28 @@ func (ep *EndPointStruct) IsCacheFileOk(request interface{}) bool {
 }
 
 // CacheRead Retrieves cache data from a local file.
-func (ep *EndPointStruct) CacheRead(request interface{}, ref interface{}) error {
-	for range Only.Once {
-		fn := ep.GetCacheFilePath(request)
-
-		ep.Error = ep.FileRead(fn, ref)
-	}
-
-	return ep.Error
+func (ep *EndPointStruct) ApiReadCache(request interface{}, ref interface{}) error {
+	return output.FileRead(ep.GetCacheFilePath(request), ref)
 }
 
 // CacheWrite Saves cache data to a file path.
-func (ep *EndPointStruct) CacheWrite(request interface{}, ref interface{}) error {
-	for range Only.Once {
-		fn := ep.GetCacheFilePath(request)
+func (ep *EndPointStruct) ApiWriteCache(request interface{}, ref interface{}) error {
+	return output.FileWrite(ep.GetCacheFilePath(request), ref, output.DefaultFileMode)
 
-		var f *os.File
-		f, ep.Error = os.OpenFile(fn, os.O_RDWR|os.O_CREATE|os.O_TRUNC, DefaultFileMode)
-		if ep.Error != nil {
-			ep.Error = errors.New(fmt.Sprintf("Unable to write to file %s - %v", fn, ep.Error))
-			break
-		}
-
-		//goland:noinspection GoUnhandledErrorResult,GoDeferInLoop
-		defer f.Close()
-		ep.Error = json.NewEncoder(f).Encode(ref)
-	}
-
-	return ep.Error
+	// for range Only.Once {
+	// 	fn := ep.GetCacheFilePath(request)
+	//
+	// 	var f *os.File
+	// 	f, ep.Error = os.OpenFile(fn, os.O_RDWR|os.O_CREATE|os.O_TRUNC, output.DefaultFileMode)
+	// 	if ep.Error != nil {
+	// 		ep.Error = errors.New(fmt.Sprintf("Unable to write to file %s - %v", fn, ep.Error))
+	// 		break
+	// 	}
+	//
+	// 	//goland:noinspection GoUnhandledErrorResult,GoDeferInLoop
+	// 	defer f.Close()
+	// 	ep.Error = json.NewEncoder(f).Encode(ref)
+	// }
+	//
+	// return ep.Error
 }

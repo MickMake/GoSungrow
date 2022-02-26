@@ -2,7 +2,6 @@ package queryDeviceList
 
 import (
 	"GoSungrow/Only"
-	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -135,7 +134,6 @@ type ResultData struct {
 	RowCount int64 `json:"rowCount"`
 }
 
-// type PointData []Point
 type PointData []struct {
 	CodeID                 int64  `json:"code_id"`
 	CodeIDOrderID          string `json:"code_id_order_id"`
@@ -208,28 +206,45 @@ func (e *ResultData) GetDataByName(name string) PointData {
 	return ret
 }
 
-func (e *ResultData) GetCsvByName(name string) api.Table {
-	var ret api.Table
-	for range Only.Once {
-		points := e.GetDataByName(name)
-		ret = ret.SetHeader([]string{
-			"Date",
-			"PointGroupName",
-			"PointName",
-			"Value",
-			"Unit",
-		})
-
-		for _, p := range points {
-			t := api.NewDateTime(p.TimeStamp)
-			ret = ret.AddRow([]string{
-				t.Format(api.DtLayout),
-				p.PointGroupName,
-				p.PointName,
-				p.Value,
-				p.Unit,
-			})
-		}
-	}
-	return ret
-}
+// func (e *ResultData) GetDataTable(name string, points api.TemplatePoints) api.Table {
+// 	var table api.Table
+// 	for range Only.Once {
+// 		// points := e.GetDataByName(name)
+// 		_ = table.SetHeader([]string{
+// 			"Date",
+// 			"PointGroupName",
+// 			"PointName",
+// 			"Value",
+// 			"Unit",
+// 		})
+//
+// 		for _, d := range e.PageList {
+// 			for _, p := range d.PointData {
+// 				gp := points.GetPoint(deviceName, pointId)
+// 				_ = table.AddRow(
+// 					// tim.Key.PrintFull(),
+// 					api.NewDateTime(p.TimeStamp),
+// 					fmt.Sprintf("%s.%d", d.DeviceName, p.PointID),
+// 					p.PointGroupName,
+// 					p.PointName,
+// 					p.Unit,
+// 					p.Value,
+// 					gp.Description,
+// 					gp.Unit,
+// 				)
+//
+// 				// _ = table.AddRow([]string{
+// 				// 	t.Format(api.DtLayout),
+// 				// 	p.PointGroupName,
+// 				// 	fmt.Sprintf("%s.%d", d.DeviceName, p.PointID),
+// 				// 	p.PointName,
+// 				// 	p.Value,
+// 				// 	p.Unit,
+// 				// })
+// 			}
+// 			break
+// 		}
+//
+// 	}
+// 	return table
+// }

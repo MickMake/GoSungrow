@@ -2,6 +2,7 @@ package api
 
 import (
 	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api/output"
 	"errors"
 	"fmt"
 	"github.com/olekukonko/tablewriter"
@@ -154,8 +155,8 @@ func (an *Areas) SetRequest(area AreaName, name EndPointName, ref interface{}) e
 	return err
 }
 
-func (an *Areas) GetRequest(area AreaName, endpoint EndPointName) Json {
-	var ret Json
+func (an *Areas) GetRequest(area AreaName, endpoint EndPointName) output.Json {
+	var ret output.Json
 
 	for range Only.Once {
 		err := an.EndpointExists(area, endpoint)
@@ -168,8 +169,8 @@ func (an *Areas) GetRequest(area AreaName, endpoint EndPointName) Json {
 	return ret
 }
 
-func (an *Areas) GetResponse(area AreaName, endpoint EndPointName) Json {
-	var ret Json
+func (an *Areas) GetResponse(area AreaName, endpoint EndPointName) output.Json {
+	var ret output.Json
 
 	for range Only.Once {
 		err := an.EndpointExists(area, endpoint)
