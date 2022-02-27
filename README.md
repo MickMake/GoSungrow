@@ -98,6 +98,26 @@ Produce basic storage report
 ./bin/GoSungrow api get queryMutiPointDataList '{"ps_key":"1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_11_0_0","points":"p13150,p13126,p13142,p13143,p13019,p13141,p13121,p13003,p13149,p83106","minute_interval":"5","start_time_stamp":"20220215000000","end_time_stamp":"20220215235900", "ps_id":"1129147"}'
 ```
 
+Show all data points used in a report template.
+```
+./bin/GoSungrow data get template-points 8040
+┏━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━┓
+┃ PointId ┃ Description                        ┃ Unit ┃
+┣━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━┫
+┃ p13008  │ Phase A Current                    │ A    ┃
+┃ p13162  │ Max. Charging Current (BMS)        │ A    ┃
+┃ p18063  │ Phase B Backup Current             │ A    ┃
+┃ p13009  │ Phase B Current                    │ A    ┃
+┃ p18062  │ Phase A Backup Current             │ A    ┃
+┃ p13163  │ Max. Discharging Current (BMS)     │ A    ┃
+┃ p13106  │ MPPT2 Current                      │ A    ┃
+┃ p13139  │ Battery Current                    │ A    ┃
+┃ p18064  │ Phase C Backup Current             │ A    ┃
+┃ p13002  │ MPPT1 Current                      │ A    ┃
+┃ p13010  │ Phase C Current                    │ A    ┃
+┗━━━━━━━━━┷━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┷━━━━━━┛
+```
+
 Get the household storage report
 ```
 ./bin/GoSungrow api get getHouseholdStoragePsReport '{"date_id":"2022","date_type":"4","ps_id":"1129147"}'

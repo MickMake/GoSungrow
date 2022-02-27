@@ -2,7 +2,9 @@ package queryDeviceList
 
 import (
 	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
 )
 
@@ -206,45 +208,48 @@ func (e *ResultData) GetDataByName(name string) PointData {
 	return ret
 }
 
-// func (e *ResultData) GetDataTable(name string, points api.TemplatePoints) api.Table {
-// 	var table api.Table
-// 	for range Only.Once {
-// 		// points := e.GetDataByName(name)
-// 		_ = table.SetHeader([]string{
-// 			"Date",
-// 			"PointGroupName",
-// 			"PointName",
-// 			"Value",
-// 			"Unit",
-// 		})
-//
-// 		for _, d := range e.PageList {
-// 			for _, p := range d.PointData {
-// 				gp := points.GetPoint(deviceName, pointId)
-// 				_ = table.AddRow(
-// 					// tim.Key.PrintFull(),
-// 					api.NewDateTime(p.TimeStamp),
-// 					fmt.Sprintf("%s.%d", d.DeviceName, p.PointID),
-// 					p.PointGroupName,
-// 					p.PointName,
-// 					p.Unit,
-// 					p.Value,
-// 					gp.Description,
-// 					gp.Unit,
-// 				)
-//
-// 				// _ = table.AddRow([]string{
-// 				// 	t.Format(api.DtLayout),
-// 				// 	p.PointGroupName,
-// 				// 	fmt.Sprintf("%s.%d", d.DeviceName, p.PointID),
-// 				// 	p.PointName,
-// 				// 	p.Value,
-// 				// 	p.Unit,
-// 				// })
-// 			}
-// 			break
-// 		}
-//
-// 	}
-// 	return table
-// }
+func (e *EndPoint) GetDataTable() output.Table {
+	var table output.Table
+	for range Only.Once {
+		table = output.NewTable()
+		e.Error = table.SetTitle("")
+		if e.Error != nil {
+			break
+		}
+
+		_ = table.SetHeader(
+			"Date",
+			"Point Id",
+			"PointGroupName",
+			"PointName",
+			"Value",
+			"Unit",
+		)
+
+		for _, d := range e.Response.ResultData.PageList {
+			for _, p := range d.PointData {
+				_ = table.AddRow(
+					api.NewDateTime(p.TimeStamp).PrintFull(),
+					fmt.Sprintf("%s.%d", d.PsKey, p.PointID),
+					p.PointGroupName,
+					p.PointName,
+					p.Value,
+					p.Unit,
+				)
+			}
+		}
+
+		table.InitGraph(output.GraphRequest {
+			Title:        "",
+			TimeColumn:   output.SetInteger(1),
+			ValueColumn:  output.SetInteger(5),
+			UnitsColumn:  output.SetInteger(6),
+			SearchColumn: output.SetInteger(2),
+			SearchString: output.SetString(""),
+			MinLeftAxis:  output.SetFloat(0),
+			MaxLeftAxis:  output.SetFloat(0),
+		})
+
+	}
+	return table
+}

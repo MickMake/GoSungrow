@@ -16,27 +16,29 @@ func AttachCmdData(cmd *cobra.Command) *cobra.Command {
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               Cmd.ProcessArgs,
-		Run:                   cmdDataFunc,
+		RunE:                  func(cmd *cobra.Command, args []string) error {
+			return cmd.Help()
+		},
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmd.AddCommand(cmdData)
 	cmdData.Example = PrintExamples(cmdData, "get <endpoint>", "put <endpoint>")
 
 
-	// ********************************************************************************
-	var cmdDataList = &cobra.Command{
-		Use:                   "ls",
-		Aliases:               []string{"list"},
-		Short:                 fmt.Sprintf("List iSolarCloud high-level data commands."),
-		Long:                  fmt.Sprintf("List iSolarCloud high-level data commands."),
-		DisableFlagParsing:    false,
-		DisableFlagsInUseLine: false,
-		// PreRunE:               Cmd.SunGrowArgs,
-		Run:  cmdDataListFunc,
-		Args: cobra.RangeArgs(0, 1),
-	}
-	cmdData.AddCommand(cmdDataList)
-	cmdDataList.Example = PrintExamples(cmdDataList, "", "areas", "endpoints", "<area name>")
+	// // ********************************************************************************
+	// var cmdDataList = &cobra.Command{
+	// 	Use:                   "ls",
+	// 	Aliases:               []string{"list"},
+	// 	Short:                 fmt.Sprintf("List iSolarCloud high-level data commands."),
+	// 	Long:                  fmt.Sprintf("List iSolarCloud high-level data commands."),
+	// 	DisableFlagParsing:    false,
+	// 	DisableFlagsInUseLine: false,
+	// 	// PreRunE:               Cmd.SunGrowArgs,
+	// 	Run:  cmdDataListFunc,
+	// 	Args: cobra.RangeArgs(0, 1),
+	// }
+	// cmdData.AddCommand(cmdDataList)
+	// cmdDataList.Example = PrintExamples(cmdDataList, "", "areas", "endpoints", "<area name>")
 
 	// ********************************************************************************
 	var cmdDataLogin = &cobra.Command{
@@ -53,6 +55,7 @@ func AttachCmdData(cmd *cobra.Command) *cobra.Command {
 	cmdData.AddCommand(cmdDataLogin)
 	cmdDataLogin.Example = PrintExamples(cmdDataLogin, "")
 
+
 	// ********************************************************************************
 	var cmdDataGet = &cobra.Command{
 		Use:                   "get",
@@ -62,11 +65,17 @@ func AttachCmdData(cmd *cobra.Command) *cobra.Command {
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               Cmd.SunGrowArgs,
-		Run:                   cmdDataGetFunc,
+		RunE:                  func(cmd *cobra.Command, args []string) error {
+			return cmd.Help()
+		},
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmdData.AddCommand(cmdDataGet)
 	cmdDataGet.Example = PrintExamples(cmdDataGet, "[area.]<endpoint>")
+	AttachCmdDataStats(cmdDataGet)
+	AttachCmdDataTemplate(cmdDataGet)
+	AttachCmdDataTemplatePoints(cmdDataGet)
+	AttachCmdDataPoints(cmdDataGet)
 
 	// ********************************************************************************
 	var cmdDataRaw = &cobra.Command{
@@ -77,11 +86,16 @@ func AttachCmdData(cmd *cobra.Command) *cobra.Command {
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               Cmd.SunGrowArgs,
-		Run:                   cmdDataRawFunc,
+		RunE:                  func(cmd *cobra.Command, args []string) error {
+			return cmd.Help()
+		},
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmdData.AddCommand(cmdDataRaw)
 	cmdDataRaw.Example = PrintExamples(cmdDataRaw, "[area.]<endpoint>")
+	AttachCmdDataStats(cmdDataRaw)
+	AttachCmdDataTemplate(cmdDataRaw)
+	AttachCmdDataPoints(cmdDataRaw)
 
 	// ********************************************************************************
 	var cmdDataSave = &cobra.Command{
@@ -92,11 +106,16 @@ func AttachCmdData(cmd *cobra.Command) *cobra.Command {
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               Cmd.SunGrowArgs,
-		Run:                   cmdDataSaveFunc,
+		RunE:                  func(cmd *cobra.Command, args []string) error {
+			return cmd.Help()
+		},
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmdData.AddCommand(cmdDataSave)
 	cmdDataSave.Example = PrintExamples(cmdDataSave, "[area.]<endpoint>")
+	AttachCmdDataStats(cmdDataSave)
+	AttachCmdDataTemplate(cmdDataSave)
+	AttachCmdDataPoints(cmdDataSave)
 
 	// ********************************************************************************
 	var cmdDataGraph = &cobra.Command{
@@ -107,11 +126,16 @@ func AttachCmdData(cmd *cobra.Command) *cobra.Command {
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               Cmd.SunGrowArgs,
-		Run:                   cmdDataGraphFunc,
+		RunE:                  func(cmd *cobra.Command, args []string) error {
+			return cmd.Help()
+		},
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmdData.AddCommand(cmdDataGraph)
 	cmdDataGraph.Example = PrintExamples(cmdDataGraph, "[area.]<endpoint> ''")
+	AttachCmdDataStats(cmdDataGraph)
+	AttachCmdDataTemplate(cmdDataGraph)
+	AttachCmdDataPoints(cmdDataGraph)
 
 	// ********************************************************************************
 	var cmdDataPut = &cobra.Command{
@@ -132,49 +156,49 @@ func AttachCmdData(cmd *cobra.Command) *cobra.Command {
 }
 
 
-func cmdDataFunc(cmd *cobra.Command, _ []string) {
-	Cmd.Error = cmd.Help()
-}
-
-func cmdDataListFunc(_ *cobra.Command, _ []string) {
-	Cmd.SunGrow.ListHighLevel()
-}
-
-func cmdDataGetFunc(_ *cobra.Command, args []string) {
-	for range Only.Once {
-		Cmd.SunGrow.OutputType.SetHuman()
-
-		args = fillArray(3, args)
-		Cmd.Error = Cmd.SunGrow.GetHighLevel(args[0], args[1:]...)
-	}
-}
-
-func cmdDataRawFunc(_ *cobra.Command, args []string) {
-	for range Only.Once {
-		Cmd.SunGrow.OutputType.SetRaw()
-
-		args = fillArray(3, args)
-		Cmd.Error = Cmd.SunGrow.GetHighLevel(args[0], args[1:]...)
-	}
-}
-
-func cmdDataSaveFunc(_ *cobra.Command, args []string) {
-	for range Only.Once {
-		Cmd.SunGrow.OutputType.SetFile()
-
-		args = fillArray(3, args)
-		Cmd.Error = Cmd.SunGrow.GetHighLevel(args[0], args[1:]...)
-	}
-}
-
-func cmdDataGraphFunc(_ *cobra.Command, args []string) {
-	for range Only.Once {
-		Cmd.SunGrow.OutputType.SetGraph()
-
-		args = fillArray(4, args)
-		Cmd.Error = Cmd.SunGrow.GetHighLevel(args[0], args[1:]...)
-	}
-}
+// func cmdDataFunc(cmd *cobra.Command, _ []string) {
+// 	Cmd.Error = cmd.Help()
+// }
+//
+// func cmdDataListFunc(_ *cobra.Command, _ []string) {
+// 	Cmd.SunGrow.ListHighLevel()
+// }
+//
+// func cmdDataGetFunc(_ *cobra.Command, args []string) {
+// 	for range Only.Once {
+// 		Cmd.SunGrow.OutputType.SetHuman()
+//
+// 		args = fillArray(3, args)
+// 		Cmd.Error = Cmd.SunGrow.GetHighLevel(args[0], args[1:]...)
+// 	}
+// }
+//
+// func cmdDataRawFunc(_ *cobra.Command, args []string) {
+// 	for range Only.Once {
+// 		Cmd.SunGrow.OutputType.SetRaw()
+//
+// 		args = fillArray(3, args)
+// 		Cmd.Error = Cmd.SunGrow.GetHighLevel(args[0], args[1:]...)
+// 	}
+// }
+//
+// func cmdDataSaveFunc(_ *cobra.Command, args []string) {
+// 	for range Only.Once {
+// 		Cmd.SunGrow.OutputType.SetFile()
+//
+// 		args = fillArray(3, args)
+// 		Cmd.Error = Cmd.SunGrow.GetHighLevel(args[0], args[1:]...)
+// 	}
+// }
+//
+// func cmdDataGraphFunc(_ *cobra.Command, args []string) {
+// 	for range Only.Once {
+// 		Cmd.SunGrow.OutputType.SetGraph()
+//
+// 		args = fillArray(4, args)
+// 		Cmd.Error = Cmd.SunGrow.GetHighLevel(args[0], args[1:]...)
+// 	}
+// }
 
 func cmdDataPutFunc(_ *cobra.Command, args []string) {
 	for range Only.Once {
@@ -183,4 +207,26 @@ func cmdDataPutFunc(_ *cobra.Command, args []string) {
 		args = fillArray(2, args)
 		// Cmd.Error = SunGrow.PutHighLevel(args[0], args[1])
 	}
+}
+
+
+func SwitchOutput(cmd *cobra.Command) error {
+	var err error
+	for range Only.Once {
+		foo := cmd.Parent()
+		switch foo.Use {
+			case "get":
+				Cmd.SunGrow.OutputType.SetHuman()
+			case "raw":
+				Cmd.SunGrow.OutputType.SetRaw()
+			case "save":
+				Cmd.SunGrow.OutputType.SetFile()
+			case "graph":
+				Cmd.SunGrow.OutputType.SetGraph()
+			default:
+				Cmd.SunGrow.OutputType.SetHuman()
+		}
+	}
+
+	return err
 }

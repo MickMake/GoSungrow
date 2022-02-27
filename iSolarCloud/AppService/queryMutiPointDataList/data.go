@@ -171,15 +171,9 @@ func (e *EndPoint) GetDataTable(points api.TemplatePoints) output.Table {
 			break
 		}
 
-		fn := e.SetFilenamePrefix("%s-", api.NewDateTime(e.Request.StartTimeStamp).String())
-		e.Error = table.SetFilePrefix(fn)
-		if e.Error != nil {
-			break
-		}
-
 		e.Error = table.SetHeader(
 			"Date/Time",
-			"PointId Name",
+			"Point Id",
 			"Point Name",
 			"Value",
 			"Units",
@@ -190,6 +184,10 @@ func (e *EndPoint) GetDataTable(points api.TemplatePoints) output.Table {
 
 		t := api.NewDateTime(e.Request.RequestData.StartTimeStamp)
 		e.SetFilenamePrefix(t.String())
+		e.Error = table.SetFilePrefix(t.String())
+		if e.Error != nil {
+			break
+		}
 
 		for deviceName, deviceRef := range e.Response.ResultData.Devices {
 			for pointId, pointRef := range deviceRef.Points {
@@ -208,6 +206,18 @@ func (e *EndPoint) GetDataTable(points api.TemplatePoints) output.Table {
 				}
 			}
 		}
+
+		table.InitGraph(output.GraphRequest {
+			Title:        "",
+			TimeColumn:   output.SetInteger(1),
+			ValueColumn:  output.SetInteger(4),
+			UnitsColumn:  output.SetInteger(5),
+			SearchColumn: output.SetInteger(2),
+			SearchString: output.SetString(""),
+			MinLeftAxis:  output.SetFloat(0),
+			MaxLeftAxis:  output.SetFloat(0),
+		})
+
 	}
 
 	return table

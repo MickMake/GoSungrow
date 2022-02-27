@@ -112,20 +112,26 @@ func (sg *SunGrow) GetByStruct(endpoint string, request interface{}, cache time.
 func (sg *SunGrow) GetHighLevel(name string, args ...string) error {
 	for range Only.Once {
 		name = strings.ToLower(name)
-		if name == "stats" {
-			sg.Error = sg.GetCurrentStats()
-			break
-		}
-
-		if name == "template" {
-			args = fillArray(3, args)
-			if args[0] == "" {
-				sg.Error = errors.New("need a date")
-				break
-			}
-			sg.Error = sg.GetTemplateData(args[0], args[1], args[2])
-			break
-		}
+		// if name == "stats" {
+		// 	sg.Error = sg.GetCurrentStats()
+		// 	break
+		// }
+		//
+		// if name == "template" {
+		// 	args = fillArray(3, args)
+		// 	if args[0] == "" {
+		// 		sg.Error = errors.New("need a date")
+		// 		break
+		// 	}
+		// 	sg.Error = sg.GetTemplateData(args[0], args[1], args[2])
+		// 	break
+		// }
+		//
+		// if name == "template-points" {
+		// 	args = fillArray(1, args)
+		// 	sg.Error = sg.GetTemplatePoints(args[0])
+		// 	break
+		// }
 
 		if name == "points" {
 			args = fillArray(2, args)
@@ -143,22 +149,22 @@ func (sg *SunGrow) GetHighLevel(name string, args ...string) error {
 	return sg.Error
 }
 
-func (sg *SunGrow) ListHighLevel() {
-	fmt.Println("stats - Get current inverter stats, (last 5 minutes).")
-	fmt.Println("\tdata get stats")
-	fmt.Println("")
-
-	fmt.Println("template [date] [template_id] - Get data from template.")
-	fmt.Println("\tdata get template - Get data using default template 8042 for today.")
-	fmt.Println("\tdata get template 2022 8040 - Get year data for template 8040 for the year 2022.")
-	fmt.Println("\tdata get template 202202 8040 - Get month data for template 8040 for the month 202202.")
-	fmt.Println("\tdata get template 20220202 8040 - Get day data for template 8040 for the day 20220202.")
-	fmt.Println("\tdata get template 2022 - Get year data for default template 8042 for the year 2022.")
-	fmt.Println("")
-
-	fmt.Println("points <date> <device_id.point_id> ... - Get data from points list.")
-	fmt.Println("")
-}
+// func (sg *SunGrow) ListHighLevel() {
+// 	fmt.Println("stats - Get current inverter stats, (last 5 minutes).")
+// 	fmt.Println("\tdata get stats")
+// 	fmt.Println("")
+//
+// 	fmt.Println("template [date] [template_id] - Get data from template.")
+// 	fmt.Println("\tdata get template - Get data using default template 8042 for today.")
+// 	fmt.Println("\tdata get template 2022 8040 - Get year data for template 8040 for the year 2022.")
+// 	fmt.Println("\tdata get template 202202 8040 - Get month data for template 8040 for the month 202202.")
+// 	fmt.Println("\tdata get template 20220202 8040 - Get day data for template 8040 for the day 20220202.")
+// 	fmt.Println("\tdata get template 2022 - Get year data for default template 8042 for the year 2022.")
+// 	fmt.Println("")
+//
+// 	fmt.Println("points <date> <device_id.point_id> ... - Get data from points list.")
+// 	fmt.Println("")
+// }
 
 func (sg *SunGrow) AllCritical() error {
 	var ep api.EndPoint
@@ -250,28 +256,18 @@ func (sg *SunGrow) AllCritical() error {
 func (sg *SunGrow) GetCurrentStats() error {
 	var ep api.EndPoint
 	for range Only.Once {
-		// ep = sg.GetByStruct("AppService.getPsList", nil, DefaultCacheTimeout)
-		// // ep = sg.GetByJson("AppService.getPsList", "")
-		// if ep.IsError() {
-		// 	break
-		// }
-		// _getPsList := getPsList.AssertResultData(ep)
-		// psId := _getPsList.GetPsId()
-		psId := sg.GetPsId()
+		ep = sg.GetByStruct("AppService.getPsList", nil, DefaultCacheTimeout)
+		if ep.IsError() {
+			break
+		}
+		_getPsList := getPsList.Assert(ep)
+		psId := _getPsList.GetPsId()
+		table := _getPsList.GetDataTable()
+		sg.Error = sg.Output(_getPsList, table, "")
 		if sg.Error != nil {
 			break
 		}
 
-		if sg.OutputType.IsHuman() {
-			_queryDeviceList := getPsList.AssertResultData(ep)
-			points := _queryDeviceList.GetData()
-			for _, r := range points {
-				for _, c := range r {
-					fmt.Printf("\"%s\",", c)
-				}
-				fmt.Println()
-			}
-		}
 
 		// ep = sg.GetByJson("AppService.queryDeviceList", fmt.Sprintf(`{"ps_id":"%d"}`, psId))
 		ep = sg.GetByStruct(
@@ -279,18 +275,25 @@ func (sg *SunGrow) GetCurrentStats() error {
 			queryDeviceList.RequestData{PsId: strconv.FormatInt(psId, 10)},
 			DefaultCacheTimeout,
 		)
-		if ep.IsError() {
+		if sg.Error != nil {
 			break
 		}
 
-		if sg.OutputType.IsHuman() {
-			_queryDeviceList := queryDeviceList.AssertResultData(ep)
-			points := _queryDeviceList.GetDataByName("SH10RT")
-			fmt.Printf("%v", points)
+		ep2 := queryDeviceList.Assert(ep)
+		table = ep2.GetDataTable()
+		sg.Error = sg.Output(ep2, table, "")
+		if sg.Error != nil {
+			break
 		}
+
+		// if sg.OutputType.IsHuman() {
+		// 	_queryDeviceList := queryDeviceList.AssertResultData(ep)
+		// 	points := _queryDeviceList.GetDataByName("SH10RT")
+		// 	// @TODO - Improve output of this!
+		// 	fmt.Printf("%v", points)
+		// }
 	}
 
-	sg.Error = ep.GetError()
 	return sg.Error
 }
 
@@ -319,6 +322,16 @@ func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints) erro
 			},
 			DefaultCacheTimeout,
 		)
+		if sg.Error != nil {
+			break
+		}
+
+		ep2 := queryMutiPointDataList.Assert(ep)
+		table := ep2.GetDataTable(pointNames)
+		sg.Error = sg.Output(ep2, table, "")
+		if sg.Error != nil {
+			break
+		}
 
 		//
 		// csv := api.NewCsv()
@@ -331,14 +344,6 @@ func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints) erro
 		// })
 		//
 		// data := queryMutiPointDataList.AssertResultData(ep)
-
-		ep2 := queryMutiPointDataList.Assert(ep)
-		table := ep2.GetDataTable(pointNames)
-		sg.Error = sg.Output(ep2, table, "")
-		if sg.Error != nil {
-			break
-		}
-
 		// for deviceName, deviceRef := range data.Devices {
 		// 	for pointId, pointRef := range deviceRef.Points {
 		// 		for _, tim := range pointRef.Times {
@@ -400,20 +405,15 @@ func (sg *SunGrow) Output(endpoint api.EndPoint, table output.Table, graphFilter
 				fmt.Println(endpoint.GetJsonData(false))
 
 			case sg.OutputType.IsGraph():
-				gr := output.JsonToGraphRequest(graphFilter)
-				if gr.Error != nil {
-					sg.Error = gr.Error
+				sg.Error = table.SetGraphFromJson(output.Json(graphFilter))
+				if sg.Error != nil {
 					break
 				}
-				sg.Error = table.WriteGraphFile(gr)
-				// api.GraphRequest {
-				// 	Title:        "Testing 1. 2. 3.",
-				// 	TimeColumn:   1,
-				// 	ValueColumn:  4,
-				// 	SearchColumn: 3,
-				// 	SearchString: "p83106",
-				// 	FileName:     "foo.png",
-				// }
+				sg.Error = table.CreateGraph()
+				if sg.Error != nil {
+					break
+				}
+				//
 
 			default:
 		}
@@ -447,10 +447,9 @@ func (sg *SunGrow) GetPsId() int64 {
 func fillArray(count int, args []string) []string {
 	var ret []string
 	for range Only.Once {
-		//
-		// if len(args) == 0 {
-		//	break
-		// }
+		if count < len(args) {
+			count = len(args)
+		}
 		ret = make([]string, count)
 		for i, e := range args {
 			ret[i] = e

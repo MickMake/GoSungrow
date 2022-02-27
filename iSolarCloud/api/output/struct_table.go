@@ -13,7 +13,7 @@ type Table struct {
 	filePrefix string
 	title      string
 	table      datatable.RenderTable
-	// graph      *graph.Chart
+	graph      *Chart
 	Error      error
 }
 

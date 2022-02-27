@@ -5,77 +5,11 @@ import (
 	"GoSungrow/iSolarCloud/AppService/queryMutiPointDataList"
 	"GoSungrow/iSolarCloud/WebAppService/queryUserCurveTemplateData"
 	"GoSungrow/iSolarCloud/api"
+	"GoSungrow/iSolarCloud/api/output"
 	"errors"
 	"time"
 )
 
-
-// type TemplatePoint struct {
-// 	Description string
-// 	PsKey       string
-// 	PointId     string
-// 	Unit        string
-// }
-// type TemplatePoints []TemplatePoint
-//
-//
-// func (t *TemplatePoints) PrintKeys() string {
-// 	var ret string
-// 	for _, p := range *t {
-// 		ret += fmt.Sprintf("%s,", p.PsKey)
-// 	}
-// 	ret = strings.TrimSuffix(ret, ",")
-// 	return ret
-// }
-//
-// func (t *TemplatePoints) PrintPoints() string {
-// 	var ret string
-// 	for _, p := range *t {
-// 		ret += fmt.Sprintf("%s,", p.PointId)
-// 	}
-// 	ret = strings.TrimSuffix(ret, ",")
-// 	return ret
-// }
-//
-// func (t *TemplatePoints) GetPoint(pskey string, point string) TemplatePoint {
-// 	var ret TemplatePoint
-// 	for _, k := range *t {
-// 		if k.PsKey != pskey {
-// 			continue
-// 		}
-// 		if k.PointId != point {
-// 			continue
-// 		}
-// 		ret = k
-// 		break
-// 	}
-// 	return ret
-// }
-//
-// func CreatePoints(points []string) TemplatePoints {
-// 	var ret TemplatePoints
-// 	for range Only.Once {
-// 		// Feed in a string array and generate points data.
-// 		// strings can be either "pskey/point_id", "pskey.point_id", "pskey:point_id",
-// 		for _, p := range points {
-// 			pa := strings.Split(p, ".")
-// 			if len(pa) == 2 {
-// 				ret = append(ret, TemplatePoint{
-// 					Description: "",
-// 					PsKey:       pa[0],
-// 					PointId:     pa[1],
-// 					Unit:        "",
-// 				})
-// 			}
-// 		}
-// 	}
-// 	return ret
-// }
-//
-// func SetPointName(pskey string, point string) string {
-// 	point = strings.TrimPrefix(point, "p")
-// 	return pskey + ".p" + point
-// }
 
 func (sg *SunGrow) GetPointNamesFromTemplate(template string) api.TemplatePoints {
 	var ret api.TemplatePoints
@@ -111,7 +45,7 @@ func (sg *SunGrow) GetPointNamesFromTemplate(template string) api.TemplatePoints
 	return ret
 }
 
-func (sg *SunGrow) GetTemplateData(date string, template string, filter string) error {
+func (sg *SunGrow) GetTemplateData(template string, date string, filter string) error {
 	for range Only.Once {
 		if template == "" {
 			template = "8042"
@@ -151,71 +85,58 @@ func (sg *SunGrow) GetTemplateData(date string, template string, filter string) 
 		// data := queryMutiPointDataList.AssertResultData(ep)
 		data := queryMutiPointDataList.Assert(ep)
 		table := data.GetDataTable(pointNames)
-		sg.Error = sg.Output(ep, table, filter)
+		if table.Error != nil {
+			sg.Error = table.Error
+			break
+		}
+
+		fn := data.SetFilenamePrefix("%s-%s", when.String(), template)
+		sg.Error = table.SetFilePrefix(fn)
 		if sg.Error != nil {
 			break
 		}
 
-		//
-		// csv := api.NewCsv()
-		// csv = csv.SetHeader(
-		// 	"Date/Time",
-		// 	"PointId Name",
-		// 	"Point Name",
-		// 	"Value",
-		// 	"Units",
-		// )
-		//
-		// for deviceName, deviceRef := range data.Devices {
-		// 	for pointId, pointRef := range deviceRef.Points {
-		// 		for _, tim := range pointRef.Times {
-		// 			gp := pointNames.GetPoint(deviceName, pointId)
-		// 			csv = csv.AddRow(
-		// 				tim.Key.PrintFull(),
-		// 				fmt.Sprintf("%s.%s", deviceName, pointId),
-		// 				gp.Description,
-		// 				tim.Value,
-		// 				gp.Unit,
-		// 			)
-		// 		}
-		// 	}
-		// }
-		//
-		// switch {
-		// 	case sg.OutputType.IsNone():
-		//
-		// 	case sg.OutputType.IsHuman():
-		// 		table.Print()
-		//
-		// 	case sg.OutputType.IsGraph():
-		// 		gr := output.JsonToGraphRequest(filter)
-		// 		if gr.Error != nil {
-		// 			sg.Error = gr.Error
-		// 			break
-		// 		}
-		// 		sg.Error = table.WriteGraphFile(gr)
-		// 		// api.GraphRequest {
-		// 		// 	Title:        "Testing 1. 2. 3.",
-		// 		// 	TimeColumn:   1,
-		// 		// 	ValueColumn:  4,
-		// 		// 	SearchColumn: 3,
-		// 		// 	SearchString: "p83106",
-		// 		// 	FileName:     "foo.png",
-		// 		// }
-		//
-		// 	case sg.OutputType.IsFile():
-		// 		a := queryMutiPointDataList.Assert(ep)
-		// 		a.SetFilenamePrefix("%s-%s", when, template)
-		// 		sg.Error = table.WriteCsvFile()
-		//
-		// 	case sg.OutputType.IsRaw():
-		// 		fmt.Println(ep.GetJsonData(true))
-		//
-		// 	case sg.OutputType.IsJson():
-		// 		fmt.Println(ep.GetJsonData(false))
-		//
-		// 	default:
-		// }
+		sg.Error = sg.Output(ep, table, filter)
+		if sg.Error != nil {
+			break
+		}
+	}
+
+	return sg.Error
+}
+
+func (sg *SunGrow) GetTemplatePoints(template string) error {
+	for range Only.Once {
+		if template == "" {
+			template = "8042"
+		}
+
+		table := output.NewTable()
+		sg.Error = table.SetHeader(
+			"PointId",
+			"Description",
+			"Unit",
+			)
+		if sg.Error != nil {
+			break
+		}
+
+		ss := sg.GetPointNamesFromTemplate(template)
+		for _, s := range ss {
+			sg.Error = table.AddRow(
+				s.PointId,
+				s.Description,
+				s.Unit,
+			)
+			if sg.Error != nil {
+				break
+			}
+		}
+		if sg.Error != nil {
+			break
+		}
+
+		table.Print()
 	}
 
 	return sg.Error

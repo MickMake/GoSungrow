@@ -4,6 +4,7 @@ import (
 	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
 	"time"
 )
@@ -199,6 +200,10 @@ func (e *ResultData) GetPsId() int64 {
 	return ret
 }
 
+func (e *EndPoint) GetPsId() int64 {
+	return e.Response.ResultData.GetPsId()
+}
+
 func (e *ResultData) GetData() [][]string {
 	var ret [][]string
 	for range Only.Once {
@@ -231,4 +236,61 @@ func (e *ResultData) GetData() [][]string {
 		}
 	}
 	return ret
+}
+
+func (e *EndPoint) GetDataTable() output.Table {
+	var table output.Table
+	for range Only.Once {
+		table = output.NewTable()
+		e.Error = table.SetTitle("")
+		if e.Error != nil {
+			break
+		}
+
+		_ = table.SetHeader(
+			"Date",
+			"Point Id",
+			"Point Name",
+			"Value",
+			"Unit",
+		)
+
+		now := time.Now().Round(5 * time.Minute).Format(api.DtLayoutZeroSeconds)
+
+		for _, p := range e.Response.ResultData.PageList {
+			_ = table.AddRow(now, fmt.Sprintf("%d.%d", p.PsID, 0), "Co2 Reduce", p.Co2Reduce.Value, p.Co2Reduce.Unit)
+			_ = table.AddRow(now, fmt.Sprintf("%d.%d", p.PsID, 0), "Co2 Reduce Total", p.Co2ReduceTotal.Value, p.Co2ReduceTotal.Unit)
+			_ = table.AddRow(now, fmt.Sprintf("%d.%d", p.PsID, 0), "Curr Power", p.CurrPower.Value, p.CurrPower.Unit)
+			_ = table.AddRow(now, fmt.Sprintf("%d.%d", p.PsID, 0), "Daily Irradiation", p.DailyIrradiation.Value, p.DailyIrradiation.Unit)
+			_ = table.AddRow(now, fmt.Sprintf("%d.%d", p.PsID, 0), "Equivalent Hour", p.EquivalentHour.Value, p.EquivalentHour.Unit)
+			_ = table.AddRow(now, fmt.Sprintf("%d.%d", p.PsID, 0), "Es Discharge Energy", p.EsDisenergy.Value, p.EsDisenergy.Unit)
+			_ = table.AddRow(now, fmt.Sprintf("%d.%d", p.PsID, 0), "Es Energy", p.EsEnergy.Value, p.EsEnergy.Unit)
+			_ = table.AddRow(now, fmt.Sprintf("%d.%d", p.PsID, 0), "Es Power", p.EsPower.Value, p.EsPower.Unit)
+			_ = table.AddRow(now, fmt.Sprintf("%d.%d", p.PsID, 0), "Es Total Discharge Energy", p.EsTotalDisenergy.Value, p.EsTotalDisenergy.Unit)
+			_ = table.AddRow(now, fmt.Sprintf("%d.%d", p.PsID, 0), "Es Total Energy", p.EsTotalEnergy.Value, p.EsTotalEnergy.Unit)
+			_ = table.AddRow(now, fmt.Sprintf("%d.%d", p.PsID, 0), "Installed Power Map", p.InstalledPowerMap.Value, p.InstalledPowerMap.Unit)
+			_ = table.AddRow(now, fmt.Sprintf("%d.%d", p.PsID, 0), "Pv Energy", p.PvEnergy.Value, p.PvEnergy.Unit)
+			_ = table.AddRow(now, fmt.Sprintf("%d.%d", p.PsID, 0), "Pv Power", p.PvPower.Value, p.PvPower.Unit)
+			_ = table.AddRow(now, fmt.Sprintf("%d.%d", p.PsID, 0), "Radiation", p.Radiation.Value, p.Radiation.Unit)
+			_ = table.AddRow(now, fmt.Sprintf("%d.%d", p.PsID, 0), "Today Energy", p.TodayEnergy.Value, p.TodayEnergy.Unit)
+			_ = table.AddRow(now, fmt.Sprintf("%d.%d", p.PsID, 0), "Today Income", p.TodayIncome.Value, p.TodayIncome.Unit)
+			_ = table.AddRow(now, fmt.Sprintf("%d.%d", p.PsID, 0), "Total Capacity", p.TotalCapcity.Value, p.TotalCapcity.Unit)
+			_ = table.AddRow(now, fmt.Sprintf("%d.%d", p.PsID, 0), "Total Energy", p.TotalEnergy.Value, p.TotalEnergy.Unit)
+			_ = table.AddRow(now, fmt.Sprintf("%d.%d", p.PsID, 0), "Total Income", p.TotalIncome.Value, p.TotalIncome.Unit)
+			_ = table.AddRow(now, fmt.Sprintf("%d.%d", p.PsID, 0), "Use Energy", p.UseEnergy.Value, p.UseEnergy.Unit)
+		}
+
+		table.InitGraph(output.GraphRequest {
+			Title:        "",
+			TimeColumn:   output.SetInteger(1),
+			ValueColumn:  output.SetInteger(3),
+			UnitsColumn:  output.SetInteger(4),
+			SearchColumn: output.SetInteger(2),
+			SearchString: output.SetString(""),
+			MinLeftAxis:  output.SetFloat(0),
+			MaxLeftAxis:  output.SetFloat(0),
+		})
+
+	}
+	return table
 }

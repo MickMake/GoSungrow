@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/wcharczuk/go-chart/v2"
+	"github.com/wcharczuk/go-chart/v2/drawing"
 	"go.pennock.tech/tabular"
 	"os"
 	"strconv"
@@ -15,17 +16,92 @@ import (
 
 type GraphRequest struct {
 	Title        string  `json:"title"`
-	TimeColumn   int     `json:"time_column"`
-	ValueColumn  int     `json:"value_column"`
-	SearchColumn int     `json:"search_column"`
-	SearchString string  `json:"search_string"`
-	FileName     string  `json:"file_name"`
-	MaxLeftAxis  float64 `json:"max_left_axis"`
-	MinLeftAxis  float64 `json:"min_left_axis"`
+
+	TimeColumn   *int     `json:"time_column"`
+	ValueColumn  *int     `json:"value_column"`
+	UnitsColumn  *int     `json:"units_column"`
+	SearchColumn *int     `json:"search_column"`
+	SearchString *string  `json:"search_string"`
+
+	MinLeftAxis  *float64 `json:"min_left_axis"`
+	MaxLeftAxis  *float64 `json:"max_left_axis"`
+
 	Error        error   `json:"-"`
 }
 
-func JsonToGraphRequest(j string) GraphRequest {
+func SetInteger(v int) *int {
+	return &v
+}
+func SetString(v string) *string {
+	return &v
+}
+func SetFloat(v float64) *float64 {
+	return &v
+}
+
+// type Integer int
+// func (c *Integer) Set(f int) (*Integer, bool) {
+// 	var changed bool
+// 	for range Only.Once {
+// 		ff := Integer(f)
+// 		if c == nil {
+// 			c = &ff
+// 			break
+// 		}
+//
+// 		if*c == ff {
+// 			break
+// 		}
+//
+// 		changed = true
+// 	}
+// 	return c, changed
+// }
+//
+// type Float float64
+// func (c *Float) Set(f float64) (*Float, bool) {
+// 	var changed bool
+// 	for range Only.Once {
+// 		ff := Float(f)
+// 		if c == nil {
+// 			c = &ff
+// 			break
+// 		}
+//
+// 		if*c == ff {
+// 			break
+// 		}
+//
+// 		changed = true
+// 	}
+// 	return c, changed
+// }
+//
+// type String string
+// func (c *String) Set(s string) (*String, bool) {
+// 	var changed bool
+// 	for range Only.Once {
+// 		ss := String(s)
+// 		if c == nil {
+// 			c = &ss
+// 			break
+// 		}
+//
+// 		if*c == ss {
+// 			break
+// 		}
+//
+// 		if ss == "" {
+// 			break
+// 		}
+//
+// 		changed = true
+// 	}
+// 	return c, changed
+// }
+
+
+func JsonToGraphRequest(j Json) GraphRequest {
 	var ret GraphRequest
 	for range Only.Once {
 		ret.Error = json.Unmarshal([]byte(j), &ret)
@@ -37,31 +113,104 @@ func JsonToGraphRequest(j string) GraphRequest {
 	return ret
 }
 
-func (t *Table) WriteGraphFile(req GraphRequest) error {
-	// func (t Table) Graph(name string, timeColumn int, valueColumn int, searchString string, searchColumn int, fileName string) error {
-	for range Only.Once {
-		foo := New(req.Title)
+func (t *Table) InitGraph(req GraphRequest) {
+	if t.graph == nil {
+		t.graph = New(req.Title)
+	}
 
-		t.Error = foo.SetFilename(t.filePrefix + ".png")
+	t.graph.req = req
+}
+
+func (t *Table) SetGraph(req GraphRequest) error {
+	for range Only.Once {
+		if t.graph == nil {
+			t.graph = New(req.Title)
+		}
+
+		t.Error = t.graph.SetFilename(t.filePrefix + ".png")
 		if t.Error != nil {
 			break
 		}
 
+		t.graph.SetRangeY(req.MinLeftAxis, req.MaxLeftAxis)
+		if t.Error != nil {
+			break
+		}
+
+		changed := t.graph.SetGraphSearch(req)
+		if !changed {
+			break
+		}
+		if t.Error != nil {
+			break
+		}
+
+		t.Error = t.ProcessGraphData()
+		if t.Error != nil {
+			break
+		}
+	}
+
+	return t.Error
+}
+
+func (t *Table) SetGraphFromJson(j Json) error {
+	for range Only.Once {
+		gr := JsonToGraphRequest(j)
+		if gr.Error != nil {
+			t.Error = gr.Error
+			break
+		}
+
+		t.Error = t.SetGraph(gr)
+		if t.Error != nil {
+			break
+		}
+	}
+
+	return t.Error
+}
+
+
+func (t *Table) GetSearchColumn() SearchStrings {
+	return t.graph.otherSearch
+}
+
+func (t *Table) ProcessGraphData() error {
+	for range Only.Once {
+		req := t.graph.req
+
+		var units string
 		var times []time.Time
 		var values []float64
 		for row := 0; row < t.table.NRows(); row++ {
 			// Get the search column
 			var cell *tabular.Cell
-			cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: req.SearchColumn})
+			cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: *req.SearchColumn})
 			if t.Error != nil {
 				continue
 			}
-			if !strings.Contains(cell.String(), req.SearchString) {
+			if !strings.Contains(cell.String(), *req.SearchString) {
 				continue
 			}
 
+			if req.Title == "" {
+				_ = t.SetTitle(cell.String())
+			}
 
-			cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: req.TimeColumn})
+			//
+			if units == "" {
+				if *req.UnitsColumn > 0 {
+					cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: *req.UnitsColumn})
+					if t.Error != nil {
+						continue
+					}
+					units = cell.String()
+				}
+			}
+
+			//
+			cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: *req.TimeColumn})
 			if t.Error != nil {
 				continue
 			}
@@ -72,8 +221,8 @@ func (t *Table) WriteGraphFile(req GraphRequest) error {
 			}
 			times = append(times, tim)
 
-
-			cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: req.ValueColumn})
+			//
+			cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: *req.ValueColumn})
 			if t.Error != nil {
 				continue
 			}
@@ -85,22 +234,12 @@ func (t *Table) WriteGraphFile(req GraphRequest) error {
 			values = append(values, val)
 		}
 
-		t.Error = foo.SetX("Date", times...)
+		t.Error = t.graph.SetX("Date", times...)
 		if t.Error != nil {
 			break
 		}
 
-		t.Error = foo.SetY("kWh", values...)
-		if t.Error != nil {
-			break
-		}
-
-		foo.SetRangeY(req.MinLeftAxis, req.MaxLeftAxis)
-		if t.Error != nil {
-			break
-		}
-
-		t.Error = foo.Generate()
+		t.Error = t.graph.SetY(units, values...)
 		if t.Error != nil {
 			break
 		}
@@ -109,12 +248,50 @@ func (t *Table) WriteGraphFile(req GraphRequest) error {
 	return t.Error
 }
 
+type SearchStrings map[string]int
+func (t *Table) FindSearchStrings() error {
+	for range Only.Once {
+		t.graph.otherSearch = make(SearchStrings)
+
+		for row := 0; row < t.table.NRows(); row++ {
+			// Get the search column
+			var cell *tabular.Cell
+			cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: *t.graph.req.SearchColumn})
+			if t.Error != nil {
+				continue
+			}
+			if _, ok := t.graph.otherSearch[cell.String()]; ok {
+				t.graph.otherSearch[cell.String()] += 1
+			} else {
+				t.graph.otherSearch[cell.String()] = 0
+			}
+		}
+	}
+
+	return t.Error
+}
+
+func (t *Table) SearchStrings() SearchStrings {
+	return t.graph.otherSearch
+}
+
+func (t *Table) CreateGraph() error {
+	return t.graph.Generate()
+}
+
+func (t *Table) CreateGraphAll() error {
+	return t.graph.Generate()
+}
+
 
 type Chart struct {
 	Error error `json:"-"`
 
+	otherSearch SearchStrings
+	req GraphRequest
 	filename string
-	timeSeries chart.TimeSeries
+	timeSeries1 chart.TimeSeries
+	timeSeries2 chart.TimeSeries
 	graph chart.Chart
 }
 
@@ -159,12 +336,17 @@ func New(title string) *Chart {
 	var c Chart
 
 	for range Only.Once {
-		if title == "" {
-			c.Error = errors.New("empty title")
-			break
+		c.timeSeries1 = chart.TimeSeries {
+			Name:    "",
+			Style:   chart.Style{},
+			YAxis:   chart.YAxisPrimary,
+			XValues: []time.Time{},
+			YValues: []float64{},
 		}
-
-		c.timeSeries = chart.TimeSeries {
+		c.timeSeries2 = chart.TimeSeries{
+			Name:    "",
+			Style:   chart.Style{},
+			YAxis:   chart.YAxisSecondary,
 			XValues: []time.Time{},
 			YValues: []float64{},
 		}
@@ -182,7 +364,7 @@ func New(title string) *Chart {
 			YAxis:          chart.YAxis{},
 			YAxisSecondary: chart.YAxis{},
 			Font:           nil,
-			Series:         []chart.Series{c.timeSeries},
+			Series:         []chart.Series{c.timeSeries1},	// , c.timeSeries2},
 			Elements:       nil,
 			Log:            nil,
 		}
@@ -206,22 +388,73 @@ func (c *Chart) SetFilename(fn string) error {
 	return c.Error
 }
 
-func (c *Chart) SetRangeY(min float64, max float64) {
-	c.graph.YAxis.Range = &chart.ContinuousRange {
-		Min:        min,
-		Max:        max,
-		Domain:     0,
-		Descending: false,
+func (c *Chart) SetTitle(fn string) error {
+	c.graph.Title = fn
+	c.req.Title = fn
+	return c.Error
+}
+
+func (c *Chart) SetRangeY(min *float64, max *float64) bool {
+	var changed bool
+	for range Only.Once {
+		if min == nil {
+			min = c.req.MinLeftAxis
+		}
+
+		if max == nil {
+			max = c.req.MaxLeftAxis
+		}
+
+		c.graph.YAxis.Range = &chart.ContinuousRange {
+			Min:        *c.req.MinLeftAxis,
+			Max:        *c.req.MaxLeftAxis,
+			Domain:     0,
+			Descending: false,
+		}
+
+		changed = true
 	}
-	// c.graph.YAxis.Range.SetMin(min)
-	// c.graph.YAxis.Range.SetMax(max)
+
+	return changed
+}
+
+func (c *Chart) SetGraphSearch(req GraphRequest) bool {
+	var changed bool
+	for range Only.Once {
+		if req.SearchString != nil {
+			c.req.SearchString = req.SearchString
+			changed = true
+		}
+
+		if req.TimeColumn != nil {
+			c.req.TimeColumn = req.TimeColumn
+			changed = true
+		}
+
+		if req.ValueColumn != nil {
+			c.req.ValueColumn = req.ValueColumn
+			changed = true
+		}
+
+		if req.UnitsColumn != nil {
+			c.req.UnitsColumn = req.UnitsColumn
+			changed = true
+		}
+
+		if req.SearchColumn != nil {
+			c.req.SearchColumn = req.SearchColumn
+			changed = true
+		}
+	}
+
+	return changed
 }
 
 func (c *Chart) SetX(name string, values ...time.Time) error {
 
 	for range Only.Once {
 		if len(values) == 0 {
-			c.Error = errors.New("empty X values")
+			c.Error = errors.New("no X values")
 			break
 		}
 
@@ -238,14 +471,33 @@ func (c *Chart) SetX(name string, values ...time.Time) error {
 			},
 			TickStyle:      chart.Style{},
 			Ticks:          nil,
-			TickPosition:   0,
+			TickPosition:   chart.TickPositionUnderTick,
 			GridLines:      nil,
 			GridMajorStyle: chart.Style{},
 			GridMinorStyle: chart.Style{},
 		}
 
-		c.timeSeries.XValues = append(c.timeSeries.XValues, values...)
-		c.graph.Series = []chart.Series{ c.timeSeries }
+		// c.graph.XAxis.ValueFormatter = func(v interface{}) string {
+		// 	typed := v.(float64)
+		// 	typedDate := chart.TimeFromFloat64(typed)
+		// 	return typedDate.Format(DateTimeLayout)
+		// 	// t := v.(time.Time)
+		// 	// return t.Format(DateTimeLayout)
+		// }
+
+		// c.graph.XAxis.TickPosition = chart.TickPositionUnderTick
+		// c.graph.XAxis.GridLines = []chart.GridLine {
+		// 	{IsMinor: true, Style: chart.Style{}, Value: 600},
+		// }
+		// c.graph.XAxis.Range = &chart.ContinuousRange {
+		// 	Min:        0,
+		// 	Max:        0,
+		// 	Domain:     0,
+		// 	Descending: false,
+		// }
+
+		c.timeSeries1.XValues = append(c.timeSeries1.XValues, values...)
+		// c.timeSeries2.XValues = append(c.timeSeries2.XValues, values...)
 	}
 	return c.Error
 }
@@ -254,33 +506,84 @@ func (c *Chart) SetY(name string, values ...float64) error {
 
 	for range Only.Once {
 		if len(values) == 0 {
-			c.Error = errors.New("empty Y values")
+			c.Error = errors.New("no Y values")
 			break
 		}
 
-		c.graph.YAxis = chart.YAxis{
-			Name:           name,
-			NameStyle:      chart.Style{},
-			Style:          chart.Style{},
-			Zero:           chart.GridLine{},
-			AxisType:       0,
-			Ascending:      false,
-			ValueFormatter: nil,
-			Range:          &chart.ContinuousRange {
-				Min:        0,
-				Max:        0,
-				Domain:     0,
-				Descending: false,
-			},
-			TickStyle:      chart.Style{},
-			Ticks:          nil,
-			GridLines:      nil,
-			GridMajorStyle: chart.Style{},
-			GridMinorStyle: chart.Style{},
+		// c.graph.YAxis = chart.YAxis {
+		// 	Name:           name,
+		// 	NameStyle:      chart.Style{},
+		// 	Style:          chart.Style{},
+		// 	Zero:           chart.GridLine{},
+		// 	AxisType:       0,
+		// 	Ascending:      false,
+		// 	ValueFormatter: nil,
+		// 	Range:          &chart.ContinuousRange {
+		// 		Min:        0,
+		// 		Max:        0,
+		// 		Domain:     0,
+		// 		Descending: false,
+		// 	},
+		// 	TickStyle:      chart.Style{},
+		// 	Ticks:          nil,
+		// 	GridLines:      nil,
+		// 	GridMajorStyle: chart.Style{},
+		// 	GridMinorStyle: chart.Style{},
+		// }
+
+		c.graph.YAxis.Name = name
+
+		c.timeSeries1.YValues = append(c.timeSeries1.YValues, values...)
+		// c.graph.Series = []chart.Series{ c.timeSeries }
+		// c.graph.YAxis.Range = &chart.ContinuousRange {
+		// 	Min:        0,
+		// 	Max:        0,
+		// 	Domain:     0,
+		// 	Descending: false,
+		// }
+	}
+	return c.Error
+}
+
+func (c *Chart) SetY2(name string, values ...float64) error {
+
+	for range Only.Once {
+		if len(values) == 0 {
+			c.Error = errors.New("no Y values")
+			break
 		}
 
-		c.timeSeries.YValues = append(c.timeSeries.YValues, values...)
-		c.graph.Series = []chart.Series{ c.timeSeries }
+		// c.graph.YAxis = chart.YAxis {
+		// 	Name:           name,
+		// 	NameStyle:      chart.Style{},
+		// 	Style:          chart.Style{},
+		// 	Zero:           chart.GridLine{},
+		// 	AxisType:       0,
+		// 	Ascending:      false,
+		// 	ValueFormatter: nil,
+		// 	Range:          &chart.ContinuousRange {
+		// 		Min:        0,
+		// 		Max:        0,
+		// 		Domain:     0,
+		// 		Descending: false,
+		// 	},
+		// 	TickStyle:      chart.Style{},
+		// 	Ticks:          nil,
+		// 	GridLines:      nil,
+		// 	GridMajorStyle: chart.Style{},
+		// 	GridMinorStyle: chart.Style{},
+		// }
+
+		c.graph.YAxis.Name = name
+
+		c.timeSeries1.YValues = append(c.timeSeries1.YValues, values...)
+		// c.graph.Series = []chart.Series{ c.timeSeries }
+		// c.graph.YAxis.Range = &chart.ContinuousRange {
+		// 	Min:        0,
+		// 	Max:        0,
+		// 	Domain:     0,
+		// 	Descending: false,
+		// }
 	}
 	return c.Error
 }
@@ -293,7 +596,23 @@ func (c *Chart) Generate() error {
 			break
 		}
 
-		f, _ := os.Create(c.filename)
+		c.timeSeries1.Style = chart.Style {
+			StrokeColor: drawing.ColorBlue,
+			FillColor:   drawing.ColorBlue.WithAlpha(64),
+		}
+
+		c.graph.Series = []chart.Series {
+			c.timeSeries1,
+			// c.timeSeries2,
+		}
+
+		c.graph.Title = c.req.Title
+
+		var f *os.File
+		f, c.Error = os.Create(c.filename)
+		if c.Error != nil {
+			break
+		}
 
 		//goland:noinspection GoUnhandledErrorResult,GoDeferInLoop
 		defer f.Close()
