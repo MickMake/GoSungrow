@@ -172,7 +172,7 @@ $ ./bin/GoSungrow data graph template 8042 20220224 '{"search_string":"p13019"}'
 ```
 ![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/AppService_queryMutiPointDataList-20220224-8042.png?raw=true)
 
-Produce graphs of all points from template 8040 for date 2022/02/24 with a different width and height.
+Produce graphs of all points from template 8042 for date 2022/02/28 with a different width and height.
 ```
 $ ./bin/GoSungrow data graph template 8042 20220228 '{"width":2400,"height":500}'
 ```
