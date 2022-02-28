@@ -244,9 +244,10 @@ Get all point ids by device_type.
 Get mains power frequency variation graph from template id 8041 on date 2022/02/28
 ```
 ./bin/GoSungrow data graph template 8041 20220228 '{"search_string":"p13007","min_left_axis":49,"max_left_axis":51}'
+```
 ![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/AppService_queryMutiPointDataList-20220228-8041.png?raw=true)
 
-```
+
 ### Using the API instead.
 
 Get basic inverter information for inverter id 1129147
