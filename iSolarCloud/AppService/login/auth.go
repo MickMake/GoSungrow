@@ -83,6 +83,10 @@ func (e *EndPoint) Login(auth *SunGrowAuth) error {
 		if auth.Force {
 			e.Auth.Token = ""
 			e.Response.ResultData.Token = ""
+			// e.Error = os.Remove(filepath.Join(e.ApiRoot.GetCacheDir(), e.CacheFilename()))
+			// if e.Error != nil {
+			// 	break
+			// }
 		}
 
 		if e.IsTokenValid() {

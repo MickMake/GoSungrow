@@ -213,9 +213,10 @@ func (e *EndPoint) GetDataTable(points api.TemplatePoints) output.Table {
 		table.InitGraph(output.GraphRequest {
 			Title:        "",
 			TimeColumn:   output.SetInteger(1),
+			SearchColumn: output.SetInteger(2),
+			NameColumn:   output.SetInteger(3),
 			ValueColumn:  output.SetInteger(4),
 			UnitsColumn:  output.SetInteger(5),
-			SearchColumn: output.SetInteger(2),
 			SearchString: output.SetString(""),
 			MinLeftAxis:  output.SetFloat(0),
 			MaxLeftAxis:  output.SetFloat(0),

@@ -172,6 +172,16 @@ $ ./bin/GoSungrow data graph template 8042 20220224 '{"search_string":"p13019"}'
 ```
 ![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/AppService_queryMutiPointDataList-20220224-8042.png?raw=true)
 
+Produce graphs of all points from template 8040 for date 2022/02/24 with a different width and height.
+```
+$ ./bin/GoSungrow data graph template 8042 20220228 '{"width":2400,"height":500}'
+```
+![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/AppService_queryMutiPointDataList-20220228-8042-PurchasedPower.png?raw=true)
+![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/AppService_queryMutiPointDataList-20220228-8042-LoadPower.png?raw=true)
+![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/AppService_queryMutiPointDataList-20220228-8042-BatteryTemperature.png?raw=true)
+![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/AppService_queryMutiPointDataList-20220228-8042-InternalAirTemperature.png?raw=true)
+![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/AppService_queryMutiPointDataList-20220228-8042-BatteryChargingPower.png?raw=true)
+![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/AppService_queryMutiPointDataList-20220228-8042-BatteryDischargingPower.png?raw=true)
 
 Produce daily report for point_id p83106 for date 2022/02/24.
 ```

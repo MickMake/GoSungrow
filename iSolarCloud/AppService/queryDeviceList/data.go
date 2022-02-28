@@ -242,9 +242,10 @@ func (e *EndPoint) GetDataTable() output.Table {
 		table.InitGraph(output.GraphRequest {
 			Title:        "",
 			TimeColumn:   output.SetInteger(1),
+			SearchColumn: output.SetInteger(2),
+			NameColumn:   output.SetInteger(4),
 			ValueColumn:  output.SetInteger(5),
 			UnitsColumn:  output.SetInteger(6),
-			SearchColumn: output.SetInteger(2),
 			SearchString: output.SetString(""),
 			MinLeftAxis:  output.SetFloat(0),
 			MaxLeftAxis:  output.SetFloat(0),
