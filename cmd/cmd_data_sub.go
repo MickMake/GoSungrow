@@ -40,9 +40,10 @@ func AttachCmdDataTemplate(cmd *cobra.Command) *cobra.Command {
 		PreRunE:               Cmd.SunGrowArgs,
 		RunE:                  func(cmd *cobra.Command, args []string) error {
 			_ = SwitchOutput(cmd)
+			args = fillArray(3, args)
 			return Cmd.SunGrow.GetTemplateData(args[0], args[1], args[2])
 		},
-		Args:                  cobra.MinimumNArgs(2),
+		Args:                  cobra.RangeArgs(2, 3),
 	}
 	cmd.AddCommand(cmdDataGetTemplate)
 	cmdDataGetTemplate.Example = PrintExamples(cmdDataGetTemplate, "8042 20220212", "8042 20220212 '{\"search_string\":\"p83106\",\"min_left_axis\":-6000,\"max_left_axis\":12000}'")

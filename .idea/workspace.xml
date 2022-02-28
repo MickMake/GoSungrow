@@ -7,17 +7,9 @@
     <list default="true" id="76adadc9-ae71-42a6-82a1-66dbc8ecb14c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/cmd_data.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/cmd_data_sub.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_data_sub.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/examples.txt" beforeDir="false" afterPath="$PROJECT_DIR$/examples.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/foo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPsList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPsList/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/queryDeviceList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/queryDeviceList/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/queryMutiPointDataList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/queryMutiPointDataList/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/output/struct_graph.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/output/struct_graph.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/output/struct_table.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/output/struct_table.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/funcs.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/funcs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/struct_template.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/struct_template.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +75,7 @@
     <configuration name="GoSungrow" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="GoSungrow" />
       <working_directory value="$PROJECT_DIR$" />
-      <parameters value="data get stats" />
+      <parameters value="data get template 8042 20220224" />
       <kind value="PACKAGE" />
       <package value="$PROJECT_DIR$" />
       <directory value="$PROJECT_DIR$" />
@@ -234,6 +226,11 @@
           <url>file://$PROJECT_DIR$/iSolarCloud/funcs.go</url>
           <line>277</line>
           <option name="timeStamp" value="206" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/struct_template.go</url>
+          <line>49</line>
+          <option name="timeStamp" value="207" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

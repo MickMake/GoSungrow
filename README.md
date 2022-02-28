@@ -59,78 +59,144 @@ I've planned a number of features, but my main goal is to be able to interface w
 
 Get basic inverter information for inverter id 1129147
 ```
-./bin/GoSungrow api get findPsType '{"ps_id":"1129147"}'
+$ ./bin/GoSungrow api get findPsType '{"ps_id":"1129147"}'
 ```
 
 ```
-./bin/GoSungrow api get getPsDetailWithPsType '{"ps_id":"1129147"}'
+$ ./bin/GoSungrow api get getPsDetailWithPsType '{"ps_id":"1129147"}'
 ```
 
 Get basic power stats for inverter
 ```
-./bin/GoSungrow api get getPowerStatistics '{"ps_id":"1129147"}'
+$ ./bin/GoSungrow api get getPowerStatistics '{"ps_id":"1129147"}'
 ```
 
 Get point_id to point names for different device types
 ```
-./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"1"}'
+$ ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"1"}'
 ```
 
 ```
-./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"2"}'
+$ ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"2"}'
 ```
 
 ```
-./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"7"}'
+$ ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"7"}'
 ```
 
 Get all inverters
 ```
-./bin/GoSungrow api get getPsList
+$ ./bin/GoSungrow api get getPsList
 ```
 
 ```
-./bin/GoSungrow api get WebAppService.showPSView '{"ps_id":"1129147"}'
+$ ./bin/GoSungrow api get WebAppService.showPSView '{"ps_id":"1129147"}'
 ```
 
-Produce basic storage report
+Produce basic real-time stats
 ```
-./bin/GoSungrow api get queryMutiPointDataList '{"ps_key":"1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_11_0_0","points":"p13150,p13126,p13142,p13143,p13019,p13141,p13121,p13003,p13149,p83106","minute_interval":"5","start_time_stamp":"20220215000000","end_time_stamp":"20220215235900", "ps_id":"1129147"}'
+$ ./bin/GoSungrow data get stats
++---------------------+-----------+---------------------------+---------+------+
+| Date                | Point Id  | Point Name                | Value   | Unit |
++---------------------+-----------+---------------------------+---------+------+
+| 2022-02-28 11:05:00 | 1129147.0 | Co2 Reduce                | 3.589   | kg   |
+| 2022-02-28 11:05:00 | 1129147.0 | Co2 Reduce Total          | 1047    | kg   |
+| 2022-02-28 11:05:00 | 1129147.0 | Curr Power                | 641     | W    |
+| 2022-02-28 11:05:00 | 1129147.0 | Daily Irradiation         | --      |      |
+| 2022-02-28 11:05:00 | 1129147.0 | Equivalent Hour           | 0.36    | Hour |
+| 2022-02-28 11:05:00 | 1129147.0 | Es Discharge Energy       | 4.8     | kWh  |
+| 2022-02-28 11:05:00 | 1129147.0 | Es Energy                 | 1.6     | kWh  |
+| 2022-02-28 11:05:00 | 1129147.0 | Es Power                  | 641     | W    |
+| 2022-02-28 11:05:00 | 1129147.0 | Es Total Discharge Energy | 109.9   | kWh  |
+| 2022-02-28 11:05:00 | 1129147.0 | Es Total Energy           | 106.2   | kWh  |
+| 2022-02-28 11:05:00 | 1129147.0 | Installed Power Map       | 10      | kWp  |
+| 2022-02-28 11:05:00 | 1129147.0 | Pv Energy                 | 3.6     | kWh  |
+| 2022-02-28 11:05:00 | 1129147.0 | Pv Power                  | 2.291   | kW   |
+| 2022-02-28 11:05:00 | 1129147.0 | Radiation                 | --      |      |
+| 2022-02-28 11:05:00 | 1129147.0 | Today Energy              | 3.6     | kWh  |
+| 2022-02-28 11:05:00 | 1129147.0 | Today Income              | 1.346   | AUD  |
+| 2022-02-28 11:05:00 | 1129147.0 | Total Capacity            | 10      | kWp  |
+| 2022-02-28 11:05:00 | 1129147.0 | Total Energy              | 1.05    | MWh  |
+| 2022-02-28 11:05:00 | 1129147.0 | Total Income              | 302.074 | AUD  |
+| 2022-02-28 11:05:00 | 1129147.0 | Use Energy                | 7.6     | kWh  |
++---------------------+-----------+---------------------------+---------+------+
 ```
+
+### Reporting examples.
 
 Show all data points used in a report template.
 ```
-./bin/GoSungrow data get template-points 8040
-┏━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━┓
-┃ PointId ┃ Description                        ┃ Unit ┃
-┣━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━┫
-┃ p13008  │ Phase A Current                    │ A    ┃
-┃ p13162  │ Max. Charging Current (BMS)        │ A    ┃
-┃ p18063  │ Phase B Backup Current             │ A    ┃
-┃ p13009  │ Phase B Current                    │ A    ┃
-┃ p18062  │ Phase A Backup Current             │ A    ┃
-┃ p13163  │ Max. Discharging Current (BMS)     │ A    ┃
-┃ p13106  │ MPPT2 Current                      │ A    ┃
-┃ p13139  │ Battery Current                    │ A    ┃
-┃ p18064  │ Phase C Backup Current             │ A    ┃
-┃ p13002  │ MPPT1 Current                      │ A    ┃
-┃ p13010  │ Phase C Current                    │ A    ┃
-┗━━━━━━━━━┷━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┷━━━━━━┛
+$ ./bin/GoSungrow data get template-points 8040
++---------+----------------------------+------+
+| PointId | Description                | Unit |
++---------+----------------------------+------+
+| p83106  | Load Power                 | kW   |
+| p13003  | Total DC Power             | kW   |
+| p13019  | Internal Air Temperature   | ℃    |
+| p13142  | Battery Health (SOH)       | %    |
+| p13149  | Purchased Power            | kW   |
+| p13150  | Battery Discharging Power  | kW   |
+| p13121  | Total Export Active  Power | kW   |
+| p13126  | Battery Charging Power     | kW   |
+| p13141  | Battery Level (SOC)        | %    |
+| p13143  | Battery Temperature        | ℃    |
++---------+----------------------------+------+
+```
+
+Produce daily report for template 8040 for date 2022/02/24 spit out CSV to STDOUT.
+```
+$ ./bin/GoSungrow data get template 8040 20220224
++---------------------+-----------------------+----------------------------+-------------+-------+
+| Date/Time           | Point Id              | Point Name                 | Value       | Units |
++---------------------+-----------------------+----------------------------+-------------+-------+
+| 2022-02-24 00:00:00 | 1129147_11_0_0.p83106 | Load Power                 | 818.0       | kW    |
+| 2022-02-24 00:05:00 | 1129147_11_0_0.p83106 | Load Power                 | 756.0       | kW    |
+| 2022-02-24 00:10:00 | 1129147_11_0_0.p83106 | Load Power                 | 571.0       | kW    |
+| 2022-02-24 00:15:00 | 1129147_11_0_0.p83106 | Load Power                 | 557.0       | kW    |
+| 2022-02-24 00:20:00 | 1129147_11_0_0.p83106 | Load Power                 | 553.0       | kW    |
+| 2022-02-24 00:25:00 | 1129147_11_0_0.p83106 | Load Power                 | 558.0       | kW    |
+| 2022-02-24 00:30:00 | 1129147_11_0_0.p83106 | Load Power                 | 562.0       | kW    |
+
+...
+
++---------------------+-----------------------+----------------------------+-------------+-------+
+```
+
+Produce daily report for template 8042 for date 2022/02/24 and save as a JSON file.
+```
+$ ./bin/GoSungrow data save template 8042 20220224
+```
+
+Produce graph of daily report for template 8040 for date 2022/02/24 and point_id P13019.
+```
+$ ./bin/GoSungrow data get template-points 8040
++---------+----------------------------+------+
+| PointId | Description                | Unit |
++---------+----------------------------+------+
+| p83106  | Load Power                 | kW   |
+| p13003  | Total DC Power             | kW   |
+| p13121  | Total Export Active  Power | kW   |
+| p13142  | Battery Health (SOH)       | %    |
+| p13150  | Battery Discharging Power  | kW   |
+| p13019  | Internal Air Temperature   | ℃    |
+| p13126  | Battery Charging Power     | kW   |
+| p13141  | Battery Level (SOC)        | %    |
+| p13143  | Battery Temperature        | ℃    |
+| p13149  | Purchased Power            | kW   |
++---------+----------------------------+------+
+
+$ ./bin/GoSungrow data graph template 8042 20220224 '{"search_string":"p13019"}'
+```
+![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/AppService_queryMutiPointDataList-20220224-8042.png?raw=true)
+
+Produce basic storage report
+```
+$ ./bin/GoSungrow api get queryMutiPointDataList '{"ps_key":"1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_11_0_0","points":"p13150,p13126,p13142,p13143,p13019,p13141,p13121,p13003,p13149,p83106","minute_interval":"5","start_time_stamp":"20220215000000","end_time_stamp":"20220215235900", "ps_id":"1129147"}'
 ```
 
 Get the household storage report
 ```
-./bin/GoSungrow api get getHouseholdStoragePsReport '{"date_id":"2022","date_type":"4","ps_id":"1129147"}'
-```
-
-Produce daily report for template 8042 for date 2022/02/24 and save as a CSV file 
-```
-./bin/GoSungrow data save template 20220224 8042
-```
-
-Produce daily report for template 8042 for date 2022/02/24 spit out CSV to STDOUT
-```
-./bin/GoSungrow data get template 20220224 8042
+$ ./bin/GoSungrow api get getHouseholdStoragePsReport '{"date_id":"2022","date_type":"4","ps_id":"1129147"}'
 ```
 
 ### Git commands
