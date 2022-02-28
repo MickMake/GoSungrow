@@ -291,13 +291,6 @@ func (sg *SunGrow) GetCurrentStats() error {
 		if sg.Error != nil {
 			break
 		}
-
-		// if sg.OutputType.IsHuman() {
-		// 	_queryDeviceList := queryDeviceList.AssertResultData(ep)
-		// 	points := _queryDeviceList.GetDataByName("SH10RT")
-		// 	// @TODO - Improve output of this!
-		// 	fmt.Printf("%v", points)
-		// }
 	}
 
 	return sg.Error
@@ -343,53 +336,6 @@ func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints) erro
 		if sg.Error != nil {
 			break
 		}
-
-		//
-		// csv := api.NewCsv()
-		// sg.Error = csv.SetHeader([]string{
-		// 	"Date/Time",
-		// 	"PointId Name",
-		// 	"Point Name",
-		// 	"Value",
-		// 	"Units",
-		// })
-		//
-		// data := queryMutiPointDataList.AssertResultData(ep)
-		// for deviceName, deviceRef := range data.Devices {
-		// 	for pointId, pointRef := range deviceRef.Points {
-		// 		for _, tim := range pointRef.Times {
-		// 			gp := pointNames.GetPoint(deviceName, pointId)
-		// 			_ = csv.AddRow([]string {
-		// 				tim.Key.PrintFull(),
-		// 				deviceName,
-		// 				fmt.Sprintf("%s (%s)", gp.Description, pointId),
-		// 				tim.Value,
-		// 				gp.Unit,
-		// 			})
-		// 		}
-		// 	}
-		// }
-		//
-		// switch {
-		// 	case sg.OutputType.IsNone():
-		//
-		// 	case sg.OutputType.IsHuman():
-		// 		table.Print()
-		//
-		// 	case sg.OutputType.IsFile():
-		// 		// a := queryMutiPointDataList.Assert(ep)
-		// 		// suffix := fmt.Sprintf("%s-%s", when, "data")
-		// 		// fn := a.GetCsvFilename()
-		// 		sg.Error = table.WriteCsvFile()
-		//
-		// 	case sg.OutputType.IsRaw():
-		// 		fmt.Println(ep.GetJsonData(true))
-		//
-		// 	case sg.OutputType.IsJson():
-		// 		fmt.Println(ep.GetJsonData(false))
-		//
-		// 	default:
-		// }
 	}
 
 	return sg.Error
@@ -460,9 +406,6 @@ func (sg *SunGrow) Output(endpoint api.EndPoint, table output.Table, graphFilter
 				table.Print()
 
 			case sg.OutputType.IsFile():
-				// a := queryMutiPointDataList.Assert(endpoint)
-				// suffix := fmt.Sprintf("%s-%s", when, "data")
-				// fn := a.GetCsvFilename()
 				sg.Error = table.WriteCsvFile()
 
 			case sg.OutputType.IsRaw():
@@ -480,7 +423,6 @@ func (sg *SunGrow) Output(endpoint api.EndPoint, table output.Table, graphFilter
 				if sg.Error != nil {
 					break
 				}
-				//
 
 			default:
 		}
@@ -492,11 +434,8 @@ func (sg *SunGrow) Output(endpoint api.EndPoint, table output.Table, graphFilter
 func (sg *SunGrow) GetPsId() int64 {
 	var ret int64
 
-	// sOut := sg.OutputType
 	for range Only.Once {
-		// sg.OutputType.SetNone()
 
-		// ep := sg.GetByJson("AppService.getPsList", "")
 		ep := sg.GetByStruct("AppService.getPsList", nil, DefaultCacheTimeout)
 		if ep.IsError() {
 			sg.Error = ep.GetError()
@@ -506,7 +445,6 @@ func (sg *SunGrow) GetPsId() int64 {
 		_getPsList := getPsList.AssertResultData(ep)
 		ret = _getPsList.GetPsId()
 	}
-	// sg.OutputType = sOut
 
 	return ret
 }
@@ -524,33 +462,3 @@ func fillArray(count int, args []string) []string {
 	}
 	return ret
 }
-
-// func (sg *SunGrow) Graph(csv api.Table, timeCol int, ) {
-// 	foo := New("Testing 1. 2. 3.")
-//
-// 	err := foo.SetFilename("HelloWorld.png")
-// 	fmt.Println(err)
-//
-// 	now := time.Now()
-// 	var times []time.Time
-// 	for i := 0; i < 16; i++ {
-// 		now = now.Add(time.Minute * 5)
-// 		times = append(times, now)
-// 	}
-// 	err = foo.SetX("Date", times...)
-// 	fmt.Println(err)
-//
-// 	var values []float64
-// 	for i := 0; i < 16; i++ {
-// 		then := (float64(i) * Randy(-200, 500)) +  Randy(-5000, 10000)
-// 		values = append(values, then)
-// 	}
-//
-// 	err = foo.SetY("Power", values...)
-// 	fmt.Println(err)
-//
-// 	foo.SetRangeY(-6000, 12000)
-//
-// 	err = foo.Generate()
-// 	fmt.Println(err)
-// }

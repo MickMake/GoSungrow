@@ -656,6 +656,20 @@ func (c *Chart) Generate() error {
 }
 
 
+// TimeValueFormatterWithFormat is a ValueFormatter for timestamps with a given format.
+func formatTime(v interface{}, dateFormat string) string {
+	if typed, isTyped := v.(time.Time); isTyped {
+		return typed.Format(dateFormat)
+	}
+	if typed, isTyped := v.(int64); isTyped {
+		return time.Unix(0, typed).Format(dateFormat)
+	}
+	if typed, isTyped := v.(float64); isTyped {
+		return time.Unix(0, int64(typed)).Format(dateFormat)
+	}
+	return ""
+}
+
 
 // var lock sync.Mutex
 // var graph *chart.Chart

@@ -6,8 +6,21 @@
   <component name="ChangeListManager">
     <list default="true" id="76adadc9-ae71-42a6-82a1-66dbc8ecb14c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220224-8042-InternalAirTemperature.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220224-8042-InternalAirTemperature.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220228-8042-BatteryChargingPower.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220228-8042-BatteryChargingPower.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220228-8042-BatteryDischargingPower.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220228-8042-BatteryDischargingPower.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220228-8042-BatteryHealth(SOH).png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220228-8042-BatteryHealth(SOH).png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220228-8042-BatteryLevel(SOC).png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220228-8042-BatteryLevel(SOC).png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220228-8042-BatteryTemperature.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220228-8042-BatteryTemperature.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220228-8042-InternalAirTemperature.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220228-8042-InternalAirTemperature.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220228-8042-LoadPower.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220228-8042-LoadPower.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220228-8042-PurchasedPower.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220228-8042-PurchasedPower.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220228-8042-TotalDCPower.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220228-8042-TotalDCPower.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220228-8042-TotalExportActivePower.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/AppService_queryMutiPointDataList-20220228-8042-TotalExportActivePower.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/examples.txt" beforeDir="false" afterPath="$PROJECT_DIR$/examples.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/datetime.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/datetime.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/output/struct_graph.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/output/struct_graph.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/funcs.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/funcs.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +86,7 @@
     <configuration name="GoSungrow" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="GoSungrow" />
       <working_directory value="$PROJECT_DIR$" />
-      <parameters value="data graph template 8042 20220228" />
+      <parameters value="data graph template 8042 20220224 '{&quot;search_string&quot;:&quot;p13019&quot;}'" />
       <kind value="PACKAGE" />
       <package value="$PROJECT_DIR$" />
       <directory value="$PROJECT_DIR$" />
@@ -177,12 +190,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/funcs.go</url>
-          <line>330</line>
+          <line>323</line>
           <option name="timeStamp" value="210" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/funcs.go</url>
-          <line>318</line>
+          <line>311</line>
           <option name="timeStamp" value="211" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
@@ -197,23 +210,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/funcs.go</url>
-          <line>399</line>
+          <line>345</line>
           <option name="timeStamp" value="261" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/funcs.go</url>
-          <line>417</line>
+          <line>363</line>
           <option name="timeStamp" value="265" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/funcs.go</url>
-          <line>410</line>
+          <line>356</line>
           <option name="timeStamp" value="266" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/iSolarCloud/api/output/struct_graph.go</url>
-          <line>270</line>
-          <option name="timeStamp" value="291" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/output/struct_graph.go</url>
@@ -222,33 +230,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/output/struct_graph.go</url>
-          <line>634</line>
-          <option name="timeStamp" value="312" />
+          <line>652</line>
+          <option name="timeStamp" value="336" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/output/struct_graph.go</url>
-          <line>76</line>
-          <option name="timeStamp" value="313" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/iSolarCloud/api/struct_response.go</url>
-          <line>23</line>
-          <option name="timeStamp" value="324" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/iSolarCloud/api/datetime.go</url>
-          <line>63</line>
-          <option name="timeStamp" value="326" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/iSolarCloud/api/output/struct_graph.go</url>
-          <line>204</line>
-          <option name="timeStamp" value="331" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/iSolarCloud/api/output/struct_graph.go</url>
-          <line>181</line>
-          <option name="timeStamp" value="332" />
+          <line>481</line>
+          <option name="timeStamp" value="337" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

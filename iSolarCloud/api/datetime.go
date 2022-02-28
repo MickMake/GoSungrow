@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -51,11 +50,19 @@ func NewDateTime(date string) DateTime {
 }
 
 func (dt *DateTime) GetDayStartTimestamp() string {
-	return fmt.Sprintf("%s000000", dt.Time.Format(DtLayoutDay))
+	var ret string
+	f1 := dt.Time.Round(time.Hour * 24)
+	ret = f1.Format(DtLayoutSecond)
+	return ret
+	// return fmt.Sprintf("%s000000", dt.Time.Format(DtLayoutDay))
 }
 
 func (dt *DateTime) GetDayEndTimestamp() string {
-	return fmt.Sprintf("%s235900", dt.Time.Format(DtLayoutDay))
+	var ret string
+	f1 := dt.Time.Round(time.Hour * 24).Add(time.Hour * 24)
+	ret = f1.Format(DtLayoutSecond)
+	return ret
+	// return fmt.Sprintf("%s235900", dt.Time.Format(DtLayoutDay))
 }
 
 func (dt DateTime) String() string {
