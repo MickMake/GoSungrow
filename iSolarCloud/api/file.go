@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"time"
 )
 
 
@@ -142,72 +141,76 @@ func (ep *EndPointStruct) ApiWriteDataFile(ref interface{}) error {
 }
 
 
-func (ep *EndPointStruct) GetCacheFilename(request interface{}) string {
+func (ep *EndPointStruct) ApiCacheFilename(request interface{}) string {
 	postfix := apiReflect.GetFingerprint(request)
 	return fmt.Sprintf("%s_%s-%s.json", ep.Area, ep.Name, postfix)
 }
 
-func (ep *EndPointStruct) GetCacheFilePath(request interface{}) string {
-	return filepath.Join(ep.ApiRoot.GetCacheDir(), ep.GetCacheFilename(request))
+func (ep *EndPointStruct) ApiFingerprint(request interface{}) string {
+	return apiReflect.GetFingerprint(request)
 }
 
-// IsCacheFileOk Retrieves cache data from a local file.
-func (ep *EndPointStruct) ApiCheckCache(request interface{}) bool {
-	var ok bool
-	for range Only.Once {
-		fn := ep.GetCacheFilePath(request)
-
-		var f os.FileInfo
-		f, ep.Error = os.Stat(fn)
-		if ep.Error != nil {
-			if os.IsNotExist(ep.Error) {
-				ep.Error = nil
-			}
-			break
-		}
-
-		if f.IsDir() {
-			ep.Error = errors.New("file is a directory")
-			break
-		}
-
-		duration := ep.ApiRoot.GetCacheTimeout()
-		then := f.ModTime()
-		then = then.Add(duration)
-		now := time.Now()
-		if then.Before(now) {
-			break
-		}
-
-		ok = true
-	}
-
-	return ok
-}
-
-// CacheRead Retrieves cache data from a local file.
-func (ep *EndPointStruct) ApiReadCache(request interface{}, ref interface{}) error {
-	return output.FileRead(ep.GetCacheFilePath(request), ref)
-}
-
-// CacheWrite Saves cache data to a file path.
-func (ep *EndPointStruct) ApiWriteCache(request interface{}, ref interface{}) error {
-	return output.FileWrite(ep.GetCacheFilePath(request), ref, output.DefaultFileMode)
-
-	// for range Only.Once {
-	// 	fn := ep.GetCacheFilePath(request)
-	//
-	// 	var f *os.File
-	// 	f, ep.Error = os.OpenFile(fn, os.O_RDWR|os.O_CREATE|os.O_TRUNC, output.DefaultFileMode)
-	// 	if ep.Error != nil {
-	// 		ep.Error = errors.New(fmt.Sprintf("Unable to write to file %s - %v", fn, ep.Error))
-	// 		break
-	// 	}
-	//
-	// 	//goland:noinspection GoUnhandledErrorResult,GoDeferInLoop
-	// 	defer f.Close()
-	// 	ep.Error = json.NewEncoder(f).Encode(ref)
-	// }
-	//
-	// return ep.Error
-}
+// func (ep *EndPointStruct) ApiCacheFilePath(request interface{}) string {
+// 	return filepath.Join(ep.ApiRoot.GetCacheDir(), ep.ApiCacheFilename(request))
+// }
+//
+// // ApiCheckCache Retrieves cache data from a local file.
+// func (ep *EndPointStruct) ApiCheckCache(request interface{}) bool {
+// 	var ok bool
+// 	for range Only.Once {
+// 		fn := ep.ApiCacheFilePath(request)
+//
+// 		var f os.FileInfo
+// 		f, ep.Error = os.Stat(fn)
+// 		if ep.Error != nil {
+// 			if os.IsNotExist(ep.Error) {
+// 				ep.Error = nil
+// 			}
+// 			break
+// 		}
+//
+// 		if f.IsDir() {
+// 			ep.Error = errors.New("file is a directory")
+// 			break
+// 		}
+//
+// 		duration := ep.ApiRoot.GetCacheTimeout()
+// 		then := f.ModTime()
+// 		then = then.Add(duration)
+// 		now := time.Now()
+// 		if then.Before(now) {
+// 			break
+// 		}
+//
+// 		ok = true
+// 	}
+//
+// 	return ok
+// }
+//
+// // CacheRead Retrieves cache data from a local file.
+// func (ep *EndPointStruct) ApiReadCache(request interface{}, ref interface{}) error {
+// 	return output.FileRead(ep.ApiCacheFilePath(request), ref)
+// }
+//
+// // CacheWrite Saves cache data to a file path.
+// func (ep *EndPointStruct) ApiWriteCache(request interface{}, ref interface{}) error {
+// 	return output.FileWrite(ep.ApiCacheFilePath(request), ref, output.DefaultFileMode)
+//
+// 	// for range Only.Once {
+// 	// 	fn := ep.ApiCacheFilePath(request)
+// 	//
+// 	// 	var f *os.File
+// 	// 	f, ep.Error = os.OpenFile(fn, os.O_RDWR|os.O_CREATE|os.O_TRUNC, output.DefaultFileMode)
+// 	// 	if ep.Error != nil {
+// 	// 		ep.Error = errors.New(fmt.Sprintf("Unable to write to file %s - %v", fn, ep.Error))
+// 	// 		break
+// 	// 	}
+// 	//
+// 	// 	//goland:noinspection GoUnhandledErrorResult,GoDeferInLoop
+// 	// 	defer f.Close()
+// 	// 	ep.Error = json.NewEncoder(f).Encode(ref)
+// 	// }
+// 	//
+// 	// return ep.Error
+// }

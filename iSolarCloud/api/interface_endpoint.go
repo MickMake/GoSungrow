@@ -30,6 +30,7 @@ type EndPoint interface {
 	GetRequestJson() output.Json
 	IsRequestValid() error
 	RequestString() string
+	RequestFingerprint() string
 
 	SetResponse([]byte) EndPoint // EndPointStruct
 	ResponseRef() interface{}
@@ -37,9 +38,10 @@ type EndPoint interface {
 	IsResponseValid() error
 	ResponseString() string
 
-	CheckCache() bool
-	ReadCache() EndPoint
-	WriteCache() error
+	// WriteCache() error
+	// ReadCache() EndPoint
+	// CheckCache() bool
+	CacheFilename() string
 	SetCacheTimeout(duration time.Duration) EndPoint
 	GetCacheTimeout() time.Duration
 }

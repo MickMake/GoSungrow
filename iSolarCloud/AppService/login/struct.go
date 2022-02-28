@@ -335,21 +335,31 @@ func (e EndPoint) MarshalJSON() ([]byte, error) {
 
 // ********************************************************************************
 
-// CheckCacheFile - Check if a cache file exists for this EndPoint.
-func (e EndPoint) CheckCache() bool {
-	return e.ApiCheckCache(e.Request.RequestData)
+// RequestFingerprint - Check if a cache file exists for this EndPoint.
+func (e EndPoint) RequestFingerprint() string {
+	return e.ApiFingerprint(e.Request.RequestData)
 }
 
-// ReadCacheFile - Read a cache file and return it as an EndPoint structure.
-func (e EndPoint) ReadCache() api.EndPoint {
-	e.Error = e.ApiReadCache(e.Request.RequestData, &e)
-	return e
+// CacheFilename - Check if a cache file exists for this EndPoint.
+func (e EndPoint) CacheFilename() string {
+	return e.ApiCacheFilename(e.Request.RequestData)
 }
 
-// WriteCacheFile - Write this EndPoint structure out to a cache file.
-func (e EndPoint) WriteCache() error {
-	return e.ApiWriteCache(e.Request.RequestData, e)
-}
+// // CheckCache - Check if a cache file exists for this EndPoint.
+// func (e EndPoint) CheckCache() bool {
+// 	return e.ApiCheckCache(e.Request.RequestData)
+// }
+//
+// // ReadCache - Read a cache file and return it as an EndPoint structure.
+// func (e EndPoint) ReadCache() api.EndPoint {
+// 	e.Error = e.ApiReadCache(e.Request.RequestData, &e)
+// 	return e
+// }
+//
+// // WriteCache - Write this EndPoint structure out to a cache file.
+// func (e EndPoint) WriteCache() error {
+// 	return e.ApiWriteCache(e.Request.RequestData, e)
+// }
 
 // SetCacheTimeout - Set the cache timeout for this EndPoint. (Defaults to 1 hour.)
 func (e EndPoint) SetCacheTimeout(duration time.Duration) api.EndPoint {

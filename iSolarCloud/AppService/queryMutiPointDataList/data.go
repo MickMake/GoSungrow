@@ -78,8 +78,11 @@ func (e *ResultData) UnmarshalJSON(data []byte) error {
 
 		d := make(dDevices)
 
-		// Store DeviceData.Points
-		_ = json.Unmarshal(data, &d)
+		// Store DeviceData.Points.
+		err = json.Unmarshal(data, &d)
+		if err != nil {
+			break
+		}
 
 		e.Devices = make(Devices)
 		for deviceName, deviceRef := range d {

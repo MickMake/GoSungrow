@@ -55,45 +55,10 @@ I've planned a number of features, but my main goal is to be able to interface w
 
 
 ## Use case example:
-### Fetch PV data from the API.
 
-Get basic inverter information for inverter id 1129147
-```
-$ ./bin/GoSungrow api get findPsType '{"ps_id":"1129147"}'
-```
+### High level reporting examples.
 
-```
-$ ./bin/GoSungrow api get getPsDetailWithPsType '{"ps_id":"1129147"}'
-```
-
-Get basic power stats for inverter
-```
-$ ./bin/GoSungrow api get getPowerStatistics '{"ps_id":"1129147"}'
-```
-
-Get point_id to point names for different device types
-```
-$ ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"1"}'
-```
-
-```
-$ ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"2"}'
-```
-
-```
-$ ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"7"}'
-```
-
-Get all inverters
-```
-$ ./bin/GoSungrow api get getPsList
-```
-
-```
-$ ./bin/GoSungrow api get WebAppService.showPSView '{"ps_id":"1129147"}'
-```
-
-Produce basic real-time stats
+Produce point-in-time statistics
 ```
 $ ./bin/GoSungrow data get stats
 +---------------------+-----------+---------------------------+---------+------+
@@ -122,8 +87,26 @@ $ ./bin/GoSungrow data get stats
 +---------------------+-----------+---------------------------+---------+------+
 ```
 
-### Reporting examples.
-
+Get all defined report templates.
+```
+./bin/GoSungrow data get templates
++-------------+---------------+---------------------+
+| Template Id | Template Name | Update On           |
++-------------+---------------+---------------------+
+| 8042        | Critical      | 2022-02-15 13:00:28 |
+| 8041        | extras        | 2022-02-15 09:40:04 |
+| 8036        | C             | 2022-02-15 09:31:35 |
+| 8039        | v             | 2022-02-15 09:31:10 |
+| 8040        | A             | 2022-02-15 09:30:56 |
+| 8034        | Percent       | 2022-02-15 09:30:41 |
+| 8038        | MWh           | 2022-02-15 09:09:22 |
+| 8037        | MW            | 2022-02-15 09:03:22 |
+| 8033        | kW            | 2022-02-15 09:01:19 |
+| 8035        | Hours         | 2022-02-15 08:55:56 |
+| 8031        | kWh           | 2022-02-15 07:57:36 |
+| 7981        | Power         | 2022-02-09 10:03:40 |
++-------------+---------------+---------------------+
+```
 Show all data points used in a report template.
 ```
 $ ./bin/GoSungrow data get template-points 8040
@@ -143,7 +126,7 @@ $ ./bin/GoSungrow data get template-points 8040
 +---------+----------------------------+------+
 ```
 
-Produce daily report for template 8040 for date 2022/02/24 spit out CSV to STDOUT.
+Produce daily report for template 8040 for date 2022/02/24 display on STDOUT.
 ```
 $ ./bin/GoSungrow data get template 8040 20220224
 +---------------------+-----------------------+----------------------------+-------------+-------+
@@ -188,6 +171,119 @@ $ ./bin/GoSungrow data get template-points 8040
 $ ./bin/GoSungrow data graph template 8042 20220224 '{"search_string":"p13019"}'
 ```
 ![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/AppService_queryMutiPointDataList-20220224-8042.png?raw=true)
+
+
+Produce daily report for point_id p83106 for date 2022/02/24.
+```
+$ ./bin/GoSungrow data get points 20220224 1129147_11_0_0.p83106
++---------------------+-----------------------+------------+--------+-------+
+| Date/Time           | Point Id              | Point Name | Value  | Units |
++---------------------+-----------------------+------------+--------+-------+
+| 2022-02-24 00:00:00 | 1129147_11_0_0.p83106 |            | 818.0  |       |
+| 2022-02-24 00:05:00 | 1129147_11_0_0.p83106 |            | 756.0  |       |
+| 2022-02-24 00:10:00 | 1129147_11_0_0.p83106 |            | 571.0  |       |
+| 2022-02-24 00:15:00 | 1129147_11_0_0.p83106 |            | 557.0  |       |
+| 2022-02-24 00:20:00 | 1129147_11_0_0.p83106 |            | 553.0  |       |
+| 2022-02-24 00:25:00 | 1129147_11_0_0.p83106 |            | 558.0  |       |
+| 2022-02-24 00:30:00 | 1129147_11_0_0.p83106 |            | 562.0  |       |
+| 2022-02-24 00:35:00 | 1129147_11_0_0.p83106 |            | 561.0  |       |
+
+...
+
++---------------------+-----------------------+------------+--------+-------+
+```
+
+Get all point ids by device_type.
+```
++-------------+------------+----------+----------------------------------------+
+| Device Type | Point Type | Point Id | Point Name                             |
++-------------+------------+----------+----------------------------------------+
+| 1           | 2          | 1        | Daily Yield                            |
+| 1           | 1          | 24       | Total Active Power                     |
+| 1           | 1          | 2        | Total Yield                            |
+| 1           | 1          | 14       | Total DC Power                         |
+| 1           | 1          | 18       | Phase A Voltage                        |
+| 1           | 1          | 19       | Phase B Voltage                        |
+| 1           | 1          | 20       | Phase C Voltage                        |
+| 1           | 1          | 21       | Phase A Current                        |
+| 1           | 1          | 22       | Phase B Current                        |
+| 1           | 1          | 23       | Phase C Current                        |
+| 1           | 1          | 25       | Total Reactive Power                   |
+| 1           | 1          | 27       | Grid Frequency                         |
+| 1           | 1          | 15       | A-B Line Voltage                       |
+| 1           | 1          | 16       | B-C Line Voltage                       |
+| 1           | 1          | 17       | C-A Line Voltage                       |
+| 1           | 1          | 4        | Internal Air Temperature               |
+| 1           | 1          | 26       | Total Power Factor                     |
+| 1           | 1          | 90       | Negative Voltage to Ground             |
+| 1           | 1          | 43       | Total Apparent Power                   |
+| 1           | 1          | 33       | Module 1 Temperature                   |
+| 1           | 1          | 34       | Module 2 Temperature                   |
+| 1           | 1          | 39       | Positive Impedance to Ground           |
+| 1           | 1          | 40       | Negative Impedance to Ground           |
+| 1           | 1          | 41       | P-limit-actual                         |
+| 1           | 1          | 42       | Reactive Power Regulation Actual Value |
+| 1           | 2          | 67       | Daily Yield (Theoretical)              |
+| 1           | 1          | 5        | MPPT1 Voltage                          |
+| 1           | 1          | 6        | MPPT1 Current                          |
+| 1           | 1          | 7        | MPPT2 Voltage                          |
+| 1           | 1          | 8        | MPPT2 Current                          |
+| 1           | 1          | 70       | String 1 Current                       |
+| 1           | 1          | 71       | String 2 Current                       |
+| 1           | 1          | 72       | String 3 Current                       |
+| 1           | 1          | 73       | String 4 Current                       |
+| 1           | 1          | 74       | String 5 Current                       |
+| 1           | 1          | 75       | String 6 Current                       |
+| 1           | 1          | 76       | String 7 Current                       |
+
+...
+
++-------------+------------+----------+----------------------------------------+
+```
+
+Get mains power frequency variation graph from template id 8041 on date 2022/02/28
+```
+./bin/GoSungrow data graph template 8041 20220228 '{"search_string":"p13007","min_left_axis":49,"max_left_axis":51}'
+![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/AppService_queryMutiPointDataList-20220228-8041.png?raw=true)
+
+```
+### Using the API instead.
+
+Get basic inverter information for inverter id 1129147
+```
+$ ./bin/GoSungrow api get findPsType '{"ps_id":"1129147"}'
+```
+
+```
+$ ./bin/GoSungrow api get getPsDetailWithPsType '{"ps_id":"1129147"}'
+```
+
+Get basic power stats for inverter
+```
+$ ./bin/GoSungrow api get getPowerStatistics '{"ps_id":"1129147"}'
+```
+
+Get point_id to point names for different device types
+```
+$ ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"1"}'
+```
+
+```
+$ ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"2"}'
+```
+
+```
+$ ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"7"}'
+```
+
+Get all inverters
+```
+$ ./bin/GoSungrow api get getPsList
+```
+
+```
+$ ./bin/GoSungrow api get WebAppService.showPSView '{"ps_id":"1129147"}'
+```
 
 Produce basic storage report
 ```

@@ -113,7 +113,7 @@ func (sg *SunGrow) GetTemplatePoints(template string) error {
 
 		table := output.NewTable()
 		sg.Error = table.SetHeader(
-			"PointId",
+			"Point Id",
 			"Description",
 			"Unit",
 			)

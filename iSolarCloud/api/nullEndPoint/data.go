@@ -1,7 +1,9 @@
 package nullEndPoint
 
 import (
+	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/output"
 	"errors"
 	"fmt"
 )
@@ -60,3 +62,48 @@ func (e *ResultData) IsValid() error {
 //
 //	return err
 // }
+
+func (e *EndPoint) GetDataTable() output.Table {
+	var table output.Table
+
+	for range Only.Once {
+		table = output.NewTable()
+		e.Error = table.SetTitle("")
+		if e.Error != nil {
+			break
+		}
+
+		// e.Error = table.SetHeader(
+		// 	"Template Id",
+		// 	"Template Name",
+		// 	"Update On",
+		// )
+		// if e.Error != nil {
+		// 	break
+		// }
+
+		// for _, p := range e.Response.ResultData.PageList {
+		// 	_ = table.AddRow(
+		// 		p.TemplateID,
+		// 		p.TemplateName,
+		// 		api.NewDateTime(p.UpdateTime).PrintFull(),
+		// 	)
+		// 	if table.Error != nil {
+		// 		continue
+		// 	}
+		// }
+
+		// table.InitGraph(output.GraphRequest {
+		// 	Title:        "",
+		// 	TimeColumn:   output.SetInteger(1),
+		// 	ValueColumn:  output.SetInteger(4),
+		// 	UnitsColumn:  output.SetInteger(5),
+		// 	SearchColumn: output.SetInteger(2),
+		// 	SearchString: output.SetString(""),
+		// 	MinLeftAxis:  output.SetFloat(0),
+		// 	MaxLeftAxis:  output.SetFloat(0),
+		// })
+	}
+
+	return table
+}

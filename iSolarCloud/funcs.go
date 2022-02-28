@@ -2,7 +2,9 @@ package iSolarCloud
 
 import (
 	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/AppService/getPowerDevicePointNames"
 	"GoSungrow/iSolarCloud/AppService/getPsList"
+	"GoSungrow/iSolarCloud/AppService/getTemplateList"
 	"GoSungrow/iSolarCloud/AppService/queryDeviceList"
 	"GoSungrow/iSolarCloud/AppService/queryMutiPointDataList"
 	"GoSungrow/iSolarCloud/api"
@@ -10,7 +12,6 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -34,11 +35,6 @@ func (sg *SunGrow) GetByJson(endpoint string, request string) api.EndPoint {
 				sg.Error = ret.GetError()
 				break
 			}
-		}
-
-		sg.Error = ret.WriteCache()
-		if sg.Error != nil {
-			break
 		}
 
 		ret = ret.Call()
@@ -87,12 +83,12 @@ func (sg *SunGrow) GetByStruct(endpoint string, request interface{}, cache time.
 		}
 
 		ret = ret.SetCacheTimeout(cache)
-		if ret.CheckCache() {
-			ret = ret.ReadCache()
-			if !ret.IsError() {
-				break
-			}
-		}
+		// if ret.CheckCache() {
+		// 	ret = ret.ReadCache()
+		// 	if !ret.IsError() {
+		// 		break
+		// 	}
+		// }
 
 		ret = ret.Call()
 		if ret.IsError() {
@@ -100,55 +96,55 @@ func (sg *SunGrow) GetByStruct(endpoint string, request interface{}, cache time.
 			break
 		}
 
-		sg.Error = ret.WriteCache()
-		if sg.Error != nil {
-			break
-		}
+		// sg.Error = ret.WriteCache()
+		// if sg.Error != nil {
+		// 	break
+		// }
 	}
 
 	return ret
 }
 
-func (sg *SunGrow) GetHighLevel(name string, args ...string) error {
-	for range Only.Once {
-		name = strings.ToLower(name)
-		// if name == "stats" {
-		// 	sg.Error = sg.GetCurrentStats()
-		// 	break
-		// }
-		//
-		// if name == "template" {
-		// 	args = fillArray(3, args)
-		// 	if args[0] == "" {
-		// 		sg.Error = errors.New("need a date")
-		// 		break
-		// 	}
-		// 	sg.Error = sg.GetTemplateData(args[0], args[1], args[2])
-		// 	break
-		// }
-		//
-		// if name == "template-points" {
-		// 	args = fillArray(1, args)
-		// 	sg.Error = sg.GetTemplatePoints(args[0])
-		// 	break
-		// }
-
-		if name == "points" {
-			args = fillArray(2, args)
-			if args[0] == "" {
-				sg.Error = errors.New("need a date")
-				break
-			}
-			points := api.CreatePoints(args)
-			sg.Error = sg.GetPointData(args[0], points)
-			break
-		}
-
-		sg.Error = errors.New("unknown high-level command")
-	}
-	return sg.Error
-}
-
+// func (sg *SunGrow) GetHighLevel(name string, args ...string) error {
+// 	for range Only.Once {
+// 		name = strings.ToLower(name)
+// 		// if name == "stats" {
+// 		// 	sg.Error = sg.GetCurrentStats()
+// 		// 	break
+// 		// }
+// 		//
+// 		// if name == "template" {
+// 		// 	args = fillArray(3, args)
+// 		// 	if args[0] == "" {
+// 		// 		sg.Error = errors.New("need a date")
+// 		// 		break
+// 		// 	}
+// 		// 	sg.Error = sg.GetTemplateData(args[0], args[1], args[2])
+// 		// 	break
+// 		// }
+// 		//
+// 		// if name == "template-points" {
+// 		// 	args = fillArray(1, args)
+// 		// 	sg.Error = sg.GetTemplatePoints(args[0])
+// 		// 	break
+// 		// }
+//
+// 		// if name == "points" {
+// 		// 	args = fillArray(2, args)
+// 		// 	if args[0] == "" {
+// 		// 		sg.Error = errors.New("need a date")
+// 		// 		break
+// 		// 	}
+// 		// 	points := api.CreatePoints(args)
+// 		// 	sg.Error = sg.GetPointData(args[0], points)
+// 		// 	break
+// 		// }
+//
+// 		sg.Error = errors.New("unknown high-level command")
+// 	}
+// 	return sg.Error
+// }
+//
 // func (sg *SunGrow) ListHighLevel() {
 // 	fmt.Println("stats - Get current inverter stats, (last 5 minutes).")
 // 	fmt.Println("\tdata get stats")
@@ -263,6 +259,11 @@ func (sg *SunGrow) GetCurrentStats() error {
 		_getPsList := getPsList.Assert(ep)
 		psId := _getPsList.GetPsId()
 		table := _getPsList.GetDataTable()
+		if table.Error != nil {
+			sg.Error = table.Error
+			break
+		}
+
 		sg.Error = sg.Output(_getPsList, table, "")
 		if sg.Error != nil {
 			break
@@ -281,6 +282,11 @@ func (sg *SunGrow) GetCurrentStats() error {
 
 		ep2 := queryDeviceList.Assert(ep)
 		table = ep2.GetDataTable()
+		if table.Error != nil {
+			sg.Error = table.Error
+			break
+		}
+
 		sg.Error = sg.Output(ep2, table, "")
 		if sg.Error != nil {
 			break
@@ -328,6 +334,11 @@ func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints) erro
 
 		ep2 := queryMutiPointDataList.Assert(ep)
 		table := ep2.GetDataTable(pointNames)
+		if table.Error != nil {
+			sg.Error = table.Error
+			break
+		}
+
 		sg.Error = sg.Output(ep2, table, "")
 		if sg.Error != nil {
 			break
@@ -379,6 +390,62 @@ func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints) erro
 		//
 		// 	default:
 		// }
+	}
+
+	return sg.Error
+}
+
+func (sg *SunGrow) GetPointNames() error {
+	for range Only.Once {
+		for _, dt := range getPowerDevicePointNames.DeviceTypes {
+			ep := sg.GetByStruct(
+				"AppService.getPowerDevicePointNames",
+				getPowerDevicePointNames.RequestData{DeviceType: dt},
+				DefaultCacheTimeout,
+			)
+			if sg.Error != nil {
+				break
+			}
+
+			ep2 := getPowerDevicePointNames.Assert(ep)
+			table := ep2.GetDataTable()
+			if table.Error != nil {
+				sg.Error = table.Error
+				break
+			}
+
+			sg.Error = sg.Output(ep2, table, "")
+			if sg.Error != nil {
+				break
+			}
+		}
+	}
+
+	return sg.Error
+}
+
+func (sg *SunGrow) GetTemplates() error {
+	for range Only.Once {
+		ep := sg.GetByStruct(
+			"AppService.getTemplateList",
+			getTemplateList.RequestData{},
+			DefaultCacheTimeout,
+		)
+		if sg.Error != nil {
+			break
+		}
+
+		ep2 := getTemplateList.Assert(ep)
+		table := ep2.GetDataTable()
+		if table.Error != nil {
+			sg.Error = table.Error
+			break
+		}
+
+		sg.Error = sg.Output(ep2, table, "")
+		if sg.Error != nil {
+			break
+		}
 	}
 
 	return sg.Error

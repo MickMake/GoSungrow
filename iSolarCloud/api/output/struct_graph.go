@@ -132,15 +132,15 @@ func (t *Table) SetGraph(req GraphRequest) error {
 			break
 		}
 
-		t.graph.SetRangeY(req.MinLeftAxis, req.MaxLeftAxis)
-		if t.Error != nil {
-			break
-		}
-
 		changed := t.graph.SetGraphSearch(req)
 		if !changed {
 			break
 		}
+		if t.Error != nil {
+			break
+		}
+
+		t.graph.SetRangeY(req.MinLeftAxis, req.MaxLeftAxis)
 		if t.Error != nil {
 			break
 		}
@@ -406,8 +406,8 @@ func (c *Chart) SetRangeY(min *float64, max *float64) bool {
 		}
 
 		c.graph.YAxis.Range = &chart.ContinuousRange {
-			Min:        *c.req.MinLeftAxis,
-			Max:        *c.req.MaxLeftAxis,
+			Min:        *min,
+			Max:        *max,
 			Domain:     0,
 			Descending: false,
 		}
@@ -595,6 +595,13 @@ func (c *Chart) Generate() error {
 			c.Error = errors.New("empty filename")
 			break
 		}
+
+		// c.graph.YAxis.Range = &chart.ContinuousRange {
+		// 	Min:        *c.req.MinLeftAxis,
+		// 	Max:        *c.req.MaxLeftAxis,
+		// 	Domain:     0,
+		// 	Descending: false,
+		// }
 
 		c.timeSeries1.Style = chart.Style {
 			StrokeColor: drawing.ColorBlue,
