@@ -102,6 +102,7 @@ func cmdMqttFunc(cmd *cobra.Command, args []string) error {
 			break
 		}
 
+		// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint, 
 		ep := Cmd.SunGrow.QueryDevice(psId)
 		if ep.IsError() {
 			err = ep.GetError()
