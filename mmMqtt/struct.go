@@ -7,6 +7,7 @@ import (
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -199,6 +200,8 @@ func (m *Mqtt) SensorPublish(subtopic string, payload interface{}) error {
 func (m *Mqtt) SensorPublishConfig(id string, name string, units string, address int) error {
 	for range Only.Once {
 		a := strconv.Itoa(address)
+		id = strings.ReplaceAll("sungrow_" + id, ".", "-")
+
 		class := ""
 		switch units {
 			case "MW":
@@ -263,9 +266,10 @@ func (m *Mqtt) SensorPublishConfig(id string, name string, units string, address
 	return m.err
 }
 
-func (m *Mqtt) SensorPublishState(sensor string, payload interface{}) error {
+func (m *Mqtt) SensorPublishState(id string, payload interface{}) error {
 	for range Only.Once {
-		m.client.Publish(SensorBaseTopic + "/" + sensor + "/state", 0, true, payload)
+		id = strings.ReplaceAll("sungrow_" + id, ".", "-")
+		m.client.Publish(SensorBaseTopic + "/" + id + "/state", 0, true, payload)
 	}
 	return m.err
 }

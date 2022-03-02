@@ -5,27 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="76adadc9-ae71-42a6-82a1-66dbc8ecb14c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/mmMqtt/config.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mmMqtt/funcs.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mmMqtt/lights.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mmMqtt/sensors.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mmMqtt/struct.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mmMqtt/switch.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/cmd_data_sub.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_data_sub.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/cmd_mqtt.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_mqtt.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/SunGrowOnHASSIO.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/examples.txt" beforeDir="false" afterPath="$PROJECT_DIR$/examples.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/queryDeviceList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/queryDeviceList/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/output/file.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/output/file.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/output/struct_table.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/output/struct_table.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/output/struct_table2.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/web.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/web.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/funcs.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/funcs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/struct_output.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/struct_template.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/highlevel.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmMqtt/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmMqtt/struct.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

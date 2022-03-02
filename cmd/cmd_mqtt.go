@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"math/rand"
-	"strings"
 	"time"
 )
 
@@ -111,62 +110,20 @@ func cmdMqttFunc(cmd *cobra.Command, args []string) error {
 
 		data := ep.GetData()
 		for i, r := range data.Entries {
-			point_id := strings.ReplaceAll(r.PointId, ".", "-")
-			id := "sungrow_" + point_id
-			fmt.Println(id)
-
-			err = foo.SensorPublishConfig(id, r.PointName, r.Unit, i)
-			// time.Sleep(time.Second)
-			err = foo.SensorPublishState(id, r.Value)
+			fmt.Printf("%s ", r.PointId)
+			err = foo.SensorPublishConfig(r.PointId, r.PointName, r.Unit, i)
+			if err != nil {
+				break
+			}
+			err = foo.SensorPublishState(r.PointId, r.Value)
+			if err != nil {
+				break
+			}
 		}
-
-		// sensor1 := mmMqtt.Sensor {
-		// 	Device: mmMqtt.Device {
-		// 		Connections:  [][]string{{"sungrow_address", "1"}},
-		// 		Identifiers:  []string{"sungrow_battery_Level", "sungrow_address_1"},
-		// 		Manufacturer: "MickMake",
-		// 		Model:        "SunGrow inverter",
-		// 		Name:         "SunGrow battery level",
-		// 		SwVersion:    "GoSunGrow https://github.com/MickMake/GoSungrow",
-		// 		ViaDevice:    "GoSunGrow",
-		// 	},
-		// 	Name:              "SunGrow battery level",
-		// 	StateTopic:        "homeassistant/sensor/SunGrow/sungrow_battery_Level/state",
-		// 	UniqueID:          "sungrow_battery_Level",
-		// 	UnitOfMeasurement: "%",
-		// }
-
-		// err = foo.SensorPublishConfig("sungrow_battery_Level", "SunGrow battery level", "%", "1")
-		// if err != nil {
-		// 	break
-		// }
-		// err = foo.SensorPublishState("sungrow_battery_Level", randoPercent())
-		// if err != nil {
-		// 	break
-		// }
-
-		// sensor2 := mmMqtt.Sensor {
-		// 	Device: mmMqtt.Device {
-		// 		Connections:  [][]string{{"sungrow_address", "2"}},
-		// 		Identifiers:  []string{"sungrow_pv_energy", "sungrow_address_2"},
-		// 		Manufacturer: "MickMake",
-		// 		Model:        "SunGrow inverter",
-		// 		Name:         "SunGrow PV Energy",
-		// 		SwVersion:    "GoSunGrow https://github.com/MickMake/GoSungrow",
-		// 		ViaDevice:    "GoSunGrow",
-		// 	},
-		// 	Name:              "SunGrow PV Energy",
-		// 	StateTopic:        "homeassistant/sensor/SunGrow/sungrow_pv_energy/state",
-		// 	UniqueID:          "sungrow_pv_energy",
-		// 	UnitOfMeasurement: "kWh",
-		// }
-
-		// err = foo.SensorPublishConfig("sungrow_pv_energy", "SunGrow PV Energy", "kWh", "2")
-		// if err != nil {
-		// 	break
-		// }
-		// err = foo.SensorPublishState("sungrow_pv_energy", randoKWh())
-
+		fmt.Println()
+		if err != nil {
+			break
+		}
 
 		updateCounter := 0
 		timer := time.NewTicker(10 * time.Second)
@@ -187,12 +144,16 @@ func cmdMqttFunc(cmd *cobra.Command, args []string) error {
 
 			data = ep.GetData()
 			for _, r := range data.Entries {
-				point_id := strings.ReplaceAll(r.PointId, ".", "-")
-				id := "sungrow_" + point_id
-				fmt.Println(id)
-				err = foo.SensorPublishState(id, r.Value)
+				fmt.Printf("%s ", r.PointId)
+				err = foo.SensorPublishState(r.PointId, r.Value)
+				if err != nil {
+					break
+				}
 			}
-
+			fmt.Println()
+		}
+		if err != nil {
+			break
 		}
 
 

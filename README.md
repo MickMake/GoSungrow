@@ -16,7 +16,15 @@ Note:
 
 I'm currently using it in my [HomeAssistant](https://www.home-assistant.io/) instance.
 
-![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/SunGrowOnHASSIO.png?raw=true)
+![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/SunGrowOnHASSIO1.png?raw=true)
+
+![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/SunGrowOnHASSIO2.png?raw=true)
+
+![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/SunGrowOnHASSIO3.png?raw=true)
+
+![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/SunGrowOnHASSIO4.png?raw=true)
+
+![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/SunGrowOnHASSIO5.png?raw=true)
 
 
 ## What state is it in?
