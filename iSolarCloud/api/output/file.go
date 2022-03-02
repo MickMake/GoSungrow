@@ -134,3 +134,32 @@ func PlainFileWrite(fn string, data []byte, perm os.FileMode) error {
 
 	return err
 }
+
+// FileRemove Removes a file path.
+func FileRemove(fn string) error {
+	var err error
+	for range Only.Once {
+		if fn == "" {
+			err = errors.New("empty file")
+			break
+		}
+
+		var f os.FileInfo
+		f, err = os.Stat(fn)
+		if os.IsNotExist(err) {
+			err = nil
+			break
+		}
+		if err != nil {
+			break
+		}
+		if f.IsDir() {
+			err = errors.New("file is a directory")
+			break
+		}
+
+		err = os.Remove(fn)
+	}
+
+	return err
+}

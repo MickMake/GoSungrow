@@ -2,16 +2,12 @@ package iSolarCloud
 
 import (
 	"GoSungrow/Only"
-	"GoSungrow/iSolarCloud/AppService/getPowerDevicePointNames"
 	"GoSungrow/iSolarCloud/AppService/getPsList"
-	"GoSungrow/iSolarCloud/AppService/getTemplateList"
-	"GoSungrow/iSolarCloud/AppService/queryDeviceList"
 	"GoSungrow/iSolarCloud/AppService/queryMutiPointDataList"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/output"
 	"errors"
 	"fmt"
-	"strconv"
 	"time"
 )
 
@@ -105,197 +101,6 @@ func (sg *SunGrow) GetByStruct(endpoint string, request interface{}, cache time.
 	return ret
 }
 
-// func (sg *SunGrow) GetHighLevel(name string, args ...string) error {
-// 	for range Only.Once {
-// 		name = strings.ToLower(name)
-// 		// if name == "stats" {
-// 		// 	sg.Error = sg.GetCurrentStats()
-// 		// 	break
-// 		// }
-// 		//
-// 		// if name == "template" {
-// 		// 	args = fillArray(3, args)
-// 		// 	if args[0] == "" {
-// 		// 		sg.Error = errors.New("need a date")
-// 		// 		break
-// 		// 	}
-// 		// 	sg.Error = sg.GetTemplateData(args[0], args[1], args[2])
-// 		// 	break
-// 		// }
-// 		//
-// 		// if name == "template-points" {
-// 		// 	args = fillArray(1, args)
-// 		// 	sg.Error = sg.GetTemplatePoints(args[0])
-// 		// 	break
-// 		// }
-//
-// 		// if name == "points" {
-// 		// 	args = fillArray(2, args)
-// 		// 	if args[0] == "" {
-// 		// 		sg.Error = errors.New("need a date")
-// 		// 		break
-// 		// 	}
-// 		// 	points := api.CreatePoints(args)
-// 		// 	sg.Error = sg.GetPointData(args[0], points)
-// 		// 	break
-// 		// }
-//
-// 		sg.Error = errors.New("unknown high-level command")
-// 	}
-// 	return sg.Error
-// }
-//
-// func (sg *SunGrow) ListHighLevel() {
-// 	fmt.Println("stats - Get current inverter stats, (last 5 minutes).")
-// 	fmt.Println("\tdata get stats")
-// 	fmt.Println("")
-//
-// 	fmt.Println("template [date] [template_id] - Get data from template.")
-// 	fmt.Println("\tdata get template - Get data using default template 8042 for today.")
-// 	fmt.Println("\tdata get template 2022 8040 - Get year data for template 8040 for the year 2022.")
-// 	fmt.Println("\tdata get template 202202 8040 - Get month data for template 8040 for the month 202202.")
-// 	fmt.Println("\tdata get template 20220202 8040 - Get day data for template 8040 for the day 20220202.")
-// 	fmt.Println("\tdata get template 2022 - Get year data for default template 8042 for the year 2022.")
-// 	fmt.Println("")
-//
-// 	fmt.Println("points <date> <device_id.point_id> ... - Get data from points list.")
-// 	fmt.Println("")
-// }
-
-func (sg *SunGrow) AllCritical() error {
-	var ep api.EndPoint
-	for range Only.Once {
-		ep = sg.GetByJson("AppService.powerDevicePointList", "")
-		if ep.IsError() {
-			break
-		}
-
-		ep = sg.GetByJson("AppService.getPsList", "")
-		if ep.IsError() {
-			break
-		}
-
-		_getPsList := getPsList.AssertResultData(ep)
-		psId := _getPsList.GetPsId()
-
-		ep = sg.GetByJson("AppService.queryDeviceList", fmt.Sprintf(`{"ps_id":"%d"}`, psId))
-		if ep.IsError() {
-			break
-		}
-
-		ep = sg.GetByJson("AppService.queryDeviceListForApp", fmt.Sprintf(`{"ps_id":"%d"}`, psId))
-		if ep.IsError() {
-			break
-		}
-
-		ep = sg.GetByJson("WebAppService.showPSView", fmt.Sprintf(`{"ps_id":"%d"}`, psId))
-		if ep.IsError() {
-			break
-		}
-
-		// ep = sg.GetByJson("AppService.findPsType", fmt.Sprintf(`{"ps_id":"%d"}`, psId))
-		// if ep.IsError() {
-		// 	break
-		// }
-
-		ep = sg.GetByJson("AppService.getPowerStatistics", fmt.Sprintf(`{"ps_id":"%d"}`, psId))
-		if ep.IsError() {
-			break
-		}
-
-		ep = sg.GetByJson("AppService.getPsDetail", fmt.Sprintf(`{"ps_id":"%d"}`, psId))
-		if ep.IsError() {
-			break
-		}
-
-		ep = sg.GetByJson("AppService.getPsDetailWithPsType", fmt.Sprintf(`{"ps_id":"%d"}`, psId))
-		if ep.IsError() {
-			break
-		}
-
-		ep = sg.GetByJson("AppService.getPsHealthState", fmt.Sprintf(`{"ps_id":"%d"}`, psId))
-		if ep.IsError() {
-			break
-		}
-
-		ep = sg.GetByJson("AppService.getPsListStaticData", fmt.Sprintf(`{"ps_id":"%d"}`, psId))
-		if ep.IsError() {
-			break
-		}
-
-		ep = sg.GetByJson("AppService.getPsWeatherList", fmt.Sprintf(`{"ps_id":"%d"}`, psId))
-		if ep.IsError() {
-			break
-		}
-
-		// ep = sg.GetByJson("AppService.queryAllPsIdAndName", fmt.Sprintf(`{"ps_id":"%d"}`, psId))
-		// if ep.IsError() {
-		// 	break
-		// }
-
-		// ep = sg.GetByJson("AppService.queryDeviceListByUserId", fmt.Sprintf(`{"ps_id":"%d"}`, psId))
-		// if ep.IsError() {
-		// 	break
-		// }
-
-		ep = sg.GetByJson("AppService.queryDeviceListForApp", fmt.Sprintf(`{"ps_id":"%d"}`, psId))
-		if ep.IsError() {
-			break
-		}
-
-	}
-
-	sg.Error = ep.GetError()
-	return sg.Error
-}
-
-func (sg *SunGrow) GetCurrentStats() error {
-	var ep api.EndPoint
-	for range Only.Once {
-		ep = sg.GetByStruct("AppService.getPsList", nil, DefaultCacheTimeout)
-		if ep.IsError() {
-			break
-		}
-		_getPsList := getPsList.Assert(ep)
-		psId := _getPsList.GetPsId()
-		table := _getPsList.GetDataTable()
-		if table.Error != nil {
-			sg.Error = table.Error
-			break
-		}
-
-		sg.Error = sg.Output(_getPsList, table, "")
-		if sg.Error != nil {
-			break
-		}
-
-
-		// ep = sg.GetByJson("AppService.queryDeviceList", fmt.Sprintf(`{"ps_id":"%d"}`, psId))
-		ep = sg.GetByStruct(
-			"AppService.queryDeviceList",
-			queryDeviceList.RequestData{PsId: strconv.FormatInt(psId, 10)},
-			DefaultCacheTimeout,
-		)
-		if sg.Error != nil {
-			break
-		}
-
-		ep2 := queryDeviceList.Assert(ep)
-		table = ep2.GetDataTable()
-		if table.Error != nil {
-			sg.Error = table.Error
-			break
-		}
-
-		sg.Error = sg.Output(ep2, table, "")
-		if sg.Error != nil {
-			break
-		}
-	}
-
-	return sg.Error
-}
-
 func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints) error {
 	for range Only.Once {
 		if len(pointNames) == 0 {
@@ -307,7 +112,12 @@ func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints) erro
 			date = api.NewDateTime("").String()
 		}
 		when := api.NewDateTime(date)
-		psId := sg.GetPsId()
+
+		var psId int64
+		psId, sg.Error = sg.GetPsId()
+		if sg.Error != nil {
+			break
+		}
 
 		ep := sg.GetByStruct(
 			"AppService.queryMutiPointDataList",
@@ -327,62 +137,6 @@ func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints) erro
 
 		ep2 := queryMutiPointDataList.Assert(ep)
 		table := ep2.GetDataTable(pointNames)
-		if table.Error != nil {
-			sg.Error = table.Error
-			break
-		}
-
-		sg.Error = sg.Output(ep2, table, "")
-		if sg.Error != nil {
-			break
-		}
-	}
-
-	return sg.Error
-}
-
-func (sg *SunGrow) GetPointNames() error {
-	for range Only.Once {
-		for _, dt := range getPowerDevicePointNames.DeviceTypes {
-			ep := sg.GetByStruct(
-				"AppService.getPowerDevicePointNames",
-				getPowerDevicePointNames.RequestData{DeviceType: dt},
-				DefaultCacheTimeout,
-			)
-			if sg.Error != nil {
-				break
-			}
-
-			ep2 := getPowerDevicePointNames.Assert(ep)
-			table := ep2.GetDataTable()
-			if table.Error != nil {
-				sg.Error = table.Error
-				break
-			}
-
-			sg.Error = sg.Output(ep2, table, "")
-			if sg.Error != nil {
-				break
-			}
-		}
-	}
-
-	return sg.Error
-}
-
-func (sg *SunGrow) GetTemplates() error {
-	for range Only.Once {
-		ep := sg.GetByStruct(
-			"AppService.getTemplateList",
-			getTemplateList.RequestData{},
-			DefaultCacheTimeout,
-		)
-		if sg.Error != nil {
-			break
-		}
-
-		ep2 := getTemplateList.Assert(ep)
-		table := ep2.GetDataTable()
 		if table.Error != nil {
 			sg.Error = table.Error
 			break
@@ -431,7 +185,7 @@ func (sg *SunGrow) Output(endpoint api.EndPoint, table output.Table, graphFilter
 	return sg.Error
 }
 
-func (sg *SunGrow) GetPsId() int64 {
+func (sg *SunGrow) GetPsId() (int64, error) {
 	var ret int64
 
 	for range Only.Once {
@@ -446,7 +200,7 @@ func (sg *SunGrow) GetPsId() int64 {
 		ret = _getPsList.GetPsId()
 	}
 
-	return ret
+	return ret, sg.Error
 }
 
 func fillArray(count int, args []string) []string {

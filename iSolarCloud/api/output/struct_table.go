@@ -4,6 +4,7 @@ import (
 	"GoSungrow/Only"
 	"errors"
 	"fmt"
+	"go.pennock.tech/tabular"
 	datatable "go.pennock.tech/tabular/auto"
 	"os"
 )
@@ -37,6 +38,28 @@ func (t *Table) String() string {
 		}
 	}
 	return ret
+}
+
+func (t *Table) GetHeaders() []tabular.Cell {
+	return t.table.Headers()
+}
+
+func (t *Table) AllRows() []*tabular.Row {
+	return t.table.AllRows()
+}
+
+type DataSet []DataRow
+type DataRow map[string]string
+func (t *Table) GetData()  {
+	headers := t.GetHeaders()
+	for _, r := range t.AllRows() {
+		for i, c := range r.Cells() {
+			fmt.Printf("Header: %s\tValue: %v\n", headers[i], c)
+			// err = foo.SensorPublishConfig()
+		}
+		// r.Cells()
+		// err = foo.SensorPublishConfig()
+	}
 }
 
 func (t *Table) Print() {

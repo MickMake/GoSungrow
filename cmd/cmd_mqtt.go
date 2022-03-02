@@ -2,8 +2,12 @@ package cmd
 
 import (
 	"GoSungrow/Only"
+	"GoSungrow/mmMqtt"
 	"fmt"
 	"github.com/spf13/cobra"
+	"math/rand"
+	"strings"
+	"time"
 )
 
 
@@ -17,7 +21,7 @@ func AttachCmdMqtt(cmd *cobra.Command) *cobra.Command {
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               Cmd.ProcessArgs,
-		Run:                   cmdMqttFunc,
+		RunE:                  cmdMqttFunc,
 		Args:                  cobra.RangeArgs(0, 1),
 	}
 	cmd.AddCommand(cmdMqtt)
@@ -43,20 +47,195 @@ func AttachCmdMqtt(cmd *cobra.Command) *cobra.Command {
 }
 
 
-func cmdMqttFunc(cmd *cobra.Command, args []string) {
+func cmdMqttFunc(cmd *cobra.Command, args []string) error {
+	var err error
+
 	for range Only.Once {
-		switch {
-			case len(args) == 0:
-				Cmd.Error = cmd.Help()
-
-			case args[0] == "all":
-				// Cmd.Error = Cmd.GoogleUpdate()
-
-			default:
-				fmt.Println("Unknown sub-command.")
-				_ = cmd.Help()
+		foo := mmMqtt.New(mmMqtt.Mqtt{
+			ClientId: "SunGrow",
+			Username: "mickmake",
+			Password: "rvsrzdd0",
+			Host:     "10.0.5.21",
+			Port:     "11883",
+		})
+		err = foo.GetError()
+		if err != nil {
+			break
 		}
+
+		err = foo.Connect()
+		if err != nil {
+			break
+		}
+
+
+		// switch1 := mmMqtt.BinarySensor {
+		// 	Device: mmMqtt.Device {
+		// 		Connections:  [][]string{{"sungrow_address", "0"}},
+		// 		Identifiers:  []string{"sungrow_bin_sensor_0"},
+		// 		Manufacturer: "MickMake",
+		// 		Model:        "SunGrow inverter",
+		// 		Name:         "SunGrow inverter online",
+		// 		SwVersion:    "GoSunGrow https://github.com/MickMake/GoSungrow",
+		// 		ViaDevice:    "GoSunGrow",
+		// 	},
+		// 	Name:         "SunGrow inverter online",
+		// 	StateTopic:   "homeassistant/binary_sensor/GoSunGrow_0/state",
+		// 	UniqueId:     "sungrow_bin_sensor_0",
+		// }
+		// err = foo.Publish("homeassistant/binary_sensor/GoSunGrow_0/config", 0, true, switch1.Json())
+		// if err != nil {
+		// 	break
+		// }
+		// err = foo.Publish("homeassistant/binary_sensor/GoSunGrow_0/state", 0, true, "OFF")
+		// if err != nil {
+		// 	break
+		// }
+
+		err = Cmd.SunGrowArgs(cmd, args)
+		if err != nil {
+			break
+		}
+
+		var psId int64
+		psId, err = Cmd.SunGrow.GetPsId()
+		if err != nil {
+			break
+		}
+
+		ep := Cmd.SunGrow.QueryDevice(psId)
+		if ep.IsError() {
+			err = ep.GetError()
+			break
+		}
+
+		data := ep.GetData()
+		for i, r := range data.Entries {
+			point_id := strings.ReplaceAll(r.PointId, ".", "-")
+			id := "sungrow_" + point_id
+			fmt.Println(id)
+
+			err = foo.SensorPublishConfig(id, r.PointName, r.Unit, i)
+			// time.Sleep(time.Second)
+			err = foo.SensorPublishState(id, r.Value)
+		}
+
+		// sensor1 := mmMqtt.Sensor {
+		// 	Device: mmMqtt.Device {
+		// 		Connections:  [][]string{{"sungrow_address", "1"}},
+		// 		Identifiers:  []string{"sungrow_battery_Level", "sungrow_address_1"},
+		// 		Manufacturer: "MickMake",
+		// 		Model:        "SunGrow inverter",
+		// 		Name:         "SunGrow battery level",
+		// 		SwVersion:    "GoSunGrow https://github.com/MickMake/GoSungrow",
+		// 		ViaDevice:    "GoSunGrow",
+		// 	},
+		// 	Name:              "SunGrow battery level",
+		// 	StateTopic:        "homeassistant/sensor/SunGrow/sungrow_battery_Level/state",
+		// 	UniqueID:          "sungrow_battery_Level",
+		// 	UnitOfMeasurement: "%",
+		// }
+
+		// err = foo.SensorPublishConfig("sungrow_battery_Level", "SunGrow battery level", "%", "1")
+		// if err != nil {
+		// 	break
+		// }
+		// err = foo.SensorPublishState("sungrow_battery_Level", randoPercent())
+		// if err != nil {
+		// 	break
+		// }
+
+		// sensor2 := mmMqtt.Sensor {
+		// 	Device: mmMqtt.Device {
+		// 		Connections:  [][]string{{"sungrow_address", "2"}},
+		// 		Identifiers:  []string{"sungrow_pv_energy", "sungrow_address_2"},
+		// 		Manufacturer: "MickMake",
+		// 		Model:        "SunGrow inverter",
+		// 		Name:         "SunGrow PV Energy",
+		// 		SwVersion:    "GoSunGrow https://github.com/MickMake/GoSungrow",
+		// 		ViaDevice:    "GoSunGrow",
+		// 	},
+		// 	Name:              "SunGrow PV Energy",
+		// 	StateTopic:        "homeassistant/sensor/SunGrow/sungrow_pv_energy/state",
+		// 	UniqueID:          "sungrow_pv_energy",
+		// 	UnitOfMeasurement: "kWh",
+		// }
+
+		// err = foo.SensorPublishConfig("sungrow_pv_energy", "SunGrow PV Energy", "kWh", "2")
+		// if err != nil {
+		// 	break
+		// }
+		// err = foo.SensorPublishState("sungrow_pv_energy", randoKWh())
+
+
+		updateCounter := 0
+		timer := time.NewTicker(10 * time.Second)
+		for t := range timer.C {
+			if updateCounter < 6 {
+				updateCounter++
+				fmt.Printf("Wait: %d - %s\n", updateCounter, t.String())
+				continue
+			}
+
+			updateCounter = 0
+			fmt.Printf("Update: %s\n", t.String())
+			ep = Cmd.SunGrow.QueryDevice(psId)
+			if ep.IsError() {
+				err = ep.GetError()
+				break
+			}
+
+			data = ep.GetData()
+			for _, r := range data.Entries {
+				point_id := strings.ReplaceAll(r.PointId, ".", "-")
+				id := "sungrow_" + point_id
+				fmt.Println(id)
+				err = foo.SensorPublishState(id, r.Value)
+			}
+
+		}
+
+
+		// switch {
+		// 	case len(args) == 0:
+		// 		Cmd.Error = cmd.Help()
+		//
+		// 	case args[0] == "all":
+		// 		// Cmd.Error = Cmd.GoogleUpdate()
+		//
+		// 	default:
+		// 		fmt.Println("Unknown sub-command.")
+		// 		_ = cmd.Help()
+		// }
 	}
+
+	return err
+}
+
+func toggle(v string) string {
+	switch v {
+		case "OFF":
+			v = "ON"
+		case "ON":
+			v = "OFF"
+	}
+	return v
+}
+
+func randoPercent() string {
+	t := time.Now()
+	min := 0
+	max := t.Second()
+	i := (rand.Intn(max - min) + min) * t.Minute()	// / float64(max)
+	return fmt.Sprintf("%.2f", (float64(i) / 3600) * 100)
+}
+
+func randoKWh() string {
+	t := time.Now()
+	min := 0
+	max := t.Minute()
+	i := (rand.Intn(max - min) + min) * t.Second()	// / float64(max)
+	return fmt.Sprintf("%.2f", (float64(i) / 3600) * 11000)
 }
 
 func cmdMqttSyncFunc(cmd *cobra.Command, args []string) {

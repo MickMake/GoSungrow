@@ -63,7 +63,7 @@ func AttachCmdDataStats(cmd *cobra.Command) *cobra.Command {
 		PreRunE:               Cmd.SunGrowArgs,
 		RunE:                  func(cmd *cobra.Command, args []string) error {
 			_ = SwitchOutput(cmd)
-			return Cmd.SunGrow.GetCurrentStats()
+			return Cmd.SunGrow.PrintCurrentStats()
 		},
 		Args:                  cobra.ExactArgs(0),
 	}

@@ -220,8 +220,8 @@ func (e *EndPoint) GetDataTable() output.Table {
 		_ = table.SetHeader(
 			"Date",
 			"Point Id",
-			"PointGroupName",
-			"PointName",
+			"Point Group Name",
+			"Point Name",
 			"Value",
 			"Unit",
 		)
@@ -253,4 +253,53 @@ func (e *EndPoint) GetDataTable() output.Table {
 
 	}
 	return table
+}
+
+
+type Data struct {
+	// Headers DataHeaders
+	Entries []DataEntry
+}
+// type DataHeaders struct {
+// 	Date           string
+// 	PointId        string
+// 	PointGroupName string
+// 	PointName      string
+// 	Value          string
+// 	Unit           string
+// }
+type DataEntry struct {
+	Date           api.DateTime `json:"date"`
+	PointId        string    `json:"point_id"`
+	PointGroupName string    `json:"point_group_name"`
+	PointName      string    `json:"point_name"`
+	Value          string    `json:"value"`
+	Unit           string    `json:"unit"`
+}
+func (e *EndPoint) GetData() Data {
+	var ret Data
+	for range Only.Once {
+		// ret.Headers = DataHeaders {
+		// 	Date:           "Date",
+		// 	PointId:        "Point Id",
+		// 	PointGroupName: "Point Group Name",
+		// 	PointName:      "Point Name",
+		// 	Value:          "Value",
+		// 	Unit:           "Unit",
+		// }
+
+		for _, d := range e.Response.ResultData.PageList {
+			for _, p := range d.PointData {
+				ret.Entries = append(ret.Entries, DataEntry {
+					Date:           api.NewDateTime(p.TimeStamp),
+					PointId:        fmt.Sprintf("%s.%d", d.PsKey, p.PointID),
+					PointGroupName: p.PointGroupName,
+					PointName:      p.PointName,
+					Value:          p.Value,
+					Unit:           p.Unit,
+				})
+			}
+		}
+	}
+	return ret
 }

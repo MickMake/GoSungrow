@@ -1,5 +1,6 @@
 # GoSungrow - iSolarCloud API written in GoLang.
 
+
 ## What is it?
 
 This GoLang package has a complete, (almost complete), implementation of the iSolarCloud API.
@@ -13,14 +14,16 @@ Note:
 
 ![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/iSolarCloud.png?raw=true)
 
+I'm currently using it in my [HomeAssistant](https://www.home-assistant.io/) instance.
+
+![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/SunGrowOnHASSIO.png?raw=true)
+
 
 ## What state is it in?
 
-This is currently under development.
+This is currently usable for my needs, (seeing all data in [HomeAssistant](https://www.home-assistant.io/)), but there's quite a few API endpoints that need to be implemented for completeness.
 
-So far I have mapped out all the API calls, but now figuring out JSON POST data formats.
-
-It's tricky as their "API" changes regularly.
+So far I have mapped out all the API calls. It's tricky as their "API" changes regularly.
 
 I've currently mapped out these API EndPoints. Only about 6%, but most of the API endpoints are a repeat and a lot of the data is repeated.
 So, in reality 50% of the critical endpoints are implemented.
@@ -39,19 +42,21 @@ So, in reality 50% of the critical endpoints are implemented.
 +-------------------+-------------------+--------------------+------------+
 ```
 
+
 ## What does it do?
 
 This GoLang package does several things:
 1. Provides ready access to all API calls via a simple get/put framework.
-2. Update a GitHub repo with SunGrow PV data, (provide full revision history for any changes made to the SunGrow PV).
-3. Update a Google sheet with SunGrow PV data.
+2. MQTT client to push to [HomeAssistant](https://www.home-assistant.io/).
+3. Graphing any points data, (over daily, monthly and yearly).
+4. Update a GitHub repo with SunGrow PV data, (provide full revision history for any changes made to the SunGrow PV).
+5. Update a Google sheet with SunGrow PV data.
+
 
 ## What is the roadmap?
 
-I've planned a number of features, but my main goal is to be able to interface with my HASS instance.
-1. MQTT client to push to things like [HomeAssistant](https://www.home-assistant.io/).
-2. IFTTT support.
-3. Graphing a logging support.
+I've implemented most of the features I've wanted to, except for... 
+1. IFTTT support.
 
 
 ## Use case example:

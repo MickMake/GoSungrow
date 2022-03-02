@@ -64,54 +64,6 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 			}
 		}
 
-		// {
-		// 	request := endpoint.RequestRef()
-		// 	w.Error = apiReflect.VerifyOptionsRequired(request)
-		// 	if w.Error != nil {
-		// 		break
-		// 	}
-		//
-		// 	w.Error = endpoint.IsRequestValid()
-		// 	if w.Error != nil {
-		// 		break
-		// 	}
-		//
-		// 	u := endpoint.GetUrl()
-		// 	w.Error = u.IsValid()
-		// 	if w.Error != nil {
-		// 		break
-		// 	}
-		//
-		// 	postUrl := w.Url.AppendPath(u.String()).String()
-		// 	j, _ := json.Marshal(request)
-		//
-		// 	w.httpResponse, w.Error = http.Post(postUrl, "application/json", bytes.NewBuffer(j))
-		// 	if w.Error != nil {
-		// 		break
-		// 	}
-		//
-		// 	if w.httpResponse.StatusCode == 401 {
-		// 		w.Error = errors.New(w.httpResponse.Status)
-		// 		break
-		// 	}
-		//
-		// 	//goland:noinspection GoUnhandledErrorResult,GoDeferInLoop
-		// 	defer w.httpResponse.Body.Close()
-		// 	if w.Error != nil {
-		// 		break
-		// 	}
-		//
-		// 	if w.httpResponse.StatusCode != 200 {
-		// 		w.Error = errors.New(fmt.Sprintf("API httpResponse is %s", w.httpResponse.Status))
-		// 		break
-		// 	}
-		//
-		// 	w.Body, w.Error = ioutil.ReadAll(w.httpResponse.Body)
-		// 	if w.Error != nil {
-		// 		break
-		// 	}
-		// }
-
 		if len(w.Body) == 0 {
 			w.Error = errors.New("empty httpResponse")
 			break
@@ -120,16 +72,10 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 		endpoint = endpoint.SetResponse(w.Body)
 		w.Error = endpoint.IsResponseValid()
 		if w.Error != nil {
+			_ = w.CacheRemove(endpoint)
 			// fmt.Printf("ERROR: Body is:\n%s\n", w.Body)
 			break
 		}
-
-		// if newFile {
-		// 	w.Error = w.CacheWrite(endpoint, w.Body)
-		// 	if w.Error != nil {
-		// 		break
-		// 	}
-		// }
 	}
 
 	if w.Error != nil {
@@ -258,6 +204,12 @@ func (w *Web) CheckCache(endpoint EndPoint) bool {
 func (w *Web) CacheRead(endpoint EndPoint) ([]byte, error) {
 	fn := filepath.Join(w.cacheDir, endpoint.CacheFilename())
 	return output.PlainFileRead(fn)
+}
+
+// CacheRemove Removes a cache file.
+func (w *Web) CacheRemove(endpoint EndPoint) error {
+	fn := filepath.Join(w.cacheDir, endpoint.CacheFilename())
+	return output.FileRemove(fn)
 }
 
 // CacheWrite Saves cache data to a file path.
