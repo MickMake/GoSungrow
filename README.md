@@ -9,6 +9,7 @@ There's been no published specs on this, so I've had to figure it all out based 
 Note:
 - [iSolarCloud](https://isolarcloud.com) has no interest in developing a public API.
 - Their "API" implementation is so broken with security and coding issues, I'm surprised it hasn't been exploited yet.
+- iSolarCloud reached out to me, (based off this GitHub page), to see what can be done about these security issues. So that's a very good thing.
 
 ![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/iSolarCloudLogin.png?raw=true)
 

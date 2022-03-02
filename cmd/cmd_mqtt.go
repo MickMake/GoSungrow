@@ -50,6 +50,8 @@ func cmdMqttFunc(cmd *cobra.Command, args []string) error {
 	var err error
 
 	for range Only.Once {
+		fmt.Println("# Starting MQTT HASSIO Service...")
+
 		foo := mmMqtt.New(mmMqtt.Mqtt{
 			ClientId: "SunGrow",
 			Username: "mickmake",
@@ -91,6 +93,7 @@ func cmdMqttFunc(cmd *cobra.Command, args []string) error {
 		// 	break
 		// }
 
+		fmt.Println("# Checking in on SunGrow...")
 		err = Cmd.SunGrowArgs(cmd, args)
 		if err != nil {
 			break
@@ -102,7 +105,8 @@ func cmdMqttFunc(cmd *cobra.Command, args []string) error {
 			break
 		}
 
-		// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint, 
+		fmt.Printf("# Found SunGrow device %d\n", psId)
+		// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
 		ep := Cmd.SunGrow.QueryDevice(psId)
 		if ep.IsError() {
 			err = ep.GetError()
@@ -110,6 +114,7 @@ func cmdMqttFunc(cmd *cobra.Command, args []string) error {
 		}
 
 		data := ep.GetData()
+		fmt.Printf("# Adding %d entries to HASSIO.\n", len(data.Entries))
 		for i, r := range data.Entries {
 			fmt.Printf("%s ", r.PointId)
 			err = foo.SensorPublishConfig(r.PointId, r.PointName, r.Unit, i)
@@ -126,10 +131,11 @@ func cmdMqttFunc(cmd *cobra.Command, args []string) error {
 			break
 		}
 
+		fmt.Println("# Starting ticker...")
 		updateCounter := 0
-		timer := time.NewTicker(10 * time.Second)
+		timer := time.NewTicker(60 * time.Second)
 		for t := range timer.C {
-			if updateCounter < 6 {
+			if updateCounter < 5 {
 				updateCounter++
 				fmt.Printf("Wait: %d - %s\n", updateCounter, t.String())
 				continue
@@ -145,13 +151,13 @@ func cmdMqttFunc(cmd *cobra.Command, args []string) error {
 
 			data = ep.GetData()
 			for _, r := range data.Entries {
-				fmt.Printf("%s ", r.PointId)
+				// fmt.Printf("%s ", r.PointId)
 				err = foo.SensorPublishState(r.PointId, r.Value)
 				if err != nil {
 					break
 				}
 			}
-			fmt.Println()
+			// fmt.Println()
 		}
 		if err != nil {
 			break
