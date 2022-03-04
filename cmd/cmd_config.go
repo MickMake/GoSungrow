@@ -67,10 +67,10 @@ func cmdConfigFunc(cmd *cobra.Command, args []string) {
 
 func cmdConfigWriteFunc(_ *cobra.Command, args []string) {
 	for range Only.Once {
-		if len(args) == 1 {
-			Cmd.ConfigFile = args[0]
-			rootViper.SetConfigFile(Cmd.ConfigFile)
-		}
+		// if len(args) == 1 {
+		// 	Cmd.ConfigFile = args[0]
+		// 	rootViper.SetConfigFile(Cmd.ConfigFile)
+		// }
 
 		_, _ = fmt.Fprintf(os.Stderr, "Using config file '%s'\n", rootViper.ConfigFileUsed())
 		Cmd.Error = openConfig()

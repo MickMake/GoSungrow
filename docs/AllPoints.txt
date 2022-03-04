@@ -1,0 +1,184 @@
++----------+----------------------------+------+
+| Point Id | Description                | Unit |
++----------+----------------------------+------+
+| p83106   | Load Power                 | kW   |
+| p13019   | Internal Air Temperature   | ℃    |
+| p13121   | Total Export Active  Power | kW   |
+| p13149   | Purchased Power            | kW   |
+| p13003   | Total DC Power             | kW   |
+| p13142   | Battery Health (SOH)       | %    |
+| p13143   | Battery Temperature        | ℃    |
+| p13150   | Battery Discharging Power  | kW   |
+| p13126   | Battery Charging Power     | kW   |
+| p13141   | Battery Level (SOC)        | %    |
++----------+----------------------------+------+
++----------+---------------------------------+--------+
+| Point Id | Description                     | Unit   |
++----------+---------------------------------+--------+
+| p83012   | P-radiation-H                   | W/㎡   |
+| p83013   | Daily Irradiation               | Wh/m2  |
+| p83239   | Total field reactive power      | Mvar   |
+| p83001   | Inverter AC Power Normalization | kW/kWp |
+| p13007   | Grid Frequency                  | Hz     |
+| p13013   | Total Power Factor              |        |
+| p13018   | Total Apparent Power            | VA     |
+| p13160   | Array Insulation Resistance     | kΩ     |
++----------+---------------------------------+--------+
++----------+---------------------------+------+
+| Point Id | Description               | Unit |
++----------+---------------------------+------+
+| p13019   | Internal Air Temperature  | ℃    |
+| p13143   | Battery Temperature       | ℃    |
+| p83016   | Plant Ambient Temperature | ℃    |
+| p83017   | Plant Module Temperature  | ℃    |
++----------+---------------------------+------+
++----------+-----------------+------+
+| Point Id | Description     | Unit |
++----------+-----------------+------+
+| p13161   | Bus Voltage     | V    |
+| p13001   | MPPT1 Voltage   | V    |
+| p13158   | Phase B Voltage | V    |
+| p13159   | Phase C Voltage | V    |
+| p13105   | MPPT2 Voltage   | V    |
+| p13138   | Battery Voltage | V    |
+| p13157   | Phase A Voltage | V    |
++----------+-----------------+------+
++----------+--------------------------------+------+
+| Point Id | Description                    | Unit |
++----------+--------------------------------+------+
+| p13002   | MPPT1 Current                  | A    |
+| p13009   | Phase B Current                | A    |
+| p13162   | Max. Charging Current (BMS)    | A    |
+| p18063   | Phase B Backup Current         | A    |
+| p18062   | Phase A Backup Current         | A    |
+| p18064   | Phase C Backup Current         | A    |
+| p13008   | Phase A Current                | A    |
+| p13010   | Phase C Current                | A    |
+| p13139   | Battery Current                | A    |
+| p13163   | Max. Discharging Current (BMS) | A    |
+| p13106   | MPPT2 Current                  | A    |
++----------+--------------------------------+------+
++----------+----------------------------------------------------------+------+
+| Point Id | Description                                              | Unit |
++----------+----------------------------------------------------------+------+
+| p83007   | Meter PR                                                 | %    |
+| p83010   | Inverter PR                                              | %    |
+| p83019   | Power/Installed Power of Plant                           | %    |
+| p83129   | Battery SOC                                              | %    |
+| p83420   | Current Power/Inverter Installed Capacity                | %    |
+| p83023   | Plant PR                                                 | %    |
+| p83252   | Battery Level (SOC)                                      | %    |
+| p83419   | Daily Highest Inverter Power/Inverter Installed Capacity | %    |
+| p13144   | Daily Self-consumption Rate                              | %    |
+| p13141   | Battery Level (SOC)                                      | %    |
+| p13142   | Battery Health (SOH)                                     | %    |
++----------+----------------------------------------------------------+------+
++----------+--------------------------------------+------+
+| Point Id | Description                          | Unit |
++----------+--------------------------------------+------+
+| p83241   | Total field charge capacity          | MWh  |
+| p83242   | Total field discharge capacity       | MWh  |
+| p83235   | Total field chargeable energy        | MWh  |
+| p83236   | Total field dischargeable energy     | MWh  |
+| p83243   | Total field daily charge capacity    | MWh  |
+| p83244   | Total field daily discharge capacity | MWh  |
++----------+--------------------------------------+------+
++----------+---------------------------------------------------+------+
+| Point Id | Description                                       | Unit |
++----------+---------------------------------------------------+------+
+| p83233   | Total field maximum rechargeable power            | MW   |
+| p83234   | Total field maximum dischargeable power           | MW   |
+| p83237   | Total field energy storage maximum reactive power | MW   |
+| p83238   | Total field energy storage active power           | MW   |
++----------+---------------------------------------------------+------+
++----------+---------------------------------------+------+
+| Point Id | Description                           | Unit |
++----------+---------------------------------------+------+
+| p83033   | Plant Power                           | kW   |
+| p83549   | Grid active power                     | kW   |
+| p83002   | Inverter AC Power                     | kW   |
+| p83032   | Meter AC Power                        | kW   |
+| p83128   | Total Active Power of Optical Storage | kW   |
+| p83106   | Load Power                            | kW   |
+| p13011   | Total Active Power                    | kW   |
+| p13121   | Total Export Active  Power            | kW   |
+| p13150   | Battery Discharging Power             | kW   |
+| p13149   | Purchased Power                       | kW   |
+| p18068   | Total Backup Power                    | kW   |
+| p13126   | Battery Charging Power                | kW   |
+| p18067   | Phase C Backup Power                  | kW   |
+| p13003   | Total DC Power                        | kW   |
+| p13119   | Total Load Active Power               | kW   |
+| p18065   | Phase A Backup Power                  | kW   |
+| p18066   | Phase B Backup Power                  | kW   |
++----------+---------------------------------------+------+
++----------+------------------------------------+------+
+| Point Id | Description                        | Unit |
++----------+------------------------------------+------+
+| p83005   | Daily Equivalent Hours of Meter    | h    |
+| p83008   | Daily Equivalent Hours of Inverter | h    |
+| p83025   | Plant Equivalent Hours             | h    |
++----------+------------------------------------+------+
++----------+-----------------------------------------+------+
+| Point Id | Description                             | Unit |
++----------+-----------------------------------------+------+
+| p13029   | Daily Battery Discharging Energy        | kWh  |
+| p13116   | Daily Load Energy Consumption from PV   | kWh  |
+| p13137   | Total Load Energy Consumption from PV   | kWh  |
+| p13174   | Daily Battery Charging Energy from PV   | kWh  |
+| p13199   | Daily Load Energy Consumption           | kWh  |
+| p13130   | Total Load Energy Consumption           | kWh  |
+| p13134   | Total PV Yield                          | kWh  |
+| p13140   | Battery Capacity(kWh)                   | kWh  |
+| p13173   | Daily Feed-in Energy (PV)               | kWh  |
+| p13175   | Total Feed-in Energy (PV)               | kWh  |
+| p13176   | Total Battery Charging Energy from PV   | kWh  |
+| p13125   | Total Feed-in Energy                    | kWh  |
+| p13028   | Daily Battery Charging Energy           | kWh  |
+| p13035   | Total Battery Discharging Energy        | kWh  |
+| p13148   | Total Purchased Energy                  | kWh  |
+| p13034   | Total Battery Charging Energy           | kWh  |
+| p13112   | Daily PV Yield                          | kWh  |
+| p13122   | Daily Feed-in Energy                    | kWh  |
+| p13147   | Daily Purchased Energy                  | kWh  |
+| p83119   | Daily Feed-in Energy (PV)               | kWh  |
+| p83124   | Total Load Energy Consumption           | kWh  |
+| p83100   | Total Load Energy Consumption from PV   | kWh  |
+| p83102   | Daily Purchased Energy                  | kWh  |
+| p83105   | Total Purchased Energy                  | kWh  |
+| p83021   | Accumulative Power Consumption by Meter | kWh  |
+| p83022   | Daily Yield of Plant                    | kWh  |
+| p83072   | Daily Feed-in Energy                    | kWh  |
+| p83004   | Inverter Total Yield                    | kWh  |
+| p83006   | Meter Daily Yield                       | kWh  |
+| p83009   | Daily Yield by Inverter                 | kWh  |
+| p83011   | Meter E-daily Consumption               | kWh  |
+| p83018   | Daily Yield (Theoretical)               | kWh  |
+| p83020   | Meter Total Yield                       | kWh  |
+| p83024   | Plant Total Yield                       | kWh  |
+| p83097   | Daily Load Energy Consumption from PV   | kWh  |
+| p83075   | Total Feed-in Energy                    | kWh  |
++----------+-----------------------------------------+------+
++----------+---------------------------------------+------+
+| Point Id | Description                           | Unit |
++----------+---------------------------------------+------+
+| p83002   | Inverter AC Power                     | kW   |
+| p83006   | Meter Daily Yield                     | kWh  |
+| p83549   | Grid active power                     | kW   |
+| p83011   | Meter E-daily Consumption             | kWh  |
+| p83022   | Daily Yield of Plant                  | kWh  |
+| p83033   | Plant Power                           | kW   |
+| p83119   | Daily Feed-in Energy (PV)             | kWh  |
+| p83032   | Meter AC Power                        | kW   |
+| p83097   | Daily Load Energy Consumption from PV | kWh  |
+| p83102   | Daily Purchased Energy                | kWh  |
+| p83072   | Daily Feed-in Energy                  | kWh  |
+| p13028   | Daily Battery Charging Energy         | kWh  |
+| p13122   | Daily Feed-in Energy                  | kWh  |
+| p13112   | Daily PV Yield                        | kWh  |
+| p13116   | Daily Load Energy Consumption from PV | kWh  |
+| p13147   | Daily Purchased Energy                | kWh  |
+| p13173   | Daily Feed-in Energy (PV)             | kWh  |
+| p13174   | Daily Battery Charging Energy from PV | kWh  |
+| p13199   | Daily Load Energy Consumption         | kWh  |
++----------+---------------------------------------+------+

@@ -2,12 +2,14 @@ package iSolarCloud
 
 import (
 	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/AppService/getPsDetailWithPsType"
 	"GoSungrow/iSolarCloud/AppService/getPsList"
 	"GoSungrow/iSolarCloud/AppService/queryMutiPointDataList"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/output"
 	"errors"
 	"fmt"
+	"strconv"
 	"time"
 )
 
@@ -142,7 +144,7 @@ func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints) erro
 			break
 		}
 
-		sg.Error = sg.Output(ep2, table, "")
+		sg.Error = sg.Output(ep2, &table, "")
 		if sg.Error != nil {
 			break
 		}
@@ -151,15 +153,21 @@ func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints) erro
 	return sg.Error
 }
 
-func (sg *SunGrow) Output(endpoint api.EndPoint, table output.Table, graphFilter string) error {
+func (sg *SunGrow) Output(endpoint api.EndPoint, table *output.Table, graphFilter string) error {
 	for range Only.Once {
 		switch {
 			case sg.OutputType.IsNone():
 
 			case sg.OutputType.IsHuman():
+				if table == nil {
+					break
+				}
 				table.Print()
 
 			case sg.OutputType.IsFile():
+				if table == nil {
+					break
+				}
 				sg.Error = table.WriteCsvFile()
 
 			case sg.OutputType.IsRaw():
@@ -169,6 +177,9 @@ func (sg *SunGrow) Output(endpoint api.EndPoint, table output.Table, graphFilter
 				fmt.Println(endpoint.GetJsonData(false))
 
 			case sg.OutputType.IsGraph():
+				if table == nil {
+					break
+				}
 				sg.Error = table.SetGraphFromJson(output.Json(graphFilter))
 				if sg.Error != nil {
 					break
@@ -198,6 +209,32 @@ func (sg *SunGrow) GetPsId() (int64, error) {
 
 		_getPsList := getPsList.AssertResultData(ep)
 		ret = _getPsList.GetPsId()
+	}
+
+	return ret, sg.Error
+}
+
+func (sg *SunGrow) GetPsKeys() ([]string, error) {
+	var ret []string
+
+	for range Only.Once {
+		var psId int64
+		psId, sg.Error = sg.GetPsId()
+		if sg.Error != nil {
+			break
+		}
+
+		ep := sg.GetByStruct(
+			"AppService.getPsDetailWithPsType",
+			getPsDetailWithPsType.RequestData{PsId: strconv.FormatInt(psId, 10)},
+			DefaultCacheTimeout)
+		if ep.IsError() {
+			sg.Error = ep.GetError()
+			break
+		}
+
+		ep2 := getPsDetailWithPsType.Assert(ep)
+		ret = ep2.GetPsKeys()
 	}
 
 	return ret, sg.Error

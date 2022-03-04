@@ -1,8 +1,10 @@
 package getPsDetailWithPsType
 
 import (
+	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
 )
 
@@ -165,3 +167,250 @@ func (e *ResultData) IsValid() error {
 //
 //	return err
 //}
+
+func (e *EndPoint) GetDataTable() output.Table {
+	var table output.Table
+
+	for range Only.Once {
+		table = output.NewTable()
+		e.Error = table.SetTitle("")
+		if e.Error != nil {
+			break
+		}
+
+		_ = table.SetHeader(
+			"Date",
+			"Point Id",
+			"Description",
+			"Value",
+			"(Unit)",
+			"(Unit)",
+		)
+
+		now := api.TimeNowString()
+
+		keys := api.GetStructKeys(e.Response.ResultData)
+		for _, n := range keys.Sort() {
+			p := api.GetPoint(e.Response.ResultData.PsPsKey, n)
+			if p != nil {
+				_ = table.AddRow(
+					now,
+					api.NameDevicePoint(e.Response.ResultData.PsPsKey, n),
+					p.Description,
+					keys[n].Value,
+					p.Unit,
+					keys[n].Unit,
+				)
+				continue
+			}
+
+			_ = table.AddRow(
+				now,
+				api.NameDevicePoint(e.Response.ResultData.PsPsKey, n),
+				api.UpperCase(n),
+				keys[n].Value,
+				keys[n].Unit,
+				keys[n].Unit,
+			)
+		}
+
+		if len(e.Response.ResultData.StorageInverterData) == 0 {
+			break
+		}
+
+		for _, sid := range e.Response.ResultData.StorageInverterData {
+			keys = api.GetStructKeys(sid)
+			for _, n := range keys.Sort() {
+				p := api.GetPoint(sid.PsKey, n)
+				if p != nil {
+					_ = table.AddRow(
+						now,
+						api.NameDevicePoint(sid.PsKey, n),
+						p.Description,
+						keys[n].Value,
+						p.Unit,
+						keys[n].Unit,
+					)
+					continue
+				}
+
+				_ = table.AddRow(
+					now,
+					api.NameDevicePoint(sid.PsKey, n),
+					api.UpperCase(n),
+					keys[n].Value,
+					keys[n].Unit,
+					keys[n].Unit,
+				)
+			}
+		}
+
+		// table.InitGraph(output.GraphRequest {
+		// 	Title:        "",
+		// 	TimeColumn:   output.SetInteger(1),
+		// 	SearchColumn: output.SetInteger(2),
+		// 	NameColumn:   output.SetInteger(4),
+		// 	ValueColumn:  output.SetInteger(5),
+		// 	UnitsColumn:  output.SetInteger(6),
+		// 	SearchString: output.SetString(""),
+		// 	MinLeftAxis:  output.SetFloat(0),
+		// 	MaxLeftAxis:  output.SetFloat(0),
+		// })
+	}
+
+	return table
+}
+
+func (e *EndPoint) GetData() api.Data {
+	var ret api.Data
+
+	// for range Only.Once {
+	// 	index := 0
+	// 	for _, d := range e.Response.ResultData.PageList {
+	// 		for _, p := range d.PointData {
+	// 			if p.Unit == "W" {
+	// 				fv, err := strconv.ParseFloat(p.Value, 64)
+	// 				fv = fv / 1000
+	// 				if err == nil {
+	// 					p.Value = fmt.Sprintf("%.3f", fv)
+	// 					p.Unit = "kW"
+	// 				}
+	// 			}
+	//
+	// 			ret.Entries = append(ret.Entries, api.DataEntry {
+	// 				Date:           api.NewDateTime(p.TimeStamp),
+	// 				PointId:        api.GetAreaPointName(d.PsKey, p.PointID),
+	// 				PointGroupName: p.PointGroupName,
+	// 				PointName:      p.PointName,
+	// 				Value:          p.Value,
+	// 				Unit:           p.Unit,
+	// 				ValueType:      api.GetPointType(d.PsKey, p.PointID),
+	// 				Index:          index,
+	// 			})
+	//
+	// 			index++
+	// 		}
+	// 	}
+	// }
+
+	return ret
+}
+
+func (e *EndPoint) GetPsKeys() []string {
+	ret := []string{e.Response.ResultData.PsPsKey}
+	for _, l := range e.Response.ResultData.StorageInverterData {
+		ret = append(ret, l.PsKey)
+	}
+	return ret
+}
+
+// ChargingDischargingPowerMap
+// Co2ReduceTotal
+// CoalReduceTotal
+// ConnectType
+// CurrPower
+// DesignCapacity
+// EnergyScheme
+// GcjLatitude
+// GcjLongitude
+// HasAmmeter
+// HouseholdInverterData
+// InstallerPsFaultStatus
+// IsHaveEsInverter
+// IsSingleInverter
+// IsTransformSystem
+// Latitude
+// LoadPowerMap
+// LoadPowerMapVirgin
+// Longitude
+// MapLatitude
+// MapLongitude
+// MeterReduceTotal
+// MobleTel
+// MonthEnergy
+// MonthEnergyVirgin
+// MonthIncome
+// NegativeLoadMsg
+// OwnerPsFaultStatus
+// P83081Map
+// P83081MapVirgin
+// P83102Map
+// P83102MapVirgin
+// P83102Percent
+// P83118Map
+// P83118MapVirgin
+// P83119Map
+// P83119MapVirgin
+// P83120Map
+// P83120MapVirgin
+// P83122
+// P83124Map
+// P83124MapVirgin
+// P83202Map
+// P83202MapVirgin
+// P83532MapVirgin
+// PowerChargeSetted
+// PowerGridPowerMap
+// PowerGridPowerMapVirgin
+// PsCountryID
+// PsDeviceType
+// PsFaultStatus
+// PsHealthStatus
+// PsLocation
+// PsName
+// PsPsKey
+// PsState
+// PsType
+// PvPowerMap
+// PvPowerMapVirgin
+// RobotNumSweepCapacity
+// Num
+// SweepCapacity
+// }
+// SelfConsumptionOffsetReminder
+// So2ReduceTotal
+// StorageInverterData
+// CommunicationDevSn
+// DevStatus
+// DeviceCode
+// DeviceModelCode
+// DeviceName
+// DeviceState
+// DeviceType
+// DrmStatus
+// DrmStatusName
+// EnergyFlow
+// HasAmmeter
+// InstallerDevFaultStatus
+// InverterSn
+// OwnerDevFaultStatus
+// P13003Map
+// P13003MapVirgin
+// P13119Map
+// P13119MapVirgin
+// P13121Map
+// P13121MapVirgin
+// P13126Map
+// P13126MapVirgin
+// P13141
+// P13149Map
+// P13149MapVirgin
+// P13150Map
+// P13150MapVirgin
+// PsKey
+// UUID
+// }
+// TodayEnergy
+// TodayEnergyVirgin
+// TodayIncome
+// TotalEnergy
+// TotalEnergyVirgin
+// TotalIncome
+// TreeReduceTotal
+// ValidFlag
+// WgsLatitude
+// WgsLongitude
+// ZfzyMap
+// ZfzyMapVirgin
+// ZjzzMap
+// ZjzzMapVirgin

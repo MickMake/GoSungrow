@@ -3,16 +3,20 @@ package iSolarCloud
 import (
 	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/AppService/getPowerDevicePointNames"
+	"GoSungrow/iSolarCloud/AppService/getPsDetailWithPsType"
 	"GoSungrow/iSolarCloud/AppService/getPsList"
 	"GoSungrow/iSolarCloud/AppService/getTemplateList"
 	"GoSungrow/iSolarCloud/AppService/queryDeviceList"
+	"GoSungrow/iSolarCloud/AppService/queryDeviceRealTimeDataByPsKeys"
 	"GoSungrow/iSolarCloud/AppService/queryMutiPointDataList"
+	"GoSungrow/iSolarCloud/WebAppService/getMqttConfigInfoByAppkey"
 	"GoSungrow/iSolarCloud/WebAppService/queryUserCurveTemplateData"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/output"
 	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -103,7 +107,7 @@ func (sg *SunGrow) GetTemplateData(template string, date string, filter string) 
 			break
 		}
 
-		sg.Error = sg.Output(ep, table, filter)
+		sg.Error = sg.Output(ep, &table, filter)
 		if sg.Error != nil {
 			break
 		}
@@ -251,13 +255,11 @@ func (sg *SunGrow) PrintCurrentStats() error {
 			break
 		}
 
-		sg.Error = sg.Output(_getPsList, table, "")
+		sg.Error = sg.Output(_getPsList, &table, "")
 		if sg.Error != nil {
 			break
 		}
 
-
-		// ep = sg.GetByJson("AppService.queryDeviceList", fmt.Sprintf(`{"ps_id":"%d"}`, psId))
 		ep = sg.GetByStruct(
 			"AppService.queryDeviceList",
 			queryDeviceList.RequestData{PsId: strconv.FormatInt(psId, 10)},
@@ -274,7 +276,7 @@ func (sg *SunGrow) PrintCurrentStats() error {
 			break
 		}
 
-		sg.Error = sg.Output(ep2, table, "")
+		sg.Error = sg.Output(ep2, &table, "")
 		if sg.Error != nil {
 			break
 		}
@@ -328,7 +330,7 @@ func (sg *SunGrow) GetPointNames() error {
 				break
 			}
 
-			sg.Error = sg.Output(ep2, table, "")
+			sg.Error = sg.Output(ep2, &table, "")
 			if sg.Error != nil {
 				break
 			}
@@ -356,7 +358,113 @@ func (sg *SunGrow) GetTemplates() error {
 			break
 		}
 
-		sg.Error = sg.Output(ep2, table, "")
+		sg.Error = sg.Output(ep2, &table, "")
+		if sg.Error != nil {
+			break
+		}
+	}
+
+	return sg.Error
+}
+
+func (sg *SunGrow) GetIsolarcloudMqtt(appKey string) error {
+	for range Only.Once {
+		if appKey == "" {
+			appKey = sg.GetAppKey()
+		}
+
+		ep := sg.GetByStruct(
+			"WebAppService.getMqttConfigInfoByAppkey",
+			getMqttConfigInfoByAppkey.RequestData{AppKey: appKey},
+			DefaultCacheTimeout,
+		)
+		if sg.Error != nil {
+			break
+		}
+
+		ep2 := getMqttConfigInfoByAppkey.Assert(ep)
+		table := ep2.GetDataTable()
+		if table.Error != nil {
+			sg.Error = table.Error
+			break
+		}
+
+		sg.Error = sg.Output(ep2, &table, "")
+		if sg.Error != nil {
+			break
+		}
+	}
+
+	return sg.Error
+}
+
+func (sg *SunGrow) GetRealTimeData(psKey string) error {
+	for range Only.Once {
+		if psKey == "" {
+			var psKeys []string
+			psKeys, sg.Error = sg.GetPsKeys()
+			if sg.Error != nil {
+				break
+			}
+			fmt.Printf("%v\n", psKeys)
+			psKey = strings.Join(psKeys, ",")
+		}
+
+		ep := sg.GetByStruct(
+			"AppService.queryDeviceRealTimeDataByPsKeys",
+			queryDeviceRealTimeDataByPsKeys.RequestData{PsKeyList: psKey},
+			DefaultCacheTimeout,
+		)
+		if sg.Error != nil {
+			break
+		}
+
+		ep2 := queryDeviceRealTimeDataByPsKeys.Assert(ep)
+		table := ep2.GetDataTable()
+		if table.Error != nil {
+			sg.Error = table.Error
+			break
+		}
+
+		sg.Error = sg.Output(ep2, nil, "")
+		if sg.Error != nil {
+			break
+		}
+	}
+
+	return sg.Error
+}
+
+func (sg *SunGrow) GetPsDetails(psid string) error {
+
+	for range Only.Once {
+		var psId int64
+		if psid == "" {
+			psId, sg.Error = sg.GetPsId()
+		} else {
+			psId, sg.Error = strconv.ParseInt(psid, 10, 64)
+		}
+		if sg.Error != nil {
+			break
+		}
+
+		ep := sg.GetByStruct(
+			"AppService.getPsDetailWithPsType",
+			getPsDetailWithPsType.RequestData{PsId: strconv.FormatInt(psId, 10)},
+			DefaultCacheTimeout)
+		if ep.IsError() {
+			sg.Error = ep.GetError()
+			break
+		}
+
+		ep2 := getPsDetailWithPsType.Assert(ep)
+		table := ep2.GetDataTable()
+		if table.Error != nil {
+			sg.Error = table.Error
+			break
+		}
+
+		sg.Error = sg.Output(ep2, &table, "")
 		if sg.Error != nil {
 			break
 		}

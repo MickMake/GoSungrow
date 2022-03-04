@@ -6,6 +6,7 @@ import (
 	"GoSungrow/iSolarCloud/AppService/login"
 	"GoSungrow/lsgo"
 	"GoSungrow/mmGit"
+	"GoSungrow/mmMqtt"
 	"errors"
 	"fmt"
 	"github.com/spf13/cobra"
@@ -20,6 +21,7 @@ var DefaultAreas = []string{"all"}
 type CommandArgs struct {
 	SunGrow *iSolarCloud.SunGrow
 	Git *mmGit.Git
+	Mqtt *mmMqtt.Mqtt
 
 	ConfigDir   string
 	CacheDir    string
@@ -40,6 +42,12 @@ type CommandArgs struct {
 	ApiToken      string
 	ApiTokenFile  string
 	ApiOutputType string
+
+	// HASSIO MQTT
+	MqttUsername   string
+	MqttPassword   string
+	MqttHost       string
+	MqttPort       string
 
 	// Google sheets
 	GoogleSheet       string

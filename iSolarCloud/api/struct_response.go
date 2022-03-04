@@ -48,15 +48,19 @@ func (req ResponseCommon) IsTokenValid() bool {
 	var ok bool
 	for range Only.Once {
 		switch {
-		case req.ResultMsg == "success":
-			ok = true
-		case req.ResultMsg == "er_token_login_invalid":
-			ok = false
-		default:
-			ok = false
+			case req.ResultMsg == "success":
+				ok = true
+			case req.ResultMsg == "er_token_login_invalid":
+				ok = false
+			default:
+				ok = false
 		}
 	}
 	return ok
+}
+
+func (req ResponseCommon) IsTokenInvalid() bool {
+	return !req.IsTokenValid()
 }
 
 func (req ResponseCommon) String() string {

@@ -96,6 +96,7 @@ type Sensor struct {
 	UniqueId               string       `json:"unique_id,omitempty" required:"false"`
 	UnitOfMeasurement      string       `json:"unit_of_measurement,omitempty" required:"false"`
 	ValueTemplate          string       `json:"value_template,omitempty" required:"false"`
+	LastReset              string       `json:"last_reset,omitempty" required:"false"`
 
 	// StateFunc func() string `json:"-"`
 	//

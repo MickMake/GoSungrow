@@ -6,6 +6,7 @@ import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
+	"strconv"
 )
 
 const Url = "/v1/devService/queryDeviceList"
@@ -221,16 +222,32 @@ func (e *EndPoint) GetDataTable() output.Table {
 			"Date",
 			"Point Id",
 			"Point Group Name",
-			"Point Name",
+			"Description",
 			"Value",
 			"Unit",
 		)
 
 		for _, d := range e.Response.ResultData.PageList {
 			for _, p := range d.PointData {
+				p.Value, p.Unit = api.DivideByThousandIfRequired(p.Value, p.Unit)
+				// gp := api.GetPointInt("", p.PointID)
+				// if gp != nil {
+				// 	_ = table.AddRow(
+				// 		api.NewDateTime(p.TimeStamp).PrintFull(),
+				// 		api.NameDevicePointInt(d.PsKey, p.PointID),
+				// 		p.PointGroupName,
+				// 		p.PointName,
+				// 		gp.Description,
+				// 		p.Value,
+				// 		p.Unit,
+				// 		gp.Unit,
+				// 	)
+				// 	continue
+				// }
+
 				_ = table.AddRow(
 					api.NewDateTime(p.TimeStamp).PrintFull(),
-					fmt.Sprintf("%s.%d", d.PsKey, p.PointID),
+					api.NameDevicePointInt(d.PsKey, p.PointID),
 					p.PointGroupName,
 					p.PointName,
 					p.Value,
@@ -255,51 +272,37 @@ func (e *EndPoint) GetDataTable() output.Table {
 	return table
 }
 
+func (e *EndPoint) GetData() api.Data {
+	var ret api.Data
 
-type Data struct {
-	// Headers DataHeaders
-	Entries []DataEntry
-}
-// type DataHeaders struct {
-// 	Date           string
-// 	PointId        string
-// 	PointGroupName string
-// 	PointName      string
-// 	Value          string
-// 	Unit           string
-// }
-type DataEntry struct {
-	Date           api.DateTime `json:"date"`
-	PointId        string    `json:"point_id"`
-	PointGroupName string    `json:"point_group_name"`
-	PointName      string    `json:"point_name"`
-	Value          string    `json:"value"`
-	Unit           string    `json:"unit"`
-}
-func (e *EndPoint) GetData() Data {
-	var ret Data
 	for range Only.Once {
-		// ret.Headers = DataHeaders {
-		// 	Date:           "Date",
-		// 	PointId:        "Point Id",
-		// 	PointGroupName: "Point Group Name",
-		// 	PointName:      "Point Name",
-		// 	Value:          "Value",
-		// 	Unit:           "Unit",
-		// }
-
+		index := 0
 		for _, d := range e.Response.ResultData.PageList {
 			for _, p := range d.PointData {
-				ret.Entries = append(ret.Entries, DataEntry {
+				if p.Unit == "W" {
+					fv, err := strconv.ParseFloat(p.Value, 64)
+					fv = fv / 1000
+					if err == nil {
+						p.Value = fmt.Sprintf("%.3f", fv)
+						p.Unit = "kW"
+					}
+				}
+
+				ret.Entries = append(ret.Entries, api.DataEntry {
 					Date:           api.NewDateTime(p.TimeStamp),
-					PointId:        fmt.Sprintf("%s.%d", d.PsKey, p.PointID),
+					PointId:        api.NameDevicePointInt(d.PsKey, p.PointID),
 					PointGroupName: p.PointGroupName,
 					PointName:      p.PointName,
 					Value:          p.Value,
 					Unit:           p.Unit,
+					ValueType:      api.GetPointInt(d.PsKey, p.PointID),
+					Index:          index,
 				})
+
+				index++
 			}
 		}
 	}
+
 	return ret
 }

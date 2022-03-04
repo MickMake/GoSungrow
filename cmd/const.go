@@ -22,6 +22,11 @@ const (
 	flagApiLastLogin  = "token-expiry"
 	flagApiOutputType = "out"
 
+	flagMqttUsername   = "mqtt-user"
+	flagMqttPassword   = "mqtt-password"
+	flagMqttHost   = "mqtt-host"
+	flagMqttPort   = "mqtt-port"
+
 	flagGoogleSheet       = "google-sheet"
 	flagGoogleSheetUpdate = "update"
 

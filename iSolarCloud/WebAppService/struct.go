@@ -78,6 +78,7 @@ import (
 	"GoSungrow/iSolarCloud/WebAppService/getInverterFactoryList"
 	"GoSungrow/iSolarCloud/WebAppService/getInverterInfo"
 	"GoSungrow/iSolarCloud/WebAppService/getLoadCurveList"
+	"GoSungrow/iSolarCloud/WebAppService/getMqttConfigInfoByAppkey"
 	"GoSungrow/iSolarCloud/WebAppService/getMultiPowers"
 	"GoSungrow/iSolarCloud/WebAppService/getOndutyQuery"
 	"GoSungrow/iSolarCloud/WebAppService/getOperateTicketUserList"
@@ -213,6 +214,10 @@ func Init(apiRoot api.Web) Area {
 			api.GetName(showPSView.EndPoint{}):                 showPSView.Init(apiRoot),
 			api.GetName(queryUserCurveTemplateData.EndPoint{}): queryUserCurveTemplateData.Init(apiRoot),
 			api.GetName(getDeviceUuid.EndPoint{}):              getDeviceUuid.Init(apiRoot), // /v1/devService/getDeviceUuid}
+
+			// Discovered from Chrome Dev Tools
+			api.GetName(getMqttConfigInfoByAppkey.EndPoint{}):              getMqttConfigInfoByAppkey.Init(apiRoot), // /v1/devService/getDeviceUuid}
+
 
 			api.GetName(addMaterial.EndPoint{}):                            addMaterial.Init(apiRoot),                            // /v1/otherService/addMaterial}
 			api.GetName(addOptTicketInfo.EndPoint{}):                       addOptTicketInfo.Init(apiRoot),                       // /v1/faultService/addOptTicketInfo}
@@ -409,6 +414,7 @@ func Init(apiRoot api.Web) Area {
 // ****************************************
 // Methods not scoped by api.EndPoint interface type
 
+//goland:noinspection GoUnusedExportedFunction
 func GetAreaName() string {
 	return string(api.GetArea(Area{}))
 }
@@ -427,6 +433,7 @@ func (a Area) GetEndPoint(name api.EndPointName) api.EndPoint {
 // ****************************************
 // Methods scoped by api.Area interface type
 
+//goland:noinspection GoUnusedParameter
 func (a Area) Init(apiRoot *api.Web) api.AreaStruct {
 	panic("implement me")
 }
@@ -442,30 +449,37 @@ func (a Area) GetEndPoints() api.TypeEndPoints {
 	return a.EndPoints
 }
 
+//goland:noinspection GoUnusedParameter
 func (a Area) Call(name api.EndPointName) output.Json {
 	panic("implement me")
 }
 
+//goland:noinspection GoUnusedParameter
 func (a Area) SetRequest(name api.EndPointName, ref interface{}) error {
 	panic("implement me")
 }
 
+//goland:noinspection GoUnusedParameter
 func (a Area) GetRequest(name api.EndPointName) output.Json {
 	panic("implement me")
 }
 
+//goland:noinspection GoUnusedParameter
 func (a Area) GetResponse(name api.EndPointName) output.Json {
 	panic("implement me")
 }
 
+//goland:noinspection GoUnusedParameter
 func (a Area) GetData(name api.EndPointName) output.Json {
 	panic("implement me")
 }
 
+//goland:noinspection GoUnusedParameter
 func (a Area) IsValid(name api.EndPointName) error {
 	panic("implement me")
 }
 
+//goland:noinspection GoUnusedParameter
 func (a Area) GetError(name api.EndPointName) error {
 	panic("implement me")
 }

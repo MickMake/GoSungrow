@@ -2,6 +2,8 @@ package mmMqtt
 
 import (
 	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api"
+	"encoding/json"
 	"errors"
 	"fmt"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
@@ -13,17 +15,21 @@ import (
 
 
 type Mqtt struct {
-	ClientId string `json:"client_id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Host     string `json:"host"`
-	Port     string `json:"port"`
+	ClientId      string `json:"client_id"`
+	Username      string `json:"username"`
+	Password      string `json:"password"`
+	Host          string `json:"host"`
+	Port          string `json:"port"`
 
-	url       *url.URL
-	client    mqtt.Client
-	pubClient mqtt.Client
+	url           *url.URL
+	client        mqtt.Client
+	pubClient     mqtt.Client
 	clientOptions *mqtt.ClientOptions
-	err           error
+	LastRefresh   time.Time `json:"-"`
+	PsId          int64 `json:"-"`
+
+	firstRun bool
+	err      error
 }
 
 func New(req Mqtt) *Mqtt {
@@ -34,9 +40,22 @@ func New(req Mqtt) *Mqtt {
 		if ret.err != nil {
 			break
 		}
+		ret.firstRun = true
 	}
 
 	return &ret
+}
+
+func (m *Mqtt) IsFirstRun() bool {
+	return m.firstRun
+}
+
+func (m *Mqtt) IsNotFirstRun() bool {
+	return !m.firstRun
+}
+
+func (m *Mqtt) UnsetFirstRun() {
+	m.firstRun = false
 }
 
 func (m *Mqtt) GetError() error {
@@ -48,6 +67,20 @@ func (m *Mqtt) IsError() bool {
 		return true
 	}
 	return false
+}
+
+func (m *Mqtt) IsNewDay() bool {
+	var yes bool
+	for range Only.Once {
+		last := m.LastRefresh.Format("20060102")
+		now := time.Now().Format("20060102")
+
+		if last != now {
+			yes = true
+			break
+		}
+	}
+	return yes
 }
 
 func (m *Mqtt) setUrl(req Mqtt) error {
@@ -66,7 +99,7 @@ func (m *Mqtt) setUrl(req Mqtt) error {
 		m.Password = req.Password
 
 		if req.Host == "" {
-			m.err = errors.New("host empty")
+			m.err = errors.New("HASSIO mqtt host not defined")
 			break
 		}
 		m.Host = req.Host
@@ -197,13 +230,14 @@ func (m *Mqtt) SensorPublish(subtopic string, payload interface{}) error {
 	return m.err
 }
 
-func (m *Mqtt) SensorPublishConfig(id string, name string, units string, address int) error {
+// func (m *Mqtt) SensorPublishConfig(id string, name string, units string, address int) error {
+func (m *Mqtt) SensorPublishConfig(point api.DataEntry) error {
 	for range Only.Once {
-		a := strconv.Itoa(address)
-		id = strings.ReplaceAll("sungrow_" + id, ".", "-")
+		a := strconv.Itoa(point.Index)
+		id := strings.ReplaceAll("sungrow_" + point.PointId, ".", "-")
 
 		class := ""
-		switch units {
+		switch point.Unit {
 			case "MW":
 				fallthrough
 			case "kW":
@@ -237,33 +271,72 @@ func (m *Mqtt) SensorPublishConfig(id string, name string, units string, address
 				class = "battery"
 		}
 
+		LastReset := m.GetLastReset(point.PointId)
+		LastResetValueTemplate := ""
+		if LastReset != "" {
+			LastResetValueTemplate = "{{ value_json.last_reset | as_datetime() }}"
+			// LastResetValueTemplate = "{{ value_json.last_reset | int | timestamp_local | as_datetime }}"
+		}
+
 		payload := Sensor {
 			Device: Device {
 				Connections:  [][]string{{"sungrow_address", a}},
 				Identifiers:  []string{id, "sungrow_address_" + a},
 				Manufacturer: "MickMake",
 				Model:        "SunGrow inverter",
-				Name:         name,
+				Name:         point.PointName,
 				SwVersion:    "GoSunGrow https://github.com/MickMake/GoSungrow",
 				ViaDevice:    "gosungrow",
 			},
-			Name:              "SunGrow " + name,
-			StateClass:        "measurement",
-			StateTopic:        SensorBaseTopic + "/" + id + "/state",
-			UniqueId:          id,
-			UnitOfMeasurement: units,
-			DeviceClass:       class,
-			Qos:               0,
-			ForceUpdate: true,
-			ExpireAfter: 0,
-			Encoding: "utf-8",
-			EnabledByDefault: true,
+			Name:                   "SunGrow " + point.PointName,
+			StateClass:             "measurement",
+			StateTopic:             SensorBaseTopic + "/" + id + "/state",
+			UniqueId:               id,
+			UnitOfMeasurement:      point.Unit,
+			DeviceClass:            class,
+			Qos:                    0,
+			ForceUpdate:            true,
+			ExpireAfter:            0,
+			Encoding:               "utf-8",
+			EnabledByDefault:       true,
+			LastResetValueTemplate: LastResetValueTemplate,
+			LastReset:              LastReset,
+			ValueTemplate:          "{{ value_json.value | float }}",
+			// LastReset: time.Now().Format("2006-01-02T00:00:00+00:00"),
+			// LastResetValueTemplate: "{{entity_id}}",
+			// LastResetValueTemplate: "{{ (as_datetime((value_json.last_reset | int | timestamp_utc)|string+'Z')).isoformat() }}",
 		}
 
-		topic := SensorBaseTopic + "/" + id + "/config"
-		m.client.Publish(topic, 0, true, payload.Json())
+		m.client.Publish(SensorBaseTopic + "/" + id + "/config", 0, true, payload.Json())
 	}
 	return m.err
+}
+
+// func (m *Mqtt) SensorPublishValue(id string, value string) error {
+func (m *Mqtt) SensorPublishValue(point api.DataEntry) error {
+	for range Only.Once {
+		id := strings.ReplaceAll("sungrow_" + point.PointId, ".", "-")
+		payload := MqttState {
+			LastReset: m.GetLastReset(point.PointId),
+			Value:     point.Value,
+		}
+		m.client.Publish(SensorBaseTopic + "/" + id + "/state", 0, true, payload.Json())
+	}
+	return m.err
+}
+
+func (m *Mqtt) GetLastReset(pointType string) string {
+	var ret string
+
+	for range Only.Once {
+		pt := api.GetDevicePoint(pointType)
+		if pt == nil {
+			break
+		}
+		ret = pt.WhenReset()
+	}
+
+	return ret
 }
 
 func (m *Mqtt) SensorPublishState(id string, payload interface{}) error {
@@ -274,105 +347,20 @@ func (m *Mqtt) SensorPublishState(id string, payload interface{}) error {
 	return m.err
 }
 
+type MqttState struct {
+	LastReset string `json:"last_reset,omitempty"`
+	Value string `json:"value"`
+}
 
-// func (m *Mqtt) SetKeyFile(path string) error {
-//
-// 	for range Only.Once {
-// 		if path == "" {
-// 			break
-// 		}
-//
-// 		m.err = checkKeyFile(path)
-// 		if m.err != nil {
-// 			break
-// 		}
-//
-// 		m.KeyFile = path
-// 	}
-//
-// 	return m.err
-// }
-//
-// func (m *Mqtt) SetToken(t string) error {
-//
-// 	for range Only.Once {
-// 		if t == "" {
-// 			break
-// 		}
-//
-// 		m.Token = t
-// 	}
-//
-// 	return m.err
-// }
-//
-// func (m *Mqtt) SetRepo(repo string) error {
-//
-// 	for range Only.Once {
-// 		if repo == "" {
-// 			m.err = errors.New("repo empty")
-// 			break
-// 		}
-// 		m.RepoUrl = repo
-// 	}
-//
-// 	return m.err
-// }
-//
-// func (m *Mqtt) SetDir(dir string) error {
-//
-// 	for range Only.Once {
-// 		if dir == "" {
-// 			m.err = errors.New("dir empty")
-// 			break
-// 		}
-// 		m.RepoDir = dir
-// 	}
-//
-// 	return m.err
-// }
-//
-// func (m *Mqtt) SetDiffCmd(cmd string) error {
-//
-// 	for range Only.Once {
-// 		if cmd == "" {
-// 			cmd = "tkdiff"
-// 		}
-// 		m.DiffCmd = cmd
-// 	}
-//
-// 	return m.err
-// }
-//
-// func (m *Mqtt) IsOk() bool {
-// 	var ok bool
-//
-// 	for range Only.Once {
-// 		//if m.ApiUsername == "" {
-// 		//	m.Error = errors.New("username empty")
-// 		//	break
-// 		//}
-// 		//
-// 		//if m.ApiPassword == "" {
-// 		//	m.Error = errors.New("password empty")
-// 		//	break
-// 		//}
-//
-// 		if m.RepoUrl == "" {
-// 			m.err = errors.New("repo empty")
-// 			break
-// 		}
-//
-// 		if m.RepoDir == "" {
-// 			m.err = errors.New("repo dir empty")
-// 			break
-// 		}
-//
-// 		ok = true
-// 	}
-//
-// 	return ok
-// }
-// func (m *Mqtt) IsNotOk() bool {
-// 	return !m.IsOk()
-// }
+func (mq *MqttState) Json() string {
+	var ret string
+	for range Only.Once {
+		j, err := json.Marshal(*mq)
+		if err != nil {
+			ret = fmt.Sprintf("{ \"error\": \"%s\"", err)
+			break
+		}
+		ret = string(j)
+	}
+	return ret
+}

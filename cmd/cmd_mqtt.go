@@ -3,9 +3,11 @@ package cmd
 import (
 	"GoSungrow/Only"
 	"GoSungrow/mmMqtt"
+	"errors"
 	"fmt"
+	"github.com/go-co-op/gocron"
 	"github.com/spf13/cobra"
-	"math/rand"
+	"strings"
 	"time"
 )
 
@@ -15,28 +17,43 @@ func AttachCmdMqtt(cmd *cobra.Command) *cobra.Command {
 	var cmdMqtt = &cobra.Command{
 		Use:                   "mqtt",
 		Aliases:               []string{""},
-		Short:                 fmt.Sprintf("All things MQTT related."),
-		Long:                  fmt.Sprintf("All things MQTT related."),
+		Short:                 fmt.Sprintf("Connect to a HASSIO broker."),
+		Long:                  fmt.Sprintf("Connect to a HASSIO broker."),
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
-		PreRunE:               Cmd.ProcessArgs,
+		PreRunE:               Cmd.MqttArgs,
 		RunE:                  cmdMqttFunc,
-		Args:                  cobra.RangeArgs(0, 1),
+		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmd.AddCommand(cmdMqtt)
-	cmdMqtt.Example = PrintExamples(cmdMqtt, "sync", "sync all")
+	cmdMqtt.Example = PrintExamples(cmdMqtt, "run", "sync")
 
 
 	// ******************************************************************************** //
-	var cmdMqttSync = &cobra.Command{
-		Use:                   "update",
+	var cmdMqttRun = &cobra.Command{
+		Use:                   "run",
 		Aliases:               []string{""},
-		Short:                 fmt.Sprintf("Sync to an MQTT broker."),
-		Long:                  fmt.Sprintf("Sync to an MQTT broker."),
+		Short:                 fmt.Sprintf("One-off sync to a HASSIO broker."),
+		Long:                  fmt.Sprintf("One-off sync to a HASSIO broker."),
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
-		PreRunE:               Cmd.ProcessArgs,
-		Run:                   cmdMqttSyncFunc,
+		PreRunE:               Cmd.MqttArgs,
+		RunE:                  cmdMqttRunFunc,
+		Args:                  cobra.RangeArgs(0, 1),
+	}
+	cmdMqtt.AddCommand(cmdMqttRun)
+	cmdMqttRun.Example = PrintExamples(cmdMqttRun, "")
+
+	// ******************************************************************************** //
+	var cmdMqttSync = &cobra.Command{
+		Use:                   "sync",
+		Aliases:               []string{""},
+		Short:                 fmt.Sprintf("Sync to a HASSIO MQTT broker."),
+		Long:                  fmt.Sprintf("Sync to a HASSIO MQTT broker."),
+		DisableFlagParsing:    false,
+		DisableFlagsInUseLine: false,
+		PreRunE:               Cmd.MqttArgs,
+		RunE:                  cmdMqttSyncFunc,
 		Args:                  cobra.RangeArgs(0, 1),
 	}
 	cmdMqtt.AddCommand(cmdMqttSync)
@@ -46,30 +63,56 @@ func AttachCmdMqtt(cmd *cobra.Command) *cobra.Command {
 }
 
 
-func cmdMqttFunc(cmd *cobra.Command, args []string) error {
-	var err error
-
+func (ca *CommandArgs) MqttArgs(cmd *cobra.Command, args []string) error {
 	for range Only.Once {
-		fmt.Println("# Starting MQTT HASSIO Service...")
+		ca.Error = ca.ProcessArgs(cmd, args)
+		if ca.Error != nil {
+			break
+		}
 
-		foo := mmMqtt.New(mmMqtt.Mqtt{
-			ClientId: "SunGrow",
-			Username: "mickmake",
-			Password: "rvsrzdd0",
-			Host:     "10.0.5.21",
-			Port:     "11883",
+		LogPrintDate("Connecting to MQTT HASSIO Service...\n")
+		Cmd.Mqtt = mmMqtt.New(mmMqtt.Mqtt {
+			ClientId: "GoSunGrow",
+			Username: Cmd.MqttUsername,
+			Password: Cmd.MqttPassword,
+			Host:     Cmd.MqttHost,
+			Port:     Cmd.MqttPort,
 		})
-		err = foo.GetError()
-		if err != nil {
+		Cmd.Error = Cmd.Mqtt.GetError()
+		if Cmd.Error != nil {
 			break
 		}
 
-		err = foo.Connect()
-		if err != nil {
+		Cmd.Error = Cmd.Mqtt.Connect()
+		if Cmd.Error != nil {
 			break
 		}
 
+		LogPrintDate("Connecting to SunGrow...\n")
+		Cmd.Error = Cmd.SunGrowArgs(cmd, args)
+		if Cmd.Error != nil {
+			break
+		}
 
+		if Cmd.Mqtt.PsId == 0 {
+			Cmd.Mqtt.PsId, Cmd.Error = Cmd.SunGrow.GetPsId()
+			if Cmd.Error != nil {
+				break
+			}
+			LogPrintDate("Found SunGrow device %d\n", Cmd.Mqtt.PsId)
+		}
+	}
+
+	return Cmd.Error
+}
+
+
+func cmdMqttFunc(cmd *cobra.Command, _ []string) error {
+	return cmd.Help()
+}
+
+func cmdMqttRunFunc(_ *cobra.Command, _ []string) error {
+	for range Only.Once {
 		// switch1 := mmMqtt.BinarySensor {
 		// 	Device: mmMqtt.Device {
 		// 		Connections:  [][]string{{"sungrow_address", "0"}},
@@ -93,131 +136,202 @@ func cmdMqttFunc(cmd *cobra.Command, args []string) error {
 		// 	break
 		// }
 
-		fmt.Println("# Checking in on SunGrow...")
-		err = Cmd.SunGrowArgs(cmd, args)
-		if err != nil {
+		// var psId int64
+		// psId, Cmd.Error = Cmd.SunGrow.GetPsId()
+		// if err != nil {
+		// 	break
+		// }
+		//
+		// fmt.Printf("# Found SunGrow device %d\n", psId)
+		// // Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
+		// ep := Cmd.SunGrow.QueryDevice(psId)
+		// if ep.IsError() {
+		// 	Cmd.Error = ep.GetError()
+		// 	break
+		// }
+		//
+		// data := ep.GetData()
+		// fmt.Printf("# Adding %d entries to HASSIO.\n", len(data.Entries))
+		// for i, r := range data.Entries {
+		// 	fmt.Printf("%s ", r.PointId)
+		// 	Cmd.Error = foo.SensorPublishConfig(r.PointId, r.PointName, r.Unit, i)
+		// 	if err != nil {
+		// 		break
+		// 	}
+		// 	Cmd.Error = foo.SensorPublishState(r.PointId, r.Value)
+		// 	if err != nil {
+		// 		break
+		// 	}
+		// }
+		// fmt.Println()
+		// if err != nil {
+		// 	break
+		// }
+
+		Cmd.Error = MqttCron()
+		if Cmd.Error != nil {
 			break
 		}
 
-		var psId int64
-		psId, err = Cmd.SunGrow.GetPsId()
-		if err != nil {
-			break
-		}
-
-		fmt.Printf("# Found SunGrow device %d\n", psId)
-		// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
-		ep := Cmd.SunGrow.QueryDevice(psId)
-		if ep.IsError() {
-			err = ep.GetError()
-			break
-		}
-
-		data := ep.GetData()
-		fmt.Printf("# Adding %d entries to HASSIO.\n", len(data.Entries))
-		for i, r := range data.Entries {
-			fmt.Printf("%s ", r.PointId)
-			err = foo.SensorPublishConfig(r.PointId, r.PointName, r.Unit, i)
-			if err != nil {
-				break
-			}
-			err = foo.SensorPublishState(r.PointId, r.Value)
-			if err != nil {
-				break
-			}
-		}
-		fmt.Println()
-		if err != nil {
-			break
-		}
-
-		fmt.Println("# Starting ticker...")
+		LogPrintDate("Starting ticker...\n")
 		updateCounter := 0
 		timer := time.NewTicker(60 * time.Second)
 		for t := range timer.C {
 			if updateCounter < 5 {
 				updateCounter++
-				fmt.Printf("Wait: %d - %s\n", updateCounter, t.String())
+				LogPrintDate("Sleeping: %d\n", updateCounter)
 				continue
 			}
 
 			updateCounter = 0
-			fmt.Printf("Update: %s\n", t.String())
-			ep = Cmd.SunGrow.QueryDevice(psId)
-			if ep.IsError() {
-				err = ep.GetError()
+			LogPrintDate("Update: %s\n", t.String())
+			Cmd.Error = MqttCron()
+			if Cmd.Error != nil {
 				break
 			}
 
-			data = ep.GetData()
-			for _, r := range data.Entries {
-				// fmt.Printf("%s ", r.PointId)
-				err = foo.SensorPublishState(r.PointId, r.Value)
-				if err != nil {
-					break
-				}
-			}
-			// fmt.Println()
+			// ep = Cmd.SunGrow.QueryDevice(psId)
+			// if ep.IsError() {
+			// 	Cmd.Error = ep.GetError()
+			// 	break
+			// }
+			//
+			// data = ep.GetData()
+			// for _, r := range data.Entries {
+			// 	// fmt.Printf("%s ", r.PointId)
+			// 	Cmd.Error = foo.SensorPublishState(r.PointId, r.Value)
+			// 	if err != nil {
+			// 		break
+			// 	}
+			// }
+			// // fmt.Println()
 		}
-		if err != nil {
+	}
+
+	return Cmd.Error
+}
+
+func cmdMqttSyncFunc(_ *cobra.Command, args []string) error {
+
+	for range Only.Once {
+		// */1 * * * * /dir/command args args
+		cronString := "*/5 * * * *"
+		if len(args) > 0 {
+			cronString = strings.Join(args[0:5], " ")
+			cronString = strings.ReplaceAll(cronString, ".", "*")
+		}
+
+		Cron.Scheduler = gocron.NewScheduler(time.UTC)
+		Cron.Scheduler = Cron.Scheduler.Cron(cronString)
+		Cron.Scheduler = Cron.Scheduler.SingletonMode()
+
+		Cmd.Error = MqttCron()
+		if Cmd.Error != nil {
 			break
 		}
 
+		Cron.Job, Cmd.Error = Cron.Scheduler.Do(MqttCron)
+		if Cmd.Error != nil {
+			break
+		}
 
-		// switch {
-		// 	case len(args) == 0:
-		// 		Cmd.Error = cmd.Help()
-		//
-		// 	case args[0] == "all":
-		// 		// Cmd.Error = Cmd.GoogleUpdate()
-		//
-		// 	default:
-		// 		fmt.Println("Unknown sub-command.")
-		// 		_ = cmd.Help()
-		// }
-	}
-
-	return err
-}
-
-func toggle(v string) string {
-	switch v {
-		case "OFF":
-			v = "ON"
-		case "ON":
-			v = "OFF"
-	}
-	return v
-}
-
-func randoPercent() string {
-	t := time.Now()
-	min := 0
-	max := t.Second()
-	i := (rand.Intn(max - min) + min) * t.Minute()	// / float64(max)
-	return fmt.Sprintf("%.2f", (float64(i) / 3600) * 100)
-}
-
-func randoKWh() string {
-	t := time.Now()
-	min := 0
-	max := t.Minute()
-	i := (rand.Intn(max - min) + min) * t.Second()	// / float64(max)
-	return fmt.Sprintf("%.2f", (float64(i) / 3600) * 11000)
-}
-
-func cmdMqttSyncFunc(cmd *cobra.Command, args []string) {
-	for range Only.Once {
-		switch {
-			case len(args) == 0:
-				Cmd.Error = cmd.Help()
-
-			case args[0] == "all":
-				// Cmd.Error = Cmd.GoogleUpdate()
-
-			default:
-				fmt.Println("Unknown sub-command.")
-				_ = cmd.Help()
+		LogPrintDate("Created job schedule using '%s'\n", cronString)
+		Cron.Scheduler.StartBlocking()
+		if Cmd.Error != nil {
+			break
 		}
 	}
+
+	return Cmd.Error
 }
+
+func MqttCron() error {
+	for range Only.Once {
+		if Cmd.Mqtt == nil {
+			Cmd.Error = errors.New("mqtt not available")
+			break
+		}
+
+		if Cmd.SunGrow == nil {
+			Cmd.Error = errors.New("sungrow not available")
+			break
+		}
+
+		if Cmd.Mqtt.IsFirstRun() {
+			Cmd.Mqtt.UnsetFirstRun()
+		} else {
+			time.Sleep(time.Second * 40)	// Takes up to 40 seconds for data to come in.
+		}
+
+		// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
+		ep := Cmd.SunGrow.QueryDevice(Cmd.Mqtt.PsId)
+		if ep.IsError() {
+			Cmd.Error = ep.GetError()
+			break
+		}
+
+		data := ep.GetData()
+
+		if Cmd.Mqtt.IsNewDay() {
+			LogPrintDate("New day: Configuring %d entries in HASSIO.\n", len(data.Entries))
+			for _, r := range data.Entries {
+				fmt.Printf(".")
+				// Cmd.Error = Cmd.Mqtt.SensorPublishConfig(r.PointId, r.PointName, r.Unit, i)
+				Cmd.Error = Cmd.Mqtt.SensorPublishConfig(r)
+				if Cmd.Error != nil {
+					break
+				}
+			}
+			fmt.Println()
+		}
+
+		LogPrintDate("Updating %d entries to HASSIO.\n", len(data.Entries))
+		for _, r := range data.Entries {
+			fmt.Printf(".")
+			// Cmd.Error = Cmd.Mqtt.SensorPublishState(r.PointId, r.Value)
+			Cmd.Error = Cmd.Mqtt.SensorPublishValue(r)
+			if Cmd.Error != nil {
+				break
+			}
+		}
+		fmt.Println()
+
+		Cmd.Mqtt.LastRefresh = time.Now()
+
+		if Cmd.Error != nil {
+			break
+		}
+	}
+
+	if Cmd.Error != nil {
+		LogPrintDate("Error: %s\n", Cmd.Error)
+	}
+	return Cmd.Error
+}
+
+
+// func toggle(v string) string {
+// 	switch v {
+// 		case "OFF":
+// 			v = "ON"
+// 		case "ON":
+// 			v = "OFF"
+// 	}
+// 	return v
+// }
+//
+// func randoPercent() string {
+// 	t := time.Now()
+// 	min := 0
+// 	max := t.Second()
+// 	i := (rand.Intn(max - min) + min) * t.Minute()	// / float64(max)
+// 	return fmt.Sprintf("%.2f", (float64(i) / 3600) * 100)
+// }
+//
+// func randoKWh() string {
+// 	t := time.Now()
+// 	min := 0
+// 	max := t.Minute()
+// 	i := (rand.Intn(max - min) + min) * t.Second()	// / float64(max)
+// 	return fmt.Sprintf("%.2f", (float64(i) / 3600) * 11000)
+// }

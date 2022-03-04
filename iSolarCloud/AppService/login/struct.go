@@ -41,8 +41,8 @@ type Response struct {
 
 // Init - Used to initialize a new endpoint instance. Usually called from an area.
 func Init(apiRoot api.Web) EndPoint {
-	return EndPoint{
-		EndPointStruct: api.EndPointStruct{
+	return EndPoint {
+		EndPointStruct: api.EndPointStruct {
 			ApiRoot:  apiRoot,
 			Area:     api.GetArea(EndPoint{}),
 			Name:     api.GetName(EndPoint{}),
@@ -51,16 +51,16 @@ func Init(apiRoot api.Web) EndPoint {
 			Response: Response{},
 			Error:    nil,
 		},
-		Auth: &SunGrowAuth{
+		Auth: &SunGrowAuth {
 			AppKey:       "",
 			UserAccount:  "",
 			UserPassword: "",
 			TokenFile:    DefaultAuthTokenFile,
-			Token:        "",
+			// Token:        "",
 			Force:        false,
 			lastLogin:    time.Time{},
 			newToken:     false,
-			retry:        0,
+			// retry:        0,
 			err:          nil,
 		},
 	}

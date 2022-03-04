@@ -116,3 +116,72 @@ func AttachCmdDataPointNames(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
+func AttachCmdDataMqtt(cmd *cobra.Command) *cobra.Command {
+	// ********************************************************************************
+	var c = &cobra.Command{
+		Use:                   "mqtt-server",
+		Aliases:               []string{"mqtt"},
+		Short:                 fmt.Sprintf("Get iSolarCloud MQTT service login details."),
+		Long:                  fmt.Sprintf("Get iSolarCloud MQTT service login details."),
+		DisableFlagParsing:    false,
+		DisableFlagsInUseLine: false,
+		PreRunE:               Cmd.SunGrowArgs,
+		RunE:                  func(cmd *cobra.Command, args []string) error {
+			_ = SwitchOutput(cmd)
+			args = fillArray(1, args)
+			return Cmd.SunGrow.GetIsolarcloudMqtt(args[0])
+		},
+		Args:                  cobra.RangeArgs(0, 1),
+	}
+	cmd.AddCommand(c)
+	c.Example = PrintExamples(c, "")
+
+	return cmd
+}
+
+func AttachCmdDataRealTime(cmd *cobra.Command) *cobra.Command {
+	// ********************************************************************************
+	var c = &cobra.Command{
+		Use:                   "real-time",
+		Aliases:               []string{"realtime"},
+		Short:                 fmt.Sprintf("Get iSolarCloud real-time data."),
+		Long:                  fmt.Sprintf("Get iSolarCloud real-time data."),
+		DisableFlagParsing:    false,
+		DisableFlagsInUseLine: false,
+		PreRunE:               Cmd.SunGrowArgs,
+		RunE:                  func(cmd *cobra.Command, args []string) error {
+			_ = SwitchOutput(cmd)
+			args = fillArray(1, args)
+			return Cmd.SunGrow.GetRealTimeData(args[0])
+		},
+		Args:                  cobra.RangeArgs(0, 1),
+	}
+	cmd.AddCommand(c)
+	c.Example = PrintExamples(c, "")
+
+	return cmd
+}
+
+func AttachCmdDataPsDetails(cmd *cobra.Command) *cobra.Command {
+	// ********************************************************************************
+	var c = &cobra.Command{
+		Use:                   "psdetails",
+		Aliases:               []string{"ps-details"},
+		Short:                 fmt.Sprintf("Get iSolarCloud ps details."),
+		Long:                  fmt.Sprintf("Get iSolarCloud ps details."),
+		DisableFlagParsing:    false,
+		DisableFlagsInUseLine: false,
+		PreRunE:               Cmd.SunGrowArgs,
+		RunE:                  func(cmd *cobra.Command, args []string) error {
+			_ = SwitchOutput(cmd)
+			args = fillArray(1, args)
+			return Cmd.SunGrow.GetPsDetails(args[0])
+		},
+		Args:                  cobra.RangeArgs(0, 1),
+	}
+	cmd.AddCommand(c)
+	c.Example = PrintExamples(c, "")
+
+	return cmd
+}

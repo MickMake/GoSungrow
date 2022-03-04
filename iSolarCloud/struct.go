@@ -20,6 +20,7 @@ type SunGrow struct {
 	Auth    login.EndPoint
 	Areas   api.Areas
 	Error   error
+	NeedLogin bool
 
 	OutputType output.OutputType
 	// EndPoint api.EndPoint

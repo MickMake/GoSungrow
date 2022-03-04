@@ -49,6 +49,10 @@ func NewDateTime(date string) DateTime {
 	return ret
 }
 
+func TimeNowString() string {
+	return time.Now().Format(DtLayout)
+}
+
 func (dt *DateTime) GetDayStartTimestamp() string {
 	var ret string
 	f1 := dt.Time.Round(time.Hour * 24)

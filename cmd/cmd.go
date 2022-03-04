@@ -49,6 +49,15 @@ func AttachRootCmd(cmd *cobra.Command) *cobra.Command {
 	rootViper.SetDefault(flagGoogleSheetUpdate, false)
 	_ = rootCmd.PersistentFlags().MarkHidden(flagGoogleSheetUpdate)
 
+	rootCmd.PersistentFlags().StringVarP(&Cmd.MqttUsername, flagMqttUsername, "", "", fmt.Sprintf("HASSIO: mqtt username."))
+	rootViper.SetDefault(flagMqttUsername, "")
+	rootCmd.PersistentFlags().StringVarP(&Cmd.MqttPassword, flagMqttPassword, "", "", fmt.Sprintf("HASSIO: mqtt password."))
+	rootViper.SetDefault(flagMqttPassword, "")
+	rootCmd.PersistentFlags().StringVarP(&Cmd.MqttHost, flagMqttHost, "", "", fmt.Sprintf("HASSIO: mqtt host."))
+	rootViper.SetDefault(flagMqttHost, "")
+	rootCmd.PersistentFlags().StringVarP(&Cmd.MqttPort, flagMqttPort, "", "", fmt.Sprintf("HASSIO: mqtt port."))
+	rootViper.SetDefault(flagMqttPort, "")
+
 	rootCmd.PersistentFlags().StringVarP(&Cmd.GitRepo, flagGitRepo, "", "", fmt.Sprintf("Git: Repo url for updates."))
 	rootViper.SetDefault(flagGitRepo, "")
 	rootCmd.PersistentFlags().StringVarP(&Cmd.GitRepoDir, flagGitRepoDir, "", "", fmt.Sprintf("Git: Local repo directory."))

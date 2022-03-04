@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"hash/fnv"
+	"strconv"
 
 	// "github.com/google/uuid"
 	"path/filepath"
@@ -620,6 +621,92 @@ func GetOptionsRequired(ref interface{}) Required {
 			}
 
 			ret = append(ret, field.Name)
+		}
+	}
+
+	return ret
+}
+
+type StructKey struct {
+	Name      string
+	JsonName  string
+	JsonValue string
+	Required  string
+	Value     string
+	Type      reflect.Type
+	Interface interface{}
+}
+type StructKeys map[string]StructKey
+
+//goland:noinspection GoUnusedFunction,GoUnusedExportedFunction
+func GetStructKeys(ref interface{}, keys ...string) StructKeys {
+	ret := make(StructKeys)
+
+	s := New(ref)
+	if len(keys) == 0 {
+		keys = s.Names()
+	}
+
+	keyMap := make(map[string]bool)
+	for _, k := range keys {
+		keyMap[k] = true
+	}
+
+	// n := s.Names()
+	// fmt.Printf("%v\n", n)
+	//
+	// n2 := s.Name()
+	// fmt.Printf("%v\n", n2)
+	//
+	// n3 := s.TagName
+	// fmt.Printf("%v\n", n3)
+	//
+	// n4 := s.Fields()
+	// fmt.Printf("%v\n", n4)
+	//
+	// n5 := s.Map()
+	// fmt.Printf("%v\n", n5)
+	//
+	// n6 := s.Values()
+	// fmt.Printf("%v\n", n6)
+	//
+	// n7 := s.Field("")
+	// fmt.Printf("%v\n", n7)
+
+	for _, k := range New(ref).Fields() {
+		if _, ok := keyMap[k.Name()]; !ok {
+			continue
+		}
+
+		jValue := ""
+		value := ""
+		switch k.value.Type().Name() {
+			case "string":
+				value = k.Value().(string)
+			case "int":
+				v := k.Value().(int)
+				value = strconv.FormatInt(int64(v), 10)
+			case "int64":
+				value = strconv.FormatInt(k.Value().(int64), 10)
+			case "float64":
+				value = strconv.FormatFloat(k.Value().(float64), 'f', 6, 64)
+			default:
+				j, e := json.Marshal(k.Value())
+				if e == nil {
+					jValue = string(j)
+				} else {
+					jValue = fmt.Sprintf("%v", k.Value())
+				}
+		}
+
+		ret[k.Name()] = StructKey {
+			Name:      k.Name(),
+			JsonName:  k.Tag("json"),
+			JsonValue: jValue,
+			Value:     value,
+			Required:  k.Tag("required"),
+			Type:      k.value.Type(),
+			Interface: k.Value(),
 		}
 	}
 

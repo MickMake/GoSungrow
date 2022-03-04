@@ -219,6 +219,16 @@ func LogPrint(format string, args ...interface{}) {
 	fmt.Printf(format, args...)
 }
 
+func LogPrintDate(format string, args ...interface{}) {
+	fmt.Printf("%s ", TimeNow())
+	fmt.Printf(format, args...)
+	// fmt.Println()
+}
+
+func TimeNow() string {
+	return time.Now().Format("2006-01-02 15:04:05")
+}
+
 func ReExecute() error {
 	for range Only.Once {
 		LogPrint("Running scheduled command '%s'\n", strings.Join(os.Args, " "))

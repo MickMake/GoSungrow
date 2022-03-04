@@ -25,21 +25,6 @@ func AttachCmdData(cmd *cobra.Command) *cobra.Command {
 	cmdData.Example = PrintExamples(cmdData, "get <endpoint>", "put <endpoint>")
 
 
-	// // ********************************************************************************
-	// var cmdDataList = &cobra.Command{
-	// 	Use:                   "ls",
-	// 	Aliases:               []string{"list"},
-	// 	Short:                 fmt.Sprintf("List iSolarCloud high-level data commands."),
-	// 	Long:                  fmt.Sprintf("List iSolarCloud high-level data commands."),
-	// 	DisableFlagParsing:    false,
-	// 	DisableFlagsInUseLine: false,
-	// 	// PreRunE:               Cmd.SunGrowArgs,
-	// 	Run:  cmdDataListFunc,
-	// 	Args: cobra.RangeArgs(0, 1),
-	// }
-	// cmdData.AddCommand(cmdDataList)
-	// cmdDataList.Example = PrintExamples(cmdDataList, "", "areas", "endpoints", "<area name>")
-
 	// ********************************************************************************
 	var cmdDataLogin = &cobra.Command{
 		Use:                   "login",
@@ -77,6 +62,9 @@ func AttachCmdData(cmd *cobra.Command) *cobra.Command {
 	AttachCmdDataTemplatePoints(cmdDataGet)
 	AttachCmdDataPoints(cmdDataGet)
 	AttachCmdDataPointNames(cmdDataGet)
+	AttachCmdDataMqtt(cmdDataGet)
+	AttachCmdDataRealTime(cmdDataGet)
+	AttachCmdDataPsDetails(cmdDataGet)
 
 	// ********************************************************************************
 	var cmdDataRaw = &cobra.Command{
@@ -98,6 +86,9 @@ func AttachCmdData(cmd *cobra.Command) *cobra.Command {
 	AttachCmdDataTemplate(cmdDataRaw)
 	AttachCmdDataPoints(cmdDataRaw)
 	AttachCmdDataPointNames(cmdDataRaw)
+	AttachCmdDataMqtt(cmdDataRaw)
+	AttachCmdDataRealTime(cmdDataRaw)
+	AttachCmdDataPsDetails(cmdDataRaw)
 
 	// ********************************************************************************
 	var cmdDataSave = &cobra.Command{
@@ -119,6 +110,9 @@ func AttachCmdData(cmd *cobra.Command) *cobra.Command {
 	AttachCmdDataTemplate(cmdDataSave)
 	AttachCmdDataPoints(cmdDataSave)
 	AttachCmdDataPointNames(cmdDataSave)
+	AttachCmdDataMqtt(cmdDataSave)
+	AttachCmdDataRealTime(cmdDataSave)
+	AttachCmdDataPsDetails(cmdDataSave)
 
 	// ********************************************************************************
 	var cmdDataGraph = &cobra.Command{
@@ -139,6 +133,7 @@ func AttachCmdData(cmd *cobra.Command) *cobra.Command {
 	AttachCmdDataStats(cmdDataGraph)
 	AttachCmdDataTemplate(cmdDataGraph)
 	AttachCmdDataPoints(cmdDataGraph)
+	AttachCmdDataRealTime(cmdDataGraph)
 
 	// ********************************************************************************
 	var cmdDataPut = &cobra.Command{
@@ -158,50 +153,6 @@ func AttachCmdData(cmd *cobra.Command) *cobra.Command {
 	return cmdData
 }
 
-
-// func cmdDataFunc(cmd *cobra.Command, _ []string) {
-// 	Cmd.Error = cmd.Help()
-// }
-//
-// func cmdDataListFunc(_ *cobra.Command, _ []string) {
-// 	Cmd.SunGrow.ListHighLevel()
-// }
-//
-// func cmdDataGetFunc(_ *cobra.Command, args []string) {
-// 	for range Only.Once {
-// 		Cmd.SunGrow.OutputType.SetHuman()
-//
-// 		args = fillArray(3, args)
-// 		Cmd.Error = Cmd.SunGrow.GetHighLevel(args[0], args[1:]...)
-// 	}
-// }
-//
-// func cmdDataRawFunc(_ *cobra.Command, args []string) {
-// 	for range Only.Once {
-// 		Cmd.SunGrow.OutputType.SetRaw()
-//
-// 		args = fillArray(3, args)
-// 		Cmd.Error = Cmd.SunGrow.GetHighLevel(args[0], args[1:]...)
-// 	}
-// }
-//
-// func cmdDataSaveFunc(_ *cobra.Command, args []string) {
-// 	for range Only.Once {
-// 		Cmd.SunGrow.OutputType.SetFile()
-//
-// 		args = fillArray(3, args)
-// 		Cmd.Error = Cmd.SunGrow.GetHighLevel(args[0], args[1:]...)
-// 	}
-// }
-//
-// func cmdDataGraphFunc(_ *cobra.Command, args []string) {
-// 	for range Only.Once {
-// 		Cmd.SunGrow.OutputType.SetGraph()
-//
-// 		args = fillArray(4, args)
-// 		Cmd.Error = Cmd.SunGrow.GetHighLevel(args[0], args[1:]...)
-// 	}
-// }
 
 func cmdDataPutFunc(_ *cobra.Command, args []string) {
 	for range Only.Once {

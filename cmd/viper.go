@@ -69,6 +69,11 @@ func openConfig() error {
 			rootViper.SetDefault(flagApiPassword, defaultPassword)
 			rootViper.SetDefault(flagApiAppKey, Cmd.ApiAppKey)
 
+			rootViper.SetDefault(flagMqttUsername, Cmd.MqttUsername)
+			rootViper.SetDefault(flagMqttPassword, Cmd.MqttPassword)
+			rootViper.SetDefault(flagMqttHost, Cmd.MqttHost)
+			rootViper.SetDefault(flagMqttPort, Cmd.MqttPort)
+
 			rootViper.SetDefault(flagGoogleSheet, Cmd.GoogleSheet)
 			rootViper.SetDefault(flagGoogleSheetUpdate, Cmd.GoogleSheetUpdate)
 
@@ -122,6 +127,11 @@ func writeConfig() error {
 		rootViper.Set(flagApiPassword, Cmd.ApiPassword)
 		rootViper.Set(flagApiAppKey, Cmd.ApiAppKey)
 
+		rootViper.Set(flagMqttUsername, Cmd.MqttUsername)
+		rootViper.Set(flagMqttPassword, Cmd.MqttPassword)
+		rootViper.Set(flagMqttHost, Cmd.MqttHost)
+		rootViper.Set(flagMqttPort, Cmd.MqttPort)
+
 		rootViper.Set(flagGoogleSheet, Cmd.GoogleSheet)
 		rootViper.Set(flagGoogleSheetUpdate, Cmd.GoogleSheetUpdate)
 
@@ -157,6 +167,12 @@ func readConfig() error {
 		_, _ = fmt.Fprintf(os.Stderr, "Api AppKey:	%v\n", rootViper.Get(flagApiAppKey))
 		_, _ = fmt.Fprintf(os.Stderr, "Api UserAccount:	%v\n", rootViper.Get(flagApiUsername))
 		_, _ = fmt.Fprintf(os.Stderr, "Api UserPassword:	%v\n", rootViper.Get(flagApiPassword))
+		_, _ = fmt.Fprintln(os.Stderr)
+
+		_, _ = fmt.Fprintf(os.Stderr, "HASSIO mqtt Username:		%v\n", rootViper.Get(flagMqttUsername))
+		_, _ = fmt.Fprintf(os.Stderr, "HASSIO mqtt Password:		%v\n", rootViper.Get(flagMqttPassword))
+		_, _ = fmt.Fprintf(os.Stderr, "HASSIO mqtt Host:		%v\n", rootViper.Get(flagMqttHost))
+		_, _ = fmt.Fprintf(os.Stderr, "HASSIO mqtt Port:		%v\n", rootViper.Get(flagMqttPort))
 		_, _ = fmt.Fprintln(os.Stderr)
 
 		_, _ = fmt.Fprintf(os.Stderr, "Git Repo URL:		%v\n", rootViper.Get(flagGitRepo))

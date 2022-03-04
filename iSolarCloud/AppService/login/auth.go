@@ -21,13 +21,13 @@ type SunGrowAuth struct {
 	UserAccount  string
 	UserPassword string
 	TokenFile    string
-	Token        string
+	// Token        string
 	Force        bool
 
-	lastLogin time.Time
-	newToken  bool
-	retry     int
-	err       error
+	lastLogin    time.Time
+	newToken     bool
+	// retry        int
+	err          error
 }
 
 func (a *SunGrowAuth) Verify() error {
@@ -61,11 +61,11 @@ func (a *SunGrowAuth) Verify() error {
 func (e *EndPoint) Login(auth *SunGrowAuth) error {
 	for range Only.Once {
 		e.Auth = auth
-		e.Request.RequestData = RequestData{
+		e.Request.RequestData = RequestData {
 			UserAccount:  auth.UserAccount,
 			UserPassword: auth.UserPassword,
 		}
-		e.Request.RequestCommon = api.RequestCommon{
+		e.Request.RequestCommon = api.RequestCommon {
 			Appkey:  auth.AppKey,
 			SysCode: "900",
 		}
@@ -81,29 +81,28 @@ func (e *EndPoint) Login(auth *SunGrowAuth) error {
 		}
 
 		if auth.Force {
-			e.Auth.Token = ""
-			e.Response.ResultData.Token = ""
-			// e.Error = os.Remove(filepath.Join(e.ApiRoot.GetCacheDir(), e.CacheFilename()))
-			// if e.Error != nil {
-			// 	break
-			// }
+			e.SetTokenInvalid()
 		}
 
 		if e.IsTokenValid() {
 			break
 		}
 
-		foo := Assert(e.Call())
-		e.Error = foo.GetError()
+		ep := Assert(e.Call())
+		e.Error = ep.GetError()
 		if e.Error != nil {
 			break
 		}
-		e.Request = foo.Request
-		e.Response = foo.Response
+		e.Request = ep.Request
+		e.Response = ep.Response
+		e.Auth.lastLogin = time.Now()
 
-		// e.Auth.UserAccount = e.Response.ResultData.UserAccount
-		e.Auth.Token = e.Response.ResultData.Token
+		if e.IsTokenInvalid() {
+			break
+		}
+
 		e.Auth.lastLogin, _ = time.Parse(LastLoginDateFormat, e.Response.ResultData.LoginLastDate)
+		e.Auth.newToken = true
 
 		e.Error = e.saveToken()
 		if e.Error != nil {
@@ -114,38 +113,68 @@ func (e *EndPoint) Login(auth *SunGrowAuth) error {
 	return e.Error
 }
 
-func (e *EndPoint) IsTokenInvalid() bool {
+func (e *EndPoint) SetTokenInvalid() {
 	for range Only.Once {
-		if e.Token() == "" {
-			e.Auth.newToken = true
-			break
-		}
-		if e.HoursFromLastLogin() > TokenValidHours {
-			e.Auth.newToken = true
-			break
-		}
+		// e.Auth.Token = ""
+		e.Response.ResultData.Token = ""
+		e.Auth.newToken = true
+		// e.Error = os.Remove(filepath.Join(e.ApiRoot.GetCacheDir(), e.CacheFilename()))
+		// if e.Error != nil {
+		// 	break
+		// }
 	}
-
-	return e.Auth.newToken
 }
+
+// func (e *EndPoint) SetTokenValid(t string) {
+// 	// e.Auth.Token = t
+// 	e.Response.ResultData.Token = t
+// 	e.Auth.newToken = true
+// }
 
 func (e *EndPoint) IsTokenValid() bool {
-	var ok bool
 	for range Only.Once {
-		if e.Token() == "" {
+		if e.Response.ResponseCommon.IsTokenInvalid() {
+			e.SetTokenInvalid()
 			break
 		}
-		if e.HoursFromLastLogin() > TokenValidHours {
-			break
-		}
-		ok = true
-	}
 
-	return ok
+		if e.Response.ResultData.Token == "" {
+			e.SetTokenInvalid()
+			break
+		}
+
+		if e.HoursFromLastLogin() > TokenValidHours {
+			e.SetTokenInvalid()
+			break
+		}
+
+		e.Auth.newToken = false
+	}
+	return !e.Auth.newToken
 }
 
-func (e *EndPoint) HoursFromLastLogin() time.Duration {
-	return time.Now().Sub(e.Auth.lastLogin)
+func (e *EndPoint) IsTokenInvalid() bool {
+	return !e.IsTokenValid()
+	// for range Only.Once {
+	// 	if e.Response.ResponseCommon.IsTokenInvalid() {
+	// 		e.Auth.newToken = true
+	// 		break
+	// 	}
+	// 	if e.Response.ResultData.Token == "" {
+	// 		e.Auth.newToken = true
+	// 		break
+	// 	}
+	// 	if e.HoursFromLastLogin() > TokenValidHours {
+	// 		e.Auth.newToken = true
+	// 		break
+	// 	}
+	// 	e.Auth.newToken = false
+	// }
+	// return e.Auth.newToken
+}
+
+func (e *EndPoint) HoursFromLastLogin() float64 {
+	return time.Now().Sub(e.Auth.lastLogin).Hours()
 }
 
 func (e *EndPoint) HasTokenChanged() bool {
@@ -180,17 +209,12 @@ func (e *EndPoint) readTokenFile() error {
 		e.Auth.TokenFile = e.GetFilePath()
 
 		// e.Error = e.ApiReadDataFile(e.Auth.TokenFile, &e.Response.ResultData)
-		e.Error = output.FileRead(e.Auth.TokenFile, &e.Response.ResultData)
+		e.Error = output.FileRead(e.Auth.TokenFile, &e.Response)
 		if e.Error != nil {
 			break
 		}
 
-		e.Response.ResultData.Msg = ""
-		e.Response.ResultMsg = ""
-		e.Response.ResultCode = ""
-
-		e.Auth.Token = e.Token()
-		if e.Auth.Token == "" {
+		if e.Token() == "" {
 			e.Auth.newToken = true
 			break
 		}
@@ -212,7 +236,7 @@ func (e *EndPoint) saveToken() error {
 	for range Only.Once {
 		e.Auth.TokenFile = e.GetFilePath()
 
-		e.Error = output.FileWrite(e.Auth.TokenFile, e.Response.ResultData, output.DefaultFileMode)
+		e.Error = output.FileWrite(e.Auth.TokenFile, e.Response, output.DefaultFileMode)
 		// e.Error = e.ApiWriteDataFile(e.Auth.TokenFile, e.Response.ResultData, 0644)
 		if e.Error != nil {
 			break
