@@ -1,3 +1,6 @@
+https://augateway.isolarcloud.com/v1/commonService/getMqttConfigInfoByAppkey
+sensor.sungrow_total_load_active_power == sensor.sungrow_total_active_power
+
 ./bin/GoSungrow api get WebAppService.getDeviceUuid '{"ps_key":"1129147_11_0_0"}'
 ./bin/GoSungrow api get WebAppService.showPSView '{"ps_id":"1129147"}'
 ./bin/GoSungrow api get checkUnitStatus
@@ -15,6 +18,7 @@
 ./bin/GoSungrow api get getDeviceTypeList
 ./bin/GoSungrow api get getInvertDataList
 ./bin/GoSungrow api get getKpiInfo ''
+./bin/GoSungrow api get getModuleLogTaskList
 ./bin/GoSungrow api get getOrgListByName
 ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"1"}'
 ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"2"}'
@@ -27,7 +31,6 @@
 ./bin/GoSungrow api get getPowerPictureList
 ./bin/GoSungrow api get getPowerStatistics '{"ps_id":"1129147"}'
 ./bin/GoSungrow api get getPsDataSupplementTaskList
-./bin/GoSungrow api get getPsDetail
 ./bin/GoSungrow api get getPsDetail '{"ps_id":"1129147"}'
 ./bin/GoSungrow api get getPsDetailWithPsType '{"ps_id":"1129147"}'
 ./bin/GoSungrow api get getPsHealthState '{"ps_id":"1129147"}'
@@ -39,6 +42,8 @@
 ./bin/GoSungrow api get getPsReport '{"report_type":"1","date_id":"20220201","date_type":"3","ps_id":"1129147"}'
 ./bin/GoSungrow api get getPsUser
 ./bin/GoSungrow api get getPsWeatherList '{"ps_id":"1129147"}'
+./bin/GoSungrow api get getRemoteUpgradeSubTasksList '{"query_type":"1","task_id":"1577700"}'
+./bin/GoSungrow api get getRemoteUpgradeTaskList '{"ps_id_list":"1129147"}'
 ./bin/GoSungrow api get getTemplateList
 ./bin/GoSungrow api get getUserList
 ./bin/GoSungrow api get getUserPsOrderList
@@ -54,10 +59,43 @@
 ./bin/GoSungrow api get reportList '{"ps_id":"1129147","report_type":"3"}'
 ./bin/GoSungrow api get reportList '{"ps_id":"1129147","report_type":"4"}'
 ./bin/GoSungrow api login
-
-./bin/GoSungrow api get getRemoteUpgradeSubTasksList '{"query_type":"1","task_id":"1577700"}'
-./bin/GoSungrow api get getRemoteUpgradeTaskList '{"ps_id_list":"1129147"}'
-./bin/GoSungrow api get getModuleLogTaskList
+./bin/GoSungrow api ls areas
+./bin/GoSungrow api raw queryDeviceList '{"ps_id":"1129147"}'
 ./bin/GoSungrow api save WebAppService.queryUserCurveTemplateData '{"template_id":"8042","date_type":"1","start_time":"20220223000000","end_time":"20220223235900"}'
-./bin/GoSungrow data get template > foo.csv
-
+./bin/GoSungrow api save getPsDetail '{"ps_id":""}'
+./bin/GoSungrow api save getPsDetail '{"ps_id":"1129147"}'
+./bin/GoSungrow api save queryDeviceList '{"ps_id":"1129147"}'
+./bin/GoSungrow data get stats
+./bin/GoSungrow data get template '' 20220201
+./bin/GoSungrow data get template '' 20220220
+./bin/GoSungrow data get template '' 20220222
+./bin/GoSungrow data get template '' 20220224
+./bin/GoSungrow data get template '' 20220227
+./bin/GoSungrow data get template 8042
+./bin/GoSungrow data get template 8042 20220212
+./bin/GoSungrow data get template 8042 20220227
+./bin/GoSungrow data get template-points 8040
+./bin/GoSungrow data get template-points 8041
+./bin/GoSungrow data get template-points 8042
+./bin/GoSungrow data graph template 8042 20220212 '{"search_string":"p13019","min_left_axis":-6000,"max_left_axis":12000}'
+./bin/GoSungrow data graph template 8042 20220212 '{"search_string":"p13019"}'
+./bin/GoSungrow data graph template 8042 20220212 '{"search_string":"p83106","min_left_axis":-6000,"max_left_axis":12000}'
+./bin/GoSungrow data graph template 8042 20220212 '{"search_string":"p83106"}'
+./bin/GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":"1","value_column":"4","search_column":"3","search_string":"p83106","file_name":"foo.png"}'
+./bin/GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p13019","min_left_axis":0,"max_left_axis":0}'
+./bin/GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p13149","min_left_axis":0,"max_left_axis":0}'
+./bin/GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p83106","file_name":"foo.png"}'
+./bin/GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p83106","min_left_axis":-6000,"max_left_axis":1000}'
+./bin/GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p83106","min_left_axis":-6000,"max_left_axis":12000}'
+./bin/GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p83106","min_left_axis":-6000,"max_left_axis":42000}'
+./bin/GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p83106","min_left_axis":0,"max_left_axis":0}'
+./bin/GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":3,"search_string":"p83106","file_name":"foo.png"}'
+./bin/GoSungrow data raw template '' 20220201
+./bin/GoSungrow data raw template '' 20220202
+./bin/GoSungrow data save template '' 20220201
+./bin/GoSungrow data save template '' 20220202
+./bin/GoSungrow data save template '' 20220220
+./bin/GoSungrow data save template '' 20220224
+./bin/GoSungrow data save template 8042 20220212
+./bin/GoSungrow get raw template 20220202
+./bin/GoSungrow get template 8042 20220212
