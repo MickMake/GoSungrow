@@ -56,6 +56,7 @@ func CreatePoints(points []string) TemplatePoints {
 		for _, p := range points {
 			pa := strings.Split(p, ".")
 			if len(pa) == 2 {
+				pa[1] = "p" + strings.TrimPrefix(pa[1], "p")
 				ret = append(ret, TemplatePoint{
 					Description: "",
 					PsKey:       pa[0],

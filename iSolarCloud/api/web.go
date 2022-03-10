@@ -17,6 +17,7 @@ import (
 	"net/http"
 )
 
+
 type Web struct {
 	Url   EndPointUrl
 	Body  []byte
@@ -29,6 +30,7 @@ type Web struct {
 	httpRequest  *http.Request
 	httpResponse *http.Response
 }
+
 
 func (w *Web) SetUrl(u string) error {
 	w.Url = SetUrl(u)

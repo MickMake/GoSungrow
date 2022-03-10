@@ -28,6 +28,15 @@ I'm currently using it in my [HomeAssistant](https://www.home-assistant.io/) ins
 ![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/SunGrowOnHASSIO5.png?raw=true)
 
 
+![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/Grafan1.png?raw=true)
+
+![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/Grafan2.png?raw=true)
+
+![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/Grafan3.png?raw=true)
+
+![alt text](https://github.com/MickMake/GoSungrow/blob/master/docs/Grafan4.png?raw=true)
+
+
 ## What state is it in?
 
 This is currently usable for my needs, (seeing all data in [HomeAssistant](https://www.home-assistant.io/)), but there's quite a few API endpoints that need to be implemented for completeness.

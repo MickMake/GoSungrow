@@ -266,6 +266,11 @@ func (m *Mqtt) SensorPublishConfig(point api.DataEntry) error {
 
 			case "℃":
 				class = "temperature"
+				// point.Unit = "C"
+
+			case "C":
+				class = "temperature"
+				point.Unit = "℃"
 
 			case "%":
 				class = "battery"

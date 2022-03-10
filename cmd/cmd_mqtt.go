@@ -136,38 +136,6 @@ func cmdMqttRunFunc(_ *cobra.Command, _ []string) error {
 		// 	break
 		// }
 
-		// var psId int64
-		// psId, Cmd.Error = Cmd.SunGrow.GetPsId()
-		// if err != nil {
-		// 	break
-		// }
-		//
-		// fmt.Printf("# Found SunGrow device %d\n", psId)
-		// // Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
-		// ep := Cmd.SunGrow.QueryDevice(psId)
-		// if ep.IsError() {
-		// 	Cmd.Error = ep.GetError()
-		// 	break
-		// }
-		//
-		// data := ep.GetData()
-		// fmt.Printf("# Adding %d entries to HASSIO.\n", len(data.Entries))
-		// for i, r := range data.Entries {
-		// 	fmt.Printf("%s ", r.PointId)
-		// 	Cmd.Error = foo.SensorPublishConfig(r.PointId, r.PointName, r.Unit, i)
-		// 	if err != nil {
-		// 		break
-		// 	}
-		// 	Cmd.Error = foo.SensorPublishState(r.PointId, r.Value)
-		// 	if err != nil {
-		// 		break
-		// 	}
-		// }
-		// fmt.Println()
-		// if err != nil {
-		// 	break
-		// }
-
 		Cmd.Error = MqttCron()
 		if Cmd.Error != nil {
 			break

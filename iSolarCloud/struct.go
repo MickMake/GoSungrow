@@ -12,8 +12,11 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/output"
 	"errors"
+	"fmt"
 	"strings"
+	"time"
 )
+
 
 type SunGrow struct {
 	ApiRoot api.Web
@@ -23,11 +26,6 @@ type SunGrow struct {
 	NeedLogin bool
 
 	OutputType output.OutputType
-	// EndPoint api.EndPoint
-
-	// OutputString string
-	// OutputArray  [][]interface{}
-	// OutputType
 }
 
 func NewSunGro(baseUrl string, cacheDir string) *SunGrow {
@@ -99,6 +97,95 @@ func (sg *SunGrow) GetEndpoint(ae string) api.EndPoint {
 	return ep
 }
 
+func (sg *SunGrow) GetByJson(endpoint string, request string) api.EndPoint {
+	var ret api.EndPoint
+	for range Only.Once {
+		ret = sg.GetEndpoint(endpoint)
+		if sg.Error != nil {
+			break
+		}
+		if ret.IsError() {
+			sg.Error = ret.GetError()
+			break
+		}
+
+		if request != "" {
+			ret = ret.SetRequestByJson(output.Json(request))
+			if ret.IsError() {
+				fmt.Println(ret.Help())
+				sg.Error = ret.GetError()
+				break
+			}
+		}
+
+		ret = ret.Call()
+		if ret.IsError() {
+			fmt.Println(ret.Help())
+			sg.Error = ret.GetError()
+			break
+		}
+
+		switch {
+		case sg.OutputType.IsNone():
+
+		case sg.OutputType.IsFile():
+			sg.Error = ret.WriteDataFile()
+
+		case sg.OutputType.IsRaw():
+			fmt.Println(ret.GetJsonData(true))
+
+		case sg.OutputType.IsJson():
+			fmt.Println(ret.GetJsonData(false))
+
+		default:
+		}
+	}
+	return ret
+}
+
+func (sg *SunGrow) GetByStruct(endpoint string, request interface{}, cache time.Duration) api.EndPoint {
+	var ret api.EndPoint
+	for range Only.Once {
+		ret = sg.GetEndpoint(endpoint)
+		if sg.Error != nil {
+			break
+		}
+		if ret.IsError() {
+			sg.Error = ret.GetError()
+			break
+		}
+
+		if request != nil {
+			ret = ret.SetRequest(request)
+			if ret.IsError() {
+				sg.Error = ret.GetError()
+				break
+			}
+		}
+
+		ret = ret.SetCacheTimeout(cache)
+		// if ret.CheckCache() {
+		// 	ret = ret.ReadCache()
+		// 	if !ret.IsError() {
+		// 		break
+		// 	}
+		// }
+
+		ret = ret.Call()
+		if ret.IsError() {
+			sg.Error = ret.GetError()
+			break
+		}
+
+		// sg.Error = ret.WriteCache()
+		// if sg.Error != nil {
+		// 	break
+		// }
+	}
+
+	return ret
+}
+
 func (sg *SunGrow) SplitEndPoint(ae string) (string, string) {
 	var area string
 	var endpoint string
@@ -139,6 +226,49 @@ func (sg *SunGrow) AreaExists(area string) bool {
 
 func (sg *SunGrow) AreaNotExists(area string) bool {
 	return sg.Areas.NotExists(area)
+}
+
+func (sg *SunGrow) Output(endpoint api.EndPoint, table *output.Table, graphFilter string) error {
+	for range Only.Once {
+		switch {
+			case sg.OutputType.IsNone():
+
+			case sg.OutputType.IsHuman():
+				if table == nil {
+					break
+				}
+				table.Print()
+
+			case sg.OutputType.IsFile():
+				if table == nil {
+					break
+				}
+				sg.Error = table.WriteCsvFile()
+
+			case sg.OutputType.IsRaw():
+				fmt.Println(endpoint.GetJsonData(true))
+
+			case sg.OutputType.IsJson():
+				fmt.Println(endpoint.GetJsonData(false))
+
+			case sg.OutputType.IsGraph():
+				if table == nil {
+					break
+				}
+				sg.Error = table.SetGraphFromJson(output.Json(graphFilter))
+				if sg.Error != nil {
+					break
+				}
+				sg.Error = table.CreateGraph()
+				if sg.Error != nil {
+					break
+				}
+
+			default:
+		}
+	}
+
+	return sg.Error
 }
 
 func (sg *SunGrow) Login(auth login.SunGrowAuth) error {

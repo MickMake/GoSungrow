@@ -135,7 +135,7 @@ func (sg *SunGrow) GetTemplatePoints(template string) error {
 		ss := sg.GetPointNamesFromTemplate(template)
 		for _, s := range ss {
 			sg.Error = table.AddRow(
-				s.PointId,
+				api.NameDevicePoint(s.PsKey, s.PointId),
 				s.Description,
 				s.Unit,
 			)
@@ -436,7 +436,6 @@ func (sg *SunGrow) GetRealTimeData(psKey string) error {
 }
 
 func (sg *SunGrow) GetPsDetails(psid string) error {
-
 	for range Only.Once {
 		var psId int64
 		if psid == "" {
@@ -471,4 +470,98 @@ func (sg *SunGrow) GetPsDetails(psid string) error {
 	}
 
 	return sg.Error
+}
+
+func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints) error {
+	for range Only.Once {
+		if len(pointNames) == 0 {
+			sg.Error = errors.New("no points defined")
+			break
+		}
+
+		if date == "" {
+			date = api.NewDateTime("").String()
+		}
+		when := api.NewDateTime(date)
+
+		var psId int64
+		psId, sg.Error = sg.GetPsId()
+		if sg.Error != nil {
+			break
+		}
+
+		ep := sg.GetByStruct(
+			"AppService.queryMutiPointDataList",
+			queryMutiPointDataList.RequestData {
+				PsID:           psId,
+				PsKey:          pointNames.PrintKeys(),
+				Points:         pointNames.PrintPoints(),
+				MinuteInterval: "5",
+				StartTimeStamp: when.GetDayStartTimestamp(),
+				EndTimeStamp:   when.GetDayEndTimestamp(),
+			},
+			DefaultCacheTimeout,
+		)
+		if sg.Error != nil {
+			break
+		}
+
+		ep2 := queryMutiPointDataList.Assert(ep)
+		table := ep2.GetDataTable(pointNames)
+		if table.Error != nil {
+			sg.Error = table.Error
+			break
+		}
+
+		sg.Error = sg.Output(ep2, &table, "")
+		if sg.Error != nil {
+			break
+		}
+	}
+
+	return sg.Error
+}
+
+func (sg *SunGrow) GetPsId() (int64, error) {
+	var ret int64
+
+	for range Only.Once {
+
+		ep := sg.GetByStruct("AppService.getPsList", nil, DefaultCacheTimeout)
+		if ep.IsError() {
+			sg.Error = ep.GetError()
+			break
+		}
+
+		_getPsList := getPsList.AssertResultData(ep)
+		ret = _getPsList.GetPsId()
+	}
+
+	return ret, sg.Error
+}
+
+func (sg *SunGrow) GetPsKeys() ([]string, error) {
+	var ret []string
+
+	for range Only.Once {
+		var psId int64
+		psId, sg.Error = sg.GetPsId()
+		if sg.Error != nil {
+			break
+		}
+
+		ep := sg.GetByStruct(
+			"AppService.getPsDetailWithPsType",
+			getPsDetailWithPsType.RequestData{PsId: strconv.FormatInt(psId, 10)},
+			DefaultCacheTimeout)
+		if ep.IsError() {
+			sg.Error = ep.GetError()
+			break
+		}
+
+		ep2 := getPsDetailWithPsType.Assert(ep)
+		ret = ep2.GetPsKeys()
+	}
+
+	return ret, sg.Error
 }
