@@ -78,7 +78,31 @@ I've implemented most of the features I've wanted to, except for...
 1. IFTTT support.
 
 
-## Use case example:
+## Using GoSungrow:
+
+### Config and login.
+
+Add your username and password to the config. (See [the website](https://portalau.isolarcloud.com/))
+```
+$ ./bin/GoSungrow config write --user=USERNAME --password=PASSWORD
+Using config file '/Users/mick/.GoSungrow/config.json'
+```
+
+Login to SunGrow website.
+```
+$ ./bin/GoSungrow api login
+Email:	your@email.address
+Create Date:	Tue Nov 16 23:30:12 CST 2021
+Login Last Date:	2022-03-10 17:14:49
+Login Last IP:
+Login State:	1
+User Account:	mickmake
+User Id:	276937
+User Name:	MickMake
+Is Online:	0
+Token:	424242_42424242424242424242424242424242
+Token File:	/Users/mick/.GoSungrow/AppService_login.json
+```
 
 ### High level reporting examples.
 
