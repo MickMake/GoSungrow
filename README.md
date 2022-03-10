@@ -43,20 +43,21 @@ This is currently usable for my needs, (seeing all data in [HomeAssistant](https
 
 So far I have mapped out all the API calls. It's tricky as their "API" changes regularly.
 
-I've currently mapped out these API EndPoints. Only about 6%, but most of the API endpoints are a repeat and a lot of the data is repeated.
-So, in reality 50% of the critical endpoints are implemented.
+I've currently mapped out these API EndPoints. All of the critical read only endpoints are mapped out, with none of the write endpoints.
+Most endpoints are a repeat and a lot of the data contained is repeated.
+So, in reality 50% of all endpoints are implemented.
 ```
 +-------------------+-------------------+--------------------+------------+
 |       AREAS       | ENABLED ENDPOINTS | DISABLED ENDPOINTS | COVERAGE % |
 +-------------------+-------------------+--------------------+------------+
 | AliSmsService     |                 0 |                  1 | 0.0 %      |
-| AppService        |                51 |                523 | 9.8 %      |
+| AppService        |                52 |                522 | 10.0 %     |
 | MttvScreenService |                 0 |                 30 | 0.0 %      |
 | PowerPointService |                 0 |                  1 | 0.0 %      |
-| WebAppService     |                 3 |                186 | 1.6 %      |
+| WebAppService     |                 4 |                186 | 2.2 %      |
 | WebIscmAppService |                 0 |                184 | 0.0 %      |
 | ----------------  | ----------------  | -----------------  | ---------  |
-| Total             |                54 |                925 | 5.8 %      |
+| Total             |                56 |                924 | 6.1 %      |
 +-------------------+-------------------+--------------------+------------+
 ```
 
