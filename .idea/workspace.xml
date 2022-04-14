@@ -5,9 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="76adadc9-ae71-42a6-82a1-66dbc8ecb14c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/GoSungrow.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/GoSungrow.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/queryDeviceList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/queryDeviceList/data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HA/CHANGELOG.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/HA/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/HA/GoSungrow" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/HA/build.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/HA/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/HA/src/GoSungrow" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/HA/src/run.sh" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
