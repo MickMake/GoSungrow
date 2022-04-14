@@ -6,7 +6,7 @@ import "time"
 //goland:noinspection SpellCheckingInspection
 const (
 	DefaultBinaryName = "GoSungrow"
-	EnvPrefix         = "SunGrow"
+	EnvPrefix         = "SUNGROW"
 	defaultConfigFile = "config.json"
 	defaultTokenFile  = "AuthToken.json"
 

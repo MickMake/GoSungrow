@@ -7,6 +7,7 @@ import (
 	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 const Url = "/v1/devService/queryDeviceList"
@@ -276,15 +277,49 @@ func (e *EndPoint) GetData() api.Data {
 	var ret api.Data
 
 	for range Only.Once {
+		// Used for virtual entries.
+		// 0 - sungrow_battery_charging_power
+		var BatteryChargingPower float64
+		// sensor.sungrow_battery_discharging_power
+		var BatteryDischargingPower float64
+		// 0 - sensor.sungrow_total_export_active_power
+		var TotalExportActivePower float64
+		// sensor.sungrow_purchased_power
+		var PurchasedPower float64
+
+		// 0 - sensor.sungrow_daily_battery_charging_energy_from_pv
+		var DailyBatteryChargingEnergyFromPv float64
+		// sensor.sungrow_daily_battery_discharging_energy
+		var DailyBatteryDischargingEnergy float64
+		// 0 - sensor.sungrow_daily_feed_in_energy_pv
+		var DailyFeedInEnergyPv float64
+		// sensor.sungrow_daily_purchased_energy
+		var DailyPurchasedEnergy float64
+
+		var TotalDcPower float64
+
 		index := 0
 		for _, d := range e.Response.ResultData.PageList {
 			for _, p := range d.PointData {
 				if p.Unit == "W" {
-					fv, err := strconv.ParseFloat(p.Value, 64)
-					fv = fv / 1000
+					fv, err := api.DivideByThousand(p.Value)
+					// fv, err := strconv.ParseFloat(p.Value, 64)
+					// fv = fv / 1000
 					if err == nil {
-						p.Value = fmt.Sprintf("%.3f", fv)
+						// p.Value = fmt.Sprintf("%.3f", fv)
+						p.Value = fv
 						p.Unit = "kW"
+					}
+				}
+
+				if p.Unit == "Wh" {
+					fv, err := api.DivideByThousand(p.Value)
+					// fv, err := strconv.ParseFloat(p.Value, 64)
+					// fv = fv / 1000
+					if err == nil {
+						// p.Value = fmt.Sprintf("%.3f", fv)
+						p.Value = fv
+						p.Unit = "kWh"
 					}
 				}
 
@@ -300,8 +335,152 @@ func (e *EndPoint) GetData() api.Data {
 				})
 
 				index++
+
+				// Handle virtual results.
+				switch strings.ReplaceAll(p.PointName, " ", "") {
+					case "BatteryChargingPower":
+						BatteryChargingPower, _ = strconv.ParseFloat(p.Value, 64)
+					case "BatteryDischargingPower":
+						BatteryDischargingPower, _ = strconv.ParseFloat(p.Value, 64)
+					case "TotalExportActivePower":
+						TotalExportActivePower, _ = strconv.ParseFloat(p.Value, 64)
+					case "PurchasedPower":
+						PurchasedPower, _ = strconv.ParseFloat(p.Value, 64)
+					case "DailyBatteryChargingEnergyFromPv":
+						DailyBatteryChargingEnergyFromPv, _ = strconv.ParseFloat(p.Value, 64)
+					case "DailyBatteryDischargingEnergy":
+						DailyBatteryDischargingEnergy, _ = strconv.ParseFloat(p.Value, 64)
+					case "DailyFeedInEnergyPv":
+						DailyFeedInEnergyPv, _ = strconv.ParseFloat(p.Value, 64)
+					case "DailyPurchasedEnergy":
+						DailyPurchasedEnergy, _ = strconv.ParseFloat(p.Value, 64)
+					case "TotalDCPower":
+						TotalDcPower, _ = strconv.ParseFloat(p.Value, 64)
+				}
 			}
 		}
+
+		if len(ret.Entries) == 0 {
+			break
+		}
+
+		// Add virtual entries.
+		ts := ret.Entries[0].Date
+		var value string
+
+		if BatteryChargingPower > 0 {
+			value = api.Float64ToString(0 - BatteryChargingPower)
+		} else {
+			value = api.Float64ToString(BatteryDischargingPower)
+		}
+		ret.Entries = append(ret.Entries, api.DataEntry {
+			Date:           ts,
+			PointId:        "virtual.battery_power",
+			PointGroupName: "Virtual",
+			PointName:      "Battery Power",
+			Value:          value,
+			Unit:           "kW",
+			ValueType:      &api.Point {
+				PsKey:       "virtual",
+				Id:          "battery_power",
+				Description: "Battery Power",
+				Unit:        "kW",
+				Type:        "PointTypeInstant",
+			},
+			Index:          index,
+		})
+		index++
+
+		if TotalExportActivePower > 0 {
+			value = api.Float64ToString(0 - TotalExportActivePower)
+		} else {
+			value = api.Float64ToString(PurchasedPower)
+		}
+		ret.Entries = append(ret.Entries, api.DataEntry {
+			Date:           ts,
+			PointId:        "virtual.grid_power",
+			PointGroupName: "Virtual",
+			PointName:      "Grid Power",
+			Value:          value,
+			Unit:           "kW",
+			ValueType:      &api.Point {
+				PsKey:       "virtual",
+				Id:          "grid_power",
+				Description: "Grid Power",
+				Unit:        "kW",
+				Type:        "PointTypeInstant",
+			},
+			Index:          index,
+		})
+		index++
+
+
+		if DailyBatteryChargingEnergyFromPv > 0 {
+			value = api.Float64ToString(0 - DailyBatteryChargingEnergyFromPv)
+		} else {
+			value = api.Float64ToString(DailyBatteryDischargingEnergy)
+		}
+		ret.Entries = append(ret.Entries, api.DataEntry {
+			Date:           ts,
+			PointId:        "virtual.battery_energy",
+			PointGroupName: "Virtual",
+			PointName:      "Battery Energy",
+			Value:          value,
+			Unit:           "kWh",
+			ValueType:      &api.Point {
+				PsKey:       "virtual",
+				Id:          "battery_energy",
+				Description: "Battery Energy",
+				Unit:        "kWh",
+				Type:        "PointTypeInstant",
+			},
+			Index:          index,
+		})
+		index++
+
+		if DailyFeedInEnergyPv > 0 {
+			value = api.Float64ToString(0 - DailyFeedInEnergyPv)
+		} else {
+			value = api.Float64ToString(DailyPurchasedEnergy)
+		}
+		ret.Entries = append(ret.Entries, api.DataEntry {
+			Date:           ts,
+			PointId:        "virtual.grid_energy",
+			PointGroupName: "Virtual",
+			PointName:      "Grid Energy",
+			Value:          value,
+			Unit:           "kWh",
+			ValueType:      &api.Point {
+				PsKey:       "virtual",
+				Id:          "grid_energy",
+				Description: "Grid Energy",
+				Unit:        "kWh",
+				Type:        "PointTypeInstant",
+			},
+			Index:          index,
+		})
+		index++
+
+
+		value = api.Float64ToString(TotalDcPower - BatteryChargingPower - TotalExportActivePower)
+		ret.Entries = append(ret.Entries, api.DataEntry {
+			Date:           ts,
+			PointId:        "virtual.pv_to_load",
+			PointGroupName: "Virtual",
+			PointName:      "PV To Load Power",
+			Value:          value,
+			Unit:           "kW",
+			ValueType:      &api.Point {
+				PsKey:       "virtual",
+				Id:          "pv_to_load",
+				Description: "PV To Load Power",
+				Unit:        "kW",
+				Type:        "PointTypeInstant",
+			},
+			Index:          index,
+		})
+		index++
+
 	}
 
 	return ret

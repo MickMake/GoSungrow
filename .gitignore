@@ -2,3 +2,8 @@ bin/GoSungrow
 AppService_*.json
 WebAppService_*.json
 
+/*.txt
+/GoSungrow
+/data/
+/dist/
+
