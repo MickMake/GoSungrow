@@ -6,6 +6,7 @@ import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
+	"strconv"
 	"time"
 )
 
@@ -200,43 +201,238 @@ func (e *ResultData) GetPsId() int64 {
 	return ret
 }
 
-func (e *EndPoint) GetPsId() int64 {
-	return e.Response.ResultData.GetPsId()
-}
-
-func (e *ResultData) GetData() [][]string {
-	var ret [][]string
+func (e *ResultData) GetPsName() string {
+	var ret string
 	for range Only.Once {
 		i := len(e.PageList)
 		if i == 0 {
 			break
 		}
-		now := time.Now().Round(5 * time.Minute).Format(api.DtLayoutZeroSeconds)
 		for _, p := range e.PageList {
-			ret = append(ret, []string{now, "Co2 Reduce", p.Co2Reduce.Value, p.Co2Reduce.Unit})
-			ret = append(ret, []string{now, "Co2 Reduce Total", p.Co2ReduceTotal.Value, p.Co2ReduceTotal.Unit})
-			ret = append(ret, []string{now, "Curr Power", p.CurrPower.Value, p.CurrPower.Unit})
-			ret = append(ret, []string{now, "Daily Irradiation", p.DailyIrradiation.Value, p.DailyIrradiation.Unit})
-			ret = append(ret, []string{now, "Equivalent Hour", p.EquivalentHour.Value, p.EquivalentHour.Unit})
-			ret = append(ret, []string{now, "Es Discharge Energy", p.EsDisenergy.Value, p.EsDisenergy.Unit})
-			ret = append(ret, []string{now, "Es Energy", p.EsEnergy.Value, p.EsEnergy.Unit})
-			ret = append(ret, []string{now, "Es Power", p.EsPower.Value, p.EsPower.Unit})
-			ret = append(ret, []string{now, "Es Total Discharge Energy", p.EsTotalDisenergy.Value, p.EsTotalDisenergy.Unit})
-			ret = append(ret, []string{now, "Es Total Energy", p.EsTotalEnergy.Value, p.EsTotalEnergy.Unit})
-			ret = append(ret, []string{now, "Installed Power Map", p.InstalledPowerMap.Value, p.InstalledPowerMap.Unit})
-			ret = append(ret, []string{now, "Pv Energy", p.PvEnergy.Value, p.PvEnergy.Unit})
-			ret = append(ret, []string{now, "Pv Power", p.PvPower.Value, p.PvPower.Unit})
-			ret = append(ret, []string{now, "Radiation", p.Radiation.Value, p.Radiation.Unit})
-			ret = append(ret, []string{now, "Today Energy", p.TodayEnergy.Value, p.TodayEnergy.Unit})
-			ret = append(ret, []string{now, "Today Income", p.TodayIncome.Value, p.TodayIncome.Unit})
-			ret = append(ret, []string{now, "Total Capacity", p.TotalCapcity.Value, p.TotalCapcity.Unit})
-			ret = append(ret, []string{now, "Total Energy", p.TotalEnergy.Value, p.TotalEnergy.Unit})
-			ret = append(ret, []string{now, "Total Income", p.TotalIncome.Value, p.TotalIncome.Unit})
-			ret = append(ret, []string{now, "Use Energy", p.UseEnergy.Value, p.UseEnergy.Unit})
+			if p.PsID != 0 {
+				ret = p.PsName
+				break
+			}
 		}
 	}
 	return ret
 }
+
+func (e *ResultData) GetPsSerial() string {
+	var ret string
+	for range Only.Once {
+		i := len(e.PageList)
+		if i == 0 {
+			break
+		}
+		for _, p := range e.PageList {
+			if p.PsID != 0 {
+				ret = p.PsShortName
+				break
+			}
+		}
+	}
+	return ret
+}
+
+func (e *EndPoint) GetPsId() int64 {
+	return e.Response.ResultData.GetPsId()
+}
+
+func (e *EndPoint) GetData() api.Data {
+	return e.Response.ResultData.GetData()
+}
+
+func (e *ResultData) GetData() api.Data {
+	var ret api.Data
+
+	for range Only.Once {
+		i := len(e.PageList)
+		if i == 0 {
+			break
+		}
+
+		now := api.NewDateTime(time.Now().Round(5 * time.Minute).Format(api.DtLayoutZeroSeconds))
+
+		for _, p := range e.PageList {
+			psId := strconv.FormatInt(p.PsID, 10)
+
+			ret.Entries = append(ret.Entries, add(now, psId, "p83077", "Pv Energy",					p.PvEnergy, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, add(now, psId, "p83089", "Es Discharge Energy",		p.EsDisenergy, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, add(now, psId, "p83095", "Es Total Discharge Energy",	p.EsTotalDisenergy, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, add(now, psId, "p83118", "Use Energy", 				p.UseEnergy, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, add(now, psId, "p83120", "Es Energy", 				p.EsEnergy, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, add(now, psId, "p83127", "Es Total Energy", 			p.EsTotalEnergy, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, add(now, psId, "p83076", "Pv Power", 					p.PvPower, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, add(now, psId, "p83081", "Es Power", 					p.EsPower, len(ret.Entries)))
+
+			ret.Entries = append(ret.Entries, add(now, psId, "co2_reduce", "Co2 Reduce", 					p.Co2Reduce, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, add(now, psId, "co2_reduce_total", "Co2 Reduce Total", 		p.Co2ReduceTotal, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, add(now, psId, "curr_power", "Curr Power", 					p.CurrPower, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, add(now, psId, "daily_irradiation", "Daily Irradiation", 		p.DailyIrradiation, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, add(now, psId, "equivalent_hour", "Equivalent Hour", 			p.EquivalentHour, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, add(now, psId, "installed_power_map", "Installed Power Map",	p.InstalledPowerMap, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, add(now, psId, "radiation", "Radiation", 						p.Radiation, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, add(now, psId, "today_energy", "Today Energy", 				p.TodayEnergy, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, add(now, psId, "today_income", "Today Income", 				p.TodayIncome, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, add(now, psId, "total_capacity", "Total Capacity", 			p.TotalCapcity, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, add(now, psId, "total_energy", "Total Energy", 				p.TotalEnergy, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, add(now, psId, "total_income", "Total Income", 				p.TotalIncome, len(ret.Entries)))
+
+			ret.Entries = append(ret.Entries, addValue(now, psId, "build_date", "Build Date",			p.BuildDate, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, addIntValue(now, psId, "build_status", "Build Status",	p.BuildStatus, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, addFloatValue(now, psId, "latitude", "Latitude",			p.Latitude, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, addFloatValue(now, psId, "longitude", "Longitude",		p.Longitude, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, addValue(now, psId, "location", "Location",				p.Location, len(ret.Entries)))
+
+			ret.Entries = append(ret.Entries, addIntValue(now, psId, "installer_ps_fault_status", "Installer PS Fault Status",	p.InstallerPsFaultStatus, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, addIntValue(now, psId, "owner_ps_fault_status", "Owner PS Fault Status",			p.OwnerPsFaultStatus, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, addIntValue(now, psId, "ps_fault_status", "PS Fault Status",						p.PsFaultStatus, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, addValue(now, psId, "ps_health_status", "PS Health Status",						p.PsHealthStatus, len(ret.Entries)))
+
+			ret.Entries = append(ret.Entries, addValue(now, psId, "ps_holder", "PS Holder",			p.PsHolder, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, addIntValue(now, psId, "ps_id", "PS Id",				p.PsID, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, addValue(now, psId, "ps_name", "PS Name",				p.PsName, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, addValue(now, psId, "ps_short_name", "PS Short Name",	p.PsShortName, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, addIntValue(now, psId, "ps_status", "PS Status",		p.PsStatus, len(ret.Entries)))
+			ret.Entries = append(ret.Entries, addIntValue(now, psId, "ps_type", "PS Type",			p.PsType, len(ret.Entries)))
+
+			// ret = append(ret, []string{now, "Pv Energy", p.PvEnergy.Value, p.PvEnergy.Unit})		// p83077
+			// ret = append(ret, []string{now, "Es Discharge Energy", p.EsDisenergy.Value, p.EsDisenergy.Unit})	// p83089
+			// ret = append(ret, []string{now, "Es Total Discharge Energy", p.EsTotalDisenergy.Value, p.EsTotalDisenergy.Unit})	// p83095
+			// ret = append(ret, []string{now, "Use Energy", p.UseEnergy.Value, p.UseEnergy.Unit})		// p83118
+			// ret = append(ret, []string{now, "Es Energy", p.EsEnergy.Value, p.EsEnergy.Unit})		// p83120
+			// ret = append(ret, []string{now, "Es Total Energy", p.EsTotalEnergy.Value, p.EsTotalEnergy.Unit})	// p83127
+			// ret = append(ret, []string{now, "Pv Power", p.PvPower.Value, p.PvPower.Unit})			// p83076
+			// ret = append(ret, []string{now, "Es Power", p.EsPower.Value, p.EsPower.Unit})			// p83081
+			//
+			// ret = append(ret, []string{now, "Co2 Reduce", p.Co2Reduce.Value, p.Co2Reduce.Unit})
+			// ret = append(ret, []string{now, "Co2 Reduce Total", p.Co2ReduceTotal.Value, p.Co2ReduceTotal.Unit})
+			// ret = append(ret, []string{now, "Curr Power", p.CurrPower.Value, p.CurrPower.Unit})
+			// ret = append(ret, []string{now, "Daily Irradiation", p.DailyIrradiation.Value, p.DailyIrradiation.Unit})
+			// ret = append(ret, []string{now, "Equivalent Hour", p.EquivalentHour.Value, p.EquivalentHour.Unit})
+			// ret = append(ret, []string{now, "Installed Power Map", p.InstalledPowerMap.Value, p.InstalledPowerMap.Unit})
+			// ret = append(ret, []string{now, "Radiation", p.Radiation.Value, p.Radiation.Unit})
+			// ret = append(ret, []string{now, "Today Energy", p.TodayEnergy.Value, p.TodayEnergy.Unit})
+			// ret = append(ret, []string{now, "Today Income", p.TodayIncome.Value, p.TodayIncome.Unit})
+			// ret = append(ret, []string{now, "Total Capacity", p.TotalCapcity.Value, p.TotalCapcity.Unit})
+			// ret = append(ret, []string{now, "Total Energy", p.TotalEnergy.Value, p.TotalEnergy.Unit})
+			// ret = append(ret, []string{now, "Total Income", p.TotalIncome.Value, p.TotalIncome.Unit})
+		}
+	}
+	return ret
+}
+
+func addState(now api.DateTime, point string, name string, state bool, index int) api.DataEntry {
+	return add(now, "virtual", point, name, api.UnitValue{ Value: fmt.Sprintf("%v", state) }, index)
+
+	// return api.DataEntry {
+	// 	Date:           now,
+	// 	PointId:        api.NameDevicePoint("virtual", point),
+	// 	PointGroupName: "Virtual",
+	// 	PointName:      name,
+	// 	Value:          fmt.Sprintf("%v", state),
+	// 	Unit:           "binary",
+	// 	ValueType: &api.Point{
+	// 		PsKey:       "virtual",
+	// 		Id:          point,
+	// 		Description: name,
+	// 		Unit:        "binary",
+	// 		Type:        "PointTypeInstant",
+	// 	},
+	// 	Index: index,
+	// }
+}
+
+func addValue(now api.DateTime, psId string, point string, name string, value string, index int) api.DataEntry {
+	return add(now, psId, point, name, api.UnitValue{ Value: value }, index)
+
+	// vt := api.GetPoint(psId, point)
+	// if !vt.Valid {
+	// 	vt = &api.Point{
+	// 		PsKey:       psId,
+	// 		Id:          point,
+	// 		Description: name,
+	// 		Unit:        "",
+	// 		Type:        "PointTypeInstant",
+	// 	}
+	// }
+	// return api.DataEntry {
+	// 	Date:           now,
+	// 	PointId:        api.NameDevicePoint(psId, point),
+	// 	PointGroupName: "Summary",
+	// 	PointName:      name,
+	// 	Value:          value,
+	// 	Unit:           "",
+	// 	ValueType:      vt,
+	// 	Index:          index,
+	// }
+}
+
+func addIntValue(now api.DateTime, psId string, point string, name string, value int64, index int) api.DataEntry {
+	return add(now, psId, point, name, api.UnitValue{ Value: strconv.FormatInt(value, 10) }, index)
+}
+
+func addFloatValue(now api.DateTime, psId string, point string, name string, value float64, index int) api.DataEntry {
+	return add(now, psId, point, name, api.UnitValue{ Value: api.Float64ToString(value) }, index)
+}
+
+func add(now api.DateTime, psId string, point string, name string, value api.UnitValue, index int) api.DataEntry {
+	vt := api.GetPoint(psId, point)
+	if !vt.Valid {
+		vt = &api.Point{
+			PsKey:       psId,
+			Id:          point,
+			Description: name,
+			Unit:        value.Unit,
+			Type:        "PointTypeInstant",
+		}
+	}
+	return api.DataEntry {
+		Date:           now,
+		PointId:        api.NameDevicePoint(psId, point),
+		PointGroupName: "Virtual",
+		PointName:      name,
+		Value:          value.Value,
+		Unit:           value.Unit,
+		ValueType:      vt,
+		Index:          index,
+	}
+}
+
+// func (e *ResultData) GetData() [][]string {
+// 	var ret [][]string
+// 	for range Only.Once {
+// 		i := len(e.PageList)
+// 		if i == 0 {
+// 			break
+// 		}
+// 		now := time.Now().Round(5 * time.Minute).Format(api.DtLayoutZeroSeconds)
+// 		for _, p := range e.PageList {
+// 			ret = append(ret, []string{now, "Co2 Reduce", p.Co2Reduce.Value, p.Co2Reduce.Unit})
+// 			ret = append(ret, []string{now, "Co2 Reduce Total", p.Co2ReduceTotal.Value, p.Co2ReduceTotal.Unit})
+// 			ret = append(ret, []string{now, "Curr Power", p.CurrPower.Value, p.CurrPower.Unit})
+// 			ret = append(ret, []string{now, "Daily Irradiation", p.DailyIrradiation.Value, p.DailyIrradiation.Unit})
+// 			ret = append(ret, []string{now, "Equivalent Hour", p.EquivalentHour.Value, p.EquivalentHour.Unit})
+// 			ret = append(ret, []string{now, "Es Discharge Energy", p.EsDisenergy.Value, p.EsDisenergy.Unit})
+// 			ret = append(ret, []string{now, "Es Energy", p.EsEnergy.Value, p.EsEnergy.Unit})
+// 			ret = append(ret, []string{now, "Es Power", p.EsPower.Value, p.EsPower.Unit})
+// 			ret = append(ret, []string{now, "Es Total Discharge Energy", p.EsTotalDisenergy.Value, p.EsTotalDisenergy.Unit})
+// 			ret = append(ret, []string{now, "Es Total Energy", p.EsTotalEnergy.Value, p.EsTotalEnergy.Unit})
+// 			ret = append(ret, []string{now, "Installed Power Map", p.InstalledPowerMap.Value, p.InstalledPowerMap.Unit})
+// 			ret = append(ret, []string{now, "Pv Energy", p.PvEnergy.Value, p.PvEnergy.Unit})
+// 			ret = append(ret, []string{now, "Pv Power", p.PvPower.Value, p.PvPower.Unit})
+// 			ret = append(ret, []string{now, "Radiation", p.Radiation.Value, p.Radiation.Unit})
+// 			ret = append(ret, []string{now, "Today Energy", p.TodayEnergy.Value, p.TodayEnergy.Unit})
+// 			ret = append(ret, []string{now, "Today Income", p.TodayIncome.Value, p.TodayIncome.Unit})
+// 			ret = append(ret, []string{now, "Total Capacity", p.TotalCapcity.Value, p.TotalCapcity.Unit})
+// 			ret = append(ret, []string{now, "Total Energy", p.TotalEnergy.Value, p.TotalEnergy.Unit})
+// 			ret = append(ret, []string{now, "Total Income", p.TotalIncome.Value, p.TotalIncome.Unit})
+// 			ret = append(ret, []string{now, "Use Energy", p.UseEnergy.Value, p.UseEnergy.Unit})
+// 		}
+// 	}
+// 	return ret
+// }
 
 func (e *EndPoint) GetDataTable() output.Table {
 	var table output.Table

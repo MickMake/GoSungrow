@@ -6,7 +6,7 @@ import (
 	"GoSungrow/iSolarCloud/AppService/login"
 	"GoSungrow/lsgo"
 	"GoSungrow/mmGit"
-	"GoSungrow/mmMqtt"
+	"GoSungrow/mmHa"
 	"errors"
 	"fmt"
 	"github.com/spf13/cobra"
@@ -21,7 +21,7 @@ var DefaultAreas = []string{"all"}
 type CommandArgs struct {
 	SunGrow *iSolarCloud.SunGrow
 	Git *mmGit.Git
-	Mqtt *mmMqtt.Mqtt
+	Mqtt *mmHa.Mqtt
 
 	ConfigDir   string
 	CacheDir    string

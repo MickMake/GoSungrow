@@ -298,7 +298,9 @@ func (e *EndPoint) GetData() api.Data {
 
 		var TotalDcPower float64
 
-		index := 0
+		var TotalLoadActivePower float64
+
+		// index := 0
 		for _, d := range e.Response.ResultData.PageList {
 			for _, p := range d.PointData {
 				if p.Unit == "W" {
@@ -323,6 +325,16 @@ func (e *EndPoint) GetData() api.Data {
 					}
 				}
 
+				vt := api.GetPointInt(d.PsKey, p.PointID)
+				if !vt.Valid {
+					vt = &api.Point{
+						PsKey:       d.PsKey,
+						Id:          "p" + strings.TrimPrefix(strconv.FormatInt(p.PointID, 10), "p"),
+						Description: p.PointName,
+						Unit:        p.Unit,
+						Type:        "",
+					}
+				}
 				ret.Entries = append(ret.Entries, api.DataEntry {
 					Date:           api.NewDateTime(p.TimeStamp),
 					PointId:        api.NameDevicePointInt(d.PsKey, p.PointID),
@@ -330,11 +342,9 @@ func (e *EndPoint) GetData() api.Data {
 					PointName:      p.PointName,
 					Value:          p.Value,
 					Unit:           p.Unit,
-					ValueType:      api.GetPointInt(d.PsKey, p.PointID),
-					Index:          index,
+					ValueType:      vt,
+					Index:          len(ret.Entries),
 				})
-
-				index++
 
 				// Handle virtual results.
 				switch strings.ReplaceAll(p.PointName, " ", "") {
@@ -346,6 +356,11 @@ func (e *EndPoint) GetData() api.Data {
 						TotalExportActivePower, _ = strconv.ParseFloat(p.Value, 64)
 					case "PurchasedPower":
 						PurchasedPower, _ = strconv.ParseFloat(p.Value, 64)
+					case "TotalDCPower":
+						TotalDcPower, _ = strconv.ParseFloat(p.Value, 64)
+					case "TotalLoadActivePower":
+						TotalLoadActivePower, _ = strconv.ParseFloat(p.Value, 64)
+
 					case "DailyBatteryChargingEnergyFromPv":
 						DailyBatteryChargingEnergyFromPv, _ = strconv.ParseFloat(p.Value, 64)
 					case "DailyBatteryDischargingEnergy":
@@ -354,8 +369,6 @@ func (e *EndPoint) GetData() api.Data {
 						DailyFeedInEnergyPv, _ = strconv.ParseFloat(p.Value, 64)
 					case "DailyPurchasedEnergy":
 						DailyPurchasedEnergy, _ = strconv.ParseFloat(p.Value, 64)
-					case "TotalDCPower":
-						TotalDcPower, _ = strconv.ParseFloat(p.Value, 64)
 				}
 			}
 		}
@@ -366,122 +379,313 @@ func (e *EndPoint) GetData() api.Data {
 
 		// Add virtual entries.
 		ts := ret.Entries[0].Date
-		var value string
+		var value float64
 
-		if BatteryChargingPower > 0 {
-			value = api.Float64ToString(0 - BatteryChargingPower)
-		} else {
-			value = api.Float64ToString(BatteryDischargingPower)
+		/*
+			PVPower				- TotalDcPower
+			PVPowerToBattery	- BatteryChargingPower
+			PVPowerToLoad		- TotalDcPower - BatteryChargingPower - TotalExportActivePower
+			PVPowerToGrid		- TotalExportActivePower
+
+			LoadPower			- TotalLoadActivePower
+			BatteryToLoad		- BatteryDischargingPower
+			BatteryToGrid		- ?
+
+			GridPower			- TotalDcPower
+			GridToLoad			- PurchasedPower
+			GridToBattery		- ?
+		*/
+
+
+		PVPower				:= TotalDcPower
+		PVPowerToBattery	:= BatteryChargingPower
+		PVPowerToLoad		:= TotalDcPower - BatteryChargingPower - TotalExportActivePower
+		PVPowerToGrid		:= TotalExportActivePower
+		ret.Entries = append(ret.Entries, addState(ts, "pv_power_active", "PV Power Active", isActive(PVPower), len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_power", "PV Power", PVPower, "kW", len(ret.Entries)))
+
+		ret.Entries = append(ret.Entries, addState(ts, "pv_power_to_battery_active", "PV Power To Battery Active", isActive(PVPowerToBattery), len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_power_to_battery", "PV Power To Battery", PVPowerToBattery, "kW", len(ret.Entries)))
+
+		ret.Entries = append(ret.Entries, addState(ts, "pv_power_to_load_active", "PV Power To Load Active", isActive(PVPowerToLoad), len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_power_to_load", "PV Power To Load", PVPowerToLoad, "kW", len(ret.Entries)))
+
+		ret.Entries = append(ret.Entries, addState(ts, "pv_power_to_grid_active", "PV Power To Grid Active", isActive(PVPowerToGrid), len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_power_to_grid", "PV Power To Grid", PVPowerToGrid, "kW", len(ret.Entries)))
+
+
+		BatteryPower		:= lowerUpper(BatteryChargingPower, BatteryDischargingPower)
+		BatteryToLoad		:= BatteryDischargingPower
+		BatteryToGrid		:= 0.0
+		ret.Entries = append(ret.Entries, addState(ts, "battery_power_active", "Battery Power Active", isActive(BatteryPower), len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "battery_power", "Battery Power", BatteryPower, "kW", len(ret.Entries)))
+
+		ret.Entries = append(ret.Entries, addState(ts, "battery_power_to_load_active", "Battery Power To Load Active", isActive(BatteryToLoad), len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "battery_power_to_load", "Battery Power To Load", BatteryToLoad, "kW", len(ret.Entries)))
+
+		ret.Entries = append(ret.Entries, addState(ts, "battery_power_to_grid_active", "Battery Power To Grid Active", isActive(BatteryToGrid), len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "battery_power_to_grid", "Battery Power To Grid", BatteryToGrid, "kW", len(ret.Entries)))
+
+
+		GridPower			:= lowerUpper(TotalExportActivePower, PurchasedPower)
+		GridToLoad			:= PurchasedPower
+		GridToBattery		:= 0.0
+		ret.Entries = append(ret.Entries, addState(ts, "grid_power_active", "Grid Power Active", isActive(GridPower), len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "grid_power", "Grid Power", GridPower, "kW", len(ret.Entries)))
+
+		ret.Entries = append(ret.Entries, addState(ts, "grid_power_to_load_active", "Grid Power To Load Active", isActive(GridToLoad), len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "grid_power_to_load", "Grid Power To Load", GridToLoad, "kW", len(ret.Entries)))
+
+		ret.Entries = append(ret.Entries, addState(ts, "grid_power_to_battery_active", "Grid Power To Battery Active", isActive(GridToBattery), len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "grid_power_to_battery", "Grid Power To Battery", GridToBattery, "kW", len(ret.Entries)))
+
+
+		LoadPower			:= TotalLoadActivePower
+		ret.Entries = append(ret.Entries, addState(ts, "load_power_active", "Load Power Active", isActive(LoadPower), len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "load_power", "Load Power", LoadPower, "kW", len(ret.Entries)))
+
+
+		// {
+		// 	if isActive(BatteryChargingPower) {
+		// 		value = 0 - BatteryChargingPower
+		//
+		// 		ret.Entries = append(ret.Entries, addState(ts, "battery_power_active", "Battery Power Active", true, len(ret.Entries)))
+		// 		ret.Entries = append(ret.Entries, addState(ts, "pv_flow_to_battery", "PV Flow To Battery", true, len(ret.Entries)))
+		// 		ret.Entries = append(ret.Entries, addState(ts, "battery_flow_to_load", "Battery Flow To Load", false, len(ret.Entries)))
+		//
+		// 	} else if isActive(BatteryDischargingPower) {
+		// 		value = BatteryDischargingPower
+		//
+		// 		ret.Entries = append(ret.Entries, addState(ts, "battery_power_active", "Battery Power Active", true, len(ret.Entries)))
+		// 		ret.Entries = append(ret.Entries, addState(ts, "pv_flow_to_battery", "PV Flow To Battery", false, len(ret.Entries)))
+		// 		ret.Entries = append(ret.Entries, addState(ts, "battery_flow_to_load", "Battery Flow To Load", true, len(ret.Entries)))
+		//
+		// 	} else {
+		// 		value = 0
+		//
+		// 		ret.Entries = append(ret.Entries, addState(ts, "battery_power_active", "Battery Power Active", false, len(ret.Entries)))
+		// 		ret.Entries = append(ret.Entries, addState(ts, "pv_flow_to_battery", "PV Flow To Battery", false, len(ret.Entries)))
+		// 		ret.Entries = append(ret.Entries, addState(ts, "battery_flow_to_load", "Battery Flow To Load", false, len(ret.Entries)))
+		// 	}
+		//
+		// 	ret.Entries = append(ret.Entries, addFloatValue(ts, "battery_power", "Battery Power", value, len(ret.Entries)))
+		// }
+		//
+		// {
+		// 	if isActive(TotalExportActivePower) {
+		// 		value = 0 - TotalExportActivePower
+		//
+		// 		ret.Entries = append(ret.Entries, addState(ts, "grid_power_active", "Grid Power Active", true, len(ret.Entries)))
+		// 		ret.Entries = append(ret.Entries, addState(ts, "pv_flow_to_grid", "PV Flow To Grid", true, len(ret.Entries)))
+		// 		ret.Entries = append(ret.Entries, addState(ts, "grid_flow_to_load", "Grid Flow To Load", false, len(ret.Entries)))
+		//
+		// 	} else if isActive(PurchasedPower) {
+		// 		value = PurchasedPower
+		//
+		// 		ret.Entries = append(ret.Entries, addState(ts, "grid_power_active", "Grid Power Active", true, len(ret.Entries)))
+		// 		ret.Entries = append(ret.Entries, addState(ts, "pv_flow_to_grid", "PV Flow To Grid", false, len(ret.Entries)))
+		// 		ret.Entries = append(ret.Entries, addState(ts, "grid_flow_to_load", "Grid Flow To Load", true, len(ret.Entries)))
+		//
+		// 	} else {
+		// 		value = 0
+		//
+		// 		ret.Entries = append(ret.Entries, addState(ts, "grid_power_active", "Grid Power Active", false, len(ret.Entries)))
+		// 		ret.Entries = append(ret.Entries, addState(ts, "pv_flow_to_grid", "PV Flow To Grid", false, len(ret.Entries)))
+		// 		ret.Entries = append(ret.Entries, addState(ts, "grid_flow_to_load", "Grid Flow To Load", false, len(ret.Entries)))
+		// 	}
+		//
+		// 	ret.Entries = append(ret.Entries, addFloatValue(ts, "grid_power", "Grid Power", value, len(ret.Entries)))
+		// }
+		//
+		// {
+		// 	ret.Entries = append(ret.Entries, addState(ts, "pv_power_active", "PV Power Active", isActive(TotalDcPower), len(ret.Entries)))
+		// 	ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_power", "PV Power", TotalDcPower, len(ret.Entries)))
+		//
+		// 	value = TotalDcPower - BatteryChargingPower - TotalExportActivePower
+		// 	ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_power_to_load", "PV Power To Load", value, len(ret.Entries)))
+		// }
+		//
+		// {
+		// 	ret.Entries = append(ret.Entries, addState(ts, "load_power_active", "Load Power Active", isActive(TotalLoadActivePower), len(ret.Entries)))
+		//
+		// 	ret.Entries = append(ret.Entries, api.DataEntry{
+		// 		Date:           ts,
+		// 		PointId:        "virtual.pv_power_to_grid",
+		// 		PointGroupName: "Virtual",
+		// 		PointName:      "PV Power To Grid",
+		// 		Value:          api.Float64ToString(TotalExportActivePower),
+		// 		Unit:           "kW",
+		// 		ValueType: &api.Point{
+		// 			PsKey:       "virtual",
+		// 			Id:          "pv_power_to_grid",
+		// 			Description: "PV Power To Grid",
+		// 			Unit:        "kW",
+		// 			Type:        "PointTypeInstant",
+		// 		},
+		// 		Index: len(ret.Entries),
+		// 	})
+		// }
+
+		{
+			if DailyBatteryChargingEnergyFromPv > 0 {
+				value = 0 - DailyBatteryChargingEnergyFromPv
+			} else {
+				value = DailyBatteryDischargingEnergy
+			}
+			ret.Entries = append(ret.Entries, api.DataEntry{
+				Date:           ts,
+				PointId:        "virtual.battery_energy",
+				PointGroupName: "Virtual",
+				PointName:      "Battery Energy",
+				Value:          api.Float64ToString(value),
+				Unit:           "kWh",
+				ValueType: &api.Point{
+					PsKey:       "virtual",
+					Id:          "battery_energy",
+					Description: "Battery Energy",
+					Unit:        "kWh",
+					Type:        "PointTypeInstant",
+				},
+				Index: len(ret.Entries),
+			})
 		}
-		ret.Entries = append(ret.Entries, api.DataEntry {
-			Date:           ts,
-			PointId:        "virtual.battery_power",
-			PointGroupName: "Virtual",
-			PointName:      "Battery Power",
-			Value:          value,
-			Unit:           "kW",
-			ValueType:      &api.Point {
-				PsKey:       "virtual",
-				Id:          "battery_power",
-				Description: "Battery Power",
-				Unit:        "kW",
-				Type:        "PointTypeInstant",
-			},
-			Index:          index,
-		})
-		index++
 
-		if TotalExportActivePower > 0 {
-			value = api.Float64ToString(0 - TotalExportActivePower)
-		} else {
-			value = api.Float64ToString(PurchasedPower)
+		{
+			if DailyFeedInEnergyPv > 0 {
+				value = 0 - DailyFeedInEnergyPv
+			} else {
+				value = DailyPurchasedEnergy
+			}
+			ret.Entries = append(ret.Entries, api.DataEntry{
+				Date:           ts,
+				PointId:        "virtual.grid_energy",
+				PointGroupName: "Virtual",
+				PointName:      "Grid Energy",
+				Value:          api.Float64ToString(value),
+				Unit:           "kWh",
+				ValueType: &api.Point{
+					PsKey:       "virtual",
+					Id:          "grid_energy",
+					Description: "Grid Energy",
+					Unit:        "kWh",
+					Type:        "PointTypeInstant",
+				},
+				Index: len(ret.Entries),
+			})
 		}
-		ret.Entries = append(ret.Entries, api.DataEntry {
-			Date:           ts,
-			PointId:        "virtual.grid_power",
-			PointGroupName: "Virtual",
-			PointName:      "Grid Power",
-			Value:          value,
-			Unit:           "kW",
-			ValueType:      &api.Point {
-				PsKey:       "virtual",
-				Id:          "grid_power",
-				Description: "Grid Power",
-				Unit:        "kW",
-				Type:        "PointTypeInstant",
-			},
-			Index:          index,
-		})
-		index++
-
-
-		if DailyBatteryChargingEnergyFromPv > 0 {
-			value = api.Float64ToString(0 - DailyBatteryChargingEnergyFromPv)
-		} else {
-			value = api.Float64ToString(DailyBatteryDischargingEnergy)
-		}
-		ret.Entries = append(ret.Entries, api.DataEntry {
-			Date:           ts,
-			PointId:        "virtual.battery_energy",
-			PointGroupName: "Virtual",
-			PointName:      "Battery Energy",
-			Value:          value,
-			Unit:           "kWh",
-			ValueType:      &api.Point {
-				PsKey:       "virtual",
-				Id:          "battery_energy",
-				Description: "Battery Energy",
-				Unit:        "kWh",
-				Type:        "PointTypeInstant",
-			},
-			Index:          index,
-		})
-		index++
-
-		if DailyFeedInEnergyPv > 0 {
-			value = api.Float64ToString(0 - DailyFeedInEnergyPv)
-		} else {
-			value = api.Float64ToString(DailyPurchasedEnergy)
-		}
-		ret.Entries = append(ret.Entries, api.DataEntry {
-			Date:           ts,
-			PointId:        "virtual.grid_energy",
-			PointGroupName: "Virtual",
-			PointName:      "Grid Energy",
-			Value:          value,
-			Unit:           "kWh",
-			ValueType:      &api.Point {
-				PsKey:       "virtual",
-				Id:          "grid_energy",
-				Description: "Grid Energy",
-				Unit:        "kWh",
-				Type:        "PointTypeInstant",
-			},
-			Index:          index,
-		})
-		index++
-
-
-		value = api.Float64ToString(TotalDcPower - BatteryChargingPower - TotalExportActivePower)
-		ret.Entries = append(ret.Entries, api.DataEntry {
-			Date:           ts,
-			PointId:        "virtual.pv_to_load",
-			PointGroupName: "Virtual",
-			PointName:      "PV To Load Power",
-			Value:          value,
-			Unit:           "kW",
-			ValueType:      &api.Point {
-				PsKey:       "virtual",
-				Id:          "pv_to_load",
-				Description: "PV To Load Power",
-				Unit:        "kW",
-				Type:        "PointTypeInstant",
-			},
-			Index:          index,
-		})
-		index++
 
 	}
 
 	return ret
+}
+
+func lowerUpper(lower float64, upper float64) float64 {
+	if lower > 0 {
+		return 0 - lower
+	}
+	return upper
+}
+
+
+func addState(now api.DateTime, point string, name string, state bool, index int) api.DataEntry {
+	return add(now, "virtual", point, name, api.UnitValue{ Value: fmt.Sprintf("%v", state), Unit: "binary"}, index)
+
+	// return api.DataEntry {
+	// 	Date:           now,
+	// 	PointId:        api.NameDevicePoint("virtual", point),
+	// 	PointGroupName: "Virtual",
+	// 	PointName:      name,
+	// 	Value:          fmt.Sprintf("%v", state),
+	// 	Unit:           "binary",
+	// 	ValueType: &api.Point{
+	// 		PsKey:       "virtual",
+	// 		Id:          point,
+	// 		Description: name,
+	// 		Unit:        "binary",
+	// 		Type:        "PointTypeInstant",
+	// 	},
+	// 	Index: index,
+	// }
+}
+
+func addValue(now api.DateTime, point string, name string, value string, unit string, index int) api.DataEntry {
+	return add(now, "virtual", point, name, api.UnitValue{ Value: value, Unit: unit}, index)
+
+	// vt := api.GetPoint(psId, point)
+	// if !vt.Valid {
+	// 	vt = &api.Point{
+	// 		PsKey:       psId,
+	// 		Id:          point,
+	// 		Description: name,
+	// 		Unit:        "",
+	// 		Type:        "PointTypeInstant",
+	// 	}
+	// }
+	// return api.DataEntry {
+	// 	Date:           now,
+	// 	PointId:        api.NameDevicePoint(psId, point),
+	// 	PointGroupName: "Summary",
+	// 	PointName:      name,
+	// 	Value:          value,
+	// 	Unit:           "",
+	// 	ValueType:      vt,
+	// 	Index:          index,
+	// }
+}
+
+func addIntValue(now api.DateTime, point string, name string, value int64, unit string, index int) api.DataEntry {
+	return add(now, "virtual", point, name, api.UnitValue{ Value: strconv.FormatInt(value, 10), Unit: unit }, index)
+}
+
+func addFloatValue(now api.DateTime, point string, name string, value float64, unit string, index int) api.DataEntry {
+	return add(now, "virtual", point, name, api.UnitValue{ Value: api.Float64ToString(value), Unit: unit }, index)
+}
+
+func add(now api.DateTime, psId string, point string, name string, value api.UnitValue, index int) api.DataEntry {
+	vt := api.GetPoint(psId, point)
+	if !vt.Valid {
+		vt = &api.Point{
+			PsKey:       psId,
+			Id:          point,
+			Description: name,
+			Unit:        value.Unit,
+			Type:        "PointTypeInstant",
+		}
+	}
+	return api.DataEntry {
+		Date:           now,
+		PointId:        api.NameDevicePoint(psId, point),
+		PointGroupName: "Virtual",
+		PointName:      name,
+		Value:          value.Value,
+		Unit:           value.Unit,
+		ValueType:      vt,
+		Index:          index,
+	}
+}
+
+// func addState(now api.DateTime, point string, name string, state bool, index int) api.DataEntry {
+// 	return api.DataEntry {
+// 		Date:           now,
+// 		PointId:        api.NameDevicePoint("virtual", point),
+// 		PointGroupName: "Virtual",
+// 		PointName:      name,
+// 		Value:          fmt.Sprintf("%v", state),
+// 		Unit:           "binary",
+// 		ValueType: &api.Point{
+// 			PsKey:       "virtual",
+// 			Id:          point,
+// 			Description: name,
+// 			Unit:        "binary",
+// 			Type:        "PointTypeInstant",
+// 		},
+// 		Index: index,
+// 	}
+// }
+
+func isActive(value float64) bool {
+	if (value > 0.01) || (value < -0.01) {
+		return true
+	}
+	return false
 }

@@ -1,23 +1,7 @@
-package mmMqtt
+package mmHa
 
 import "encoding/json"
 
-
-// {
-//	"device": {
-//		"identifiers": [
-//			"sungrow"
-//		],
-//		"manufacturer": "MickMake",
-//		"model": "GoLang",
-//		"name": "sungrow",
-//		"sw_version": "sungrow https://github.com/MickMake/GoSungrow"
-//	},
-//	"name": "sungrow",
-//	"stat_t": "~/state",
-//	"unique_id": "sungrow",
-//	"~": "homeassistant/binary_sensor/SunGrow"
-// }
 
 type Config struct {
 	Entry        string       `json:"~,omitempty" required:"false"`
@@ -51,3 +35,19 @@ type Device struct {
 	SwVersion        string     `json:"sw_version,omitempty" required:"false"`
 	ViaDevice        string     `json:"via_device,omitempty" required:"false"`
 }
+
+// {
+//	"device": {
+//		"identifiers": [
+//			"sungrow"
+//		],
+//		"manufacturer": "MickMake",
+//		"model": "GoLang",
+//		"name": "sungrow",
+//		"sw_version": "sungrow https://github.com/MickMake/GoSungrow"
+//	},
+//	"name": "sungrow",
+//	"stat_t": "~/state",
+//	"unique_id": "sungrow",
+//	"~": "homeassistant/binary_sensor/SunGrow"
+// }

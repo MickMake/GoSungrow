@@ -192,7 +192,7 @@ func (e *EndPoint) GetDataTable() output.Table {
 		keys := api.GetStructKeys(e.Response.ResultData)
 		for _, n := range keys.Sort() {
 			p := api.GetPoint(e.Response.ResultData.PsPsKey, n)
-			if p != nil {
+			if p.Valid {
 				_ = table.AddRow(
 					now,
 					api.NameDevicePoint(e.Response.ResultData.PsPsKey, n),
@@ -222,7 +222,7 @@ func (e *EndPoint) GetDataTable() output.Table {
 			keys = api.GetStructKeys(sid)
 			for _, n := range keys.Sort() {
 				p := api.GetPoint(sid.PsKey, n)
-				if p != nil {
+				if p.Valid {
 					_ = table.AddRow(
 						now,
 						api.NameDevicePoint(sid.PsKey, n),
@@ -300,6 +300,45 @@ func (e *EndPoint) GetPsKeys() []string {
 	ret := []string{e.Response.ResultData.PsPsKey}
 	for _, l := range e.Response.ResultData.StorageInverterData {
 		ret = append(ret, l.PsKey)
+	}
+	return ret
+}
+
+func (e *EndPoint) GetPsName() string {
+	return e.Response.ResultData.PsName
+}
+
+func (e *EndPoint) GetPsState() string {
+	return e.Response.ResultData.PsState
+}
+
+func (e *EndPoint) GetPsKey() string {
+	return e.Response.ResultData.PsPsKey
+}
+
+func (e *EndPoint) GetDeviceModelCode() string {
+	ret := e.Response.ResultData.PsPsKey
+	for _, l := range e.Response.ResultData.StorageInverterData {
+		ret = l.DeviceModelCode
+		break
+	}
+	return ret
+}
+
+func (e *EndPoint) GetDeviceName() string {
+	ret := e.Response.ResultData.PsPsKey
+	for _, l := range e.Response.ResultData.StorageInverterData {
+		ret = l.DeviceName
+		break
+	}
+	return ret
+}
+
+func (e *EndPoint) GetDeviceSerial() string {
+	ret := e.Response.ResultData.PsPsKey
+	for _, l := range e.Response.ResultData.StorageInverterData {
+		ret = l.InverterSn
+		break
 	}
 	return ret
 }

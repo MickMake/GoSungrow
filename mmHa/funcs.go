@@ -1,4 +1,51 @@
-package mmMqtt
+package mmHa
+
+import (
+	"regexp"
+	"strings"
+)
+
+
+func JoinStrings(args ...string) string {
+	return strings.TrimSpace(strings.Join(args, " "))
+}
+
+func JoinStringsForId(args ...string) string {
+	var newargs []string
+	var re = regexp.MustCompile(`(/| |:|\.)+`)
+	for _, a := range args {
+		if a == "" {
+			continue
+		}
+		a = strings.TrimSpace(a)
+		a = re.ReplaceAllString(a, `_`)
+		newargs = append(newargs, a)
+	}
+	// return strings.ReplaceAll(strings.TrimSpace(strings.Join(args, ".")), ".", "_")
+	return strings.Join(newargs, "-")
+}
+
+// func (c *Config) JoinStringsForId() string {
+// 	return JoinStringsForId(m.Device.FullName, c.ParentName, c.FullName)
+// }
+
+func JoinStringsForTopic(args ...string) string {
+	var newargs []string
+	var re = regexp.MustCompile(`( |:)+`)
+	for _, a := range args {
+		if a == "" {
+			continue
+		}
+		a = strings.TrimSpace(a)
+		a = re.ReplaceAllString(a, `_`)
+		newargs = append(newargs, a)
+	}
+	// return strings.ReplaceAll(strings.TrimSpace(strings.Join(args, ".")), ".", "_")
+	return strings.Join(newargs, "/")
+
+	// ret := strings.ReplaceAll(strings.Join(args, "/"), "//", "/")
+	// return ret
+}
 
 
 // const DiscoveryPrefix = "homeassistant"

@@ -2,11 +2,12 @@ package cmd
 
 import (
 	"GoSungrow/Only"
-	"GoSungrow/mmMqtt"
+	"GoSungrow/mmHa"
 	"errors"
 	"fmt"
 	"github.com/go-co-op/gocron"
 	"github.com/spf13/cobra"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -70,8 +71,33 @@ func (ca *CommandArgs) MqttArgs(cmd *cobra.Command, args []string) error {
 			break
 		}
 
+		LogPrintDate("Connecting to SunGrow...\n")
+		Cmd.Error = Cmd.SunGrowArgs(cmd, args)
+		if Cmd.Error != nil {
+			break
+		}
+
+		var id int64
+		id, Cmd.Error = Cmd.SunGrow.GetPsId()
+		if Cmd.Error != nil {
+			break
+		}
+
+		var model string
+		model, Cmd.Error = Cmd.SunGrow.GetPsModel()
+		if Cmd.Error != nil {
+			break
+		}
+
+		var serial string
+		serial, Cmd.Error = Cmd.SunGrow.GetPsSerial()
+		if Cmd.Error != nil {
+			break
+		}
+		LogPrintDate("Found SunGrow device %s id:%d serial:%s\n", model, id, serial)
+
 		LogPrintDate("Connecting to MQTT HASSIO Service...\n")
-		Cmd.Mqtt = mmMqtt.New(mmMqtt.Mqtt {
+		Cmd.Mqtt = mmHa.New(mmHa.Mqtt {
 			ClientId: "GoSunGrow",
 			Username: Cmd.MqttUsername,
 			Password: Cmd.MqttPassword,
@@ -83,24 +109,23 @@ func (ca *CommandArgs) MqttArgs(cmd *cobra.Command, args []string) error {
 			break
 		}
 
+		Cmd.Error = Cmd.Mqtt.SetDeviceConfig("GoSunGrow", strconv.FormatInt(id, 10), "GoSungrow", model, "Sungrow", "Roof")
+		if Cmd.Error != nil {
+			break
+		}
+
 		Cmd.Error = Cmd.Mqtt.Connect()
 		if Cmd.Error != nil {
 			break
 		}
 
-		LogPrintDate("Connecting to SunGrow...\n")
-		Cmd.Error = Cmd.SunGrowArgs(cmd, args)
-		if Cmd.Error != nil {
-			break
-		}
-
-		if Cmd.Mqtt.PsId == 0 {
-			Cmd.Mqtt.PsId, Cmd.Error = Cmd.SunGrow.GetPsId()
-			if Cmd.Error != nil {
-				break
-			}
-			LogPrintDate("Found SunGrow device %d\n", Cmd.Mqtt.PsId)
-		}
+		// if Cmd.Mqtt.PsId == 0 {
+		// 	Cmd.Mqtt.PsId, Cmd.Error = Cmd.SunGrow.GetPsId()
+		// 	if Cmd.Error != nil {
+		// 		break
+		// 	}
+		// 	LogPrintDate("Found SunGrow device %d\n", Cmd.Mqtt.PsId)
+		// }
 	}
 
 	return Cmd.Error
@@ -231,21 +256,64 @@ func MqttCron() error {
 			time.Sleep(time.Second * 40)	// Takes up to 40 seconds for data to come in.
 		}
 
+		newDay := false
+		if Cmd.Mqtt.IsNewDay() {
+			newDay = true
+		}
+
+		Cmd.Error = Update1(newDay)
+		if Cmd.Error != nil {
+			break
+		}
+
+		Cmd.Error = Update2(newDay)
+		if Cmd.Error != nil {
+			break
+		}
+
+		Cmd.Mqtt.LastRefresh = time.Now()
+	}
+
+	if Cmd.Error != nil {
+		LogPrintDate("Error: %s\n", Cmd.Error)
+	}
+	return Cmd.Error
+}
+
+func Update1(newDay bool) error {
+	for range Only.Once {
 		// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
 		ep := Cmd.SunGrow.QueryDevice(Cmd.Mqtt.PsId)
 		if ep.IsError() {
 			Cmd.Error = ep.GetError()
 			break
 		}
-
 		data := ep.GetData()
 
-		if Cmd.Mqtt.IsNewDay() {
+		if newDay {
 			LogPrintDate("New day: Configuring %d entries in HASSIO.\n", len(data.Entries))
 			for _, r := range data.Entries {
-				fmt.Printf(".")
-				// Cmd.Error = Cmd.Mqtt.SensorPublishConfig(r.PointId, r.PointName, r.Unit, i)
-				Cmd.Error = Cmd.Mqtt.SensorPublishConfig(r)
+				fmt.Printf("C")
+				re := mmHa.EntityConfig {
+					Type:       r.ValueType.Type,
+					Name:       r.ValueType.Id, // PointName,
+					SubName:    "",
+					ParentId:   r.ValueType.PsKey,
+					ParentName: "",
+					UniqueId:   r.PointId,
+					FullName:   r.ValueType.Description,
+					Units:      r.Unit,
+					ValueName:  r.PointId,
+					Class:      "",
+					Value:      r.Value,
+				}
+
+				Cmd.Error = Cmd.Mqtt.BinarySensorPublishConfig(re)
+				if Cmd.Error != nil {
+					break
+				}
+
+				Cmd.Error = Cmd.Mqtt.SensorPublishConfig(re)
 				if Cmd.Error != nil {
 					break
 				}
@@ -255,20 +323,111 @@ func MqttCron() error {
 
 		LogPrintDate("Updating %d entries to HASSIO.\n", len(data.Entries))
 		for _, r := range data.Entries {
-			fmt.Printf(".")
-			// Cmd.Error = Cmd.Mqtt.SensorPublishState(r.PointId, r.Value)
-			Cmd.Error = Cmd.Mqtt.SensorPublishValue(r)
+			fmt.Printf("U")
+			re := mmHa.EntityConfig {
+				Type:       r.ValueType.Type,
+				Name:       r.ValueType.Id, // PointName,
+				SubName:    "",
+				ParentId:   r.ValueType.PsKey,
+				ParentName: "",
+				UniqueId:   r.PointId,
+				FullName:   r.ValueType.Description,
+				Units:      r.Unit,
+				ValueName:  r.PointId,
+				Class:      "",
+				Value:      r.Value,
+			}
+
+			Cmd.Error = Cmd.Mqtt.BinarySensorPublishValue(re)
+			if Cmd.Error != nil {
+				break
+			}
+
+			Cmd.Error = Cmd.Mqtt.SensorPublishValue(re)
 			if Cmd.Error != nil {
 				break
 			}
 		}
 		fmt.Println()
+	}
 
-		Cmd.Mqtt.LastRefresh = time.Now()
+	if Cmd.Error != nil {
+		LogPrintDate("Error: %s\n", Cmd.Error)
+	}
+	return Cmd.Error
+}
 
-		if Cmd.Error != nil {
+func Update2(newDay bool) error {
+	for range Only.Once {
+		// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
+		ep := Cmd.SunGrow.QueryPs(Cmd.Mqtt.PsId)
+		if ep.IsError() {
+			Cmd.Error = ep.GetError()
 			break
 		}
+		data := ep.GetData()
+
+		if newDay {
+			LogPrintDate("New day: Configuring %d entries in HASSIO.\n", len(data.Entries))
+			for _, r := range data.Entries {
+				fmt.Printf("C")
+
+				re := mmHa.EntityConfig {
+					Type:       r.ValueType.Type,
+					Name:       r.ValueType.Id, // PointName,
+					SubName:    "",
+					ParentId:   r.ValueType.PsKey,
+					ParentName: "",
+					UniqueId:   r.PointId,
+					FullName:   r.ValueType.Description,
+					Units:      r.Unit,
+					ValueName:  r.PointId,
+					Class:      "",
+					Value:      r.Value,
+				}
+
+				Cmd.Error = Cmd.Mqtt.BinarySensorPublishConfig(re)
+				if Cmd.Error != nil {
+					break
+				}
+
+				Cmd.Error = Cmd.Mqtt.SensorPublishConfig(re)
+				if Cmd.Error != nil {
+					break
+				}
+			}
+			fmt.Println()
+		}
+
+		LogPrintDate("Updating %d entries to HASSIO.\n", len(data.Entries))
+		for _, r := range data.Entries {
+			fmt.Printf("U")
+
+			re := mmHa.EntityConfig {
+				Type:       r.ValueType.Type,
+				Name:       r.ValueType.Id, // PointName,
+				SubName:    "",
+				ParentId:   r.ValueType.PsKey,
+				ParentName: "",
+				UniqueId:   r.PointId,
+				FullName:   r.ValueType.Description,
+				Units:      r.Unit,
+				ValueName:  r.PointId,
+				Class:      "",
+				Value:      r.Value,
+			}
+
+			Cmd.Error = Cmd.Mqtt.BinarySensorPublishValue(re)
+			if Cmd.Error != nil {
+				break
+			}
+
+			Cmd.Error = Cmd.Mqtt.SensorPublishValue(re)
+			if Cmd.Error != nil {
+				break
+			}
+		}
+		fmt.Println()
 	}
 
 	if Cmd.Error != nil {

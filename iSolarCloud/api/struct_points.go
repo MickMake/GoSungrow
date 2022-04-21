@@ -24,6 +24,7 @@ type Point struct {
 	Description string
 	Unit        string
 	Type        string
+	Valid       bool
 }
 type PointsMap map[string]Point
 
@@ -292,15 +293,24 @@ func (p Point) String() string {
 func (pm PointsMap) Get(device string, point string) *Point {
 	dp := device + ".p" + strings.TrimPrefix(point, "p")
 	if p, ok := pm[dp]; ok {
+		p.Valid = true
 		return &p
 	}
 
 	dp = "p" + strings.TrimPrefix(point, "p")
 	if p, ok := pm[dp]; ok {
+		p.Valid = true
 		return &p
 	}
 
-	return nil
+	return &Point {
+		PsKey:       device,
+		Id:          dp,
+		Description: "",
+		Unit:        "",
+		Type:        "",
+		Valid:       false,
+	}
 }
 
 func (pm PointsMap) GetDevicePoint(devicePoint string) *Point {
@@ -372,3 +382,18 @@ type DataEntry struct {
 	ValueType      *Point    `json:"value_type"`
 	Index          int       `json:"index"`
 }
+
+// 	Type       string
+//	Name       string
+//	SubName    string
+//
+//	ParentId   string
+//	ParentName string
+//
+//	UniqueId   string
+//	FullName   string
+//	Units      string
+//	ValueName  string
+//	Class      string
+//
+//	Value      string

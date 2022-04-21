@@ -311,6 +311,32 @@ func (sg *SunGrow) QueryDevice(psId int64) queryDeviceList.EndPoint {
 	return ret
 }
 
+func (sg *SunGrow) QueryPs(psId int64) getPsList.EndPoint {
+	var ret getPsList.EndPoint
+	for range Only.Once {
+		if psId == 0 {
+			psId, sg.Error = sg.GetPsId()
+			if sg.Error != nil {
+				break
+			}
+		}
+
+		// ep = sg.GetByJson("AppService.queryDeviceList", fmt.Sprintf(`{"ps_id":"%d"}`, psId))
+		ep := sg.GetByStruct(
+			"AppService.getPsList",
+			getPsList.RequestData{},
+			time.Second * 60,
+		)
+		// if sg.Error != nil {
+		// 	break
+		// }
+
+		ret = getPsList.Assert(ep)
+	}
+
+	return ret
+}
+
 func (sg *SunGrow) GetPointNames() error {
 	for range Only.Once {
 		for _, dt := range getPowerDevicePointNames.DeviceTypes {
@@ -535,6 +561,76 @@ func (sg *SunGrow) GetPsId() (int64, error) {
 
 		_getPsList := getPsList.AssertResultData(ep)
 		ret = _getPsList.GetPsId()
+	}
+
+	return ret, sg.Error
+}
+
+func (sg *SunGrow) GetPsName() (string, error) {
+	var ret string
+
+	for range Only.Once {
+
+		ep := sg.GetByStruct("AppService.getPsList", nil, DefaultCacheTimeout)
+		if ep.IsError() {
+			sg.Error = ep.GetError()
+			break
+		}
+
+		_getPsList := getPsList.AssertResultData(ep)
+		ret = _getPsList.GetPsName()
+	}
+
+	return ret, sg.Error
+}
+
+func (sg *SunGrow) GetPsModel() (string, error) {
+	var ret string
+
+	for range Only.Once {
+		var psId int64
+		psId, sg.Error = sg.GetPsId()
+		if sg.Error != nil {
+			break
+		}
+
+		ep := sg.GetByStruct(
+			"AppService.getPsDetailWithPsType",
+			getPsDetailWithPsType.RequestData{PsId: strconv.FormatInt(psId, 10)},
+			DefaultCacheTimeout)
+		if ep.IsError() {
+			sg.Error = ep.GetError()
+			break
+		}
+
+		ep2 := getPsDetailWithPsType.Assert(ep)
+		ret = ep2.GetDeviceName()
+	}
+
+	return ret, sg.Error
+}
+
+func (sg *SunGrow) GetPsSerial() (string, error) {
+	var ret string
+
+	for range Only.Once {
+		var psId int64
+		psId, sg.Error = sg.GetPsId()
+		if sg.Error != nil {
+			break
+		}
+
+		ep := sg.GetByStruct(
+			"AppService.getPsDetailWithPsType",
+			getPsDetailWithPsType.RequestData{PsId: strconv.FormatInt(psId, 10)},
+			DefaultCacheTimeout)
+		if ep.IsError() {
+			sg.Error = ep.GetError()
+			break
+		}
+
+		ep2 := getPsDetailWithPsType.Assert(ep)
+		ret = ep2.GetDeviceSerial()
 	}
 
 	return ret, sg.Error

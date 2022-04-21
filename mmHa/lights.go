@@ -1,4 +1,61 @@
-package mmMqtt
+package mmHa
+
+import (
+	"GoSungrow/Only"
+	"encoding/json"
+)
+
+
+func (m *Mqtt) PublishLightConfig(id string, name string, subName string, units string, valueName string, class string) error {
+	for range Only.Once {
+		id = JoinStringsForId(m.EntityPrefix, m.Device.Name, id)
+
+		payload := Light {
+			Device:                 m.Device,
+			Name:                   JoinStrings(m.Device.ViaDevice, name),
+			StateTopic:             JoinStringsForTopic(m.switchPrefix, id, "state"),
+			// StateClass:             "measurement",
+			// UniqueId:               id,
+			// UnitOfMeasurement:      units,
+			// DeviceClass:            class,
+			// Qos:                    0,
+			// ForceUpdate:            true,
+			// ExpireAfter:            0,
+			// Encoding:               "utf-8",
+			// EnabledByDefault:       true,
+			// LastResetValueTemplate: LastResetValueTemplate,
+			// LastReset:              LastReset,
+			// ValueTemplate:          "{{ value_json.value | float }}",
+			// LastReset: time.Now().Format("2006-01-02T00:00:00+00:00"),
+			// LastResetValueTemplate: "{{entity_id}}",
+			// LastResetValueTemplate: "{{ (as_datetime((value_json.last_reset | int | timestamp_utc)|string+'Z')).isoformat() }}",
+		}
+
+		m.client.Publish(JoinStringsForTopic(m.lightPrefix, id, "config"), 0, true, payload.Json())
+	}
+	return m.err
+}
+
+func (m *Mqtt) PublishLight(subtopic string, payload interface{}) error {
+	for range Only.Once {
+		t := m.client.Publish(JoinStringsForTopic(m.lightPrefix, subtopic), 0, true, payload)
+		if !t.WaitTimeout(m.Timeout) {
+			m.err = t.Error()
+		}
+	}
+	return m.err
+}
+
+func (m *Mqtt) PublishLightState(topic string, payload interface{}) error {
+	for range Only.Once {
+		topic = JoinStringsForId(m.EntityPrefix, m.Device.Name, topic)
+		t := m.client.Publish(JoinStringsForTopic(m.lightPrefix, topic, "state"), 0, true, payload)
+		if !t.WaitTimeout(m.Timeout) {
+			m.err = t.Error()
+		}
+	}
+	return m.err
+}
 
 
 type Light struct {
@@ -72,6 +129,11 @@ type Light struct {
 	// ForceUpdateMQTT bool    `json:"-"`
 	//
 	// messageHandler mqtt.MessageHandler
+}
+
+func (c *Light) Json() string {
+	j, _ := json.Marshal(*c)
+	return string(j)
 }
 
 
