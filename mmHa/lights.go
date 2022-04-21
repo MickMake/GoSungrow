@@ -130,7 +130,6 @@ type Light struct {
 	//
 	// messageHandler mqtt.MessageHandler
 }
-
 func (c *Light) Json() string {
 	j, _ := json.Marshal(*c)
 	return string(j)
@@ -180,7 +179,6 @@ func (c *Light) Json() string {
 // 	Model        string     `json:"model"`
 // 	ViaDevice    string     `json:"via_device"`
 // }
-
 
 // {
 //	"brightness": 255,

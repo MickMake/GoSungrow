@@ -442,19 +442,191 @@ func (m *Mqtt) GetLastReset(pointType string) string {
 
 
 type EntityConfig struct {
-	Type       string
-	Name       string
-	SubName    string
+	Type          string
+	Name          string
+	SubName       string
 
-	ParentId   string
-	ParentName string
+	ParentId      string
+	ParentName    string
 
-	UniqueId   string
-	FullName   string
-	Units      string
-	ValueName  string
-	Class      string
-	Icon       string
+	UniqueId      string
+	FullName      string
+	Units         string
+	ValueName     string
+	DeviceClass   string
+	Icon          string
 
-	Value      string
+	Value         string
+	ValueTemplate string
+
+	LastReset     string
+	LastResetValueTemplate string
+
+	haType        string
+}
+
+func (config *EntityConfig) IsSensor() bool {
+	var ok bool
+
+	for range Only.Once {
+		if config.IsBinarySensor() {
+			break
+		}
+		if config.IsSwitch() {
+			break
+		}
+		if config.IsLight() {
+			break
+		}
+		if config.Units == "" {
+			break
+		}
+
+		ok = true
+	}
+
+	return ok
+}
+
+func (config *EntityConfig) IsBinarySensor() bool {
+	var ok bool
+
+	for range Only.Once {
+		if config.Units == LabelBinarySensor {
+			ok = true
+			break
+		}
+	}
+
+	return ok
+}
+
+func (config *EntityConfig) IsSwitch() bool {
+	var ok bool
+
+	for range Only.Once {
+		if config.Units == LabelSwitch {
+			ok = true
+			break
+		}
+	}
+
+	return ok
+}
+
+func (config *EntityConfig) IsLight() bool {
+	var ok bool
+
+	for range Only.Once {
+		if config.Units == LabelBinarySensor {
+			ok = true
+			break
+		}
+	}
+
+	return ok
+}
+
+
+func (config *EntityConfig) FixConfig() {
+
+	for range Only.Once {
+		// mdi:power-socket-au
+		// mdi:solar-power
+		// mdi:home-lightning-bolt-outline
+		// mdi:transmission-tower
+		// mdi:transmission-tower-export
+		// mdi:transmission-tower-import
+		// mdi:transmission-tower-off
+		// mdi:home-battery-outline
+		// mdi:lightning-bolt
+		// mdi:check-circle-outline | mdi:arrow-right-bold
+
+		switch config.Units {
+			case LabelBinarySensor:
+				config.DeviceClass = SetDefault(config.DeviceClass, "power")
+				config.Icon = SetDefault(config.Icon, "mdi:check-circle-outline")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value }}")
+
+			case "MW":
+				fallthrough
+			case "kW":
+				fallthrough
+			case "W":
+				config.DeviceClass = SetDefault(config.DeviceClass, "power")
+				config.Icon = SetDefault(config.Icon, "mdi:lightning-bolt")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				// config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
+				// - Used with merged values.
+
+			case "MWh":
+				fallthrough
+			case "kWh":
+				fallthrough
+			case "Wh":
+				config.DeviceClass = SetDefault(config.DeviceClass, "energy")
+				config.Icon = SetDefault(config.Icon, "mdi:lightning-bolt")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+
+			case "kvar":
+				config.DeviceClass = SetDefault(config.DeviceClass, "reactive_power")
+				config.Icon = SetDefault(config.Icon, "mdi:lightning-bolt")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+
+			case "Hz":
+				config.DeviceClass = SetDefault(config.DeviceClass, "frequency")
+				config.Icon = SetDefault(config.Icon, "mdi:sine-wave")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+
+			case "V":
+				config.DeviceClass = SetDefault(config.DeviceClass, "voltage")
+				config.Icon = SetDefault(config.Icon, "mdi:current-dc")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+
+			case "A":
+				config.DeviceClass = SetDefault(config.DeviceClass, "current")
+				config.Icon = SetDefault(config.Icon, "mdi:current-ac")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+
+			case "°C":
+				fallthrough
+			case "C":
+				fallthrough
+			case "℃":
+				config.DeviceClass = SetDefault(config.DeviceClass, "temperature")
+				config.Units = "°C"
+				config.Icon = SetDefault(config.Icon, "mdi:thermometer")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+
+			case "%":
+				config.DeviceClass = SetDefault(config.DeviceClass, "battery")
+				config.Icon = SetDefault(config.Icon, "mdi:home-battery-outline")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+
+			default:
+				config.DeviceClass = SetDefault(config.DeviceClass, "")
+				config.Icon = SetDefault(config.Icon, "")
+				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value }}")
+		}
+
+		if config.LastReset != "" {
+			break
+		}
+
+		pt := api.GetDevicePoint(config.UniqueId)
+		if !pt.Valid {
+			break
+		}
+		config.LastReset = pt.WhenReset()
+
+		config.LastResetValueTemplate = SetDefault(config.LastResetValueTemplate, "{{ value_json.last_reset | as_datetime() }}")
+		// config.LastResetValueTemplate = SetDefault(config.LastResetValueTemplate, "{{ value_json.last_reset | int | timestamp_local | as_datetime }}")
+	}
+}
+
+func SetDefault(value string, def string) string {
+	if value == "" {
+		value = def
+	}
+	return value
 }

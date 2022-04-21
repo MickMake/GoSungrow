@@ -394,6 +394,6 @@ type DataEntry struct {
 //	FullName   string
 //	Units      string
 //	ValueName  string
-//	Class      string
+//	DeviceClass      string
 //
 //	Value      string

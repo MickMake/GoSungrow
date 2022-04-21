@@ -295,17 +295,17 @@ func Update1(newDay bool) error {
 			for _, r := range data.Entries {
 				fmt.Printf("C")
 				re := mmHa.EntityConfig {
-					Type:       r.ValueType.Type,
-					Name:       r.ValueType.Id, // PointName,
-					SubName:    "",
-					ParentId:   r.ValueType.PsKey,
-					ParentName: "",
-					UniqueId:   r.PointId,
-					FullName:   r.ValueType.Description,
-					Units:      r.Unit,
-					ValueName:  r.PointId,
-					Class:      "",
-					Value:      r.Value,
+					Type:        r.ValueType.Type,
+					Name:        r.ValueType.Id, // PointName,
+					SubName:     "",
+					ParentId:    r.ValueType.PsKey,
+					ParentName:  "",
+					UniqueId:    r.PointId,
+					FullName:    r.ValueType.Description,
+					Units:       r.Unit,
+					ValueName:   r.PointId,
+					DeviceClass: "",
+					Value:       r.Value,
 				}
 
 				Cmd.Error = Cmd.Mqtt.BinarySensorPublishConfig(re)
@@ -325,17 +325,17 @@ func Update1(newDay bool) error {
 		for _, r := range data.Entries {
 			fmt.Printf("U")
 			re := mmHa.EntityConfig {
-				Type:       r.ValueType.Type,
-				Name:       r.ValueType.Id, // PointName,
-				SubName:    "",
-				ParentId:   r.ValueType.PsKey,
-				ParentName: "",
-				UniqueId:   r.PointId,
-				FullName:   r.ValueType.Description,
-				Units:      r.Unit,
-				ValueName:  r.PointId,
-				Class:      "",
-				Value:      r.Value,
+				Type:        r.ValueType.Type,
+				Name:        r.ValueType.Id, // PointName,
+				SubName:     "",
+				ParentId:    r.ValueType.PsKey,
+				ParentName:  "",
+				UniqueId:    r.PointId,
+				FullName:    r.ValueType.Description,
+				Units:       r.Unit,
+				ValueName:   r.PointId,
+				DeviceClass: "",
+				Value:       r.Value,
 			}
 
 			Cmd.Error = Cmd.Mqtt.BinarySensorPublishValue(re)
@@ -373,17 +373,17 @@ func Update2(newDay bool) error {
 				fmt.Printf("C")
 
 				re := mmHa.EntityConfig {
-					Type:       r.ValueType.Type,
-					Name:       r.ValueType.Id, // PointName,
-					SubName:    "",
-					ParentId:   r.ValueType.PsKey,
-					ParentName: "",
-					UniqueId:   r.PointId,
-					FullName:   r.ValueType.Description,
-					Units:      r.Unit,
-					ValueName:  r.PointId,
-					Class:      "",
-					Value:      r.Value,
+					Type:        r.ValueType.Type,
+					Name:        r.ValueType.Id, // PointName,
+					SubName:     "",
+					ParentId:    r.ValueType.PsKey,
+					ParentName:  "",
+					UniqueId:    r.PointId,
+					FullName:    r.ValueType.Description,
+					Units:       r.Unit,
+					ValueName:   r.PointId,
+					DeviceClass: "",
+					Value:       r.Value,
 				}
 
 				Cmd.Error = Cmd.Mqtt.BinarySensorPublishConfig(re)
@@ -404,17 +404,17 @@ func Update2(newDay bool) error {
 			fmt.Printf("U")
 
 			re := mmHa.EntityConfig {
-				Type:       r.ValueType.Type,
-				Name:       r.ValueType.Id, // PointName,
-				SubName:    "",
-				ParentId:   r.ValueType.PsKey,
-				ParentName: "",
-				UniqueId:   r.PointId,
-				FullName:   r.ValueType.Description,
-				Units:      r.Unit,
-				ValueName:  r.PointId,
-				Class:      "",
-				Value:      r.Value,
+				Type:        r.ValueType.Type,
+				Name:        r.ValueType.Id, // PointName,
+				SubName:     "",
+				ParentId:    r.ValueType.PsKey,
+				ParentName:  "",
+				UniqueId:    r.PointId,
+				FullName:    r.ValueType.Description,
+				Units:       r.Unit,
+				ValueName:   r.PointId,
+				DeviceClass: "",
+				Value:       r.Value,
 			}
 
 			Cmd.Error = Cmd.Mqtt.BinarySensorPublishValue(re)

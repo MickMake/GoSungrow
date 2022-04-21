@@ -3,24 +3,22 @@ package mmHa
 import (
 	"GoSungrow/Only"
 	"encoding/json"
-	"fmt"
 )
 
 
 func (m *Mqtt) BinarySensorPublishConfig(config EntityConfig) error {
 
 	for range Only.Once {
-		if config.Units != "binary" {
+		config.FixConfig()
+		if !config.IsBinarySensor() {
 			break
 		}
 
-		ValueTemplate := fmt.Sprintf("{{ value_json.value }}")
-
-		LastReset := m.GetLastReset(config.UniqueId)
-		LastResetValueTemplate := ""
-		if LastReset != "" {
-			LastResetValueTemplate = "{{ value_json.last_reset | as_datetime() }}"
-		}
+		// LastReset := m.GetLastReset(config.UniqueId)
+		// LastResetValueTemplate := ""
+		// if LastReset != "" {
+		// 	LastResetValueTemplate = "{{ value_json.last_reset | as_datetime() }}"
+		// }
 
 		device := m.Device
 		device.Name = JoinStrings(m.Device.Name, config.ParentId)
@@ -29,8 +27,7 @@ func (m *Mqtt) BinarySensorPublishConfig(config EntityConfig) error {
 			{ JoinStringsForId(m.Device.Name, config.ParentId), JoinStringsForId(m.Device.Name, config.ParentId, config.Name) },
 		}
 		device.Identifiers = []string{ JoinStringsForId(m.Device.Name, config.ParentId) }
-		st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)	// , config.ParentName, config.Name)
-		// UniqueId:               JoinStringsForId(m.Device.Name, config.ParentName, config.Name, config.UniqueId),
+		st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
 
 		payload := BinarySensor {
 			Device:                 device,
@@ -39,17 +36,34 @@ func (m *Mqtt) BinarySensorPublishConfig(config EntityConfig) error {
 			StateClass:             "measurement",
 			UniqueId:               st,
 			UnitOfMeasurement:      config.Units,
-			DeviceClass:            config.Class,
+			DeviceClass:            config.DeviceClass,
 			Qos:                    0,
 			ForceUpdate:            true,
 			ExpireAfter:            0,
 			Encoding:               "utf-8",
 			EnabledByDefault:       true,
-			LastResetValueTemplate: LastResetValueTemplate,
 			PayloadOn:              "true",
 			PayloadOff:             "false",
-			ValueTemplate:          ValueTemplate,
-			Icon:                   "mdi:check-circle-outline",	// mdi:check-circle-outline | mdi:arrow-right-bold
+			LastResetValueTemplate: config.LastResetValueTemplate,
+			ValueTemplate:          config.ValueTemplate,
+			Icon:                   config.Icon,
+
+			// Availability:           &Availability {
+			// 	PayloadAvailable:    "",
+			// 	PayloadNotAvailable: "",
+			// 	Topic:               "",
+			// 	ValueTemplate:       "",
+			// },
+			// AvailabilityMode:       "",
+			// AvailabilityTemplate:   "",
+			// AvailabilityTopic:      "",
+			// EntityCategory:         "",
+			// JsonAttributesTemplate: "",
+			// JsonAttributesTopic:    "",
+			// ObjectId:               "",
+			// PayloadAvailable:       "",
+			// PayloadNotAvailable:    "",
+			// OffDelay:               0,
 		}
 
 		ct := JoinStringsForTopic(m.binarySensorPrefix, st, "config")
@@ -65,7 +79,7 @@ func (m *Mqtt) BinarySensorPublishConfig(config EntityConfig) error {
 func (m *Mqtt) BinarySensorPublishValue(config EntityConfig) error {
 
 	for range Only.Once {
-		if config.Units != "binary" {
+		if config.Units != LabelBinarySensor {
 			break
 		}
 
@@ -80,6 +94,7 @@ func (m *Mqtt) BinarySensorPublishValue(config EntityConfig) error {
 			m.err = t.Error()
 		}
 	}
+
 	return m.err
 }
 
@@ -115,7 +130,6 @@ type BinarySensor struct {
 	PayloadOff             string       `json:"pl_off,omitempty" required:"false"`
 	PayloadOn              string       `json:"pl_on,omitempty" required:"false"`
 }
-
 func (c *BinarySensor) Json() string {
 	j, _ := json.Marshal(*c)
 	return string(j)

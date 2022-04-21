@@ -279,26 +279,41 @@ func (e *EndPoint) GetData() api.Data {
 	for range Only.Once {
 		// Used for virtual entries.
 		// 0 - sungrow_battery_charging_power
-		var BatteryChargingPower float64
+		var PVPowerToBattery float64
+
 		// sensor.sungrow_battery_discharging_power
-		var BatteryDischargingPower float64
+		var BatteryPowerToLoad float64
+
 		// 0 - sensor.sungrow_total_export_active_power
-		var TotalExportActivePower float64
+		var PVPowerToGrid float64
+
 		// sensor.sungrow_purchased_power
-		var PurchasedPower float64
+		var GridPowerToLoad float64
 
 		// 0 - sensor.sungrow_daily_battery_charging_energy_from_pv
-		var DailyBatteryChargingEnergyFromPv float64
+		var YieldBatteryCharge float64
+		// var DailyBatteryChargingEnergy float64
+
 		// sensor.sungrow_daily_battery_discharging_energy
 		var DailyBatteryDischargingEnergy float64
+
 		// 0 - sensor.sungrow_daily_feed_in_energy_pv
-		var DailyFeedInEnergyPv float64
+		var YieldFeedIn float64
+
 		// sensor.sungrow_daily_purchased_energy
 		var DailyPurchasedEnergy float64
 
-		var TotalDcPower float64
+		var PVPower float64
 
-		var TotalLoadActivePower float64
+		var LoadPower float64
+
+		var YieldSelfConsumption float64
+		// var DailyFeedInEnergy float64
+		var TotalPvYield float64
+
+		var DailyTotalLoad float64
+
+		var TotalEnergyConsumption float64
 
 		// index := 0
 		for _, d := range e.Response.ResultData.PageList {
@@ -347,29 +362,83 @@ func (e *EndPoint) GetData() api.Data {
 				})
 
 				// Handle virtual results.
-				switch strings.ReplaceAll(p.PointName, " ", "") {
-					case "BatteryChargingPower":
-						BatteryChargingPower, _ = strconv.ParseFloat(p.Value, 64)
-					case "BatteryDischargingPower":
-						BatteryDischargingPower, _ = strconv.ParseFloat(p.Value, 64)
-					case "TotalExportActivePower":
-						TotalExportActivePower, _ = strconv.ParseFloat(p.Value, 64)
-					case "PurchasedPower":
-						PurchasedPower, _ = strconv.ParseFloat(p.Value, 64)
-					case "TotalDCPower":
-						TotalDcPower, _ = strconv.ParseFloat(p.Value, 64)
-					case "TotalLoadActivePower":
-						TotalLoadActivePower, _ = strconv.ParseFloat(p.Value, 64)
+				switch p.PointID {
+					case 13126:
+						// BatteryChargingPower
+						PVPowerToBattery, _ = strconv.ParseFloat(p.Value, 64)
+					case 13150:
+						// BatteryDischargingPower
+						BatteryPowerToLoad, _ = strconv.ParseFloat(p.Value, 64)
+					case 13121:
+						// TotalExportActivePower
+						PVPowerToGrid, _ = strconv.ParseFloat(p.Value, 64)
+					case 13149:
+						// PurchasedPower
+						GridPowerToLoad, _ = strconv.ParseFloat(p.Value, 64)
+					case 13003:
+						// TotalDcPower
+						PVPower, _ = strconv.ParseFloat(p.Value, 64)
+					case 13119:
+						// TotalLoadActivePower
+						LoadPower, _ = strconv.ParseFloat(p.Value, 64)
 
-					case "DailyBatteryChargingEnergyFromPv":
-						DailyBatteryChargingEnergyFromPv, _ = strconv.ParseFloat(p.Value, 64)
-					case "DailyBatteryDischargingEnergy":
+					case 13028:
+						// DailyBatteryChargingEnergy
+						// DailyBatteryChargingEnergy, _ = strconv.ParseFloat(p.Value, 64)
+					case 13174:
+						// DailyBatteryChargingEnergyFromPv
+						YieldBatteryCharge, _ = strconv.ParseFloat(p.Value, 64)
+					case 13029:
+						// DailyBatteryDischargingEnergy
 						DailyBatteryDischargingEnergy, _ = strconv.ParseFloat(p.Value, 64)
-					case "DailyFeedInEnergyPv":
-						DailyFeedInEnergyPv, _ = strconv.ParseFloat(p.Value, 64)
-					case "DailyPurchasedEnergy":
+					case 13173:
+						// DailyFeedInEnergyPv
+						YieldFeedIn, _ = strconv.ParseFloat(p.Value, 64)
+					case 13147:
+						// DailyPurchasedEnergy
 						DailyPurchasedEnergy, _ = strconv.ParseFloat(p.Value, 64)
+
+					case 13116:
+						// DailyLoadEnergyConsumptionFromPv
+						YieldSelfConsumption, _ = strconv.ParseFloat(p.Value, 64)
+					case 13122:
+						// DailyFeedInEnergy, _ = strconv.ParseFloat(p.Value, 64)
+					case 13134:
+						// TotalPvYield
+						TotalPvYield, _ = strconv.ParseFloat(p.Value, 64)
+
+					case 13199:
+						// Daily Load Energy Consumption
+						DailyTotalLoad, _ = strconv.ParseFloat(p.Value, 64)
+
+					case 13130:
+						// Total Load Energy Consumption
+						TotalEnergyConsumption, _ = strconv.ParseFloat(p.Value, 64)
 				}
+
+				// switch strings.ReplaceAll(p.PointName, " ", "") {
+				// 	case "BatteryChargingPower":
+				// 		BatteryChargingPower, _ = strconv.ParseFloat(p.Value, 64)
+				// 	case "BatteryDischargingPower":
+				// 		BatteryDischargingPower, _ = strconv.ParseFloat(p.Value, 64)
+				// 	case "TotalExportActivePower":
+				// 		TotalExportActivePower, _ = strconv.ParseFloat(p.Value, 64)
+				// 	case "PurchasedPower":
+				// 		PurchasedPower, _ = strconv.ParseFloat(p.Value, 64)
+				// 	case "TotalDCPower":
+				// 		TotalDcPower, _ = strconv.ParseFloat(p.Value, 64)
+				// 	case "TotalLoadActivePower":
+				// 		TotalLoadActivePower, _ = strconv.ParseFloat(p.Value, 64)
+				//
+				// 	case "DailyBatteryChargingEnergyFromPv":
+				// 		DailyBatteryChargingEnergyFromPv, _ = strconv.ParseFloat(p.Value, 64)
+				// 	case "DailyBatteryDischargingEnergy":
+				// 		DailyBatteryDischargingEnergy, _ = strconv.ParseFloat(p.Value, 64)
+				// 	case "DailyFeedInEnergyPv":
+				// 		DailyFeedInEnergyPv, _ = strconv.ParseFloat(p.Value, 64)
+				// 	case "DailyPurchasedEnergy":
+				// 		DailyPurchasedEnergy, _ = strconv.ParseFloat(p.Value, 64)
+				// }
 			}
 		}
 
@@ -394,13 +463,40 @@ func (e *EndPoint) GetData() api.Data {
 			GridPower			- TotalDcPower
 			GridToLoad			- PurchasedPower
 			GridToBattery		- ?
+
+			DailyLoadEnergyConsumptionFromPv - Self-consumption
+			DailyBatteryChargingEnergyFromPv - Battery charge
+			DailyFeedInEnergyPv				 - Feed-In
 		*/
 
+		YieldTotal := YieldSelfConsumption + YieldBatteryCharge + YieldFeedIn
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_daily_yield", "PV Daily Yield", YieldTotal, "kWh", len(ret.Entries)))
 
-		PVPower				:= TotalDcPower
-		PVPowerToBattery	:= BatteryChargingPower
-		PVPowerToLoad		:= TotalDcPower - BatteryChargingPower - TotalExportActivePower
-		PVPowerToGrid		:= TotalExportActivePower
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_self_consumption", "PV Self Consumption", YieldSelfConsumption, "kWh", len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_battery_charge", "PV Battery Charge", YieldBatteryCharge, "kWh", len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_feed_in", "PV Feed In", YieldFeedIn, "kWh", len(ret.Entries)))
+
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_self_consumption_percent", "PV Self Consumption Percent", getPercent(YieldSelfConsumption, YieldTotal), "%", len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_battery_charge_percent", "PV Battery Charge Percent", getPercent(YieldBatteryCharge, YieldTotal), "%", len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_feed_in_percent", "PV Feed In Percent", getPercent(YieldFeedIn, YieldTotal), "%", len(ret.Entries)))
+
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_total_yield", "PV Total Yield", TotalPvYield, "MWh", len(ret.Entries)))
+
+		DailyPvEnergy := DailyTotalLoad - DailyPurchasedEnergy
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "daily_total_energy", "Daily Total Energy", DailyTotalLoad, "kWh", len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "daily_pv_energy", "Daily PV Energy", DailyPvEnergy, "kWh", len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "daily_purchased_energy", "Daily Purchased Energy", DailyPurchasedEnergy, "kWh", len(ret.Entries)))
+
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "daily_pv_energy_percent", "Daily PV Energy Percent", getPercent(DailyPvEnergy, DailyTotalLoad), "%", len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "daily_purchased_energy_percent", "Daily Purchased Energy Percent", getPercent(DailyPurchasedEnergy, DailyTotalLoad), "%", len(ret.Entries)))
+
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "total_energy_consumption", "Total Energy Consumption", TotalEnergyConsumption, "MWh", len(ret.Entries)))
+
+
+		// PVPower				:= PVPower
+		// PVPowerToBattery	:= PVPowerToBattery
+		// PVPowerToGrid		:= PVPowerToGrid
+		PVPowerToLoad		:= PVPower - PVPowerToBattery - PVPowerToGrid
 		ret.Entries = append(ret.Entries, addState(ts, "pv_power_active", "PV Power Active", isActive(PVPower), len(ret.Entries)))
 		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_power", "PV Power", PVPower, "kW", len(ret.Entries)))
 
@@ -414,33 +510,33 @@ func (e *EndPoint) GetData() api.Data {
 		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_power_to_grid", "PV Power To Grid", PVPowerToGrid, "kW", len(ret.Entries)))
 
 
-		BatteryPower		:= lowerUpper(BatteryChargingPower, BatteryDischargingPower)
-		BatteryToLoad		:= BatteryDischargingPower
+		// BatteryToLoad		:= BatteryToLoad
+		BatteryPower		:= lowerUpper(PVPowerToBattery, BatteryPowerToLoad)
 		BatteryToGrid		:= 0.0
 		ret.Entries = append(ret.Entries, addState(ts, "battery_power_active", "Battery Power Active", isActive(BatteryPower), len(ret.Entries)))
 		ret.Entries = append(ret.Entries, addFloatValue(ts, "battery_power", "Battery Power", BatteryPower, "kW", len(ret.Entries)))
 
-		ret.Entries = append(ret.Entries, addState(ts, "battery_power_to_load_active", "Battery Power To Load Active", isActive(BatteryToLoad), len(ret.Entries)))
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "battery_power_to_load", "Battery Power To Load", BatteryToLoad, "kW", len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addState(ts, "battery_power_to_load_active", "Battery Power To Load Active", isActive(BatteryPowerToLoad), len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "battery_power_to_load", "Battery Power To Load", BatteryPowerToLoad, "kW", len(ret.Entries)))
 
 		ret.Entries = append(ret.Entries, addState(ts, "battery_power_to_grid_active", "Battery Power To Grid Active", isActive(BatteryToGrid), len(ret.Entries)))
 		ret.Entries = append(ret.Entries, addFloatValue(ts, "battery_power_to_grid", "Battery Power To Grid", BatteryToGrid, "kW", len(ret.Entries)))
 
 
-		GridPower			:= lowerUpper(TotalExportActivePower, PurchasedPower)
-		GridToLoad			:= PurchasedPower
+		// GridToLoad			:= GridToLoad
+		GridPower			:= lowerUpper(PVPowerToGrid, GridPowerToLoad)
 		GridToBattery		:= 0.0
 		ret.Entries = append(ret.Entries, addState(ts, "grid_power_active", "Grid Power Active", isActive(GridPower), len(ret.Entries)))
 		ret.Entries = append(ret.Entries, addFloatValue(ts, "grid_power", "Grid Power", GridPower, "kW", len(ret.Entries)))
 
-		ret.Entries = append(ret.Entries, addState(ts, "grid_power_to_load_active", "Grid Power To Load Active", isActive(GridToLoad), len(ret.Entries)))
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "grid_power_to_load", "Grid Power To Load", GridToLoad, "kW", len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addState(ts, "grid_power_to_load_active", "Grid Power To Load Active", isActive(GridPowerToLoad), len(ret.Entries)))
+		ret.Entries = append(ret.Entries, addFloatValue(ts, "grid_power_to_load", "Grid Power To Load", GridPowerToLoad, "kW", len(ret.Entries)))
 
 		ret.Entries = append(ret.Entries, addState(ts, "grid_power_to_battery_active", "Grid Power To Battery Active", isActive(GridToBattery), len(ret.Entries)))
 		ret.Entries = append(ret.Entries, addFloatValue(ts, "grid_power_to_battery", "Grid Power To Battery", GridToBattery, "kW", len(ret.Entries)))
 
 
-		LoadPower			:= TotalLoadActivePower
+		// LoadPower			:= LoadPower
 		ret.Entries = append(ret.Entries, addState(ts, "load_power_active", "Load Power Active", isActive(LoadPower), len(ret.Entries)))
 		ret.Entries = append(ret.Entries, addFloatValue(ts, "load_power", "Load Power", LoadPower, "kW", len(ret.Entries)))
 
@@ -527,8 +623,8 @@ func (e *EndPoint) GetData() api.Data {
 		// }
 
 		{
-			if DailyBatteryChargingEnergyFromPv > 0 {
-				value = 0 - DailyBatteryChargingEnergyFromPv
+			if YieldBatteryCharge > 0 {
+				value = 0 - YieldBatteryCharge
 			} else {
 				value = DailyBatteryDischargingEnergy
 			}
@@ -551,8 +647,8 @@ func (e *EndPoint) GetData() api.Data {
 		}
 
 		{
-			if DailyFeedInEnergyPv > 0 {
-				value = 0 - DailyFeedInEnergyPv
+			if YieldFeedIn > 0 {
+				value = 0 - YieldFeedIn
 			} else {
 				value = DailyPurchasedEnergy
 			}
@@ -584,6 +680,10 @@ func lowerUpper(lower float64, upper float64) float64 {
 		return 0 - lower
 	}
 	return upper
+}
+
+func getPercent(value float64, max float64) float64 {
+	return (value / max) * 100
 }
 
 
