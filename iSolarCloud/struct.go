@@ -126,18 +126,18 @@ func (sg *SunGrow) GetByJson(endpoint string, request string) api.EndPoint {
 		}
 
 		switch {
-		case sg.OutputType.IsNone():
+			case sg.OutputType.IsNone():
 
-		case sg.OutputType.IsFile():
-			sg.Error = ret.WriteDataFile()
+			case sg.OutputType.IsFile():
+				sg.Error = ret.WriteDataFile()
 
-		case sg.OutputType.IsRaw():
-			fmt.Println(ret.GetJsonData(true))
+			case sg.OutputType.IsRaw():
+				fmt.Println(ret.GetJsonData(true))
 
-		case sg.OutputType.IsJson():
-			fmt.Println(ret.GetJsonData(false))
+			case sg.OutputType.IsJson():
+				fmt.Println(ret.GetJsonData(false))
 
-		default:
+			default:
 		}
 	}
 	return ret

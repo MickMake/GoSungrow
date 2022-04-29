@@ -292,21 +292,32 @@ func Update1(newDay bool) error {
 
 		if newDay {
 			LogPrintDate("New day: Configuring %d entries in HASSIO.\n", len(data.Entries))
-			for _, r := range data.Entries {
+			for _, o := range data.Order {
+				r := data.Entries[o]
+
 				fmt.Printf("C")
 				re := mmHa.EntityConfig {
-					Type:        r.ValueType.Type,
-					Name:        r.ValueType.Id, // PointName,
+					Name:        r.Point.Id, // PointName,
 					SubName:     "",
-					ParentId:    r.ValueType.PsKey,
+					ParentId:    r.EndPoint,
 					ParentName:  "",
-					UniqueId:    r.PointId,
-					FullName:    r.ValueType.Description,
-					Units:       r.Unit,
-					ValueName:   r.PointId,
+					UniqueId:    r.Point.Id,
+					FullId:      r.Point.FullId,
+					Units:       r.Point.Unit,
+					ValueName:   r.Point.Name,
 					DeviceClass: "",
+					StateClass:  r.Point.Type,
 					Value:       r.Value,
+
+					// Icon:                   "",
+					// ValueTemplate:          "",
+					// LastReset:              "",
+					// LastResetValueTemplate: "",
 				}
+
+				// if re.LastResetValueTemplate != "" {
+				// 	fmt.Printf("HEY\n")
+				// }
 
 				Cmd.Error = Cmd.Mqtt.BinarySensorPublishConfig(re)
 				if Cmd.Error != nil {
@@ -322,19 +333,24 @@ func Update1(newDay bool) error {
 		}
 
 		LogPrintDate("Updating %d entries to HASSIO.\n", len(data.Entries))
-		for _, r := range data.Entries {
+		for _, o := range data.Order {
+			r := data.Entries[o]
+
 			fmt.Printf("U")
 			re := mmHa.EntityConfig {
-				Type:        r.ValueType.Type,
-				Name:        r.ValueType.Id, // PointName,
+				Name:        r.Point.Id, // PointName,
 				SubName:     "",
-				ParentId:    r.ValueType.PsKey,
+				ParentId:    r.EndPoint,
 				ParentName:  "",
-				UniqueId:    r.PointId,
-				FullName:    r.ValueType.Description,
-				Units:       r.Unit,
-				ValueName:   r.PointId,
+				UniqueId:    r.Point.Id,
+				// UniqueId:    r.Id,
+				FullId: r.Point.FullId,
+				// FullName:    r.Point.Name,
+				Units:       r.Point.Unit,
+				ValueName:   r.Point.Name,
+				// ValueName:   r.Id,
 				DeviceClass: "",
+				StateClass:  r.Point.Type,
 				Value:       r.Value,
 			}
 
@@ -369,20 +385,25 @@ func Update2(newDay bool) error {
 
 		if newDay {
 			LogPrintDate("New day: Configuring %d entries in HASSIO.\n", len(data.Entries))
-			for _, r := range data.Entries {
+			for _, o := range data.Order {
+				r := data.Entries[o]
+
 				fmt.Printf("C")
 
 				re := mmHa.EntityConfig {
-					Type:        r.ValueType.Type,
-					Name:        r.ValueType.Id, // PointName,
+					Name:        r.Point.Id, // PointName,
 					SubName:     "",
-					ParentId:    r.ValueType.PsKey,
+					ParentId:    r.EndPoint,
 					ParentName:  "",
-					UniqueId:    r.PointId,
-					FullName:    r.ValueType.Description,
-					Units:       r.Unit,
-					ValueName:   r.PointId,
+					UniqueId:    r.Point.Id,
+					// UniqueId:    r.Id,
+					FullId: r.Point.FullId,
+					// FullName:    r.Point.Name,
+					Units:       r.Point.Unit,
+					ValueName:   r.Point.Name,
+					// ValueName:   r.Id,
 					DeviceClass: "",
+					StateClass:  r.Point.Type,
 					Value:       r.Value,
 				}
 
@@ -400,20 +421,25 @@ func Update2(newDay bool) error {
 		}
 
 		LogPrintDate("Updating %d entries to HASSIO.\n", len(data.Entries))
-		for _, r := range data.Entries {
+		for _, o := range data.Order {
+			r := data.Entries[o]
+
 			fmt.Printf("U")
 
 			re := mmHa.EntityConfig {
-				Type:        r.ValueType.Type,
-				Name:        r.ValueType.Id, // PointName,
+				Name:        r.Point.Id, // PointName,
 				SubName:     "",
-				ParentId:    r.ValueType.PsKey,
+				ParentId:    r.EndPoint,
 				ParentName:  "",
-				UniqueId:    r.PointId,
-				FullName:    r.ValueType.Description,
-				Units:       r.Unit,
-				ValueName:   r.PointId,
+				UniqueId:    r.Point.Id,
+				// UniqueId:    r.Id,
+				FullId: r.Point.FullId,
+				// FullName:    r.Point.Name,
+				Units:       r.Point.Unit,
+				ValueName:   r.Point.Name,
+				// ValueName:   r.Id,
 				DeviceClass: "",
+				StateClass:  r.Point.Type,
 				Value:       r.Value,
 			}
 

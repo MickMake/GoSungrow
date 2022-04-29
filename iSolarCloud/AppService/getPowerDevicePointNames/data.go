@@ -19,6 +19,11 @@ const (
 	DeviceType11 = "11"
 	DeviceType14 = "14"
 	DeviceType17 = "17"
+	DeviceType23 = "23"
+	DeviceType26 = "26"
+	DeviceType37 = "37"
+	DeviceType41 = "41"
+	DeviceType47 = "47"
 )
 
 var DeviceTypes = []string{
@@ -30,6 +35,11 @@ var DeviceTypes = []string{
 	DeviceType11,
 	DeviceType14,
 	DeviceType17,
+	DeviceType23,
+	DeviceType26,
+	DeviceType37,
+	DeviceType41,
+	DeviceType47,
 }
 
 type RequestData struct {

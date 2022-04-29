@@ -10,7 +10,7 @@ const Url = "/v1/devService/getPowerDeviceModelTree"
 const Disabled = true
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
+	Id string `json:"id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

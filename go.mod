@@ -4,6 +4,7 @@ go 1.17
 
 require (
 	github.com/acarl005/textcol v0.0.0
+	github.com/davecgh/go-spew v1.1.1
 	github.com/eclipse/paho.mqtt.golang v1.3.5
 	github.com/go-co-op/gocron v1.13.0
 	github.com/go-git/go-billy/v5 v5.3.1

@@ -6,7 +6,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/davecgh/go-spew/spew"
 	"hash/fnv"
+	"runtime"
 	"strconv"
 
 	// "github.com/google/uuid"
@@ -211,25 +213,25 @@ func PrintHeader(i interface{}) string {
 	s := reflect.ValueOf(i) // .Elem()
 	typeOf := s.Type()
 	switch s.Kind().String() {
-	case "string":
-		ret = fmt.Sprintf("%v", s)
-	default:
-		for id := 0; id < s.NumField(); id++ {
-			// value := fmt.Sprintf("%v", s.Field(id).Interface())
-			// if value == "" {
-			//	continue
-			// }
-			ret += fmt.Sprintf("%s (%s),",
-				typeOf.Field(id).Name,
-				typeOf.Field(id).Tag.Get("json"),
-			)
-			// fmt.Printf("%d: %s %s = %v\n",
-			//	i,
-			//	typeOfT.Field(i).Name,
-			//	s.Field(i).Type(),
-			//	s.Field(i).Interface(),
-			// )
-		}
+		case "string":
+			ret = fmt.Sprintf("%v", s)
+		default:
+			for id := 0; id < s.NumField(); id++ {
+				// value := fmt.Sprintf("%v", s.Field(id).Interface())
+				// if value == "" {
+				//	continue
+				// }
+				ret += fmt.Sprintf("%s (%s),",
+					typeOf.Field(id).Name,
+					typeOf.Field(id).Tag.Get("json"),
+				)
+				// fmt.Printf("%d: %s %s = %v\n",
+				//	i,
+				//	typeOfT.Field(i).Name,
+				//	s.Field(i).Type(),
+				//	s.Field(i).Interface(),
+				// )
+			}
 	}
 
 	return ret
@@ -594,6 +596,73 @@ func GetFingerprint(ref interface{}) string {
 		// h := hash(GetRequestString(ref))
 		h := md5.Sum([]byte(GetRequestString(ref)))
 		ret = fmt.Sprintf("%x", h)
+	}
+
+	return ret
+}
+
+
+type DataStructureMap map[string]DataStructure
+type DataStructure struct {
+	Json string
+	PointId string
+	PointType string
+	PointUnit string
+	PointDevice string
+	PointName string
+}
+
+func GetCallerPackage(skip int) string {
+	var ret string
+	if pc, _, _, ok := runtime.Caller(skip); ok {
+		funcName := runtime.FuncForPC(pc).Name()
+		slash := strings.LastIndexByte(funcName, '/')
+		if slash < 0 {
+			slash = 0
+		}
+		dot := strings.IndexByte(funcName, '.')
+		ret = funcName[slash+1:dot]
+	}
+	return ret
+}
+
+func GetTagPointType(ref interface{}) DataStructureMap {
+	ret := make(DataStructureMap)
+
+	for range Only.Once {
+		// required := GetOptionsRequired(ref)
+
+		vo := reflect.ValueOf(ref)
+		to := reflect.TypeOf(ref)
+		spew.Dump(&vo)
+		spew.Dump(&to)
+
+		// Iterate over all available fields and read the tag value
+		for i := 0; i < vo.NumField(); i++ {
+			fieldTo := to.Field(i)
+			spew.Dump(&fieldTo)
+
+			// j := fieldTo.Tag.Get("json")
+			// pid := fieldTo.Tag.Get("json")
+
+			name := fieldTo.Name
+			foo := DataStructure{
+				Json:        fieldTo.Tag.Get("json"),
+				PointDevice: fieldTo.Tag.Get("PointDevice"),
+				PointId:     fieldTo.Tag.Get("PointId"),
+				PointName:   fieldTo.Tag.Get("PointName"),
+				PointUnit:   fieldTo.Tag.Get("PointUnit"),
+				PointType:   fieldTo.Tag.Get("PointType"),
+			}
+			ret[name] = foo
+
+			// fieldVo := vo.Field(i)
+			// value := fmt.Sprintf("%v", fieldVo.Interface())
+			// if value == "" {
+			// 	err = errors.New(fmt.Sprintf("option '%s' is empty", fieldTo.Name))
+			// 	break
+			// }
+		}
 	}
 
 	return ret

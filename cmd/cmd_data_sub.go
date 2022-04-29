@@ -95,7 +95,7 @@ func AttachCmdDataPoints(cmd *cobra.Command) *cobra.Command {
 	return cmd
 }
 
-func AttachCmdDataPointNames(cmd *cobra.Command) *cobra.Command {
+func AttachCmdDataTemplates(cmd *cobra.Command) *cobra.Command {
 	// ********************************************************************************
 	var c = &cobra.Command{
 		Use:                   "templates",
@@ -179,6 +179,28 @@ func AttachCmdDataPsDetails(cmd *cobra.Command) *cobra.Command {
 			return Cmd.SunGrow.GetPsDetails(args[0])
 		},
 		Args:                  cobra.RangeArgs(0, 1),
+	}
+	cmd.AddCommand(c)
+	c.Example = PrintExamples(c, "")
+
+	return cmd
+}
+
+func AttachCmdDataPointNames(cmd *cobra.Command) *cobra.Command {
+	// ********************************************************************************
+	var c = &cobra.Command{
+		Use:                   "point-names",
+		Aliases:               []string{"names"},
+		Short:                 fmt.Sprintf("Get iSolarCloud point names."),
+		Long:                  fmt.Sprintf("Get iSolarCloud point names."),
+		DisableFlagParsing:    false,
+		DisableFlagsInUseLine: false,
+		PreRunE:               Cmd.SunGrowArgs,
+		RunE:                  func(cmd *cobra.Command, args []string) error {
+			_ = SwitchOutput(cmd)
+			return Cmd.SunGrow.GetPointNames(args...)
+		},
+		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(c)
 	c.Example = PrintExamples(c, "")

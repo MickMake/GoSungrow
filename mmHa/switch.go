@@ -25,7 +25,7 @@ func (m *Mqtt) SwitchPublishConfig(config EntityConfig) error {
 
 		payload := Switch {
 			Device:                 device,
-			Name:                   JoinStrings(m.Device.Name, config.ParentName, config.FullName),
+			Name:                   JoinStrings(m.Device.Name, config.ParentName, config.FullId),
 			StateTopic:             JoinStringsForTopic(m.binarySensorPrefix, st, "state"),
 			CommandTopic:           JoinStringsForTopic(m.binarySensorPrefix, st, "cmd"),
 			UniqueId:               st,
@@ -34,6 +34,8 @@ func (m *Mqtt) SwitchPublishConfig(config EntityConfig) error {
 
 			PayloadOn:              "true",
 			PayloadOff:             "false",
+			StateOn:                "true",
+			StateOff:               "false",
 			ValueTemplate:          config.ValueTemplate,
 			Icon:                   config.Icon,
 
@@ -52,8 +54,6 @@ func (m *Mqtt) SwitchPublishConfig(config EntityConfig) error {
 			// Optimistic:             false,
 			// PayloadAvailable:       "",
 			// PayloadNotAvailable:    "",
-			// StateOff:               "",
-			// StateOn:                "",
 		}
 
 		ct := JoinStringsForTopic(m.binarySensorPrefix, st, "config")

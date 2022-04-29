@@ -13,7 +13,8 @@ import (
 type UnitValue struct {
 	Unit  string `json:"unit"`
 	Value string `json:"value"`
-	Point *Point `json:"point"`
+	ValueFloat float64 `json:"value_float,omitempty"`
+	ValueInt int64 `json:"value_int,omitempty"`
 }
 type UnitValues []UnitValue
 type UnitValueMap map[string]UnitValue

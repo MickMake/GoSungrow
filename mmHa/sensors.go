@@ -15,13 +15,16 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 			break
 		}
 
-		// LastReset := m.GetLastReset(config.UniqueId)
-		// LastResetValueTemplate := ""
-		// if LastReset != "" {
-		// 	LastResetValueTemplate = "{{ value_json.last_reset | as_datetime() }}"
+		// if config.LastReset == "" {
+		// 	config.LastReset = m.GetLastReset(config.UniqueId)
+		// }
+		// if config.LastReset != "" {
+		// 	if config.LastResetValueTemplate == "" {
+		// 		config.LastResetValueTemplate = "{{ value_json.last_reset | as_datetime() }}"
+		// 	}
 		// 	// LastResetValueTemplate = "{{ value_json.last_reset | int | timestamp_local | as_datetime }}"
 		// }
-		//
+
 		// switch config.Units {
 		// 	case "MW":
 		// 		fallthrough
@@ -76,10 +79,10 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 
 		payload := Sensor {
 			Device:                 device,
-			Name:                   JoinStrings(m.Device.Name, config.ParentName, config.FullName),
+			Name:                   JoinStrings(m.Device.Name, config.ParentName, config.FullId),
 			StateTopic:             JoinStringsForTopic(m.sensorPrefix, st, "state"),
 			// StateTopic:             m.GetSensorStateTopic(name, config.SubName),m.EntityPrefix, m.Device.FullName, config.SubName
-			StateClass:             "measurement",
+			StateClass:             config.StateClass,
 			UniqueId:               st,
 			UnitOfMeasurement:      config.Units,
 			DeviceClass:            config.DeviceClass,
@@ -129,7 +132,7 @@ func (m *Mqtt) SensorPublishValue(config EntityConfig) error {
 
 		st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
 		payload := MqttState {
-			LastReset: m.GetLastReset(config.UniqueId),
+			LastReset: m.GetLastReset(config.FullId),
 			Value:     config.Value,
 		}
 		st = JoinStringsForTopic(m.sensorPrefix, st, "state")
@@ -192,10 +195,10 @@ func (m *Mqtt) PublishSensorValues(configs []EntityConfig) error {
 			if topic == "" {
 				topic = JoinStringsForId(m.Device.Name, oid.ParentName, oid.Name)
 			}
-			if _, ok := cs[oid.Type]; !ok {
-				cs[oid.Type] = make(Fields)
+			if _, ok := cs[oid.StateClass]; !ok {
+				cs[oid.StateClass] = make(Fields)
 			}
-			cs[oid.Type][oid.ValueName] = oid.Value
+			cs[oid.StateClass][oid.ValueName] = oid.Value
 		}
 
 		for n, c := range cs {

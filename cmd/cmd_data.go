@@ -61,10 +61,11 @@ func AttachCmdData(cmd *cobra.Command) *cobra.Command {
 	AttachCmdDataTemplate(cmdDataGet)
 	AttachCmdDataTemplatePoints(cmdDataGet)
 	AttachCmdDataPoints(cmdDataGet)
-	AttachCmdDataPointNames(cmdDataGet)
+	AttachCmdDataTemplates(cmdDataGet)
 	AttachCmdDataMqtt(cmdDataGet)
 	AttachCmdDataRealTime(cmdDataGet)
 	AttachCmdDataPsDetails(cmdDataGet)
+	AttachCmdDataPointNames(cmdDataGet)
 
 	// ********************************************************************************
 	var cmdDataRaw = &cobra.Command{
@@ -85,7 +86,7 @@ func AttachCmdData(cmd *cobra.Command) *cobra.Command {
 	AttachCmdDataStats(cmdDataRaw)
 	AttachCmdDataTemplate(cmdDataRaw)
 	AttachCmdDataPoints(cmdDataRaw)
-	AttachCmdDataPointNames(cmdDataRaw)
+	AttachCmdDataTemplates(cmdDataRaw)
 	AttachCmdDataMqtt(cmdDataRaw)
 	AttachCmdDataRealTime(cmdDataRaw)
 	AttachCmdDataPsDetails(cmdDataRaw)
@@ -109,10 +110,11 @@ func AttachCmdData(cmd *cobra.Command) *cobra.Command {
 	AttachCmdDataStats(cmdDataSave)
 	AttachCmdDataTemplate(cmdDataSave)
 	AttachCmdDataPoints(cmdDataSave)
-	AttachCmdDataPointNames(cmdDataSave)
+	AttachCmdDataTemplates(cmdDataSave)
 	AttachCmdDataMqtt(cmdDataSave)
 	AttachCmdDataRealTime(cmdDataSave)
 	AttachCmdDataPsDetails(cmdDataSave)
+	AttachCmdDataPointNames(cmdDataSave)
 
 	// ********************************************************************************
 	var cmdDataGraph = &cobra.Command{

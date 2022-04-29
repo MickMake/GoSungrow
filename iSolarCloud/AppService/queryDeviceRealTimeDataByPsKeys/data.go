@@ -108,8 +108,8 @@ func (e *EndPoint) GetDataTable() output.Table {
 	return table
 }
 
-func (e *EndPoint) GetData() api.Data {
-	var ret api.Data
+func (e *EndPoint) GetData() api.DataMap {
+	var ret api.DataMap
 
 	// for range Only.Once {
 	// 	index := 0

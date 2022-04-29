@@ -11,7 +11,8 @@ import (
 type EndPointName string
 
 type EndPointStruct struct {
-	ApiRoot Web `json:"-"`
+	ApiRoot        Web `json:"-"`
+	RawResponse    []byte
 
 	Area           AreaName     `json:"area"`
 	Name           EndPointName `json:"name"`
@@ -98,6 +99,18 @@ func (ep EndPointStruct) String() string {
 		ret += fmt.Sprintf("Response JSON:\t%s\n",
 			foo,
 		)
+	}
+	return ret
+}
+
+func (ep EndPointStruct) ResponseAsJson(raw bool, r interface{}) output.Json {
+	var ret output.Json
+	for range Only.Once {
+		if raw {
+			ret = output.GetAsPrettyJson(r)
+			break
+		}
+		ret = output.GetAsPrettyJson(r)
 	}
 	return ret
 }

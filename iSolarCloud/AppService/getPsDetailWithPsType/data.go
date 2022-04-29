@@ -196,7 +196,7 @@ func (e *EndPoint) GetDataTable() output.Table {
 				_ = table.AddRow(
 					now,
 					api.NameDevicePoint(e.Response.ResultData.PsPsKey, n),
-					p.Description,
+					p.Name,
 					keys[n].Value,
 					p.Unit,
 					keys[n].Unit,
@@ -207,7 +207,7 @@ func (e *EndPoint) GetDataTable() output.Table {
 			_ = table.AddRow(
 				now,
 				api.NameDevicePoint(e.Response.ResultData.PsPsKey, n),
-				api.UpperCase(n),
+				api.PointToName(n),
 				keys[n].Value,
 				keys[n].Unit,
 				keys[n].Unit,
@@ -226,7 +226,7 @@ func (e *EndPoint) GetDataTable() output.Table {
 					_ = table.AddRow(
 						now,
 						api.NameDevicePoint(sid.PsKey, n),
-						p.Description,
+						p.Name,
 						keys[n].Value,
 						p.Unit,
 						keys[n].Unit,
@@ -237,7 +237,7 @@ func (e *EndPoint) GetDataTable() output.Table {
 				_ = table.AddRow(
 					now,
 					api.NameDevicePoint(sid.PsKey, n),
-					api.UpperCase(n),
+					api.PointToName(n),
 					keys[n].Value,
 					keys[n].Unit,
 					keys[n].Unit,
@@ -261,8 +261,8 @@ func (e *EndPoint) GetDataTable() output.Table {
 	return table
 }
 
-func (e *EndPoint) GetData() api.Data {
-	var ret api.Data
+func (e *EndPoint) GetData() api.DataMap {
+	var ret api.DataMap
 
 	// for range Only.Once {
 	// 	index := 0

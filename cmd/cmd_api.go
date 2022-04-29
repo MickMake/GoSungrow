@@ -183,7 +183,16 @@ func cmdApiGetFunc(_ *cobra.Command, args []string) {
 			break
 		}
 
-		Cmd.Error = Cmd.SunGrow.GetByJson(args[0], args[1]).GetError()
+		ep := Cmd.SunGrow.GetByJson(args[0], args[1])
+		if Cmd.SunGrow.Error != nil {
+			Cmd.Error = Cmd.SunGrow.Error
+			break
+		}
+		if Cmd.Error != nil {
+			break
+		}
+
+		Cmd.Error = ep.GetError()
 		if Cmd.Error != nil {
 			break
 		}
@@ -200,7 +209,16 @@ func cmdApiRawFunc(_ *cobra.Command, args []string) {
 			break
 		}
 
-		Cmd.Error = Cmd.SunGrow.GetByJson(args[0], args[1]).GetError()
+		ep := Cmd.SunGrow.GetByJson(args[0], args[1])
+		if Cmd.SunGrow.Error != nil {
+			Cmd.Error = Cmd.SunGrow.Error
+			break
+		}
+		if Cmd.Error != nil {
+			break
+		}
+
+		Cmd.Error = ep.GetError()
 		if Cmd.Error != nil {
 			break
 		}
@@ -217,7 +235,16 @@ func cmdApiSaveFunc(_ *cobra.Command, args []string) {
 			break
 		}
 
-		Cmd.Error = Cmd.SunGrow.GetByJson(args[0], args[1]).GetError()
+		ep := Cmd.SunGrow.GetByJson(args[0], args[1])
+		if Cmd.SunGrow.Error != nil {
+			Cmd.Error = Cmd.SunGrow.Error
+			break
+		}
+		if Cmd.Error != nil {
+			break
+		}
+
+		Cmd.Error = ep.GetError()
 		if Cmd.Error != nil {
 			break
 		}

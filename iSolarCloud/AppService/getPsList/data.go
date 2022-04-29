@@ -6,7 +6,6 @@ import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
-	"strconv"
 	"time"
 )
 
@@ -27,35 +26,35 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		AlarmCount                int64         `json:"alarm_count"`
-		AlarmDevCount             int64         `json:"alarm_dev_count"`
-		AreaID                    interface{}   `json:"area_id"`
-		AreaType                  interface{}   `json:"area_type"`
-		ArrearsStatus             int64         `json:"arrears_status"`
-		BuildDate                 string        `json:"build_date"`
-		BuildStatus               int64         `json:"build_status"`
-		Co2Reduce                 api.UnitValue `json:"co2_reduce"`
-		Co2ReduceTotal            api.UnitValue `json:"co2_reduce_total"`
-		CurrPower                 api.UnitValue `json:"curr_power"`
-		DailyIrradiation          api.UnitValue `json:"daily_irradiation"`
-		DailyIrradiationVirgin    interface{}   `json:"daily_irradiation_virgin"`
-		DesignCapacity            string        `json:"design_capacity"`
-		DesignCapacityUnit        string        `json:"design_capacity_unit"`
-		DesignCapacityVirgin      float64       `json:"design_capacity_virgin"`
-		EquivalentHour            api.UnitValue `json:"equivalent_hour"`
-		EsDisenergy               api.UnitValue `json:"es_disenergy"`
-		EsEnergy                  api.UnitValue `json:"es_energy"`
-		EsPower                   api.UnitValue `json:"es_power"`
-		EsTotalDisenergy          api.UnitValue `json:"es_total_disenergy"`
-		EsTotalEnergy             api.UnitValue `json:"es_total_energy"`
-		ExpectInstallDate         string        `json:"expect_install_date"`
-		FaultAlarmOfflineDevCount int64         `json:"fault_alarm_offline_dev_count"`
-		FaultCount                int64         `json:"fault_count"`
-		FaultDevCount             int64         `json:"fault_dev_count"`
-		GcjLatitude               string        `json:"gcj_latitude"`
-		GcjLongitude              string        `json:"gcj_longitude"`
-		GprsLatitude              interface{}   `json:"gprs_latitude"`
-		GprsLongitude             interface{}   `json:"gprs_longitude"`
+		AlarmCount                int64         `json:"alarm_count" PointId:"alarm_count" PointType:"PointTypeBoot"`
+		AlarmDevCount             int64         `json:"alarm_dev_count" PointId:"alarm_dev_count" PointType:"PointTypeBoot"`
+		AreaID                    interface{}   `json:"area_id" PointId:"area_id" PointType:""`
+		AreaType                  interface{}   `json:"area_type" PointId:"area_type" PointType:""`
+		ArrearsStatus             int64         `json:"arrears_status" PointId:"arrears_status" PointType:""`
+		BuildDate                 string        `json:"build_date" PointId:"build_date" PointType:""`
+		BuildStatus               int64         `json:"build_status" PointId:"build_status" PointType:""`
+		Co2Reduce                 api.UnitValue `json:"co2_reduce" PointId:"co2_reduce" PointType:""`
+		Co2ReduceTotal            api.UnitValue `json:"co2_reduce_total" PointId:"co2_reduce_total" PointType:"PointTypeTotal"`
+		CurrPower                 api.UnitValue `json:"curr_power" PointId:"curr_power" PointType:""`
+		DailyIrradiation          api.UnitValue `json:"daily_irradiation" PointId:"daily_irradiation" PointType:"PointTypeDaily"`
+		DailyIrradiationVirgin    interface{}   `json:"daily_irradiation_virgin" PointId:"daily_irradiation_virgin" PointType:"PointTypeDaily"`
+		DesignCapacity            string        `json:"design_capacity" PointId:"design_capacity" PointType:""`
+		DesignCapacityUnit        string        `json:"design_capacity_unit" PointId:"design_capacity_unit" PointType:""`
+		DesignCapacityVirgin      float64       `json:"design_capacity_virgin" PointId:"design_capacity_virgin" PointType:""`
+		EquivalentHour            api.UnitValue `json:"equivalent_hour" PointId:"equivalent_hour" PointType:"PointTypeDaily"`
+		EsDisenergy               api.UnitValue `json:"es_discharge_energy" PointId:"es_discharge_energy" PointAlias:"p83089" PointType:""`
+		EsEnergy                  api.UnitValue `json:"es_energy" PointId:"es_energy" PointAlias:"p83120" PointType:""`
+		EsPower                   api.UnitValue `json:"es_power" PointId:"es_power" PointAlias:"p83081" PointType:""`
+		EsTotalDisenergy          api.UnitValue `json:"es_total_discharge_energy" PointId:"es_total_discharge_energy" PointAlias:"p83095" PointType:"PointTypeTotal"`
+		EsTotalEnergy             api.UnitValue `json:"es_total_energy" PointId:"es_total_energy" PointAlias:"p83127" PointType:"PointTypeTotal"`
+		ExpectInstallDate         string        `json:"expect_install_date" PointId:"expect_install_date" PointType:""`
+		FaultAlarmOfflineDevCount int64         `json:"fault_alarm_offline_dev_count" PointId:"fault_alarm_offline_dev_count" PointType:""`
+		FaultCount                int64         `json:"fault_count" PointId:"fault_count" PointType:""`
+		FaultDevCount             int64         `json:"fault_dev_count" PointId:"fault_dev_count" PointType:""`
+		GcjLatitude               string        `json:"gcj_latitude" PointId:"gcj_latitude" PointType:""`
+		GcjLongitude              string        `json:"gcj_longitude" PointId:"gcj_longitude" PointType:""`
+		GprsLatitude              interface{}   `json:"gprs_latitude" PointId:"gprs_latitude" PointType:""`
+		GprsLongitude             interface{}   `json:"gprs_longitude" PointId:"gprs_longitude" PointType:""`
 		Images                    []struct {
 			FileID      int64       `json:"file_id"`
 			ID          int64       `json:"id"`
@@ -66,90 +65,90 @@ type ResultData struct {
 			PsID        int64       `json:"ps_id"`
 			PsUnitUUID  interface{} `json:"ps_unit_uuid"`
 		} `json:"images"`
-		InstallDate            string        `json:"install_date"`
-		InstalledPowerMap      api.UnitValue `json:"installed_power_map"`
-		InstalledPowerVirgin   float64       `json:"installed_power_virgin"`
-		InstallerAlarmCount    int64         `json:"installer_alarm_count"`
-		InstallerFaultCount    int64         `json:"installer_fault_count"`
-		InstallerPsFaultStatus int64         `json:"installer_ps_fault_status"`
-		IsBankPs               int64         `json:"is_bank_ps"`
-		IsTuv                  int64         `json:"is_tuv"`
-		JoinYearInitElec       float64       `json:"join_year_init_elec"`
-		Latitude               float64       `json:"latitude"`
-		Location               string        `json:"location"`
-		Longitude              float64       `json:"longitude"`
-		MapLatitude            string        `json:"map_latitude"`
-		MapLongitude           string        `json:"map_longitude"`
-		MlpeFlag               int64         `json:"mlpe_flag"`
-		Nmi                    interface{}   `json:"nmi"`
-		OfflineDevCount        int64         `json:"offline_dev_count"`
-		OperateYear            interface{}   `json:"operate_year"`
-		OperationBusName       interface{}   `json:"operation_bus_name"`
-		OwnerAlarmCount        int64         `json:"owner_alarm_count"`
-		OwnerFaultCount        int64         `json:"owner_fault_count"`
-		OwnerPsFaultStatus     int64         `json:"owner_ps_fault_status"`
-		P83022y                string        `json:"p83022y"`
-		P83046                 interface{}   `json:"p83046"`
-		P83048                 interface{}   `json:"p83048"`
-		P83049                 interface{}   `json:"p83049"`
-		P83050                 interface{}   `json:"p83050"`
-		P83051                 interface{}   `json:"p83051"`
-		P83054                 interface{}   `json:"p83054"`
-		P83055                 interface{}   `json:"p83055"`
-		P83067                 interface{}   `json:"p83067"`
-		P83070                 interface{}   `json:"p83070"`
-		P83076                 float64       `json:"p83076"`
-		P83077                 float64       `json:"p83077"`
-		P83081                 float64       `json:"p83081"`
-		P83089                 float64       `json:"p83089"`
-		P83095                 float64       `json:"p83095"`
-		P83118                 float64       `json:"p83118"`
-		P83120                 float64       `json:"p83120"`
-		P83127                 float64       `json:"p83127"`
-		ParamCo2               float64       `json:"param_co2"`
-		ParamCoal              float64       `json:"param_coal"`
-		ParamIncome            float64       `json:"param_income"`
-		ParamMeter             float64       `json:"param_meter"`
-		ParamNox               float64       `json:"param_nox"`
-		ParamPowder            float64       `json:"param_powder"`
-		ParamSo2               float64       `json:"param_so2"`
-		ParamTree              float64       `json:"param_tree"`
-		ParamWater             float64       `json:"param_water"`
-		PrScale                string        `json:"pr_scale"`
-		Producer               interface{}   `json:"producer"`
-		PsCountryID            int64         `json:"ps_country_id"`
-		PsFaultStatus          int64         `json:"ps_fault_status"`
-		PsHealthStatus         string        `json:"ps_health_status"`
-		PsHolder               string        `json:"ps_holder"`
-		PsID                   int64         `json:"ps_id"`
-		PsIsNotInit            string        `json:"ps_is_not_init"`
-		PsName                 string        `json:"ps_name"`
-		PsShortName            string        `json:"ps_short_name"`
-		PsStatus               int64         `json:"ps_status"`
-		PsTimezone             string        `json:"ps_timezone"`
-		PsType                 int64         `json:"ps_type"`
-		PvEnergy               api.UnitValue `json:"pv_energy"`
-		PvPower                api.UnitValue `json:"pv_power"`
-		Radiation              api.UnitValue `json:"radiation"`
-		RadiationVirgin        interface{}   `json:"radiation_virgin"`
-		RecoreCreateTime       string        `json:"recore_create_time"`
-		SafeStartDate          string        `json:"safe_start_date"`
-		ShareType              string        `json:"share_type"`
-		ShippingAddress        string        `json:"shipping_address"`
-		ShippingZipCode        string        `json:"shipping_zip_code"`
-		TodayEnergy            api.UnitValue `json:"today_energy"`
-		TodayIncome            api.UnitValue `json:"today_income"`
-		TotalCapcity           api.UnitValue `json:"total_capcity"`
-		TotalEnergy            api.UnitValue `json:"total_energy"`
-		TotalIncome            api.UnitValue `json:"total_income"`
-		TotalInitCo2Accelerate float64       `json:"total_init_co2_accelerate"`
-		TotalInitElec          float64       `json:"total_init_elec"`
-		TotalInitProfit        float64       `json:"total_init_profit"`
-		UseEnergy              api.UnitValue `json:"use_energy"`
-		ValidFlag              int64         `json:"valid_flag"`
-		WgsLatitude            float64       `json:"wgs_latitude"`
-		WgsLongitude           float64       `json:"wgs_longitude"`
-		ZipCode                string        `json:"zip_code"`
+		InstallDate            string        `json:"install_date" PointId:"install_date" PointType:""`
+		InstalledPowerMap      api.UnitValue `json:"installed_power_map" PointId:"installed_power_map" PointType:""`
+		InstalledPowerVirgin   float64       `json:"installed_power_virgin" PointId:"installed_power_virgin" PointType:""`
+		InstallerAlarmCount    int64         `json:"installer_alarm_count" PointId:"installer_alarm_count" PointType:""`
+		InstallerFaultCount    int64         `json:"installer_fault_count" PointId:"installer_fault_count" PointType:""`
+		InstallerPsFaultStatus int64         `json:"installer_ps_fault_status" PointId:"installer_ps_fault_status" PointType:""`
+		IsBankPs               int64         `json:"is_bank_ps" PointId:"is_bank_ps" PointType:""`
+		IsTuv                  int64         `json:"is_tuv" PointId:"is_tuv" PointType:""`
+		JoinYearInitElec       float64       `json:"join_year_init_elec" PointId:"join_year_init_elec" PointType:""`
+		Latitude               float64       `json:"latitude" PointId:"latitude" PointType:""`
+		Location               string        `json:"location" PointId:"location" PointType:""`
+		Longitude              float64       `json:"longitude" PointId:"longitude" PointType:""`
+		MapLatitude            string        `json:"map_latitude" PointId:"map_latitude" PointType:""`
+		MapLongitude           string        `json:"map_longitude" PointId:"map_longitude" PointType:""`
+		MlpeFlag               int64         `json:"mlpe_flag" PointId:"mlpe_flag" PointType:""`
+		Nmi                    interface{}   `json:"nmi" PointId:"nmi" PointType:""`
+		OfflineDevCount        int64         `json:"offline_dev_count" PointId:"offline_dev_count" PointType:""`
+		OperateYear            interface{}   `json:"operate_year" PointId:"operate_year" PointType:""`
+		OperationBusName       interface{}   `json:"operation_bus_name" PointId:"operation_bus_name" PointType:""`
+		OwnerAlarmCount        int64         `json:"owner_alarm_count" PointId:"owner_alarm_count" PointType:""`
+		OwnerFaultCount        int64         `json:"owner_fault_count" PointId:"owner_fault_count" PointType:""`
+		OwnerPsFaultStatus     int64         `json:"owner_ps_fault_status" PointId:"owner_ps_fault_status" PointType:""`
+		P83022y                string        `json:"p83022y" PointId:"P83022" PointType:""`
+		P83046                 interface{}   `json:"p83046" PointId:"p83046" PointType:""`
+		P83048                 interface{}   `json:"p83048" PointId:"p83048" PointType:""`
+		P83049                 interface{}   `json:"p83049" PointId:"p83049" PointType:""`
+		P83050                 interface{}   `json:"p83050" PointId:"p83050" PointType:""`
+		P83051                 interface{}   `json:"p83051" PointId:"p83051" PointType:""`
+		P83054                 interface{}   `json:"p83054" PointId:"p83054" PointType:""`
+		P83055                 interface{}   `json:"p83055" PointId:"p83055" PointType:""`
+		P83067                 interface{}   `json:"p83067" PointId:"p83067" PointType:""`
+		P83070                 interface{}   `json:"p83070" PointId:"p83070" PointType:""`
+		P83076                 float64       `json:"p83076" PointId:"p83076" PointType:""`		// Dupe of PvPower
+		P83077                 float64       `json:"p83077" PointId:"p83077" PointType:""`
+		P83081                 float64       `json:"p83081" PointId:"p83081" PointType:""`		// Dupe of EsPower
+		P83089                 float64       `json:"p83089" PointId:"p83089" PointType:""`		// Dupe of EsDisenergy
+		P83095                 float64       `json:"p83095" PointId:"p83095" PointType:""`		// Dupe of EsTotalDisenergy
+		P83118                 float64       `json:"p83118" PointId:"p83118" PointType:""`		// Dupe of UseEnergy
+		P83120                 float64       `json:"p83120" PointId:"p83120" PointType:""`		// Dupe of EsEnergy
+		P83127                 float64       `json:"p83127" PointId:"p83127" PointType:""`		// Dupe of EsTotalEnergy
+		ParamCo2               float64       `json:"param_co2" PointId:"param_co2" PointType:""`
+		ParamCoal              float64       `json:"param_coal" PointId:"param_coal" PointType:""`
+		ParamIncome            float64       `json:"param_income" PointId:"param_income" PointType:""`
+		ParamMeter             float64       `json:"param_meter" PointId:"param_meter" PointType:""`
+		ParamNox               float64       `json:"param_nox" PointId:"param_nox" PointType:""`
+		ParamPowder            float64       `json:"param_powder" PointId:"param_powder" PointType:""`
+		ParamSo2               float64       `json:"param_so2" PointId:"param_so2" PointType:""`
+		ParamTree              float64       `json:"param_tree" PointId:"param_tree" PointType:""`
+		ParamWater             float64       `json:"param_water" PointId:"param_water" PointType:""`
+		PrScale                string        `json:"pr_scale" PointId:"pr_scale" PointType:""`
+		Producer               interface{}   `json:"producer" PointId:"producer" PointType:""`
+		PsCountryID            int64         `json:"ps_country_id" PointId:"ps_country_id" PointType:""`
+		PsFaultStatus          int64         `json:"ps_fault_status" PointId:"ps_fault_status" PointType:""`
+		PsHealthStatus         string        `json:"ps_health_status" PointId:"ps_health_status" PointType:""`
+		PsHolder               string        `json:"ps_holder" PointId:"ps_holder" PointType:""`
+		PsID                   int64         `json:"ps_id" PointId:"ps_id" PointType:""`
+		PsIsNotInit            string        `json:"ps_is_not_init" PointId:"ps_is_not_init" PointType:""`
+		PsName                 string        `json:"ps_name" PointId:"ps_name" PointType:""`
+		PsShortName            string        `json:"ps_short_name" PointId:"ps_short_name" PointType:""`
+		PsStatus               int64         `json:"ps_status" PointId:"ps_status" PointType:""`
+		PsTimezone             string        `json:"ps_timezone" PointId:"ps_timezone" PointType:""`
+		PsType                 int64         `json:"ps_type" PointId:"ps_type" PointType:""`
+		PvEnergy               api.UnitValue `json:"pv_energy" PointId:"pv_energy" PointAlias:"p83077" PointType:""`
+		PvPower                api.UnitValue `json:"pv_power" PointId:"pv_power" PointAlias:"p83076" PointType:""`
+		Radiation              api.UnitValue `json:"radiation" PointId:"radiation" PointType:""`
+		RadiationVirgin        interface{}   `json:"radiation_virgin" PointId:"radiation_virgin" PointType:""`
+		RecoreCreateTime       string        `json:"recore_create_time" PointId:"recore_create_time" PointType:""`
+		SafeStartDate          string        `json:"safe_start_date" PointId:"safe_start_date" PointType:""`
+		ShareType              string        `json:"share_type" PointId:"share_type" PointType:""`
+		ShippingAddress        string        `json:"shipping_address" PointId:"shipping_address" PointType:""`
+		ShippingZipCode        string        `json:"shipping_zip_code" PointId:"shipping_zip_code" PointType:""`
+		TodayEnergy            api.UnitValue `json:"today_energy" PointId:"today_energy" PointType:"PointTypeDaily"`
+		TodayIncome            api.UnitValue `json:"today_income" PointId:"today_income" PointType:"PointTypeDaily"`
+		TotalCapcity           api.UnitValue `json:"total_capacity" PointId:"total_capacity" PointType:"PointTypeTotal"`
+		TotalEnergy            api.UnitValue `json:"total_energy" PointId:"total_energy" PointType:"PointTypeTotal"`
+		TotalIncome            api.UnitValue `json:"total_income" PointId:"total_income" PointType:"PointTypeTotal"`
+		TotalInitCo2Accelerate float64       `json:"total_init_co2_accelerate" PointId:"total_init_co2_accelerate" PointType:"PointTypeTotal"`
+		TotalInitElec          float64       `json:"total_init_elec" PointId:"total_init_elec" PointType:"PointTypeTotal"`
+		TotalInitProfit        float64       `json:"total_init_profit" PointId:"total_init_profit" PointType:"PointTypeTotal"`
+		UseEnergy              api.UnitValue `json:"use_energy" PointId:"use_energy" PointAlias:"p83118" PointType:""`
+		ValidFlag              int64         `json:"valid_flag" PointId:"valid_flag" PointType:""`
+		WgsLatitude            float64       `json:"wgs_latitude" PointId:"wgs_latitude" PointType:""`
+		WgsLongitude           float64       `json:"wgs_longitude" PointId:"wgs_longitude" PointType:""`
+		ZipCode                string        `json:"zip_code" PointId:"zip_code" PointType:""`
 	} `json:"pageList"`
 	RowCount int64 `json:"rowCount"`
 }
@@ -239,12 +238,12 @@ func (e *EndPoint) GetPsId() int64 {
 	return e.Response.ResultData.GetPsId()
 }
 
-func (e *EndPoint) GetData() api.Data {
+func (e *EndPoint) GetData() api.DataMap {
 	return e.Response.ResultData.GetData()
 }
 
-func (e *ResultData) GetData() api.Data {
-	var ret api.Data
+func (e *ResultData) GetData() api.DataMap {
+	entries := api.NewDataMap()
 
 	for range Only.Once {
 		i := len(e.PageList)
@@ -252,50 +251,51 @@ func (e *ResultData) GetData() api.Data {
 			break
 		}
 
-		now := api.NewDateTime(time.Now().Round(5 * time.Minute).Format(api.DtLayoutZeroSeconds))
+		// now := api.NewDateTime(time.Now().Round(5 * time.Minute).Format(api.DtLayoutZeroSeconds))
 
 		for _, p := range e.PageList {
-			psId := strconv.FormatInt(p.PsID, 10)
+			// psId := strconv.FormatInt(p.PsID, 10)
+			entries.StructToPoints("", p)
 
-			ret.Entries = append(ret.Entries, add(now, psId, "p83077", "Pv Energy",					p.PvEnergy, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, add(now, psId, "p83089", "Es Discharge Energy",		p.EsDisenergy, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, add(now, psId, "p83095", "Es Total Discharge Energy",	p.EsTotalDisenergy, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, add(now, psId, "p83118", "Use Energy", 				p.UseEnergy, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, add(now, psId, "p83120", "Es Energy", 				p.EsEnergy, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, add(now, psId, "p83127", "Es Total Energy", 			p.EsTotalEnergy, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, add(now, psId, "p83076", "Pv Power", 					p.PvPower, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, add(now, psId, "p83081", "Es Power", 					p.EsPower, len(ret.Entries)))
-
-			ret.Entries = append(ret.Entries, add(now, psId, "co2_reduce", "Co2 Reduce", 					p.Co2Reduce, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, add(now, psId, "co2_reduce_total", "Co2 Reduce Total", 		p.Co2ReduceTotal, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, add(now, psId, "curr_power", "Curr Power", 					p.CurrPower, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, add(now, psId, "daily_irradiation", "Daily Irradiation", 		p.DailyIrradiation, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, add(now, psId, "equivalent_hour", "Equivalent Hour", 			p.EquivalentHour, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, add(now, psId, "installed_power_map", "Installed Power Map",	p.InstalledPowerMap, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, add(now, psId, "radiation", "Radiation", 						p.Radiation, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, add(now, psId, "today_energy", "Today Energy", 				p.TodayEnergy, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, add(now, psId, "today_income", "Today Income", 				p.TodayIncome, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, add(now, psId, "total_capacity", "Total Capacity", 			p.TotalCapcity, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, add(now, psId, "total_energy", "Total Energy", 				p.TotalEnergy, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, add(now, psId, "total_income", "Total Income", 				p.TotalIncome, len(ret.Entries)))
-
-			ret.Entries = append(ret.Entries, addValue(now, psId, "build_date", "Build Date",			p.BuildDate, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, addIntValue(now, psId, "build_status", "Build Status",	p.BuildStatus, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, addFloatValue(now, psId, "latitude", "Latitude",			p.Latitude, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, addFloatValue(now, psId, "longitude", "Longitude",		p.Longitude, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, addValue(now, psId, "location", "Location",				p.Location, len(ret.Entries)))
-
-			ret.Entries = append(ret.Entries, addIntValue(now, psId, "installer_ps_fault_status", "Installer PS Fault Status",	p.InstallerPsFaultStatus, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, addIntValue(now, psId, "owner_ps_fault_status", "Owner PS Fault Status",			p.OwnerPsFaultStatus, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, addIntValue(now, psId, "ps_fault_status", "PS Fault Status",						p.PsFaultStatus, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, addValue(now, psId, "ps_health_status", "PS Health Status",						p.PsHealthStatus, len(ret.Entries)))
-
-			ret.Entries = append(ret.Entries, addValue(now, psId, "ps_holder", "PS Holder",			p.PsHolder, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, addIntValue(now, psId, "ps_id", "PS Id",				p.PsID, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, addValue(now, psId, "ps_name", "PS Name",				p.PsName, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, addValue(now, psId, "ps_short_name", "PS Short Name",	p.PsShortName, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, addIntValue(now, psId, "ps_status", "PS Status",		p.PsStatus, len(ret.Entries)))
-			ret.Entries = append(ret.Entries, addIntValue(now, psId, "ps_type", "PS Type",			p.PsType, len(ret.Entries)))
+			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"p83077"}, now, p.PvEnergy.Value)
+			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"p83089"}, now, p.EsDisenergy.Value)
+			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"p83095"}, now, p.EsTotalDisenergy.Value)
+			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"p83118"}, now, p.UseEnergy.Value)
+			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"p83120"}, now, p.EsEnergy.Value)
+			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"p83127"}, now, p.EsTotalEnergy.Value)
+			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"p83076"}, now, p.PvPower.Value)
+			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"p83081"}, now, p.EsPower.Value)
+			//
+			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"co2_reduce", Unit:p.Co2Reduce.Unit}, now, p.Co2Reduce.Value)
+			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"co2_reduce_total", Unit:p.Co2ReduceTotal.Unit}, now, p.Co2ReduceTotal.Value)
+			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"curr_power", Unit:p.CurrPower.Unit}, now, p.CurrPower.Value)
+			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"daily_irradiation", Unit:p.DailyIrradiation.Unit}, now, p.DailyIrradiation.Value)
+			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"equivalent_hour", Unit:p.EquivalentHour.Unit}, now, p.EquivalentHour.Value)
+			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"installed_power_map", Unit:p.InstalledPowerMap.Unit}, now, p.InstalledPowerMap.Value)
+			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"radiation", Unit:p.Radiation.Unit}, now, p.Radiation.Value)
+			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"today_energy", Unit:p.TodayEnergy.Unit}, now, p.TodayEnergy.Value)
+			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"today_income", Unit:p.TodayIncome.Unit}, now, p.TodayIncome.Value)
+			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"total_capacity", Unit:p.TotalCapcity.Unit}, now, p.TotalCapcity.Value)
+			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"total_energy", Unit:p.TotalEnergy.Unit}, now, p.TotalEnergy.Value)
+			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"total_income", Unit:p.TotalIncome.Unit}, now, p.TotalIncome.Value)
+			//
+			// entries.AddString(now, psId, "build_date", "", p.BuildDate)
+			// entries.AddInt(now, psId, "build_status", "", p.BuildStatus)
+			// entries.AddFloat(now, psId, "latitude", "", p.Latitude)
+			// entries.AddFloat(now, psId, "longitude", "", p.Longitude)
+			// entries.AddString(now, psId, "location", "", p.Location)
+			//
+			// entries.AddInt(now, psId, "installer_ps_fault_status", "", p.InstallerPsFaultStatus)
+			// entries.AddInt(now, psId, "owner_ps_fault_status", "", p.OwnerPsFaultStatus)
+			// entries.AddInt(now, psId, "ps_fault_status", "", p.PsFaultStatus)
+			// entries.AddString(now, psId, "ps_health_status", "", p.PsHealthStatus)
+			//
+			// entries.AddString(now, psId, "ps_holder", "", p.PsHolder)
+			// entries.AddInt(now, psId, "ps_id", "", p.PsID)
+			// entries.AddString(now, psId, "ps_name", "", p.PsName)
+			// entries.AddString(now, psId, "ps_short_name", "", p.PsShortName)
+			// entries.AddInt(now, psId, "ps_status", "", p.PsStatus)
+			// entries.AddInt(now, psId, "ps_type", "", p.PsType)
 
 			// ret = append(ret, []string{now, "Pv Energy", p.PvEnergy.Value, p.PvEnergy.Unit})		// p83077
 			// ret = append(ret, []string{now, "Es Discharge Energy", p.EsDisenergy.Value, p.EsDisenergy.Unit})	// p83089
@@ -320,86 +320,111 @@ func (e *ResultData) GetData() api.Data {
 			// ret = append(ret, []string{now, "Total Income", p.TotalIncome.Value, p.TotalIncome.Unit})
 		}
 	}
-	return ret
+	return entries
 }
 
-func addState(now api.DateTime, point string, name string, state bool, index int) api.DataEntry {
-	return add(now, "virtual", point, name, api.UnitValue{ Value: fmt.Sprintf("%v", state) }, index)
-
-	// return api.DataEntry {
-	// 	Date:           now,
-	// 	PointId:        api.NameDevicePoint("virtual", point),
-	// 	PointGroupName: "Virtual",
-	// 	PointName:      name,
-	// 	Value:          fmt.Sprintf("%v", state),
-	// 	Unit:           "binary",
-	// 	ValueType: &api.Point{
-	// 		PsKey:       "virtual",
-	// 		Id:          point,
-	// 		Description: name,
-	// 		Unit:        "binary",
-	// 		Type:        "PointTypeInstant",
-	// 	},
-	// 	Index: index,
-	// }
-}
-
-func addValue(now api.DateTime, psId string, point string, name string, value string, index int) api.DataEntry {
-	return add(now, psId, point, name, api.UnitValue{ Value: value }, index)
-
-	// vt := api.GetPoint(psId, point)
-	// if !vt.Valid {
-	// 	vt = &api.Point{
-	// 		PsKey:       psId,
-	// 		Id:          point,
-	// 		Description: name,
-	// 		Unit:        "",
-	// 		Type:        "PointTypeInstant",
-	// 	}
-	// }
-	// return api.DataEntry {
-	// 	Date:           now,
-	// 	PointId:        api.NameDevicePoint(psId, point),
-	// 	PointGroupName: "Summary",
-	// 	PointName:      name,
-	// 	Value:          value,
-	// 	Unit:           "",
-	// 	ValueType:      vt,
-	// 	Index:          index,
-	// }
-}
-
-func addIntValue(now api.DateTime, psId string, point string, name string, value int64, index int) api.DataEntry {
-	return add(now, psId, point, name, api.UnitValue{ Value: strconv.FormatInt(value, 10) }, index)
-}
-
-func addFloatValue(now api.DateTime, psId string, point string, name string, value float64, index int) api.DataEntry {
-	return add(now, psId, point, name, api.UnitValue{ Value: api.Float64ToString(value) }, index)
-}
-
-func add(now api.DateTime, psId string, point string, name string, value api.UnitValue, index int) api.DataEntry {
-	vt := api.GetPoint(psId, point)
-	if !vt.Valid {
-		vt = &api.Point{
-			PsKey:       psId,
-			Id:          point,
-			Description: name,
-			Unit:        value.Unit,
-			Type:        "PointTypeInstant",
-		}
-	}
-	return api.DataEntry {
-		Date:           now,
-		PointId:        api.NameDevicePoint(psId, point),
-		PointGroupName: "Virtual",
-		PointName:      name,
-		Value:          value.Value,
-		Unit:           value.Unit,
-		ValueType:      vt,
-		Index:          index,
-	}
-}
-
+// func add(now api.DateTime, psId string, pid string, name string, p api.UnitValue) api.DataEntry {
+//
+// 	vt := api.GetPoint(psId, pid)
+// 	if !vt.Valid {
+// 		vt = &api.Point {
+// 			PsKey:       psId,
+// 			Id:          pid,
+// 			Description: name,
+// 			Unit:        p.Unit,
+// 			Type:        "PointTypeInstant",
+// 		}
+// 	}
+// 	fv, _ := strconv.ParseFloat(p.Value, 64)
+// 	return api.DataEntry {
+// 		Date:           now,
+// 		PointId:        api.NameDevicePoint(psId, pid),
+// 		PointGroupName: "Virtual",
+// 		PointName:      name,
+// 		Value:          p.Value,
+// 		ValueFloat:     fv,
+// 		Unit:           p.Unit,
+// 		ValueType:      vt,
+// 		Index:          0,
+// 	}
+// }
+//
+// func addState(now api.DateTime, point string, name string, state bool) api.DataEntry {
+// 	return add(now, "virtual", point, name, api.UnitValue{ Value: fmt.Sprintf("%v", state) })
+//
+// 	// return api.DataEntry {
+// 	// 	Date:           now,
+// 	// 	PointId:        api.NameDevicePoint("virtual", point),
+// 	// 	PointGroupName: "Virtual",
+// 	// 	PointName:      name,
+// 	// 	Value:          fmt.Sprintf("%v", state),
+// 	// 	Unit:           "binary",
+// 	// 	ValueType: &api.Point{
+// 	// 		PsKey:       "virtual",
+// 	// 		Id:          point,
+// 	// 		Description: name,
+// 	// 		Unit:        "binary",
+// 	// 		Type:        "PointTypeInstant",
+// 	// 	},
+// 	// 	Index: index,
+// 	// }
+// }
+//
+// func addValue(now api.DateTime, psId string, point string, name string, value string) api.DataEntry {
+// 	return add(now, psId, point, name, api.UnitValue{ Value: value })
+// 	// vt := api.GetPoint(psId, point)
+// 	// if !vt.Valid {
+// 	// 	vt = &api.Point{
+// 	// 		PsKey:       psId,
+// 	// 		Id:          point,
+// 	// 		Description: name,
+// 	// 		Unit:        "",
+// 	// 		Type:        "PointTypeInstant",
+// 	// 	}
+// 	// }
+// 	// return api.DataEntry {
+// 	// 	Date:           now,
+// 	// 	PointId:        api.NameDevicePoint(psId, point),
+// 	// 	PointGroupName: "Summary",
+// 	// 	PointName:      name,
+// 	// 	Value:          value,
+// 	// 	Unit:           "",
+// 	// 	ValueType:      vt,
+// 	// 	Index:          index,
+// 	// }
+// }
+//
+// func addIntValue(now api.DateTime, psId string, point string, name string, value int64) api.DataEntry {
+// 	return add(now, psId, point, name, api.UnitValue{ Value: strconv.FormatInt(value, 10) })
+// }
+//
+// func addFloatValue(now api.DateTime, psId string, point string, name string, value float64) api.DataEntry {
+// 	return add(now, psId, point, name, api.UnitValue{ Value: api.Float64ToString(value) })
+// }
+//
+// func add2(now api.DateTime, psId string, point string, name string, value api.UnitValue) api.DataEntry {
+// 	vt := api.GetPoint(psId, point)
+// 	if !vt.Valid {
+// 		vt = &api.Point{
+// 			PsKey:       psId,
+// 			Id:          point,
+// 			Description: name,
+// 			Unit:        value.Unit,
+// 			Type:        "PointTypeInstant",
+// 		}
+// 	}
+// 	return api.DataEntry {
+// 		Date:           now,
+// 		PointId:        api.NameDevicePoint(psId, point),
+// 		PointGroupName: "Virtual",
+// 		PointName:      name,
+// 		Value:          value.Value,
+// 		Unit:           value.Unit,
+// 		ValueType:      vt,
+// 		Index:          0,
+// 	}
+// }
+//
 // func (e *ResultData) GetData() [][]string {
 // 	var ret [][]string
 // 	for range Only.Once {

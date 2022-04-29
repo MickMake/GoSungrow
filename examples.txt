@@ -99,3 +99,15 @@ sensor.sungrow_total_load_active_power == sensor.sungrow_total_active_power
 ./bin/GoSungrow data save template 8042 20220212
 ./bin/GoSungrow get raw template 20220202
 ./bin/GoSungrow get template 8042 20220212
+
+
+################################################################################
+
+"energy_flow"
+1 / 3	- PV2Load && PV2Battery
+
+
+        "1"	- PV to Load
+        "3"	- Battery to Load
+        "5"	- PV to Battery
+

@@ -124,7 +124,7 @@ func (sg *SunGrow) GetTemplatePoints(template string) error {
 
 		table := output.NewTable()
 		sg.Error = table.SetHeader(
-			"Point Id",
+			"PointStruct Id",
 			"Description",
 			"Unit",
 			)
@@ -337,9 +337,12 @@ func (sg *SunGrow) QueryPs(psId int64) getPsList.EndPoint {
 	return ret
 }
 
-func (sg *SunGrow) GetPointNames() error {
+func (sg *SunGrow) GetPointNames(devices ...string) error {
 	for range Only.Once {
-		for _, dt := range getPowerDevicePointNames.DeviceTypes {
+		if len(devices) == 0 {
+			devices = getPowerDevicePointNames.DeviceTypes
+		}
+		for _, dt := range devices {
 			ep := sg.GetByStruct(
 				"AppService.getPowerDevicePointNames",
 				getPowerDevicePointNames.RequestData{DeviceType: dt},
@@ -547,6 +550,7 @@ func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints) erro
 
 	return sg.Error
 }
+
 
 func (sg *SunGrow) GetPsId() (int64, error) {
 	var ret int64

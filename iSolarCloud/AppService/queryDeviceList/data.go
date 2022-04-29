@@ -7,7 +7,6 @@ import (
 	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
 	"strconv"
-	"strings"
 )
 
 const Url = "/v1/devService/queryDeviceList"
@@ -28,10 +27,10 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	DevCountByStatusMap struct {
-		FaultCount   int64 `json:"fault_count"`
-		OfflineCount int64 `json:"offline_count"`
-		RunCount     int64 `json:"run_count"`
-		WarningCount int64 `json:"warning_count"`
+		FaultCount   int64 `json:"fault_count" PointId:"fault_count" PointType:""`
+		OfflineCount int64 `json:"offline_count" PointId:"offline_count" PointType:""`
+		RunCount     int64 `json:"run_count" PointId:"run_count" PointType:""`
+		WarningCount int64 `json:"warning_count" PointId:"warning_count" PointType:""`
 	} `json:"dev_count_by_status_map"`
 	DevCountByTypeMap struct {
 		One4 int64 `json:"14"`
@@ -88,57 +87,58 @@ type ResultData struct {
 		Nine9  string `json:"99"`
 	} `json:"dev_type_definition"`
 	PageList []struct {
-		AlarmCount              int64       `json:"alarm_count"`
-		ChnnlID                 int64       `json:"chnnl_id"`
-		CommandStatus           int64       `json:"command_status"`
-		ComponentAmount         int64       `json:"component_amount"`
-		DataFlag                int64       `json:"data_flag"`
-		DataFlagDetail          int64       `json:"data_flag_detail"`
-		DeviceArea              string      `json:"device_area"`
-		DeviceAreaName          string      `json:"device_area_name"`
-		DeviceCode              int64       `json:"device_code"`
-		DeviceID                int64       `json:"device_id"`
-		DeviceModelCode         string      `json:"device_model_code"`
-		DeviceModelID           string      `json:"device_model_id"`
-		DeviceName              string      `json:"device_name"`
-		DeviceStatus            int64       `json:"device_status"`
-		DeviceType              int64       `json:"device_type"`
-		FaultCount              int64       `json:"fault_count"`
-		FaultStatus             string      `json:"fault_status"`
-		FunctionEnum            string      `json:"function_enum"`
-		InstallerAlarmCount     int64       `json:"installer_alarm_count"`
-		InstallerDevFaultStatus int64       `json:"installer_dev_fault_status"`
-		InstallerFaultCount     int64       `json:"installer_fault_count"`
-		InverterModelType       int64       `json:"inverter_model_type"`
-		IsDeveloper             string      `json:"is_developer"`
-		IsG2point5Module        int64       `json:"is_g2point5_module"`
-		IsInit                  int64       `json:"is_init"`
-		IsSecond                int64       `json:"is_second"`
-		IsSupportParamset       int64       `json:"is_support_paramset"`
-		NodeTimestamps          interface{} `json:"node_timestamps"`
-		OwnerAlarmCount         int64       `json:"owner_alarm_count"`
-		OwnerDevFaultStatus     int64       `json:"owner_dev_fault_status"`
-		OwnerFaultCount         int64       `json:"owner_fault_count"`
+		AlarmCount              int64       `json:"alarm_count" PointId:"alarm_count" PointType:""`
+		ChnnlID                 int64       `json:"chnnl_id" PointId:"channel_id" PointType:""`
+		CommandStatus           int64       `json:"command_status" PointId:"command_status" PointType:""`
+		ComponentAmount         int64       `json:"component_amount" PointId:"component_amount" PointType:""`
+		DataFlag                int64       `json:"data_flag" PointId:"data_flag" PointType:""`
+		DataFlagDetail          int64       `json:"data_flag_detail" PointId:"data_flag_detail" PointType:""`
+		DeviceArea              string      `json:"device_area" PointId:"device_area" PointType:""`
+		DeviceAreaName          string      `json:"device_area_name" PointId:"device_area_name" PointType:""`
+		DeviceCode              int64       `json:"device_code" PointId:"device_code" PointType:""`
+		DeviceID                int64       `json:"device_id" PointId:"device_id" PointType:""`
+		DeviceModelCode         string      `json:"device_model_code" PointId:"device_model_code" PointType:""`
+		DeviceModelID           string      `json:"device_model_id" PointId:"device_model_id" PointType:""`
+		DeviceName              string      `json:"device_name" PointId:"device_name" PointType:""`
+		DeviceStatus            int64       `json:"device_status" PointId:"device_status" PointType:""`
+		DeviceType              int64       `json:"device_type" PointId:"device_type" PointType:""`
+		FaultCount              int64       `json:"fault_count" PointId:"fault_count" PointType:""`
+		FaultStatus             string      `json:"fault_status" PointId:"fault_status" PointType:""`
+		FunctionEnum            string      `json:"function_enum" PointId:"function_enum" PointType:""`
+		InstallerAlarmCount     int64       `json:"installer_alarm_count" PointId:"installer_alarm_count" PointType:""`
+		InstallerDevFaultStatus int64       `json:"installer_dev_fault_status" PointId:"installer_dev_fault_status" PointType:""`
+		InstallerFaultCount     int64       `json:"installer_fault_count" PointId:"installer_fault_count" PointType:""`
+		InverterModelType       int64       `json:"inverter_model_type" PointId:"inverter_model_type" PointType:""`
+		IsDeveloper             string      `json:"is_developer" PointId:"is_developer" PointType:""`
+		IsG2point5Module        int64       `json:"is_g2point5_module" PointId:"is_g2point5_module" PointType:""`
+		IsInit                  int64       `json:"is_init" PointId:"is_init" PointType:""`
+		IsSecond                int64       `json:"is_second" PointId:"is_second" PointType:""`
+		IsSupportParamset       int64       `json:"is_support_paramset" PointId:"is_support_paramset" PointType:""`
+		NodeTimestamps          interface{} `json:"node_timestamps" PointId:"node_timestamps" PointType:""`
+		OwnerAlarmCount         int64       `json:"owner_alarm_count" PointId:"owner_alarm_count" PointType:""`
+		OwnerDevFaultStatus     int64       `json:"owner_dev_fault_status" PointId:"owner_dev_fault_status" PointType:""`
+		OwnerFaultCount         int64       `json:"owner_fault_count" PointId:"owner_fault_count" PointType:""`
 		PointData               PointData   `json:"point_data"`
-		Points                  interface{} `json:"points"`
+		Points                  interface{} `json:"points" PointId:"points" PointType:""`
 		PsTimezoneInfo          struct {
 			IsDst    string `json:"is_dst"`
 			TimeZone string `json:"time_zone"`
 		} `json:"psTimezoneInfo"`
-		PsID          int64       `json:"ps_id"`
-		PsKey         string      `json:"ps_key"`
-		RelState      int64       `json:"rel_state"`
-		Sn            string      `json:"sn"`
-		StringAmount  int64       `json:"string_amount"`
-		TypeName      string      `json:"type_name"`
-		UnitName      interface{} `json:"unit_name"`
-		UUID          string      `json:"uuid"`
-		UUIDIndexCode string      `json:"uuid_index_code"`
+		PsID                    int64       `json:"ps_id" PointId:"ps_id" PointType:""`
+		PsKey                   string      `json:"ps_key" PointId:"ps_key" PointType:""`
+		RelState                int64       `json:"rel_state" PointId:"rel_state" PointType:""`
+		Sn                      string      `json:"sn" PointId:"sn" PointType:""`
+		StringAmount            int64       `json:"string_amount" PointId:"string_amount" PointType:""`
+		TypeName                string      `json:"type_name" PointId:"type_name" PointType:""`
+		UnitName                interface{} `json:"unit_name" PointId:"unit_name" PointType:""`
+		UUID                    string      `json:"uuid" PointId:"uuid" PointType:""`
+		UUIDIndexCode           string      `json:"uuid_index_code" PointId:"uuid_index_code" PointType:""`
 	} `json:"pageList"`
 	RowCount int64 `json:"rowCount"`
 }
 
-type PointData []struct {
+type PointData []PointStruct
+type PointStruct struct {
 	CodeID                 int64  `json:"code_id"`
 	CodeIDOrderID          string `json:"code_id_order_id"`
 	CodeName               string `json:"code_name"`
@@ -161,6 +161,12 @@ type PointData []struct {
 	Value                  string `json:"value"`
 	ValueDescription       string `json:"value_description"`
 }
+
+// type VirtualPointStruct struct {
+// 	api.DataEntry
+// 	ValueFloat float64
+// }
+
 
 func (e *ResultData) IsValid() error {
 	var err error
@@ -221,8 +227,8 @@ func (e *EndPoint) GetDataTable() output.Table {
 
 		_ = table.SetHeader(
 			"Date",
-			"Point Id",
-			"Point Group Name",
+			"PointStruct Id",
+			"PointStruct Group Name",
 			"Description",
 			"Value",
 			"Unit",
@@ -273,182 +279,191 @@ func (e *EndPoint) GetDataTable() output.Table {
 	return table
 }
 
-func (e *EndPoint) GetData() api.Data {
-	var ret api.Data
+type DataEntry api.DataEntry
+type EntryMap api.DataMap
+
+func (e *EndPoint) GetData() api.DataMap {
+	entries := api.NewDataMap()
 
 	for range Only.Once {
-		// Used for virtual entries.
-		// 0 - sungrow_battery_charging_power
-		var PVPowerToBattery float64
+		// // Used for virtual entries.
+		// // 0 - sungrow_battery_charging_power
+		// var PVPowerToBattery VirtualPointStruct
+		//
+		// // sensor.sungrow_battery_discharging_power
+		// var BatteryPowerToLoad VirtualPointStruct
+		//
+		// // 0 - sensor.sungrow_total_export_active_power
+		// var PVPowerToGrid VirtualPointStruct
+		//
+		// // sensor.sungrow_purchased_power
+		// var GridPowerToLoad VirtualPointStruct
+		//
+		// // 0 - sensor.sungrow_daily_battery_charging_energy_from_pv
+		// var YieldBatteryCharge VirtualPointStruct
+		// // var DailyBatteryChargingEnergy VirtualPointStruct
+		//
+		// // sensor.sungrow_daily_battery_discharging_energy
+		// var DailyBatteryDischargingEnergy VirtualPointStruct
+		//
+		// // 0 - sensor.sungrow_daily_feed_in_energy_pv
+		// var YieldFeedIn VirtualPointStruct
+		//
+		// // sensor.sungrow_daily_purchased_energy
+		// var DailyPurchasedEnergy VirtualPointStruct
+		//
+		// var PVPower VirtualPointStruct
+		//
+		// var LoadPower VirtualPointStruct
+		//
+		// var YieldSelfConsumption VirtualPointStruct
+		// // var DailyFeedInEnergy VirtualPointStruct
+		// var TotalPvYield VirtualPointStruct
+		//
+		// var DailyTotalLoad VirtualPointStruct
+		//
+		// var TotalEnergyConsumption VirtualPointStruct
 
-		// sensor.sungrow_battery_discharging_power
-		var BatteryPowerToLoad float64
+		entries.StructToPoints("", e.Response.ResultData.DevCountByStatusMap)
+		for _, d := range e.Response.ResultData.PageList {
+			entries.StructToPoints("", d)
+		}
 
-		// 0 - sensor.sungrow_total_export_active_power
-		var PVPowerToGrid float64
-
-		// sensor.sungrow_purchased_power
-		var GridPowerToLoad float64
-
-		// 0 - sensor.sungrow_daily_battery_charging_energy_from_pv
-		var YieldBatteryCharge float64
-		// var DailyBatteryChargingEnergy float64
-
-		// sensor.sungrow_daily_battery_discharging_energy
-		var DailyBatteryDischargingEnergy float64
-
-		// 0 - sensor.sungrow_daily_feed_in_energy_pv
-		var YieldFeedIn float64
-
-		// sensor.sungrow_daily_purchased_energy
-		var DailyPurchasedEnergy float64
-
-		var PVPower float64
-
-		var LoadPower float64
-
-		var YieldSelfConsumption float64
-		// var DailyFeedInEnergy float64
-		var TotalPvYield float64
-
-		var DailyTotalLoad float64
-
-		var TotalEnergyConsumption float64
-
-		// index := 0
 		for _, d := range e.Response.ResultData.PageList {
 			for _, p := range d.PointData {
-				if p.Unit == "W" {
-					fv, err := api.DivideByThousand(p.Value)
-					// fv, err := strconv.ParseFloat(p.Value, 64)
-					// fv = fv / 1000
-					if err == nil {
-						// p.Value = fmt.Sprintf("%.3f", fv)
-						p.Value = fv
-						p.Unit = "kW"
-					}
-				}
+				pid := api.SetPoint(strconv.FormatInt(p.PointID, 10))
+				uv := api.CreateUnitValue(p.Value, p.Unit)
+				entries.AddUnitValue("", d.PsKey, pid, p.PointName, api.NewDateTime(p.TimeStamp), uv)
 
-				if p.Unit == "Wh" {
-					fv, err := api.DivideByThousand(p.Value)
-					// fv, err := strconv.ParseFloat(p.Value, 64)
-					// fv = fv / 1000
-					if err == nil {
-						// p.Value = fmt.Sprintf("%.3f", fv)
-						p.Value = fv
-						p.Unit = "kWh"
-					}
-				}
-
-				vt := api.GetPointInt(d.PsKey, p.PointID)
-				if !vt.Valid {
-					vt = &api.Point{
-						PsKey:       d.PsKey,
-						Id:          "p" + strings.TrimPrefix(strconv.FormatInt(p.PointID, 10), "p"),
-						Description: p.PointName,
-						Unit:        p.Unit,
-						Type:        "",
-					}
-				}
-				ret.Entries = append(ret.Entries, api.DataEntry {
-					Date:           api.NewDateTime(p.TimeStamp),
-					PointId:        api.NameDevicePointInt(d.PsKey, p.PointID),
-					PointGroupName: p.PointGroupName,
-					PointName:      p.PointName,
-					Value:          p.Value,
-					Unit:           p.Unit,
-					ValueType:      vt,
-					Index:          len(ret.Entries),
-				})
+				// vt := api.GetPointInt(d.PsKey, p.PointID)
+				// if !vt.Valid {
+				// 	vt = &api.Point {
+				// 		PsKey: d.PsKey,
+				// 		Id:    api.PointToName(strconv.FormatInt(p.PointID, 10)),
+				// 		Name:  p.PointName,
+				// 		Unit:  uv.Unit,
+				// 		Type:  "PointTypeInstant",
+				// 	}
+				// }
+				//
+				// entries.Add(pid, api.DataEntry {
+				// 	Date:       api.NewDateTime(p.TimeStamp),
+				// 	Id:         api.NameDevicePointInt(d.PsKey, p.PointID),
+				// 	GroupName:  p.PointGroupName,
+				// 	Name:       p.PointName,
+				// 	Value:      uv.Value,
+				// 	ValueFloat: uv.ValueFloat,
+				// 	Unit:       uv.Unit,
+				// 	Point:      vt,
+				// 	Index:      0,
+				// })
 
 				// Handle virtual results.
-				switch p.PointID {
-					case 13126:
-						// BatteryChargingPower
-						PVPowerToBattery, _ = strconv.ParseFloat(p.Value, 64)
-					case 13150:
-						// BatteryDischargingPower
-						BatteryPowerToLoad, _ = strconv.ParseFloat(p.Value, 64)
-					case 13121:
-						// TotalExportActivePower
-						PVPowerToGrid, _ = strconv.ParseFloat(p.Value, 64)
-					case 13149:
-						// PurchasedPower
-						GridPowerToLoad, _ = strconv.ParseFloat(p.Value, 64)
-					case 13003:
-						// TotalDcPower
-						PVPower, _ = strconv.ParseFloat(p.Value, 64)
-					case 13119:
-						// TotalLoadActivePower
-						LoadPower, _ = strconv.ParseFloat(p.Value, 64)
-
-					case 13028:
-						// DailyBatteryChargingEnergy
-						// DailyBatteryChargingEnergy, _ = strconv.ParseFloat(p.Value, 64)
-					case 13174:
-						// DailyBatteryChargingEnergyFromPv
-						YieldBatteryCharge, _ = strconv.ParseFloat(p.Value, 64)
-					case 13029:
-						// DailyBatteryDischargingEnergy
-						DailyBatteryDischargingEnergy, _ = strconv.ParseFloat(p.Value, 64)
-					case 13173:
-						// DailyFeedInEnergyPv
-						YieldFeedIn, _ = strconv.ParseFloat(p.Value, 64)
-					case 13147:
-						// DailyPurchasedEnergy
-						DailyPurchasedEnergy, _ = strconv.ParseFloat(p.Value, 64)
-
-					case 13116:
-						// DailyLoadEnergyConsumptionFromPv
-						YieldSelfConsumption, _ = strconv.ParseFloat(p.Value, 64)
-					case 13122:
-						// DailyFeedInEnergy, _ = strconv.ParseFloat(p.Value, 64)
-					case 13134:
-						// TotalPvYield
-						TotalPvYield, _ = strconv.ParseFloat(p.Value, 64)
-
-					case 13199:
-						// Daily Load Energy Consumption
-						DailyTotalLoad, _ = strconv.ParseFloat(p.Value, 64)
-
-					case 13130:
-						// Total Load Energy Consumption
-						TotalEnergyConsumption, _ = strconv.ParseFloat(p.Value, 64)
-				}
-
-				// switch strings.ReplaceAll(p.PointName, " ", "") {
-				// 	case "BatteryChargingPower":
-				// 		BatteryChargingPower, _ = strconv.ParseFloat(p.Value, 64)
-				// 	case "BatteryDischargingPower":
-				// 		BatteryDischargingPower, _ = strconv.ParseFloat(p.Value, 64)
-				// 	case "TotalExportActivePower":
-				// 		TotalExportActivePower, _ = strconv.ParseFloat(p.Value, 64)
-				// 	case "PurchasedPower":
-				// 		PurchasedPower, _ = strconv.ParseFloat(p.Value, 64)
-				// 	case "TotalDCPower":
-				// 		TotalDcPower, _ = strconv.ParseFloat(p.Value, 64)
-				// 	case "TotalLoadActivePower":
-				// 		TotalLoadActivePower, _ = strconv.ParseFloat(p.Value, 64)
+				// switch pid {
+				// 	case "13126":
+				// 		// BatteryChargingPower
+				// 		entries["PVPowerToBattery"] = entries[pid]
+				// 	case "13150":
+				// 		// BatteryDischargingPower
+				// 		entries["BatteryPowerToLoad"] = entries[pid]
+				// 	case "13121":
+				// 		// TotalExportActivePower
+				// 		entries["PVPowerToGrid"] = entries[pid]
+				// 	case "13149":
+				// 		// PurchasedPower
+				// 		entries["GridPowerToLoad"] = entries[pid]
+				// 	case "13003":
+				// 		// TotalDcPower
+				// 		entries["PVPower"] = addVirtualAlias(entries[pid], "pv_power", "PV Power")
+				// 	case "13119":
+				// 		// TotalLoadActivePower
+				// 		entries["LoadPower"] = addVirtualAlias(entries[pid], "load_power", "Load Power")
 				//
-				// 	case "DailyBatteryChargingEnergyFromPv":
-				// 		DailyBatteryChargingEnergyFromPv, _ = strconv.ParseFloat(p.Value, 64)
-				// 	case "DailyBatteryDischargingEnergy":
-				// 		DailyBatteryDischargingEnergy, _ = strconv.ParseFloat(p.Value, 64)
-				// 	case "DailyFeedInEnergyPv":
-				// 		DailyFeedInEnergyPv, _ = strconv.ParseFloat(p.Value, 64)
-				// 	case "DailyPurchasedEnergy":
-				// 		DailyPurchasedEnergy, _ = strconv.ParseFloat(p.Value, 64)
+				// 		// addVirtualAlias(entries[pid], "FOO", "FOO")
+				//
+				// 	case "13112":
+				// 		// Daily PV Yield
+				// 		entries["DailyPvEnergy"] = addVirtualAlias(entries["DailyPvEnergy"], "daily_pv_energy", "Daily PV Energy")
+				// 	case "13174":
+				// 		// DailyBatteryChargingEnergyFromPv
+				// 		entries["YieldBatteryCharge"] = addVirtualAlias(entries[pid], "pv_battery_charge", "PV Battery Charge")
+				// 	case "13029":
+				// 		// DailyBatteryDischargingEnergy
+				// 		entries["DailyBatteryDischargingEnergy"] = entries[pid]
+				// 	case "13122":
+				// 		// entries["DailyFeedInEnergy"] = addVirtualAlias(entries[pid], "pv_feed_in", "PV Feed In")
+				// 		// @TODO - This may differ from DailyFeedInEnergyPv
+				// 	case "13173":
+				// 		// DailyFeedInEnergyPv
+				// 		entries["YieldFeedIn"] = addVirtualAlias(entries[pid], "pv_feed_in", "PV Feed In")
+				// 	case "13147":
+				// 		// DailyPurchasedEnergy
+				// 		entries["DailyPurchasedEnergy"] = addVirtualAlias(entries[pid], "daily_purchased_energy", "Daily Purchased Energy")
+				//
+				// 	case "13116":
+				// 		// DailyLoadEnergyConsumptionFromPv
+				// 		entries["YieldSelfConsumption"] = addVirtualAlias(entries[pid], "pv_self_consumption", "PV Self Consumption")
+				// 	case "13134":
+				// 		// TotalPvYield
+				// 		entries["TotalPvYield"] = addVirtualAlias(entries[pid], "pv_total_yield", "PV Total Yield")
+				//
+				// 	case "13199":
+				// 		// Daily Load Energy Consumption
+				// 		entries["DailyTotalLoad"] = addVirtualAlias(entries[pid], "daily_total_energy", "Daily Total Energy")
+				//
+				// 	case "13130":
+				// 		// Total Load Energy Consumption
+				// 		entries["TotalEnergyConsumption"] = addVirtualAlias(entries[pid], "total_energy_consumption", "Total Energy Consumption"
 				// }
 			}
 		}
 
-		if len(ret.Entries) == 0 {
+		if len(entries.Entries) == 0 {
 			break
 		}
 
-		// Add virtual entries.
-		ts := ret.Entries[0].Date
-		var value float64
+		// TotalDcPower
+		entries.FromRefAddAlias("p13003", api.VirtualPsId, "pv_power", "")
+		// BatteryChargingPower
+		entries.FromRefAddAlias("p13126", api.VirtualPsId, "pv_power_to_battery", "")
+		// BatteryDischargingPower
+		entries.FromRefAddAlias("p13150", api.VirtualPsId, "battery_power_to_load", "")
+		// TotalExportActivePower
+		entries.FromRefAddAlias("p13121", api.VirtualPsId, "pv_power_to_grid", "")
+
+		// TotalLoadActivePower
+		entries.FromRefAddAlias("p13119", api.VirtualPsId, "load_power", "")
+
+		// PurchasedPower
+		entries.FromRefAddAlias("p13149", api.VirtualPsId, "grid_power_to_load", "")
+
+		// Daily PV Yield
+		entries.FromRefAddAlias("p13112", api.VirtualPsId, "daily_pv_energy", "")
+		// DailyPvEnergy := entries.getFloatValue("DailyTotalLoad") - entries.getFloatValue("DailyPurchasedEnergy")
+		// DailyBatteryChargingEnergyFromPv
+		entries.FromRefAddAlias("p13174", api.VirtualPsId, "pv_battery_charge", "")
+		// DailyBatteryDischargingEnergy
+		entries.FromRefAddAlias("p13029", api.VirtualPsId, "battery_discharge", "")
+
+		// @TODO - This may differ from DailyFeedInEnergyPv
+		// entries["DailyFeedInEnergy"] = entries.AddVirtualAliasFromRef("13122", "pv_feed_in", "PV Feed In")
+
+		// DailyFeedInEnergyPv
+		entries.FromRefAddAlias("p13173", api.VirtualPsId, "pv_feed_in", "")
+		// DailyPurchasedEnergy
+		entries.FromRefAddAlias("p13147", api.VirtualPsId, "daily_purchased_energy", "")
+		// DailyLoadEnergyConsumptionFromPv
+		entries.FromRefAddAlias("p13116", api.VirtualPsId, "pv_self_consumption", "")
+		// TotalPvYield
+		entries.FromRefAddAlias("p13134", api.VirtualPsId, "pv_total_yield", "")
+		// Daily Load Energy Consumption
+		entries.FromRefAddAlias("p13199", api.VirtualPsId, "daily_total_energy", "")
+		// Total Load Energy Consumption
+		entries.FromRefAddAlias("p13130", api.VirtualPsId, "total_energy_consumption", "")
+		// entries.AddPointFromRef(api.Point{ Id:"p13130" }, api.Point{ PsKey:api.VirtualPsId, Id:"total_energy_consumption" })
+
+		// entries.CopyEntry("p13130").CreateAlias()
+		// 		entries.GetEntry(api.Point{PsKey:psId, Id:"total_income", Unit:p.TotalIncome.Unit, Type:api.PointTypeTotal}, now, p.TotalIncome.Value)
 
 		/*
 			PVPower				- TotalDcPower
@@ -457,313 +472,237 @@ func (e *EndPoint) GetData() api.Data {
 			PVPowerToGrid		- TotalExportActivePower
 
 			LoadPower			- TotalLoadActivePower
-			BatteryToLoad		- BatteryDischargingPower
-			BatteryToGrid		- ?
+			BatteryPowerToLoad	- BatteryDischargingPower
+			BatteryPowerToGrid	- ?
 
-			GridPower			- TotalDcPower
-			GridToLoad			- PurchasedPower
-			GridToBattery		- ?
+			GridPower			- lowerUpper(PVPowerToGrid, GridPowerToLoad)
+			GridPowerToLoad		- PurchasedPower
+			GridPowerToBattery	- ?
 
-			DailyLoadEnergyConsumptionFromPv - Self-consumption
-			DailyBatteryChargingEnergyFromPv - Battery charge
-			DailyFeedInEnergyPv				 - Feed-In
+			YieldSelfConsumption	- DailyLoadEnergyConsumptionFromPv
+			YieldBatteryCharge		- DailyBatteryChargingEnergyFromPv
+			YieldFeedIn				- DailyFeedInEnergyPv
 		*/
 
-		YieldTotal := YieldSelfConsumption + YieldBatteryCharge + YieldFeedIn
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_daily_yield", "PV Daily Yield", YieldTotal, "kWh", len(ret.Entries)))
+		// Add virtual entries.
+		// ts := ret.Entries[0].Date
+		// var value float64
 
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_self_consumption", "PV Self Consumption", YieldSelfConsumption, "kWh", len(ret.Entries)))
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_battery_charge", "PV Battery Charge", YieldBatteryCharge, "kWh", len(ret.Entries)))
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_feed_in", "PV Feed In", YieldFeedIn, "kWh", len(ret.Entries)))
+		entries.FromRefAddFloat("pv_self_consumption",
+			api.VirtualPsId,"pv_daily_yield", "",
+			entries.GetFloatValue("pv_self_consumption") + entries.GetFloatValue("pv_battery_charge") + entries.GetFloatValue("pv_feed_in"))
 
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_self_consumption_percent", "PV Self Consumption Percent", getPercent(YieldSelfConsumption, YieldTotal), "%", len(ret.Entries)))
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_battery_charge_percent", "PV Battery Charge Percent", getPercent(YieldBatteryCharge, YieldTotal), "%", len(ret.Entries)))
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_feed_in_percent", "PV Feed In Percent", getPercent(YieldFeedIn, YieldTotal), "%", len(ret.Entries)))
+		entries.FromRefAddFloat("daily_pv_energy",
+			api.VirtualPsId,"pv_self_consumption_percent", "",
+			entries.GetPercent("pv_self_consumption", "daily_pv_energy"))
+		entries.FromRefAddFloat("daily_pv_energy",
+			api.VirtualPsId,"pv_battery_charge_percent", "",
+			entries.GetPercent("pv_battery_charge", "daily_pv_energy"))
+		entries.FromRefAddFloat("daily_pv_energy",
+			api.VirtualPsId,"pv_feed_in_percent", "",
+			entries.GetPercent("pv_feed_in", "daily_pv_energy"))
 
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_total_yield", "PV Total Yield", TotalPvYield, "MWh", len(ret.Entries)))
+		// @TODO - Add this calculation.
+		DailyPvEnergy := entries.GetFloatValue("daily_total_energy") - entries.GetFloatValue("daily_purchased_energy")
+		fmt.Sprintf("%f", DailyPvEnergy)
+		entries.FromRefAddFloat("daily_total_energy",
+			api.VirtualPsId,"daily_pv_energy_percent", "",
+			api.GetPercent(DailyPvEnergy, entries.GetValue("daily_total_energy")))
+		entries.FromRefAddFloat("daily_total_energy",
+			api.VirtualPsId,"daily_purchased_energy_percent", "",
+			entries.GetPercent("daily_purchased_energy", "daily_total_energy"))
 
-		DailyPvEnergy := DailyTotalLoad - DailyPurchasedEnergy
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "daily_total_energy", "Daily Total Energy", DailyTotalLoad, "kWh", len(ret.Entries)))
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "daily_pv_energy", "Daily PV Energy", DailyPvEnergy, "kWh", len(ret.Entries)))
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "daily_purchased_energy", "Daily Purchased Energy", DailyPurchasedEnergy, "kWh", len(ret.Entries)))
+		entries.FromRefAddFloat("pv_power",
+			api.VirtualPsId,"pv_power_to_load", "",
+			entries.GetFloatValue("pv_power") - entries.GetFloatValue("pv_power_to_battery") - entries.GetFloatValue("pv_power_to_grid"))
 
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "daily_pv_energy_percent", "Daily PV Energy Percent", getPercent(DailyPvEnergy, DailyTotalLoad), "%", len(ret.Entries)))
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "daily_purchased_energy_percent", "Daily Purchased Energy Percent", getPercent(DailyPurchasedEnergy, DailyTotalLoad), "%", len(ret.Entries)))
+		// Battery
+		entries.FromRefAddFloat("pv_power_to_battery",
+			api.VirtualPsId,"battery_power", "",
+			entries.LowerUpper("pv_power_to_battery", "battery_power_to_load"))
+		entries.FromRefAddFloat("pv_power_to_battery",
+			api.VirtualPsId,"battery_power_to_grid", "",
+			0.0)
 
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "total_energy_consumption", "Total Energy Consumption", TotalEnergyConsumption, "MWh", len(ret.Entries)))
-
-
-		// PVPower				:= PVPower
-		// PVPowerToBattery	:= PVPowerToBattery
-		// PVPowerToGrid		:= PVPowerToGrid
-		PVPowerToLoad		:= PVPower - PVPowerToBattery - PVPowerToGrid
-		ret.Entries = append(ret.Entries, addState(ts, "pv_power_active", "PV Power Active", isActive(PVPower), len(ret.Entries)))
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_power", "PV Power", PVPower, "kW", len(ret.Entries)))
-
-		ret.Entries = append(ret.Entries, addState(ts, "pv_power_to_battery_active", "PV Power To Battery Active", isActive(PVPowerToBattery), len(ret.Entries)))
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_power_to_battery", "PV Power To Battery", PVPowerToBattery, "kW", len(ret.Entries)))
-
-		ret.Entries = append(ret.Entries, addState(ts, "pv_power_to_load_active", "PV Power To Load Active", isActive(PVPowerToLoad), len(ret.Entries)))
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_power_to_load", "PV Power To Load", PVPowerToLoad, "kW", len(ret.Entries)))
-
-		ret.Entries = append(ret.Entries, addState(ts, "pv_power_to_grid_active", "PV Power To Grid Active", isActive(PVPowerToGrid), len(ret.Entries)))
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_power_to_grid", "PV Power To Grid", PVPowerToGrid, "kW", len(ret.Entries)))
-
-
-		// BatteryToLoad		:= BatteryToLoad
-		BatteryPower		:= lowerUpper(PVPowerToBattery, BatteryPowerToLoad)
-		BatteryToGrid		:= 0.0
-		ret.Entries = append(ret.Entries, addState(ts, "battery_power_active", "Battery Power Active", isActive(BatteryPower), len(ret.Entries)))
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "battery_power", "Battery Power", BatteryPower, "kW", len(ret.Entries)))
-
-		ret.Entries = append(ret.Entries, addState(ts, "battery_power_to_load_active", "Battery Power To Load Active", isActive(BatteryPowerToLoad), len(ret.Entries)))
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "battery_power_to_load", "Battery Power To Load", BatteryPowerToLoad, "kW", len(ret.Entries)))
-
-		ret.Entries = append(ret.Entries, addState(ts, "battery_power_to_grid_active", "Battery Power To Grid Active", isActive(BatteryToGrid), len(ret.Entries)))
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "battery_power_to_grid", "Battery Power To Grid", BatteryToGrid, "kW", len(ret.Entries)))
+		// Grid
+		entries.FromRefAddFloat("grid_power_to_load",
+			api.VirtualPsId,"grid_power", "",
+			entries.LowerUpper("pv_power_to_grid", "grid_power_to_load"))
+		entries.FromRefAddFloat("grid_power_to_load",
+			api.VirtualPsId,"grid_power_to_battery", "",
+			0.0)
 
 
-		// GridToLoad			:= GridToLoad
-		GridPower			:= lowerUpper(PVPowerToGrid, GridPowerToLoad)
-		GridToBattery		:= 0.0
-		ret.Entries = append(ret.Entries, addState(ts, "grid_power_active", "Grid Power Active", isActive(GridPower), len(ret.Entries)))
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "grid_power", "Grid Power", GridPower, "kW", len(ret.Entries)))
+		entries.FromRefAddState("pv_power", api.VirtualPsId,"pv_power_active", "")
+		entries.FromRefAddState("battery_power", api.VirtualPsId,"battery_power_active", "")
+		entries.FromRefAddState("grid_power", api.VirtualPsId,"grid_power_active", "")
+		entries.FromRefAddState("load_power", api.VirtualPsId,"load_power_active", "")
 
-		ret.Entries = append(ret.Entries, addState(ts, "grid_power_to_load_active", "Grid Power To Load Active", isActive(GridPowerToLoad), len(ret.Entries)))
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "grid_power_to_load", "Grid Power To Load", GridPowerToLoad, "kW", len(ret.Entries)))
+		entries.FromRefAddState("pv_power_to_battery", api.VirtualPsId,"pv_power_to_battery_active", "")
+		entries.FromRefAddState("pv_power_to_load", api.VirtualPsId,"pv_power_to_load_active", "")
+		entries.FromRefAddState("pv_power_to_grid", api.VirtualPsId,"pv_power_to_grid_active", "")
 
-		ret.Entries = append(ret.Entries, addState(ts, "grid_power_to_battery_active", "Grid Power To Battery Active", isActive(GridToBattery), len(ret.Entries)))
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "grid_power_to_battery", "Grid Power To Battery", GridToBattery, "kW", len(ret.Entries)))
+		entries.FromRefAddState("battery_power_to_load", api.VirtualPsId,"battery_power_to_load_active", "")
+		entries.FromRefAddState("battery_power_to_grid", api.VirtualPsId,"battery_power_to_grid_active", "")
 
-
-		// LoadPower			:= LoadPower
-		ret.Entries = append(ret.Entries, addState(ts, "load_power_active", "Load Power Active", isActive(LoadPower), len(ret.Entries)))
-		ret.Entries = append(ret.Entries, addFloatValue(ts, "load_power", "Load Power", LoadPower, "kW", len(ret.Entries)))
+		entries.FromRefAddState("grid_power_to_load", api.VirtualPsId,"grid_power_to_load_active", "")
+		entries.FromRefAddState("grid_power_to_battery", api.VirtualPsId,"grid_power_to_battery_active", "")
 
 
-		// {
-		// 	if isActive(BatteryChargingPower) {
-		// 		value = 0 - BatteryChargingPower
-		//
-		// 		ret.Entries = append(ret.Entries, addState(ts, "battery_power_active", "Battery Power Active", true, len(ret.Entries)))
-		// 		ret.Entries = append(ret.Entries, addState(ts, "pv_flow_to_battery", "PV Flow To Battery", true, len(ret.Entries)))
-		// 		ret.Entries = append(ret.Entries, addState(ts, "battery_flow_to_load", "Battery Flow To Load", false, len(ret.Entries)))
-		//
-		// 	} else if isActive(BatteryDischargingPower) {
-		// 		value = BatteryDischargingPower
-		//
-		// 		ret.Entries = append(ret.Entries, addState(ts, "battery_power_active", "Battery Power Active", true, len(ret.Entries)))
-		// 		ret.Entries = append(ret.Entries, addState(ts, "pv_flow_to_battery", "PV Flow To Battery", false, len(ret.Entries)))
-		// 		ret.Entries = append(ret.Entries, addState(ts, "battery_flow_to_load", "Battery Flow To Load", true, len(ret.Entries)))
-		//
-		// 	} else {
-		// 		value = 0
-		//
-		// 		ret.Entries = append(ret.Entries, addState(ts, "battery_power_active", "Battery Power Active", false, len(ret.Entries)))
-		// 		ret.Entries = append(ret.Entries, addState(ts, "pv_flow_to_battery", "PV Flow To Battery", false, len(ret.Entries)))
-		// 		ret.Entries = append(ret.Entries, addState(ts, "battery_flow_to_load", "Battery Flow To Load", false, len(ret.Entries)))
-		// 	}
-		//
-		// 	ret.Entries = append(ret.Entries, addFloatValue(ts, "battery_power", "Battery Power", value, len(ret.Entries)))
+		entries.FromRefAddFloat("pv_battery_charge",
+			api.VirtualPsId, "battery_energy", "",
+			entries.LowerUpper("pv_battery_charge", "battery_discharge"))
+
+		entries.FromRefAddFloat("pv_feed_in",
+			api.VirtualPsId,"grid_energy", "",
+			entries.LowerUpper("pv_feed_in", "daily_purchased_energy"))
+
+
+		// for _, pid := range entries.Order {
+		// 	// entries[pid].Index = i
+		// 	ret.Entries = append(ret.Entries, entries.Entries[pid])
 		// }
-		//
-		// {
-		// 	if isActive(TotalExportActivePower) {
-		// 		value = 0 - TotalExportActivePower
-		//
-		// 		ret.Entries = append(ret.Entries, addState(ts, "grid_power_active", "Grid Power Active", true, len(ret.Entries)))
-		// 		ret.Entries = append(ret.Entries, addState(ts, "pv_flow_to_grid", "PV Flow To Grid", true, len(ret.Entries)))
-		// 		ret.Entries = append(ret.Entries, addState(ts, "grid_flow_to_load", "Grid Flow To Load", false, len(ret.Entries)))
-		//
-		// 	} else if isActive(PurchasedPower) {
-		// 		value = PurchasedPower
-		//
-		// 		ret.Entries = append(ret.Entries, addState(ts, "grid_power_active", "Grid Power Active", true, len(ret.Entries)))
-		// 		ret.Entries = append(ret.Entries, addState(ts, "pv_flow_to_grid", "PV Flow To Grid", false, len(ret.Entries)))
-		// 		ret.Entries = append(ret.Entries, addState(ts, "grid_flow_to_load", "Grid Flow To Load", true, len(ret.Entries)))
-		//
-		// 	} else {
-		// 		value = 0
-		//
-		// 		ret.Entries = append(ret.Entries, addState(ts, "grid_power_active", "Grid Power Active", false, len(ret.Entries)))
-		// 		ret.Entries = append(ret.Entries, addState(ts, "pv_flow_to_grid", "PV Flow To Grid", false, len(ret.Entries)))
-		// 		ret.Entries = append(ret.Entries, addState(ts, "grid_flow_to_load", "Grid Flow To Load", false, len(ret.Entries)))
-		// 	}
-		//
-		// 	ret.Entries = append(ret.Entries, addFloatValue(ts, "grid_power", "Grid Power", value, len(ret.Entries)))
-		// }
-		//
-		// {
-		// 	ret.Entries = append(ret.Entries, addState(ts, "pv_power_active", "PV Power Active", isActive(TotalDcPower), len(ret.Entries)))
-		// 	ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_power", "PV Power", TotalDcPower, len(ret.Entries)))
-		//
-		// 	value = TotalDcPower - BatteryChargingPower - TotalExportActivePower
-		// 	ret.Entries = append(ret.Entries, addFloatValue(ts, "pv_power_to_load", "PV Power To Load", value, len(ret.Entries)))
-		// }
-		//
-		// {
-		// 	ret.Entries = append(ret.Entries, addState(ts, "load_power_active", "Load Power Active", isActive(TotalLoadActivePower), len(ret.Entries)))
-		//
-		// 	ret.Entries = append(ret.Entries, api.DataEntry{
-		// 		Date:           ts,
-		// 		PointId:        "virtual.pv_power_to_grid",
-		// 		PointGroupName: "Virtual",
-		// 		PointName:      "PV Power To Grid",
-		// 		Value:          api.Float64ToString(TotalExportActivePower),
-		// 		Unit:           "kW",
-		// 		ValueType: &api.Point{
-		// 			PsKey:       "virtual",
-		// 			Id:          "pv_power_to_grid",
-		// 			Description: "PV Power To Grid",
-		// 			Unit:        "kW",
-		// 			Type:        "PointTypeInstant",
-		// 		},
-		// 		Index: len(ret.Entries),
-		// 	})
-		// }
-
-		{
-			if YieldBatteryCharge > 0 {
-				value = 0 - YieldBatteryCharge
-			} else {
-				value = DailyBatteryDischargingEnergy
-			}
-			ret.Entries = append(ret.Entries, api.DataEntry{
-				Date:           ts,
-				PointId:        "virtual.battery_energy",
-				PointGroupName: "Virtual",
-				PointName:      "Battery Energy",
-				Value:          api.Float64ToString(value),
-				Unit:           "kWh",
-				ValueType: &api.Point{
-					PsKey:       "virtual",
-					Id:          "battery_energy",
-					Description: "Battery Energy",
-					Unit:        "kWh",
-					Type:        "PointTypeInstant",
-				},
-				Index: len(ret.Entries),
-			})
-		}
-
-		{
-			if YieldFeedIn > 0 {
-				value = 0 - YieldFeedIn
-			} else {
-				value = DailyPurchasedEnergy
-			}
-			ret.Entries = append(ret.Entries, api.DataEntry{
-				Date:           ts,
-				PointId:        "virtual.grid_energy",
-				PointGroupName: "Virtual",
-				PointName:      "Grid Energy",
-				Value:          api.Float64ToString(value),
-				Unit:           "kWh",
-				ValueType: &api.Point{
-					PsKey:       "virtual",
-					Id:          "grid_energy",
-					Description: "Grid Energy",
-					Unit:        "kWh",
-					Type:        "PointTypeInstant",
-				},
-				Index: len(ret.Entries),
-			})
-		}
-
 	}
 
-	return ret
+	return entries
 }
 
-func lowerUpper(lower float64, upper float64) float64 {
-	if lower > 0 {
-		return 0 - lower
-	}
-	return upper
-}
+// func (ref *EntryMap) getFloatValue(entry string) float64 {
+// 	return (*ref)[entry].ValueFloat
+// }
+//
+// func lowerUpper(lower api.DataEntry, upper api.DataEntry) float64 {
+// 	if lower.ValueFloat > 0 {
+// 		return 0 - lower.ValueFloat
+// 	}
+// 	return upper.ValueFloat
+// }
+//
+// func getPercent(value api.DataEntry, max api.DataEntry) float64 {
+// 	if max.ValueFloat == 0 {
+// 		return 0
+// 	}
+// 	return (value.ValueFloat / max.ValueFloat) * 100
+// }
 
-func getPercent(value float64, max float64) float64 {
-	return (value / max) * 100
-}
 
-
-func addState(now api.DateTime, point string, name string, state bool, index int) api.DataEntry {
-	return add(now, "virtual", point, name, api.UnitValue{ Value: fmt.Sprintf("%v", state), Unit: "binary"}, index)
-
-	// return api.DataEntry {
-	// 	Date:           now,
-	// 	PointId:        api.NameDevicePoint("virtual", point),
-	// 	PointGroupName: "Virtual",
-	// 	PointName:      name,
-	// 	Value:          fmt.Sprintf("%v", state),
-	// 	Unit:           "binary",
-	// 	ValueType: &api.Point{
-	// 		PsKey:       "virtual",
-	// 		Id:          point,
-	// 		Description: name,
-	// 		Unit:        "binary",
-	// 		Type:        "PointTypeInstant",
-	// 	},
-	// 	Index: index,
-	// }
-}
-
-func addValue(now api.DateTime, point string, name string, value string, unit string, index int) api.DataEntry {
-	return add(now, "virtual", point, name, api.UnitValue{ Value: value, Unit: unit}, index)
-
-	// vt := api.GetPoint(psId, point)
-	// if !vt.Valid {
-	// 	vt = &api.Point{
-	// 		PsKey:       psId,
-	// 		Id:          point,
-	// 		Description: name,
-	// 		Unit:        "",
-	// 		Type:        "PointTypeInstant",
-	// 	}
-	// }
-	// return api.DataEntry {
-	// 	Date:           now,
-	// 	PointId:        api.NameDevicePoint(psId, point),
-	// 	PointGroupName: "Summary",
-	// 	PointName:      name,
-	// 	Value:          value,
-	// 	Unit:           "",
-	// 	ValueType:      vt,
-	// 	Index:          index,
-	// }
-}
-
-func addIntValue(now api.DateTime, point string, name string, value int64, unit string, index int) api.DataEntry {
-	return add(now, "virtual", point, name, api.UnitValue{ Value: strconv.FormatInt(value, 10), Unit: unit }, index)
-}
-
-func addFloatValue(now api.DateTime, point string, name string, value float64, unit string, index int) api.DataEntry {
-	return add(now, "virtual", point, name, api.UnitValue{ Value: api.Float64ToString(value), Unit: unit }, index)
-}
-
-func add(now api.DateTime, psId string, point string, name string, value api.UnitValue, index int) api.DataEntry {
-	vt := api.GetPoint(psId, point)
-	if !vt.Valid {
-		vt = &api.Point{
-			PsKey:       psId,
-			Id:          point,
-			Description: name,
-			Unit:        value.Unit,
-			Type:        "PointTypeInstant",
-		}
-	}
-	return api.DataEntry {
-		Date:           now,
-		PointId:        api.NameDevicePoint(psId, point),
-		PointGroupName: "Virtual",
-		PointName:      name,
-		Value:          value.Value,
-		Unit:           value.Unit,
-		ValueType:      vt,
-		Index:          index,
-	}
-}
-
+// func addState(now api.DateTime, point string, name string, state bool, index int) api.DataEntry {
+// 	return add(now, "virtual", point, name, api.UnitValue{ Value: fmt.Sprintf("%v", state), Unit: "binary"}, index)
+// }
+//
+// func addValue(now api.DateTime, point string, name string, value string, unit string, index int) api.DataEntry {
+// 	return add(now, "virtual", point, name, api.UnitValue{ Value: value, Unit: unit}, index)
+//
+// 	// vt := api.GetPoint(psId, point)
+// 	// if !vt.Valid {
+// 	// 	vt = &api.PointStruct{
+// 	// 		PsKey:       psId,
+// 	// 		Id:          point,
+// 	// 		Description: name,
+// 	// 		Unit:        "",
+// 	// 		Type:        "PointTypeInstant",
+// 	// 	}
+// 	// }
+// 	// return api.DataEntry {
+// 	// 	Date:           now,
+// 	// 	PointId:        api.NameDevicePoint(psId, point),
+// 	// 	PointGroupName: "Summary",
+// 	// 	PointName:      name,
+// 	// 	Value:          value,
+// 	// 	Unit:           "",
+// 	// 	ValueType:      vt,
+// 	// 	Index:          index,
+// 	// }
+// }
+//
+// func addIntValue(now api.DateTime, point string, name string, value int64, unit string, index int) api.DataEntry {
+// 	return add(now, "virtual", point, name, api.UnitValue{ Value: strconv.FormatInt(value, 10), Unit: unit }, index)
+// }
+//
+// func addFloatValue(now api.DateTime, point string, name string, value float64, unit string, index int) api.DataEntry {
+// 	return add(now, "virtual", point, name, api.UnitValue{ Value: api.Float64ToString(value), Unit: unit }, index)
+// }
+//
+// func addFloatValue(ref api.DataEntry, psId string, point string, name string, index int) api.DataEntry {
+// 	ref.PointId = psId
+// 	ref.PointName = point
+// 	return add(now, "virtual", point, name, api.UnitValue{ Value: api.Float64ToString(value), Unit: unit }, index)
+// }
+//
+// func addVirtualState(ref api.DataEntry, point string, name string) api.DataEntry {
+//
+// 	return api.DataEntry {
+// 		Date:           ref.Date,
+// 		PointId:        api.NameDevicePoint("virtual", point),
+// 		PointGroupName: "Virtual",
+// 		PointName:      name,
+// 		Value:          fmt.Sprintf("%v", isActive(ref.ValueFloat)),
+// 		ValueFloat:     0,
+// 		Unit:           "binary",
+// 		ValueType:      &api.Point {
+// 			PsKey:       "virtual",
+// 			Id:          point,
+// 			Description: name,
+// 			Unit:        "binary",
+// 		},
+// 		Index:          0,
+// 	}
+// }
+//
+// func addVirtualValue(ref api.DataEntry, point string, name string, value float64) api.DataEntry {
+// 	return api.DataEntry {
+// 		Date:           ref.Date,
+// 		PointId:        api.NameDevicePoint("virtual", point),
+// 		PointGroupName: "Virtual",
+// 		PointName:      name,
+// 		Value:          api.Float64ToString(value),
+// 		ValueFloat:     value,
+// 		Unit:           ref.Unit,
+// 		ValueType:      &api.Point {
+// 			PsKey:       "virtual",
+// 			Id:          point,
+// 			Description: name,
+// 			Unit:        ref.Unit,
+// 		},
+// 		Index:          0,
+// 	}
+// }
+//
+// func addVirtualAlias(ref api.DataEntry, point string, name string) api.DataEntry {
+// 	ref.PointId = api.NameDevicePoint("virtual", point)
+// 	ref.PointGroupName = "Virtual"
+// 	ref.PointName = name
+// 	ref.ValueType.PsKey = "virtual"
+// 	ref.ValueType.Description = name
+// 	ref.ValueType.Id = point
+// 	ref.Index = 0
+//
+// 	return ref
+// }
+//
+// func add(now api.DateTime, psId string, point string, name string, value api.UnitValue) api.DataEntry {
+// 	vt := api.GetPoint(psId, point)
+// 	if !vt.Valid {
+// 		vt = &api.Point{
+// 			PsKey:       psId,
+// 			Id:          point,
+// 			Description: name,
+// 			Unit:        value.Unit,
+// 			Type:        "PointTypeInstant",
+// 		}
+// 	}
+// 	return api.DataEntry {
+// 		Date:           now,
+// 		PointId:        api.NameDevicePoint(psId, point),
+// 		PointGroupName: "Virtual",
+// 		PointName:      name,
+// 		Value:          value.Value,
+// 		Unit:           value.Unit,
+// 		ValueType:      vt,
+// 		Index:          0,
+// 	}
+// }
+//
 // func addState(now api.DateTime, point string, name string, state bool, index int) api.DataEntry {
 // 	return api.DataEntry {
 // 		Date:           now,
@@ -772,7 +711,7 @@ func add(now api.DateTime, psId string, point string, name string, value api.Uni
 // 		PointName:      name,
 // 		Value:          fmt.Sprintf("%v", state),
 // 		Unit:           "binary",
-// 		ValueType: &api.Point{
+// 		ValueType: &api.PointStruct{
 // 			PsKey:       "virtual",
 // 			Id:          point,
 // 			Description: name,
@@ -782,10 +721,10 @@ func add(now api.DateTime, psId string, point string, name string, value api.Uni
 // 		Index: index,
 // 	}
 // }
-
-func isActive(value float64) bool {
-	if (value > 0.01) || (value < -0.01) {
-		return true
-	}
-	return false
-}
+//
+// func isActive(value float64) bool {
+// 	if (value > 0.01) || (value < -0.01) {
+// 		return true
+// 	}
+// 	return false
+// }

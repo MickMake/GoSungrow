@@ -434,6 +434,9 @@ func (m *Mqtt) GetLastReset(pointType string) string {
 		if !pt.Valid {
 			break
 		}
+		if pt.Type == "" {
+			break
+		}
 		ret = pt.WhenReset()
 	}
 
@@ -442,18 +445,19 @@ func (m *Mqtt) GetLastReset(pointType string) string {
 
 
 type EntityConfig struct {
-	Type          string
+	// Type          string
 	Name          string
 	SubName       string
 
 	ParentId      string
 	ParentName    string
 
-	UniqueId      string
-	FullName      string
-	Units         string
+	UniqueId string
+	FullId   string
+	Units    string
 	ValueName     string
 	DeviceClass   string
+	StateClass    string
 	Icon          string
 
 	Value         string
@@ -478,9 +482,13 @@ func (config *EntityConfig) IsSensor() bool {
 		if config.IsLight() {
 			break
 		}
-		if config.Units == "" {
-			break
-		}
+		// if config.Value != "" {
+		// 	ok = true
+		// 	break
+		// }
+		// if config.Units == "" {
+		// 	break
+		// }
 
 		ok = true
 	}
@@ -613,14 +621,30 @@ func (config *EntityConfig) FixConfig() {
 			break
 		}
 
-		pt := api.GetDevicePoint(config.UniqueId)
+		pt := api.GetDevicePoint(config.FullId)
 		if !pt.Valid {
 			break
 		}
-		config.LastReset = pt.WhenReset()
 
+		if config.StateClass == "instant" {
+			config.StateClass = "measurement"
+			break
+		}
+
+		if config.StateClass == "" {
+			config.StateClass = "measurement"
+			break
+		}
+
+		config.LastReset = pt.WhenReset()
 		config.LastResetValueTemplate = SetDefault(config.LastResetValueTemplate, "{{ value_json.last_reset | as_datetime() }}")
 		// config.LastResetValueTemplate = SetDefault(config.LastResetValueTemplate, "{{ value_json.last_reset | int | timestamp_local | as_datetime }}")
+
+		if config.LastReset == "" {
+			config.StateClass = "measurement"
+			break
+		}
+		config.StateClass = "total"
 	}
 }
 
