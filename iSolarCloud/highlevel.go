@@ -2,6 +2,7 @@ package iSolarCloud
 
 import (
 	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/AppService/getPowerDevicePointInfo"
 	"GoSungrow/iSolarCloud/AppService/getPowerDevicePointNames"
 	"GoSungrow/iSolarCloud/AppService/getPsDetailWithPsType"
 	"GoSungrow/iSolarCloud/AppService/getPsList"
@@ -15,6 +16,7 @@ import (
 	"GoSungrow/iSolarCloud/api/output"
 	"errors"
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 	"time"
@@ -541,6 +543,126 @@ func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints) erro
 			sg.Error = table.Error
 			break
 		}
+
+		sg.Error = sg.Output(ep2, &table, "")
+		if sg.Error != nil {
+			break
+		}
+	}
+
+	return sg.Error
+}
+
+func (sg *SunGrow) SearchPointNames(pns ...string) error {
+	for range Only.Once {
+		table := output.NewTable()
+		sg.Error = table.SetTitle("")
+		if sg.Error != nil {
+			break
+		}
+		_ = table.SetHeader(
+			"DeviceType",
+			"Id",
+			"Period",
+			"Point Id",
+			"Point Name",
+			"Show Point Name",
+			"Translation Id",
+		)
+
+		if len(pns) == 0 {
+			fmt.Println("Searching up to id 1000 within getPowerDevicePointInfo")
+			for pni := 0; pni < 1000; pni++ {
+				PrintPause(pni, 20)
+
+				ep := sg.GetByStruct(
+					"AppService.getPowerDevicePointInfo",
+					getPowerDevicePointInfo.RequestData{Id: strconv.FormatInt(int64(pni), 10)},
+					DefaultCacheTimeout,
+				)
+				if sg.Error != nil {
+					break
+				}
+
+				ep2 := getPowerDevicePointInfo.Assert(ep)
+				table = ep2.AddDataTable(table)
+				if table.Error != nil {
+					sg.Error = table.Error
+					break
+				}
+			}
+			fmt.Println("")
+		} else {
+			fmt.Printf("Searching for %v within getPowerDevicePointInfo\n", pns)
+			for _, pn := range pns {
+				ep := sg.GetByStruct(
+					"AppService.getPowerDevicePointInfo",
+					getPowerDevicePointInfo.RequestData{Id: pn},
+					DefaultCacheTimeout,
+				)
+				if sg.Error != nil {
+					break
+				}
+
+				ep2 := getPowerDevicePointInfo.Assert(ep)
+				table := ep2.GetDataTable()
+				if table.Error != nil {
+					sg.Error = table.Error
+					break
+				}
+			}
+			fmt.Println("")
+		}
+
+		sg.Error = sg.OutputTable(&table)
+		if sg.Error != nil {
+			break
+		}
+	}
+
+	return sg.Error
+}
+
+func PrintPause(index int, max int) {
+	for range Only.Once {
+		if index == 0 {
+			fmt.Printf("\n%.3d ", index)
+			break
+		}
+
+		m := math.Mod(float64(index), float64(max))
+		if m == 0 {
+			fmt.Printf("PAUSE")
+			time.Sleep(time.Millisecond * 500)
+			// fmt.Printf("\r%s%.3d ", strings.Repeat(" ", 4), pni)
+			fmt.Printf("\r%.3d ", index)
+		} else {
+			time.Sleep(time.Millisecond * 100)
+			fmt.Printf(".")
+		}
+	}
+}
+
+func (sg *SunGrow) GetPointName(pn string) error {
+	for range Only.Once {
+		ep := sg.GetByStruct(
+			"AppService.getPowerDevicePointInfo",
+			getPowerDevicePointInfo.RequestData{Id: pn},
+			DefaultCacheTimeout,
+		)
+		if sg.Error != nil {
+			break
+		}
+
+		ep2 := getPowerDevicePointInfo.Assert(ep)
+		table := ep2.GetDataTable()
+		if table.Error != nil {
+			sg.Error = table.Error
+			break
+		}
+
+		// table2 := ep2.GetData()
+		// fmt.Printf("%v\n", table2)
 
 		sg.Error = sg.Output(ep2, &table, "")
 		if sg.Error != nil {

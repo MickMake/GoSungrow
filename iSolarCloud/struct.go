@@ -271,6 +271,30 @@ func (sg *SunGrow) Output(endpoint api.EndPoint, table *output.Table, graphFilte
 	return sg.Error
 }
 
+func (sg *SunGrow) OutputTable(table *output.Table) error {
+	for range Only.Once {
+		switch {
+			case sg.OutputType.IsNone():
+
+			case sg.OutputType.IsHuman():
+				if table == nil {
+					break
+				}
+				table.Print()
+
+			case sg.OutputType.IsFile():
+				if table == nil {
+					break
+				}
+				sg.Error = table.WriteCsvFile()
+
+			default:
+		}
+	}
+
+	return sg.Error
+}
+
 func (sg *SunGrow) Login(auth login.SunGrowAuth) error {
 	for range Only.Once {
 		a := sg.GetEndpoint(AppService.GetAreaName() + ".login")

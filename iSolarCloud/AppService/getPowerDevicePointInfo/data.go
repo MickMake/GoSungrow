@@ -1,7 +1,9 @@
 package getPowerDevicePointInfo
 
 import (
+	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
 )
 
@@ -41,6 +43,60 @@ func (e *ResultData) IsValid() error {
 		// 		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
 		// }
 	return err
+}
+
+func (e *EndPoint) GetData() ResultData {
+	return e.Response.ResultData
+}
+
+// func (e *EndPoint) GetData() api.DataMap {
+// 	return e.Response.ResultData.GetData()
+// }
+//
+// func (e *ResultData) GetData() api.DataMap {
+// 	entries := api.NewDataMap()
+//
+// 	for range Only.Once {
+// 		entries.StructToPoints("", *e)
+// 	}
+// 	return entries
+// }
+
+func (e *EndPoint) AddDataTable(table output.Table) output.Table {
+
+	for range Only.Once {
+		rd := e.Response.ResultData
+
+		if rd.ID == 0 {
+			break
+		}
+		_ = table.AddRow(rd.DeviceType, rd.ID, rd.Period, rd.PointID,rd.PointName, rd.ShowPointName, rd.TranslationID)
+	}
+	return table
+}
+
+func (e *EndPoint) GetDataTable() output.Table {
+	var table output.Table
+	for range Only.Once {
+		table = output.NewTable()
+		e.Error = table.SetTitle("")
+		if e.Error != nil {
+			break
+		}
+
+		_ = table.SetHeader(
+			"DeviceType",
+			"Id",
+			"Period",
+			"Point Id",
+			"Point Name",
+			"Show Point Name",
+			"Translation Id",
+		)
+		rd := e.Response.ResultData
+		_ = table.AddRow(rd.DeviceType, rd.ID, rd.Period, rd.PointID,rd.PointName, rd.ShowPointName, rd.TranslationID)
+	}
+	return table
 }
 
 //type DecodeResultData ResultData

@@ -207,3 +207,26 @@ func AttachCmdDataPointNames(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
+// AttachCmdDataSearchPointInfo
+func AttachCmdDataSearchPointInfo(cmd *cobra.Command) *cobra.Command {
+	// ********************************************************************************
+	var c = &cobra.Command{
+		Use:                   "search-point-names",
+		Aliases:               []string{"names"},
+		Short:                 fmt.Sprintf("Get iSolarCloud search point names."),
+		Long:                  fmt.Sprintf("Get iSolarCloud search point names."),
+		DisableFlagParsing:    false,
+		DisableFlagsInUseLine: false,
+		PreRunE:               Cmd.SunGrowArgs,
+		RunE:                  func(cmd *cobra.Command, args []string) error {
+			_ = SwitchOutput(cmd)
+			return Cmd.SunGrow.SearchPointNames(args...)
+		},
+		Args:                  cobra.MinimumNArgs(0),
+	}
+	cmd.AddCommand(c)
+	c.Example = PrintExamples(c, "")
+
+	return cmd
+}
