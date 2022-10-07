@@ -2,7 +2,9 @@ package getDeviceModelInfoList
 
 import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/getDeviceModelInfoList"
@@ -61,3 +63,40 @@ func (e *ResultData) IsValid() error {
 //
 //	return err
 //}
+
+func (e *EndPoint) GetDataTable() output.Table {
+	var table output.Table
+	for range Only.Once {
+		table = output.NewTable()
+		table.SetTitle("")
+		table.SetJson([]byte(e.GetJsonData(false)))
+		table.SetRaw([]byte(e.GetJsonData(true)))
+
+		_ = table.SetHeader(
+			"Model Id",
+			"Type",
+			"Com Type",
+			"Factory Id",
+			"Factory Name",
+			"Model",
+			"Model Code",
+			"Is Remote Upgrade",
+		)
+		for _, d := range e.Response.ResultData {
+			if d.DeviceModel == d.DeviceModelCode {
+				d.DeviceModelCode = ""
+			}
+			_ = table.AddRow(
+				d.DeviceModelID,
+				d.DeviceType,
+				d.ComType,
+				d.DeviceFactoryID,
+				d.DeviceFactoryName,
+				d.DeviceModel,
+				d.DeviceModelCode,
+				d.IsRemoteUpgrade,
+			)
+		}
+	}
+	return table
+}

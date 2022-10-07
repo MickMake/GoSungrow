@@ -6,6 +6,7 @@ import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
+	"time"
 )
 
 const Url = "/v1/powerStationService/getPsDetailWithPsType"
@@ -25,117 +26,117 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	BatteryLevelPercent         string        `json:"battery_level_percent"`
-	ChargingDischargingPowerMap api.UnitValue `json:"charging_discharging_power_map"`
-	Co2ReduceTotal              api.UnitValue `json:"co2_reduce_total"`
-	CoalReduceTotal             api.UnitValue `json:"coal_reduce_total"`
-	ConnectType                 string        `json:"connect_type"`
-	CurrPower                   api.UnitValue `json:"curr_power"`
-	DesignCapacity              api.UnitValue `json:"design_capacity"`
+	BatteryLevelPercent         string        `json:"battery_level_percent" PointId:"BatteryLevelPercent" PointType:"PointTypeBoot"`
+	ChargingDischargingPowerMap api.UnitValue `json:"charging_discharging_power_map" PointId:"ChargingDischargingPowerMap" PointType:"PointTypeInstant"`
+	Co2ReduceTotal              api.UnitValue `json:"co2_reduce_total" PointId:"Co2ReduceTotal" PointType:"PointTypeTotal"`
+	CoalReduceTotal             api.UnitValue `json:"coal_reduce_total" PointId:"CoalReduceTotal" PointType:"PointTypeTotal"`
+	ConnectType                 string        `json:"connect_type" PointId:"ConnectType" PointType:"PointTypeBoot"`
+	CurrPower                   api.UnitValue `json:"curr_power" PointId:"CurrPower" PointType:"PointTypeInstant"`
+	DesignCapacity              api.UnitValue `json:"design_capacity" PointId:"DesignCapacity" PointType:"PointTypeBoot"`
 	EnergyScheme                interface{}   `json:"energy_scheme"`
-	GcjLatitude                 string        `json:"gcj_latitude"`
-	GcjLongitude                string        `json:"gcj_longitude"`
-	HasAmmeter                  int64         `json:"has_ammeter"`
+	GcjLatitude                 string        `json:"gcj_latitude" PointId:"GcjLatitude" PointType:"PointTypeBoot"`
+	GcjLongitude                string        `json:"gcj_longitude" PointId:"GcjLongitude" PointType:"PointTypeBoot"`
+	HasAmmeter                  int64         `json:"has_ammeter" PointId:"HasAmmeter" PointType:"PointTypeBoot"`
 	HouseholdInverterData       interface{}   `json:"household_inverter_data"`
-	InstallerPsFaultStatus      string        `json:"installer_ps_fault_status"`
-	IsHaveEsInverter            int64         `json:"is_have_es_inverter"`
-	IsSingleInverter            int64         `json:"is_single_inverter"`
-	IsTransformSystem           string        `json:"is_transform_system"`
-	Latitude                    float64       `json:"latitude"`
-	LoadPowerMap                api.UnitValue `json:"load_power_map"`
-	LoadPowerMapVirgin          api.UnitValue `json:"load_power_map_virgin"`
-	Longitude                   float64       `json:"longitude"`
-	MapLatitude                 string        `json:"map_latitude"`
-	MapLongitude                string        `json:"map_longitude"`
-	MeterReduceTotal            api.UnitValue `json:"meter_reduce_total"`
-	MobleTel                    string        `json:"moble_tel"`
-	MonthEnergy                 api.UnitValue `json:"month_energy"`
-	MonthEnergyVirgin           api.UnitValue `json:"month_energy_virgin"`
-	MonthIncome                 api.UnitValue `json:"month_income"`
+	InstallerPsFaultStatus      string        `json:"installer_ps_fault_status" PointId:"InstallerPsFaultStatus" PointType:"PointTypeBoot"`
+	IsHaveEsInverter            int64         `json:"is_have_es_inverter" PointId:"IsHaveEsInverter" PointType:"PointTypeBoot"`
+	IsSingleInverter            int64         `json:"is_single_inverter" PointId:"IsSingleInverter" PointType:"PointTypeBoot"`
+	IsTransformSystem           string        `json:"is_transform_system" PointId:"IsTransformSystem" PointType:"PointTypeBoot"`
+	Latitude                    float64       `json:"latitude" PointId:"Latitude" PointType:"PointTypeBoot"`
+	LoadPowerMap                api.UnitValue `json:"load_power_map" PointId:"LoadPowerMap" PointType:"PointTypeInstant"`
+	LoadPowerMapVirgin          api.UnitValue `json:"load_power_map_virgin"  PointIgnore:"true"`
+	Longitude                   float64       `json:"longitude" PointId:"Longitude" PointType:"PointTypeBoot"`
+	MapLatitude                 string        `json:"map_latitude" PointId:"MapLatitude" PointType:"PointTypeBoot"`
+	MapLongitude                string        `json:"map_longitude" PointId:"MapLongitude" PointType:"PointTypeBoot"`
+	MeterReduceTotal            api.UnitValue `json:"meter_reduce_total" PointId:"MeterReduceTotal" PointType:"PointTypeTotal"`
+	MobleTel                    string        `json:"moble_tel" PointId:"MobleTel" PointType:"PointTypeBoot"`
+	MonthEnergy                 api.UnitValue `json:"month_energy" PointId:"MonthEnergy" PointType:"PointTypeMonthly"`
+	MonthEnergyVirgin           api.UnitValue `json:"month_energy_virgin"  PointIgnore:"true"`
+	MonthIncome                 api.UnitValue `json:"month_income" PointId:"MonthIncome" PointType:"PointTypeMonthly"`
 	NegativeLoadMsg             interface{}   `json:"negative_load_msg"`
-	OwnerPsFaultStatus          string        `json:"owner_ps_fault_status"`
-	P83081Map                   api.UnitValue `json:"p83081_map"`
-	P83081MapVirgin             api.UnitValue `json:"p83081_map_virgin"`
-	P83102Map                   api.UnitValue `json:"p83102_map"`
-	P83102MapVirgin             api.UnitValue `json:"p83102_map_virgin"`
-	P83102Percent               string        `json:"p83102_percent"`
-	P83118Map                   api.UnitValue `json:"p83118_map"`
-	P83118MapVirgin             api.UnitValue `json:"p83118_map_virgin"`
-	P83119Map                   api.UnitValue `json:"p83119_map"`
-	P83119MapVirgin             api.UnitValue `json:"p83119_map_virgin"`
-	P83120Map                   api.UnitValue `json:"p83120_map"`
-	P83120MapVirgin             api.UnitValue `json:"p83120_map_virgin"`
-	P83122                      string        `json:"p83122"`
-	P83124Map                   api.UnitValue `json:"p83124_map"`
-	P83124MapVirgin             api.UnitValue `json:"p83124_map_virgin"`
-	P83202Map                   api.UnitValue `json:"p83202_map"`
-	P83202MapVirgin             api.UnitValue `json:"p83202_map_virgin"`
-	P83532MapVirgin             api.UnitValue `json:"p83532_map_virgin"`
-	PowerChargeSetted           int64         `json:"power_charge_setted"`
-	PowerGridPowerMap           api.UnitValue `json:"power_grid_power_map"`
-	PowerGridPowerMapVirgin     api.UnitValue `json:"power_grid_power_map_virgin"`
-	PsCountryID                 int64         `json:"ps_country_id"`
-	PsDeviceType                string        `json:"ps_device_type"`
-	PsFaultStatus               string        `json:"ps_fault_status"`
-	PsHealthStatus              string        `json:"ps_health_status"`
-	PsLocation                  string        `json:"ps_location"`
-	PsName                      string        `json:"ps_name"`
-	PsPsKey                     string        `json:"ps_ps_key"`
-	PsState                     string        `json:"ps_state"`
-	PsType                      int64         `json:"ps_type"`
-	PvPowerMap                  api.UnitValue `json:"pv_power_map"`
-	PvPowerMapVirgin            api.UnitValue `json:"pv_power_map_virgin"`
+	OwnerPsFaultStatus          string        `json:"owner_ps_fault_status" PointId:"OwnerPsFaultStatus" PointType:"PointTypeBoot"`
+	P83081Map                   api.UnitValue `json:"p83081_map" PointId:"P83081Map" PointType:"PointTypeInstant"`
+	P83081MapVirgin             api.UnitValue `json:"p83081_map_virgin"  PointIgnore:"true"`
+	P83102Map                   api.UnitValue `json:"p83102_map" PointId:"P83102Map" PointType:"PointTypeInstant"`
+	P83102MapVirgin             api.UnitValue `json:"p83102_map_virgin"  PointIgnore:"true"`
+	P83102Percent               string        `json:"p83102_percent" PointId:"P83102Percent" PointType:"PointTypeInstant"`
+	P83118Map                   api.UnitValue `json:"p83118_map" PointId:"P83118Map" PointType:"PointTypeInstant"`
+	P83118MapVirgin             api.UnitValue `json:"p83118_map_virgin"  PointIgnore:"true"`
+	P83119Map                   api.UnitValue `json:"p83119_map" PointId:"P83119Map" PointType:"PointTypeInstant"`
+	P83119MapVirgin             api.UnitValue `json:"p83119_map_virgin"  PointIgnore:"true"`
+	P83120Map                   api.UnitValue `json:"p83120_map" PointId:"P83120Map" PointType:"PointTypeInstant"`
+	P83120MapVirgin             api.UnitValue `json:"p83120_map_virgin"  PointIgnore:"true"`
+	P83122                      string        `json:"p83122" PointId:"P83122" PointType:"PointTypeInstant"`
+	P83124Map                   api.UnitValue `json:"p83124_map" PointId:"P83124Map" PointType:"PointTypeInstant"`
+	P83124MapVirgin             api.UnitValue `json:"p83124_map_virgin"  PointIgnore:"true"`
+	P83202Map                   api.UnitValue `json:"p83202_map" PointId:"P83202Map" PointType:"PointTypeInstant"`
+	P83202MapVirgin             api.UnitValue `json:"p83202_map_virgin"  PointIgnore:"true"`
+	P83532MapVirgin             api.UnitValue `json:"p83532_map_virgin"  PointIgnore:"true"`
+	PowerChargeSetted           int64         `json:"power_charge_setted" PointId:"PowerChargeSetted" PointType:"PointTypeBoot"`
+	PowerGridPowerMap           api.UnitValue `json:"power_grid_power_map" PointId:"PowerGridPowerMap" PointType:"PointTypeInstant"`
+	PowerGridPowerMapVirgin     api.UnitValue `json:"power_grid_power_map_virgin"  PointIgnore:"true"`
+	PsCountryID                 int64         `json:"ps_country_id" PointId:"PsCountryID" PointType:"PointTypeBoot"`
+	PsDeviceType                string        `json:"ps_device_type" PointId:"PsDeviceType" PointType:"PointTypeBoot"`
+	PsFaultStatus               string        `json:"ps_fault_status" PointId:"PsFaultStatus" PointType:"PointTypeBoot"`
+	PsHealthStatus              string        `json:"ps_health_status" PointId:"PsHealthStatus" PointType:"PointTypeBoot"`
+	PsLocation                  string        `json:"ps_location" PointId:"PsLocation" PointType:"PointTypeBoot"`
+	PsName                      string        `json:"ps_name" PointId:"PsName" PointType:"PointTypeBoot"`
+	PsPsKey                     string        `json:"ps_ps_key" PointId:"PsPsKey" PointType:"PointTypeBoot"`
+	PsState                     string        `json:"ps_state" PointId:"PsState" PointType:"PointTypeBoot"`
+	PsType                      int64         `json:"ps_type" PointId:"PsType" PointType:"PointTypeBoot"`
+	PvPowerMap                  api.UnitValue `json:"pv_power_map" PointId:"PvPowerMap" PointType:"PointTypeInstant"`
+	PvPowerMapVirgin            api.UnitValue `json:"pv_power_map_virgin"  PointIgnore:"true"`
 	RobotNumSweepCapacity       struct {
-		Num           int64   `json:"num"`
-		SweepCapacity float64 `json:"sweep_capacity"`
+		Num           int64   `json:"num" PointId:"Num" PointType:"PointTypeBoot"`
+		SweepCapacity float64 `json:"sweep_capacity" PointId:"SweepCapacity" PointType:"PointTypeBoot"`
 	} `json:"robot_num_sweep_capacity"`
-	SelfConsumptionOffsetReminder int64         `json:"self_consumption_offset_reminder"`
-	So2ReduceTotal                api.UnitValue `json:"so2_reduce_total"`
+	SelfConsumptionOffsetReminder int64         `json:"self_consumption_offset_reminder" PointId:"SelfConsumptionOffsetReminder" PointType:"PointTypeBoot"`
+	So2ReduceTotal                api.UnitValue `json:"so2_reduce_total" PointId:"So2ReduceTotal" PointType:"PointTypeTotal"`
 	StorageInverterData           []struct {
-		CommunicationDevSn      string        `json:"communication_dev_sn"`
-		DevStatus               int64         `json:"dev_status"`
-		DeviceCode              int64         `json:"device_code"`
-		DeviceModelCode         string        `json:"device_model_code"`
-		DeviceName              string        `json:"device_name"`
-		DeviceState             string        `json:"device_state"`
-		DeviceType              int64         `json:"device_type"`
-		DrmStatus               string        `json:"drm_status"`
-		DrmStatusName           string        `json:"drm_status_name"`
+		CommunicationDevSn      string        `json:"communication_dev_sn" PointId:"CommunicationDevSn" PointType:"PointTypeBoot"`
+		DevStatus               int64         `json:"dev_status" PointId:"DevStatus" PointType:"PointTypeBoot"`
+		DeviceCode              int64         `json:"device_code" PointId:"DeviceCode" PointType:"PointTypeBoot"`
+		DeviceModelCode         string        `json:"device_model_code" PointId:"DeviceModelCode" PointType:"PointTypeBoot"`
+		DeviceName              string        `json:"device_name" PointId:"DeviceName" PointType:"PointTypeBoot"`
+		DeviceState             string        `json:"device_state" PointId:"DeviceState" PointType:"PointTypeBoot"`
+		DeviceType              int64         `json:"device_type" PointId:"DeviceType" PointType:"PointTypeBoot"`
+		DrmStatus               string        `json:"drm_status" PointId:"DrmStatus" PointType:"PointTypeBoot"`
+		DrmStatusName           string        `json:"drm_status_name" PointId:"DrmStatusName" PointType:"PointTypeBoot"`
 		EnergyFlow              []string      `json:"energy_flow"`
-		HasAmmeter              int64         `json:"has_ammeter"`
-		InstallerDevFaultStatus int64         `json:"installer_dev_fault_status"`
-		InverterSn              string        `json:"inverter_sn"`
-		OwnerDevFaultStatus     int64         `json:"owner_dev_fault_status"`
-		P13003Map               api.UnitValue `json:"p13003_map"`
-		P13003MapVirgin         api.UnitValue `json:"p13003_map_virgin"`
-		P13119Map               api.UnitValue `json:"p13119_map"`
-		P13119MapVirgin         api.UnitValue `json:"p13119_map_virgin"`
-		P13121Map               api.UnitValue `json:"p13121_map"`
-		P13121MapVirgin         api.UnitValue `json:"p13121_map_virgin"`
-		P13126Map               api.UnitValue `json:"p13126_map"`
-		P13126MapVirgin         api.UnitValue `json:"p13126_map_virgin"`
-		P13141                  string        `json:"p13141"`
-		P13149Map               api.UnitValue `json:"p13149_map"`
-		P13149MapVirgin         api.UnitValue `json:"p13149_map_virgin"`
-		P13150Map               api.UnitValue `json:"p13150_map"`
-		P13150MapVirgin         api.UnitValue `json:"p13150_map_virgin"`
-		PsKey                   string        `json:"ps_key"`
-		UUID                    int64         `json:"uuid"`
+		HasAmmeter              int64         `json:"has_ammeter" PointId:"HasAmmeter" PointType:"PointTypeBoot"`
+		InstallerDevFaultStatus int64         `json:"installer_dev_fault_status" PointId:"InstallerDevFaultStatus" PointType:"PointTypeBoot"`
+		InverterSn              string        `json:"inverter_sn" PointId:"InverterSn" PointType:"PointTypeBoot"`
+		OwnerDevFaultStatus     int64         `json:"owner_dev_fault_status" PointId:"OwnerDevFaultStatus" PointType:"PointTypeBoot"`
+		P13003Map               api.UnitValue `json:"p13003_map" PointId:"P13003Map" PointType:"PointTypeInstant"`
+		P13003MapVirgin         api.UnitValue `json:"p13003_map_virgin"  PointIgnore:"true"`
+		P13119Map               api.UnitValue `json:"p13119_map" PointId:"P13119Map" PointType:"PointTypeInstant"`
+		P13119MapVirgin         api.UnitValue `json:"p13119_map_virgin"  PointIgnore:"true"`
+		P13121Map               api.UnitValue `json:"p13121_map" PointId:"P13121Map" PointType:"PointTypeInstant"`
+		P13121MapVirgin         api.UnitValue `json:"p13121_map_virgin"  PointIgnore:"true"`
+		P13126Map               api.UnitValue `json:"p13126_map" PointId:"P13126Map" PointType:"PointTypeInstant"`
+		P13126MapVirgin         api.UnitValue `json:"p13126_map_virgin"  PointIgnore:"true"`
+		P13141                  string        `json:"p13141" PointId:"P13141" PointType:"PointTypeInstant"`
+		P13149Map               api.UnitValue `json:"p13149_map" PointId:"P13149Map" PointType:"PointTypeInstant"`
+		P13149MapVirgin         api.UnitValue `json:"p13149_map_virgin"  PointIgnore:"true"`
+		P13150Map               api.UnitValue `json:"p13150_map" PointId:"P13150Map" PointType:"PointTypeInstant"`
+		P13150MapVirgin         api.UnitValue `json:"p13150_map_virgin"  PointIgnore:"true"`
+		PsKey                   string        `json:"ps_key" PointId:"PsKey" PointType:"PointTypeBoot"`
+		UUID                    int64         `json:"uuid" PointId:"UUID" PointType:"PointTypeBoot"`
 	} `json:"storage_inverter_data"`
-	TodayEnergy       api.UnitValue `json:"today_energy"`
-	TodayEnergyVirgin api.UnitValue `json:"today_energy_virgin"`
-	TodayIncome       api.UnitValue `json:"today_income"`
-	TotalEnergy       api.UnitValue `json:"total_energy"`
-	TotalEnergyVirgin api.UnitValue `json:"total_energy_virgin"`
-	TotalIncome       api.UnitValue `json:"total_income"`
-	TreeReduceTotal   api.UnitValue `json:"tree_reduce_total"`
-	ValidFlag         int64         `json:"valid_flag"`
-	WgsLatitude       float64       `json:"wgs_latitude"`
-	WgsLongitude      float64       `json:"wgs_longitude"`
-	ZfzyMap           api.UnitValue `json:"zfzy_map"`
-	ZfzyMapVirgin     api.UnitValue `json:"zfzy_map_virgin"`
-	ZjzzMap           api.UnitValue `json:"zjzz_map"`
-	ZjzzMapVirgin     api.UnitValue `json:"zjzz_map_virgin"`
+	TodayEnergy       api.UnitValue `json:"today_energy" PointId:"TodayEnergy" PointType:"PointTypeDaily"`
+	TodayEnergyVirgin api.UnitValue `json:"today_energy_virgin"  PointIgnore:"true"`
+	TodayIncome       api.UnitValue `json:"today_income" PointId:"TodayIncome" PointType:"PointTypeDaily"`
+	TotalEnergy       api.UnitValue `json:"total_energy" PointId:"TotalEnergy" PointType:"PointTypeTotal"`
+	TotalEnergyVirgin api.UnitValue `json:"total_energy_virgin"  PointIgnore:"true"`
+	TotalIncome       api.UnitValue `json:"total_income" PointId:"TotalIncome" PointType:"PointTypeTotal"`
+	TreeReduceTotal   api.UnitValue `json:"tree_reduce_total" PointId:"TreeReduceTotal" PointType:"PointTypeTotal"`
+	ValidFlag         int64         `json:"valid_flag" PointId:"ValidFlag" PointType:"PointTypeBoot"`
+	WgsLatitude       float64       `json:"wgs_latitude" PointId:"WgsLatitude" PointType:"PointTypeBoot"`
+	WgsLongitude      float64       `json:"wgs_longitude" PointId:"WgsLongitude" PointType:"PointTypeBoot"`
+	ZfzyMap           api.UnitValue `json:"zfzy_map" PointId:"ZfzyMap" PointType:"PointTypeInstant"`
+	ZfzyMapVirgin     api.UnitValue `json:"zfzy_map_virgin"  PointIgnore:"true"`
+	ZjzzMap           api.UnitValue `json:"zjzz_map" PointId:"ZjzzMap" PointType:"PointTypeInstant"`
+	ZjzzMapVirgin     api.UnitValue `json:"zjzz_map_virgin"  PointIgnore:"true"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -173,10 +174,9 @@ func (e *EndPoint) GetDataTable() output.Table {
 
 	for range Only.Once {
 		table = output.NewTable()
-		e.Error = table.SetTitle("")
-		if e.Error != nil {
-			break
-		}
+		table.SetTitle("")
+		table.SetJson([]byte(e.GetJsonData(false)))
+		table.SetRaw([]byte(e.GetJsonData(true)))
 
 		_ = table.SetHeader(
 			"Date",
@@ -191,26 +191,27 @@ func (e *EndPoint) GetDataTable() output.Table {
 
 		keys := api.GetStructKeys(e.Response.ResultData)
 		for _, n := range keys.Sort() {
-			p := api.GetPoint(e.Response.ResultData.PsPsKey, n)
+			pn := api.PointId(n)
+			p := api.GetPoint(e.Response.ResultData.PsPsKey, pn)
 			if p.Valid {
 				_ = table.AddRow(
 					now,
-					api.NameDevicePoint(e.Response.ResultData.PsPsKey, n),
+					api.NameDevicePoint(e.Response.ResultData.PsPsKey, pn),
 					p.Name,
-					keys[n].Value,
+					keys[pn].Value,
 					p.Unit,
-					keys[n].Unit,
+					keys[pn].Unit,
 				)
 				continue
 			}
 
 			_ = table.AddRow(
 				now,
-				api.NameDevicePoint(e.Response.ResultData.PsPsKey, n),
-				api.PointToName(n),
-				keys[n].Value,
-				keys[n].Unit,
-				keys[n].Unit,
+				api.NameDevicePoint(e.Response.ResultData.PsPsKey, pn),
+				api.PointToName(pn),
+				keys[pn].Value,
+				keys[pn].Unit,
+				keys[pn].Unit,
 			)
 		}
 
@@ -221,26 +222,27 @@ func (e *EndPoint) GetDataTable() output.Table {
 		for _, sid := range e.Response.ResultData.StorageInverterData {
 			keys = api.GetStructKeys(sid)
 			for _, n := range keys.Sort() {
-				p := api.GetPoint(sid.PsKey, n)
+				pn := api.PointId(n)
+				p := api.GetPoint(sid.PsKey, pn)
 				if p.Valid {
 					_ = table.AddRow(
 						now,
-						api.NameDevicePoint(sid.PsKey, n),
+						api.NameDevicePoint(sid.PsKey, pn),
 						p.Name,
-						keys[n].Value,
+						keys[pn].Value,
 						p.Unit,
-						keys[n].Unit,
+						keys[pn].Unit,
 					)
 					continue
 				}
 
 				_ = table.AddRow(
 					now,
-					api.NameDevicePoint(sid.PsKey, n),
-					api.PointToName(n),
-					keys[n].Value,
-					keys[n].Unit,
-					keys[n].Unit,
+					api.NameDevicePoint(sid.PsKey, pn),
+					api.PointToName(pn),
+					keys[pn].Value,
+					keys[pn].Unit,
+					keys[pn].Unit,
 				)
 			}
 		}
@@ -262,38 +264,17 @@ func (e *EndPoint) GetDataTable() output.Table {
 }
 
 func (e *EndPoint) GetData() api.DataMap {
-	var ret api.DataMap
+	entries := api.NewDataMap()
 
-	// for range Only.Once {
-	// 	index := 0
-	// 	for _, d := range e.Response.ResultData.PageList {
-	// 		for _, p := range d.PointData {
-	// 			if p.Unit == "W" {
-	// 				fv, err := strconv.ParseFloat(p.Value, 64)
-	// 				fv = fv / 1000
-	// 				if err == nil {
-	// 					p.Value = fmt.Sprintf("%.3f", fv)
-	// 					p.Unit = "kW"
-	// 				}
-	// 			}
-	//
-	// 			ret.Entries = append(ret.Entries, api.DataEntry {
-	// 				Date:           api.NewDateTime(p.TimeStamp),
-	// 				PointId:        api.GetAreaPointName(d.PsKey, p.PointID),
-	// 				PointGroupName: p.PointGroupName,
-	// 				PointName:      p.PointName,
-	// 				Value:          p.Value,
-	// 				Unit:           p.Unit,
-	// 				ValueType:      api.GetPointType(d.PsKey, p.PointID),
-	// 				Index:          index,
-	// 			})
-	//
-	// 			index++
-	// 		}
-	// 	}
-	// }
+	for range Only.Once {
+		name := fmt.Sprintf("getPsDetailWithPsType.%s", e.Response.ResultData.PsPsKey)
+		entries.StructToPoints(e.Response.ResultData, name, e.Response.ResultData.PsPsKey, time.Time{})
 
-	return ret
+		for _, sid := range e.Response.ResultData.StorageInverterData {
+			entries.StructToPoints(sid, name + ".StorageInverterData." + sid.PsKey, sid.PsKey, time.Time{})
+		}
+	}
+	return entries
 }
 
 func (e *EndPoint) GetPsKeys() []string {

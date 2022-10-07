@@ -10,6 +10,7 @@ import (
 
 // https://augateway.isolarcloud.com/v1/
 
+
 func main() {
 	var err error
 
@@ -18,7 +19,6 @@ func main() {
 		if err != nil {
 			break
 		}
-
 	}
 
 	if err != nil {

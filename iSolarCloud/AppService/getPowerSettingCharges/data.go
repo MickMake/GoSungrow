@@ -2,12 +2,11 @@ package getPowerSettingCharges
 
 import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"errors"
 	"fmt"
 )
 
 const Url = "/v1/powerStationService/getPowerSettingCharges"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
 	// DeviceType string `json:"device_type" required:"true"`
@@ -23,18 +22,22 @@ func (rd RequestData) Help() string {
 }
 
 
-type ResultData struct {
-	Dummy string `json:"dummy"`
+type ResultData   struct {
+	CurrencyTypeList []struct {
+		CodeName  string `json:"code_name"`
+		CodeValue string `json:"code_value"`
+	} `json:"currencyTypeList"`
+	PowerChargeDataMap struct{} `json:"powerChargeDataMap"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
+	// switch {
+	// case e.Dummy == "":
+	// 	break
+	// default:
+	// 	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
+	// }
 	return err
 }
 

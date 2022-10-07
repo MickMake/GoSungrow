@@ -32,10 +32,10 @@ type ResultData struct {
 func (e *ResultData) IsValid() error {
 	var err error
 	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
+		case e.Dummy == "":
+			break
+		default:
+			err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
 	}
 	return err
 }

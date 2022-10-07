@@ -39,7 +39,7 @@ type Devices map[string]Device
 type Device struct {
 	Points Points `json:"points"`
 }
-type Points map[string]Point
+type Points map[api.PointId]Point
 type Point struct {
 	Name  string `json:"name"`
 	Units string `json:"units"`
@@ -99,7 +99,7 @@ func (e *ResultData) UnmarshalJSON(data []byte) error {
 				sort.Slice(times, func(i, j int) bool {
 					return times[i].Key.Before(times[j].Key.Time)
 				})
-				points[pointName] = Point{
+				points[api.PointId(pointName)] = Point{
 					Name:  "",
 					Units: "",
 					Times: times,
@@ -169,10 +169,9 @@ func (e *EndPoint) GetDataTable(points api.TemplatePoints) output.Table {
 
 	for range Only.Once {
 		table = output.NewTable()
-		e.Error = table.SetTitle("")
-		if e.Error != nil {
-			break
-		}
+		table.SetTitle("")
+		table.SetJson([]byte(e.GetJsonData(false)))
+		table.SetRaw([]byte(e.GetJsonData(true)))
 
 		e.Error = table.SetHeader(
 			"Date/Time",
@@ -187,10 +186,7 @@ func (e *EndPoint) GetDataTable(points api.TemplatePoints) output.Table {
 
 		t := api.NewDateTime(e.Request.RequestData.StartTimeStamp)
 		e.SetFilenamePrefix(t.String())
-		e.Error = table.SetFilePrefix(t.String())
-		if e.Error != nil {
-			break
-		}
+		table.SetFilePrefix(t.String())
 
 		for deviceName, deviceRef := range e.Response.ResultData.Devices {
 			for pointId, pointRef := range deviceRef.Points {

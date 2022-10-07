@@ -71,7 +71,7 @@ func GetStructKeys(ref interface{}, keys ...string) UnitValueMap {
 		}
 
 		k.JsonName = strings.TrimSuffix(k.JsonName, "_map")	// Bit of a hack, but hey... @TODO - Future self take note.
-		ret[k.JsonName] = p
+		ret[PointId(k.JsonName)] = p
 	}
 
 	return ret

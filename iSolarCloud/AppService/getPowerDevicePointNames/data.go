@@ -19,10 +19,12 @@ const (
 	DeviceType11 = "11"
 	DeviceType14 = "14"
 	DeviceType17 = "17"
+	DeviceType22 = "22"
 	DeviceType23 = "23"
 	DeviceType26 = "26"
 	DeviceType37 = "37"
 	DeviceType41 = "41"
+	DeviceType43 = "43"
 	DeviceType47 = "47"
 )
 
@@ -35,10 +37,12 @@ var DeviceTypes = []string{
 	DeviceType11,
 	DeviceType14,
 	DeviceType17,
+	DeviceType22,
 	DeviceType23,
 	DeviceType26,
 	DeviceType37,
 	DeviceType41,
+	DeviceType43,
 	DeviceType47,
 }
 
@@ -106,10 +110,9 @@ func (e *EndPoint) GetDataTable() output.Table {
 
 	for range Only.Once {
 		table = output.NewTable()
-		e.Error = table.SetTitle("")
-		if e.Error != nil {
-			break
-		}
+		table.SetTitle("")
+		table.SetJson([]byte(e.GetJsonData(false)))
+		table.SetRaw([]byte(e.GetJsonData(true)))
 
 		e.Error = table.SetHeader(
 			"Device Type",
@@ -121,10 +124,7 @@ func (e *EndPoint) GetDataTable() output.Table {
 			break
 		}
 
-		e.Error = table.SetFilePrefix(e.Request.DeviceType)
-		if e.Error != nil {
-			break
-		}
+		table.SetFilePrefix(e.Request.DeviceType)
 
 		for _, p := range e.Response.ResultData {
 			_ = table.AddRow(

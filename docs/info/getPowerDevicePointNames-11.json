@@ -1,0 +1,227 @@
+[
+	{
+		"point_cal_type": 2,
+		"point_id": 83022,
+		"point_name": "Daily Yield of Plant"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83024,
+		"point_name": "Plant Total Yield"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83033,
+		"point_name": "Plant Power"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83019,
+		"point_name": "Power/Installed Power of Plant"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 83006,
+		"point_name": "Meter Daily Yield"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83020,
+		"point_name": "Meter Total Yield"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 83011,
+		"point_name": "Meter E-daily Consumption"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83021,
+		"point_name": "Accumulative Power Consumption by Meter"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83032,
+		"point_name": "Meter AC Power"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83002,
+		"point_name": "Inverter AC Power"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83004,
+		"point_name": "Inverter Total Yield"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 83009,
+		"point_name": "Daily Yield by Inverter"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83012,
+		"point_name": "P-radiation-H"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 83013,
+		"point_name": "Daily Irradiation"
+	},
+	{
+		"point_cal_type": 3,
+		"point_id": 83023,
+		"point_name": "Plant PR"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 83025,
+		"point_name": "Plant Equivalent Hours"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 83005,
+		"point_name": "Daily Equivalent Hours of Meter"
+	},
+	{
+		"point_cal_type": 3,
+		"point_id": 83007,
+		"point_name": "Meter PR"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 83018,
+		"point_name": "Daily Yield (Theoretical)"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83001,
+		"point_name": "Inverter AC Power Normalization"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 83008,
+		"point_name": "Daily Equivalent Hours of Inverter"
+	},
+	{
+		"point_cal_type": 3,
+		"point_id": 83010,
+		"point_name": "Inverter PR"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83016,
+		"point_name": "Plant Ambient Temperature"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83017,
+		"point_name": "Plant Module Temperature"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83236,
+		"point_name": "Total field dischargeable energy"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83238,
+		"point_name": "Total field energy storage active power"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 83241,
+		"point_name": "Total field charge capacity"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 83242,
+		"point_name": "Total field discharge capacity"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 83243,
+		"point_name": "Total field daily charge capacity"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 83244,
+		"point_name": "Total field daily discharge capacity"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83167,
+		"point_name": "Total number of PCS in normal state"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83168,
+		"point_name": "Total field alarm status PCS statistics"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83169,
+		"point_name": "Total field fault state PCS statistics"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83235,
+		"point_name": "Total field chargeable energy"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83075,
+		"point_name": "Total Feed-in Energy"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83046,
+		"point_name": "PCS Total Active Power"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83067,
+		"point_name": "Total Active Power of PV"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 83097,
+		"point_name": "Daily Load Energy Consumption from PV"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83100,
+		"point_name": "Total Load Energy Consumption from PV"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 83102,
+		"point_name": "Daily Purchased Energy"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83105,
+		"point_name": "Total Purchased Energy"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83124,
+		"point_name": "Total Load Energy Consumption"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 83119,
+		"point_name": "Daily Feed-in Energy (PV)"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 83072,
+		"point_name": "Daily Feed-in Energy"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 83176,
+		"point_name": "Total field communication interruption PCS quantity statistics"
+	}
+]

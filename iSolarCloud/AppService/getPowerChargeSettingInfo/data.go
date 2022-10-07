@@ -2,15 +2,14 @@ package getPowerChargeSettingInfo
 
 import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"errors"
 	"fmt"
 )
 
 const Url = "/v1/powerStationService/getPowerChargeSettingInfo"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
+	PsId string `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -22,19 +21,28 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
-	Dummy string `json:"dummy"`
+	ParamIncomeUnit          int64  `json:"param_income_unit"`
+	ParamIncomeUnitName      string `json:"param_income_unit_name"`
+	PowerElectricalChargeMap struct {
+		DefaultCharge      float64     `json:"default_charge"`
+		IntervalTimeCharge interface{} `json:"interval_time_charge"`
+	} `json:"powerElectricalChargeMap"`
+	PowerSelfUseTimesChargeMap struct {
+		DefaultCharge      float64 `json:"default_charge"`
+		IntervalTimeCharge string  `json:"interval_time_charge"`
+	} `json:"powerSelfUseTimesChargeMap"`
+	PsID string `json:"ps_id"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
+	// switch {
+	// case e.Dummy == "":
+	// 	break
+	// default:
+	// 	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
+	// }
 	return err
 }
 

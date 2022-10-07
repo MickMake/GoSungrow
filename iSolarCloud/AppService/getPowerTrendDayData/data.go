@@ -7,10 +7,11 @@ import (
 )
 
 const Url = "/v1/powerStationService/getPowerTrendDayData"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
 	// DeviceType string `json:"device_type" required:"true"`
+	BeginTime string `json:"beginTime" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

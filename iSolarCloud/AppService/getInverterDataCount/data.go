@@ -7,7 +7,7 @@ import (
 )
 
 const Url = "/v1/devService/getInverterDataCount"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
 	// DeviceType string `json:"device_type" required:"true"`

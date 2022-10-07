@@ -6,6 +6,7 @@ import (
 	"fmt"
 )
 
+
 type AreaStruct struct {
 	ApiRoot   interface{} // *web.Web
 	Name      AreaName

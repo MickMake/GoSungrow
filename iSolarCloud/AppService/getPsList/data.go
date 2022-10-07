@@ -6,6 +6,7 @@ import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
+	"strconv"
 	"time"
 )
 
@@ -97,14 +98,14 @@ type ResultData struct {
 		P83055                 interface{}   `json:"p83055" PointId:"p83055" PointType:""`
 		P83067                 interface{}   `json:"p83067" PointId:"p83067" PointType:""`
 		P83070                 interface{}   `json:"p83070" PointId:"p83070" PointType:""`
-		P83076                 float64       `json:"p83076" PointId:"p83076" PointType:""`		// Dupe of PvPower
+		P83076                 float64       `json:"p83076" PointId:"p83076" PointIgnore:"true"`		// Dupe of PvPower
 		P83077                 float64       `json:"p83077" PointId:"p83077" PointType:""`
-		P83081                 float64       `json:"p83081" PointId:"p83081" PointType:""`		// Dupe of EsPower
-		P83089                 float64       `json:"p83089" PointId:"p83089" PointType:""`		// Dupe of EsDisenergy
-		P83095                 float64       `json:"p83095" PointId:"p83095" PointType:""`		// Dupe of EsTotalDisenergy
-		P83118                 float64       `json:"p83118" PointId:"p83118" PointType:""`		// Dupe of UseEnergy
-		P83120                 float64       `json:"p83120" PointId:"p83120" PointType:""`		// Dupe of EsEnergy
-		P83127                 float64       `json:"p83127" PointId:"p83127" PointType:""`		// Dupe of EsTotalEnergy
+		P83081                 float64       `json:"p83081" PointId:"p83081" PointIgnore:"true"`		// Dupe of EsPower
+		P83089                 float64       `json:"p83089" PointId:"p83089" PointIgnore:"true"`		// Dupe of EsDisenergy
+		P83095                 float64       `json:"p83095" PointId:"p83095" PointIgnore:"true"`		// Dupe of EsTotalDisenergy
+		P83118                 float64       `json:"p83118" PointId:"p83118" `		// Dupe of UseEnergy
+		P83120                 float64       `json:"p83120" PointId:"p83120" PointIgnore:"true"`		// Dupe of EsEnergy
+		P83127                 float64       `json:"p83127" PointId:"p83127" PointIgnore:"true"`		// Dupe of EsTotalEnergy
 		ParamCo2               float64       `json:"param_co2" PointId:"param_co2" PointType:""`
 		ParamCoal              float64       `json:"param_coal" PointId:"param_coal" PointType:""`
 		ParamIncome            float64       `json:"param_income" PointId:"param_income" PointType:""`
@@ -183,8 +184,8 @@ func (e *ResultData) IsValid() error {
 //	return err
 // }
 
-func (e *ResultData) GetPsId() int64 {
-	var ret int64
+func (e *ResultData) GetPsIds() []int64 {
+	var ret []int64
 	for range Only.Once {
 		i := len(e.PageList)
 		if i == 0 {
@@ -192,16 +193,15 @@ func (e *ResultData) GetPsId() int64 {
 		}
 		for _, p := range e.PageList {
 			if p.PsID != 0 {
-				ret = p.PsID
-				break
+				ret = append(ret, p.PsID)
 			}
 		}
 	}
 	return ret
 }
 
-func (e *ResultData) GetPsName() string {
-	var ret string
+func (e *ResultData) GetPsName() []string {
+	var ret []string
 	for range Only.Once {
 		i := len(e.PageList)
 		if i == 0 {
@@ -209,16 +209,15 @@ func (e *ResultData) GetPsName() string {
 		}
 		for _, p := range e.PageList {
 			if p.PsID != 0 {
-				ret = p.PsName
-				break
+				ret = append(ret, p.PsName)
 			}
 		}
 	}
 	return ret
 }
 
-func (e *ResultData) GetPsSerial() string {
-	var ret string
+func (e *ResultData) GetPsSerial() []string {
+	var ret []string
 	for range Only.Once {
 		i := len(e.PageList)
 		if i == 0 {
@@ -226,16 +225,15 @@ func (e *ResultData) GetPsSerial() string {
 		}
 		for _, p := range e.PageList {
 			if p.PsID != 0 {
-				ret = p.PsShortName
-				break
+				ret = append(ret, p.PsShortName)
 			}
 		}
 	}
 	return ret
 }
 
-func (e *EndPoint) GetPsId() int64 {
-	return e.Response.ResultData.GetPsId()
+func (e *EndPoint) GetPsIds() []int64 {
+	return e.Response.ResultData.GetPsIds()
 }
 
 func (e *EndPoint) GetData() api.DataMap {
@@ -246,16 +244,16 @@ func (e *ResultData) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		i := len(e.PageList)
-		if i == 0 {
+		if len(e.PageList) == 0 {
 			break
 		}
 
 		// now := api.NewDateTime(time.Now().Round(5 * time.Minute).Format(api.DtLayoutZeroSeconds))
 
 		for _, p := range e.PageList {
-			// psId := strconv.FormatInt(p.PsID, 10)
-			entries.StructToPoints("", p)
+			psId := strconv.FormatInt(p.PsID, 10)
+			name := "getPsList." + psId
+			entries.StructToPoints(p, name, psId, time.Time{})
 
 			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"p83077"}, now, p.PvEnergy.Value)
 			// entries.AddEntry(api.Point{PsKey: "virtual", Id:"p83089"}, now, p.EsDisenergy.Value)
@@ -463,10 +461,9 @@ func (e *EndPoint) GetDataTable() output.Table {
 	var table output.Table
 	for range Only.Once {
 		table = output.NewTable()
-		e.Error = table.SetTitle("")
-		if e.Error != nil {
-			break
-		}
+		table.SetTitle("")
+		table.SetJson([]byte(e.GetJsonData(false)))
+		table.SetRaw([]byte(e.GetJsonData(true)))
 
 		_ = table.SetHeader(
 			"Date",

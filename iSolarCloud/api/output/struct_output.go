@@ -4,17 +4,19 @@ package output
 const (
 	TypeNone  = iota
 	TypeJson  = iota
-	TypeFile  = iota
+	TypeCsv   = iota
+	TypeTable = iota
 	TypeRaw   = iota
-	TypeHuman = iota
 	TypeGraph = iota
+	// TypeHuman = iota
 
 	StringTypeNone  = ""
 	StringTypeJson  = "json"
-	StringTypeFile  = "file"
+	StringTypeCsv   = "csv"
+	StringTypeTable = "table"
 	StringTypeRaw   = "raw"
-	StringTypeHuman = "human"
 	StringTypeGraph = "graph"
+	// StringTypeHuman = "human"
 )
 
 type OutputType int
@@ -26,15 +28,18 @@ func (out *OutputType) SetNone() {
 func (out *OutputType) SetJson() {
 	*out = TypeJson
 }
-func (out *OutputType) SetFile() {
-	*out = TypeFile
+func (out *OutputType) SetCsv() {
+	*out = TypeCsv
+}
+func (out *OutputType) SetTable() {
+	*out = TypeTable
 }
 func (out *OutputType) SetRaw() {
 	*out = TypeRaw
 }
-func (out *OutputType) SetHuman() {
-	*out = TypeHuman
-}
+// func (out *OutputType) SetHuman() {
+// 	*out = TypeHuman
+// }
 func (out *OutputType) SetGraph() {
 	*out = TypeGraph
 }
@@ -51,8 +56,14 @@ func (out *OutputType) IsJson() bool {
 	}
 	return false
 }
-func (out *OutputType) IsFile() bool {
-	if *out == TypeFile {
+func (out *OutputType) IsCsv() bool {
+	if *out == TypeCsv {
+		return true
+	}
+	return false
+}
+func (out *OutputType) IsTable() bool {
+	if *out == TypeTable {
 		return true
 	}
 	return false
@@ -63,12 +74,12 @@ func (out *OutputType) IsRaw() bool {
 	}
 	return false
 }
-func (out *OutputType) IsHuman() bool {
-	if *out == TypeHuman {
-		return true
-	}
-	return false
-}
+// func (out *OutputType) IsHuman() bool {
+// 	if *out == TypeHuman {
+// 		return true
+// 	}
+// 	return false
+// }
 func (out *OutputType) IsGraph() bool {
 	if *out == TypeGraph {
 		return true
@@ -88,8 +99,14 @@ func (out *OutputType) IsStrJson(t string) bool {
 	}
 	return false
 }
-func (out *OutputType) IsStrFile(t string) bool {
-	if t == StringTypeFile {
+func (out *OutputType) IsStrCsv(t string) bool {
+	if t == StringTypeCsv {
+		return true
+	}
+	return false
+}
+func (out *OutputType) IsStrTable(t string) bool {
+	if t == StringTypeTable {
 		return true
 	}
 	return false
@@ -100,15 +117,33 @@ func (out *OutputType) IsStrRaw(t string) bool {
 	}
 	return false
 }
-func (out *OutputType) IsStrHuman(t string) bool {
-	if t == StringTypeHuman {
-		return true
-	}
-	return false
-}
+// func (out *OutputType) IsStrHuman(t string) bool {
+// 	if t == StringTypeHuman {
+// 		return true
+// 	}
+// 	return false
+// }
 func (out *OutputType) IsStrGraph(t string) bool {
 	if t == StringTypeGraph {
 		return true
 	}
 	return false
+}
+
+
+func (out *OutputType) Set(outputType string) {
+	switch outputType {
+		case StringTypeJson:
+			out.SetJson()
+		case StringTypeCsv:
+			out.SetCsv()
+		case StringTypeRaw:
+			out.SetRaw()
+		case StringTypeGraph:
+			out.SetGraph()
+		case StringTypeTable:
+			fallthrough
+		default:
+			out.SetTable()
+	}
 }

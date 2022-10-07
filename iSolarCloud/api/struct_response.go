@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+
 type Response struct {
 	ResponseCommon
 }
@@ -17,6 +18,7 @@ type ResponseCommon struct {
 	ResultData   []interface{} `json:"result_data"`
 	ResultMsg    string        `json:"result_msg"`
 }
+
 
 func (req ResponseCommon) IsValid() error {
 	var err error

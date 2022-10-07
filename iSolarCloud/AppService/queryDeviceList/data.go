@@ -6,7 +6,7 @@ import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
-	"strconv"
+	"time"
 )
 
 const Url = "/v1/devService/queryDeviceList"
@@ -32,63 +32,65 @@ type ResultData struct {
 		RunCount     int64 `json:"run_count" PointId:"run_count" PointType:""`
 		WarningCount int64 `json:"warning_count" PointId:"warning_count" PointType:""`
 	} `json:"dev_count_by_status_map"`
-	DevCountByTypeMap struct {
-		One4 int64 `json:"14"`
-		Two2 int64 `json:"22"`
-	} `json:"dev_count_by_type_map"`
-	DevTypeDefinition struct {
-		One    string `json:"1"`
-		One0   string `json:"10"`
-		One1   string `json:"11"`
-		One2   string `json:"12"`
-		One3   string `json:"13"`
-		One4   string `json:"14"`
-		One5   string `json:"15"`
-		One6   string `json:"16"`
-		One7   string `json:"17"`
-		One8   string `json:"18"`
-		One9   string `json:"19"`
-		Two0   string `json:"20"`
-		Two1   string `json:"21"`
-		Two2   string `json:"22"`
-		Two3   string `json:"23"`
-		Two4   string `json:"24"`
-		Two5   string `json:"25"`
-		Two6   string `json:"26"`
-		Two8   string `json:"28"`
-		Two9   string `json:"29"`
-		Three  string `json:"3"`
-		Three0 string `json:"30"`
-		Three1 string `json:"31"`
-		Three2 string `json:"32"`
-		Three3 string `json:"33"`
-		Three4 string `json:"34"`
-		Three5 string `json:"35"`
-		Three6 string `json:"36"`
-		Three7 string `json:"37"`
-		Three8 string `json:"38"`
-		Three9 string `json:"39"`
-		Four   string `json:"4"`
-		Four0  string `json:"40"`
-		Four1  string `json:"41"`
-		Four2  string `json:"42"`
-		Four3  string `json:"43"`
-		Four4  string `json:"44"`
-		Four5  string `json:"45"`
-		Four6  string `json:"46"`
-		Four7  string `json:"47"`
-		Four8  string `json:"48"`
-		Five   string `json:"5"`
-		Five0  string `json:"50"`
-		Six    string `json:"6"`
-		Seven  string `json:"7"`
-		Eight  string `json:"8"`
-		Nine   string `json:"9"`
-		Nine9  string `json:"99"`
-	} `json:"dev_type_definition"`
+	DevCountByTypeMap map[string]int64 `json:"dev_count_by_type_map"`
+	// DevCountByTypeMap struct {
+	// 	One4 int64 `json:"14"`
+	// 	Two2 int64 `json:"22"`
+	// } `json:"dev_count_by_type_map"`
+	DevTypeDefinition map[string]string `json:"dev_type_definition"`
+	// DevTypeDefinition struct {
+	// 	One    string `json:"1"`
+	// 	One0   string `json:"10"`
+	// 	One1   string `json:"11"`
+	// 	One2   string `json:"12"`
+	// 	One3   string `json:"13"`
+	// 	One4   string `json:"14"`
+	// 	One5   string `json:"15"`
+	// 	One6   string `json:"16"`
+	// 	One7   string `json:"17"`
+	// 	One8   string `json:"18"`
+	// 	One9   string `json:"19"`
+	// 	Two0   string `json:"20"`
+	// 	Two1   string `json:"21"`
+	// 	Two2   string `json:"22"`
+	// 	Two3   string `json:"23"`
+	// 	Two4   string `json:"24"`
+	// 	Two5   string `json:"25"`
+	// 	Two6   string `json:"26"`
+	// 	Two8   string `json:"28"`
+	// 	Two9   string `json:"29"`
+	// 	Three  string `json:"3"`
+	// 	Three0 string `json:"30"`
+	// 	Three1 string `json:"31"`
+	// 	Three2 string `json:"32"`
+	// 	Three3 string `json:"33"`
+	// 	Three4 string `json:"34"`
+	// 	Three5 string `json:"35"`
+	// 	Three6 string `json:"36"`
+	// 	Three7 string `json:"37"`
+	// 	Three8 string `json:"38"`
+	// 	Three9 string `json:"39"`
+	// 	Four   string `json:"4"`
+	// 	Four0  string `json:"40"`
+	// 	Four1  string `json:"41"`
+	// 	Four2  string `json:"42"`
+	// 	Four3  string `json:"43"`
+	// 	Four4  string `json:"44"`
+	// 	Four5  string `json:"45"`
+	// 	Four6  string `json:"46"`
+	// 	Four7  string `json:"47"`
+	// 	Four8  string `json:"48"`
+	// 	Five   string `json:"5"`
+	// 	Five0  string `json:"50"`
+	// 	Six    string `json:"6"`
+	// 	Seven  string `json:"7"`
+	// 	Eight  string `json:"8"`
+	// 	Nine   string `json:"9"`
+	// 	Nine9  string `json:"99"`
+	// } `json:"dev_type_definition"`
 	PageList []struct {
 		AlarmCount              int64       `json:"alarm_count" PointId:"alarm_count" PointType:""`
-		ChnnlID                 int64       `json:"chnnl_id" PointId:"channel_id" PointType:""`
+		ChannelId               int64       `json:"chnnl_id" PointId:"channel_id" PointType:""`
 		CommandStatus           int64       `json:"command_status" PointId:"command_status" PointType:""`
 		ComponentAmount         int64       `json:"component_amount" PointId:"component_amount" PointType:""`
 		DataFlag                int64       `json:"data_flag" PointId:"data_flag" PointType:""`
@@ -220,15 +222,14 @@ func (e *EndPoint) GetDataTable() output.Table {
 	var table output.Table
 	for range Only.Once {
 		table = output.NewTable()
-		e.Error = table.SetTitle("")
-		if e.Error != nil {
-			break
-		}
+		table.SetTitle("")
+		table.SetJson([]byte(e.GetJsonData(false)))
+		table.SetRaw([]byte(e.GetJsonData(true)))
 
 		_ = table.SetHeader(
 			"Date",
-			"PointStruct Id",
-			"PointStruct Group Name",
+			"Point Id",
+			"Group Name",
 			"Description",
 			"Value",
 			"Unit",
@@ -237,21 +238,6 @@ func (e *EndPoint) GetDataTable() output.Table {
 		for _, d := range e.Response.ResultData.PageList {
 			for _, p := range d.PointData {
 				p.Value, p.Unit = api.DivideByThousandIfRequired(p.Value, p.Unit)
-				// gp := api.GetPointInt("", p.PointID)
-				// if gp != nil {
-				// 	_ = table.AddRow(
-				// 		api.NewDateTime(p.TimeStamp).PrintFull(),
-				// 		api.NameDevicePointInt(d.PsKey, p.PointID),
-				// 		p.PointGroupName,
-				// 		p.PointName,
-				// 		gp.Description,
-				// 		p.Value,
-				// 		p.Unit,
-				// 		gp.Unit,
-				// 	)
-				// 	continue
-				// }
-
 				_ = table.AddRow(
 					api.NewDateTime(p.TimeStamp).PrintFull(),
 					api.NameDevicePointInt(d.PsKey, p.PointID),
@@ -279,8 +265,8 @@ func (e *EndPoint) GetDataTable() output.Table {
 	return table
 }
 
-type DataEntry api.DataEntry
-type EntryMap api.DataMap
+// type DataEntry api.DataEntry
+// type EntryMap api.DataMap
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
@@ -324,39 +310,17 @@ func (e *EndPoint) GetData() api.DataMap {
 		//
 		// var TotalEnergyConsumption VirtualPointStruct
 
-		entries.StructToPoints("", e.Response.ResultData.DevCountByStatusMap)
-		for _, d := range e.Response.ResultData.PageList {
-			entries.StructToPoints("", d)
-		}
+		entries.StructToPoints(e.Response.ResultData.DevCountByStatusMap, "queryDeviceList." + e.Request.PsId + ".status", e.Request.PsId, time.Time{})
 
 		for _, d := range e.Response.ResultData.PageList {
+			name := fmt.Sprintf("queryDeviceList.%d", d.PsID)
+			entries.StructToPoints(d, name, e.Request.PsId, time.Time{})
+
 			for _, p := range d.PointData {
-				pid := api.SetPoint(strconv.FormatInt(p.PointID, 10))
+				pid := api.SetPointInt(p.PointID)
 				uv := api.CreateUnitValue(p.Value, p.Unit)
-				entries.AddUnitValue("", d.PsKey, pid, p.PointName, api.NewDateTime(p.TimeStamp), uv)
-
-				// vt := api.GetPointInt(d.PsKey, p.PointID)
-				// if !vt.Valid {
-				// 	vt = &api.Point {
-				// 		PsKey: d.PsKey,
-				// 		Id:    api.PointToName(strconv.FormatInt(p.PointID, 10)),
-				// 		Name:  p.PointName,
-				// 		Unit:  uv.Unit,
-				// 		Type:  "PointTypeInstant",
-				// 	}
-				// }
-				//
-				// entries.Add(pid, api.DataEntry {
-				// 	Date:       api.NewDateTime(p.TimeStamp),
-				// 	Id:         api.NameDevicePointInt(d.PsKey, p.PointID),
-				// 	GroupName:  p.PointGroupName,
-				// 	Name:       p.PointName,
-				// 	Value:      uv.Value,
-				// 	ValueFloat: uv.ValueFloat,
-				// 	Unit:       uv.Unit,
-				// 	Point:      vt,
-				// 	Index:      0,
-				// })
+				name2 := fmt.Sprintf("queryDeviceList.%s.PointData.%s", d.PsKey, pid)
+				entries.AddUnitValue(name2, d.PsKey, pid, p.PointName, api.NewDateTime(p.TimeStamp), uv)
 
 				// Handle virtual results.
 				// switch pid {
@@ -418,7 +382,7 @@ func (e *EndPoint) GetData() api.DataMap {
 			}
 		}
 
-		if len(entries.Entries) == 0 {
+		if len(entries.DataPoints) == 0 {
 			break
 		}
 
@@ -460,7 +424,7 @@ func (e *EndPoint) GetData() api.DataMap {
 		entries.FromRefAddAlias("p13199", api.VirtualPsId, "daily_total_energy", "")
 		// Total Load Energy Consumption
 		entries.FromRefAddAlias("p13130", api.VirtualPsId, "total_energy_consumption", "")
-		// entries.AddPointFromRef(api.Point{ Id:"p13130" }, api.Point{ PsKey:api.VirtualPsId, Id:"total_energy_consumption" })
+		// entries.AddPointFromRef(api.Point{ Id:"queryDeviceList.p13130" }, api.Point{ PsKey:api.VirtualPsId, Id:"total_energy_consumption" })
 
 		// entries.CopyEntry("p13130").CreateAlias()
 		// 		entries.GetEntry(api.Point{PsKey:psId, Id:"total_income", Unit:p.TotalIncome.Unit, Type:api.PointTypeTotal}, now, p.TotalIncome.Value)
@@ -490,36 +454,36 @@ func (e *EndPoint) GetData() api.DataMap {
 
 		entries.FromRefAddFloat("pv_self_consumption",
 			api.VirtualPsId,"pv_daily_yield", "",
-			entries.GetFloatValue("pv_self_consumption") + entries.GetFloatValue("pv_battery_charge") + entries.GetFloatValue("pv_feed_in"))
+			entries.GetFloatValue("pv_self_consumption", api.LastEntry) + entries.GetFloatValue("pv_battery_charge", api.LastEntry) + entries.GetFloatValue("pv_feed_in", api.LastEntry))
 
 		entries.FromRefAddFloat("daily_pv_energy",
 			api.VirtualPsId,"pv_self_consumption_percent", "",
-			entries.GetPercent("pv_self_consumption", "daily_pv_energy"))
+			entries.GetPercent("pv_self_consumption", "daily_pv_energy", api.LastEntry))
 		entries.FromRefAddFloat("daily_pv_energy",
 			api.VirtualPsId,"pv_battery_charge_percent", "",
-			entries.GetPercent("pv_battery_charge", "daily_pv_energy"))
+			entries.GetPercent("pv_battery_charge", "daily_pv_energy", api.LastEntry))
 		entries.FromRefAddFloat("daily_pv_energy",
 			api.VirtualPsId,"pv_feed_in_percent", "",
-			entries.GetPercent("pv_feed_in", "daily_pv_energy"))
+			entries.GetPercent("pv_feed_in", "daily_pv_energy", api.LastEntry))
 
 		// @TODO - Add this calculation.
-		DailyPvEnergy := entries.GetFloatValue("daily_total_energy") - entries.GetFloatValue("daily_purchased_energy")
-		fmt.Sprintf("%f", DailyPvEnergy)
+		DailyPvEnergy := entries.GetFloatValue("daily_total_energy", api.LastEntry) - entries.GetFloatValue("daily_purchased_energy", api.LastEntry)
+		// fmt.Sprintf("%f", DailyPvEnergy)
 		entries.FromRefAddFloat("daily_total_energy",
 			api.VirtualPsId,"daily_pv_energy_percent", "",
-			api.GetPercent(DailyPvEnergy, entries.GetValue("daily_total_energy")))
+			api.GetPercent(DailyPvEnergy, entries.GetValue("daily_total_energy", api.LastEntry)))
 		entries.FromRefAddFloat("daily_total_energy",
 			api.VirtualPsId,"daily_purchased_energy_percent", "",
-			entries.GetPercent("daily_purchased_energy", "daily_total_energy"))
+			entries.GetPercent("daily_purchased_energy", "daily_total_energy", api.LastEntry))
 
 		entries.FromRefAddFloat("pv_power",
 			api.VirtualPsId,"pv_power_to_load", "",
-			entries.GetFloatValue("pv_power") - entries.GetFloatValue("pv_power_to_battery") - entries.GetFloatValue("pv_power_to_grid"))
+			entries.GetFloatValue("pv_power", api.LastEntry) - entries.GetFloatValue("pv_power_to_battery", api.LastEntry) - entries.GetFloatValue("pv_power_to_grid", api.LastEntry))
 
 		// Battery
 		entries.FromRefAddFloat("pv_power_to_battery",
 			api.VirtualPsId,"battery_power", "",
-			entries.LowerUpper("pv_power_to_battery", "battery_power_to_load"))
+			entries.LowerUpper("pv_power_to_battery", "battery_power_to_load", api.LastEntry))
 		entries.FromRefAddFloat("pv_power_to_battery",
 			api.VirtualPsId,"battery_power_to_grid", "",
 			0.0)
@@ -527,7 +491,7 @@ func (e *EndPoint) GetData() api.DataMap {
 		// Grid
 		entries.FromRefAddFloat("grid_power_to_load",
 			api.VirtualPsId,"grid_power", "",
-			entries.LowerUpper("pv_power_to_grid", "grid_power_to_load"))
+			entries.LowerUpper("pv_power_to_grid", "grid_power_to_load", api.LastEntry))
 		entries.FromRefAddFloat("grid_power_to_load",
 			api.VirtualPsId,"grid_power_to_battery", "",
 			0.0)
@@ -551,11 +515,11 @@ func (e *EndPoint) GetData() api.DataMap {
 
 		entries.FromRefAddFloat("pv_battery_charge",
 			api.VirtualPsId, "battery_energy", "",
-			entries.LowerUpper("pv_battery_charge", "battery_discharge"))
+			entries.LowerUpper("pv_battery_charge", "battery_discharge", api.LastEntry))
 
 		entries.FromRefAddFloat("pv_feed_in",
 			api.VirtualPsId,"grid_energy", "",
-			entries.LowerUpper("pv_feed_in", "daily_purchased_energy"))
+			entries.LowerUpper("pv_feed_in", "daily_purchased_energy", api.LastEntry))
 
 
 		// for _, pid := range entries.Order {

@@ -2,12 +2,11 @@ package getInstallInfoList
 
 import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"errors"
 	"fmt"
 )
 
 const Url = "/v1/orgService/getInstallInfoList"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
 	// DeviceType string `json:"device_type" required:"true"`
@@ -23,18 +22,22 @@ func (rd RequestData) Help() string {
 }
 
 
-type ResultData struct {
-	Dummy string `json:"dummy"`
+type ResultData []struct {
+	Installer      string   `json:"installer"`
+	InstallerEmail string   `json:"installer_email"`
+	InstallerPhone string   `json:"installer_phone"`
+	OrgID          string   `json:"org_id"`
+	PsNames        []string `json:"ps_names"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
+	// switch {
+	// case e.Dummy == "":
+	// 	break
+	// default:
+	// 	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
+	// }
 	return err
 }
 

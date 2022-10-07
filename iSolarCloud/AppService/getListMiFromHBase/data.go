@@ -7,10 +7,11 @@ import (
 )
 
 const Url = "/v1/commonService/getListMiFromHBase"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
+	Table string `json:"table" required:"true"`
+	PrimaryKey string `json:"primaryKey" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

@@ -17,14 +17,14 @@ type UnitValue struct {
 	ValueInt int64 `json:"value_int,omitempty"`
 }
 type UnitValues []UnitValue
-type UnitValueMap map[string]UnitValue
+type UnitValueMap map[PointId]UnitValue
 
 
 
 func (u *UnitValueMap) Sort() []string {
 	var ret []string
 	for n := range *u {
-		ret = append(ret, n)
+		ret = append(ret, string(n))
 	}
 	sort.Strings(ret)
 	return ret

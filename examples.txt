@@ -1,104 +1,148 @@
-https://augateway.isolarcloud.com/v1/commonService/getMqttConfigInfoByAppkey
-sensor.sungrow_total_load_active_power == sensor.sungrow_total_active_power
+GoSungrow api get WebAppService.getDeviceUuid '{"ps_key":"1171348"}'
+GoSungrow api get WebAppService.showPSView '{"ps_id":"1171348"}'
+GoSungrow api get checkUnitStatus
+GoSungrow api get energyTrend
+GoSungrow api get findPsType '{"ps_id":"1171348"}'
+GoSungrow api get getAllPowerDeviceSetName
+GoSungrow api get getAreaList
+GoSungrow api get getCloudList
+GoSungrow api get getConfigList
+GoSungrow api get getDeviceInfo
+GoSungrow api get getDeviceList '{"ps_id":"1171348"}'
+GoSungrow api get getDeviceModelInfoList
+GoSungrow api get getDevicePoints '{"point_id":"13003"}'
+GoSungrow api get getDeviceTypeInfoList
+GoSungrow api get getDeviceTypeList
+GoSungrow api get getInvertDataList
+GoSungrow api get getModuleLogTaskList
+GoSungrow api get getPowerDevicePointNames '{"device_type":"1"}'
+GoSungrow api get getPowerDevicePointNames '{"device_type":"2"}'
+GoSungrow api get getPowerDevicePointNames '{"device_type":"7"}'
+GoSungrow api get getPowerDeviceSetTaskDetailList '{"query_type":"2","task_id":"1","uuid":"844763"}'
+GoSungrow api get getPowerDeviceSetTaskDetailList '{"query_type":"7","task_id":"1","uuid":"844763"}'
+GoSungrow api get getPowerDeviceSetTaskDetailList '{"size":0,"curPage":0}'
+GoSungrow api get getPowerDeviceSetTaskList '{"size":0,"curPage":0}'
+GoSungrow api get getPowerDeviceSetTaskList '{"size":0,"curPage":1}'
+GoSungrow api get getPowerPictureList
+GoSungrow api get getPowerStatistics '{"ps_id":"1171348"}'
+GoSungrow api get getPsDataSupplementTaskList
+GoSungrow api get getPsDetail '{"ps_id":"1171348"}'
+GoSungrow api get getPsDetailWithPsType '{"ps_id":"1171348"}'
+GoSungrow api get getPsHealthState '{"ps_id":"1171348"}'
+GoSungrow api get getPsList
+GoSungrow api get getPsListByName
+GoSungrow api get getPsListStaticData '{"ps_id":"1171348"}'
+GoSungrow api get getPsReport '{"report_type":"1","date_id":"20220201","date_type":"1","ps_id":"1171348"}'
+GoSungrow api get getPsReport '{"report_type":"1","date_id":"20220201","date_type":"2","ps_id":"1171348"}'
+GoSungrow api get getPsReport '{"report_type":"1","date_id":"20220201","date_type":"3","ps_id":"1171348"}'
+GoSungrow api get getPsUser
+GoSungrow api get getPsWeatherList '{"ps_id":"1171348"}'
+GoSungrow api get getRemoteUpgradeSubTasksList '{"query_type":"1","task_id":"1577700"}'
+GoSungrow api get getRemoteUpgradeTaskList '{"ps_id_list":"1171348"}'
+GoSungrow api get getTemplateList
+GoSungrow api get getUserList
+GoSungrow api get getUserPsOrderList
+GoSungrow api get powerDevicePointList
+GoSungrow api get queryAllPsIdAndName '{"ps_id":"1171348"}'
+GoSungrow api get queryBatchCreatePsTaskList
+GoSungrow api get queryDeviceList
+GoSungrow api get queryDeviceListByUserId '{"ps_id":"1171348"}'
+GoSungrow api get queryDeviceListForApp '{"ps_id":"1171348"}'
+GoSungrow api get queryUserList
+GoSungrow api get reportList '{"ps_id":"1171348","report_type":"1"}'
+GoSungrow api get reportList '{"ps_id":"1171348","report_type":"2"}'
+GoSungrow api get reportList '{"ps_id":"1171348","report_type":"3"}'
+GoSungrow api get reportList '{"ps_id":"1171348","report_type":"4"}'
+GoSungrow api login
+GoSungrow api ls areas
+GoSungrow api raw queryDeviceList '{"ps_id":"1171348"}'
+GoSungrow api save WebAppService.queryUserCurveTemplateData '{"template_id":"8042","date_type":"1","start_time":"20220223000000","end_time":"20220223235900"}'
+GoSungrow api save getPsDetail '{"ps_id":""}'
+GoSungrow api save getPsDetail '{"ps_id":"1171348"}'
+GoSungrow api save queryDeviceList '{"ps_id":"1171348"}'
 
-./bin/GoSungrow api get WebAppService.getDeviceUuid '{"ps_key":"1129147_11_0_0"}'
-./bin/GoSungrow api get WebAppService.showPSView '{"ps_id":"1129147"}'
-./bin/GoSungrow api get checkUnitStatus
-./bin/GoSungrow api get energyTrend
-./bin/GoSungrow api get findPsType '{"ps_id":"1129147"}'
-./bin/GoSungrow api get getAllPowerDeviceSetName
-./bin/GoSungrow api get getAreaList
-./bin/GoSungrow api get getCloudList
-./bin/GoSungrow api get getConfigList
-./bin/GoSungrow api get getDeviceInfo
-./bin/GoSungrow api get getDeviceList '{"ps_id":"1129147"}'
-./bin/GoSungrow api get getDeviceModelInfoList
-./bin/GoSungrow api get getDevicePoints '{"point_id":"13003"}'
-./bin/GoSungrow api get getDeviceTypeInfoList
-./bin/GoSungrow api get getDeviceTypeList
-./bin/GoSungrow api get getInvertDataList
-./bin/GoSungrow api get getKpiInfo ''
-./bin/GoSungrow api get getModuleLogTaskList
-./bin/GoSungrow api get getOrgListByName
-./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"1"}'
-./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"2"}'
-./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"7"}'
-./bin/GoSungrow api get getPowerDeviceSetTaskDetailList '{"query_type":"2","task_id":"1","uuid":"844763"}'
-./bin/GoSungrow api get getPowerDeviceSetTaskDetailList '{"query_type":"7","task_id":"1","uuid":"844763"}'
-./bin/GoSungrow api get getPowerDeviceSetTaskDetailList '{"size":0,"curPage":0}'
-./bin/GoSungrow api get getPowerDeviceSetTaskList '{"size":0,"curPage":0}'
-./bin/GoSungrow api get getPowerDeviceSetTaskList '{"size":0,"curPage":1}'
-./bin/GoSungrow api get getPowerPictureList
-./bin/GoSungrow api get getPowerStatistics '{"ps_id":"1129147"}'
-./bin/GoSungrow api get getPsDataSupplementTaskList
-./bin/GoSungrow api get getPsDetail '{"ps_id":"1129147"}'
-./bin/GoSungrow api get getPsDetailWithPsType '{"ps_id":"1129147"}'
-./bin/GoSungrow api get getPsHealthState '{"ps_id":"1129147"}'
-./bin/GoSungrow api get getPsList
-./bin/GoSungrow api get getPsListByName
-./bin/GoSungrow api get getPsListStaticData '{"ps_id":"1129147"}'
-./bin/GoSungrow api get getPsReport '{"report_type":"1","date_id":"20220201","date_type":"1","ps_id":"1129147"}'
-./bin/GoSungrow api get getPsReport '{"report_type":"1","date_id":"20220201","date_type":"2","ps_id":"1129147"}'
-./bin/GoSungrow api get getPsReport '{"report_type":"1","date_id":"20220201","date_type":"3","ps_id":"1129147"}'
-./bin/GoSungrow api get getPsUser
-./bin/GoSungrow api get getPsWeatherList '{"ps_id":"1129147"}'
-./bin/GoSungrow api get getRemoteUpgradeSubTasksList '{"query_type":"1","task_id":"1577700"}'
-./bin/GoSungrow api get getRemoteUpgradeTaskList '{"ps_id_list":"1129147"}'
-./bin/GoSungrow api get getTemplateList
-./bin/GoSungrow api get getUserList
-./bin/GoSungrow api get getUserPsOrderList
-./bin/GoSungrow api get powerDevicePointList
-./bin/GoSungrow api get queryAllPsIdAndName '{"ps_id":"1129147"}'
-./bin/GoSungrow api get queryBatchCreatePsTaskList
-./bin/GoSungrow api get queryDeviceList
-./bin/GoSungrow api get queryDeviceListByUserId '{"ps_id":"1129147"}'
-./bin/GoSungrow api get queryDeviceListForApp '{"ps_id":"1129147"}'
-./bin/GoSungrow api get queryUserList
-./bin/GoSungrow api get reportList '{"ps_id":"1129147","report_type":"1"}'
-./bin/GoSungrow api get reportList '{"ps_id":"1129147","report_type":"2"}'
-./bin/GoSungrow api get reportList '{"ps_id":"1129147","report_type":"3"}'
-./bin/GoSungrow api get reportList '{"ps_id":"1129147","report_type":"4"}'
-./bin/GoSungrow api login
-./bin/GoSungrow api ls areas
-./bin/GoSungrow api raw queryDeviceList '{"ps_id":"1129147"}'
-./bin/GoSungrow api save WebAppService.queryUserCurveTemplateData '{"template_id":"8042","date_type":"1","start_time":"20220223000000","end_time":"20220223235900"}'
-./bin/GoSungrow api save getPsDetail '{"ps_id":""}'
-./bin/GoSungrow api save getPsDetail '{"ps_id":"1129147"}'
-./bin/GoSungrow api save queryDeviceList '{"ps_id":"1129147"}'
-./bin/GoSungrow data get stats
-./bin/GoSungrow data get template '' 20220201
-./bin/GoSungrow data get template '' 20220220
-./bin/GoSungrow data get template '' 20220222
-./bin/GoSungrow data get template '' 20220224
-./bin/GoSungrow data get template '' 20220227
-./bin/GoSungrow data get template 8042
-./bin/GoSungrow data get template 8042 20220212
-./bin/GoSungrow data get template 8042 20220227
-./bin/GoSungrow data get template-points 8040
-./bin/GoSungrow data get template-points 8041
-./bin/GoSungrow data get template-points 8042
-./bin/GoSungrow data graph template 8042 20220212 '{"search_string":"p13019","min_left_axis":-6000,"max_left_axis":12000}'
-./bin/GoSungrow data graph template 8042 20220212 '{"search_string":"p13019"}'
-./bin/GoSungrow data graph template 8042 20220212 '{"search_string":"p83106","min_left_axis":-6000,"max_left_axis":12000}'
-./bin/GoSungrow data graph template 8042 20220212 '{"search_string":"p83106"}'
-./bin/GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":"1","value_column":"4","search_column":"3","search_string":"p83106","file_name":"foo.png"}'
-./bin/GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p13019","min_left_axis":0,"max_left_axis":0}'
-./bin/GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p13149","min_left_axis":0,"max_left_axis":0}'
-./bin/GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p83106","file_name":"foo.png"}'
-./bin/GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p83106","min_left_axis":-6000,"max_left_axis":1000}'
-./bin/GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p83106","min_left_axis":-6000,"max_left_axis":12000}'
-./bin/GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p83106","min_left_axis":-6000,"max_left_axis":42000}'
-./bin/GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p83106","min_left_axis":0,"max_left_axis":0}'
-./bin/GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":3,"search_string":"p83106","file_name":"foo.png"}'
-./bin/GoSungrow data raw template '' 20220201
-./bin/GoSungrow data raw template '' 20220202
-./bin/GoSungrow data save template '' 20220201
-./bin/GoSungrow data save template '' 20220202
-./bin/GoSungrow data save template '' 20220220
-./bin/GoSungrow data save template '' 20220224
-./bin/GoSungrow data save template 8042 20220212
-./bin/GoSungrow get raw template 20220202
-./bin/GoSungrow get template 8042 20220212
+GoSungrow data get template '' 20220201
+GoSungrow data get template '' 20220220
+GoSungrow data get template '' 20220222
+GoSungrow data get template '' 20220224
+GoSungrow data get template '' 20220227
+GoSungrow data get template 8042
+GoSungrow data get template 8042 20220212
+GoSungrow data get template 8042 20220227
+GoSungrow data get template-points 8040
+GoSungrow data get template-points 8041
+GoSungrow data get template-points 8042
+GoSungrow data graph template 8042 20220212 '{"search_string":"p13019","min_left_axis":-6000,"max_left_axis":12000}'
+GoSungrow data graph template 8042 20220212 '{"search_string":"p13019"}'
+GoSungrow data graph template 8042 20220212 '{"search_string":"p83106","min_left_axis":-6000,"max_left_axis":12000}'
+GoSungrow data graph template 8042 20220212 '{"search_string":"p83106"}'
+GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":"1","value_column":"4","search_column":"3","search_string":"p83106","file_name":"foo.png"}'
+GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p13019","min_left_axis":0,"max_left_axis":0}'
+GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p13149","min_left_axis":0,"max_left_axis":0}'
+GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p83106","file_name":"foo.png"}'
+GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p83106","min_left_axis":-6000,"max_left_axis":1000}'
+GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p83106","min_left_axis":-6000,"max_left_axis":12000}'
+GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p83106","min_left_axis":-6000,"max_left_axis":42000}'
+GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p83106","min_left_axis":0,"max_left_axis":0}'
+GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":3,"search_string":"p83106","file_name":"foo.png"}'
+GoSungrow data raw template '' 20220201
+GoSungrow data save template '' 20220201
+GoSungrow data save template 8042 20220212
+GoSungrow get raw template 20220202
+GoSungrow get template 8042 20220212
+
+GoSungrow data get stats
+GoSungrow data get search-point-names
+GoSungrow data get device
+GoSungrow data get model
+
+GoSungrow api raw getPowerStationForHousehold '{"ps_id":"1171348"}'
+> 				"org_index_code":"|80384|80393|300977|",
+
+GoSungrow api raw getInstallerInfoByDealerOrgCodeOrId '{"dealer_org_code":"AUSCEKK7"}'
+GoSungrow api raw getInstallerInfoByDealerOrgCodeOrId '{"org_id":"362245"}'
+GoSungrow api raw getInstallerInfoByDealerOrgCodeOrId '{"org_id":"80384"}'
+GoSungrow api raw getInstallerInfoByDealerOrgCodeOrId '{"org_id":"80393"}'
+GoSungrow api raw getInstallerInfoByDealerOrgCodeOrId '{"org_id":"300977"}'
+
+GoSungrow api raw getKpiInfo
+GoSungrow api raw getInstallInfoList
+GoSungrow api raw getIncomeSettingInfos '{"ps_id":"1171348"}'
+GoSungrow api raw getOSSConfig
+GoSungrow api raw getOssObjectStream
+GoSungrow api raw getPhotoInfo
+GoSungrow api raw getPowerChargeSettingInfo {ps_id:1171348}
+GoSungrow api get getOrgListByName
+GoSungrow api raw getOrgListByUserId
+GoSungrow api raw getOrgListForUser
+GoSungrow api raw getPowerDevicePointNames '{"device_type":"1"}'
+GoSungrow api raw getPowerDeviceModelTechList '{"device_type":"1"}'
+GoSungrow api raw getPowerDevicePointInfo '{"id":"1"}'
+GoSungrow api raw getPowerStationForHousehold '{"ps_id":"1171348"}'
+
+GoSungrow api raw queryPsProfit '{"date_id":"20221001","date_type":"1","ps_id":"1171348"}'
+GoSungrow api raw getPowerStationData '{"date_id":"20221001","date_type":"1","ps_id":"1171348"}'
+GoSungrow api get getHouseholdStoragePsReport '{"date_id":"20221001","date_type":"1","ps_id":"1171348"}'
+
+GoSungrow api raw queryPsProfit '{"date_id":"202210","date_type":"2","ps_id":"1171348"}'
+GoSungrow api raw getPowerStationData '{"date_id":"202210","date_type":"2","ps_id":"1171348"}'
+GoSungrow api get getHouseholdStoragePsReport '{"date_id":"202210","date_type":"2","ps_id":"1171348"}'
+
+GoSungrow api raw queryPsProfit '{"date_id":"2022","date_type":"3","ps_id":"1171348"}'
+GoSungrow api raw getPowerStationData '{"date_id":"2022","date_type":"3","ps_id":"1171348"}'
+GoSungrow api get getHouseholdStoragePsReport '{"date_id":"2022","date_type":"3","ps_id":"1171348"}'
+
+GoSungrow api raw getPowerStationInfo '{"ps_id":"1171348"}'
+GoSungrow api raw getPowerTrendDayData '{"BeginTime":"20221004"}'
+GoSungrow api raw getPowerSettingCharges
+GoSungrow api raw queryUnitList
+GoSungrow api raw queryPsIdList
+GoSungrow api get getEncryptPublicKey
+
+GoSungrow api raw getFaultCount
+GoSungrow api raw getFaultDetail '{"fault_code":"34"}'
+GoSungrow api raw getFaultMsgByFaultCode '{"fault_code":"703"}'
+GoSungrow api get getFaultMsgListWithYYYYMM
 
 
 ################################################################################
@@ -110,4 +154,7 @@ sensor.sungrow_total_load_active_power == sensor.sungrow_total_active_power
         "1"	- PV to Load
         "3"	- Battery to Load
         "5"	- PV to Battery
+
+https://augateway.isolarcloud.com/v1/commonService/getMqttConfigInfoByAppkey
+sensor.sungrow_total_load_active_power == sensor.sungrow_total_active_power
 

@@ -1,0 +1,82 @@
+[
+	{
+		"point_cal_type": 1,
+		"point_id": 13134,
+		"point_name": "Total PV Yield"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 13112,
+		"point_name": "Daily PV Yield"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 13122,
+		"point_name": "Daily Feed-in Energy"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 13125,
+		"point_name": "Total Feed-in Energy"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 13147,
+		"point_name": "Daily Purchased Energy"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 13148,
+		"point_name": "Total Purchased Energy"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 13173,
+		"point_name": "Daily Feed-in Energy (PV)"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 13175,
+		"point_name": "Total Feed-in Energy (PV)"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 13029,
+		"point_name": "Daily Battery Discharging Energy"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 13028,
+		"point_name": "Daily Battery Charging Energy"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 13035,
+		"point_name": "Total Battery Discharging Energy"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 13034,
+		"point_name": "Total Battery Charging Energy"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 13174,
+		"point_name": "Daily Battery Charging Energy from PV"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 13176,
+		"point_name": "Total Battery Charging Energy from PV"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 13137,
+		"point_name": "Total Load Energy Consumption from PV"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 13116,
+		"point_name": "Daily Load Energy Consumption from PV"
+	}
+]

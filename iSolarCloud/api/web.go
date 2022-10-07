@@ -4,11 +4,10 @@ import (
 	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
-	"os"
+	"github.com/MickMake/GoUnify/cmdPath"
 	"path/filepath"
 	"time"
 
-	// "GoSungrow/iSolarCloud/AppService/login"
 	"bytes"
 	"encoding/json"
 	"errors"
@@ -46,37 +45,51 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 	for range Only.Once {
 		w.Error = w.Url.IsValid()
 		if w.Error != nil {
-			w.Error = errors.New("SUNGRO API EndPoint not yet implemented")
+			w.Error = errors.New("SUNGROW API EndPoint not yet implemented")
+			fmt.Println(w.Error)
 			break
 		}
 
-		if w.CheckCache(endpoint) {
-			w.Body, w.Error = w.CacheRead(endpoint)
+		isCached := false
+		if w.WebCacheCheck(endpoint) {
+			isCached = true
+		}
+
+
+		if isCached {
+			w.Body, w.Error = w.WebCacheRead(endpoint)
 			if w.Error != nil {
 				break
 			}
+
 		} else {
 			w.Body, w.Error = w.getApi(endpoint)
 			if w.Error != nil {
 				break
 			}
-			w.Error = w.CacheWrite(endpoint, w.Body)
-			if w.Error != nil {
-				break
-			}
 		}
+
 
 		if len(w.Body) == 0 {
-			w.Error = errors.New("empty httpResponse")
+			w.Error = errors.New("empty http response")
 			break
 		}
-
 		endpoint = endpoint.SetResponse(w.Body)
 		w.Error = endpoint.IsResponseValid()
 		if w.Error != nil {
-			_ = w.CacheRemove(endpoint)
+			_ = w.WebCacheRemove(endpoint)
 			// fmt.Printf("ERROR: Body is:\n%s\n", w.Body)
 			break
+		}
+
+
+		if isCached {
+
+		} else {
+			w.Error = w.WebCacheWrite(endpoint, w.Body)
+			if w.Error != nil {
+				break
+			}
 		}
 	}
 
@@ -141,16 +154,29 @@ func (w *Web) getApi(endpoint EndPoint) ([]byte, error) {
 func (w *Web) SetCacheDir(basedir string) error {
 	for range Only.Once {
 		w.cacheDir = filepath.Join(basedir)
-		_, w.Error = os.Stat(w.cacheDir)
-		if os.IsExist(w.Error) {
-			w.Error = nil
+
+		p := cmdPath.NewPath(basedir)
+		if p.DirExists() {
 			break
 		}
 
-		w.Error = os.MkdirAll(w.cacheDir, 0700)
+		w.Error = p.MkdirAll()
 		if w.Error != nil {
 			break
 		}
+
+		// _, w.Error = os.Stat(w.cacheDir)
+		// if w.Error != nil {
+		// 	if os.IsNotExist(w.Error) {
+		// 		w.Error = nil
+		// 	}
+		// 	break
+		// }
+		//
+		// w.Error = os.MkdirAll(w.cacheDir, 0700)
+		// if w.Error != nil {
+		// 	break
+		// }
 	}
 
 	return w.Error
@@ -168,28 +194,39 @@ func (w *Web) GetCacheTimeout() time.Duration {
 	return w.cacheTimeout
 }
 
-// CheckCache Retrieves cache data from a local file.
-func (w *Web) CheckCache(endpoint EndPoint) bool {
+// WebCacheCheck Retrieves cache data from a local file.
+func (w *Web) WebCacheCheck(endpoint EndPoint) bool {
 	var ok bool
 	for range Only.Once {
-		fn := filepath.Join(w.cacheDir, endpoint.CacheFilename())
+		// fn := filepath.Join(w.cacheDir, endpoint.CacheFilename())
+		//
+		// var f os.FileInfo
+		// f, w.Error = os.Stat(fn)
+		// if w.Error != nil {
+		// 	if os.IsNotExist(w.Error) {
+		// 		w.Error = nil
+		// 	}
+		// 	break
+		// }
+		//
+		// if f.IsDir() {
+		// 	w.Error = errors.New("file is a directory")
+		// 	break
+		// }
 
-		var f os.FileInfo
-		f, w.Error = os.Stat(fn)
-		if w.Error != nil {
-			if os.IsNotExist(w.Error) {
-				w.Error = nil
-			}
+		p := cmdPath.NewPath(w.cacheDir, endpoint.CacheFilename())
+		if p.DirExists() {
+			w.Error = errors.New("file is a directory")
+			ok = false
 			break
 		}
-
-		if f.IsDir() {
-			w.Error = errors.New("file is a directory")
+		if p.FileExists() {
+			ok = true
 			break
 		}
 
 		duration := w.GetCacheTimeout()
-		then := f.ModTime()
+		then := p.ModTime()
 		then = then.Add(duration)
 		now := time.Now()
 		if then.Before(now) {
@@ -202,20 +239,62 @@ func (w *Web) CheckCache(endpoint EndPoint) bool {
 	return ok
 }
 
-// CacheRead Retrieves cache data from a local file.
-func (w *Web) CacheRead(endpoint EndPoint) ([]byte, error) {
+// WebCacheRead Retrieves cache data from a local file.
+func (w *Web) WebCacheRead(endpoint EndPoint) ([]byte, error) {
 	fn := filepath.Join(w.cacheDir, endpoint.CacheFilename())
 	return output.PlainFileRead(fn)
 }
 
-// CacheRemove Removes a cache file.
-func (w *Web) CacheRemove(endpoint EndPoint) error {
+// WebCacheRemove Removes a cache file.
+func (w *Web) WebCacheRemove(endpoint EndPoint) error {
 	fn := filepath.Join(w.cacheDir, endpoint.CacheFilename())
 	return output.FileRemove(fn)
 }
 
-// CacheWrite Saves cache data to a file path.
-func (w *Web) CacheWrite(endpoint EndPoint, data []byte) error {
+// WebCacheWrite Saves cache data to a file path.
+func (w *Web) WebCacheWrite(endpoint EndPoint, data []byte) error {
+	fn := filepath.Join(w.cacheDir, endpoint.CacheFilename())
+	return output.PlainFileWrite(fn, data, output.DefaultFileMode)
+}
+
+
+// PointCacheCheck Retrieves cache data from a local file.
+func (w *Web) PointCacheCheck(data DataMap) bool {
+	var ok bool
+	for range Only.Once {
+		p := cmdPath.NewPath(w.cacheDir, "Points.json")
+		if p.DirExists() {
+			w.Error = errors.New("file is a directory")
+			ok = false
+			break
+		}
+		if p.FileExists() {
+			ok = true
+			break
+		}
+
+		duration := w.GetCacheTimeout()
+		then := p.ModTime()
+		then = then.Add(duration)
+		now := time.Now()
+		if then.Before(now) {
+			break
+		}
+
+		ok = true
+	}
+
+	return ok
+}
+
+// PointCacheRead Retrieves cache data from a local file.
+func (w *Web) PointCacheRead(endpoint EndPoint) ([]byte, error) {
+	fn := filepath.Join(w.cacheDir, endpoint.CacheFilename())
+	return output.PlainFileRead(fn)
+}
+
+// PointCacheWrite Saves cache data to a file path.
+func (w *Web) PointCacheWrite(endpoint EndPoint, data []byte) error {
 	fn := filepath.Join(w.cacheDir, endpoint.CacheFilename())
 	return output.PlainFileWrite(fn, data, output.DefaultFileMode)
 }

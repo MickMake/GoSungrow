@@ -8,6 +8,7 @@ import (
 	"fmt"
 )
 
+
 type EndPointName string
 
 type EndPointStruct struct {

@@ -1,23 +1,48 @@
 #!/bin/bash
 
-VERSION="$1"
+VERSION="$(awk '/BinaryVersion/{gsub("\"",""); print"v"$3}' defaults/const.go)"
 if [ -z "${VERSION}" ]
 then
-	echo "Need a version number. EG: v1.42"
+	echo "Unknown version."
 	exit 1
 fi
 
-# vi defaults/const.go 
-git tag -d "${VERSION}"
-rm -rf dist/
+echo -n "Checking git tag \"${VERSION}\"  - "
+TAG="$(git describe --tags "${VERSION}")"
+if [ ! -z "${TAG}" ]
+then
+	echo "Version ${VERSION} already exists."
+	echo "Delete with:"
+	echo "git tag -d ${VERSION}"
+  echo ""
+	echo "OR modify defaults/const.go file."
+  echo ""
+	echo "OR hit enter to just commit and push."
+  echo ""
+  echo -n "OK? (Ctrl-C to terminate) "
+  read OK
+
+  git add .
+  git commit -m "Committed ${VERSION}"
+  git push
+
+  exit 1
+fi
+
+echo ""
+echo "Releasing version ${VERSION}"
+echo ""
+echo -n "OK? (Ctrl-C to terminate) "
+read OK
 
 git add .
 git commit -m "Committed ${VERSION}"
-
 git tag "${VERSION}"
-goreleaser build
+git push
+
+goreleaser release --rm-dist
 
 git add .
 git commit -m "Released ${VERSION}"
-
 git push
+

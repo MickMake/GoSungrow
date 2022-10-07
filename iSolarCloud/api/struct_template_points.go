@@ -6,11 +6,12 @@ import (
 	"strings"
 )
 
+
 type TemplatePoint struct {
 	Description string
-	PsKey       string
-	PointId     string
-	Unit        string
+	PsKey   string
+	PointId PointId
+	Unit    string
 }
 type TemplatePoints []TemplatePoint
 
@@ -33,7 +34,7 @@ func (t *TemplatePoints) PrintPoints() string {
 	return ret
 }
 
-func (t *TemplatePoints) GetPoint(pskey string, point string) TemplatePoint {
+func (t *TemplatePoints) GetPoint(pskey string, point PointId) TemplatePoint {
 	var ret TemplatePoint
 	for _, k := range *t {
 		if k.PsKey != pskey {
@@ -56,12 +57,12 @@ func CreatePoints(points []string) TemplatePoints {
 		for _, p := range points {
 			pa := strings.Split(p, ".")
 			if len(pa) == 2 {
-				pa[1] = SetPoint(pa[1])
+				pa[1] = string(SetPoint(PointId(pa[1])))
 				// pa[1] = "p" + strings.TrimPrefix(pa[1], "p")
 				ret = append(ret, TemplatePoint{
 					Description: "",
 					PsKey:       pa[0],
-					PointId:     pa[1],
+					PointId:     PointId(pa[1]),
 					Unit:        "",
 				})
 			}

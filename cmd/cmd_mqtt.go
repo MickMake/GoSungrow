@@ -2,141 +2,218 @@ package cmd
 
 import (
 	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/mmHa"
 	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/cmdHelp"
+	"github.com/MickMake/GoUnify/cmdLog"
 	"github.com/go-co-op/gocron"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"strconv"
 	"strings"
 	"time"
 )
 
 
-func AttachCmdMqtt(cmd *cobra.Command) *cobra.Command {
-	// ******************************************************************************** //
-	var cmdMqtt = &cobra.Command{
-		Use:                   "mqtt",
-		Aliases:               []string{""},
-		Short:                 fmt.Sprintf("Connect to a HASSIO broker."),
-		Long:                  fmt.Sprintf("Connect to a HASSIO broker."),
-		DisableFlagParsing:    false,
-		DisableFlagsInUseLine: false,
-		PreRunE:               Cmd.MqttArgs,
-		RunE:                  cmdMqttFunc,
-		Args:                  cobra.MinimumNArgs(1),
-	}
-	cmd.AddCommand(cmdMqtt)
-	cmdMqtt.Example = PrintExamples(cmdMqtt, "run", "sync")
+const (
+	flagMqttUsername   = "mqtt-user"
+	flagMqttPassword   = "mqtt-password"
+	flagMqttHost   = "mqtt-host"
+	flagMqttPort   = "mqtt-port"
+)
 
+//goland:noinspection GoNameStartsWithPackageName
+type CmdMqtt struct {
+	CmdDefault
 
-	// ******************************************************************************** //
-	var cmdMqttRun = &cobra.Command{
-		Use:                   "run",
-		Aliases:               []string{""},
-		Short:                 fmt.Sprintf("One-off sync to a HASSIO broker."),
-		Long:                  fmt.Sprintf("One-off sync to a HASSIO broker."),
-		DisableFlagParsing:    false,
-		DisableFlagsInUseLine: false,
-		PreRunE:               Cmd.MqttArgs,
-		RunE:                  cmdMqttRunFunc,
-		Args:                  cobra.RangeArgs(0, 1),
-	}
-	cmdMqtt.AddCommand(cmdMqttRun)
-	cmdMqttRun.Example = PrintExamples(cmdMqttRun, "")
+	// HASSIO MQTT
+	MqttUsername   string
 
-	// ******************************************************************************** //
-	var cmdMqttSync = &cobra.Command{
-		Use:                   "sync",
-		Aliases:               []string{""},
-		Short:                 fmt.Sprintf("Sync to a HASSIO MQTT broker."),
-		Long:                  fmt.Sprintf("Sync to a HASSIO MQTT broker."),
-		DisableFlagParsing:    false,
-		DisableFlagsInUseLine: false,
-		PreRunE:               Cmd.MqttArgs,
-		RunE:                  cmdMqttSyncFunc,
-		Args:                  cobra.RangeArgs(0, 1),
-	}
-	cmdMqtt.AddCommand(cmdMqttSync)
-	cmdMqttSync.Example = PrintExamples(cmdMqttSync, "", "all")
+	MqttPassword   string
+	MqttHost       string
+	MqttPort       string
 
-	return cmdMqtt
+	Mqtt *mmHa.Mqtt
+	// SunGrow *iSolarCloud.SunGrow
 }
 
+func NewCmdMqtt() *CmdMqtt {
+	var ret *CmdMqtt
 
-func (ca *CommandArgs) MqttArgs(cmd *cobra.Command, args []string) error {
 	for range Only.Once {
-		ca.Error = ca.ProcessArgs(cmd, args)
+		ret = &CmdMqtt {
+			CmdDefault: CmdDefault {
+				Error:   nil,
+				cmd:     nil,
+				SelfCmd: nil,
+			},
+		}
+	}
+
+	return ret
+}
+
+func (c *CmdMqtt) AttachCommand(cmd *cobra.Command) *cobra.Command {
+	for range Only.Once {
+		if cmd == nil {
+			break
+		}
+		c.cmd = cmd
+
+		// ******************************************************************************** //
+		var cmdMqtt = &cobra.Command{
+			Use:                   "mqtt",
+			Aliases:               []string{""},
+			Short:                 fmt.Sprintf("Connect to a HASSIO broker."),
+			Long:                  fmt.Sprintf("Connect to a HASSIO broker."),
+			DisableFlagParsing:    false,
+			DisableFlagsInUseLine: false,
+			PreRunE:               nil,
+			RunE:                  c.CmdMqtt,
+			Args:                  cobra.MinimumNArgs(1),
+		}
+		cmd.AddCommand(cmdMqtt)
+		cmdMqtt.Example = cmdHelp.PrintExamples(cmdMqtt, "run", "sync")
+
+		// ******************************************************************************** //
+		var cmdMqttRun = &cobra.Command{
+			Use:                   "run",
+			Aliases:               []string{""},
+			Short:                 fmt.Sprintf("One-off sync to a HASSIO broker."),
+			Long:                  fmt.Sprintf("One-off sync to a HASSIO broker."),
+			DisableFlagParsing:    false,
+			DisableFlagsInUseLine: false,
+			PreRunE:               func(cmd *cobra.Command, args []string) error {
+				cmds.Error = cmds.ProcessArgs(cmd, args)
+				if cmds.Error != nil {
+					return cmds.Error
+				}
+				cmds.Error = cmds.SunGrowArgs(cmd, args)
+				if cmds.Error != nil {
+					return cmds.Error
+				}
+				cmds.Error = cmds.MqttArgs(cmd, args)
+				if cmds.Error != nil {
+					return cmds.Error
+				}
+				return nil
+			},
+			RunE:                  cmds.CmdMqttRun,
+			Args:                  cobra.RangeArgs(0, 1),
+		}
+		cmdMqtt.AddCommand(cmdMqttRun)
+		cmdMqttRun.Example = cmdHelp.PrintExamples(cmdMqttRun, "")
+
+		// ******************************************************************************** //
+		var cmdMqttSync = &cobra.Command{
+			Use:                   "sync",
+			Aliases:               []string{""},
+			Short:                 fmt.Sprintf("Sync to a HASSIO MQTT broker."),
+			Long:                  fmt.Sprintf("Sync to a HASSIO MQTT broker."),
+			DisableFlagParsing:    false,
+			DisableFlagsInUseLine: false,
+			PreRunE:               func(cmd *cobra.Command, args []string) error {
+				cmds.Error = cmds.ProcessArgs(cmd, args)
+				if cmds.Error != nil {
+					return cmds.Error
+				}
+				cmds.Error = cmds.SunGrowArgs(cmd, args)
+				if cmds.Error != nil {
+					return cmds.Error
+				}
+				cmds.Error = cmds.MqttArgs(cmd, args)
+				if cmds.Error != nil {
+					return cmds.Error
+				}
+				return nil
+			},
+			RunE:                  cmds.CmdMqttSync,
+			Args:                  cobra.RangeArgs(0, 1),
+		}
+		cmdMqtt.AddCommand(cmdMqttSync)
+		cmdMqttSync.Example = cmdHelp.PrintExamples(cmdMqttSync, "", "all")
+	}
+	return c.SelfCmd
+}
+
+func (c *CmdMqtt) AttachFlags(cmd *cobra.Command, viper *viper.Viper) {
+	for range Only.Once {
+		cmd.PersistentFlags().StringVarP(&c.MqttUsername, flagMqttUsername, "", "", fmt.Sprintf("HASSIO: mqtt username."))
+		viper.SetDefault(flagMqttUsername, "")
+		cmd.PersistentFlags().StringVarP(&c.MqttPassword, flagMqttPassword, "", "", fmt.Sprintf("HASSIO: mqtt password."))
+		viper.SetDefault(flagMqttPassword, "")
+		cmd.PersistentFlags().StringVarP(&c.MqttHost, flagMqttHost, "", "", fmt.Sprintf("HASSIO: mqtt host."))
+		viper.SetDefault(flagMqttHost, "")
+		cmd.PersistentFlags().StringVarP(&c.MqttPort, flagMqttPort, "", "", fmt.Sprintf("HASSIO: mqtt port."))
+		viper.SetDefault(flagMqttPort, "")
+	}
+}
+
+func (ca *Cmds) MqttArgs(cmd *cobra.Command, args []string) error {
+	for range Only.Once {
+		cmdLog.LogPrintDate("Connecting to SunGrow...\n")
+		var id int64
+		id, ca.Error = ca.Api.SunGrow.GetPsId()
 		if ca.Error != nil {
 			break
 		}
 
-		LogPrintDate("Connecting to SunGrow...\n")
-		Cmd.Error = Cmd.SunGrowArgs(cmd, args)
-		if Cmd.Error != nil {
+		var model []string
+		model, ca.Error = ca.Api.SunGrow.GetPsModel()
+		if ca.Error != nil {
 			break
 		}
 
-		var id int64
-		id, Cmd.Error = Cmd.SunGrow.GetPsId()
-		if Cmd.Error != nil {
+		var serial []string
+		serial, ca.Error = ca.Api.SunGrow.GetPsSerial()
+		if ca.Error != nil {
 			break
 		}
+		cmdLog.LogPrintDate("Found SunGrow device %s id:%d serial:%s\n", model, id, serial)
 
-		var model string
-		model, Cmd.Error = Cmd.SunGrow.GetPsModel()
-		if Cmd.Error != nil {
-			break
-		}
-
-		var serial string
-		serial, Cmd.Error = Cmd.SunGrow.GetPsSerial()
-		if Cmd.Error != nil {
-			break
-		}
-		LogPrintDate("Found SunGrow device %s id:%d serial:%s\n", model, id, serial)
-
-		LogPrintDate("Connecting to MQTT HASSIO Service...\n")
-		Cmd.Mqtt = mmHa.New(mmHa.Mqtt {
+		cmdLog.LogPrintDate("Connecting to MQTT HASSIO Service...\n")
+		ca.Mqtt.Mqtt = mmHa.New(mmHa.Mqtt {
 			ClientId: "GoSunGrow",
-			Username: Cmd.MqttUsername,
-			Password: Cmd.MqttPassword,
-			Host:     Cmd.MqttHost,
-			Port:     Cmd.MqttPort,
+			Username: ca.Mqtt.MqttUsername,
+			Password: ca.Mqtt.MqttPassword,
+			Host:     ca.Mqtt.MqttHost,
+			Port:     ca.Mqtt.MqttPort,
 		})
-		Cmd.Error = Cmd.Mqtt.GetError()
-		if Cmd.Error != nil {
+		ca.Error = ca.Mqtt.Mqtt.GetError()
+		if ca.Error != nil {
 			break
 		}
 
-		Cmd.Error = Cmd.Mqtt.SetDeviceConfig("GoSunGrow", strconv.FormatInt(id, 10), "GoSungrow", model, "Sungrow", "Roof")
-		if Cmd.Error != nil {
+		ca.Error = ca.Mqtt.Mqtt.SetDeviceConfig("GoSunGrow", strconv.FormatInt(id, 10), "GoSungrow", model[0], "Sungrow", "Roof")
+		if ca.Error != nil {
 			break
 		}
 
-		Cmd.Error = Cmd.Mqtt.Connect()
-		if Cmd.Error != nil {
+		ca.Error = ca.Mqtt.Mqtt.Connect()
+		if ca.Error != nil {
 			break
 		}
 
-		// if Cmd.Mqtt.PsId == 0 {
-		// 	Cmd.Mqtt.PsId, Cmd.Error = Cmd.SunGrow.GetPsId()
-		// 	if Cmd.Error != nil {
+		// if c.Mqtt.PsId == 0 {
+		// 	c.Mqtt.PsId, c.Error = c.Api.SunGrow.GetPsId()
+		// 	if c.Error != nil {
 		// 		break
 		// 	}
-		// 	LogPrintDate("Found SunGrow device %d\n", Cmd.Mqtt.PsId)
+		// 	cmdLog.LogPrintDate("Found SunGrow device %d\n", c.Mqtt.PsId)
 		// }
 	}
 
-	return Cmd.Error
+	return ca.Error
 }
 
 
-func cmdMqttFunc(cmd *cobra.Command, _ []string) error {
+func (c *CmdMqtt) CmdMqtt(cmd *cobra.Command, _ []string) error {
 	return cmd.Help()
 }
 
-func cmdMqttRunFunc(_ *cobra.Command, _ []string) error {
+func (ca *Cmds) CmdMqttRun(_ *cobra.Command, _ []string) error {
 	for range Only.Once {
 		// switch1 := mmMqtt.BinarySensor {
 		// 	Device: mmMqtt.Device {
@@ -161,38 +238,38 @@ func cmdMqttRunFunc(_ *cobra.Command, _ []string) error {
 		// 	break
 		// }
 
-		Cmd.Error = MqttCron()
-		if Cmd.Error != nil {
+		ca.Error = ca.MqttCron()
+		if ca.Error != nil {
 			break
 		}
 
-		LogPrintDate("Starting ticker...\n")
+		cmdLog.LogPrintDate("Starting ticker...\n")
 		updateCounter := 0
 		timer := time.NewTicker(60 * time.Second)
 		for t := range timer.C {
 			if updateCounter < 5 {
 				updateCounter++
-				LogPrintDate("Sleeping: %d\n", updateCounter)
+				cmdLog.LogPrintDate("Sleeping: %d\n", updateCounter)
 				continue
 			}
 
 			updateCounter = 0
-			LogPrintDate("Update: %s\n", t.String())
-			Cmd.Error = MqttCron()
-			if Cmd.Error != nil {
+			cmdLog.LogPrintDate("Update: %s\n", t.String())
+			ca.Error = ca.MqttCron()
+			if ca.Error != nil {
 				break
 			}
 
-			// ep = Cmd.SunGrow.QueryDevice(psId)
+			// ep = c.Api.SunGrow.QueryDevice(psId)
 			// if ep.IsError() {
-			// 	Cmd.Error = ep.GetError()
+			// 	c.Error = ep.GetError()
 			// 	break
 			// }
 			//
 			// data = ep.GetData()
 			// for _, r := range data.Entries {
 			// 	// fmt.Printf("%s ", r.PointId)
-			// 	Cmd.Error = foo.SensorPublishState(r.PointId, r.Value)
+			// 	c.Error = foo.SensorPublishState(r.PointId, r.Value)
 			// 	if err != nil {
 			// 		break
 			// 	}
@@ -201,10 +278,10 @@ func cmdMqttRunFunc(_ *cobra.Command, _ []string) error {
 		}
 	}
 
-	return Cmd.Error
+	return ca.Error
 }
 
-func cmdMqttSyncFunc(_ *cobra.Command, args []string) error {
+func (ca *Cmds) CmdMqttSync(_ *cobra.Command, args []string) error {
 
 	for range Only.Once {
 		// */1 * * * * /dir/command args args
@@ -214,95 +291,97 @@ func cmdMqttSyncFunc(_ *cobra.Command, args []string) error {
 			cronString = strings.ReplaceAll(cronString, ".", "*")
 		}
 
-		Cron.Scheduler = gocron.NewScheduler(time.UTC)
-		Cron.Scheduler = Cron.Scheduler.Cron(cronString)
-		Cron.Scheduler = Cron.Scheduler.SingletonMode()
+		cron := gocron.NewScheduler(time.UTC)
+		cron = cron.Cron(cronString)
+		cron = cron.SingletonMode()
 
-		Cmd.Error = MqttCron()
-		if Cmd.Error != nil {
+		ca.Error = ca.MqttCron()
+		if ca.Error != nil {
 			break
 		}
 
-		Cron.Job, Cmd.Error = Cron.Scheduler.Do(MqttCron)
-		if Cmd.Error != nil {
+		var job *gocron.Job
+		job, ca.Error = cron.Do(ca.MqttCron)
+		if ca.Error != nil {
 			break
 		}
+		job.IsRunning()
 
-		LogPrintDate("Created job schedule using '%s'\n", cronString)
-		Cron.Scheduler.StartBlocking()
-		if Cmd.Error != nil {
+		cmdLog.LogPrintDate("Created job schedule using '%s'\n", cronString)
+		cron.StartBlocking()
+		if ca.Error != nil {
 			break
 		}
 	}
 
-	return Cmd.Error
+	return ca.Error
 }
 
-func MqttCron() error {
+func (ca *Cmds) MqttCron() error {
 	for range Only.Once {
-		if Cmd.Mqtt == nil {
-			Cmd.Error = errors.New("mqtt not available")
+		if ca.Mqtt == nil {
+			ca.Error = errors.New("mqtt not available")
 			break
 		}
 
-		if Cmd.SunGrow == nil {
-			Cmd.Error = errors.New("sungrow not available")
+		if ca.Api.SunGrow == nil {
+			ca.Error = errors.New("sungrow not available")
 			break
 		}
 
-		if Cmd.Mqtt.IsFirstRun() {
-			Cmd.Mqtt.UnsetFirstRun()
+		if ca.Mqtt.Mqtt.IsFirstRun() {
+			ca.Mqtt.Mqtt.UnsetFirstRun()
 		} else {
 			time.Sleep(time.Second * 40)	// Takes up to 40 seconds for data to come in.
 		}
 
 		newDay := false
-		if Cmd.Mqtt.IsNewDay() {
+		if ca.Mqtt.Mqtt.IsNewDay() {
 			newDay = true
 		}
 
-		Cmd.Error = Update1(newDay)
-		if Cmd.Error != nil {
+		ca.Error = ca.Update1(newDay)
+		if ca.Error != nil {
 			break
 		}
 
-		Cmd.Error = Update2(newDay)
-		if Cmd.Error != nil {
+		ca.Error = ca.Update2(newDay)
+		if ca.Error != nil {
 			break
 		}
 
-		Cmd.Mqtt.LastRefresh = time.Now()
+		ca.Mqtt.Mqtt.LastRefresh = time.Now()
 	}
 
-	if Cmd.Error != nil {
-		LogPrintDate("Error: %s\n", Cmd.Error)
+	if ca.Error != nil {
+		cmdLog.LogPrintDate("Error: %s\n", ca.Error)
 	}
-	return Cmd.Error
+	return ca.Error
 }
 
-func Update1(newDay bool) error {
+func (ca *Cmds) Update1(newDay bool) error {
 	for range Only.Once {
 		// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
-		ep := Cmd.SunGrow.QueryDevice(Cmd.Mqtt.PsId)
+		ep := ca.Api.SunGrow.QueryDevice(ca.Mqtt.Mqtt.PsId)
 		if ep.IsError() {
-			Cmd.Error = ep.GetError()
+			ca.Error = ep.GetError()
 			break
 		}
 		data := ep.GetData()
 
 		if newDay {
-			LogPrintDate("New day: Configuring %d entries in HASSIO.\n", len(data.Entries))
+			cmdLog.LogPrintDate("New day: Configuring %d entries in HASSIO.\n", len(data.DataPoints))
 			for _, o := range data.Order {
-				r := data.Entries[o]
-
 				fmt.Printf("C")
-				re := mmHa.EntityConfig {
-					Name:        r.Point.Id, // PointName,
+				entries := data.DataPoints[o]
+				r := entries.GetEntry(api.LastEntry) // Gets the last entry
+				re := mmHa.EntityConfig{
+					Name:        string(r.Point.Id), // PointName,
 					SubName:     "",
 					ParentId:    r.EndPoint,
 					ParentName:  "",
-					UniqueId:    r.Point.Id,
-					FullId:      r.Point.FullId,
+					UniqueId:    string(r.Point.Id),
+					FullId:      string(r.FullId),	// WAS r.Point.FullId
 					Units:       r.Point.Unit,
 					ValueName:   r.Point.Name,
 					DeviceClass: "",
@@ -319,32 +398,32 @@ func Update1(newDay bool) error {
 				// 	fmt.Printf("HEY\n")
 				// }
 
-				Cmd.Error = Cmd.Mqtt.BinarySensorPublishConfig(re)
-				if Cmd.Error != nil {
+				ca.Error = ca.Mqtt.Mqtt.BinarySensorPublishConfig(re)
+				if ca.Error != nil {
 					break
 				}
 
-				Cmd.Error = Cmd.Mqtt.SensorPublishConfig(re)
-				if Cmd.Error != nil {
+				ca.Error = ca.Mqtt.Mqtt.SensorPublishConfig(re)
+				if ca.Error != nil {
 					break
 				}
 			}
 			fmt.Println()
 		}
 
-		LogPrintDate("Updating %d entries to HASSIO.\n", len(data.Entries))
+		cmdLog.LogPrintDate("Updating %d entries to HASSIO.\n", len(data.DataPoints))
 		for _, o := range data.Order {
-			r := data.Entries[o]
-
+			entries := data.DataPoints[o]
+			r := entries.GetEntry(api.LastEntry) // Gets the last entry
 			fmt.Printf("U")
-			re := mmHa.EntityConfig {
-				Name:        r.Point.Id, // PointName,
+			re := mmHa.EntityConfig{
+				Name:        string(r.Point.Id), // PointName,
 				SubName:     "",
 				ParentId:    r.EndPoint,
 				ParentName:  "",
-				UniqueId:    r.Point.Id,
+				UniqueId:    string(r.Point.Id),
 				// UniqueId:    r.Id,
-				FullId: r.Point.FullId,
+				FullId:      string(r.FullId),	// WAS r.Point.FullId
 				// FullName:    r.Point.Name,
 				Units:       r.Point.Unit,
 				ValueName:   r.Point.Name,
@@ -354,50 +433,49 @@ func Update1(newDay bool) error {
 				Value:       r.Value,
 			}
 
-			Cmd.Error = Cmd.Mqtt.BinarySensorPublishValue(re)
-			if Cmd.Error != nil {
+			ca.Error = ca.Mqtt.Mqtt.BinarySensorPublishValue(re)
+			if ca.Error != nil {
 				break
 			}
 
-			Cmd.Error = Cmd.Mqtt.SensorPublishValue(re)
-			if Cmd.Error != nil {
+			ca.Error = ca.Mqtt.Mqtt.SensorPublishValue(re)
+			if ca.Error != nil {
 				break
 			}
 		}
 		fmt.Println()
 	}
 
-	if Cmd.Error != nil {
-		LogPrintDate("Error: %s\n", Cmd.Error)
+	if ca.Error != nil {
+		cmdLog.LogPrintDate("Error: %s\n", ca.Error)
 	}
-	return Cmd.Error
+	return ca.Error
 }
 
-func Update2(newDay bool) error {
+func (ca *Cmds) Update2(newDay bool) error {
 	for range Only.Once {
 		// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
-		ep := Cmd.SunGrow.QueryPs(Cmd.Mqtt.PsId)
+		ep := ca.Api.SunGrow.QueryPs(ca.Mqtt.Mqtt.PsId)
 		if ep.IsError() {
-			Cmd.Error = ep.GetError()
+			ca.Error = ep.GetError()
 			break
 		}
 		data := ep.GetData()
 
 		if newDay {
-			LogPrintDate("New day: Configuring %d entries in HASSIO.\n", len(data.Entries))
+			cmdLog.LogPrintDate("New day: Configuring %d entries in HASSIO.\n", len(data.DataPoints))
 			for _, o := range data.Order {
-				r := data.Entries[o]
-
+				entries := data.DataPoints[o]
+				r := entries.GetEntry(api.LastEntry) // Gets the last entry
 				fmt.Printf("C")
-
 				re := mmHa.EntityConfig {
-					Name:        r.Point.Id, // PointName,
+					Name:        string(r.Point.Id), // PointName,
 					SubName:     "",
 					ParentId:    r.EndPoint,
 					ParentName:  "",
-					UniqueId:    r.Point.Id,
+					UniqueId:    string(r.Point.Id),
 					// UniqueId:    r.Id,
-					FullId: r.Point.FullId,
+					FullId:      string(r.FullId),	// WAS r.Point.FullId
 					// FullName:    r.Point.Name,
 					Units:       r.Point.Unit,
 					ValueName:   r.Point.Name,
@@ -407,33 +485,32 @@ func Update2(newDay bool) error {
 					Value:       r.Value,
 				}
 
-				Cmd.Error = Cmd.Mqtt.BinarySensorPublishConfig(re)
-				if Cmd.Error != nil {
+				ca.Error = ca.Mqtt.Mqtt.BinarySensorPublishConfig(re)
+				if ca.Error != nil {
 					break
 				}
 
-				Cmd.Error = Cmd.Mqtt.SensorPublishConfig(re)
-				if Cmd.Error != nil {
+				ca.Error = ca.Mqtt.Mqtt.SensorPublishConfig(re)
+				if ca.Error != nil {
 					break
 				}
 			}
 			fmt.Println()
 		}
 
-		LogPrintDate("Updating %d entries to HASSIO.\n", len(data.Entries))
+		cmdLog.LogPrintDate("Updating %d entries to HASSIO.\n", len(data.DataPoints))
 		for _, o := range data.Order {
-			r := data.Entries[o]
-
+			entries := data.DataPoints[o]
+			r := entries.GetEntry(api.LastEntry) // Gets the last entry
 			fmt.Printf("U")
-
 			re := mmHa.EntityConfig {
-				Name:        r.Point.Id, // PointName,
+				Name:        string(r.Point.Id), // PointName,
 				SubName:     "",
 				ParentId:    r.EndPoint,
 				ParentName:  "",
-				UniqueId:    r.Point.Id,
+				UniqueId:    string(r.Point.Id),
 				// UniqueId:    r.Id,
-				FullId: r.Point.FullId,
+				FullId:      string(r.FullId),	// WAS r.Point.FullId
 				// FullName:    r.Point.Name,
 				Units:       r.Point.Unit,
 				ValueName:   r.Point.Name,
@@ -443,23 +520,23 @@ func Update2(newDay bool) error {
 				Value:       r.Value,
 			}
 
-			Cmd.Error = Cmd.Mqtt.BinarySensorPublishValue(re)
-			if Cmd.Error != nil {
+			ca.Error = ca.Mqtt.Mqtt.BinarySensorPublishValue(re)
+			if ca.Error != nil {
 				break
 			}
 
-			Cmd.Error = Cmd.Mqtt.SensorPublishValue(re)
-			if Cmd.Error != nil {
+			ca.Error = ca.Mqtt.Mqtt.SensorPublishValue(re)
+			if ca.Error != nil {
 				break
 			}
 		}
 		fmt.Println()
 	}
 
-	if Cmd.Error != nil {
-		LogPrintDate("Error: %s\n", Cmd.Error)
+	if ca.Error != nil {
+		cmdLog.LogPrintDate("Error: %s\n", ca.Error)
 	}
-	return Cmd.Error
+	return ca.Error
 }
 
 

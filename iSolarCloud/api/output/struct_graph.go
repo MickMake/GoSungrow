@@ -148,7 +148,7 @@ func (t *Table) ProcessGraphData() error {
 			}
 
 			if req.Title == "" {
-				_ = t.SetTitle(cell.String())
+				t.SetTitle(cell.String())
 			}
 
 			if t.graph.searchName == "" {

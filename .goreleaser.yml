@@ -1,29 +1,27 @@
 ################################################################################
 project_name: GoSungrow
 
-
 ################################################################################
 before:
   hooks:
     - go mod download
-    - go generate ./...
-
+    - go generate -x ./...
 
 ################################################################################
 builds:
 - env:
   - CGO_ENABLED=0
-
   binary: GoSungrow
-
   goos:
     - linux
     - darwin
-    # windows
+    - windows
+    - openbsd
   goarch:
+    # 386
     - amd64
+    - arm
     - arm64
-
 
 ################################################################################
 # .goreleaser.yml
@@ -31,7 +29,7 @@ archives:
   -
     # ID of this archive.
     # Defaults to `default`.
-    #id: GoSungrow-archive
+    #id: GoSungrow
 
     # Builds reference which build instances should be archived in this archive.
     #builds:
@@ -88,16 +86,13 @@ archives:
     #  - design/*.png
     #  - templates/**/*
 
-
 ################################################################################
 checksum:
   name_template: 'checksums.txt'
 
-
 ################################################################################
 snapshot:
   name_template: "{{ .Tag }}-next"
-
 
 ################################################################################
 changelog:

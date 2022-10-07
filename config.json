@@ -1,0 +1,11 @@
+{
+  "appkey": "93D72E60331ABDCDC7B39ADC2D1F32B3",
+  "config": "/Users/mick/.GoSungrow/config.json",
+  "debug": false,
+  "host": "https://augateway.isolarcloud.com",
+  "password": "",
+  "quiet": false,
+  "timeout": "30s",
+  "token-expiry": "",
+  "user": ""
+}

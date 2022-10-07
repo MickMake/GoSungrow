@@ -2,14 +2,16 @@ package getDeviceList
 
 import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/getDeviceList"
 const Disabled = false
 
 type RequestData struct {
-	PsId string `json:"ps_id" required:"true"`
+	PsId int64 `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -100,3 +102,47 @@ func (e *ResultData) IsValid() error {
 //
 //	return err
 //}
+
+func (e *EndPoint) GetDataTable() output.Table {
+	var table output.Table
+	for range Only.Once {
+		table = output.NewTable()
+		table.SetTitle("")
+		table.SetJson([]byte(e.GetJsonData(false)))
+		table.SetRaw([]byte(e.GetJsonData(true)))
+
+		_ = table.SetHeader(
+			"Ps Key",
+			"Ps Id",
+			"Type",
+			"Code",
+			"Id",
+			"Type Name",
+			"Serial Number",
+			"Model",
+			"Model Id",
+			"Name",
+			"State",
+			"Status",
+			// "Factory Date",
+		)
+		for _, d := range e.Response.ResultData.PageList {
+			_ = table.AddRow(
+				d.PsKey,
+				d.PsID,
+				d.DeviceType,
+				d.DeviceCode,
+				d.ChnnlID,
+				d.TypeName,
+				d.DeviceProSn,
+				d.DeviceModel,
+				d.DeviceModelID,
+				d.DeviceName,
+				d.DeviceState,
+				d.DevStatus,
+				// d.DeviceFactoryDate,
+			)
+		}
+	}
+	return table
+}

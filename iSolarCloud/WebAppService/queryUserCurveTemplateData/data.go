@@ -2,6 +2,7 @@ package queryUserCurveTemplateData
 
 import (
 	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"encoding/json"
 	"fmt"
@@ -124,7 +125,7 @@ func (p *DeviceData) UnmarshalJSON(data []byte) error {
 	return err
 }
 
-type Points map[string]Point
+type Points map[api.PointId]Point
 
 type Point struct {
 	Color    string `json:"color"`
@@ -132,9 +133,9 @@ type Point struct {
 		TimeStamp string `json:"time_stamp"`
 		Value     string `json:"value"`
 	} `json:"data_list"`
-	DetailID   string `json:"detail_id"`
-	PointID    string `json:"point_id"`
-	PointName  string `json:"point_name"`
+	DetailID   string      `json:"detail_id"`
+	PointID    api.PointId `json:"point_id"`
+	PointName  string      `json:"point_name"`
 	PsID       string `json:"ps_id"`
 	PsKey      string `json:"ps_key"`
 	PsName     string `json:"ps_name"`
@@ -153,30 +154,3 @@ func (e *ResultData) IsValid() error {
 	// }
 	return err
 }
-
-// type DecodeResultData ResultData
-//
-// func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-// }
-
-// func (rd *RequestData) GetFingerprint() string {
-// 	return apiReflect.GetFingerprint(*rd)
-// }
-//
-// func (e EndPoint) GetFingerprint() string {
-// 	return apiReflect.GetFingerprint(e.Request.RequestData)
-// }

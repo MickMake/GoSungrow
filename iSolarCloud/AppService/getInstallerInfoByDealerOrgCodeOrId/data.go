@@ -2,15 +2,15 @@ package getInstallerInfoByDealerOrgCodeOrId
 
 import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"errors"
 	"fmt"
 )
 
 const Url = "/v1/orgService/getInstallerInfoByDealerOrgCodeOrId"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
+	DealerOrgCode string `json:"dealer_org_code"` // required:"true"`
+	OrgId         string `json:"org_id"`          // required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -24,17 +24,29 @@ func (rd RequestData) Help() string {
 
 
 type ResultData struct {
-	Dummy string `json:"dummy"`
+	UserInfoList []struct {
+		DealerOrgCode     string      `json:"dealer_org_code"`
+		Email             string      `json:"email"`
+		Installer         string      `json:"installer"`
+		InstallerEmail    string      `json:"installer_email"`
+		InstallerPhone    string      `json:"installer_phone"`
+		MobleTel          interface{} `json:"moble_tel"`
+		OrgID             int64       `json:"org_id"`
+		OrgName           string      `json:"org_name"`
+		UserID            int64       `json:"user_id"`
+		UserName          string      `json:"user_name"`
+		UserTelNationCode interface{} `json:"user_tel_nation_code"`
+	} `json:"user_info_list"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
+	// switch {
+	// case e.Dummy == "":
+	// 	break
+	// default:
+	// 	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
+	// }
 	return err
 }
 

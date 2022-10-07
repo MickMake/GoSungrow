@@ -1,0 +1,173 @@
+	
+ 1        	 Daily Yield                                    
+ 2        	 Total Yield                                    
+ 3        	 Total On-grid Running Time                     
+ 4        	 Internal Air Temperature                       
+ 5        	 MPPT1 Voltage                                  
+ 6        	 MPPT1 Current                                  
+ 7        	 MPPT2 Voltage                                  
+ 8        	 MPPT2 Current                                  
+ 9        	 MPPT3 Voltage                                  
+ 10       	 MPPT3 Current                                  
+ 14       	 Total DC Power                                 
+ 15       	 A-B Line Voltage                               
+ 16       	 B-C Line Voltage                               
+ 17       	 C-A Line Voltage                               
+ 18       	 Phase A Voltage                                
+ 19       	 Phase B Voltage                                
+ 20       	 Phase C Voltage                                
+ 21       	 Phase A Current                                
+ 22       	 Phase B Current                                
+ 23       	 Phase C Current                                
+ 24       	 Total Active Power                             
+ 25       	 Total Reactive Power                           
+ 26       	 Total Power Factor                             
+ 27       	 Grid Frequency                                 
+ 33       	 Module 1 Temperature                           
+ 34       	 Module 2 Temperature                           
+ 35       	 Module 3 Temperature                           
+ 36       	 Module 4 Temperature                           
+ 37       	 Module 5 Temperature                           
+ 38       	 Module 6 Temperature                           
+ 39       	 Positive Impedance to Ground                   
+ 40       	 Negative Impedance to Ground                   
+ 43       	 Total Apparent Power                           
+ 45       	 MPPT4 Voltage                                  
+ 46       	 MPPT4 Current                                  
+ 47       	 MPPT5 Voltage                                  
+ 48       	 MPPT5 Current                                  
+ 49       	 MPPT6 Voltage                                  
+ 50       	 MPPT6 Current                                  
+ 67       	 Daily Yield (Theoretical)                      
+ 68       	 Power Generation Hours (Theoretical)           
+ 86       	 Pac-Nom.                                       
+ 89       	 Rated Reactive Power                           
+ 90       	 Negative Voltage to Ground                     
+ 805      	 Equivalent Power Generating Hours              
+ 1001     	 DC Bus Voltage                                 
+ 1002     	 Interior Temperature                           
+ 1005     	 Total DC Current                               
+ 1006     	 Total DC Power                                 
+ 1009     	 Ipv-1                                          
+ 1010     	 Ipv-2                                          
+ 1011     	 Ipv-3                                          
+ 1012     	 Ipv-4                                          
+ 1013     	 Ipv-5                                          
+ 1014     	 Ipv-6                                          
+ 1015     	 Ipv-7                                          
+ 1016     	 Ipv-8                                          
+ 1017     	 Ipv-9                                          
+ 1018     	 Ipv-10                                         
+ 1019     	 Ipv-11                                         
+ 1020     	 Ipv-12                                         
+ 1021     	 Ipv-13                                         
+ 1022     	 Ipv-14                                         
+ 1023     	 Ipv-15                                         
+ 1024     	 Ipv-16                                         
+ 2001     	 Daily Horizontal Irradiation                   
+ 8000     	 Phase A Voltage                                
+ 8001     	 Phase B Voltage                                
+ 8002     	 Phase C Voltage                                
+ 8006     	 Phase A Current                                
+ 8007     	 Phase B Current                                
+ 8008     	 Phase C Current                                
+ 8014     	 PF                                             
+ 8018     	 Meter Active Power                             
+ 8022     	 Reactive Power                                 
+ 8026     	 Apparent Power                                 
+ 8030     	 Forward Active Energy                          
+ 8031     	 Reverse Active Energy                          
+ 8032     	 Forward Reactive Energy                        
+ 8033     	 Reverse Reactive Energy                        
+ 8034     	 Peak Forward Active Energy                     
+ 8035     	 Peak Reverse Active Energy                     
+ 8038     	 Valley Forward Active Energy                   
+ 8039     	 Valley Reverse Active Energy                   
+ 8042     	 Flat Forward Active Energy                     
+ 8043     	 Flat Reverse Active Energy                     
+ 8062     	 Daily Forward Active Energy                    
+ 8063     	 Daily Reverse Active Energy                    
+ 8064     	 Frequency                                      
+ 8065     	 Daily Peak Reverse Active Energy               
+ 8066     	 Daily Valley Forward Active Energy             
+ 8067     	 Daily Valley Reverse Active Energy             
+ 8068     	 Daily Flat Forward Active Energy               
+ 8069     	 Daily Flat Reverse Active Energy               
+ 8070     	 Daily Tip Forward Active Energy                
+ 8071     	 Daily Tip Reverse Active Energy                
+ 8072     	 Daily Peak Forward Active Energy               
+ 13028    	 Daily Battery Charging Energy                  
+ 13029    	 Daily Battery Discharging Energy               
+ 13034    	 Total Battery Charging Energy                  
+ 13035    	 Total Battery Discharging Energy               
+ 13112    	 Daily PV Yield                                 
+ 13116    	 Daily Load Energy Consumption from PV          
+ 13122    	 Daily Feed-in Energy                           
+ 13125    	 Total Feed-in Energy                           
+ 13134    	 Total PV Yield                                 
+ 13137    	 Total Load Energy Consumption from PV          
+ 13147    	 Daily Purchased Energy                         
+ 13148    	 Total Purchased Energy                         
+ 13174    	 Daily Battery Charging Energy from PV          
+ 81001    	 Inverter AC Power Normalization                
+ 81002    	 Inverter AC Power                              
+ 81003    	 Inverter DC Power Normalization                
+ 81004    	 Inverter DC Power                              
+ 81007    	 Inverter Total Yield                           
+ 81011    	 Inverter Equivalent Hours                      
+ 81012    	 Daily Yield by Inverter                        
+ 81022    	 Unit PR                                        
+ 81023    	 Unit Daily Yield                               
+ 81025    	 Unit Yield (Theoretical)                       
+ 82001    	 Inverter AC Power Normalization                
+ 82002    	 Inverter AC Power                              
+ 82003    	 Inverter DC Power Normalization                
+ 82004    	 Inverter DC Power                              
+ 82007    	 Inverter Total Yield                           
+ 82008    	 Daily Equivalent Hours of Meter                
+ 82009    	 Meter Daily Yield                              
+ 82010    	 Meter PR                                       
+ 82011    	 Daily Equivalent Hours of Inverter             
+ 82012    	 Daily Yield by Inverter                        
+ 82013    	 Inverter PR                                    
+ 82014    	 Meter E-daily Consumption                      
+ 82015    	 Transient Irradiation at Grid-connecting Point 
+ 82016    	 Daily Irradiation at Grid-connecting Point     
+ 82019    	 Ambient Temperature                            
+ 82020    	 PV Module Temperature                          
+ 82021    	 Total Yield of Meter                           
+ 82022    	 Total Energy Consumption by Meter              
+ 82023    	 Meter Active Power                             
+ 82033    	 Grid-connection Point Daily Yield              
+ 82034    	 Daily Yield (Theoretical)                      
+ 82035    	 Grid-connecting Point PR                       
+ 82038    	 Equivalent Hours of Grid-connecting Point      
+ 82039    	 Grid-connection Point Total Yield              
+ 83001    	 Inverter AC Power Normalization                
+ 83002    	 Inverter AC Power                              
+ 83004    	 Inverter Total Yield                           
+ 83005    	 Daily Equivalent Hours of Meter                
+ 83006    	 Meter Daily Yield                              
+ 83007    	 Meter PR                                       
+ 83008    	 Daily Equivalent Hours of Inverter             
+ 83009    	 Daily Yield by Inverter                        
+ 83010    	 Inverter PR                                    
+ 83011    	 Meter E-daily Consumption                      
+ 83012    	 P-radiation-H                                  
+ 83013    	 Daily Irradiation                              
+ 83016    	 Plant Ambient Temperature                      
+ 83017    	 Plant Module Temperature                       
+ 83018    	 Daily Yield (Theoretical)                      
+ 83019    	 Power/Installed Power of Plant                 
+ 83020    	 Meter Total Yield                              
+ 83021    	 Accumulative Power Consumption by Meter        
+ 83022    	 Daily Yield of Plant                           
+ 83023    	 Plant PR                                       
+ 83024    	 Plant Total Yield                              
+ 83025    	 Plant Equivalent Hours                         
+ 83032    	 Meter AC Power                                 
+ 83033    	 Plant Power                                    
+ 83072    	 Daily Feed-in Energy                           
+ 83075    	 Total Feed-in Energy                           
+ 83102    	 Daily Purchased Energy                         
+ 83105    	 Total Purchased Energy                         

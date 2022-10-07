@@ -7,10 +7,10 @@ import (
 )
 
 const Url = "/v1/faultService/getFaultMsgByFaultCode"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
+	FaultCode string `json:"fault_code" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

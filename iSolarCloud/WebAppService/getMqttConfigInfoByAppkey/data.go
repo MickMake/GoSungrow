@@ -78,10 +78,9 @@ func (e *EndPoint) GetDataTable() output.Table {
 
 	for range Only.Once {
 		table = output.NewTable()
-		e.Error = table.SetTitle("")
-		if e.Error != nil {
-			break
-		}
+		table.SetTitle("")
+		table.SetJson([]byte(e.GetJsonData(false)))
+		table.SetRaw([]byte(e.GetJsonData(true)))
 
 		e.Error = table.SetHeader(
 			"AppKey",

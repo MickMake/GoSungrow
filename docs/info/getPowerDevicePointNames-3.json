@@ -1,0 +1,122 @@
+[
+	{
+		"point_cal_type": 2,
+		"point_id": 82009,
+		"point_name": "Meter Daily Yield"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 82021,
+		"point_name": "Total Yield of Meter"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 82023,
+		"point_name": "Meter Active Power"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 82022,
+		"point_name": "Total Energy Consumption by Meter"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 82014,
+		"point_name": "Meter E-daily Consumption"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 82002,
+		"point_name": "Inverter AC Power"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 82015,
+		"point_name": "Transient Irradiation at Grid-connecting Point"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 82016,
+		"point_name": "Daily Irradiation at Grid-connecting Point"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 82019,
+		"point_name": "Ambient Temperature"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 82020,
+		"point_name": "PV Module Temperature"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 82008,
+		"point_name": "Daily Equivalent Hours of Meter"
+	},
+	{
+		"point_cal_type": 3,
+		"point_id": 82010,
+		"point_name": "Meter PR"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 82007,
+		"point_name": "Inverter Total Yield"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 82011,
+		"point_name": "Daily Equivalent Hours of Inverter"
+	},
+	{
+		"point_cal_type": 3,
+		"point_id": 82013,
+		"point_name": "Inverter PR"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 82001,
+		"point_name": "Inverter AC Power Normalization"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 82003,
+		"point_name": "Inverter DC Power Normalization"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 82004,
+		"point_name": "Inverter DC Power"
+	},
+	{
+		"point_cal_type": 1,
+		"point_id": 82005,
+		"point_name": "Conversion Efficiency"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 82034,
+		"point_name": "Daily Yield (Theoretical)"
+	},
+	{
+		"point_cal_type": 3,
+		"point_id": 82035,
+		"point_name": "Grid-connecting Point PR"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 82012,
+		"point_name": "Daily Yield by Inverter"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 82038,
+		"point_name": "Equivalent Hours of Grid-connecting Point"
+	},
+	{
+		"point_cal_type": 2,
+		"point_id": 82039,
+		"point_name": "Grid-connection Point Total Yield"
+	}
+]

@@ -6,6 +6,7 @@ import (
 	"GoSungrow/iSolarCloud/api/output"
 	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/cmdPath"
 	"os"
 	"path/filepath"
 )
@@ -72,26 +73,36 @@ func (ep *EndPointStruct) FileExists(fn string) bool {
 			}
 		}
 
-		var f os.FileInfo
-		f, ep.Error = os.Stat(fn)
-		if ep.Error != nil {
-			if os.IsNotExist(ep.Error) {
-				ep.Error = nil
-			}
+		// var f os.FileInfo
+		// f, ep.Error = os.Stat(fn)
+		// if ep.Error != nil {
+		// 	if os.IsNotExist(ep.Error) {
+		// 		ep.Error = nil
+		// 	}
+		// 	break
+		// }
+		// if f.IsDir() {
+		// 	ep.Error = errors.New("file is a directory")
+		// 	break
+		// }
+		p := cmdPath.NewPath(fn)
+		if p.DirExists() {
+			ep.Error = errors.New("file is a directory")
+			ok = false
 			break
 		}
-		if f.IsDir() {
-			ep.Error = errors.New("file is a directory")
+		if p.FileExists() {
+			ok = true
 			break
 		}
 
-		ok = true
+		ok = false
 	}
 
 	return ok
 }
 
-// FileRead Retrieves data from a local file.
+// ApiReadDataFile - Retrieves data from a local file.
 func (ep *EndPointStruct) ApiReadDataFile(ref interface{}) error {
 	return output.FileRead(ep.GetJsonFilename(), ref)
 
@@ -135,7 +146,7 @@ func (ep *EndPointStruct) ApiReadDataFile(ref interface{}) error {
 	// return ep.Error
 }
 
-// FileWrite Saves data to a file path.
+// ApiWriteDataFile - Saves data to a file path.
 func (ep *EndPointStruct) ApiWriteDataFile(ref interface{}) error {
 	return output.FileWrite(ep.GetJsonFilename(), ref, output.DefaultFileMode)
 }

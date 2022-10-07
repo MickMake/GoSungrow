@@ -2,12 +2,11 @@ package getFaultMsgListWithYYYYMM
 
 import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"errors"
 	"fmt"
 )
 
 const Url = "/v1/faultService/getFaultMsgListWithYYYYMM"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
 	// DeviceType string `json:"device_type" required:"true"`
@@ -23,18 +22,27 @@ func (rd RequestData) Help() string {
 }
 
 
-type ResultData struct {
-	Dummy string `json:"dummy"`
+type ResultData   []struct {
+	CreateTime    int64  `json:"create_time"`
+	FaultCode     string `json:"fault_code"`
+	FaultLevel    int64  `json:"fault_level"`
+	FaultReason   string `json:"fault_reason"`
+	FaultType     int64  `json:"fault_type"`
+	FaultTypeCode int64  `json:"fault_type_code"`
+	ID            int64  `json:"id"`
+	PsID          int64  `json:"ps_id"`
+	PsKey         string `json:"ps_key"`
+	UUID          int64  `json:"uuid"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
+	// switch {
+	// case e.Dummy == "":
+	// 	break
+	// default:
+	// 	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
+	// }
 	return err
 }
 

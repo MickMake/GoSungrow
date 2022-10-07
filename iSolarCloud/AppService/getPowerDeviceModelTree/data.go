@@ -7,7 +7,7 @@ import (
 )
 
 const Url = "/v1/devService/getPowerDeviceModelTree"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
 	Id string `json:"id" required:"true"`

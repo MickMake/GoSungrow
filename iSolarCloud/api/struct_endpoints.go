@@ -70,10 +70,6 @@ func (ps TypeEndPoints) String() string {
 	return ret
 }
 
-// func (ps TypeEndPoints) ListEndpoints() {
-// 	fmt.Printf("%v", ps)
-// }
-
 func (ps *TypeEndPoints) SortEndPoints() []EndPointName {
 	ret := make([]EndPointName, 0, len(*ps))
 	for range Only.Once {
@@ -89,10 +85,6 @@ func (ps *TypeEndPoints) SortEndPoints() []EndPointName {
 	}
 	return ret
 }
-
-// func (ps *TypeEndPoints) CountEndpoints() int {
-//	return len(*ps)
-// }
 
 func (ps *TypeEndPoints) GetEnabled() TypeEndPoints {
 	ret := make(TypeEndPoints)

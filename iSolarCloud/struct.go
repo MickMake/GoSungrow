@@ -26,6 +26,7 @@ type SunGrow struct {
 	NeedLogin bool
 
 	OutputType output.OutputType
+	SaveAsFile bool
 }
 
 func NewSunGro(baseUrl string, cacheDir string) *SunGrow {
@@ -119,25 +120,45 @@ func (sg *SunGrow) GetByJson(endpoint string, request string) api.EndPoint {
 		}
 
 		ret = ret.Call()
-		if ret.IsError() {
-			fmt.Println(ret.Help())
-			sg.Error = ret.GetError()
-			break
-		}
 
 		switch {
 			case sg.OutputType.IsNone():
-
-			case sg.OutputType.IsFile():
-				sg.Error = ret.WriteDataFile()
+				if ret.IsError() {
+					fmt.Println(ret.Help())
+					sg.Error = ret.GetError()
+					break
+				}
 
 			case sg.OutputType.IsRaw():
+				// if ret.IsError() {
+				// 	fmt.Println(ret.Help())
+				// 	sg.Error = ret.GetError()
+				// 	break
+				// }
+				if sg.SaveAsFile {
+					sg.Error = ret.WriteDataFile()
+					break
+				}
 				fmt.Println(ret.GetJsonData(true))
 
 			case sg.OutputType.IsJson():
+				if ret.IsError() {
+					fmt.Println(ret.Help())
+					sg.Error = ret.GetError()
+					break
+				}
+				if sg.SaveAsFile {
+					sg.Error = ret.WriteDataFile()
+					break
+				}
 				fmt.Println(ret.GetJsonData(false))
 
 			default:
+				if ret.IsError() {
+					fmt.Println(ret.Help())
+					sg.Error = ret.GetError()
+					break
+				}
 		}
 	}
 	return ret
@@ -164,23 +185,12 @@ func (sg *SunGrow) GetByStruct(endpoint string, request interface{}, cache time.
 		}
 
 		ret = ret.SetCacheTimeout(cache)
-		// if ret.CheckCache() {
-		// 	ret = ret.ReadCache()
-		// 	if !ret.IsError() {
-		// 		break
-		// 	}
-		// }
 
 		ret = ret.Call()
 		if ret.IsError() {
 			sg.Error = ret.GetError()
 			break
 		}
-
-		// sg.Error = ret.WriteCache()
-		// if sg.Error != nil {
-		// 	break
-		// }
 	}
 
 	return ret
@@ -228,72 +238,67 @@ func (sg *SunGrow) AreaNotExists(area string) bool {
 	return sg.Areas.NotExists(area)
 }
 
-func (sg *SunGrow) Output(endpoint api.EndPoint, table *output.Table, graphFilter string) error {
-	for range Only.Once {
-		switch {
-			case sg.OutputType.IsNone():
-
-			case sg.OutputType.IsHuman():
-				if table == nil {
-					break
-				}
-				table.Print()
-
-			case sg.OutputType.IsFile():
-				if table == nil {
-					break
-				}
-				sg.Error = table.WriteCsvFile()
-
-			case sg.OutputType.IsRaw():
-				fmt.Println(endpoint.GetJsonData(true))
-
-			case sg.OutputType.IsJson():
-				fmt.Println(endpoint.GetJsonData(false))
-
-			case sg.OutputType.IsGraph():
-				if table == nil {
-					break
-				}
-				sg.Error = table.SetGraphFromJson(output.Json(graphFilter))
-				if sg.Error != nil {
-					break
-				}
-				sg.Error = table.CreateGraph()
-				if sg.Error != nil {
-					break
-				}
-
-			default:
-		}
-	}
-
-	return sg.Error
-}
-
-func (sg *SunGrow) OutputTable(table *output.Table) error {
-	for range Only.Once {
-		switch {
-			case sg.OutputType.IsNone():
-
-			case sg.OutputType.IsHuman():
-				if table == nil {
-					break
-				}
-				table.Print()
-
-			case sg.OutputType.IsFile():
-				if table == nil {
-					break
-				}
-				sg.Error = table.WriteCsvFile()
-
-			default:
-		}
-	}
-
-	return sg.Error
-}
+// func (sg *SunGrow) Output(endpoint api.EndPoint, table *output.Table, graphFilter string) error {
+// 	for range Only.Once {
+// 		switch {
+// 			case sg.OutputType.IsNone():
+//
+// 			case sg.OutputType.IsTable():
+// 				if sg.
+// 				table.Print()
+//
+// 			case sg.OutputType.IsCsv():
+// 				table.WriteFileCsv()
+//
+// 			case sg.OutputType.IsRaw():
+// 				fmt.Println(endpoint.GetJsonData(true))
+//
+// 			case sg.OutputType.IsJson():
+// 				fmt.Println(endpoint.GetJsonData(false))
+//
+// 			case sg.OutputType.IsGraph():
+// 				if table == nil {
+// 					break
+// 				}
+// 				sg.Error = table.SetGraphFromJson(output.Json(graphFilter))
+// 				if sg.Error != nil {
+// 					break
+// 				}
+// 				sg.Error = table.CreateGraph()
+// 				if sg.Error != nil {
+// 					break
+// 				}
+//
+// 			default:
+// 		}
+// 	}
+//
+// 	return sg.Error
+// }
+//
+// func (sg *SunGrow) OutputTable(table *output.Table) error {
+// 	for range Only.Once {
+// 		switch {
+// 			case sg.OutputType.IsNone():
+//
+// 			case sg.OutputType.IsHuman():
+// 				if table == nil {
+// 					break
+// 				}
+// 				table.Print()
+//
+// 			case sg.OutputType.IsFile():
+// 				if table == nil {
+// 					break
+// 				}
+// 				sg.Error = table.WriteFileCsv()
+//
+// 			default:
+// 		}
+// 	}
+//
+// 	return sg.Error
+// }
 
 func (sg *SunGrow) Login(auth login.SunGrowAuth) error {
 	for range Only.Once {
@@ -335,4 +340,9 @@ func (sg *SunGrow) GetUserEmail() string {
 
 func (sg *SunGrow) HasTokenChanged() bool {
 	return sg.Auth.HasTokenChanged()
+}
+
+
+func (sg *SunGrow) SetOutputType(outputType string) {
+	sg.OutputType.Set(outputType)
 }

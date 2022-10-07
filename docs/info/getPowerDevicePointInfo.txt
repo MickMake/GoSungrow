@@ -1,0 +1,531 @@
++------------+-----+--------+----------+------------------------------------------------+----------------------------------------+----------------+
+| DeviceType | Id  | Period | Point Id | Point Name                                     | Show Point Name                        | Translation Id |
++------------+-----+--------+----------+------------------------------------------------+----------------------------------------+----------------+
+| 11         | 1   | 1      | 83022    | Daily Yield of Plant                           | Daily Yield                            | 1022978        |
+| 11         | 2   | 2      | 83022    | Daily Yield of Plant                           | Monthly Yield                          | 1023538        |
+| 11         | 3   | 3      | 83022    | Daily Yield of Plant                           | Annual Yield                           | 1022851        |
+| 11         | 4   | 1      | 83018    | Daily Yield (Theoretical)                      | Daily Yield (Theoretical)              | 1022996        |
+| 11         | 5   | 2      | 83018    | Daily Yield (Theoretical)                      | Monthly Yield (Theoretical)            | 1321635        |
+| 11         | 6   | 3      | 83018    | Daily Yield (Theoretical)                      | Yearly Yield (Theoretical)             | 1321636        |
+| 3          | 7   | 1      | 82016    | Daily Irradiation at Grid-connecting Point     | Daily Horizontal Irradiation           | 1022894        |
+| 3          | 8   | 2      | 82016    | Daily Irradiation at Grid-connecting Point     | Plan Monthly Radiation                 | 1321637        |
+| 3          | 9   | 3      | 82016    | Daily Irradiation at Grid-connecting Point     | Plan Yearly Radiation                  | 1321639        |
+| 17         | 10  | 1      | 81012    | Daily Yield by Inverter                        | Daily Yield (Inverter)                 | 1022980        |
+| 7          | 16  | 1      | 8000     | Phase A Voltage                                | Phase A Voltage                        | 1020764        |
+| 7          | 17  | 2      | 8000     | Phase A Voltage                                | Phase A Voltage                        | 1020764        |
+| 7          | 18  | 3      | 8000     | Phase A Voltage                                | Phase A Voltage                        | 1020764        |
+| 11         | 29  | 1      | 83001    | Inverter AC Power Normalization                | AC Power Normalization (Inverter)      | 1022496        |
+| 11         | 30  | 1      | 83002    | Inverter AC Power                              | AC Power (Inverter)                    | 1022494        |
+| 11         | 31  | 1      | 83004    | Inverter Total Yield                           | Total Yield (Inverter)                 | 1022599        |
+| 11         | 32  | 1      | 83009    | Daily Yield by Inverter                        | Daily Yield (Inverter)                 | 1022980        |
+| 11         | 33  | 1      | 83008    | Daily Equivalent Hours of Inverter             | Daily Yield Equivalent Hour (Inverter) | 1022982        |
+| 11         | 34  | 1      | 83010    | Inverter PR                                    | PR (Inverter)                          | 1020959        |
+| 11         | 35  | 1      | 83032    | Meter AC Power                                 | AC Power (Meter)                       | 1022493        |
+| 11         | 36  | 1      | 83020    | Meter Total Yield                              | Total Yield (Meter)                    | 1321640        |
+| 11         | 37  | 1      | 83006    | Meter Daily Yield                              | Daily Yield (Meter)                    | 1022979        |
+| 11         | 38  | 1      | 83005    | Daily Equivalent Hours of Meter                | Daily Yield Equivalent Hour (Meter)    | 1022981        |
+| 11         | 39  | 1      | 83007    | Meter PR                                       | PR (Meter)                             | 1020958        |
+| 11         | 40  | 1      | 83021    | Accumulative Power Consumption by Meter        | Total Power Consumption (Meter)        | 1022602        |
+| 11         | 41  | 1      | 83011    | Meter E-daily Consumption                      | Daily Energy Consumption (Meter)       | 1023002        |
+| 11         | 42  | 1      | 83019    | Power/Installed Power of Plant                 | Power/Load                             | 1026946        |
+| 11         | 43  | 1      | 83012    | P-radiation-H                                  | Transient Horizontal Irradiation       | 1025829        |
+| 11         | 44  | 1      | 83013    | Daily Irradiation                              | Daily Irradiation                      | 1024771        |
+| 11         | 45  | 1      | 83016    | Plant Ambient Temperature                      | Ambient Temperature                    | 1022386        |
+| 11         | 46  | 1      | 83017    | Plant Module Temperature                       | Temp. (PV module)                      | 1019203        |
+| 11         | 47  | 1      | 83023    | Plant PR                                       | PR                                     | 1020957        |
+| 11         | 48  | 1      | 83024    | Plant Total Yield                              | Total Yield                            | 1023740        |
+| 11         | 49  | 1      | 83025    | Plant Equivalent Hours                         | Daily Equivalent Hours                 | 1022975        |
+| 11         | 54  | 2      | 83009    | Daily Yield by Inverter                        | Monthly Yield (Inverter)               | 1321641        |
+| 11         | 55  | 2      | 83008    | Daily Equivalent Hours of Inverter             | Monthly Equivalent Hours (Inverter)    | 1321674        |
+| 11         | 56  | 2      | 83010    | Inverter PR                                    | PR (Inverter)                          | 1020959        |
+| 11         | 59  | 2      | 83006    | Meter Daily Yield                              | Monthly Yield (Meter)                  | 1321672        |
+| 11         | 60  | 2      | 83005    | Daily Equivalent Hours of Meter                | Monthly Equivalent Hours (Meter)       | 1321673        |
+| 11         | 61  | 2      | 83007    | Meter PR                                       | PR (Meter)                             | 1020958        |
+| 11         | 63  | 2      | 83011    | Meter E-daily Consumption                      | Monthly Energy Consumption (Meter)     | 1321687        |
+| 11         | 66  | 2      | 83013    | Daily Irradiation                              | Monthly Radiation Of PS                | 1467104        |
+| 11         | 69  | 2      | 83023    | Plant PR                                       | PR                                     | 1020957        |
+| 11         | 71  | 2      | 83025    | Plant Equivalent Hours                         | Monthly Equivalent Hours               | 1321645        |
+| 11         | 76  | 3      | 83009    | Daily Yield by Inverter                        | Yearly Yield (Inverter)                | 1321660        |
+| 11         | 77  | 3      | 83008    | Daily Equivalent Hours of Inverter             | Yearly Equivalent Hours (Inverter)     | 1321667        |
+| 11         | 78  | 3      | 83010    | Inverter PR                                    | PR (Inverter)                          | 1020959        |
+| 11         | 81  | 3      | 83006    | Meter Daily Yield                              | Yearly Yield (Meter)                   | 1321659        |
+| 11         | 82  | 3      | 83005    | Daily Equivalent Hours of Meter                | Yearly Equivalent Hours (Meter)        | 1321666        |
+| 11         | 83  | 3      | 83007    | Meter PR                                       | PR (Meter)                             | 1020958        |
+| 11         | 85  | 3      | 83011    | Meter E-daily Consumption                      | Yearly Energy Consumption (Meter)      | 1321668        |
+| 11         | 88  | 3      | 83013    | Daily Irradiation                              | Yearly Radiation Of PS                 | 1467105        |
+| 11         | 91  | 3      | 83023    | Plant PR                                       | PR                                     | 1020957        |
+| 11         | 93  | 3      | 83025    | Plant Equivalent Hours                         | Yearly Equivalent Hours                | 1321656        |
+| 3          | 95  | 1      | 82001    | Inverter AC Power Normalization                | AC Power Normalization (Inverter)      | 1022496        |
+| 3          | 96  | 1      | 82002    | Inverter AC Power                              | AC Power (Inverter)                    | 1022494        |
+| 3          | 97  | 1      | 82003    | Inverter DC Power Normalization                | DC Power Normalization (Inverter)      | 1023636        |
+| 3          | 98  | 1      | 82004    | Inverter DC Power                              | DC Power (Inverter)                    | 1023635        |
+| 3          | 100 | 1      | 82007    | Inverter Total Yield                           | Total Yield (Inverter)                 | 1022599        |
+| 3          | 101 | 1      | 82012    | Daily Yield by Inverter                        | Daily Yield (Inverter)                 | 1022980        |
+| 3          | 102 | 1      | 82011    | Daily Equivalent Hours of Inverter             | Daily Yield Equivalent Hour (Inverter) | 1022982        |
+| 3          | 103 | 1      | 82013    | Inverter PR                                    | PR (Inverter)                          | 1020959        |
+| 3          | 104 | 1      | 82021    | Total Yield of Meter                           | Total Yield (Meter)                    | 1023741        |
+| 3          | 106 | 1      | 82008    | Daily Equivalent Hours of Meter                | Daily Yield Equivalent Hour (Meter)    | 1022981        |
+| 3          | 107 | 1      | 82010    | Meter PR                                       | PR (Meter)                             | 1020958        |
+| 3          | 108 | 1      | 82022    | Total Energy Consumption by Meter              | Total Energy Consumption (Meter)       | 1023757        |
+| 3          | 109 | 1      | 82014    | Meter E-daily Consumption                      | Daily Energy Consumption (Meter)       | 1023002        |
+| 3          | 110 | 1      | 82015    | Transient Irradiation at Grid-connecting Point | Transient Horizontal Irradiation       | 1025829        |
+| 3          | 111 | 1      | 82019    | Ambient Temperature                            | Ambient Temperature                    | 1022386        |
+| 3          | 112 | 1      | 82020    | PV Module Temperature                          | Temp. (PV module)                      | 1019203        |
+| 3          | 113 | 1      | 82023    | Meter Active Power                             | Active Power (Meter)                   | 1321690        |
+| 3          | 114 | 1      | 82034    | Daily Yield (Theoretical)                      | Daily Yield (Theoretical)              | 1022996        |
+| 3          | 115 | 1      | 82035    | Grid-connecting Point PR                       | PR                                     | 1020957        |
+| 3          | 116 | 1      | 82038    | Equivalent Hours of Grid-connecting Point      | Daily Equivalent Hours                 | 1022975        |
+| 3          | 117 | 1      | 82033    | Grid-connection Point Daily Yield              | Grid-connection Point Daily Yield      | 1021218        |
+| 3          | 118 | 1      | 82039    | Grid-connection Point Total Yield              | Grid-connection Point Total Yield      | 1021222        |
+| 3          | 125 | 2      | 82012    | Daily Yield by Inverter                        | Monthly Yield (Inverter)               | 1321641        |
+| 3          | 126 | 2      | 82011    | Daily Equivalent Hours of Inverter             | Monthly Equivalent Hours (Inverter)    | 1321674        |
+| 3          | 127 | 2      | 82013    | Inverter PR                                    | PR (Inverter)                          | 1020959        |
+| 3          | 129 | 2      | 82009    | Meter Daily Yield                              | Monthly Yield (Meter)                  | 1321672        |
+| 3          | 130 | 2      | 82008    | Daily Equivalent Hours of Meter                | Monthly Equivalent Hours (Meter)       | 1321673        |
+| 3          | 131 | 2      | 82010    | Meter PR                                       | PR (Meter)                             | 1020958        |
+| 3          | 133 | 2      | 82014    | Meter E-daily Consumption                      | Monthly Energy Consumption (Meter)     | 1321687        |
+| 3          | 138 | 2      | 82034    | Daily Yield (Theoretical)                      | Monthly Yield (Theoretical)            | 1321635        |
+| 3          | 139 | 2      | 82035    | Grid-connecting Point PR                       | PR                                     | 1020957        |
+| 3          | 140 | 2      | 82038    | Equivalent Hours of Grid-connecting Point      | Monthly Equivalent Hours               | 1321645        |
+| 3          | 141 | 2      | 82033    | Grid-connection Point Daily Yield              | Grid-connection Point Monthly Yield    | 1321643        |
+| 3          | 149 | 3      | 82012    | Daily Yield by Inverter                        | Yearly Yield (Inverter)                | 1321660        |
+| 3          | 150 | 3      | 82011    | Daily Equivalent Hours of Inverter             | Yearly Equivalent Hours (Inverter)     | 1321667        |
+| 3          | 151 | 3      | 82013    | Inverter PR                                    | PR (Inverter)                          | 1020959        |
+| 3          | 153 | 3      | 82009    | Meter Daily Yield                              | Yearly Yield (Meter)                   | 1321659        |
+| 3          | 154 | 3      | 82008    | Daily Equivalent Hours of Meter                | Yearly Equivalent Hours (Meter)        | 1321666        |
+| 3          | 155 | 3      | 82010    | Meter PR                                       | PR (Meter)                             | 1020958        |
+| 3          | 157 | 3      | 82014    | Meter E-daily Consumption                      | Yearly Energy Consumption (Meter)      | 1321668        |
+| 3          | 162 | 3      | 82034    | Daily Yield (Theoretical)                      | Yearly Yield (Theoretical)             | 1321636        |
+| 3          | 163 | 3      | 82035    | Grid-connecting Point PR                       | PR                                     | 1020957        |
+| 3          | 164 | 3      | 82038    | Equivalent Hours of Grid-connecting Point      | Yearly Equivalent Hours                | 1321656        |
+| 3          | 165 | 3      | 82033    | Grid-connection Point Daily Yield              | Grid-connection Point Yearly Yield     | 1321671        |
+| 17         | 167 | 1      | 81001    | Inverter AC Power Normalization                | AC Power Normalization (Inverter)      | 1022496        |
+| 17         | 168 | 1      | 81002    | Inverter AC Power                              | AC Power (Inverter)                    | 1022494        |
+| 17         | 169 | 1      | 81003    | Inverter DC Power Normalization                | DC Power Normalization (Inverter)      | 1023636        |
+| 17         | 170 | 1      | 81004    | Inverter DC Power                              | DC Power (Inverter)                    | 1023635        |
+| 17         | 172 | 1      | 81007    | Inverter Total Yield                           | Total Yield (Inverter)                 | 1022599        |
+| 17         | 174 | 1      | 81011    | Inverter Equivalent Hours                      | Daily Yield Equivalent Hour (Inverter) | 1022982        |
+| 17         | 175 | 1      | 81022    | Unit PR                                        | PR                                     | 1020957        |
+| 17         | 176 | 1      | 81023    | Unit Daily Yield                               | Daily Yield                            | 1022978        |
+| 17         | 177 | 1      | 81025    | Unit Yield (Theoretical)                       | Daily Yield (Theoretical)              | 1022996        |
+| 17         | 184 | 2      | 81012    | Daily Yield by Inverter                        | Monthly Yield (Inverter)               | 1321641        |
+| 17         | 185 | 2      | 81011    | Inverter Equivalent Hours                      | Monthly Equivalent Hours (Inverter)    | 1321674        |
+| 17         | 186 | 2      | 81022    | Unit PR                                        | PR                                     | 1020957        |
+| 17         | 187 | 2      | 81023    | Unit Daily Yield                               | Monthly Yield                          | 1023538        |
+| 17         | 188 | 2      | 81025    | Unit Yield (Theoretical)                       | Monthly Yield (Theoretical)            | 1321635        |
+| 17         | 195 | 3      | 81012    | Daily Yield by Inverter                        | Yearly Yield (Inverter)                | 1321660        |
+| 17         | 196 | 3      | 81011    | Inverter Equivalent Hours                      | Yearly Equivalent Hours (Inverter)     | 1321667        |
+| 17         | 197 | 3      | 81022    | Unit PR                                        | PR                                     | 1020957        |
+| 17         | 198 | 3      | 81023    | Unit Daily Yield                               | Annual Yield                           | 1022851        |
+| 17         | 199 | 3      | 81025    | Unit Yield (Theoretical)                       | Yearly Yield (Theoretical)             | 1321636        |
+| 1          | 200 | 1      | 1        | Daily Yield                                    | Daily Yield                            | 1022978        |
+| 1          | 201 | 1      | 2        | Total Yield                                    | Total Yield                            | 1023740        |
+| 1          | 240 | 1      | 805      | Equivalent Power Generating Hours              | Daily Equivalent Hours                 | 1022975        |
+| 1          | 242 | 1      | 67       | Daily Yield (Theoretical)                      | Daily Yield (Theoretical)              | 1022996        |
+| 1          | 243 | 1      | 68       | Power Generation Hours (Theoretical)           | Power Generation Hours (Theoretical)   | 1022604        |
+| 1          | 263 | 2      | 1        | Daily Yield                                    | Monthly Yield                          | 1023538        |
+| 1          | 303 | 2      | 805      | Equivalent Power Generating Hours              | Monthly Equivalent Hours               | 1321645        |
+| 1          | 305 | 2      | 67       | Daily Yield (Theoretical)                      | Monthly Yield (Theoretical)            | 1321635        |
+| 1          | 306 | 2      | 68       | Power Generation Hours (Theoretical)           | Power Generation Hours (Theoretical)   | 1022604        |
+| 1          | 326 | 3      | 1        | Daily Yield                                    | Annual Yield                           | 1022851        |
+| 1          | 366 | 3      | 805      | Equivalent Power Generating Hours              | Yearly Equivalent Hours                | 1321656        |
+| 1          | 368 | 3      | 67       | Daily Yield (Theoretical)                      | Yearly Yield (Theoretical)             | 1321636        |
+| 1          | 369 | 3      | 68       | Power Generation Hours (Theoretical)           | Power Generation Hours (Theoretical)   | 1022604        |
+| 7          | 447 | 1      | 8001     | Phase B Voltage                                | Phase B Voltage                        | 1020792        |
+| 7          | 448 | 1      | 8002     | Phase C Voltage                                | Phase C Voltage                        | 1020835        |
+| 7          | 449 | 1      | 8006     | Phase A Current                                | Phase A Current                        | 1018151        |
+| 7          | 450 | 1      | 8007     | Phase B Current                                | Phase B Current                        | 1020789        |
+| 7          | 451 | 1      | 8008     | Phase C Current                                | Phase C Current                        | 1020832        |
+| 7          | 452 | 1      | 8014     | PF                                             | Power Factor PF                        | 1022254        |
+| 7          | 453 | 1      | 8018     | Meter Active Power                             | Active Power                           | 1023501        |
+| 7          | 454 | 1      | 8022     | Reactive Power                                 | Reactive Power Qsum                    | 1023301        |
+| 7          | 455 | 1      | 8026     | Apparent Power                                 | Apparent Power Ssum                    | 1023113        |
+| 7          | 456 | 1      | 8030     | Forward Active Energy                          | Forward Active Energy                  | 1023580        |
+| 7          | 457 | 1      | 8031     | Reverse Active Energy                          | Reverse Active Energy                  | 1022019        |
+| 7          | 458 | 1      | 8032     | Forward Reactive Energy                        | Forward Reactive Energy                | 1321692        |
+| 7          | 459 | 1      | 8033     | Reverse Reactive Energy                        | Reverse Reactive Energy                | 1022016        |
+| 7          | 460 | 1      | 8034     | Peak Forward Active Energy                     | Peak Forward Active Energy             | 1022089        |
+| 7          | 461 | 1      | 8035     | Peak Reverse Active Energy                     | Peak Reverse Active Energy             | 1022087        |
+| 7          | 462 | 1      | 8038     | Valley Forward Active Energy                   | Valley Forward Active Energy           | 1022274        |
+| 7          | 463 | 1      | 8039     | Valley Reverse Active Energy                   | Valley Reverse Active Energy           | 1022272        |
+| 7          | 464 | 1      | 8042     | Flat Forward Active Energy                     | Flat Forward Active Energy             | 1022897        |
+| 7          | 465 | 1      | 8043     | Flat Reverse Active Energy                     | Flat Reverse Active Energy             | 1022892        |
+| 7          | 466 | 1      | 8062     | Daily Forward Active Energy                    | Daily Forward Active Energy            | 1023009        |
+| 7          | 467 | 1      | 8063     | Daily Reverse Active Energy                    | Daily Reverse Active Energy            | 1022983        |
+| 7          | 468 | 1      | 8064     | Frequency                                      | Frequency                              | 1022866        |
+| 7          | 469 | 1      | 8072     | Daily Peak Forward Active Energy               | Daily Peak Forward Active Energy       | 1022987        |
+| 7          | 470 | 1      | 8065     | Daily Peak Reverse Active Energy               | Daily Peak Reverse Active Energy       | 1022986        |
+| 7          | 471 | 1      | 8066     | Daily Valley Forward Active Energy             | Daily Valley Forward Active Energy     | 1022992        |
+| 7          | 472 | 1      | 8067     | Daily Valley Reverse Active Energy             | Daily Valley Reverse Active Energy     | 1022991        |
+| 7          | 473 | 1      | 8068     | Daily Flat Forward Active Energy               | Daily Flat Forward Active Energy       | 1022999        |
+| 7          | 474 | 1      | 8069     | Daily Flat Reverse Active Energy               | Daily Flat Reverse Active Energy       | 1022998        |
+| 7          | 475 | 1      | 8070     | Daily Tip Forward Active Energy                | Daily Tip Forward Active Energy        | 1022994        |
+| 7          | 476 | 1      | 8071     | Daily Tip Reverse Active Energy                | Daily Tip Reverse Active Energy        | 1022993        |
+| 7          | 477 | 2      | 8001     | Phase B Voltage                                | Phase B Voltage                        | 1020792        |
+| 7          | 478 | 2      | 8002     | Phase C Voltage                                | Phase C Voltage                        | 1020835        |
+| 7          | 479 | 2      | 8006     | Phase A Current                                | Phase A Current                        | 1018151        |
+| 7          | 480 | 2      | 8007     | Phase B Current                                | Phase B Current                        | 1020789        |
+| 7          | 481 | 2      | 8008     | Phase C Current                                | Phase C Current                        | 1020832        |
+| 7          | 482 | 2      | 8014     | PF                                             | Power Factor PF                        | 1022254        |
+| 7          | 483 | 2      | 8018     | Meter Active Power                             | Active Power                           | 1023501        |
+| 7          | 484 | 2      | 8022     | Reactive Power                                 | Reactive Power Qsum                    | 1023301        |
+| 7          | 485 | 2      | 8026     | Apparent Power                                 | Apparent Power Ssum                    | 1023113        |
+| 7          | 486 | 2      | 8030     | Forward Active Energy                          | Forward Active Energy                  | 1023580        |
+| 7          | 487 | 2      | 8031     | Reverse Active Energy                          | Reverse Active Energy                  | 1022019        |
+| 7          | 488 | 2      | 8032     | Forward Reactive Energy                        | Forward Reactive Energy                | 1321692        |
+| 7          | 489 | 2      | 8033     | Reverse Reactive Energy                        | Reverse Reactive Energy                | 1022016        |
+| 7          | 490 | 2      | 8034     | Peak Forward Active Energy                     | Peak Forward Active Energy             | 1022089        |
+| 7          | 491 | 2      | 8035     | Peak Reverse Active Energy                     | Peak Reverse Active Energy             | 1022087        |
+| 7          | 492 | 2      | 8038     | Valley Forward Active Energy                   | Valley Forward Active Energy           | 1022274        |
+| 7          | 493 | 2      | 8039     | Valley Reverse Active Energy                   | Valley Reverse Active Energy           | 1022272        |
+| 7          | 494 | 2      | 8042     | Flat Forward Active Energy                     | Flat Forward Active Energy             | 1022897        |
+| 7          | 495 | 2      | 8043     | Flat Reverse Active Energy                     | Flat Reverse Active Energy             | 1022892        |
+| 7          | 496 | 2      | 8062     | Daily Forward Active Energy                    | Monthly Forward Active Energy          | 1321686        |
+| 7          | 497 | 2      | 8063     | Daily Reverse Active Energy                    | Monthly Reverse Active Energy          | 1321644        |
+| 7          | 498 | 2      | 8064     | Frequency                                      | Frequency                              | 1022866        |
+| 7          | 499 | 2      | 8072     | Daily Peak Forward Active Energy               | Monthly Peak Forward Active kWh        | 1321683        |
+| 7          | 500 | 2      | 8065     | Daily Peak Reverse Active Energy               | Monthly Peak Reverse Active kWh        | 1321677        |
+| 7          | 501 | 2      | 8066     | Daily Valley Forward Active Energy             | Monthly Valley Forward Active kWh      | 1321689        |
+| 7          | 502 | 2      | 8067     | Daily Valley Reverse Active Energy             | Monthly Valley Reverse Active kWh      | 1321688        |
+| 7          | 503 | 2      | 8068     | Daily Flat Forward Active Energy               | Monthly Flat Forward Active kWh        | 1321685        |
+| 7          | 504 | 2      | 8069     | Daily Flat Reverse Active Energy               | Monthly Flat Reverse Active kWh        | 1321684        |
+| 7          | 505 | 2      | 8070     | Daily Tip Forward Active Energy                | Monthly Tip Forward Active kWh         | 1321676        |
+| 7          | 506 | 2      | 8071     | Daily Tip Reverse Active Energy                | Monthly Tip Reverse Active kWh         | 1321675        |
+| 7          | 507 | 3      | 8001     | Phase B Voltage                                | Phase B Voltage                        | 1020792        |
+| 7          | 508 | 3      | 8002     | Phase C Voltage                                | Phase C Voltage                        | 1020835        |
+| 7          | 509 | 3      | 8006     | Phase A Current                                | Phase A Current                        | 1018151        |
+| 7          | 510 | 3      | 8007     | Phase B Current                                | Phase B Current                        | 1020789        |
+| 7          | 511 | 3      | 8008     | Phase C Current                                | Phase C Current                        | 1020832        |
+| 7          | 512 | 3      | 8014     | PF                                             | Power Factor PF                        | 1022254        |
+| 7          | 513 | 3      | 8018     | Meter Active Power                             | Active Power                           | 1023501        |
+| 7          | 514 | 3      | 8022     | Reactive Power                                 | Reactive Power Qsum                    | 1023301        |
+| 7          | 515 | 3      | 8026     | Apparent Power                                 | Apparent Power Ssum                    | 1023113        |
+| 7          | 516 | 3      | 8030     | Forward Active Energy                          | Forward Active Energy                  | 1023580        |
+| 7          | 517 | 3      | 8031     | Reverse Active Energy                          | Reverse Active Energy                  | 1022019        |
+| 7          | 518 | 3      | 8032     | Forward Reactive Energy                        | Forward Reactive Energy                | 1321692        |
+| 7          | 519 | 3      | 8033     | Reverse Reactive Energy                        | Reverse Reactive Energy                | 1022016        |
+| 7          | 520 | 3      | 8034     | Peak Forward Active Energy                     | Peak Forward Active Energy             | 1022089        |
+| 7          | 521 | 3      | 8035     | Peak Reverse Active Energy                     | Peak Reverse Active Energy             | 1022087        |
+| 7          | 522 | 3      | 8038     | Valley Forward Active Energy                   | Valley Forward Active Energy           | 1022274        |
+| 7          | 523 | 3      | 8039     | Valley Reverse Active Energy                   | Valley Reverse Active Energy           | 1022272        |
+| 7          | 524 | 3      | 8042     | Flat Forward Active Energy                     | Flat Forward Active Energy             | 1022897        |
+| 7          | 525 | 3      | 8043     | Flat Reverse Active Energy                     | Flat Reverse Active Energy             | 1022892        |
+| 7          | 526 | 3      | 8062     | Daily Forward Active Energy                    | Monthly Forward Active Energy          | 1321686        |
+| 7          | 527 | 3      | 8063     | Daily Reverse Active Energy                    | Monthly Reverse Active Energy          | 1321644        |
+| 7          | 528 | 3      | 8064     | Frequency                                      | Frequency                              | 1022866        |
+| 7          | 529 | 3      | 8072     | Daily Peak Forward Active Energy               | Monthly Peak Forward Active kWh        | 1321683        |
+| 7          | 530 | 3      | 8065     | Daily Peak Reverse Active Energy               | Monthly Peak Reverse Active kWh        | 1321677        |
+| 7          | 531 | 3      | 8066     | Daily Valley Forward Active Energy             | Monthly Valley Forward Active kWh      | 1321689        |
+| 7          | 532 | 3      | 8067     | Daily Valley Reverse Active Energy             | Monthly Valley Reverse Active kWh      | 1321688        |
+| 7          | 533 | 3      | 8068     | Daily Flat Forward Active Energy               | Monthly Flat Forward Active kWh        | 1321685        |
+| 7          | 534 | 3      | 8069     | Daily Flat Reverse Active Energy               | Monthly Flat Reverse Active kWh        | 1321684        |
+| 7          | 535 | 3      | 8070     | Daily Tip Forward Active Energy                | Monthly Tip Forward Active kWh         | 1321676        |
+| 7          | 536 | 3      | 8071     | Daily Tip Reverse Active Energy                | Monthly Tip Reverse Active kWh         | 1321675        |
+| 4          | 540 | 1      | 1001     | DC Bus Voltage                                 | DC Bus Voltage                         | 1014345        |
+| 4          | 541 | 1      | 1002     | Interior Temperature                           | Interior Temperature                   | 1018189        |
+| 4          | 542 | 1      | 1005     | Total DC Current                               | Total Current                          | 1014553        |
+| 4          | 543 | 1      | 1009     | Ipv-1                                          | Ipv-1                                  | 1021502        |
+| 4          | 544 | 1      | 1010     | Ipv-2                                          | Ipv-2                                  | 1021621        |
+| 4          | 545 | 1      | 1011     | Ipv-3                                          | Ipv-3                                  | 1021668        |
+| 4          | 546 | 1      | 1012     | Ipv-4                                          | Ipv-4                                  | 1021680        |
+| 4          | 547 | 1      | 1013     | Ipv-5                                          | Ipv-5                                  | 1021692        |
+| 4          | 548 | 1      | 1014     | Ipv-6                                          | Ipv-6                                  | 1021704        |
+| 4          | 549 | 1      | 1015     | Ipv-7                                          | Ipv-7                                  | 1021716        |
+| 4          | 550 | 1      | 1016     | Ipv-8                                          | Ipv-8                                  | 1021728        |
+| 4          | 551 | 1      | 1017     | Ipv-9                                          | Ipv-9                                  | 1021740        |
+| 4          | 552 | 1      | 1018     | Ipv-10                                         | Ipv-10                                 | 1021384        |
+| 4          | 553 | 1      | 1019     | Ipv-11                                         | Ipv-11                                 | 1021396        |
+| 4          | 554 | 1      | 1020     | Ipv-12                                         | Ipv-12                                 | 1021408        |
+| 4          | 555 | 1      | 1021     | Ipv-13                                         | Ipv-13                                 | 1021420        |
+| 4          | 556 | 1      | 1022     | Ipv-14                                         | Ipv-14                                 | 1021432        |
+| 4          | 557 | 1      | 1023     | Ipv-15                                         | Ipv-15                                 | 1021444        |
+| 4          | 558 | 1      | 1024     | Ipv-16                                         | Ipv-16                                 | 1021456        |
+| 4          | 559 | 1      | 1006     | Total DC Power                                 | Total Power                            | 1025396        |
+| 4          | 560 | 2      | 1001     | DC Bus Voltage                                 | DC Bus Voltage                         | 1014345        |
+| 4          | 561 | 2      | 1002     | Interior Temperature                           | Interior Temperature                   | 1018189        |
+| 4          | 562 | 2      | 1005     | Total DC Current                               | Total Current                          | 1014553        |
+| 4          | 563 | 2      | 1009     | Ipv-1                                          | Ipv-1                                  | 1021502        |
+| 4          | 564 | 2      | 1010     | Ipv-2                                          | Ipv-2                                  | 1021621        |
+| 4          | 565 | 2      | 1011     | Ipv-3                                          | Ipv-3                                  | 1021668        |
+| 4          | 566 | 2      | 1012     | Ipv-4                                          | Ipv-4                                  | 1021680        |
+| 4          | 567 | 2      | 1013     | Ipv-5                                          | Ipv-5                                  | 1021692        |
+| 4          | 568 | 2      | 1014     | Ipv-6                                          | Ipv-6                                  | 1021704        |
+| 4          | 569 | 2      | 1015     | Ipv-7                                          | Ipv-7                                  | 1021716        |
+| 4          | 570 | 2      | 1016     | Ipv-8                                          | Ipv-8                                  | 1021728        |
+| 4          | 571 | 2      | 1017     | Ipv-9                                          | Ipv-9                                  | 1021740        |
+| 4          | 572 | 2      | 1018     | Ipv-10                                         | Ipv-10                                 | 1021384        |
+| 4          | 573 | 2      | 1019     | Ipv-11                                         | Ipv-11                                 | 1021396        |
+| 4          | 574 | 2      | 1020     | Ipv-12                                         | Ipv-12                                 | 1021408        |
+| 4          | 575 | 2      | 1021     | Ipv-13                                         | Ipv-13                                 | 1021420        |
+| 4          | 576 | 2      | 1022     | Ipv-14                                         | Ipv-14                                 | 1021432        |
+| 4          | 577 | 2      | 1023     | Ipv-15                                         | Ipv-15                                 | 1021444        |
+| 4          | 578 | 2      | 1024     | Ipv-16                                         | Ipv-16                                 | 1021456        |
+| 4          | 579 | 2      | 1006     | Total DC Power                                 | Total Power                            | 1025396        |
+| 4          | 580 | 3      | 1001     | DC Bus Voltage                                 | DC Bus Voltage                         | 1014345        |
+| 4          | 581 | 3      | 1002     | Interior Temperature                           | Interior Temperature                   | 1018189        |
+| 4          | 582 | 3      | 1005     | Total DC Current                               | Total Current                          | 1014553        |
+| 4          | 583 | 3      | 1009     | Ipv-1                                          | Ipv-1                                  | 1021502        |
+| 4          | 584 | 3      | 1010     | Ipv-2                                          | Ipv-2                                  | 1021621        |
+| 4          | 585 | 3      | 1011     | Ipv-3                                          | Ipv-3                                  | 1021668        |
+| 4          | 586 | 3      | 1012     | Ipv-4                                          | Ipv-4                                  | 1021680        |
+| 4          | 587 | 3      | 1013     | Ipv-5                                          | Ipv-5                                  | 1021692        |
+| 4          | 588 | 3      | 1014     | Ipv-6                                          | Ipv-6                                  | 1021704        |
+| 4          | 589 | 3      | 1015     | Ipv-7                                          | Ipv-7                                  | 1021716        |
+| 4          | 590 | 3      | 1016     | Ipv-8                                          | Ipv-8                                  | 1021728        |
+| 4          | 591 | 3      | 1017     | Ipv-9                                          | Ipv-9                                  | 1021740        |
+| 4          | 592 | 3      | 1018     | Ipv-10                                         | Ipv-10                                 | 1021384        |
+| 4          | 593 | 3      | 1019     | Ipv-11                                         | Ipv-11                                 | 1021396        |
+| 4          | 594 | 3      | 1020     | Ipv-12                                         | Ipv-12                                 | 1021408        |
+| 4          | 595 | 3      | 1021     | Ipv-13                                         | Ipv-13                                 | 1021420        |
+| 4          | 596 | 3      | 1022     | Ipv-14                                         | Ipv-14                                 | 1021432        |
+| 4          | 597 | 3      | 1023     | Ipv-15                                         | Ipv-15                                 | 1021444        |
+| 4          | 598 | 3      | 1024     | Ipv-16                                         | Ipv-16                                 | 1021456        |
+| 4          | 599 | 3      | 1006     | Total DC Power                                 | Total Power                            | 1025396        |
+| 5          | 600 | 2      | 2001     | Daily Horizontal Irradiation                   | Daily Horizontal Irradiation           | 1022894        |
+| 11         | 601 | 1      | 83033    | Plant Power                                    | Power                                  | 1018712        |
+| 14         | 603 | 1      | 13112    | Daily PV Yield                                 | Daily PV Yield                         | 1512960        |
+| 7          | 604 | 0      | 8018     | Meter Active Power                             | Active Power                           | 1023501        |
+| 1          | 607 | 2      | 2        | Total Yield                                    | Total Yield                            | 1023740        |
+| 1          | 608 | 3      | 2        | Total Yield                                    | Total Yield                            | 1023740        |
+| 11         | 609 | 2      | 83004    | Inverter Total Yield                           | Total Yield (Inverter)                 | 1022599        |
+| 11         | 610 | 2      | 83020    | Meter Total Yield                              | Total Power Consumption (Meter)        | 1022602        |
+| 11         | 611 | 2      | 83021    | Accumulative Power Consumption by Meter        | Total Power Consumption (Meter)        | 1022602        |
+| 11         | 612 | 2      | 83024    | Plant Total Yield                              | Total Yield                            | 1023740        |
+| 11         | 613 | 3      | 83004    | Inverter Total Yield                           | Total Yield (Inverter)                 | 1022599        |
+| 11         | 614 | 3      | 83020    | Meter Total Yield                              | Total Yield (Meter)                    | 1321640        |
+| 11         | 615 | 3      | 83021    | Accumulative Power Consumption by Meter        | Total Power Consumption (Meter)        | 1022602        |
+| 11         | 616 | 3      | 83024    | Plant Total Yield                              | Total Yield                            | 1023740        |
+| 14         | 617 | 1      | 13134    | Total PV Yield                                 | Total PV Yield                         | 1512961        |
+| 14         | 618 | 1      | 13147    | Daily Purchased Energy                         | Daily Purchased Energy                 | 1515654        |
+| 14         | 619 | 1      | 13148    | Total Purchased Energy                         | Total Purchased Energy                 | 1515655        |
+| 14         | 620 | 1      | 13122    | Daily Feed-in Energy                           | Daily Feed-in Energy                   | 1515652        |
+| 14         | 621 | 1      | 13125    | Total Feed-in Energy                           | Total Feed-in Energy                   | 1515653        |
+| 14         | 622 | 1      | 13116    | Daily Load Energy Consumption from PV          | Daily Load Energy Consumption from PV  | 1512984        |
+| 14         | 623 | 1      | 13137    | Total Load Energy Consumption from PV          | Total Load Energy Consumption from PV  | 1512985        |
+| 14         | 624 | 1      | 13028    | Daily Battery Charging Energy                  | Daily Battery Charging Energy          | 1515661        |
+| 14         | 625 | 1      | 13029    | Daily Battery Discharging Energy               | Daily Battery Discharging Energy       | 1512967        |
+| 14         | 626 | 1      | 13034    | Total Battery Charging Energy                  | Total Battery Charging Energy          | 1515662        |
+| 14         | 627 | 1      | 13035    | Total Battery Discharging Energy               | Total Battery Discharging Energy       | 1512970        |
+| 14         | 628 | 2      | 13134    | Total PV Yield                                 | Total PV Yield                         | 1512961        |
+| 14         | 629 | 2      | 13034    | Total Battery Charging Energy                  | Total Battery Charging Energy          | 1515662        |
+| 14         | 630 | 2      | 13035    | Total Battery Discharging Energy               | Total Battery Discharging Energy       | 1512970        |
+| 14         | 631 | 2      | 13125    | Total Feed-in Energy                           | Total Feed-in Energy                   | 1515653        |
+| 14         | 632 | 3      | 13134    | Total PV Yield                                 | Total PV Yield                         | 1512961        |
+| 14         | 633 | 3      | 13034    | Total Battery Charging Energy                  | Total Battery Charging Energy          | 1515662        |
+| 14         | 634 | 3      | 13035    | Total Battery Discharging Energy               | Total Battery Discharging Energy       | 1512970        |
+| 14         | 635 | 3      | 13125    | Total Feed-in Energy                           | Total Feed-in Energy                   | 1515653        |
+| 1          | 636 | 0      | 1        | Daily Yield                                    | Daily Yield                            | 1022978        |
+| 1          | 637 | 0      | 24       | Total Active Power                             | Total Active Power                     | 1018169        |
+| 1          | 638 | 0      | 25       | Total Reactive Power                           | Reactive Power                         | 1023299        |
+| 1          | 639 | 0      | 805      | Equivalent Power Generating Hours              | Daily Equivalent Hours                 | 1022975        |
+| 1          | 640 | 0      | 67       | Daily Yield (Theoretical)                      | Daily Yield (Theoretical)              | 1022996        |
+| 1          | 641 | 0      | 68       | Power Generation Hours (Theoretical)           | Power Generation Hours (Theoretical)   | 1022604        |
+| 1          | 642 | 4      | 1        | Daily Yield                                    | Daily Yield                            | 1022978        |
+| 1          | 643 | 4      | 2        | Total Yield                                    | Total Yield                            | 1023740        |
+| 1          | 644 | 4      | 805      | Equivalent Power Generating Hours              | Daily Equivalent Hours                 | 1022975        |
+| 1          | 645 | 4      | 67       | Daily Yield (Theoretical)                      | Daily Yield (Theoretical)              | 1022996        |
+| 1          | 646 | 4      | 68       | Power Generation Hours (Theoretical)           | Power Generation Hours (Theoretical)   | 1022604        |
+| 11         | 647 | 0      | 83022    | Daily Yield of Plant                           | Daily Yield                            | 1022978        |
+| 11         | 648 | 0      | 83018    | Daily Yield (Theoretical)                      | Daily Yield (Theoretical)              | 1022996        |
+| 11         | 649 | 0      | 83001    | Inverter AC Power Normalization                | AC Power Normalization (Inverter)      | 1022496        |
+| 11         | 650 | 0      | 83002    | Inverter AC Power                              | AC Power (Inverter)                    | 1022494        |
+| 11         | 651 | 0      | 83004    | Inverter Total Yield                           | Total Yield (Inverter)                 | 1022599        |
+| 11         | 652 | 0      | 83009    | Daily Yield by Inverter                        | Daily Yield (Inverter)                 | 1022980        |
+| 11         | 653 | 0      | 83008    | Daily Equivalent Hours of Inverter             | Daily Yield Equivalent Hour (Inverter) | 1022982        |
+| 11         | 654 | 0      | 83010    | Inverter PR                                    | PR (Inverter)                          | 1020959        |
+| 11         | 655 | 0      | 83032    | Meter AC Power                                 | AC Power (Meter)                       | 1022493        |
+| 11         | 656 | 0      | 83020    | Meter Total Yield                              | Total Yield (Meter)                    | 1321640        |
+| 11         | 657 | 0      | 83006    | Meter Daily Yield                              | Daily Yield (Meter)                    | 1022979        |
+| 11         | 658 | 0      | 83005    | Daily Equivalent Hours of Meter                | Daily Yield Equivalent Hour (Meter)    | 1022981        |
+| 11         | 659 | 0      | 83007    | Meter PR                                       | PR (Meter)                             | 1020958        |
+| 11         | 660 | 0      | 83021    | Accumulative Power Consumption by Meter        | Total Power Consumption (Meter)        | 1022602        |
+| 11         | 661 | 0      | 83011    | Meter E-daily Consumption                      | Daily Energy Consumption (Meter)       | 1023002        |
+| 11         | 662 | 0      | 83019    | Power/Installed Power of Plant                 | Power/Load                             | 1026946        |
+| 11         | 663 | 0      | 83012    | P-radiation-H                                  | Transient Horizontal Irradiation       | 1025829        |
+| 11         | 664 | 0      | 83013    | Daily Irradiation                              | Daily Irradiation                      | 1024771        |
+| 11         | 665 | 0      | 83016    | Plant Ambient Temperature                      | Ambient Temperature                    | 1022386        |
+| 11         | 666 | 0      | 83017    | Plant Module Temperature                       | Temp. (PV module)                      | 1019203        |
+| 11         | 667 | 0      | 83023    | Plant PR                                       | PR                                     | 1020957        |
+| 11         | 668 | 0      | 83024    | Plant Total Yield                              | Total Yield                            | 1023740        |
+| 11         | 669 | 0      | 83025    | Plant Equivalent Hours                         | Daily Equivalent Hours                 | 1022975        |
+| 11         | 670 | 0      | 83033    | Plant Power                                    | Power                                  | 1018712        |
+| 11         | 671 | 4      | 83022    | Daily Yield of Plant                           | Daily Yield                            | 1022978        |
+| 11         | 672 | 4      | 83018    | Daily Yield (Theoretical)                      | Daily Yield (Theoretical)              | 1022996        |
+| 11         | 673 | 4      | 83001    | Inverter AC Power Normalization                | AC Power Normalization (Inverter)      | 1022496        |
+| 11         | 674 | 4      | 83002    | Inverter AC Power                              | AC Power (Inverter)                    | 1022494        |
+| 11         | 675 | 4      | 83004    | Inverter Total Yield                           | Total Yield (Inverter)                 | 1022599        |
+| 11         | 676 | 4      | 83009    | Daily Yield by Inverter                        | Daily Yield (Inverter)                 | 1022980        |
+| 11         | 677 | 4      | 83008    | Daily Equivalent Hours of Inverter             | Daily Yield Equivalent Hour (Inverter) | 1022982        |
+| 11         | 678 | 4      | 83010    | Inverter PR                                    | PR (Inverter)                          | 1020959        |
+| 11         | 679 | 4      | 83032    | Meter AC Power                                 | AC Power (Meter)                       | 1022493        |
+| 11         | 680 | 4      | 83020    | Meter Total Yield                              | Total Yield (Meter)                    | 1321640        |
+| 11         | 681 | 4      | 83006    | Meter Daily Yield                              | Daily Yield (Meter)                    | 1022979        |
+| 11         | 682 | 4      | 83005    | Daily Equivalent Hours of Meter                | Daily Yield Equivalent Hour (Meter)    | 1022981        |
+| 11         | 683 | 4      | 83007    | Meter PR                                       | PR (Meter)                             | 1020958        |
+| 11         | 684 | 4      | 83021    | Accumulative Power Consumption by Meter        | Total Power Consumption (Meter)        | 1022602        |
+| 11         | 685 | 4      | 83011    | Meter E-daily Consumption                      | Daily Energy Consumption (Meter)       | 1023002        |
+| 11         | 686 | 4      | 83019    | Power/Installed Power of Plant                 | Power/Load                             | 1026946        |
+| 11         | 687 | 4      | 83012    | P-radiation-H                                  | Transient Horizontal Irradiation       | 1025829        |
+| 11         | 688 | 4      | 83013    | Daily Irradiation                              | Daily Irradiation                      | 1024771        |
+| 11         | 689 | 4      | 83016    | Plant Ambient Temperature                      | Ambient Temperature                    | 1022386        |
+| 11         | 690 | 4      | 83017    | Plant Module Temperature                       | Temp. (PV module)                      | 1019203        |
+| 11         | 691 | 4      | 83023    | Plant PR                                       | PR                                     | 1020957        |
+| 11         | 692 | 4      | 83024    | Plant Total Yield                              | Total Yield                            | 1023740        |
+| 11         | 693 | 4      | 83025    | Plant Equivalent Hours                         | Daily Equivalent Hours                 | 1022975        |
+| 11         | 694 | 4      | 83033    | Plant Power                                    | Power                                  | 1018712        |
+| 17         | 695 | 0      | 81012    | Daily Yield by Inverter                        | Daily Yield (Inverter)                 | 1022980        |
+| 17         | 696 | 0      | 81001    | Inverter AC Power Normalization                | AC Power Normalization (Inverter)      | 1022496        |
+| 17         | 697 | 0      | 81002    | Inverter AC Power                              | AC Power (Inverter)                    | 1022494        |
+| 17         | 698 | 0      | 81003    | Inverter DC Power Normalization                | DC Power Normalization (Inverter)      | 1023636        |
+| 17         | 699 | 0      | 81004    | Inverter DC Power                              | DC Power (Inverter)                    | 1023635        |
+| 17         | 700 | 0      | 81007    | Inverter Total Yield                           | Total Yield (Inverter)                 | 1022599        |
+| 17         | 701 | 0      | 81011    | Inverter Equivalent Hours                      | Daily Yield Equivalent Hour (Inverter) | 1022982        |
+| 17         | 702 | 0      | 81022    | Unit PR                                        | PR                                     | 1020957        |
+| 17         | 703 | 0      | 81023    | Unit Daily Yield                               | Daily Yield                            | 1022978        |
+| 17         | 704 | 0      | 81025    | Unit Yield (Theoretical)                       | Daily Yield (Theoretical)              | 1022996        |
+| 17         | 705 | 4      | 81012    | Daily Yield by Inverter                        | Daily Yield (Inverter)                 | 1022980        |
+| 17         | 706 | 4      | 81001    | Inverter AC Power Normalization                | AC Power Normalization (Inverter)      | 1022496        |
+| 17         | 707 | 4      | 81002    | Inverter AC Power                              | AC Power (Inverter)                    | 1022494        |
+| 17         | 708 | 4      | 81003    | Inverter DC Power Normalization                | DC Power Normalization (Inverter)      | 1023636        |
+| 17         | 709 | 4      | 81004    | Inverter DC Power                              | DC Power (Inverter)                    | 1023635        |
+| 17         | 710 | 4      | 81007    | Inverter Total Yield                           | Total Yield (Inverter)                 | 1022599        |
+| 17         | 711 | 4      | 81011    | Inverter Equivalent Hours                      | Daily Yield Equivalent Hour (Inverter) | 1022982        |
+| 17         | 712 | 4      | 81022    | Unit PR                                        | PR                                     | 1020957        |
+| 17         | 713 | 4      | 81023    | Unit Daily Yield                               | Daily Yield                            | 1022978        |
+| 17         | 714 | 4      | 81025    | Unit Yield (Theoretical)                       | Daily Yield (Theoretical)              | 1022996        |
+| 3          | 715 | 0      | 82016    | Daily Irradiation at Grid-connecting Point     | Daily Horizontal Irradiation           | 1022894        |
+| 3          | 716 | 0      | 82001    | Inverter AC Power Normalization                | AC Power Normalization (Inverter)      | 1022496        |
+| 3          | 717 | 0      | 82002    | Inverter AC Power                              | AC Power (Inverter)                    | 1022494        |
+| 3          | 718 | 0      | 82003    | Inverter DC Power Normalization                | DC Power Normalization (Inverter)      | 1023636        |
+| 3          | 719 | 0      | 82004    | Inverter DC Power                              | DC Power (Inverter)                    | 1023635        |
+| 3          | 720 | 0      | 82007    | Inverter Total Yield                           | Total Yield (Inverter)                 | 1022599        |
+| 3          | 721 | 0      | 82012    | Daily Yield by Inverter                        | Daily Yield (Inverter)                 | 1022980        |
+| 3          | 722 | 0      | 82011    | Daily Equivalent Hours of Inverter             | Daily Yield Equivalent Hour (Inverter) | 1022982        |
+| 3          | 723 | 0      | 82013    | Inverter PR                                    | PR (Inverter)                          | 1020959        |
+| 3          | 724 | 0      | 82021    | Total Yield of Meter                           | Total Yield (Meter)                    | 1023741        |
+| 3          | 725 | 0      | 82008    | Daily Equivalent Hours of Meter                | Daily Yield Equivalent Hour (Meter)    | 1022981        |
+| 3          | 726 | 0      | 82010    | Meter PR                                       | PR (Meter)                             | 1020958        |
+| 3          | 727 | 0      | 82022    | Total Energy Consumption by Meter              | Total Energy Consumption (Meter)       | 1023757        |
+| 3          | 728 | 0      | 82014    | Meter E-daily Consumption                      | Daily Energy Consumption (Meter)       | 1023002        |
+| 3          | 729 | 0      | 82015    | Transient Irradiation at Grid-connecting Point | Transient Horizontal Irradiation       | 1025829        |
+| 3          | 730 | 0      | 82019    | Ambient Temperature                            | Ambient Temperature                    | 1022386        |
+| 3          | 731 | 0      | 82020    | PV Module Temperature                          | Temp. (PV module)                      | 1019203        |
+| 3          | 732 | 0      | 82023    | Meter Active Power                             | Active Power (Meter)                   | 1321690        |
+| 3          | 733 | 0      | 82034    | Daily Yield (Theoretical)                      | Daily Yield (Theoretical)              | 1022996        |
+| 3          | 734 | 0      | 82035    | Grid-connecting Point PR                       | PR                                     | 1020957        |
+| 3          | 735 | 0      | 82038    | Equivalent Hours of Grid-connecting Point      | Daily Equivalent Hours                 | 1022975        |
+| 3          | 736 | 0      | 82033    | Grid-connection Point Daily Yield              | Grid-connection Point Daily Yield      | 1021218        |
+| 3          | 737 | 0      | 82039    | Grid-connection Point Total Yield              | Grid-connection Point Total Yield      | 1021222        |
+| 3          | 738 | 4      | 82016    | Daily Irradiation at Grid-connecting Point     | Daily Horizontal Irradiation           | 1022894        |
+| 3          | 739 | 4      | 82001    | Inverter AC Power Normalization                | AC Power Normalization (Inverter)      | 1022496        |
+| 3          | 740 | 4      | 82002    | Inverter AC Power                              | AC Power (Inverter)                    | 1022494        |
+| 3          | 741 | 4      | 82003    | Inverter DC Power Normalization                | DC Power Normalization (Inverter)      | 1023636        |
+| 3          | 742 | 4      | 82004    | Inverter DC Power                              | DC Power (Inverter)                    | 1023635        |
+| 3          | 743 | 4      | 82007    | Inverter Total Yield                           | Total Yield (Inverter)                 | 1022599        |
+| 3          | 744 | 4      | 82012    | Daily Yield by Inverter                        | Daily Yield (Inverter)                 | 1022980        |
+| 3          | 745 | 4      | 82011    | Daily Equivalent Hours of Inverter             | Daily Yield Equivalent Hour (Inverter) | 1022982        |
+| 3          | 746 | 4      | 82013    | Inverter PR                                    | PR (Inverter)                          | 1020959        |
+| 3          | 747 | 4      | 82021    | Total Yield of Meter                           | Total Yield (Meter)                    | 1023741        |
+| 3          | 748 | 4      | 82008    | Daily Equivalent Hours of Meter                | Daily Yield Equivalent Hour (Meter)    | 1022981        |
+| 3          | 749 | 4      | 82010    | Meter PR                                       | PR (Meter)                             | 1020958        |
+| 3          | 750 | 4      | 82022    | Total Energy Consumption by Meter              | Total Energy Consumption (Meter)       | 1023757        |
+| 3          | 751 | 4      | 82014    | Meter E-daily Consumption                      | Daily Energy Consumption (Meter)       | 1023002        |
+| 3          | 752 | 4      | 82015    | Transient Irradiation at Grid-connecting Point | Transient Horizontal Irradiation       | 1025829        |
+| 3          | 753 | 4      | 82019    | Ambient Temperature                            | Ambient Temperature                    | 1022386        |
+| 3          | 754 | 4      | 82020    | PV Module Temperature                          | Temp. (PV module)                      | 1019203        |
+| 3          | 755 | 4      | 82023    | Meter Active Power                             | Active Power (Meter)                   | 1321690        |
+| 3          | 756 | 4      | 82034    | Daily Yield (Theoretical)                      | Daily Yield (Theoretical)              | 1022996        |
+| 3          | 757 | 4      | 82035    | Grid-connecting Point PR                       | PR                                     | 1020957        |
+| 3          | 758 | 4      | 82038    | Equivalent Hours of Grid-connecting Point      | Daily Equivalent Hours                 | 1022975        |
+| 3          | 759 | 4      | 82033    | Grid-connection Point Daily Yield              | Grid-connection Point Daily Yield      | 1021218        |
+| 3          | 760 | 4      | 82039    | Grid-connection Point Total Yield              | Grid-connection Point Total Yield      | 1021222        |
+| 1          | 761 | 0      | 4        | Internal Air Temperature                       | Interior Temperature                   | 1018189        |
+| 0          | 762 | 0      | 3        | Total On-grid Running Time                     |                                        | 0              |
+| 7          | 763 | 0      | 8030     | Forward Active Energy                          | Forward Active Energy                  | 1023580        |
+| 7          | 764 | 0      | 8062     | Daily Forward Active Energy                    | Daily Forward Active Energy            | 1023009        |
+| 7          | 765 | 0      | 8063     | Daily Reverse Active Energy                    | Daily Reverse Active Energy            | 1022983        |
+| 7          | 766 | 0      | 8031     | Reverse Active Energy                          | Reverse Active Energy                  | 1022019        |
+| 7          | 767 | 0      | 8032     | Forward Reactive Energy                        | Forward Reactive Energy                | 1321692        |
+| 7          | 768 | 0      | 8033     | Reverse Reactive Energy                        | Reverse Reactive Energy                | 1022016        |
+| 7          | 769 | 4      | 8062     | Daily Forward Active Energy                    | Daily Forward Active Energy            | 1023009        |
+| 7          | 770 | 4      | 8030     | Forward Active Energy                          | Forward Active Energy                  | 1023580        |
+| 7          | 771 | 4      | 8063     | Daily Reverse Active Energy                    | Daily Reverse Active Energy            | 1022983        |
+| 7          | 772 | 4      | 8031     | Reverse Active Energy                          | Reverse Active Energy                  | 1022019        |
+| 7          | 773 | 4      | 8032     | Forward Reactive Energy                        | Forward Reactive Energy                | 1321692        |
+| 7          | 774 | 4      | 8033     | Reverse Reactive Energy                        | Reverse Reactive Energy                | 1022016        |
+| 1          | 775 | 0      | 18       | Phase A Voltage                                | Phase A Voltage                        | 1020764        |
+| 1          | 776 | 0      | 19       | Phase B Voltage                                | Phase B Voltage                        | 1020792        |
+| 1          | 777 | 0      | 20       | Phase C Voltage                                | Phase C Voltage                        | 1020835        |
+| 1          | 778 | 0      | 21       | Phase A Current                                | Phase A Current                        | 1018151        |
+| 1          | 779 | 0      | 22       | Phase B Current                                | Phase B Current                        | 1020789        |
+| 1          | 780 | 0      | 23       | Phase C Current                                | Phase C Current                        | 1020832        |
+| 1          | 781 | 0      | 86       | Pac-Nom.                                       | AC Power Normalization (Inverter)      | 1022496        |
+| 1          | 782 | 0      | 5        | MPPT1 Voltage                                  | Udc-1                                  | 1512653        |
+| 1          | 783 | 0      | 6        | MPPT1 Current                                  | Idc-1                                  | 1512656        |
+| 1          | 784 | 0      | 7        | MPPT2 Voltage                                  | Udc-2                                  | 1516398        |
+| 1          | 785 | 0      | 8        | MPPT2 Current                                  | Idc-2                                  | 1516400        |
+| 1          | 786 | 0      | 9        | MPPT3 Voltage                                  | Udc-3                                  | 1516399        |
+| 1          | 787 | 0      | 14       | Total DC Power                                 | Total DC Power                         | 1018154        |
+| 1          | 788 | 0      | 26       | Total Power Factor                             | PF                                     | 1022252        |
+| 1          | 789 | 0      | 27       | Grid Frequency                                 | Grid Frequency                         | 1510555        |
+| 1          | 790 | 0      | 43       | Total Apparent Power                           | Apparent Power                         | 1018171        |
+| 1          | 791 | 0      | 45       | MPPT4 Voltage                                  | Udc-4                                  | 1516405        |
+| 1          | 792 | 0      | 46       | MPPT4 Current                                  | Idc-4                                  | 1516402        |
+| 1          | 793 | 0      | 47       | MPPT5 Voltage                                  | Udc-5                                  | 1516406        |
+| 1          | 794 | 0      | 48       | MPPT5 Current                                  | Idc-5                                  | 1516403        |
+| 1          | 795 | 0      | 49       | MPPT6 Voltage                                  | Udc-6                                  | 1516407        |
+| 1          | 796 | 0      | 50       | MPPT6 Current                                  | Idc-6                                  | 1516404        |
+| 1          | 797 | 0      | 90       | Negative Voltage to Ground                     | Negative Voltage to Ground             | 1018190        |
+| 14         | 798 | 0      | 13112    | Daily PV Yield                                 | Daily PV Yield                         | 1512960        |
+| 14         | 799 | 0      | 13147    | Daily Purchased Energy                         | Daily Purchased Energy                 | 1515654        |
+| 14         | 800 | 0      | 13122    | Daily Feed-in Energy                           | Daily Feed-in Energy                   | 1515652        |
+| 14         | 801 | 0      | 13116    | Daily Load Energy Consumption from PV          | Daily Load Energy Consumption from PV  | 1512984        |
+| 14         | 802 | 0      | 13028    | Daily Battery Charging Energy                  | Daily Battery Charging Energy          | 1515661        |
+| 14         | 803 | 0      | 13174    | Daily Battery Charging Energy from PV          | Daily Battery Charging Energy from PV  | 1512969        |
+| 14         | 804 | 0      | 13029    | Daily Battery Discharging Energy               | Daily Battery Discharging Energy       | 1512967        |
+| 14         | 805 | 4      | 13112    | Daily PV Yield                                 | Daily PV Yield                         | 1512960        |
+| 14         | 806 | 4      | 13134    | Total PV Yield                                 | Total PV Yield                         | 1512961        |
+| 14         | 807 | 4      | 13147    | Daily Purchased Energy                         | Daily Purchased Energy                 | 1515654        |
+| 14         | 808 | 4      | 13148    | Total Purchased Energy                         | Total Purchased Energy                 | 1515655        |
+| 14         | 809 | 4      | 13122    | Daily Feed-in Energy                           | Daily Feed-in Energy                   | 1515652        |
+| 14         | 810 | 4      | 13125    | Total Feed-in Energy                           | Total Feed-in Energy                   | 1515653        |
+| 14         | 811 | 4      | 13116    | Daily Load Energy Consumption from PV          | Daily Load Energy Consumption from PV  | 1512984        |
+| 14         | 812 | 4      | 13137    | Total Load Energy Consumption from PV          | Total Load Energy Consumption from PV  | 1512985        |
+| 14         | 813 | 4      | 13028    | Daily Battery Charging Energy                  | Daily Battery Charging Energy          | 1515661        |
+| 14         | 814 | 4      | 13029    | Daily Battery Discharging Energy               | Daily Battery Discharging Energy       | 1512967        |
+| 14         | 815 | 4      | 13034    | Total Battery Charging Energy                  | Total Battery Charging Energy          | 1515662        |
+| 14         | 816 | 4      | 13035    | Total Battery Discharging Energy               | Total Battery Discharging Energy       | 1512970        |
+| 1          | 817 | 0      | 15       | A-B Line Voltage                               | A-B Line Voltage                       | 785            |
+| 1          | 818 | 0      | 16       | B-C Line Voltage                               | B-C Line Voltage                       | 834            |
+| 1          | 819 | 0      | 17       | C-A Line Voltage                               | C-A Line Voltage                       | 902            |
+| 1          | 820 | 0      | 33       | Module 1 Temperature                           | Module Temperature A1                  | 1516412        |
+| 1          | 821 | 0      | 34       | Module 2 Temperature                           | Module Temperature A2                  | 1516413        |
+| 1          | 822 | 0      | 35       | Module 3 Temperature                           | Module Temperature B1                  | 1516414        |
+| 1          | 823 | 0      | 36       | Module 4 Temperature                           | Module Temperature B2                  | 1516415        |
+| 1          | 824 | 0      | 37       | Module 5 Temperature                           | Module Temperature C1                  | 1516416        |
+| 1          | 825 | 0      | 38       | Module 6 Temperature                           | Module Temperature C2                  | 1516417        |
+| 1          | 826 | 0      | 39       | Positive Impedance to Ground                   | Positive Impedance to Ground           | 1516418        |
+| 1          | 827 | 0      | 40       | Negative Impedance to Ground                   | Negative Impedance to Ground           | 1516419        |
+| 1          | 828 | 0      | 89       | Rated Reactive Power                           | Rated Reactive Power Output            | 1516420        |
+| 11         | 829 | 0      | 83072    | Daily Feed-in Energy                           | Daily Feed-in Energy                   | 1515652        |
+| 11         | 830 | 0      | 83075    | Total Feed-in Energy                           | Total Feed-in Energy                   | 1515653        |
+| 11         | 831 | 1      | 83072    | Daily Feed-in Energy                           | Daily Feed-in Energy                   | 1515652        |
+| 11         | 832 | 3      | 83075    | Total Feed-in Energy                           | Total Feed-in Energy                   | 1515653        |
+| 11         | 833 | 2      | 83075    | Total Feed-in Energy                           | Total Feed-in Energy                   | 1515653        |
+| 11         | 834 | 2      | 83072    | Daily Feed-in Energy                           | Daily Feed-in Energy                   | 1515652        |
+| 11         | 835 | 3      | 83072    | Daily Feed-in Energy                           | Daily Feed-in Energy                   | 1515652        |
+| 11         | 836 | 1      | 83075    | Total Feed-in Energy                           | Total Feed-in Energy                   | 1515653        |
+| 11         | 837 | 0      | 83102    | Daily Purchased Energy                         | Daily Purchased Energy                 | 1515654        |
+| 11         | 838 | 0      | 83105    | Total Purchased Energy                         | Total Purchased Energy                 | 1515655        |
+| 11         | 839 | 1      | 83102    | Daily Purchased Energy                         | Daily Purchased Energy                 | 1515654        |
+| 11         | 840 | 1      | 83105    | Total Purchased Energy                         | Total Purchased Energy                 | 1515655        |
+| 11         | 841 | 2      | 83102    | Daily Purchased Energy                         | Daily Purchased Energy                 | 1515654        |
+| 11         | 842 | 2      | 83105    | Total Purchased Energy                         | Total Purchased Energy                 | 1515655        |
+| 11         | 843 | 3      | 83102    | Daily Purchased Energy                         | Daily Purchased Energy                 | 1515654        |
+| 11         | 844 | 3      | 83105    | Total Purchased Energy                         | Total Purchased Energy                 | 1515655        |
+| 4          | 845 | 0      | 1001     | DC Bus Voltage                                 | DC Bus Voltage                         | 1014345        |
+| 4          | 846 | 0      | 1006     | Total DC Power                                 | Total DC Power                         | 1018154        |
+| 4          | 847 | 0      | 1005     | Total DC Current                               | Total DC Current                       | 1004029        |
+| 4          | 848 | 0      | 1002     | Interior Temperature                           | Interior Temperature                   | 1018189        |
+| 1          | 849 | 0      | 10       | MPPT3 Current                                  | Idc-3                                  | 4254           |
++------------+-----+--------+----------+------------------------------------------------+----------------------------------------+----------------+

@@ -140,7 +140,8 @@ func (e EndPoint) Call() api.EndPoint {
 // GetJsonData - Get the JSON representation of ResultData, either as condensed or "pretty".
 func (e EndPoint) GetJsonData(raw bool) output.Json {
 	if raw {
-		return output.Json(e.ApiRoot.Body)
+		return output.Json(e.RawResponse)
+		// return output.Json(e.ApiRoot.Body)
 	} else {
 		return output.GetAsPrettyJson(e.Response.ResultData)
 	}
@@ -260,6 +261,7 @@ func (e EndPoint) IsRequestValid() error {
 // (Used by the web call method.)
 func (e EndPoint) SetResponse(ref []byte) api.EndPoint {
 	for range Only.Once {
+		e.RawResponse = ref
 		e.Error = json.Unmarshal(ref, &e.Response)
 		if e.Error != nil {
 			break
