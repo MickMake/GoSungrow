@@ -11,7 +11,7 @@ const Url = "/v1/devService/getDeviceList"
 const Disabled = false
 
 type RequestData struct {
-	PsId int64 `json:"ps_id" required:"true"`
+	PsId string `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -26,7 +26,7 @@ func (rd RequestData) Help() string {
 type ResultData struct {
 	PageList []struct {
 		AttrID                  int64       `json:"attr_id"`
-		ChnnlID                 int64       `json:"chnnl_id"`
+		ChannelId               int64       `json:"chnnl_id"`
 		CommandStatus           int64       `json:"command_status"`
 		ConnectState            int64       `json:"connect_state"`
 		DataFlag                int64       `json:"data_flag"`
@@ -132,7 +132,7 @@ func (e *EndPoint) GetDataTable() output.Table {
 				d.PsID,
 				d.DeviceType,
 				d.DeviceCode,
-				d.ChnnlID,
+				d.ChannelId,
 				d.TypeName,
 				d.DeviceProSn,
 				d.DeviceModel,

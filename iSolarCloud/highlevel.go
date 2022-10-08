@@ -113,8 +113,8 @@ func (sg *SunGrow) GetTemplateData(template string, date string, filter string) 
 				break
 			}
 
-			table.SetTitle("Template %s on %s for %s", template, when.String(), psId)
-			table.SetFilePrefix(data.SetFilenamePrefix("%s-%s-%s", when.String(), template, psId))
+			table.SetTitle("Template %s on %s for %d", template, when.String(), psId)
+			table.SetFilePrefix(data.SetFilenamePrefix("%s-%s-%d", when.String(), template, psId))
 			table.SetGraphFilter(filter)
 			table.SetSaveFile(sg.SaveAsFile)
 			table.OutputType = sg.OutputType
@@ -694,7 +694,7 @@ func (sg *SunGrow) GetDevices(psIds ...int64) error {
 		for _, psId := range psIds {
 			ep := sg.GetByStruct(
 				"AppService.getDeviceList",
-				getDeviceList.RequestData{PsId: psId},
+				getDeviceList.RequestData{PsId: strconv.FormatInt(psId, 10)},
 				DefaultCacheTimeout,
 			)
 			if sg.Error != nil {

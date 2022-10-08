@@ -41,15 +41,15 @@ type ResultData   struct {
 		CuspPowerQuantity        interface{} `json:"cusp_power_quantity"`
 		CuspUsePowerQuantity     interface{} `json:"cusp_use_power_quantity"`
 		DateID                   int64       `json:"date_id"`
-		FlatNetPowerQuantity     int64       `json:"flat_net_power_quantity"`
-		FlatPowerQuantity        int64       `json:"flat_power_quantity"`
+		FlatNetPowerQuantity     float64     `json:"flat_net_power_quantity"`
+		FlatPowerQuantity        float64     `json:"flat_power_quantity"`
 		FlatUsePowerQuantity     float64     `json:"flat_use_power_quantity"`
 		NetPowerProfit           float64     `json:"net_power_profit"`
-		NetPowerQuantityTotal    int64       `json:"net_power_quantity_total"`
+		NetPowerQuantityTotal    float64     `json:"net_power_quantity_total"`
 		PeakNetPowerQuantity     interface{} `json:"peak_net_power_quantity"`
 		PeakPowerQuantity        interface{} `json:"peak_power_quantity"`
 		PeakUsePowerQuantity     interface{} `json:"peak_use_power_quantity"`
-		PowerQuantityTotal       int64       `json:"power_quantity_total"`
+		PowerQuantityTotal       float64     `json:"power_quantity_total"`
 		SubsidyProfit            interface{} `json:"subsidy_profit"`
 		TotalProfit              float64     `json:"total_profit"`
 		UpdateTime               string      `json:"update_time"`

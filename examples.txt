@@ -1,3 +1,6 @@
+GoSungrow api login
+GoSungrow api ls areas
+
 GoSungrow api get WebAppService.getDeviceUuid '{"ps_key":"1171348"}'
 GoSungrow api get WebAppService.showPSView '{"ps_id":"1171348"}'
 GoSungrow api get checkUnitStatus
@@ -53,8 +56,6 @@ GoSungrow api get reportList '{"ps_id":"1171348","report_type":"1"}'
 GoSungrow api get reportList '{"ps_id":"1171348","report_type":"2"}'
 GoSungrow api get reportList '{"ps_id":"1171348","report_type":"3"}'
 GoSungrow api get reportList '{"ps_id":"1171348","report_type":"4"}'
-GoSungrow api login
-GoSungrow api ls areas
 GoSungrow api raw queryDeviceList '{"ps_id":"1171348"}'
 GoSungrow api save WebAppService.queryUserCurveTemplateData '{"template_id":"8042","date_type":"1","start_time":"20220223000000","end_time":"20220223235900"}'
 GoSungrow api save getPsDetail '{"ps_id":""}'
@@ -72,6 +73,7 @@ GoSungrow data get template 8042 20220227
 GoSungrow data get template-points 8040
 GoSungrow data get template-points 8041
 GoSungrow data get template-points 8042
+
 GoSungrow data graph template 8042 20220212 '{"search_string":"p13019","min_left_axis":-6000,"max_left_axis":12000}'
 GoSungrow data graph template 8042 20220212 '{"search_string":"p13019"}'
 GoSungrow data graph template 8042 20220212 '{"search_string":"p83106","min_left_axis":-6000,"max_left_axis":12000}'
@@ -90,21 +92,17 @@ GoSungrow data save template '' 20220201
 GoSungrow data save template 8042 20220212
 GoSungrow get raw template 20220202
 GoSungrow get template 8042 20220212
-
 GoSungrow data get stats
 GoSungrow data get search-point-names
 GoSungrow data get device
 GoSungrow data get model
-
 GoSungrow api raw getPowerStationForHousehold '{"ps_id":"1171348"}'
 > 				"org_index_code":"|80384|80393|300977|",
-
 GoSungrow api raw getInstallerInfoByDealerOrgCodeOrId '{"dealer_org_code":"AUSCEKK7"}'
 GoSungrow api raw getInstallerInfoByDealerOrgCodeOrId '{"org_id":"362245"}'
 GoSungrow api raw getInstallerInfoByDealerOrgCodeOrId '{"org_id":"80384"}'
 GoSungrow api raw getInstallerInfoByDealerOrgCodeOrId '{"org_id":"80393"}'
 GoSungrow api raw getInstallerInfoByDealerOrgCodeOrId '{"org_id":"300977"}'
-
 GoSungrow api raw getKpiInfo
 GoSungrow api raw getInstallInfoList
 GoSungrow api raw getIncomeSettingInfos '{"ps_id":"1171348"}'
@@ -118,43 +116,22 @@ GoSungrow api raw getOrgListForUser
 GoSungrow api raw getPowerDevicePointNames '{"device_type":"1"}'
 GoSungrow api raw getPowerDeviceModelTechList '{"device_type":"1"}'
 GoSungrow api raw getPowerDevicePointInfo '{"id":"1"}'
-GoSungrow api raw getPowerStationForHousehold '{"ps_id":"1171348"}'
-
 GoSungrow api raw queryPsProfit '{"date_id":"20221001","date_type":"1","ps_id":"1171348"}'
 GoSungrow api raw getPowerStationData '{"date_id":"20221001","date_type":"1","ps_id":"1171348"}'
 GoSungrow api get getHouseholdStoragePsReport '{"date_id":"20221001","date_type":"1","ps_id":"1171348"}'
-
 GoSungrow api raw queryPsProfit '{"date_id":"202210","date_type":"2","ps_id":"1171348"}'
 GoSungrow api raw getPowerStationData '{"date_id":"202210","date_type":"2","ps_id":"1171348"}'
 GoSungrow api get getHouseholdStoragePsReport '{"date_id":"202210","date_type":"2","ps_id":"1171348"}'
-
 GoSungrow api raw queryPsProfit '{"date_id":"2022","date_type":"3","ps_id":"1171348"}'
 GoSungrow api raw getPowerStationData '{"date_id":"2022","date_type":"3","ps_id":"1171348"}'
 GoSungrow api get getHouseholdStoragePsReport '{"date_id":"2022","date_type":"3","ps_id":"1171348"}'
-
 GoSungrow api raw getPowerStationInfo '{"ps_id":"1171348"}'
 GoSungrow api raw getPowerTrendDayData '{"BeginTime":"20221004"}'
 GoSungrow api raw getPowerSettingCharges
 GoSungrow api raw queryUnitList
 GoSungrow api raw queryPsIdList
 GoSungrow api get getEncryptPublicKey
-
 GoSungrow api raw getFaultCount
 GoSungrow api raw getFaultDetail '{"fault_code":"34"}'
 GoSungrow api raw getFaultMsgByFaultCode '{"fault_code":"703"}'
 GoSungrow api get getFaultMsgListWithYYYYMM
-
-
-################################################################################
-
-"energy_flow"
-1 / 3	- PV2Load && PV2Battery
-
-
-        "1"	- PV to Load
-        "3"	- Battery to Load
-        "5"	- PV to Battery
-
-https://augateway.isolarcloud.com/v1/commonService/getMqttConfigInfoByAppkey
-sensor.sungrow_total_load_active_power == sensor.sungrow_total_active_power
-

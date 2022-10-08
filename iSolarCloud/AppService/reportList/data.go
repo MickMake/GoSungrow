@@ -97,7 +97,7 @@ type ResultData struct {
 		SubsidyProfitOriginalUnit            string      `json:"subsidy_profit_original_unit"`
 		SubsidyProfitTran                    string      `json:"subsidy_profit_tran"`
 		SubsidyProfitUnit                    string      `json:"subsidy_profit_unit"`
-		TimeStamp                            string      `json:"time_stamp"`
+		TimeStamp                            interface{} `json:"time_stamp"`		// Sad that this alternates between string and int64.
 		TotalProfit                          string      `json:"total_profit"`
 		TotalProfitOriginalUnit              string      `json:"total_profit_original_unit"`
 		TotalProfitTran                      string      `json:"total_profit_tran"`
