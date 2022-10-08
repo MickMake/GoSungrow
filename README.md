@@ -1,5 +1,7 @@
 # GoSungrow - iSolarCloud API written in GoLang.
 
+[Latest releases here](https://github.com/MickMake/GoSungrow/releases)
+
 
 ## What is it?
 
