@@ -1,6 +1,7 @@
 package getPsListByName
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -22,11 +23,11 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	PsID         int64  `json:"ps_id"`
+	PsID         api.Integer  `json:"ps_id"`
 	PsName       string `json:"ps_name"`
 	PsShortName  string `json:"ps_short_name"`
 	PsTimezone   string `json:"ps_timezone"`
-	PsTimezoneID int64  `json:"ps_timezone_id"`
+	PsTimezoneID api.Integer  `json:"ps_timezone_id"`
 	ShareType    string `json:"share_type"`
 }
 

@@ -11,7 +11,6 @@ import (
 	"github.com/go-co-op/gocron"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -154,7 +153,7 @@ func (c *CmdMqtt) AttachFlags(cmd *cobra.Command, viper *viper.Viper) {
 func (ca *Cmds) MqttArgs(cmd *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmdLog.LogPrintDate("Connecting to SunGrow...\n")
-		var id int64
+		var id api.Integer
 		id, ca.Error = ca.Api.SunGrow.GetPsId()
 		if ca.Error != nil {
 			break
@@ -186,7 +185,8 @@ func (ca *Cmds) MqttArgs(cmd *cobra.Command, args []string) error {
 			break
 		}
 
-		ca.Error = ca.Mqtt.Mqtt.SetDeviceConfig("GoSunGrow", strconv.FormatInt(id, 10), "GoSungrow", model[0], "Sungrow", "Roof")
+		// ca.Error = ca.Mqtt.Mqtt.SetDeviceConfig("GoSunGrow", strconv.FormatInt(id, 10), "GoSungrow", model[0], "Sungrow", "Roof")
+		ca.Error = ca.Mqtt.Mqtt.SetDeviceConfig("GoSunGrow", id.String(), "GoSungrow", model[0], "Sungrow", "Roof")
 		if ca.Error != nil {
 			break
 		}

@@ -1,6 +1,7 @@
 package getRemoteUpgradeSubTasksList
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -24,7 +25,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []interface{} `json:"pageList"`
-	RowCount int64         `json:"rowCount"`
+	RowCount api.Integer   `json:"rowCount"`
 }
 
 func (e *ResultData) IsValid() error {

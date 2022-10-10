@@ -1,6 +1,7 @@
 package queryUserList
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -21,7 +22,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	UserID   int64  `json:"user_id"`
+	UserID   api.Integer  `json:"user_id"`
 	UserName string `json:"user_name"`
 }
 

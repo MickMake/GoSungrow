@@ -1,6 +1,7 @@
 package getIncomeSettingInfos
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -23,33 +24,33 @@ func (rd RequestData) Help() string {
 
 
 type ResultData   struct {
-	CodeType                  int64         `json:"code_type"`
+	CodeType                  api.Integer   `json:"code_type"`
 	EnvironmentPowerChargeList []interface{} `json:"enviormentPowerChargeList"`
-	ParamIncomeUnit           int64         `json:"param_income_unit"`
+	ParamIncomeUnit           api.Integer   `json:"param_income_unit"`
 	PowerElectricalChargeMap  struct {
 		CityAllowanceMoney     interface{} `json:"city_allowance_money"`
-		CodeType               int64       `json:"code_type"`
+		CodeType               api.Integer `json:"code_type"`
 		CountyAllowanceMoney   interface{} `json:"county_allowance_money"`
-		DefaultCharge          float64     `json:"default_charge"`
-		ElectricChargeID       int64       `json:"electric_charge_id"`
+		DefaultCharge          api.Float   `json:"default_charge"`
+		ElectricChargeID       api.Integer `json:"electric_charge_id"`
 		EndTime                string      `json:"end_time"`
 		IncomeStyle            interface{} `json:"income_style"`
 		IntervalTimeCharge     interface{} `json:"interval_time_charge"`
 		NationAllowanceMoney   interface{} `json:"nation_allowance_money"`
-		ParamIncomeUnit        int64       `json:"param_income_unit"`
+		ParamIncomeUnit        api.Integer `json:"param_income_unit"`
 		ProvinceAllowanceMoney interface{} `json:"province_allowance_money"`
-		PsID                   int64       `json:"ps_id"`
+		PsID                   api.Integer `json:"ps_id"`
 		StartTime              string      `json:"start_time"`
 		UseSharpPeekValleyFlat interface{} `json:"use_sharp_peek_valley_flat"`
 		ValidFlag              string      `json:"valid_flag"`
 	} `json:"powerElectricalChargeMap"`
 	PowerIntervalTimesChargeMap interface{} `json:"powerIntevalTimesChargeMap"`
 	PowerSelfUseTimesChargeMap struct {
-		DefaultCharge            float64 `json:"default_charge"`
+		DefaultCharge            api.Float `json:"default_charge"`
 		EndTime                  string  `json:"end_time"`
 		IntervalTimeCharge       string  `json:"interval_time_charge"`
 		OnlineElectricityPercent string  `json:"online_electricity_percent"`
-		PsID                     int64   `json:"ps_id"`
+		PsID                     api.Integer   `json:"ps_id"`
 		StartTime                string  `json:"start_time"`
 		UseElectricityDiscount   string  `json:"use_electricity_discount"`
 	} `json:"powerSelfUseTimesChargeMap"`

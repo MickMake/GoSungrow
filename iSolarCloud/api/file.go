@@ -151,6 +151,10 @@ func (ep *EndPointStruct) ApiWriteDataFile(ref interface{}) error {
 	return output.FileWrite(ep.GetJsonFilename(), ref, output.DefaultFileMode)
 }
 
+// ApiRemoveDataFile - Saves data to a file path.
+func (ep *EndPointStruct) ApiRemoveDataFile() error {
+	return output.FileRemove(ep.GetJsonFilename())
+}
 
 func (ep *EndPointStruct) ApiCacheFilename(request interface{}) string {
 	postfix := apiReflect.GetFingerprint(request)

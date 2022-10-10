@@ -1,6 +1,7 @@
 package getAllPowerDeviceSetName
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -22,7 +23,7 @@ func (rd RequestData) Help() string {
 
 type ResultData []struct {
 	Remark  string `json:"remark"`
-	SetID   int64  `json:"set_id"`
+	SetID   api.Integer  `json:"set_id"`
 	SetName string `json:"set_name"`
 }
 

@@ -1,6 +1,7 @@
 package getFaultCount
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -22,7 +23,7 @@ func (rd RequestData) Help() string {
 }
 
 
-type ResultData int64
+type ResultData api.Integer
 
 func (e *ResultData) IsValid() error {
 	var err error

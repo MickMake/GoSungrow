@@ -1,6 +1,7 @@
 package getOrgListByUserId
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -23,7 +24,7 @@ func (rd RequestData) Help() string {
 
 
 type ResultData   struct {
-	Depth int64         `json:"depth"`
+	Depth api.Integer   `json:"depth"`
 	List  []interface{} `json:"list"`
 }
 

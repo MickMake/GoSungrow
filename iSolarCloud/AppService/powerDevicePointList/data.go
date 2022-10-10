@@ -1,6 +1,7 @@
 package powerDevicePointList
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -21,20 +22,20 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	CurrentPage  int64 `json:"currentPage"`
+	CurrentPage  api.Integer `json:"currentPage"`
 	PageDataList []struct {
 		CreateTime   string `json:"create_time"`
-		DeviceType   int64  `json:"device_type"`
-		ID           int64  `json:"id"`
-		Period       int64  `json:"period"`
-		PointID      int64  `json:"point_id"`
+		DeviceType   api.Integer  `json:"device_type"`
+		ID           api.Integer  `json:"id"`
+		Period       api.Integer  `json:"period"`
+		PointID      api.Integer  `json:"point_id"`
 		PointName    string `json:"point_name"`
 		PointNameNew string `json:"point_name_new"`
 		TypeName     string `json:"type_name"`
 	} `json:"pageDataList"`
-	PageSize    int64 `json:"pageSize"`
-	TotalCounts int64 `json:"totalCounts"`
-	TotalPages  int64 `json:"totalPages"`
+	PageSize    api.Integer `json:"pageSize"`
+	TotalCounts api.Integer `json:"totalCounts"`
+	TotalPages  api.Integer `json:"totalPages"`
 }
 
 func (e *ResultData) IsValid() error {

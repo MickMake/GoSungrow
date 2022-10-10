@@ -1,6 +1,7 @@
 package getUserList
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -24,7 +25,7 @@ type ResultData []struct {
 	Email       string      `json:"email"`
 	Mobletel    interface{} `json:"mobletel"`
 	Useraccount string      `json:"useraccount"`
-	Userid      int64       `json:"userid"`
+	Userid      api.Integer `json:"userid"`
 	Username    string      `json:"username"`
 }
 

@@ -16,7 +16,7 @@ const Disabled = false
 type RequestData struct {
 	DateID   string `json:"date_id" required:"true"`
 	DateType string `json:"date_type" required:"true"`
-	PsID     string `json:"ps_id" required:"true"`
+	PsID     api.Integer `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -31,8 +31,8 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	ConnectType       string `json:"connect_type"`
-	HasAmmeter        int64  `json:"has_ammeter"`
-	IsHaveEsInverter  int64  `json:"is_have_es_inverter"`
+	HasAmmeter        api.Integer  `json:"has_ammeter"`
+	IsHaveEsInverter  api.Integer  `json:"is_have_es_inverter"`
 	IsTransformSystem string `json:"is_transform_system"`
 
 	DayData   *DayData   `json:"day_data"`
@@ -99,7 +99,7 @@ type MonthData struct {
 	JtydMap          api.UnitValue `json:"jtyd_map"`
 	JtydMapVirgin    api.UnitValue `json:"jtyd_map_virgin"  PointIgnore:"true"`
 	MonthDataDayList []struct {
-		DateID                   int64       `json:"date_id"`
+		DateID                   api.Integer `json:"date_id"`
 		Jthd                     string      `json:"jthd"`
 		JthdUnit                 string      `json:"jthd_unit"`
 		Jtyd                     string      `json:"jtyd"`
@@ -181,7 +181,7 @@ type YearData struct {
 	P83121            string        `json:"p83121"  PointId:"p83121" PointUnit:"" PointType:"PointTypeYearly"`
 	P83122            string        `json:"p83122"  PointId:"p83122" PointUnit:"" PointType:"PointTypeYearly"`
 	YearDataMonthList []struct {
-		DateID                   int64  `json:"date_id"`
+		DateID                   api.Integer  `json:"date_id"`
 		Jthd                     string `json:"jthd"`
 		JthdUnit                 string `json:"jthd_unit"`
 		Jtyd                     string `json:"jtyd"`
@@ -206,7 +206,7 @@ type YearData struct {
 		P83120                   string `json:"p83120"  PointId:"p83120" PointUnit:"" PointType:"PointTypeYearly"`
 		P83121                   string `json:"p83121"  PointId:"p83121" PointUnit:"" PointType:"PointTypeYearly"`
 		P83122                   string `json:"p83122"  PointId:"p83122" PointUnit:"" PointType:"PointTypeYearly"`
-		PsID                     int64  `json:"ps_id"`
+		PsID                     api.Integer  `json:"ps_id"`
 		SelfConsumptionYield     string `json:"self_consumption_yield"`
 		SelfConsumptionYieldUnit string `json:"self_consumption_yield_unit"`
 		TimeStamp                string `json:"time_stamp"`
@@ -241,12 +241,12 @@ type TotalData struct {
 	P83127            api.UnitValue `json:"p83127_map"  PointId:"p83127" PointType:"PointTypeTotal"`
 	P83127MapVirgin   api.UnitValue `json:"p83127_map_virgin"  PointIgnore:"true"`
 	TotalDataYearList []struct {
-		DateID                   int64  `json:"date_id"`
+		DateID                   api.Integer  `json:"date_id"`
 		Jthd                     string `json:"jthd"`
 		JthdUnit                 string `json:"jthd_unit"`
 		Jtyd                     string `json:"jtyd"`
 		JtydUnit                 string `json:"jtyd_unit"`
-		P83038                   int64  `json:"p83038"  PointId:"p83038" PointUnit:"" PointType:"PointTypeTotal"`
+		P83038                   api.Integer  `json:"p83038"  PointId:"p83038" PointUnit:"" PointType:"PointTypeTotal"`
 		P83074                   string `json:"p83074"  PointId:"p83074" PointUnit:"" PointType:"PointTypeTotal"`
 		P83074Unit               string `json:"p83074_unit"`
 		P83079                   string `json:"p83079"  PointId:"p83079" PointUnit:"" PointType:"PointTypeTotal"`
@@ -263,10 +263,10 @@ type TotalData struct {
 		P83118Unit               string `json:"p83118_unit"`
 		P83119                   string `json:"p83119"  PointId:"p83119" PointUnit:"" PointType:"PointTypeTotal"`
 		P83119Unit               string `json:"p83119_unit"`
-		P83120                   int64  `json:"p83120"  PointId:"p83120" PointUnit:"" PointType:"PointTypeTotal"`
+		P83120                   api.Integer  `json:"p83120"  PointId:"p83120" PointUnit:"" PointType:"PointTypeTotal"`
 		P83121                   string `json:"p83121"  PointId:"p83121" PointUnit:"" PointType:"PointTypeTotal"`
 		P83122                   string `json:"p83122"  PointId:"p83122" PointUnit:"" PointType:"PointTypeTotal"`
-		PsID                     int64  `json:"ps_id"`
+		PsID                     api.Integer  `json:"ps_id"`
 		SelfConsumptionYield     string `json:"self_consumption_yield"`
 		SelfConsumptionYieldUnit string `json:"self_consumption_yield_unit"`
 		TimeStamp                string `json:"time_stamp"`
@@ -363,8 +363,8 @@ func (e *EndPoint) GetData() api.DataMap {
 
 	for range Only.Once {
 		if e.Response.ResultData.DayData != nil {
-			name := "getHouseholdStoragePsReport.Day." + e.Request.PsID
-			entries.StructToPoints(*e.Response.ResultData.DayData, name, e.Request.PsID, time.Time{})
+			name := "getHouseholdStoragePsReport.Day." + e.Request.PsID.String()
+			entries.StructToPoints(*e.Response.ResultData.DayData, name, e.Request.PsID.String(), time.Time{})
 
 			// 83072
 			// 83077
@@ -382,22 +382,22 @@ func (e *EndPoint) GetData() api.DataMap {
 				// si := fmt.Sprintf("%.2d", i)
 				// parent := api.ParentDevice{Key: e.Request.PsID}
 
-				uv := api.CreateUnitValue(d.P83076, d.P83076Unit)
-				entries.AddUnitValue(name + ".p83076", e.Request.PsID, "p83076", "", api.NewDateTime(d.TimeStamp), uv)
-				uv = api.CreateUnitValue(d.P83080, d.P83080Unit)
-				entries.AddUnitValue(name + ".p83080", e.Request.PsID, "p83080", "", api.NewDateTime(d.TimeStamp), uv)
-				uv = api.CreateUnitValue(d.P83086, d.P83086Unit)
-				entries.AddUnitValue(name + ".p83086", e.Request.PsID, "p83086", "", api.NewDateTime(d.TimeStamp), uv)
-				uv = api.CreateUnitValue(d.P83087, d.P83087Unit)
-				entries.AddUnitValue(name + ".p83087", e.Request.PsID, "p83087", "", api.NewDateTime(d.TimeStamp), uv)
-				uv = api.CreateUnitValue(d.P83096, d.P83096Unit)
-				entries.AddUnitValue(name + ".p83096", e.Request.PsID, "p83096", "", api.NewDateTime(d.TimeStamp), uv)
-				uv = api.CreateUnitValue(d.P83101, d.P83101Unit)
-				entries.AddUnitValue(name + ".p83101", e.Request.PsID, "p83101", "", api.NewDateTime(d.TimeStamp), uv)
-				uv = api.CreateUnitValue(d.P83106, d.P83106Unit)
-				entries.AddUnitValue(name + ".p83106", e.Request.PsID, "p83106", "", api.NewDateTime(d.TimeStamp), uv)
-				uv = api.CreateUnitValue(d.P83128, d.P83128Unit)
-				entries.AddUnitValue(name + ".p83128", e.Request.PsID, "p83128", "", api.NewDateTime(d.TimeStamp), uv)
+				uv := api.SetUnitValueString(d.P83076, d.P83076Unit)
+				entries.AddUnitValue(name + ".p83076", e.Request.PsID.String(), "p83076", "", api.NewDateTime(d.TimeStamp), uv)
+				uv = api.SetUnitValueString(d.P83080, d.P83080Unit)
+				entries.AddUnitValue(name + ".p83080", e.Request.PsID.String(), "p83080", "", api.NewDateTime(d.TimeStamp), uv)
+				uv = api.SetUnitValueString(d.P83086, d.P83086Unit)
+				entries.AddUnitValue(name + ".p83086", e.Request.PsID.String(), "p83086", "", api.NewDateTime(d.TimeStamp), uv)
+				uv = api.SetUnitValueString(d.P83087, d.P83087Unit)
+				entries.AddUnitValue(name + ".p83087", e.Request.PsID.String(), "p83087", "", api.NewDateTime(d.TimeStamp), uv)
+				uv = api.SetUnitValueString(d.P83096, d.P83096Unit)
+				entries.AddUnitValue(name + ".p83096", e.Request.PsID.String(), "p83096", "", api.NewDateTime(d.TimeStamp), uv)
+				uv = api.SetUnitValueString(d.P83101, d.P83101Unit)
+				entries.AddUnitValue(name + ".p83101", e.Request.PsID.String(), "p83101", "", api.NewDateTime(d.TimeStamp), uv)
+				uv = api.SetUnitValueString(d.P83106, d.P83106Unit)
+				entries.AddUnitValue(name + ".p83106", e.Request.PsID.String(), "p83106", "", api.NewDateTime(d.TimeStamp), uv)
+				uv = api.SetUnitValueString(d.P83128, d.P83128Unit)
+				entries.AddUnitValue(name + ".p83128", e.Request.PsID.String(), "p83128", "", api.NewDateTime(d.TimeStamp), uv)
 			}
 		}
 	}

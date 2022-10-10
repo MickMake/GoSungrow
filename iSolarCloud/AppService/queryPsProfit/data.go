@@ -40,22 +40,22 @@ type ResultData   struct {
 		CuspNetPowerQuantity     interface{} `json:"cusp_net_power_quantity"`
 		CuspPowerQuantity        interface{} `json:"cusp_power_quantity"`
 		CuspUsePowerQuantity     interface{} `json:"cusp_use_power_quantity"`
-		DateID                   int64       `json:"date_id"`
-		FlatNetPowerQuantity     float64     `json:"flat_net_power_quantity"`
-		FlatPowerQuantity        float64     `json:"flat_power_quantity"`
-		FlatUsePowerQuantity     float64     `json:"flat_use_power_quantity"`
-		NetPowerProfit           float64     `json:"net_power_profit"`
-		NetPowerQuantityTotal    float64     `json:"net_power_quantity_total"`
+		DateID                   api.Integer `json:"date_id"`
+		FlatNetPowerQuantity     api.Float   `json:"flat_net_power_quantity"`
+		FlatPowerQuantity        api.Float   `json:"flat_power_quantity"`
+		FlatUsePowerQuantity     api.Float   `json:"flat_use_power_quantity"`
+		NetPowerProfit           api.Float   `json:"net_power_profit"`
+		NetPowerQuantityTotal    api.Float   `json:"net_power_quantity_total"`
 		PeakNetPowerQuantity     interface{} `json:"peak_net_power_quantity"`
 		PeakPowerQuantity        interface{} `json:"peak_power_quantity"`
 		PeakUsePowerQuantity     interface{} `json:"peak_use_power_quantity"`
-		PowerQuantityTotal       float64     `json:"power_quantity_total"`
+		PowerQuantityTotal       api.Float   `json:"power_quantity_total"`
 		SubsidyProfit            interface{} `json:"subsidy_profit"`
-		TotalProfit              float64     `json:"total_profit"`
+		TotalProfit              api.Float   `json:"total_profit"`
 		UpdateTime               string      `json:"update_time"`
-		UsePowerByDiscountProfit float64     `json:"use_power_by_discount_profit"`
-		UsePowerProfit           float64     `json:"use_power_profit"`
-		UsePowerQuantityTotal    float64     `json:"use_power_quantity_total"`
+		UsePowerByDiscountProfit api.Float   `json:"use_power_by_discount_profit"`
+		UsePowerProfit           api.Float   `json:"use_power_profit"`
+		UsePowerQuantityTotal    api.Float   `json:"use_power_quantity_total"`
 		ValleyNetPowerQuantity   interface{} `json:"valley_net_power_quantity"`
 		ValleyPowerQuantity      interface{} `json:"valley_power_quantity"`
 		ValleyUsePowerQuantity   interface{} `json:"valley_use_power_quantity"`

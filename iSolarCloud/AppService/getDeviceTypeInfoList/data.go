@@ -1,6 +1,7 @@
 package getDeviceTypeInfoList
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -21,9 +22,9 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	DeviceType      int64  `json:"device_type"`
-	IsRemoteUpgrade int64  `json:"is_remote_upgrade"`
-	TypeCode        int64  `json:"type_code"`
+	DeviceType      api.Integer  `json:"device_type"`
+	IsRemoteUpgrade api.Integer  `json:"is_remote_upgrade"`
+	TypeCode        api.Integer  `json:"type_code"`
 	TypeName        string `json:"type_name"`
 }
 

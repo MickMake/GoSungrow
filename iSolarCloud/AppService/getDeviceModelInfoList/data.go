@@ -1,6 +1,7 @@
 package getDeviceModelInfoList
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
@@ -29,9 +30,9 @@ type ResultData []struct {
 	DeviceFactoryName string `json:"device_factory_name"`
 	DeviceModel       string `json:"device_model"`
 	DeviceModelCode   string `json:"device_model_code"`
-	DeviceModelID     int64  `json:"device_model_id"`
-	DeviceType        int64  `json:"device_type"`
-	IsRemoteUpgrade   int64  `json:"is_remote_upgrade"`
+	DeviceModelID     api.Integer  `json:"device_model_id"`
+	DeviceType        api.Integer  `json:"device_type"`
+	IsRemoteUpgrade   api.Integer  `json:"is_remote_upgrade"`
 }
 
 func (e *ResultData) IsValid() error {

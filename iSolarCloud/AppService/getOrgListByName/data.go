@@ -1,6 +1,7 @@
 package getOrgListByName
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -22,8 +23,8 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	IsLeaf  int64  `json:"is_leaf"`
-	OrgID   int64  `json:"org_id"`
+	IsLeaf  api.Integer  `json:"is_leaf"`
+	OrgID   api.Integer  `json:"org_id"`
 	OrgName string `json:"org_name"`
 }
 

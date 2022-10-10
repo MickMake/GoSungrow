@@ -1,8 +1,11 @@
 package api
 
 import (
+	"encoding/json"
+	"github.com/MickMake/GoUnify/Only"
 	"time"
 )
+
 
 var inputLayout = []string{
 	DtLayout,
@@ -26,32 +29,133 @@ const (
 	DtLayoutYear        = "2006"
 )
 
+
 type DateTime struct {
-	date string
-	time.Time
+	string  `json:"string,omitempty"`
+	time.Time `json:"time,omitempty"`
 	DateType string
 	Error    error
 }
 
-func NewDateTime(date string) DateTime {
-	var ret DateTime
-	if date == "" {
-		date = time.Now().Format(DtLayoutDay)
-	}
-	ret.date = date
-	ret.DateType = ret.getDateType()
-	for _, f := range inputLayout {
-		ret.Time, ret.Error = time.Parse(f, date)
-		if ret.Error == nil {
+// UnmarshalJSON - Convert JSON to value
+func (dt *DateTime) UnmarshalJSON(data []byte) error {
+	var err error
+
+	for range Only.Once {
+		if len(data) == 0 {
+			break
+		}
+
+		// Store result from string
+		err = json.Unmarshal(data, &dt.string)
+		if err == nil {
+			dt.SetString(dt.string)
+			break
+		}
+
+		// Store result from time
+		err = json.Unmarshal(data, &dt.Time)
+		if err == nil {
+			dt.SetValue(dt.Time)
 			break
 		}
 	}
-	return ret
+
+	return err
 }
 
-func TimeNowString() string {
-	return time.Now().Format(DtLayout)
+// MarshalJSON - Convert value to JSON
+func (dt DateTime) MarshalJSON() ([]byte, error) {
+	var data []byte
+	var err error
+
+	for range Only.Once {
+		// data, err = json.Marshal(dt.string)
+		// if err != nil {
+		// 	break
+		// }
+		data = []byte("\"" + dt.Time.Format(DtLayout) + "\"")
+	}
+
+	return data, err
 }
+
+func (dt DateTime) Value() time.Time {
+	return dt.Time
+}
+
+func (dt DateTime) String() string {
+	return dt.string
+}
+
+func (dt *DateTime) SetString(value string) DateTime {
+	for range Only.Once {
+		dt.string = value
+		dt.Time = time.Time{}
+
+		if value == "" {
+			break
+		}
+
+		if value == "--" {
+			value = ""
+			break
+		}
+
+		// var err error
+		// // 2022-10-01 13:29:11
+		// dt.Time, err = time.Parse(defaultFormat, dt.string)
+		// if err == nil {
+		// 	break
+		// }
+
+		dt.DateType = dt.getDateType()
+		for _, f := range inputLayout {
+			dt.Time, dt.Error = time.Parse(f, value)
+			if dt.Error == nil {
+				break
+			}
+		}
+
+		// switch dt.DateType {
+		// 	case "3":
+		// 		ret = dt.Time.Format(DtLayoutYear)
+		// 	case "2":
+		// 		ret = dt.Time.Format(DtLayoutMonth)
+		// 	case "1":
+		// 		ret = dt.Time.Format(DtLayoutDay)
+		// }
+	}
+
+	return *dt
+}
+
+func (dt *DateTime) SetValue(value time.Time) DateTime {
+	for range Only.Once {
+		dt.string = ""
+		dt.Time = value
+
+		if value.IsZero() {
+			break
+		}
+
+		dt.string = value.Format(DtLayout)
+		dt.DateType = "3"
+	}
+
+	return *dt
+}
+
+func SetDateTimeString(value string) DateTime {
+	var t DateTime
+	return t.SetString(value)
+}
+
+func SetDateTimeValue(value time.Time) DateTime {
+	var t DateTime
+	return t.SetValue(value)
+}
+
 
 func (dt *DateTime) GetDayStartTimestamp() string {
 	var ret string
@@ -69,19 +173,19 @@ func (dt *DateTime) GetDayEndTimestamp() string {
 	// return fmt.Sprintf("%s235900", dt.Time.Format(DtLayoutDay))
 }
 
-func (dt DateTime) String() string {
-	// return dt.Time.Format(DtLayout)
-	var ret string
-	switch dt.DateType {
-		case "3":
-			ret = dt.Time.Format(DtLayoutYear)
-		case "2":
-			ret = dt.Time.Format(DtLayoutMonth)
-		case "1":
-			ret = dt.Time.Format(DtLayoutDay)
-	}
-	return ret
-}
+// func (dt DateTime) String() string {
+// 	// return dt.Time.Format(DtLayout)
+// 	var ret string
+// 	switch dt.DateType {
+// 		case "3":
+// 			ret = dt.Time.Format(DtLayoutYear)
+// 		case "2":
+// 			ret = dt.Time.Format(DtLayoutMonth)
+// 		case "1":
+// 			ret = dt.Time.Format(DtLayoutDay)
+// 	}
+// 	return ret
+// }
 
 func (dt DateTime) PrintFull() string {
 	return dt.Time.Format(DtLayout)
@@ -89,7 +193,7 @@ func (dt DateTime) PrintFull() string {
 
 func (dt DateTime) getDateType() string {
 	var ret string
-	switch len(dt.date) {
+	switch len(dt.string) {
 		case len(DtLayout):
 			ret = "1"
 		case len(DtLayoutYear):
@@ -108,15 +212,22 @@ func (dt DateTime) getDateType() string {
 	return ret
 }
 
-// func (dt DateTime) GetFilenameSuffix() string {
-// 	var ret string
-// 	switch dt.DateType {
-// 	case "3":
-// 		ret = dt.Time.Format(DtLayoutYear)
-// 	case "2":
-// 		ret = dt.Time.Format(DtLayoutMonth)
-// 	case "1":
-// 		ret = dt.Time.Format(DtLayoutDay)
-// 	}
-// 	return ret
-// }
+func NewDateTime(date string) DateTime {
+	var ret DateTime
+	if date == "" {
+		date = time.Now().Format(DtLayoutDay)
+	}
+	ret.string = date
+	ret.DateType = ret.getDateType()
+	for _, f := range inputLayout {
+		ret.Time, ret.Error = time.Parse(f, date)
+		if ret.Error == nil {
+			break
+		}
+	}
+	return ret
+}
+
+func TimeNowString() string {
+	return time.Now().Format(DtLayout)
+}

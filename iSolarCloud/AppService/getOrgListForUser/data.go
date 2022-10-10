@@ -1,6 +1,7 @@
 package getOrgListForUser
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -23,20 +24,20 @@ func (rd RequestData) Help() string {
 
 
 type ResultData []struct {
-	GcjLatitude    interface{} `json:"gcj_latitude"`
-	GcjLongitude   interface{} `json:"gcj_longitude"`
-	ID             int64       `json:"id"`
-	IsLeaf         int64       `json:"is_leaf"`
+	GcjLatitude    api.Float   `json:"gcj_latitude"`
+	GcjLongitude   api.Float   `json:"gcj_longitude"`
+	ID             api.Integer `json:"id"`
+	IsLeaf         api.Integer `json:"is_leaf"`
 	MapLevel       interface{} `json:"map_level"`
-	OrgID          int64       `json:"org_id"`
+	OrgID          api.Integer `json:"org_id"`
 	OrgIndexCode   string      `json:"org_index_code"`
-	OrgIsShow      int64       `json:"org_is_show"`
-	OrgLevel       int64       `json:"org_level"`
+	OrgIsShow      api.Integer `json:"org_is_show"`
+	OrgLevel       api.Integer `json:"org_level"`
 	OrgName        string      `json:"org_name"`
-	SizeChild      int64       `json:"size_child"`
-	UpOrgID        int64       `json:"up_org_id"`
-	Wgs84Latitude  interface{} `json:"wgs84_latitude"`
-	Wgs84Longitude interface{} `json:"wgs84_longitude"`
+	SizeChild      api.Integer `json:"size_child"`
+	UpOrgID        api.Integer `json:"up_org_id"`
+	Wgs84Latitude  api.Float   `json:"wgs84_latitude"`
+	Wgs84Longitude api.Float   `json:"wgs84_longitude"`
 }
 
 func (e *ResultData) IsValid() error {

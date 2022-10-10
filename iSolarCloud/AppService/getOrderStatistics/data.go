@@ -1,6 +1,7 @@
 package getOrderStatistics
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -23,9 +24,9 @@ func (rd RequestData) Help() string {
 
 
 type ResultData   struct {
-	ProcessedCount  int64 `json:"processed_count"`
-	ProcessingCount int64 `json:"processing_count"`
-	UnProcessCount  int64 `json:"un_process_count"`
+	ProcessedCount  api.Integer `json:"processed_count"`
+	ProcessingCount api.Integer `json:"processing_count"`
+	UnProcessCount  api.Integer `json:"un_process_count"`
 }
 
 func (e *ResultData) IsValid() error {

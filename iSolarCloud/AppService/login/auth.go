@@ -81,7 +81,9 @@ func (e *EndPoint) Login(auth *SunGrowAuth) error {
 		}
 
 		if auth.Force {
-			e.SetTokenInvalid()
+			e.SetCacheTimeout(time.Second)
+			e.SetTokenInvalid()	// e.CacheFilename()
+			// e.RemoveCache
 		}
 
 		if e.IsTokenValid() {
@@ -101,7 +103,8 @@ func (e *EndPoint) Login(auth *SunGrowAuth) error {
 			break
 		}
 
-		e.Auth.lastLogin, _ = time.Parse(LastLoginDateFormat, e.Response.ResultData.LoginLastDate)
+		e.Auth.lastLogin = e.Response.ResultData.LoginLastDate.Time
+		// e.Auth.lastLogin, _ = time.Parse(LastLoginDateFormat, e.Response.ResultData.LoginLastDate)
 		e.Auth.newToken = true
 
 		e.Error = e.saveToken()
@@ -220,8 +223,10 @@ func (e *EndPoint) readTokenFile() error {
 		}
 
 		// 2022-02-17 14:27:03
-		e.Auth.lastLogin, e.Error = time.Parse(LastLoginDateFormat, e.Response.ResultData.LoginLastDate)
-		if e.Error != nil {
+		// e.Auth.lastLogin, e.Error = time.Parse(LastLoginDateFormat, e.Response.ResultData.LoginLastDate)
+		// if e.Error != nil {
+		e.Auth.lastLogin = e.Response.ResultData.LoginLastDate.Time
+		if e.Response.ResultData.LoginLastDate.IsZero() {
 			e.Auth.newToken = true
 			e.Error = nil
 			break
@@ -237,6 +242,21 @@ func (e *EndPoint) saveToken() error {
 		e.Auth.TokenFile = e.GetFilePath()
 
 		e.Error = output.FileWrite(e.Auth.TokenFile, e.Response, output.DefaultFileMode)
+		// e.Error = e.ApiWriteDataFile(e.Auth.TokenFile, e.Response.ResultData, 0644)
+		if e.Error != nil {
+			break
+		}
+	}
+
+	return e.Error
+}
+
+// RemoveToken - Removes a token from a file path.
+func (e *EndPoint) RemoveToken() error {
+	for range Only.Once {
+		e.Auth.TokenFile = e.GetFilePath()
+
+		e.Error = output.FileRemove(e.Auth.TokenFile)
 		// e.Error = e.ApiWriteDataFile(e.Auth.TokenFile, e.Response.ResultData, 0644)
 		if e.Error != nil {
 			break

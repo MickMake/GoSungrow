@@ -1,6 +1,7 @@
 package queryAllPsIdAndName
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -22,7 +23,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		PsID   int64  `json:"ps_id"`
+		PsID   api.Integer  `json:"ps_id"`
 		PsName string `json:"ps_name"`
 	} `json:"pageList"`
 }

@@ -26,7 +26,7 @@ type Mqtt struct {
 	pubClient     mqtt.Client
 	clientOptions *mqtt.ClientOptions
 	LastRefresh   time.Time `json:"-"`
-	PsId          int64 `json:"-"`
+	PsId          api.Integer `json:"-"`
 
 	Device Device
 

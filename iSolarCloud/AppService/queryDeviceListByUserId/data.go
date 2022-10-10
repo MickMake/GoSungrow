@@ -1,6 +1,7 @@
 package queryDeviceListByUserId
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -22,7 +23,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	List     []interface{} `json:"list"`
-	RowCount int64         `json:"rowCount"`
+	RowCount api.Integer   `json:"rowCount"`
 }
 
 func (e *ResultData) IsValid() error {

@@ -1,6 +1,7 @@
 package findPsType
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -22,8 +23,8 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	PsType    int64 `json:"ps_type"`
-	SysScheme int64 `json:"sys_scheme"`
+	PsType    api.Integer `json:"ps_type"`
+	SysScheme api.Integer `json:"sys_scheme"`
 }
 
 func (e *ResultData) IsValid() error {

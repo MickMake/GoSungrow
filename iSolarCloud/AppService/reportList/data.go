@@ -1,6 +1,7 @@
 package reportList
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -28,7 +29,7 @@ type ResultData struct {
 		CitySubsidyChargeOriginalUnit        string      `json:"city_subsidy_charge_original_unit"`
 		CitySubsidyChargeTran                string      `json:"city_subsidy_charge_tran"`
 		CitySubsidyChargeUnit                string      `json:"city_subsidy_charge_unit"`
-		Co2Reduce                            float64     `json:"co2_reduce"`
+		Co2Reduce                            api.Float   `json:"co2_reduce"`
 		CountrySubsidyCharge                 string      `json:"country_subsidy_charge"`
 		CountrySubsidyChargeOriginalUnit     string      `json:"country_subsidy_charge_original_unit"`
 		CountrySubsidyChargeTran             string      `json:"country_subsidy_charge_tran"`
@@ -92,12 +93,12 @@ type ResultData struct {
 		ProvinceSubsidyChargeOriginalUnit    string      `json:"province_subsidy_charge_original_unit"`
 		ProvinceSubsidyChargeTran            string      `json:"province_subsidy_charge_tran"`
 		ProvinceSubsidyChargeUnit            string      `json:"province_subsidy_charge_unit"`
-		PsID                                 int64       `json:"ps_id"`
+		PsID                                 api.Integer `json:"ps_id"`
 		SubsidyProfit                        string      `json:"subsidy_profit"`
 		SubsidyProfitOriginalUnit            string      `json:"subsidy_profit_original_unit"`
 		SubsidyProfitTran                    string      `json:"subsidy_profit_tran"`
 		SubsidyProfitUnit                    string      `json:"subsidy_profit_unit"`
-		TimeStamp                            interface{} `json:"time_stamp"`		// Sad that this alternates between string and int64.
+		TimeStamp                            interface{} `json:"time_stamp"`		// Sad that this alternates between string and api.Integer.
 		TotalProfit                          string      `json:"total_profit"`
 		TotalProfitOriginalUnit              string      `json:"total_profit_original_unit"`
 		TotalProfitTran                      string      `json:"total_profit_tran"`
@@ -130,18 +131,18 @@ type ResultData struct {
 		ValleyUsePowerQuantityUnit           string      `json:"valley_use_power_quantity_unit"`
 	} `json:"dataList"`
 	Info []struct {
-		DesignCapacity         float64 `json:"design_capacity"`
-		InstallerPsFaultStatus int64   `json:"installer_ps_fault_status"`
-		OwnerPsFaultStatus     int64   `json:"owner_ps_fault_status"`
-		PsFaultStatus          int64   `json:"ps_fault_status"`
-		PsID                   int64   `json:"ps_id"`
+		DesignCapacity         api.Float `json:"design_capacity"`
+		InstallerPsFaultStatus api.Integer   `json:"installer_ps_fault_status"`
+		OwnerPsFaultStatus     api.Integer   `json:"owner_ps_fault_status"`
+		PsFaultStatus          api.Integer   `json:"ps_fault_status"`
+		PsID                   api.Integer   `json:"ps_id"`
 		PsName                 string  `json:"ps_name"`
-		PsStatus               int64   `json:"ps_status"`
-		PsType                 int64   `json:"ps_type"`
+		PsStatus               api.Integer   `json:"ps_status"`
+		PsType                 api.Integer   `json:"ps_type"`
 		PsTypeName             string  `json:"ps_type_name"`
-		SysScheme              int64   `json:"sys_scheme"`
+		SysScheme              api.Integer   `json:"sys_scheme"`
 		SysSchemeName          string  `json:"sys_scheme_name"`
-		ValidFlag              int64   `json:"valid_flag"`
+		ValidFlag              api.Integer   `json:"valid_flag"`
 	} `json:"info"`
 	MinDateID interface{} `json:"min_date_id"`
 	Total     []struct {
@@ -210,7 +211,7 @@ type ResultData struct {
 		ProvinceSubsidyChargeOriginalUnit    string `json:"province_subsidy_charge_original_unit"`
 		ProvinceSubsidyChargeTran            string `json:"province_subsidy_charge_tran"`
 		ProvinceSubsidyChargeUnit            string `json:"province_subsidy_charge_unit"`
-		PsID                                 int64  `json:"ps_id"`
+		PsID                                 api.Integer  `json:"ps_id"`
 		SubsidyProfit                        string `json:"subsidy_profit"`
 		SubsidyProfitOriginalUnit            string `json:"subsidy_profit_original_unit"`
 		SubsidyProfitTran                    string `json:"subsidy_profit_tran"`

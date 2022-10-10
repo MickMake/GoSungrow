@@ -1,6 +1,7 @@
 package getUserPsOrderList
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -21,11 +22,11 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	CurPage    int64         `json:"curPage"`
+	CurPage    api.Integer   `json:"curPage"`
 	IsMore     interface{}   `json:"isMore"`
 	PageList   []interface{} `json:"pageList"`
-	RowCount   int64         `json:"rowCount"`
-	Size       int64         `json:"size"`
+	RowCount   api.Integer   `json:"rowCount"`
+	Size       api.Integer   `json:"size"`
 	StartIndex interface{}   `json:"startIndex"`
 	TotalPage  interface{}   `json:"totalPage"`
 }

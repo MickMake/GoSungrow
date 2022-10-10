@@ -25,11 +25,11 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		TemplateID   int64  `json:"template_id"`
+		TemplateID   api.Integer  `json:"template_id"`
 		TemplateName string `json:"template_name"`
 		UpdateTime   string `json:"update_time"`
 	} `json:"pageList"`
-	RowCount int64 `json:"rowCount"`
+	RowCount api.Integer `json:"rowCount"`
 }
 
 func (e *ResultData) IsValid() error {

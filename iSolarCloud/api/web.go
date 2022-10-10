@@ -45,7 +45,7 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 	for range Only.Once {
 		w.Error = w.Url.IsValid()
 		if w.Error != nil {
-			w.Error = errors.New("SUNGROW API EndPoint not yet implemented")
+			w.Error = errors.New("Sungrow API EndPoint not yet implemented")
 			fmt.Println(w.Error)
 			break
 		}
@@ -220,8 +220,8 @@ func (w *Web) WebCacheCheck(endpoint EndPoint) bool {
 			ok = false
 			break
 		}
-		if p.FileExists() {
-			ok = true
+		if !p.FileExists() {
+			ok = false
 			break
 		}
 
@@ -230,6 +230,7 @@ func (w *Web) WebCacheCheck(endpoint EndPoint) bool {
 		then = then.Add(duration)
 		now := time.Now()
 		if then.Before(now) {
+			ok = false
 			break
 		}
 

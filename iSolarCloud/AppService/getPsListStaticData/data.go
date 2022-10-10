@@ -1,6 +1,7 @@
 package getPsListStaticData
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -24,27 +25,27 @@ func (rd RequestData) Help() string {
 type ResultData struct {
 	PageList []struct {
 		AreaID                 interface{} `json:"area_id"`
-		DesignCapacity         float64     `json:"design_capacity"`
-		GprsLatitude           interface{} `json:"gprs_latitude"`
-		GprsLongitude          interface{} `json:"gprs_longitude"`
-		InstallDate            string      `json:"install_date"`
-		InstallerPsFaultStatus int64       `json:"installer_ps_fault_status"`
-		Latitude               float64     `json:"latitude"`
+		DesignCapacity         api.Float   `json:"design_capacity"`
+		GprsLatitude           api.Float   `json:"gprs_latitude"`
+		GprsLongitude          api.Float   `json:"gprs_longitude"`
+		InstallDate            api.DateTime      `json:"install_date"`
+		InstallerPsFaultStatus api.Integer `json:"installer_ps_fault_status"`
+		Latitude               api.Float   `json:"latitude"`
 		Location               string      `json:"location"`
-		Longitude              float64     `json:"longitude"`
-		MapLatitude            string      `json:"map_latitude"`
-		MapLongitude           string      `json:"map_longitude"`
-		OwnerPsFaultStatus     int64       `json:"owner_ps_fault_status"`
-		PsFaultStatus          int64       `json:"ps_fault_status"`
-		PsID                   int64       `json:"ps_id"`
+		Longitude              api.Float   `json:"longitude"`
+		MapLatitude            api.Float   `json:"map_latitude"`
+		MapLongitude           api.Float   `json:"map_longitude"`
+		OwnerPsFaultStatus     api.Integer `json:"owner_ps_fault_status"`
+		PsFaultStatus          api.Integer `json:"ps_fault_status"`
+		PsID                   api.Integer `json:"ps_id"`
 		PsName                 string      `json:"ps_name"`
 		PsShortName            string      `json:"ps_short_name"`
-		PsStatus               int64       `json:"ps_status"`
-		PsType                 int64       `json:"ps_type"`
-		ValidFlag              int64       `json:"valid_flag"`
-		WaitAssignOrderCount   int64       `json:"wait_assign_order_count"`
+		PsStatus               api.Integer `json:"ps_status"`
+		PsType                 api.Integer `json:"ps_type"`
+		ValidFlag              api.Integer `json:"valid_flag"`
+		WaitAssignOrderCount   api.Integer `json:"wait_assign_order_count"`
 	} `json:"pageList"`
-	RowCount int64 `json:"rowCount"`
+	RowCount api.Integer `json:"rowCount"`
 }
 
 func (e *ResultData) IsValid() error {

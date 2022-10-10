@@ -1,6 +1,7 @@
 package getModuleLogTaskList
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -21,35 +22,35 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	CurPage  int64       `json:"curPage"`
+	CurPage  api.Integer `json:"curPage"`
 	IsMore   interface{} `json:"isMore"`
 	PageList []struct {
 		BatchID        string      `json:"batch_id"`
-		CommandStatus  int64       `json:"command_status"`
-		CommandType    int64       `json:"command_type"`
+		CommandStatus  api.Integer `json:"command_status"`
+		CommandType    api.Integer `json:"command_type"`
 		CreateTime     string      `json:"create_time"`
 		DeviceCode     string      `json:"device_code"`
 		DeviceModel    interface{} `json:"device_model"`
 		DeviceModelID  interface{} `json:"device_model_id"`
-		ExpireSecond   int64       `json:"expire_second"`
+		ExpireSecond   api.Integer `json:"expire_second"`
 		LogType        string      `json:"log_type"`
 		LoggerCode     string      `json:"logger_code"`
-		OperateUserID  int64       `json:"operate_user_id"`
+		OperateUserID  api.Integer `json:"operate_user_id"`
 		OverTime       string      `json:"over_time"`
 		Remark         string      `json:"remark"`
-		SetCancelNum   int64       `json:"set_cancel_num"`
-		SetFailNum     int64       `json:"set_fail_num"`
-		SetFinishNum   int64       `json:"set_finish_num"`
-		SetOvertimeNum int64       `json:"set_overtime_num"`
-		SetSuccessNum  int64       `json:"set_success_num"`
-		SetTotalNum    int64       `json:"set_total_num"`
+		SetCancelNum   api.Integer `json:"set_cancel_num"`
+		SetFailNum     api.Integer `json:"set_fail_num"`
+		SetFinishNum   api.Integer `json:"set_finish_num"`
+		SetOvertimeNum api.Integer `json:"set_overtime_num"`
+		SetSuccessNum  api.Integer `json:"set_success_num"`
+		SetTotalNum    api.Integer `json:"set_total_num"`
 		Sn             string      `json:"sn"`
-		TaskID         int64       `json:"task_id"`
+		TaskID         api.Integer `json:"task_id"`
 		TaskName       string      `json:"task_name"`
 		UpdateTime     string      `json:"update_time"`
 	} `json:"pageList"`
-	RowCount   int64       `json:"rowCount"`
-	Size       int64       `json:"size"`
+	RowCount   api.Integer `json:"rowCount"`
+	Size       api.Integer `json:"size"`
 	StartIndex interface{} `json:"startIndex"`
 	TotalPage  interface{} `json:"totalPage"`
 }

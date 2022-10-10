@@ -1,6 +1,7 @@
 package getPowerDeviceSetTaskDetailList
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -27,7 +28,7 @@ type ResultData struct {
 	DeviceList     []interface{} `json:"device_list"`
 	PageList       []interface{} `json:"pageList"`
 	PsNameInfoList []interface{} `json:"ps_name_info_list"`
-	RowCount       int64         `json:"rowCount"`
+	RowCount       api.Integer   `json:"rowCount"`
 }
 
 func (e *ResultData) IsValid() error {

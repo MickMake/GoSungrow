@@ -89,8 +89,8 @@ type Devices map[string]DeviceData
 
 type DeviceData struct {
 	DeviceName string `json:"device_name"`
-	DeviceType int64  `json:"device_type"`
-	DeviceUUID int64  `json:"device_uuid"`
+	DeviceType api.Integer  `json:"device_type"`
+	DeviceUUID api.Integer  `json:"device_uuid"`
 	Points     Points `json:"points"`
 }
 

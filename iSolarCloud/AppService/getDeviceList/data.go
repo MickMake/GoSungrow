@@ -1,6 +1,7 @@
 package getDeviceList
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
@@ -11,7 +12,7 @@ const Url = "/v1/devService/getDeviceList"
 const Disabled = false
 
 type RequestData struct {
-	PsId string `json:"ps_id" required:"true"`
+	PsId api.Integer `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -25,52 +26,52 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		AttrID                  int64       `json:"attr_id"`
-		ChannelId               int64       `json:"chnnl_id"`
-		CommandStatus           int64       `json:"command_status"`
-		ConnectState            int64       `json:"connect_state"`
-		DataFlag                int64       `json:"data_flag"`
-		DataFlagDetail          int64       `json:"data_flag_detail"`
+		AttrID                  api.Integer `json:"attr_id"`
+		ChannelId               api.Integer `json:"chnnl_id"`
+		CommandStatus           api.Integer `json:"command_status"`
+		ConnectState            api.Integer `json:"connect_state"`
+		DataFlag                api.Integer `json:"data_flag"`
+		DataFlagDetail          api.Integer `json:"data_flag_detail"`
 		DevFaultStatus          string      `json:"dev_fault_status"`
 		DevStatus               string      `json:"dev_status"`
 		DeviceArea              string      `json:"device_area"`
-		DeviceCode              int64       `json:"device_code"`
+		DeviceCode              api.Integer `json:"device_code"`
 		DeviceFactoryDate       interface{} `json:"device_factory_date"`
-		DeviceID                int64       `json:"device_id"`
+		DeviceID                api.Integer `json:"device_id"`
 		DeviceModel             string      `json:"device_model"`
 		DeviceModelCode         string      `json:"device_model_code"`
-		DeviceModelID           int64       `json:"device_model_id"`
+		DeviceModelID           api.Integer `json:"device_model_id"`
 		DeviceName              string      `json:"device_name"`
 		DeviceProSn             string      `json:"device_pro_sn"`
 		DeviceState             string      `json:"device_state"`
 		DeviceSubType           interface{} `json:"device_sub_type"`
 		DeviceSubTypeName       interface{} `json:"device_sub_type_name"`
-		DeviceType              int64       `json:"device_type"`
+		DeviceType              api.Integer `json:"device_type"`
 		FactoryName             string      `json:"factory_name"`
 		InstallerDevFaultStatus string      `json:"installer_dev_fault_status"`
-		InverterModelType       int64       `json:"inverter_model_type"`
-		IsCountryCheck          int64       `json:"is_country_check"`
-		IsHasFunctionEnum       int64       `json:"is_has_function_enum"`
-		IsHasTheAbility         int64       `json:"is_has_the_ability"`
-		IsInit                  int64       `json:"is_init"`
-		IsReadSet               int64       `json:"is_read_set"`
-		IsReplacing             int64       `json:"is_replacing"`
-		IsReset                 int64       `json:"is_reset"`
-		IsSecond                int64       `json:"is_second"`
-		IsThirdParty            int64       `json:"is_third_party"`
-		ModuleUUID              int64       `json:"module_uuid"`
+		InverterModelType       api.Integer `json:"inverter_model_type"`
+		IsCountryCheck          api.Integer `json:"is_country_check"`
+		IsHasFunctionEnum       api.Integer `json:"is_has_function_enum"`
+		IsHasTheAbility         api.Integer `json:"is_has_the_ability"`
+		IsInit                  api.Integer `json:"is_init"`
+		IsReadSet               api.Integer `json:"is_read_set"`
+		IsReplacing             api.Integer `json:"is_replacing"`
+		IsReset                 api.Integer `json:"is_reset"`
+		IsSecond                api.Integer `json:"is_second"`
+		IsThirdParty            api.Integer `json:"is_third_party"`
+		ModuleUUID              api.Integer `json:"module_uuid"`
 		OwnerDevFaultStatus     string      `json:"owner_dev_fault_status"`
 		P24                     interface{} `json:"p24"`
 		Posx                    interface{} `json:"posx"`
 		Posy                    interface{} `json:"posy"`
-		PsID                    int64       `json:"ps_id"`
+		PsID                    api.Integer `json:"ps_id"`
 		PsKey                   string      `json:"ps_key"`
-		RelState                int64       `json:"rel_state"`
+		RelState                api.Integer `json:"rel_state"`
 		Sn                      string      `json:"sn"`
 		TypeName                string      `json:"type_name"`
-		UUID                    int64       `json:"uuid"`
+		UUID                    api.Integer `json:"uuid"`
 	} `json:"pageList"`
-	RowCount int64 `json:"rowCount"`
+	RowCount api.Integer `json:"rowCount"`
 }
 
 func (e *ResultData) IsValid() error {

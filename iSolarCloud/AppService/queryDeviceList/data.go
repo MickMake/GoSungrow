@@ -13,7 +13,7 @@ const Url = "/v1/devService/queryDeviceList"
 const Disabled = false
 
 type RequestData struct {
-	PsId string `json:"ps_id" required:"true"`
+	PsId api.Integer `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -27,15 +27,15 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	DevCountByStatusMap struct {
-		FaultCount   int64 `json:"fault_count" PointId:"fault_count" PointType:""`
-		OfflineCount int64 `json:"offline_count" PointId:"offline_count" PointType:""`
-		RunCount     int64 `json:"run_count" PointId:"run_count" PointType:""`
-		WarningCount int64 `json:"warning_count" PointId:"warning_count" PointType:""`
+		FaultCount   api.Integer `json:"fault_count" PointId:"fault_count" PointType:""`
+		OfflineCount api.Integer `json:"offline_count" PointId:"offline_count" PointType:""`
+		RunCount     api.Integer `json:"run_count" PointId:"run_count" PointType:""`
+		WarningCount api.Integer `json:"warning_count" PointId:"warning_count" PointType:""`
 	} `json:"dev_count_by_status_map"`
-	DevCountByTypeMap map[string]int64 `json:"dev_count_by_type_map"`
+	DevCountByTypeMap map[string]api.Integer `json:"dev_count_by_type_map"`
 	// DevCountByTypeMap struct {
-	// 	One4 int64 `json:"14"`
-	// 	Two2 int64 `json:"22"`
+	// 	One4 api.Integer `json:"14"`
+	// 	Two2 api.Integer `json:"22"`
 	// } `json:"dev_count_by_type_map"`
 	DevTypeDefinition map[string]string `json:"dev_type_definition"`
 	// DevTypeDefinition struct {
@@ -89,84 +89,84 @@ type ResultData struct {
 	// 	Nine9  string `json:"99"`
 	// } `json:"dev_type_definition"`
 	PageList []struct {
-		AlarmCount              int64       `json:"alarm_count" PointId:"alarm_count" PointType:""`
-		ChannelId               int64       `json:"chnnl_id" PointId:"channel_id" PointType:""`
-		CommandStatus           int64       `json:"command_status" PointId:"command_status" PointType:""`
-		ComponentAmount         int64       `json:"component_amount" PointId:"component_amount" PointType:""`
-		DataFlag                int64       `json:"data_flag" PointId:"data_flag" PointType:""`
-		DataFlagDetail          int64       `json:"data_flag_detail" PointId:"data_flag_detail" PointType:""`
+		AlarmCount              api.Integer `json:"alarm_count" PointId:"alarm_count" PointType:""`
+		ChannelId               api.Integer `json:"chnnl_id" PointId:"channel_id" PointType:""`
+		CommandStatus           api.Integer `json:"command_status" PointId:"command_status" PointType:""`
+		ComponentAmount         api.Integer `json:"component_amount" PointId:"component_amount" PointType:""`
+		DataFlag                api.Integer `json:"data_flag" PointId:"data_flag" PointType:""`
+		DataFlagDetail          api.Integer `json:"data_flag_detail" PointId:"data_flag_detail" PointType:""`
 		DeviceArea              string      `json:"device_area" PointId:"device_area" PointType:""`
 		DeviceAreaName          string      `json:"device_area_name" PointId:"device_area_name" PointType:""`
-		DeviceCode              int64       `json:"device_code" PointId:"device_code" PointType:""`
-		DeviceID                int64       `json:"device_id" PointId:"device_id" PointType:""`
+		DeviceCode              api.Integer `json:"device_code" PointId:"device_code" PointType:""`
+		DeviceID                api.Integer `json:"device_id" PointId:"device_id" PointType:""`
 		DeviceModelCode         string      `json:"device_model_code" PointId:"device_model_code" PointType:""`
 		DeviceModelID           string      `json:"device_model_id" PointId:"device_model_id" PointType:""`
 		DeviceName              string      `json:"device_name" PointId:"device_name" PointType:""`
-		DeviceStatus            int64       `json:"device_status" PointId:"device_status" PointType:""`
-		DeviceType              int64       `json:"device_type" PointId:"device_type" PointType:""`
-		FaultCount              int64       `json:"fault_count" PointId:"fault_count" PointType:""`
+		DeviceStatus            api.Integer `json:"device_status" PointId:"device_status" PointType:""`
+		DeviceType              api.Integer `json:"device_type" PointId:"device_type" PointType:""`
+		FaultCount              api.Integer `json:"fault_count" PointId:"fault_count" PointType:""`
 		FaultStatus             string      `json:"fault_status" PointId:"fault_status" PointType:""`
 		FunctionEnum            string      `json:"function_enum" PointId:"function_enum" PointType:""`
-		InstallerAlarmCount     int64       `json:"installer_alarm_count" PointId:"installer_alarm_count" PointType:""`
-		InstallerDevFaultStatus int64       `json:"installer_dev_fault_status" PointId:"installer_dev_fault_status" PointType:""`
-		InstallerFaultCount     int64       `json:"installer_fault_count" PointId:"installer_fault_count" PointType:""`
-		InverterModelType       int64       `json:"inverter_model_type" PointId:"inverter_model_type" PointType:""`
-		IsDeveloper             string      `json:"is_developer" PointId:"is_developer" PointType:""`
-		IsG2point5Module        int64       `json:"is_g2point5_module" PointId:"is_g2point5_module" PointType:""`
-		IsInit                  int64       `json:"is_init" PointId:"is_init" PointType:""`
-		IsSecond                int64       `json:"is_second" PointId:"is_second" PointType:""`
-		IsSupportParamset       int64       `json:"is_support_paramset" PointId:"is_support_paramset" PointType:""`
+		InstallerAlarmCount     api.Integer `json:"installer_alarm_count" PointId:"installer_alarm_count" PointType:""`
+		InstallerDevFaultStatus api.Integer `json:"installer_dev_fault_status" PointId:"installer_dev_fault_status" PointType:""`
+		InstallerFaultCount     api.Integer `json:"installer_fault_count" PointId:"installer_fault_count" PointType:""`
+		InverterModelType       api.Integer `json:"inverter_model_type" PointId:"inverter_model_type" PointType:""`
+		IsDeveloper             api.Bool    `json:"is_developer" PointId:"is_developer" PointType:""`
+		IsG2point5Module        api.Bool    `json:"is_g2point5_module" PointId:"is_g2point5_module" PointType:""`
+		IsInit                  api.Bool    `json:"is_init" PointId:"is_init" PointType:""`
+		IsSecond                api.Bool    `json:"is_second" PointId:"is_second" PointType:""`
+		IsSupportParamset       api.Bool    `json:"is_support_paramset" PointId:"is_support_paramset" PointType:""`
 		NodeTimestamps          interface{} `json:"node_timestamps" PointId:"node_timestamps" PointType:""`
-		OwnerAlarmCount         int64       `json:"owner_alarm_count" PointId:"owner_alarm_count" PointType:""`
-		OwnerDevFaultStatus     int64       `json:"owner_dev_fault_status" PointId:"owner_dev_fault_status" PointType:""`
-		OwnerFaultCount         int64       `json:"owner_fault_count" PointId:"owner_fault_count" PointType:""`
+		OwnerAlarmCount         api.Integer `json:"owner_alarm_count" PointId:"owner_alarm_count" PointType:""`
+		OwnerDevFaultStatus     api.Integer `json:"owner_dev_fault_status" PointId:"owner_dev_fault_status" PointType:""`
+		OwnerFaultCount         api.Integer `json:"owner_fault_count" PointId:"owner_fault_count" PointType:""`
 		PointData               PointData   `json:"point_data"`
 		Points                  interface{} `json:"points" PointId:"points" PointType:""`
 		PsTimezoneInfo          struct {
-			IsDst    string `json:"is_dst"`
-			TimeZone string `json:"time_zone"`
+			IsDst    api.Bool `json:"is_dst"`
+			TimeZone string   `json:"time_zone"`
 		} `json:"psTimezoneInfo"`
-		PsID                    int64       `json:"ps_id" PointId:"ps_id" PointType:""`
+		PsID                    api.Integer `json:"ps_id" PointId:"ps_id" PointType:""`
 		PsKey                   string      `json:"ps_key" PointId:"ps_key" PointType:""`
-		RelState                int64       `json:"rel_state" PointId:"rel_state" PointType:""`
+		RelState                api.Integer `json:"rel_state" PointId:"rel_state" PointType:""`
 		Sn                      string      `json:"sn" PointId:"sn" PointType:""`
-		StringAmount            int64       `json:"string_amount" PointId:"string_amount" PointType:""`
+		StringAmount            api.Integer `json:"string_amount" PointId:"string_amount" PointType:""`
 		TypeName                string      `json:"type_name" PointId:"type_name" PointType:""`
 		UnitName                interface{} `json:"unit_name" PointId:"unit_name" PointType:""`
 		UUID                    string      `json:"uuid" PointId:"uuid" PointType:""`
 		UUIDIndexCode           string      `json:"uuid_index_code" PointId:"uuid_index_code" PointType:""`
 	} `json:"pageList"`
-	RowCount int64 `json:"rowCount"`
+	RowCount api.Integer `json:"rowCount"`
 }
 
 type PointData []PointStruct
 type PointStruct struct {
-	CodeID                 int64  `json:"code_id"`
-	CodeIDOrderID          string `json:"code_id_order_id"`
-	CodeName               string `json:"code_name"`
-	DevPointLastUpdateTime string `json:"dev_point_last_update_time"`
-	IsPlatformDefaultUnit  int64  `json:"is_platform_default_unit"`
-	IsShow                 int64  `json:"is_show"`
-	OrderID                int64  `json:"order_id"`
-	OrderNum               int64  `json:"order_num"`
-	PointGroupID           int64  `json:"point_group_id"`
-	PointGroupIDOrderID    string `json:"point_group_id_order_id"`
-	PointGroupName         string `json:"point_group_name"`
-	PointID                int64  `json:"point_id"`
-	PointName              string `json:"point_name"`
-	PointSign              string `json:"point_sign"`
-	Relate                 int64  `json:"relate"`
-	TimeStamp              string `json:"time_stamp"`
-	Unit                   string `json:"unit"`
-	ValIsFixd              string `json:"val_is_fixd"`
-	ValidSize              int64  `json:"valid_size"`
-	Value                  string `json:"value"`
-	ValueDescription       string `json:"value_description"`
+	CodeID                 api.Integer `json:"code_id"`
+	CodeIDOrderID          string      `json:"code_id_order_id"`
+	CodeName               string      `json:"code_name"`
+	DevPointLastUpdateTime string      `json:"dev_point_last_update_time"`
+	IsPlatformDefaultUnit  api.Bool    `json:"is_platform_default_unit"`
+	IsShow                 api.Bool    `json:"is_show"`
+	OrderID                api.Integer `json:"order_id"`
+	OrderNum               api.Integer `json:"order_num"`
+	PointGroupID           api.Integer `json:"point_group_id"`
+	PointGroupIDOrderID    string      `json:"point_group_id_order_id"`
+	PointGroupName         string      `json:"point_group_name"`
+	PointID                api.Integer `json:"point_id"`
+	PointName              string      `json:"point_name"`
+	PointSign              string      `json:"point_sign"`
+	Relate                 api.Integer `json:"relate"`
+	TimeStamp              string      `json:"time_stamp"`
+	Unit                   string      `json:"unit"`
+	ValIsFixd              string      `json:"val_is_fixd"`
+	ValidSize              api.Integer `json:"valid_size"`
+	Value                  api.Float   `json:"value"`
+	ValueDescription       string      `json:"value_description"`
 }
 
 // type VirtualPointStruct struct {
 // 	api.DataEntry
-// 	ValueFloat float64
+// 	ValueFloat api.Float
 // }
 
 
@@ -229,25 +229,52 @@ func (e *EndPoint) GetDataTable() output.Table {
 		_ = table.SetHeader(
 			"Date",
 			"Point Id",
+			// "Parents",
 			"Group Name",
 			"Description",
 			"Value",
 			"Unit",
 		)
 
-		for _, d := range e.Response.ResultData.PageList {
-			for _, p := range d.PointData {
-				p.Value, p.Unit = api.DivideByThousandIfRequired(p.Value, p.Unit)
+		data := e.GetData()
+
+		for _, p := range data.Order {
+			entries := data.DataPoints[p]
+			for _, de := range entries {
+				if (de.Parent.Key == "virtual1") ||
+					(de.Point.GroupName == "virtual1") ||
+					(de.Parent.PsId == "virtual1") ||
+					(de.Point.Unit == "binary") {
+					fmt.Sprintf("")
+				}
 				_ = table.AddRow(
-					api.NewDateTime(p.TimeStamp).PrintFull(),
-					api.NameDevicePointInt(d.PsKey, p.PointID),
-					p.PointGroupName,
-					p.PointName,
-					p.Value,
-					p.Unit,
+					de.Date.Format(api.DtLayout),
+					// api.NameDevicePointInt(de.Point.Parents, p.PointID.Value()),
+					// de.Point.Id,
+					p,
+					// de.Point.Parents.String(),
+					de.Point.GroupName,
+					de.Point.Name,
+					de.Value,
+					de.Point.Unit,
 				)
 			}
 		}
+
+		// for _, d := range e.Response.ResultData.PageList {
+		// 	for _, p := range d.PointData {
+		// 		// p.Value, p.Unit = api.DivideByThousandIfRequired(p.Value, p.Unit)
+		// 		uv := api.SetUnitValueFloat(p.Value.Value(), p.Unit)
+		// 		_ = table.AddRow(
+		// 			api.NewDateTime(p.TimeStamp).PrintFull(),
+		// 			api.NameDevicePointInt(d.PsKey, p.PointID.Value()),
+		// 			p.PointGroupName,
+		// 			p.PointName,
+		// 			uv.Value(),
+		// 			uv.Unit(),
+		// 		)
+		// 	}
+		// }
 
 		table.InitGraph(output.GraphRequest {
 			Title:        "",
@@ -310,16 +337,17 @@ func (e *EndPoint) GetData() api.DataMap {
 		//
 		// var TotalEnergyConsumption VirtualPointStruct
 
-		entries.StructToPoints(e.Response.ResultData.DevCountByStatusMap, "queryDeviceList." + e.Request.PsId + ".status", e.Request.PsId, time.Time{})
+		entries.StructToPoints(e.Response.ResultData.DevCountByStatusMap, "queryDeviceList." + e.Request.PsId.String() + ".status", e.Request.PsId.String(), time.Time{})
 
 		for _, d := range e.Response.ResultData.PageList {
-			name := fmt.Sprintf("queryDeviceList.%d", d.PsID)
-			entries.StructToPoints(d, name, e.Request.PsId, time.Time{})
+			name := fmt.Sprintf("queryDeviceList.%s", d.PsKey)
+			entries.StructToPoints(d, name, d.PsKey, time.Time{})
 
 			for _, p := range d.PointData {
-				pid := api.SetPointInt(p.PointID)
-				uv := api.CreateUnitValue(p.Value, p.Unit)
-				name2 := fmt.Sprintf("queryDeviceList.%s.PointData.%s", d.PsKey, pid)
+				pid := api.SetPointInt(p.PointID.Value())
+				uv := api.SetUnitValueFloat(p.Value.Value(), p.Unit)
+				// name2 := fmt.Sprintf("%s.PointData.%s", name, pid)
+				name2 := fmt.Sprintf("%s.PointData", name)
 				entries.AddUnitValue(name2, d.PsKey, pid, p.PointName, api.NewDateTime(p.TimeStamp), uv)
 
 				// Handle virtual results.
@@ -450,7 +478,7 @@ func (e *EndPoint) GetData() api.DataMap {
 
 		// Add virtual entries.
 		// ts := ret.Entries[0].Date
-		// var value float64
+		// var value api.Float
 
 		entries.FromRefAddFloat("pv_self_consumption",
 			api.VirtualPsId,"pv_daily_yield", "",
@@ -530,165 +558,3 @@ func (e *EndPoint) GetData() api.DataMap {
 
 	return entries
 }
-
-// func (ref *EntryMap) getFloatValue(entry string) float64 {
-// 	return (*ref)[entry].ValueFloat
-// }
-//
-// func lowerUpper(lower api.DataEntry, upper api.DataEntry) float64 {
-// 	if lower.ValueFloat > 0 {
-// 		return 0 - lower.ValueFloat
-// 	}
-// 	return upper.ValueFloat
-// }
-//
-// func getPercent(value api.DataEntry, max api.DataEntry) float64 {
-// 	if max.ValueFloat == 0 {
-// 		return 0
-// 	}
-// 	return (value.ValueFloat / max.ValueFloat) * 100
-// }
-
-
-// func addState(now api.DateTime, point string, name string, state bool, index int) api.DataEntry {
-// 	return add(now, "virtual", point, name, api.UnitValue{ Value: fmt.Sprintf("%v", state), Unit: "binary"}, index)
-// }
-//
-// func addValue(now api.DateTime, point string, name string, value string, unit string, index int) api.DataEntry {
-// 	return add(now, "virtual", point, name, api.UnitValue{ Value: value, Unit: unit}, index)
-//
-// 	// vt := api.GetPoint(psId, point)
-// 	// if !vt.Valid {
-// 	// 	vt = &api.PointStruct{
-// 	// 		PsKey:       psId,
-// 	// 		Id:          point,
-// 	// 		Description: name,
-// 	// 		Unit:        "",
-// 	// 		Type:        "PointTypeInstant",
-// 	// 	}
-// 	// }
-// 	// return api.DataEntry {
-// 	// 	Date:           now,
-// 	// 	PointId:        api.NameDevicePoint(psId, point),
-// 	// 	PointGroupName: "Summary",
-// 	// 	PointName:      name,
-// 	// 	Value:          value,
-// 	// 	Unit:           "",
-// 	// 	ValueType:      vt,
-// 	// 	Index:          index,
-// 	// }
-// }
-//
-// func addIntValue(now api.DateTime, point string, name string, value int64, unit string, index int) api.DataEntry {
-// 	return add(now, "virtual", point, name, api.UnitValue{ Value: strconv.FormatInt(value, 10), Unit: unit }, index)
-// }
-//
-// func addFloatValue(now api.DateTime, point string, name string, value float64, unit string, index int) api.DataEntry {
-// 	return add(now, "virtual", point, name, api.UnitValue{ Value: api.Float64ToString(value), Unit: unit }, index)
-// }
-//
-// func addFloatValue(ref api.DataEntry, psId string, point string, name string, index int) api.DataEntry {
-// 	ref.PointId = psId
-// 	ref.PointName = point
-// 	return add(now, "virtual", point, name, api.UnitValue{ Value: api.Float64ToString(value), Unit: unit }, index)
-// }
-//
-// func addVirtualState(ref api.DataEntry, point string, name string) api.DataEntry {
-//
-// 	return api.DataEntry {
-// 		Date:           ref.Date,
-// 		PointId:        api.NameDevicePoint("virtual", point),
-// 		PointGroupName: "Virtual",
-// 		PointName:      name,
-// 		Value:          fmt.Sprintf("%v", isActive(ref.ValueFloat)),
-// 		ValueFloat:     0,
-// 		Unit:           "binary",
-// 		ValueType:      &api.Point {
-// 			PsKey:       "virtual",
-// 			Id:          point,
-// 			Description: name,
-// 			Unit:        "binary",
-// 		},
-// 		Index:          0,
-// 	}
-// }
-//
-// func addVirtualValue(ref api.DataEntry, point string, name string, value float64) api.DataEntry {
-// 	return api.DataEntry {
-// 		Date:           ref.Date,
-// 		PointId:        api.NameDevicePoint("virtual", point),
-// 		PointGroupName: "Virtual",
-// 		PointName:      name,
-// 		Value:          api.Float64ToString(value),
-// 		ValueFloat:     value,
-// 		Unit:           ref.Unit,
-// 		ValueType:      &api.Point {
-// 			PsKey:       "virtual",
-// 			Id:          point,
-// 			Description: name,
-// 			Unit:        ref.Unit,
-// 		},
-// 		Index:          0,
-// 	}
-// }
-//
-// func addVirtualAlias(ref api.DataEntry, point string, name string) api.DataEntry {
-// 	ref.PointId = api.NameDevicePoint("virtual", point)
-// 	ref.PointGroupName = "Virtual"
-// 	ref.PointName = name
-// 	ref.ValueType.PsKey = "virtual"
-// 	ref.ValueType.Description = name
-// 	ref.ValueType.Id = point
-// 	ref.Index = 0
-//
-// 	return ref
-// }
-//
-// func add(now api.DateTime, psId string, point string, name string, value api.UnitValue) api.DataEntry {
-// 	vt := api.GetPoint(psId, point)
-// 	if !vt.Valid {
-// 		vt = &api.Point{
-// 			PsKey:       psId,
-// 			Id:          point,
-// 			Description: name,
-// 			Unit:        value.Unit,
-// 			Type:        "PointTypeInstant",
-// 		}
-// 	}
-// 	return api.DataEntry {
-// 		Date:           now,
-// 		PointId:        api.NameDevicePoint(psId, point),
-// 		PointGroupName: "Virtual",
-// 		PointName:      name,
-// 		Value:          value.Value,
-// 		Unit:           value.Unit,
-// 		ValueType:      vt,
-// 		Index:          0,
-// 	}
-// }
-//
-// func addState(now api.DateTime, point string, name string, state bool, index int) api.DataEntry {
-// 	return api.DataEntry {
-// 		Date:           now,
-// 		PointId:        api.NameDevicePoint("virtual", point),
-// 		PointGroupName: "Virtual",
-// 		PointName:      name,
-// 		Value:          fmt.Sprintf("%v", state),
-// 		Unit:           "binary",
-// 		ValueType: &api.PointStruct{
-// 			PsKey:       "virtual",
-// 			Id:          point,
-// 			Description: name,
-// 			Unit:        "binary",
-// 			Type:        "PointTypeInstant",
-// 		},
-// 		Index: index,
-// 	}
-// }
-//
-// func isActive(value float64) bool {
-// 	if (value > 0.01) || (value < -0.01) {
-// 		return true
-// 	}
-// 	return false
-// }

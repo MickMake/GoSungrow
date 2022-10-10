@@ -12,7 +12,7 @@ const Url = "/v1/powerStationService/getPsDetail"
 const Disabled = false
 
 type RequestData struct {
-	PsId string `json:"ps_id" required:"true"`
+	PsId api.Integer `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -27,16 +27,16 @@ func (rd RequestData) Help() string {
 type ResultData struct {
 	ActualEnergy          []string      `json:"actual_energy"`
 	ActualEnergyUnit      string        `json:"actual_energy_unit"`
-	AlarmCount            int64         `json:"alarm_count"`
+	AlarmCount            api.Integer   `json:"alarm_count"`
 	AreaID                interface{}   `json:"area_id"`
-	AreaType              string        `json:"area_type"`
-	BuildDate             string        `json:"build_date"`
+	AreaType              api.Integer   `json:"area_type"`
+	BuildDate             api.DateTime  `json:"build_date"`
 	Co2Reduce             api.UnitValue `json:"co2_reduce"`
 	Co2ReduceTotal        api.UnitValue `json:"co2_reduce_total"   PointId:"co2_reduce_total" PointType:"PointTypeTotal"`
 	CoalReduce            api.UnitValue `json:"coal_reduce"`
 	CoalReduceTotal       api.UnitValue `json:"coal_reduce_total"   PointId:"coal_reduce_total" PointType:"PointTypeTotal"`
 	ConnectGrid           string        `json:"connect_grid"`
-	ConnectType           int64         `json:"connect_type"`
+	ConnectType           api.Integer   `json:"connect_type"`
 	ContactPerson         string        `json:"contact_person"`
 	CurrPower             api.UnitValue `json:"curr_power"` // Pv Power
 	DataLastUpdateTime    string        `json:"data_last_update_time"`
@@ -46,32 +46,32 @@ type ResultData struct {
 	DesignCapacityBattery api.UnitValue `json:"design_capacity_battery"`
 	DiagramURL            string        `json:"diagram_url"`
 	EnergyScheme          interface{}   `json:"energy_scheme"`
-	ExpectInstallDate     string        `json:"expect_install_date"`
-	FaultCount            int64         `json:"fault_count"`
+	ExpectInstallDate     api.DateTime  `json:"expect_install_date"`
+	FaultCount            api.Integer   `json:"fault_count"`
 	FaultSendType         string        `json:"fault_send_type"`
-	GcjLatitude           string        `json:"gcj_latitude"`
-	GcjLongitude          string        `json:"gcj_longitude"`
-	GprsLatitude          string        `json:"gprs_latitude"`
-	GprsLongitude         string        `json:"gprs_longitude"`
-	HasAmmeter            int64         `json:"has_ammeter"`
+	GcjLatitude           api.Float     `json:"gcj_latitude"`
+	GcjLongitude          api.Float     `json:"gcj_longitude"`
+	GprsLatitude          api.Float     `json:"gprs_latitude"`
+	GprsLongitude         api.Float     `json:"gprs_longitude"`
+	HasAmmeter            api.Integer   `json:"has_ammeter"`
 	Images                []struct {
-		FileID      int64       `json:"file_id"`
-		ID          int64       `json:"id"`
-		PicLanguage int64       `json:"pic_language"`
-		PicType     int64       `json:"pic_type"`
+		FileID      api.Integer `json:"file_id"`
+		ID          api.Integer `json:"id"`
+		PicLanguage api.Integer `json:"pic_language"`
+		PicType     api.Integer `json:"pic_type"`
 		PictureName string      `json:"picture_name"`
 		PictureURL  string      `json:"picture_url"`
 		PsUnitUUID  interface{} `json:"ps_unit_uuid"`
 	} `json:"images"`
-	InstallDate            string        `json:"install_date"`
+	InstallDate            api.DateTime  `json:"install_date"`
 	InstallerPsFaultStatus string        `json:"installer_ps_fault_status"`
-	IsHaveEsInverter       int64         `json:"is_have_es_inverter"`
+	IsHaveEsInverter       api.Integer   `json:"is_have_es_inverter"`
 	IsTransformSystem      string        `json:"is_transform_system"`
-	IsTuv                  int64         `json:"is_tuv"`
-	Latitude               float64       `json:"latitude"`
-	Longitude              float64       `json:"longitude"`
-	MapLatitude            string        `json:"map_latitude"`
-	MapLongitude           string        `json:"map_longitude"`
+	IsTuv                  api.Integer   `json:"is_tuv"`
+	Latitude               api.Float     `json:"latitude"`
+	Longitude              api.Float     `json:"longitude"`
+	MapLatitude            api.Float     `json:"map_latitude"`
+	MapLongitude           api.Float     `json:"map_longitude"`
 	MeterReduce            api.UnitValue `json:"meter_reduce"`
 	MeterReduceTotal       api.UnitValue `json:"meter_reduce_total"   PointId:"meter_reduce_total" PointType:"PointTypeTotal"`
 	MobileTel              string        `json:"mibile_tel"   PointId:"mobile_tel"`
@@ -160,15 +160,15 @@ type ResultData struct {
 	P83128MapVirgin        api.UnitValue `json:"p83128_map_virgin"  PointIgnore:"true"`
 	P83202Map              api.UnitValue `json:"p83202_map"   PointId:"p83202" PointType:""`
 	P83202MapVirgin        api.UnitValue `json:"p83202_map_virgin"  PointIgnore:"true"`
-	PercentPlanYear        float64       `json:"percent_plan_year"`
+	PercentPlanYear        api.Float     `json:"percent_plan_year"`
 	PlanEnergy             []string      `json:"plan_energy"`
 	PlanEnergyUnit         string        `json:"plan_energy_unit"`
 	PlanEnergyYear         api.UnitValue `json:"plan_energy_year"`
 	PowderReduce           api.UnitValue `json:"powder_reduce"`
 	PowderReduceTotal      api.UnitValue `json:"powder_reduce_total"   PointId:"powder_reduce_total" PointType:"PointTypeTotal"`
-	PowerChargeSetted      int64         `json:"power_charge_setted"   PointId:"power_charge_setted" PointType:"PointTypeTotal"`
+	PowerChargeSetted      api.Integer   `json:"power_charge_setted"   PointId:"power_charge_setted" PointType:"PointTypeTotal"`
 	Producer               string        `json:"producer"`
-	PsCountryID            int64         `json:"ps_country_id"`
+	PsCountryID            api.Integer   `json:"ps_country_id"`
 	PsFaultStatus          string        `json:"ps_fault_status"`
 	PsHealthStatus         string        `json:"ps_health_status"`
 	PsHolder               string        `json:"ps_holder"`
@@ -176,38 +176,38 @@ type ResultData struct {
 	PsName                 string        `json:"ps_name"`
 	PsShortName            string        `json:"ps_short_name"`
 	PsState                string        `json:"ps_state"`
-	PsType                 int64         `json:"ps_type"`
+	PsType                 api.Integer   `json:"ps_type"`
 	PsTypeName             string        `json:"ps_type_name"`
 	PsWindLevel            string        `json:"ps_wind_level"`
 	PsWindPos              string        `json:"ps_wind_pos"`
 	RecoreCreateTime       string        `json:"recore_create_time"`
 	ReportType             string        `json:"report_type"`
 	RobotNumSweepCapacity  struct {
-		Num           int64   `json:"num"`
-		SweepCapacity float64 `json:"sweep_capacity"`
+		Num           api.Integer   `json:"num"`
+		SweepCapacity api.Float `json:"sweep_capacity"`
 	} `json:"robot_num_sweep_capacity"`
-	SafeStartDate                 string        `json:"safe_start_date"`
-	SelfConsumptionOffsetReminder int64         `json:"self_consumption_offset_reminder"`
+	SafeStartDate                 api.DateTime  `json:"safe_start_date"`
+	SelfConsumptionOffsetReminder api.Integer   `json:"self_consumption_offset_reminder"`
 	ShippingAddress               string        `json:"shipping_address"`
 	ShippingZipCode               string        `json:"shipping_zip_code"`
 	So2Reduce                     api.UnitValue `json:"so2_reduce"`
 	So2ReduceTotal                api.UnitValue `json:"so2_reduce_total"   PointId:"so2_reduce_total" PointType:"PointTypeTotal"`
 	StorageInverterData           []struct {
 		CommunicationDevSn      string        `json:"communication_dev_sn"`
-		DevFaultStatus          int64         `json:"dev_fault_status"`
-		DevStatus               int64         `json:"dev_status"`
-		DeviceCode              int64         `json:"device_code"`
+		DevFaultStatus          api.Integer   `json:"dev_fault_status"`
+		DevStatus               api.Integer   `json:"dev_status"`
+		DeviceCode              api.Integer   `json:"device_code"`
 		DeviceModelCode         string        `json:"device_model_code"`
 		DeviceName              string        `json:"device_name"`
 		DeviceState             string        `json:"device_state"`
-		DeviceType              int64         `json:"device_type"`
+		DeviceType              api.Integer   `json:"device_type"`
 		DrmStatus               string        `json:"drm_status"`
 		DrmStatusName           string        `json:"drm_status_name"`
 		EnergyFlow              []string      `json:"energy_flow"`
-		HasAmmeter              int64         `json:"has_ammeter"`
-		InstallerDevFaultStatus int64         `json:"installer_dev_fault_status"`
+		HasAmmeter              api.Integer   `json:"has_ammeter"`
+		InstallerDevFaultStatus api.Integer   `json:"installer_dev_fault_status"`
 		InverterSn              string        `json:"inverter_sn"`
-		OwnerDevFaultStatus     int64         `json:"owner_dev_fault_status"`
+		OwnerDevFaultStatus     api.Integer   `json:"owner_dev_fault_status"`
 		P13003Map               api.UnitValue `json:"p13003_map"   PointId:"p13003" PointType:"PointTypeInstant"`
 		P13003MapVirgin         api.UnitValue `json:"p13003_map_virgin"  PointIgnore:"true"`
 		P13011Map               api.UnitValue `json:"p13011_map"   PointId:"p13011" PointType:"PointTypeInstant"`
@@ -229,10 +229,10 @@ type ResultData struct {
 		P13155                  string        `json:"p13155"   PointId:"P13155" PointType:"PointTypeInstant"`
 		PsKey                   string        `json:"ps_key"`
 		UpdateTime              string        `json:"update_time"`
-		UUID                    int64         `json:"uuid"`
+		UUID                    api.Integer   `json:"uuid"`
 	} `json:"storage_inverter_data"`
-	SysScheme            int64         `json:"sys_scheme"`
-	TimeZoneID           int64         `json:"time_zone_id"`
+	SysScheme            api.Integer   `json:"sys_scheme"`
+	TimeZoneID           api.Integer   `json:"time_zone_id"`
 	Timezone             string        `json:"timezone"`
 	TodayEnergy          api.UnitValue `json:"today_energy"   PointId:"today_energy" PointType:"PointTypeDaily"`
 	TodayEnergyVirgin    api.UnitValue `json:"today_energy_virgin"  PointIgnore:"true"`
@@ -245,11 +245,11 @@ type ResultData struct {
 	TreeReduceTotal      api.UnitValue `json:"tree_reduce_total"   PointId:"tree_reduce_total" PointType:"PointTypeTotal"`
 	TuvLevel             string        `json:"tuv_level"`
 	ValidFlag            string        `json:"valid_flag"`
-	WaitAssignOrderCount int64         `json:"wait_assign_order_count"`
+	WaitAssignOrderCount api.Integer   `json:"wait_assign_order_count"`
 	WaterReduce          api.UnitValue `json:"water_reduce"`
 	WaterReduceTotal     api.UnitValue `json:"water_reduce_total"   PointId:"water_reduce_total" PointType:"PointTypeTotal"`
-	WgsLatitude          float64       `json:"wgs_latitude"`
-	WgsLongitude         float64       `json:"wgs_longitude"`
+	WgsLatitude          api.Float     `json:"wgs_latitude"`
+	WgsLongitude         api.Float     `json:"wgs_longitude"`
 	Year                 string        `json:"year"`
 	ZfzyMap              api.UnitValue `json:"zfzy_map"`
 	ZfzyMapVirgin        api.UnitValue `json:"zfzy_map_virgin"  PointIgnore:"true"`
@@ -293,25 +293,25 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		name := fmt.Sprintf("getPsDetail.%s", e.Request.PsId)
+		name := fmt.Sprintf("getPsDetail.%s", e.Request.PsId.String())
 
-		uv := api.CreateUnitValue(e.Response.ResultData.P83012Value, e.Response.ResultData.P83012Unit)
-		entries.AddUnitValue(name + ".p83012", e.Request.PsId, "p83012", "", api.NewDateTime(""), uv)
+		uv := api.SetUnitValueString(e.Response.ResultData.P83012Value, e.Response.ResultData.P83012Unit)
+		entries.AddUnitValue(name + ".p83012", e.Request.PsId.String(), "p83012", "", api.NewDateTime(""), uv)
 
-		uv = api.CreateUnitValue(e.Response.ResultData.P83013Value, e.Response.ResultData.P83013Unit)
-		entries.AddUnitValue(name + ".p83013", e.Request.PsId, "p83013", "", api.NewDateTime(""), uv)
+		uv = api.SetUnitValueString(e.Response.ResultData.P83013Value, e.Response.ResultData.P83013Unit)
+		entries.AddUnitValue(name + ".p83013", e.Request.PsId.String(), "p83013", "", api.NewDateTime(""), uv)
 
-		uv = api.CreateUnitValue(e.Response.ResultData.P83036Value, e.Response.ResultData.P83036Unit)
-		entries.AddUnitValue(name + ".p83036", e.Request.PsId, "p83036", "", api.NewDateTime(""), uv)
+		uv = api.SetUnitValueString(e.Response.ResultData.P83036Value, e.Response.ResultData.P83036Unit)
+		entries.AddUnitValue(name + ".p83036", e.Request.PsId.String(), "p83036", "", api.NewDateTime(""), uv)
 
-		uv = api.CreateUnitValue(e.Response.ResultData.P83016, e.Response.ResultData.P83016Unit)
-		entries.AddUnitValue(name + ".p83016", e.Request.PsId, "p83016", "", api.NewDateTime(""), uv)
+		uv = api.SetUnitValueString(e.Response.ResultData.P83016, e.Response.ResultData.P83016Unit)
+		entries.AddUnitValue(name + ".p83016", e.Request.PsId.String(), "p83016", "", api.NewDateTime(""), uv)
 
-		uv = api.CreateUnitValue(e.Response.ResultData.P83017, e.Response.ResultData.P83017Unit)
-		entries.AddUnitValue(name + ".p83017", e.Request.PsId, "p83017", "", api.NewDateTime(""), uv)
+		uv = api.SetUnitValueString(e.Response.ResultData.P83017, e.Response.ResultData.P83017Unit)
+		entries.AddUnitValue(name + ".p83017", e.Request.PsId.String(), "p83017", "", api.NewDateTime(""), uv)
 
 
-		entries.StructToPoints(e.Response.ResultData, name, e.Request.PsId, time.Time{})
+		entries.StructToPoints(e.Response.ResultData, name, e.Request.PsId.String(), time.Time{})
 
 		for _, sid := range e.Response.ResultData.StorageInverterData {
 			entries.StructToPoints(sid, name + ".StorageInverterData." + sid.PsKey, sid.PsKey, time.Time{})

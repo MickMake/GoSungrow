@@ -2,6 +2,7 @@ package login
 
 import (
 	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"errors"
 	"fmt"
@@ -30,66 +31,66 @@ type ResultData struct {
 	Msg         string `json:"msg"`
 	RemainTimes string `json:"remain_times"`
 
-	AcceptOrderNum         int64       `json:"accept_order_num"`
-	BackgroundColor        int64       `json:"background_color"`
+	AcceptOrderNum         api.Integer `json:"accept_order_num"`
+	BackgroundColor        api.Integer `json:"background_color"`
 	Countryid              string      `json:"countryid"`
 	Createdate             string      `json:"createdate"`
 	Createuserid           string      `json:"createuserid"`
-	CurrentOrderNum        int64       `json:"current_order_num"`
+	CurrentOrderNum        api.Integer `json:"current_order_num"`
 	DisableTime            string      `json:"disable_time"`
 	Email                  string      `json:"email"`
 	Englishname            interface{} `json:"englishname"`
-	GcjLatitude            interface{} `json:"gcj_latitude"`
-	GcjLongitude           interface{} `json:"gcj_longitude"`
+	GcjLatitude            api.Float   `json:"gcj_latitude"`
+	GcjLongitude           api.Float   `json:"gcj_longitude"`
 	ImToken                interface{} `json:"im_token"`
 	IsDST                  string      `json:"isDST"`
 	IsAfsFlag              string      `json:"is_afs_flag"`
-	IsAgreeGdpr            int64       `json:"is_agree_gdpr"`
-	IsAu                   int64       `json:"is_au"`
-	IsCanModifyUserAccount int64       `json:"is_can_modify_user_account"`
+	IsAgreeGdpr            api.Integer `json:"is_agree_gdpr"`
+	IsAu                   api.Integer `json:"is_au"`
+	IsCanModifyUserAccount api.Integer `json:"is_can_modify_user_account"`
 	IsDisableMap           string      `json:"is_disable_map"`
-	IsGdpr                 int64       `json:"is_gdpr"`
-	IsHaveIm               int64       `json:"is_have_im"`
-	IsNewVersion           int64       `json:"is_new_version"`
+	IsGdpr                 api.Integer `json:"is_gdpr"`
+	IsHaveIm               api.Integer `json:"is_have_im"`
+	IsNewVersion           api.Integer `json:"is_new_version"`
 	IsOnline               string      `json:"is_online"`
-	IsOpenProtocol         int64       `json:"is_open_protocol"`
-	IsReceiveNotice        int64       `json:"is_receive_notice"`
-	IsSharePosition        int64       `json:"is_share_position"`
-	IsUploadLocation       int64       `json:"is_upload_location"`
+	IsOpenProtocol         api.Integer `json:"is_open_protocol"`
+	IsReceiveNotice        api.Integer `json:"is_receive_notice"`
+	IsSharePosition        api.Integer `json:"is_share_position"`
+	IsUploadLocation       api.Integer `json:"is_upload_location"`
 	IsUseSungrowBrand      string      `json:"is_use_sungrow_brand"`
-	IsValidMobileEmail     int64       `json:"is_valid_mobile_email"`
+	IsValidMobileEmail     api.Integer `json:"is_valid_mobile_email"`
 	Isdst                  string      `json:"isdst"`
 	Jobs                   interface{} `json:"jobs"`
 	Language               string      `json:"language"`
-	LoginFirstDate         string      `json:"loginFirstDate"`
-	LoginFristDate         string      `json:"loginFristDate"`
-	LoginLastDate          string      `json:"loginLastDate"`
+	LoginFirstDate         api.DateTime      `json:"loginFirstDate"`
+	LoginFirstDate2        api.DateTime      `json:"loginFristDate"`
+	LoginLastDate          api.DateTime      `json:"loginLastDate"`
 	LoginLastIP            string      `json:"loginLastIp"`
-	LoginTimes             int64       `json:"loginTimes"`
+	LoginTimes             api.Integer `json:"loginTimes"`
 	Logo                   interface{} `json:"logo"`
 	LogoHTTPSURL           interface{} `json:"logo_https_url"`
 	MapType                string      `json:"map_type"`
-	MinDate                string      `json:"min_date"`
+	MinDate                api.DateTime      `json:"min_date"`
 	MobileTel              interface{} `json:"mobile_tel"`
 	OrgID                  string      `json:"org_id"`
 	OrgName                string      `json:"org_name"`
 	OrgTimezone            string      `json:"org_timezone"`
-	PasswordIsSimple       int64       `json:"password_is_simple"`
+	PasswordIsSimple       api.Integer `json:"password_is_simple"`
 	PhotoID                interface{} `json:"photo_id"`
 	PhotoURL               interface{} `json:"photo_url"`
 	Privileges             []struct {
-		FatherID        int64       `json:"father_id"`
+		FatherID        api.Integer `json:"father_id"`
 		IconURL         interface{} `json:"icon_url"`
 		IsOpen          interface{} `json:"is_open"`
-		IsThirdPlatform int64       `json:"is_third_platform"`
+		IsThirdPlatform api.Integer `json:"is_third_platform"`
 		MenuCode        string      `json:"menu_code"`
-		MenuLevel       int64       `json:"menu_level"`
+		MenuLevel       api.Integer `json:"menu_level"`
 		MenuName        string      `json:"menu_name"`
 		MenuOrder       interface{} `json:"menu_order"`
 		MenuType        string      `json:"menu_type"`
 		MenuURL         string      `json:"menu_url"`
-		PrivilegeID     int64       `json:"privilege_id"`
-		RoleID          int64       `json:"role_id"`
+		PrivilegeID     api.Integer `json:"privilege_id"`
+		RoleID          api.Integer `json:"role_id"`
 		URLTarget       string      `json:"url_target"`
 		VueIcon         interface{} `json:"vue_icon"`
 		VuePath         interface{} `json:"vue_path"`
@@ -105,11 +106,11 @@ type ResultData struct {
 	Timezoneid                   string        `json:"timezoneid"`
 	Toggleflag                   string        `json:"toggleflag"`
 	Token                        string        `json:"token"`
-	UnlockLaveMinute             int64         `json:"unlock_lave_minute"`
+	UnlockLaveMinute             api.Integer   `json:"unlock_lave_minute"`
 	UploadTime                   interface{}   `json:"upload_time"`
 	UserAccount                  string        `json:"user_account"`
-	UserAccountModifyCount       int64         `json:"user_account_modify_count"`
-	UserAccountModifyRemainTimes int64         `json:"user_account_modify_remain_times"`
+	UserAccountModifyCount       api.Integer   `json:"user_account_modify_count"`
+	UserAccountModifyRemainTimes api.Integer   `json:"user_account_modify_remain_times"`
 	UserDealerOrgCode            interface{}   `json:"user_dealer_org_code"`
 	UserID                       string        `json:"user_id"`
 	UserLevel                    string        `json:"user_level"`
@@ -127,8 +128,8 @@ type ResultData struct {
 	Validflag                    string        `json:"validflag"`
 	Voice                        string        `json:"voice"`
 	Welcometext                  string        `json:"welcometext"`
-	Wgs84Latitude                interface{}   `json:"wgs84_latitude"`
-	Wgs84Longitude               interface{}   `json:"wgs84_longitude"`
+	Wgs84Latitude                api.Float     `json:"wgs84_latitude"`
+	Wgs84Longitude               api.Float     `json:"wgs84_longitude"`
 	WorkTel                      interface{}   `json:"work_tel"`
 }
 
@@ -167,7 +168,7 @@ func (e *EndPoint) IsOnline() string {
 	return e.Response.ResultData.IsOnline
 }
 func (e *EndPoint) LoginLastDate() string {
-	return e.Response.ResultData.LoginLastDate
+	return e.Response.ResultData.LoginLastDate.String()
 }
 func (e *EndPoint) LoginLastIP() string {
 	return e.Response.ResultData.LoginLastIP

@@ -1,6 +1,7 @@
 package getInstallerInfoByDealerOrgCodeOrId
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -31,9 +32,9 @@ type ResultData struct {
 		InstallerEmail    string      `json:"installer_email"`
 		InstallerPhone    string      `json:"installer_phone"`
 		MobleTel          interface{} `json:"moble_tel"`
-		OrgID             int64       `json:"org_id"`
+		OrgID             api.Integer `json:"org_id"`
 		OrgName           string      `json:"org_name"`
-		UserID            int64       `json:"user_id"`
+		UserID            api.Integer `json:"user_id"`
 		UserName          string      `json:"user_name"`
 		UserTelNationCode interface{} `json:"user_tel_nation_code"`
 	} `json:"user_info_list"`

@@ -1,6 +1,7 @@
 package getFaultMsgListWithYYYYMM
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -23,16 +24,16 @@ func (rd RequestData) Help() string {
 
 
 type ResultData   []struct {
-	CreateTime    int64  `json:"create_time"`
+	CreateTime    api.Integer  `json:"create_time"`
 	FaultCode     string `json:"fault_code"`
-	FaultLevel    int64  `json:"fault_level"`
+	FaultLevel    api.Integer  `json:"fault_level"`
 	FaultReason   string `json:"fault_reason"`
-	FaultType     int64  `json:"fault_type"`
-	FaultTypeCode int64  `json:"fault_type_code"`
-	ID            int64  `json:"id"`
-	PsID          int64  `json:"ps_id"`
+	FaultType     api.Integer  `json:"fault_type"`
+	FaultTypeCode api.Integer  `json:"fault_type_code"`
+	ID            api.Integer  `json:"id"`
+	PsID          api.Integer  `json:"ps_id"`
 	PsKey         string `json:"ps_key"`
-	UUID          int64  `json:"uuid"`
+	UUID          api.Integer  `json:"uuid"`
 }
 
 func (e *ResultData) IsValid() error {

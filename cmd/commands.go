@@ -5,8 +5,17 @@ import (
 	"GoSungrow/defaults"
 	"github.com/MickMake/GoUnify/Unify"
 	"github.com/spf13/cobra"
+	"time"
 )
 
+
+//goland:noinspection SpellCheckingInspection
+const (
+	defaultHost      = "https://augateway.isolarcloud.com"
+	defaultApiAppKey = "93D72E60331ABDCDC7B39ADC2D1F32B3"
+
+	defaultTimeout = time.Second * 30
+)
 
 type Cmds struct {
 	Unify  *Unify.Unify
@@ -15,32 +24,12 @@ type Cmds struct {
 	Info   *CmdInfo
 	Mqtt   *CmdMqtt
 
-	// SunGrow *iSolarCloud.SunGrow
-	// Git *mmGit.Git
-	// Mqtt *mmHa.Mqtt
-
 	ConfigDir   string
 	CacheDir    string
 	ConfigFile  string
 	WriteConfig bool
 	Quiet       bool
 	Debug       bool
-	// OutputType  string
-	// OutputFile  string
-	// ApiOutputType string
-
-	// // Google sheets
-	// GoogleSheet       string
-	// GoogleSheetUpdate bool
-	//
-	// // GitHub api
-	// GitRepo     string
-	// GitRepoDir  string
-	// GitUsername string
-	// GitPassword string
-	// GitKeyFile  string
-	// GitToken    string
-	// GitDiffCmd  string
 
 	Args []string
 
@@ -115,4 +104,19 @@ func Execute() error {
 	}
 
 	return err
+}
+
+
+func (ca *Cmds) ProcessArgs(_ *cobra.Command, args []string) error {
+	for range Only.Once {
+		ca.Args = args
+
+		ca.ConfigDir = cmds.Unify.GetConfigDir()
+		ca.ConfigFile = cmds.Unify.GetConfigFile()
+		ca.CacheDir = cmds.Unify.GetCacheDir()
+		ca.Debug = cmds.Unify.Flags.Debug
+		ca.Quiet = cmds.Unify.Flags.Quiet
+	}
+
+	return ca.Error
 }

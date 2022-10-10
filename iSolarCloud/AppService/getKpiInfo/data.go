@@ -32,12 +32,12 @@ type ResultData struct {
 	DisChargeTotalEnergyUnit string        `json:"dis_charge_total_energy_unit"`
 	MonthEnergy              api.UnitValue `json:"month_energy"`
 	OrgName                  string        `json:"org_name"`
-	P83024                   float64       `json:"p83024"`
+	P83024                   api.Float     `json:"p83024"`
 	PercentPlanMonth         string        `json:"percent_plan_month"`
 	PercentPlanYear          string        `json:"percent_plan_year"`
 	PlanEnergy               []string      `json:"plan_energy"`
 	PlanEnergyUnit           string        `json:"plan_energy_unit"`
-	PsCount                  int64         `json:"ps_count"`
+	PsCount                  api.Integer   `json:"ps_count"`
 	TodayEnergy              api.UnitValue `json:"today_energy"`
 	TotalCapcity             api.UnitValue `json:"total_capcity"`
 	TotalDesignCapacity      api.UnitValue `json:"total_design_capacity"`

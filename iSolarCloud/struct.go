@@ -120,19 +120,27 @@ func (sg *SunGrow) GetByJson(endpoint string, request string) api.EndPoint {
 		}
 
 		ret = ret.Call()
+		if !ret.IsError() {
+			break
+		}
+		sg.Error = ret.GetError()
+		if strings.Contains(sg.Error.Error(), "er_token_login_invalid") {
+			_ = sg.ApiRoot.WebCacheRemove(sg.Auth)
+			_ = sg.Auth.RemoveToken()
+			// _ = sg.Auth.ApiRemoveDataFile()
+			break
+		}
 
 		switch {
 			case sg.OutputType.IsNone():
-				if ret.IsError() {
+				if sg.Error != nil {
 					fmt.Println(ret.Help())
-					sg.Error = ret.GetError()
 					break
 				}
 
 			case sg.OutputType.IsRaw():
-				// if ret.IsError() {
+				// if sg.Error != nil {
 				// 	fmt.Println(ret.Help())
-				// 	sg.Error = ret.GetError()
 				// 	break
 				// }
 				if sg.SaveAsFile {
@@ -142,9 +150,8 @@ func (sg *SunGrow) GetByJson(endpoint string, request string) api.EndPoint {
 				fmt.Println(ret.GetJsonData(true))
 
 			case sg.OutputType.IsJson():
-				if ret.IsError() {
+				if sg.Error != nil {
 					fmt.Println(ret.Help())
-					sg.Error = ret.GetError()
 					break
 				}
 				if sg.SaveAsFile {
@@ -154,9 +161,8 @@ func (sg *SunGrow) GetByJson(endpoint string, request string) api.EndPoint {
 				fmt.Println(ret.GetJsonData(false))
 
 			default:
-				if ret.IsError() {
+				if sg.Error != nil {
 					fmt.Println(ret.Help())
-					sg.Error = ret.GetError()
 					break
 				}
 		}
@@ -187,9 +193,15 @@ func (sg *SunGrow) GetByStruct(endpoint string, request interface{}, cache time.
 		ret = ret.SetCacheTimeout(cache)
 
 		ret = ret.Call()
-		if ret.IsError() {
-			sg.Error = ret.GetError()
+		if !ret.IsError() {
 			break
+		}
+
+		sg.Error = ret.GetError()
+		if strings.Contains(sg.Error.Error(), "er_token_login_invalid") {
+			_ = sg.ApiRoot.WebCacheRemove(sg.Auth)
+			_ = sg.Auth.RemoveToken()
+			// _ = sg.Auth.ApiRemoveDataFile()
 		}
 	}
 
@@ -238,68 +250,6 @@ func (sg *SunGrow) AreaNotExists(area string) bool {
 	return sg.Areas.NotExists(area)
 }
 
-// func (sg *SunGrow) Output(endpoint api.EndPoint, table *output.Table, graphFilter string) error {
-// 	for range Only.Once {
-// 		switch {
-// 			case sg.OutputType.IsNone():
-//
-// 			case sg.OutputType.IsTable():
-// 				if sg.
-// 				table.Print()
-//
-// 			case sg.OutputType.IsCsv():
-// 				table.WriteFileCsv()
-//
-// 			case sg.OutputType.IsRaw():
-// 				fmt.Println(endpoint.GetJsonData(true))
-//
-// 			case sg.OutputType.IsJson():
-// 				fmt.Println(endpoint.GetJsonData(false))
-//
-// 			case sg.OutputType.IsGraph():
-// 				if table == nil {
-// 					break
-// 				}
-// 				sg.Error = table.SetGraphFromJson(output.Json(graphFilter))
-// 				if sg.Error != nil {
-// 					break
-// 				}
-// 				sg.Error = table.CreateGraph()
-// 				if sg.Error != nil {
-// 					break
-// 				}
-//
-// 			default:
-// 		}
-// 	}
-//
-// 	return sg.Error
-// }
-//
-// func (sg *SunGrow) OutputTable(table *output.Table) error {
-// 	for range Only.Once {
-// 		switch {
-// 			case sg.OutputType.IsNone():
-//
-// 			case sg.OutputType.IsHuman():
-// 				if table == nil {
-// 					break
-// 				}
-// 				table.Print()
-//
-// 			case sg.OutputType.IsFile():
-// 				if table == nil {
-// 					break
-// 				}
-// 				sg.Error = table.WriteFileCsv()
-//
-// 			default:
-// 		}
-// 	}
-//
-// 	return sg.Error
-// }
-
 func (sg *SunGrow) Login(auth login.SunGrowAuth) error {
 	for range Only.Once {
 		a := sg.GetEndpoint(AppService.GetAreaName() + ".login")
@@ -341,7 +291,6 @@ func (sg *SunGrow) GetUserEmail() string {
 func (sg *SunGrow) HasTokenChanged() bool {
 	return sg.Auth.HasTokenChanged()
 }
-
 
 func (sg *SunGrow) SetOutputType(outputType string) {
 	sg.OutputType.Set(outputType)

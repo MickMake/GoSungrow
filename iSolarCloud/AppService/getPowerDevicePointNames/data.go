@@ -2,6 +2,7 @@ package getPowerDevicePointNames
 
 import (
 	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
@@ -70,8 +71,8 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	PointCalType int64  `json:"point_cal_type"`
-	PointID      int64  `json:"point_id"`
+	PointCalType api.Integer  `json:"point_cal_type"`
+	PointID      api.Integer  `json:"point_id"`
 	PointName    string `json:"point_name"`
 }
 

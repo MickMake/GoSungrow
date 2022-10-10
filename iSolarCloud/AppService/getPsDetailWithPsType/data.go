@@ -13,7 +13,7 @@ const Url = "/v1/powerStationService/getPsDetailWithPsType"
 const Disabled = false
 
 type RequestData struct {
-	PsId string `json:"ps_id" required:"true"`
+	PsId api.Integer `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -34,20 +34,20 @@ type ResultData struct {
 	CurrPower                   api.UnitValue `json:"curr_power" PointId:"CurrPower" PointType:"PointTypeInstant"`
 	DesignCapacity              api.UnitValue `json:"design_capacity" PointId:"DesignCapacity" PointType:"PointTypeBoot"`
 	EnergyScheme                interface{}   `json:"energy_scheme"`
-	GcjLatitude                 string        `json:"gcj_latitude" PointId:"GcjLatitude" PointType:"PointTypeBoot"`
-	GcjLongitude                string        `json:"gcj_longitude" PointId:"GcjLongitude" PointType:"PointTypeBoot"`
-	HasAmmeter                  int64         `json:"has_ammeter" PointId:"HasAmmeter" PointType:"PointTypeBoot"`
+	GcjLatitude                 api.Float     `json:"gcj_latitude" PointId:"GcjLatitude" PointType:"PointTypeBoot"`
+	GcjLongitude                api.Float     `json:"gcj_longitude" PointId:"GcjLongitude" PointType:"PointTypeBoot"`
+	HasAmmeter                  api.Integer   `json:"has_ammeter" PointId:"HasAmmeter" PointType:"PointTypeBoot"`
 	HouseholdInverterData       interface{}   `json:"household_inverter_data"`
 	InstallerPsFaultStatus      string        `json:"installer_ps_fault_status" PointId:"InstallerPsFaultStatus" PointType:"PointTypeBoot"`
-	IsHaveEsInverter            int64         `json:"is_have_es_inverter" PointId:"IsHaveEsInverter" PointType:"PointTypeBoot"`
-	IsSingleInverter            int64         `json:"is_single_inverter" PointId:"IsSingleInverter" PointType:"PointTypeBoot"`
+	IsHaveEsInverter            api.Integer   `json:"is_have_es_inverter" PointId:"IsHaveEsInverter" PointType:"PointTypeBoot"`
+	IsSingleInverter            api.Integer   `json:"is_single_inverter" PointId:"IsSingleInverter" PointType:"PointTypeBoot"`
 	IsTransformSystem           string        `json:"is_transform_system" PointId:"IsTransformSystem" PointType:"PointTypeBoot"`
-	Latitude                    float64       `json:"latitude" PointId:"Latitude" PointType:"PointTypeBoot"`
+	Latitude                    api.Float     `json:"latitude" PointId:"Latitude" PointType:"PointTypeBoot"`
 	LoadPowerMap                api.UnitValue `json:"load_power_map" PointId:"LoadPowerMap" PointType:"PointTypeInstant"`
 	LoadPowerMapVirgin          api.UnitValue `json:"load_power_map_virgin"  PointIgnore:"true"`
-	Longitude                   float64       `json:"longitude" PointId:"Longitude" PointType:"PointTypeBoot"`
-	MapLatitude                 string        `json:"map_latitude" PointId:"MapLatitude" PointType:"PointTypeBoot"`
-	MapLongitude                string        `json:"map_longitude" PointId:"MapLongitude" PointType:"PointTypeBoot"`
+	Longitude                   api.Float     `json:"longitude" PointId:"Longitude" PointType:"PointTypeBoot"`
+	MapLatitude                 api.Float     `json:"map_latitude" PointId:"MapLatitude" PointType:"PointTypeBoot"`
+	MapLongitude                api.Float     `json:"map_longitude" PointId:"MapLongitude" PointType:"PointTypeBoot"`
 	MeterReduceTotal            api.UnitValue `json:"meter_reduce_total" PointId:"MeterReduceTotal" PointType:"PointTypeTotal"`
 	MobleTel                    string        `json:"moble_tel" PointId:"MobleTel" PointType:"PointTypeBoot"`
 	MonthEnergy                 api.UnitValue `json:"month_energy" PointId:"MonthEnergy" PointType:"PointTypeMonthly"`
@@ -72,10 +72,10 @@ type ResultData struct {
 	P83202Map                   api.UnitValue `json:"p83202_map" PointId:"P83202Map" PointType:"PointTypeInstant"`
 	P83202MapVirgin             api.UnitValue `json:"p83202_map_virgin"  PointIgnore:"true"`
 	P83532MapVirgin             api.UnitValue `json:"p83532_map_virgin"  PointIgnore:"true"`
-	PowerChargeSetted           int64         `json:"power_charge_setted" PointId:"PowerChargeSetted" PointType:"PointTypeBoot"`
+	PowerChargeSetted           api.Integer   `json:"power_charge_setted" PointId:"PowerChargeSetted" PointType:"PointTypeBoot"`
 	PowerGridPowerMap           api.UnitValue `json:"power_grid_power_map" PointId:"PowerGridPowerMap" PointType:"PointTypeInstant"`
 	PowerGridPowerMapVirgin     api.UnitValue `json:"power_grid_power_map_virgin"  PointIgnore:"true"`
-	PsCountryID                 int64         `json:"ps_country_id" PointId:"PsCountryID" PointType:"PointTypeBoot"`
+	PsCountryID                 api.Integer   `json:"ps_country_id" PointId:"PsCountryID" PointType:"PointTypeBoot"`
 	PsDeviceType                string        `json:"ps_device_type" PointId:"PsDeviceType" PointType:"PointTypeBoot"`
 	PsFaultStatus               string        `json:"ps_fault_status" PointId:"PsFaultStatus" PointType:"PointTypeBoot"`
 	PsHealthStatus              string        `json:"ps_health_status" PointId:"PsHealthStatus" PointType:"PointTypeBoot"`
@@ -83,30 +83,30 @@ type ResultData struct {
 	PsName                      string        `json:"ps_name" PointId:"PsName" PointType:"PointTypeBoot"`
 	PsPsKey                     string        `json:"ps_ps_key" PointId:"PsPsKey" PointType:"PointTypeBoot"`
 	PsState                     string        `json:"ps_state" PointId:"PsState" PointType:"PointTypeBoot"`
-	PsType                      int64         `json:"ps_type" PointId:"PsType" PointType:"PointTypeBoot"`
+	PsType                      api.Integer   `json:"ps_type" PointId:"PsType" PointType:"PointTypeBoot"`
 	PvPowerMap                  api.UnitValue `json:"pv_power_map" PointId:"PvPowerMap" PointType:"PointTypeInstant"`
 	PvPowerMapVirgin            api.UnitValue `json:"pv_power_map_virgin"  PointIgnore:"true"`
 	RobotNumSweepCapacity       struct {
-		Num           int64   `json:"num" PointId:"Num" PointType:"PointTypeBoot"`
-		SweepCapacity float64 `json:"sweep_capacity" PointId:"SweepCapacity" PointType:"PointTypeBoot"`
+		Num           api.Integer   `json:"num" PointId:"Num" PointType:"PointTypeBoot"`
+		SweepCapacity api.Float `json:"sweep_capacity" PointId:"SweepCapacity" PointType:"PointTypeBoot"`
 	} `json:"robot_num_sweep_capacity"`
-	SelfConsumptionOffsetReminder int64         `json:"self_consumption_offset_reminder" PointId:"SelfConsumptionOffsetReminder" PointType:"PointTypeBoot"`
+	SelfConsumptionOffsetReminder api.Integer   `json:"self_consumption_offset_reminder" PointId:"SelfConsumptionOffsetReminder" PointType:"PointTypeBoot"`
 	So2ReduceTotal                api.UnitValue `json:"so2_reduce_total" PointId:"So2ReduceTotal" PointType:"PointTypeTotal"`
 	StorageInverterData           []struct {
 		CommunicationDevSn      string        `json:"communication_dev_sn" PointId:"CommunicationDevSn" PointType:"PointTypeBoot"`
-		DevStatus               int64         `json:"dev_status" PointId:"DevStatus" PointType:"PointTypeBoot"`
-		DeviceCode              int64         `json:"device_code" PointId:"DeviceCode" PointType:"PointTypeBoot"`
+		DevStatus               api.Integer   `json:"dev_status" PointId:"DevStatus" PointType:"PointTypeBoot"`
+		DeviceCode              api.Integer   `json:"device_code" PointId:"DeviceCode" PointType:"PointTypeBoot"`
 		DeviceModelCode         string        `json:"device_model_code" PointId:"DeviceModelCode" PointType:"PointTypeBoot"`
 		DeviceName              string        `json:"device_name" PointId:"DeviceName" PointType:"PointTypeBoot"`
 		DeviceState             string        `json:"device_state" PointId:"DeviceState" PointType:"PointTypeBoot"`
-		DeviceType              int64         `json:"device_type" PointId:"DeviceType" PointType:"PointTypeBoot"`
+		DeviceType              api.Integer   `json:"device_type" PointId:"DeviceType" PointType:"PointTypeBoot"`
 		DrmStatus               string        `json:"drm_status" PointId:"DrmStatus" PointType:"PointTypeBoot"`
 		DrmStatusName           string        `json:"drm_status_name" PointId:"DrmStatusName" PointType:"PointTypeBoot"`
 		EnergyFlow              []string      `json:"energy_flow"`
-		HasAmmeter              int64         `json:"has_ammeter" PointId:"HasAmmeter" PointType:"PointTypeBoot"`
-		InstallerDevFaultStatus int64         `json:"installer_dev_fault_status" PointId:"InstallerDevFaultStatus" PointType:"PointTypeBoot"`
+		HasAmmeter              api.Integer   `json:"has_ammeter" PointId:"HasAmmeter" PointType:"PointTypeBoot"`
+		InstallerDevFaultStatus api.Integer   `json:"installer_dev_fault_status" PointId:"InstallerDevFaultStatus" PointType:"PointTypeBoot"`
 		InverterSn              string        `json:"inverter_sn" PointId:"InverterSn" PointType:"PointTypeBoot"`
-		OwnerDevFaultStatus     int64         `json:"owner_dev_fault_status" PointId:"OwnerDevFaultStatus" PointType:"PointTypeBoot"`
+		OwnerDevFaultStatus     api.Integer   `json:"owner_dev_fault_status" PointId:"OwnerDevFaultStatus" PointType:"PointTypeBoot"`
 		P13003Map               api.UnitValue `json:"p13003_map" PointId:"P13003Map" PointType:"PointTypeInstant"`
 		P13003MapVirgin         api.UnitValue `json:"p13003_map_virgin"  PointIgnore:"true"`
 		P13119Map               api.UnitValue `json:"p13119_map" PointId:"P13119Map" PointType:"PointTypeInstant"`
@@ -121,7 +121,7 @@ type ResultData struct {
 		P13150Map               api.UnitValue `json:"p13150_map" PointId:"P13150Map" PointType:"PointTypeInstant"`
 		P13150MapVirgin         api.UnitValue `json:"p13150_map_virgin"  PointIgnore:"true"`
 		PsKey                   string        `json:"ps_key" PointId:"PsKey" PointType:"PointTypeBoot"`
-		UUID                    int64         `json:"uuid" PointId:"UUID" PointType:"PointTypeBoot"`
+		UUID                    api.Integer   `json:"uuid" PointId:"UUID" PointType:"PointTypeBoot"`
 	} `json:"storage_inverter_data"`
 	TodayEnergy       api.UnitValue `json:"today_energy" PointId:"TodayEnergy" PointType:"PointTypeDaily"`
 	TodayEnergyVirgin api.UnitValue `json:"today_energy_virgin"  PointIgnore:"true"`
@@ -130,9 +130,9 @@ type ResultData struct {
 	TotalEnergyVirgin api.UnitValue `json:"total_energy_virgin"  PointIgnore:"true"`
 	TotalIncome       api.UnitValue `json:"total_income" PointId:"TotalIncome" PointType:"PointTypeTotal"`
 	TreeReduceTotal   api.UnitValue `json:"tree_reduce_total" PointId:"TreeReduceTotal" PointType:"PointTypeTotal"`
-	ValidFlag         int64         `json:"valid_flag" PointId:"ValidFlag" PointType:"PointTypeBoot"`
-	WgsLatitude       float64       `json:"wgs_latitude" PointId:"WgsLatitude" PointType:"PointTypeBoot"`
-	WgsLongitude      float64       `json:"wgs_longitude" PointId:"WgsLongitude" PointType:"PointTypeBoot"`
+	ValidFlag         api.Integer   `json:"valid_flag" PointId:"ValidFlag" PointType:"PointTypeBoot"`
+	WgsLatitude       api.Float     `json:"wgs_latitude" PointId:"WgsLatitude" PointType:"PointTypeBoot"`
+	WgsLongitude      api.Float     `json:"wgs_longitude" PointId:"WgsLongitude" PointType:"PointTypeBoot"`
 	ZfzyMap           api.UnitValue `json:"zfzy_map" PointId:"ZfzyMap" PointType:"PointTypeInstant"`
 	ZfzyMapVirgin     api.UnitValue `json:"zfzy_map_virgin"  PointIgnore:"true"`
 	ZjzzMap           api.UnitValue `json:"zjzz_map" PointId:"ZjzzMap" PointType:"PointTypeInstant"`

@@ -1,6 +1,7 @@
 package getPowerDeviceModelTechList
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -58,7 +59,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	CodeID          int64       `json:"code_id"`
+	CodeID          api.Integer `json:"code_id"`
 	CodeName        string      `json:"code_name"`
 	CodeValue       string      `json:"code_value"`
 	DefaultValue    interface{} `json:"default_value"`

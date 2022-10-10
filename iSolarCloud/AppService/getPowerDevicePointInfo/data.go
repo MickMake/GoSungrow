@@ -2,6 +2,7 @@ package getPowerDevicePointInfo
 
 import (
 	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
@@ -11,7 +12,7 @@ const Url = "/v1/reportService/getPowerDevicePointInfo"
 const Disabled = false
 
 type RequestData struct {
-	Id string `json:"id" required:"true"`
+	Id api.Integer `json:"id" required:"true"`
 	// Id string `json:"id"`
 }
 
@@ -26,13 +27,13 @@ func (rd RequestData) Help() string {
 
 
 type ResultData struct {
-	DeviceType    int64  `json:"device_type" PointId:"device_type" PointType:""`
-	ID            int64  `json:"id" PointId:"id" PointType:""`
-	Period        int64  `json:"period" PointId:"period" PointType:""`
-	PointID       int64  `json:"point_id" PointId:"point_id" PointType:""`
+	DeviceType    api.Integer  `json:"device_type" PointId:"device_type" PointType:""`
+	ID            api.Integer  `json:"id" PointId:"id" PointType:""`
+	Period        api.Integer  `json:"period" PointId:"period" PointType:""`
+	PointID       api.Integer  `json:"point_id" PointId:"point_id" PointType:""`
 	PointName     string `json:"point_name" PointId:"point_name" PointType:""`
 	ShowPointName string `json:"show_point_name" PointId:"show_point_name" PointType:""`
-	TranslationID int64  `json:"translation_id" PointId:"translation_id" PointType:""`
+	TranslationID api.Integer  `json:"translation_id" PointId:"translation_id" PointType:""`
 }
 
 func (e *ResultData) IsValid() error {
@@ -68,7 +69,7 @@ func (e *EndPoint) AddDataTable(table output.Table) output.Table {
 	for range Only.Once {
 		rd := e.Response.ResultData
 
-		if rd.ID == 0 {
+		if rd.ID.Value() == 0 {
 			break
 		}
 		_ = table.AddRow(rd.DeviceType, rd.ID, rd.Period, rd.PointID,rd.PointName, rd.ShowPointName, rd.TranslationID)

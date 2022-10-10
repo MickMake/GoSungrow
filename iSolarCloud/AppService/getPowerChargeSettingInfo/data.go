@@ -1,6 +1,7 @@
 package getPowerChargeSettingInfo
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -22,14 +23,14 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	ParamIncomeUnit          int64  `json:"param_income_unit"`
+	ParamIncomeUnit          api.Integer  `json:"param_income_unit"`
 	ParamIncomeUnitName      string `json:"param_income_unit_name"`
 	PowerElectricalChargeMap struct {
-		DefaultCharge      float64     `json:"default_charge"`
+		DefaultCharge      api.Float   `json:"default_charge"`
 		IntervalTimeCharge interface{} `json:"interval_time_charge"`
 	} `json:"powerElectricalChargeMap"`
 	PowerSelfUseTimesChargeMap struct {
-		DefaultCharge      float64 `json:"default_charge"`
+		DefaultCharge      api.Float `json:"default_charge"`
 		IntervalTimeCharge string  `json:"interval_time_charge"`
 	} `json:"powerSelfUseTimesChargeMap"`
 	PsID string `json:"ps_id"`

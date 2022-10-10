@@ -23,21 +23,21 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		FaultStationCount int64         `json:"fault_station_count"`
+		FaultStationCount api.Integer   `json:"fault_station_count"`
 		IsHaveEsPs        string        `json:"is_have_es_ps"`
-		IsLeaf            int64         `json:"is_leaf"`
-		OrgID             int64         `json:"org_id"`
+		IsLeaf            api.Integer   `json:"is_leaf"`
+		OrgID             api.Integer   `json:"org_id"`
 		OrgName           string        `json:"org_name"`
 		P83048            api.UnitValue `json:"p83048"`
 		P83049            api.UnitValue `json:"p83049"`
 		P83050            api.UnitValue `json:"p83050"`
 		P83051            api.UnitValue `json:"p83051"`
 		PlanMonth         string        `json:"plan_month"`
-		StationCount      int64         `json:"station_count"`
+		StationCount      api.Integer   `json:"station_count"`
 		TodayEnergy       api.UnitValue `json:"today_energy"`
 		TotalEnergy       api.UnitValue `json:"total_energy"`
 	} `json:"pageList"`
-	RowCount string `json:"rowCount"`
+	RowCount api.Integer `json:"rowCount"`
 }
 
 func (e *ResultData) IsValid() error {
