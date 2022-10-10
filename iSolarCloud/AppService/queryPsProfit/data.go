@@ -10,7 +10,7 @@ const Url = "/v1/powerStationService/queryPsProfit"
 const Disabled = false
 
 type RequestData struct {
-	PsId     string `json:"ps_id" required:"true"`
+	PsId     api.Integer `json:"ps_id" required:"true"`
 	DateID   string `json:"date_id" required:"true"`
 	DateType string `json:"date_type" required:"true"`
 }

@@ -10,7 +10,7 @@ const Url = "/v1/powerStationService/showPSView"
 const Disabled = false
 
 type RequestData struct {
-	PsId string `json:"ps_id" required:"true"`
+	PsId api.Integer `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -25,7 +25,7 @@ func (rd RequestData) Help() string {
 type ResultData struct {
 	BatteryPlateCom       string        `json:"batteryPlateCom"`
 	EnvironmentCom        string        `json:"environmentCom"`
-	IsPlatformDefaultUnit string        `json:"is_platform_default_unit"`
+	IsPlatformDefaultUnit api.Bool      `json:"is_platform_default_unit"`
 	Normalization         string        `json:"normalization"`
 	Todayvalue            string        `json:"todayvalue"`
 	Todayweather          string        `json:"todayweather"`

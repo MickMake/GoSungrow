@@ -1,6 +1,7 @@
 package getDeviceUuid
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -9,7 +10,7 @@ const Url = "/v1/devService/getDeviceUuid"
 const Disabled = false
 
 type RequestData struct {
-	PsKey string `json:"ps_key" required:"true"`
+	PsKey api.PsKey `json:"ps_key" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

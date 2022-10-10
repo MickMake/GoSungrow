@@ -25,7 +25,7 @@ type ResultData struct {
 	DeviceTypeList []struct {
 		DevListOrderID api.Integer  `json:"dev_list_order_id"`
 		DeviceType     api.Integer  `json:"device_type"`
-		TypeName       string `json:"type_name"`
+		TypeName       api.String   `json:"type_name"`
 	} `json:"deviceTypeList"`
 }
 

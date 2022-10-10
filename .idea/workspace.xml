@@ -6,85 +6,62 @@
   <component name="ChangeListManager">
     <list default="true" id="76adadc9-ae71-42a6-82a1-66dbc8ecb14c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/cmd.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/cmd_mqtt.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_mqtt.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/commands.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/commands.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/const.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/delete/cmd_config.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/delete/cmd_cron.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/delete/cmd_git.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/delete/cmd_google.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/delete/cmd_help.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/delete/cmd_help_const.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/delete/cmd_version.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/delete/cobra.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/delete/viper.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/flags.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/struct.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/cmd_api.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_api.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/findPsType/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/findPsType/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getAllPowerDeviceSetName/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getAllPowerDeviceSetName/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getAreaList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getAreaList/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getCloudList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getCloudList/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getDeviceList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getDeviceList/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getDeviceModelInfoList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getDeviceModelInfoList/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getDeviceTypeInfoList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getDeviceTypeInfoList/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getDeviceTypeList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getDeviceTypeList/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getFaultCount/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getFaultCount/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getFaultMsgListWithYYYYMM/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getFaultMsgListWithYYYYMM/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getHouseholdStoragePsReport/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getHouseholdStoragePsReport/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getIncomeSettingInfos/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getIncomeSettingInfos/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getInstallerInfoByDealerOrgCodeOrId/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getInstallerInfoByDealerOrgCodeOrId/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getKpiInfo/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getKpiInfo/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getModuleLogTaskList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getModuleLogTaskList/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getOrderStatistics/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getOrderStatistics/data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getOSSConfig/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getOSSConfig/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getOrgListByName/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getOrgListByName/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getOrgListByUserId/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getOrgListByUserId/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getOrgListForUser/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getOrgListForUser/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerChargeSettingInfo/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerChargeSettingInfo/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerDeviceModelTechList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerDeviceModelTechList/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerDevicePointInfo/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerDevicePointInfo/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerDevicePointNames/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerDevicePointNames/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerDeviceSetTaskDetailList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerDeviceSetTaskDetailList/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerDeviceSetTaskList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerDeviceSetTaskList/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerStationBasicInfo/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerStationBasicInfo/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerStationData/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerStationData/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerStationForHousehold/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerStationForHousehold/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerStationInfo/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerStationInfo/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPsDataSupplementTaskList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPsDataSupplementTaskList/data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerStatistics/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerStatistics/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPsDetail/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPsDetail/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPsDetailWithPsType/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPsDetailWithPsType/data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPsHealthState/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPsHealthState/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPsList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPsList/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPsListByName/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPsListByName/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPsListStaticData/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPsListStaticData/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPsReport/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPsReport/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPsUser/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPsUser/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getRemoteUpgradeSubTasksList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getRemoteUpgradeSubTasksList/data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPsWeatherList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPsWeatherList/data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getRegionalTree/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getRegionalTree/data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getRemoteUpgradeDeviceList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getRemoteUpgradeDeviceList/data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getReportData/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getReportData/data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getReportEmailConfigInfo/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getReportEmailConfigInfo/data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getSerialNum/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getSerialNum/data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getStationInfoSql/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getStationInfoSql/data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getSysMsg/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getSysMsg/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getTemplateList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getTemplateList/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getUserList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getUserList/data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getUpTimePoint/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getUpTimePoint/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getUserPsOrderList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getUserPsOrderList/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/login/auth.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/login/auth.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/listOssFiles/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/listOssFiles/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/login/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/login/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/powerDevicePointList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/powerDevicePointList/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/queryAllPsIdAndName/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/queryAllPsIdAndName/data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/psForcastInfo/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/psForcastInfo/data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/queryDeviceInfo/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/queryDeviceInfo/data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/queryDeviceInfoForApp/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/queryDeviceInfoForApp/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/queryDeviceList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/queryDeviceList/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/queryDeviceListByUserId/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/queryDeviceListByUserId/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/queryDeviceListForApp/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/queryDeviceListForApp/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/queryMutiPointDataList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/queryMutiPointDataList/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/queryPowerStationInfo/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/queryPowerStationInfo/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/queryPsProfit/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/queryPsProfit/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/queryUnitList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/queryUnitList/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/queryUserList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/queryUserList/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/reportList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/reportList/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/WebAppService/queryUserCurveTemplateData/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/WebAppService/queryUserCurveTemplateData/data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/WebAppService/getDeviceUuid/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/WebAppService/getDeviceUuid/data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/WebAppService/showPSView/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/WebAppService/showPSView/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/api/datetime.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/datetime.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/file.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/file.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/struct_data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/struct_data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/api/types.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/types.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/utils.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/utils.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/web.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/web.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/highlevel.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/highlevel.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iSolarCloud/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/struct.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mmHa/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/struct.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,7 +132,6 @@
     <configuration name="GoSungrow" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="GoSungrow" />
       <working_directory value="$PROJECT_DIR$" />
-      <parameters value="data get stats" />
       <kind value="PACKAGE" />
       <package value="GoSungrow" />
       <directory value="$PROJECT_DIR$" />
@@ -515,11 +491,6 @@
           <option name="timeStamp" value="1237" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/iSolarCloud/struct.go</url>
-          <line>169</line>
-          <option name="timeStamp" value="1244" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/AppService/getPsDetail/data.go</url>
           <line>295</line>
           <option name="timeStamp" value="1296" />
@@ -531,13 +502,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/datetime.go</url>
-          <line>133</line>
+          <line>128</line>
           <option name="timeStamp" value="1331" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/iSolarCloud/struct.go</url>
-          <line>127</line>
-          <option name="timeStamp" value="1349" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/file.go</url>
@@ -588,6 +554,21 @@
           <url>file://$PROJECT_DIR$/iSolarCloud/api/struct_data.go</url>
           <line>797</line>
           <option name="timeStamp" value="1395" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/cmd/cmd_api.go</url>
+          <line>411</line>
+          <option name="timeStamp" value="1401" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/AppService/queryDeviceList/struct.go</url>
+          <line>123</line>
+          <option name="timeStamp" value="1402" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/iSolarCloud/AppService/getHouseholdStoragePsReport/data.go</url>
+          <line>374</line>
+          <option name="timeStamp" value="1411" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

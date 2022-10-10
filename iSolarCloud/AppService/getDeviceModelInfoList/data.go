@@ -32,7 +32,7 @@ type ResultData []struct {
 	DeviceModelCode   string `json:"device_model_code"`
 	DeviceModelID     api.Integer  `json:"device_model_id"`
 	DeviceType        api.Integer  `json:"device_type"`
-	IsRemoteUpgrade   api.Integer  `json:"is_remote_upgrade"`
+	IsRemoteUpgrade   api.Bool     `json:"is_remote_upgrade"`
 }
 
 func (e *ResultData) IsValid() error {

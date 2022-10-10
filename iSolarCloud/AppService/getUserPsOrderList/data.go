@@ -23,7 +23,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	CurPage    api.Integer   `json:"curPage"`
-	IsMore     interface{}   `json:"isMore"`
+	IsMore     api.Bool      `json:"isMore"`
 	PageList   []interface{} `json:"pageList"`
 	RowCount   api.Integer   `json:"rowCount"`
 	Size       api.Integer   `json:"size"`

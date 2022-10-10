@@ -25,14 +25,14 @@ func (rd RequestData) Help() string {
 
 type ResultData   []struct {
 	CreateTime    api.Integer  `json:"create_time"`
-	FaultCode     string `json:"fault_code"`
+	FaultCode     api.String   `json:"fault_code"`
 	FaultLevel    api.Integer  `json:"fault_level"`
-	FaultReason   string `json:"fault_reason"`
+	FaultReason   api.String   `json:"fault_reason"`
 	FaultType     api.Integer  `json:"fault_type"`
 	FaultTypeCode api.Integer  `json:"fault_type_code"`
 	ID            api.Integer  `json:"id"`
 	PsID          api.Integer  `json:"ps_id"`
-	PsKey         string `json:"ps_key"`
+	PsKey         api.PsKey    `json:"ps_key"`
 	UUID          api.Integer  `json:"uuid"`
 }
 

@@ -1,6 +1,7 @@
 package getOSSConfig
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -23,15 +24,15 @@ func (rd RequestData) Help() string {
 
 
 type ResultData struct {
-	AccessId       string `json:"accessid"`
-	Dir            string `json:"dir"`
-	Expire         string `json:"expire"`
-	Host           string `json:"host"`
-	IsPrivateCloud string `json:"is_private_cloud"`
-	OssFileURL     string `json:"oss_file_url"`
-	Policy         string `json:"policy"`
-	SguZipDir      string `json:"sgu_zip_dir"`
-	Signature      string `json:"signature"`
+	AccessId       api.String   `json:"accessid"`
+	Dir            api.String   `json:"dir"`
+	Expire         api.Integer   `json:"expire"`
+	Host           api.String   `json:"host"`
+	IsPrivateCloud api.Bool `json:"is_private_cloud"`
+	OssFileURL     api.String   `json:"oss_file_url"`
+	Policy         api.String   `json:"policy"`
+	SguZipDir      api.String   `json:"sgu_zip_dir"`
+	Signature      api.String   `json:"signature"`
 }
 
 func (e *ResultData) IsValid() error {

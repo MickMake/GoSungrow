@@ -24,9 +24,9 @@ func (rd RequestData) Help() string {
 
 type ResultData []struct {
 	PsID         api.Integer  `json:"ps_id"`
-	PsName       string `json:"ps_name"`
-	PsShortName  string `json:"ps_short_name"`
-	PsTimezone   string `json:"ps_timezone"`
+	PsName       api.String `json:"ps_name"`
+	PsShortName  api.String `json:"ps_short_name"`
+	PsTimezone   api.String `json:"ps_timezone"`
 	PsTimezoneID api.Integer  `json:"ps_timezone_id"`
 	ShareType    string `json:"share_type"`
 }

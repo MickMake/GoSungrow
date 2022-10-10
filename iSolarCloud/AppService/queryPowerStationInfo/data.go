@@ -10,7 +10,7 @@ const Url = "/v1/powerStationService/queryPowerStationInfo"
 const Disabled = false
 
 type RequestData struct {
-	PsId string `json:"ps_id"`
+	PsId api.Integer `json:"ps_id"`
 	Sn   string `json:"sn"`
 }
 
@@ -59,15 +59,15 @@ type ResultData   struct {
 	InverterCount         api.Integer   `json:"inverter_count"`
 	InvestmentType        api.Integer   `json:"investment_type"`
 	InvestmentTypeDesc    string        `json:"investment_type_desc"`
-	IsAgreeGdpr           api.Integer   `json:"is_agree_gdpr"`
-	IsGdpr                api.Integer   `json:"is_gdpr"`
-	IsNewVersion          api.Integer   `json:"is_new_version"`
-	IsOpenProtocol        api.Integer   `json:"is_open_protocol"`
-	IsPsCreateUser        string        `json:"is_ps_create_user"`
-	IsPsOwner             string        `json:"is_ps_owner"`
-	IsReceiveNotice       api.Integer   `json:"is_receive_notice"`
-	IsSharePosition       api.Integer   `json:"is_share_position"`
-	IsValidMobileEmail    api.Integer   `json:"is_valid_mobile_email"`
+	IsAgreeGdpr           api.Bool      `json:"is_agree_gdpr"`
+	IsGdpr                api.Bool      `json:"is_gdpr"`
+	IsNewVersion          api.Bool      `json:"is_new_version"`
+	IsOpenProtocol        api.Bool      `json:"is_open_protocol"`
+	IsPsCreateUser        api.Bool      `json:"is_ps_create_user"`
+	IsPsOwner             api.Bool      `json:"is_ps_owner"`
+	IsReceiveNotice       api.Bool      `json:"is_receive_notice"`
+	IsSharePosition       api.Bool      `json:"is_share_position"`
+	IsValidMobileEmail    api.Bool      `json:"is_valid_mobile_email"`
 	Latitude              api.Float     `json:"latitude"`
 	Longitude             api.Float     `json:"longitude"`
 	MapLatitude           api.Float     `json:"map_latitude"`
@@ -97,7 +97,7 @@ type ResultData   struct {
 	PsHolder         string `json:"ps_holder"`
 	PsID             api.Integer  `json:"ps_id"`
 	PsInstalledPower api.Float `json:"ps_installed_power"`
-	PsKey            string `json:"ps_key"`
+	PsKey            api.PsKey `json:"ps_key"`
 	PsLocation       string `json:"ps_location"`
 	PsName           string `json:"ps_name"`
 	PsOrgInfo        []struct {
@@ -134,7 +134,7 @@ type ResultData   struct {
 		CommunicateDeviceType     api.Integer  `json:"communicate_device_type"`
 		CommunicateDeviceTypeName string `json:"communicate_device_type_name"`
 		ID                        api.Integer  `json:"id"`
-		IsEnable                  api.Integer  `json:"is_enable"`
+		IsEnable                  api.Bool     `json:"is_enable"`
 		Sn                        string `json:"sn"`
 	} `json:"sn_detail_list"`
 	SummerTimeState    api.Integer `json:"summer_time_state"`

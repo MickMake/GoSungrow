@@ -10,7 +10,7 @@ const Url = "/v1/devService/queryDeviceListForApp"
 const Disabled = false
 
 type RequestData struct {
-	PsId string `json:"ps_id" required:"true"`
+	PsId api.Integer `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -24,50 +24,50 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		AttrID                  api.Integer `json:"attr_id"`
-		ChnnlID                 api.Integer `json:"chnnl_id"`
-		CommandStatus           api.Integer `json:"command_status"`
-		ConnectState            api.Integer `json:"connect_state"`
-		DataFlag                api.Integer `json:"data_flag"`
-		DataFlagDetail          api.Integer `json:"data_flag_detail"`
-		DevFaultStatus          string      `json:"dev_fault_status"`
-		DevStatus               string      `json:"dev_status"`
-		DeviceArea              string      `json:"device_area"`
-		DeviceCode              api.Integer `json:"device_code"`
-		DeviceFactoryDate       interface{} `json:"device_factory_date"`
-		DeviceID                api.Integer `json:"device_id"`
-		DeviceModel             string      `json:"device_model"`
-		DeviceModelCode         string      `json:"device_model_code"`
-		DeviceModelID           api.Integer `json:"device_model_id"`
-		DeviceName              string      `json:"device_name"`
-		DeviceProSn             string      `json:"device_pro_sn"`
-		DeviceState             string      `json:"device_state"`
-		DeviceSubType           interface{} `json:"device_sub_type"`
-		DeviceSubTypeName       interface{} `json:"device_sub_type_name"`
-		DeviceType              api.Integer `json:"device_type"`
-		FactoryName             string      `json:"factory_name"`
-		InstallerDevFaultStatus string      `json:"installer_dev_fault_status"`
-		InverterModelType       api.Integer `json:"inverter_model_type"`
-		IsCountryCheck          api.Integer `json:"is_country_check"`
-		IsHasFunctionEnum       api.Integer `json:"is_has_function_enum"`
-		IsHasTheAbility         api.Integer `json:"is_has_the_ability"`
-		IsInit                  api.Integer `json:"is_init"`
-		IsReadSet               api.Integer `json:"is_read_set"`
-		IsReplacing             api.Integer `json:"is_replacing"`
-		IsReset                 api.Integer `json:"is_reset"`
-		IsSecond                api.Integer `json:"is_second"`
-		IsThirdParty            api.Integer `json:"is_third_party"`
-		ModuleUUID              api.Integer `json:"module_uuid"`
-		OwnerDevFaultStatus     string      `json:"owner_dev_fault_status"`
-		P24                     interface{} `json:"p24"`
-		Posx                    interface{} `json:"posx"`
-		Posy                    interface{} `json:"posy"`
-		PsID                    api.Integer `json:"ps_id"`
-		PsKey                   string      `json:"ps_key"`
-		RelState                api.Integer `json:"rel_state"`
-		Sn                      string      `json:"sn"`
-		TypeName                string      `json:"type_name"`
-		UUID                    api.Integer `json:"uuid"`
+		AttrID                  api.Integer  `json:"attr_id"`
+		ChannelId               api.Integer  `json:"chnnl_id"`
+		CommandStatus           api.Integer  `json:"command_status"`
+		ConnectState            api.Integer  `json:"connect_state"`
+		DataFlag                api.Integer  `json:"data_flag"`
+		DataFlagDetail          api.Integer  `json:"data_flag_detail"`
+		DevFaultStatus          string       `json:"dev_fault_status"`
+		DevStatus               string       `json:"dev_status"`
+		DeviceArea              api.String   `json:"device_area"`
+		DeviceCode              api.Integer  `json:"device_code"`
+		DeviceFactoryDate       api.DateTime `json:"device_factory_date"`
+		DeviceID                api.Integer  `json:"device_id"`
+		DeviceModel             api.String   `json:"device_model"`
+		DeviceModelCode         api.String   `json:"device_model_code"`
+		DeviceModelID           api.Integer  `json:"device_model_id"`
+		DeviceName              api.String   `json:"device_name"`
+		DeviceProSn             api.String   `json:"device_pro_sn"`
+		DeviceState             string       `json:"device_state"`
+		DeviceSubType           interface{}  `json:"device_sub_type"`
+		DeviceSubTypeName       interface{}  `json:"device_sub_type_name"`
+		DeviceType              api.Integer  `json:"device_type"`
+		FactoryName             api.String   `json:"factory_name"`
+		InstallerDevFaultStatus string       `json:"installer_dev_fault_status"`
+		InverterModelType       api.Integer  `json:"inverter_model_type"`
+		IsCountryCheck          api.Bool     `json:"is_country_check"`
+		IsHasFunctionEnum       api.Bool     `json:"is_has_function_enum"`
+		IsHasTheAbility         api.Bool     `json:"is_has_the_ability"`
+		IsInit                  api.Bool     `json:"is_init"`
+		IsReadSet               api.Bool     `json:"is_read_set"`
+		IsReplacing             api.Bool     `json:"is_replacing"`
+		IsReset                 api.Bool     `json:"is_reset"`
+		IsSecond                api.Bool     `json:"is_second"`
+		IsThirdParty            api.Bool     `json:"is_third_party"`
+		ModuleUUID              api.Integer  `json:"module_uuid"`
+		OwnerDevFaultStatus     string       `json:"owner_dev_fault_status"`
+		P24                     interface{}  `json:"p24"`
+		Posx                    interface{}  `json:"posx"`
+		Posy                    interface{}  `json:"posy"`
+		PsID                    api.Integer  `json:"ps_id"`
+		PsKey                   api.PsKey    `json:"ps_key"`
+		RelState                api.Integer  `json:"rel_state"`
+		Sn                      api.String   `json:"sn"`
+		TypeName                api.String   `json:"type_name"`
+		UUID                    api.Integer  `json:"uuid"`
 	} `json:"pageList"`
 	RowCount api.Integer `json:"rowCount"`
 }

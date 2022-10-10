@@ -23,10 +23,10 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	IsBasicUnit  api.Integer  `json:"is_basic_unit"`
-	TargetUnit   string `json:"target_unit"`
+	IsBasicUnit  api.Bool     `json:"is_basic_unit"`
+	TargetUnit   string       `json:"target_unit"`
 	UnitConverID api.Integer  `json:"unit_conver_id"`
-	UnitName     string `json:"unit_name"`
+	UnitName     string       `json:"unit_name"`
 	UnitType     api.Integer  `json:"unit_type"`
 }
 

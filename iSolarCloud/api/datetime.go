@@ -10,6 +10,8 @@ import (
 var inputLayout = []string{
 	DtLayout,
 	"2006/01/02 15:04:05",
+	"2006-01-02",
+	"2006/01/02",
 	DtLayoutSecond,
 	DtLayoutMinute,
 	DtLayoutHour,
@@ -101,13 +103,6 @@ func (dt *DateTime) SetString(value string) DateTime {
 			value = ""
 			break
 		}
-
-		// var err error
-		// // 2022-10-01 13:29:11
-		// dt.Time, err = time.Parse(defaultFormat, dt.string)
-		// if err == nil {
-		// 	break
-		// }
 
 		dt.DateType = dt.getDateType()
 		for _, f := range inputLayout {

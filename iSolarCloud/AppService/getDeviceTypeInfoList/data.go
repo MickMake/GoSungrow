@@ -23,9 +23,9 @@ func (rd RequestData) Help() string {
 
 type ResultData []struct {
 	DeviceType      api.Integer  `json:"device_type"`
-	IsRemoteUpgrade api.Integer  `json:"is_remote_upgrade"`
+	IsRemoteUpgrade api.Bool     `json:"is_remote_upgrade"`
 	TypeCode        api.Integer  `json:"type_code"`
-	TypeName        string `json:"type_name"`
+	TypeName        api.String   `json:"type_name"`
 }
 
 func (e *ResultData) IsValid() error {

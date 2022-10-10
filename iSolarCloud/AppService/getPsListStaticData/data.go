@@ -31,15 +31,15 @@ type ResultData struct {
 		InstallDate            api.DateTime      `json:"install_date"`
 		InstallerPsFaultStatus api.Integer `json:"installer_ps_fault_status"`
 		Latitude               api.Float   `json:"latitude"`
-		Location               string      `json:"location"`
+		Location               api.String      `json:"location"`
 		Longitude              api.Float   `json:"longitude"`
 		MapLatitude            api.Float   `json:"map_latitude"`
 		MapLongitude           api.Float   `json:"map_longitude"`
 		OwnerPsFaultStatus     api.Integer `json:"owner_ps_fault_status"`
 		PsFaultStatus          api.Integer `json:"ps_fault_status"`
 		PsID                   api.Integer `json:"ps_id"`
-		PsName                 string      `json:"ps_name"`
-		PsShortName            string      `json:"ps_short_name"`
+		PsName                 api.String      `json:"ps_name"`
+		PsShortName            api.String      `json:"ps_short_name"`
 		PsStatus               api.Integer `json:"ps_status"`
 		PsType                 api.Integer `json:"ps_type"`
 		ValidFlag              api.Integer `json:"valid_flag"`

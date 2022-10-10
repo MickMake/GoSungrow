@@ -127,7 +127,7 @@ type ResultData struct {
 			TimeZone string   `json:"time_zone"`
 		} `json:"psTimezoneInfo"`
 		PsID                    api.Integer `json:"ps_id" PointId:"ps_id" PointType:""`
-		PsKey                   string      `json:"ps_key" PointId:"ps_key" PointType:""`
+		PsKey                   api.PsKey   `json:"ps_key" PointId:"ps_key" PointType:""`
 		RelState                api.Integer `json:"rel_state" PointId:"rel_state" PointType:""`
 		Sn                      string      `json:"sn" PointId:"sn" PointType:""`
 		StringAmount            api.Integer `json:"string_amount" PointId:"string_amount" PointType:""`
@@ -341,14 +341,14 @@ func (e *EndPoint) GetData() api.DataMap {
 
 		for _, d := range e.Response.ResultData.PageList {
 			name := fmt.Sprintf("queryDeviceList.%s", d.PsKey)
-			entries.StructToPoints(d, name, d.PsKey, time.Time{})
+			entries.StructToPoints(d, name, d.PsKey.Value(), time.Time{})
 
 			for _, p := range d.PointData {
 				pid := api.SetPointInt(p.PointID.Value())
 				uv := api.SetUnitValueFloat(p.Value.Value(), p.Unit)
 				// name2 := fmt.Sprintf("%s.PointData.%s", name, pid)
 				name2 := fmt.Sprintf("%s.PointData", name)
-				entries.AddUnitValue(name2, d.PsKey, pid, p.PointName, api.NewDateTime(p.TimeStamp), uv)
+				entries.AddUnitValue(name2, d.PsKey.Value(), pid, p.PointName, api.NewDateTime(p.TimeStamp), uv)
 
 				// Handle virtual results.
 				// switch pid {

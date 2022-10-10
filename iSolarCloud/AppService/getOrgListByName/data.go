@@ -23,9 +23,9 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	IsLeaf  api.Integer  `json:"is_leaf"`
-	OrgID   api.Integer  `json:"org_id"`
-	OrgName string `json:"org_name"`
+	IsLeaf  api.Bool    `json:"is_leaf"`
+	OrgID   api.Integer `json:"org_id"`
+	OrgName api.String  `json:"org_name"`
 }
 
 func (e *ResultData) IsValid() error {

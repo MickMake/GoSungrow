@@ -43,23 +43,23 @@ type ResultData struct {
 	GcjLatitude            api.Float   `json:"gcj_latitude"`
 	GcjLongitude           api.Float   `json:"gcj_longitude"`
 	ImToken                interface{} `json:"im_token"`
-	IsDST                  string      `json:"isDST"`
-	IsAfsFlag              string      `json:"is_afs_flag"`
-	IsAgreeGdpr            api.Integer `json:"is_agree_gdpr"`
-	IsAu                   api.Integer `json:"is_au"`
-	IsCanModifyUserAccount api.Integer `json:"is_can_modify_user_account"`
-	IsDisableMap           string      `json:"is_disable_map"`
-	IsGdpr                 api.Integer `json:"is_gdpr"`
-	IsHaveIm               api.Integer `json:"is_have_im"`
-	IsNewVersion           api.Integer `json:"is_new_version"`
-	IsOnline               string      `json:"is_online"`
-	IsOpenProtocol         api.Integer `json:"is_open_protocol"`
-	IsReceiveNotice        api.Integer `json:"is_receive_notice"`
-	IsSharePosition        api.Integer `json:"is_share_position"`
-	IsUploadLocation       api.Integer `json:"is_upload_location"`
-	IsUseSungrowBrand      string      `json:"is_use_sungrow_brand"`
-	IsValidMobileEmail     api.Integer `json:"is_valid_mobile_email"`
-	Isdst                  string      `json:"isdst"`
+	IsDST                  api.Bool    `json:"isDST"`
+	IsAfsFlag              api.Bool    `json:"is_afs_flag"`
+	IsAgreeGdpr            api.Bool    `json:"is_agree_gdpr"`
+	IsAu                   api.Bool    `json:"is_au"`
+	IsCanModifyUserAccount api.Bool    `json:"is_can_modify_user_account"`
+	IsDisableMap           api.Bool    `json:"is_disable_map"`
+	IsGdpr                 api.Bool    `json:"is_gdpr"`
+	IsHaveIm               api.Bool    `json:"is_have_im"`
+	IsNewVersion           api.Bool    `json:"is_new_version"`
+	IsOnline               api.Bool    `json:"is_online"`
+	IsOpenProtocol         api.Bool    `json:"is_open_protocol"`
+	IsReceiveNotice        api.Bool    `json:"is_receive_notice"`
+	IsSharePosition        api.Bool    `json:"is_share_position"`
+	IsUploadLocation       api.Bool    `json:"is_upload_location"`
+	IsUseSungrowBrand      api.Bool    `json:"is_use_sungrow_brand"`
+	IsValidMobileEmail     api.Bool    `json:"is_valid_mobile_email"`
+	Isdst                  api.Bool    `json:"isdst"`
 	Jobs                   interface{} `json:"jobs"`
 	Language               string      `json:"language"`
 	LoginFirstDate         api.DateTime      `json:"loginFirstDate"`
@@ -81,8 +81,8 @@ type ResultData struct {
 	Privileges             []struct {
 		FatherID        api.Integer `json:"father_id"`
 		IconURL         interface{} `json:"icon_url"`
-		IsOpen          interface{} `json:"is_open"`
-		IsThirdPlatform api.Integer `json:"is_third_platform"`
+		IsOpen          api.Bool    `json:"is_open"`
+		IsThirdPlatform api.Bool    `json:"is_third_platform"`
 		MenuCode        string      `json:"menu_code"`
 		MenuLevel       api.Integer `json:"menu_level"`
 		MenuName        string      `json:"menu_name"`
@@ -164,8 +164,8 @@ func (e *EndPoint) Email() string {
 func (e *EndPoint) CreateDate() string {
 	return e.Response.ResultData.Createdate
 }
-func (e *EndPoint) IsOnline() string {
-	return e.Response.ResultData.IsOnline
+func (e *EndPoint) IsOnline() bool {
+	return e.Response.ResultData.IsOnline.Value()
 }
 func (e *EndPoint) LoginLastDate() string {
 	return e.Response.ResultData.LoginLastDate.String()

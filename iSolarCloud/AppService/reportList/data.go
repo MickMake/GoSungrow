@@ -10,7 +10,7 @@ const Url = "/v1/powerStationService/reportList"
 const Disabled = false
 
 type RequestData struct {
-	PsId       string `json:"ps_id" required:"true"`
+	PsId       api.Integer `json:"ps_id" required:"true"`
 	ReportType string `json:"report_type" required:"true"`
 }
 

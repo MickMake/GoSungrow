@@ -26,8 +26,8 @@ func (rd RequestData) Help() string {
 type ResultData struct {
 	PageList []struct {
 		TemplateID   api.Integer  `json:"template_id"`
-		TemplateName string `json:"template_name"`
-		UpdateTime   string `json:"update_time"`
+		TemplateName api.String `json:"template_name"`
+		UpdateTime   api.DateTime `json:"update_time"`
 	} `json:"pageList"`
 	RowCount api.Integer `json:"rowCount"`
 }
@@ -84,24 +84,13 @@ func (e *EndPoint) GetDataTable() output.Table {
 			_ = table.AddRow(
 				p.TemplateID,
 				p.TemplateName,
-				api.NewDateTime(p.UpdateTime).PrintFull(),
+				// api.NewDateTime(p.UpdateTime).PrintFull(),
+				p.UpdateTime.String(),
 			)
 			if table.Error != nil {
 				continue
 			}
 		}
-
-		// table.InitGraph(output.GraphRequest {
-		// 	Title:        "",
-		// 	TimeColumn:   output.SetInteger(1),
-		// 	SearchColumn: output.SetInteger(2),
-		// 	NameColumn:   output.SetInteger(3),
-		// 	ValueColumn:  output.SetInteger(4),
-		// 	UnitsColumn:  output.SetInteger(5),
-		// 	SearchString: output.SetString(""),
-		// 	MinLeftAxis:  output.SetFloat(0),
-		// 	MaxLeftAxis:  output.SetFloat(0),
-		// })
 	}
 
 	return table

@@ -24,10 +24,10 @@ func (rd RequestData) Help() string {
 type ResultData struct {
 	PageList []struct {
 		FaultStationCount api.Integer   `json:"fault_station_count"`
-		IsHaveEsPs        string        `json:"is_have_es_ps"`
-		IsLeaf            api.Integer   `json:"is_leaf"`
+		IsHaveEsPs        api.Bool      `json:"is_have_es_ps"`
+		IsLeaf            api.Bool      `json:"is_leaf"`
 		OrgID             api.Integer   `json:"org_id"`
-		OrgName           string        `json:"org_name"`
+		OrgName           api.String    `json:"org_name"`
 		P83048            api.UnitValue `json:"p83048"`
 		P83049            api.UnitValue `json:"p83049"`
 		P83050            api.UnitValue `json:"p83050"`

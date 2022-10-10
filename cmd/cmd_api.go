@@ -297,20 +297,6 @@ func (ca *Cmds) SunGrowArgs(_ *cobra.Command, _ []string) error {
 		}
 
 		ca.Api.SunGrow.SetOutputType(ca.Api.OutputType)
-		// switch ca.ApiOutputType {
-		// 	case output.StringTypeJson:
-		// 		ca.Api.SunGrow.OutputType.SetJson()
-		// 	case output.StringTypeCsv:
-		// 		ca.Api.SunGrow.OutputType.SetCsv()
-		// 	case output.StringTypeRaw:
-		// 		ca.Api.SunGrow.OutputType.SetRaw()
-		// 	case output.StringTypeGraph:
-		// 		ca.Api.SunGrow.OutputType.SetGraph()
-		// 	case output.StringTypeTable:
-		// 		fallthrough
-		// 	default:
-		// 		ca.Api.SunGrow.OutputType.SetTable()
-		// }
 		ca.Api.SunGrow.SaveAsFile = ca.Api.SaveFile
 
 		if ca.Api.AppKey == "" {
@@ -422,8 +408,11 @@ func (c *CmdApi) CmdApiGet(_ *cobra.Command, args []string) error {
 			c.Error = c.SunGrow.AllCritical()
 			break
 		}
-
 		ep := c.SunGrow.GetByJson(args[0], args[1])
+		if ep.IsError() {
+			c.Error = ep.GetError()
+			break
+		}
 		if c.SunGrow.Error != nil {
 			c.Error = c.SunGrow.Error
 			break

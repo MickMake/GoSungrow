@@ -23,36 +23,36 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	CurPage  api.Integer `json:"curPage"`
-	IsMore   interface{} `json:"isMore"`
+	IsMore   api.Bool    `json:"isMore"`
 	PageList []struct {
-		BatchID        string      `json:"batch_id"`
+		BatchID        api.String      `json:"batch_id"`
 		CommandStatus  api.Integer `json:"command_status"`
 		CommandType    api.Integer `json:"command_type"`
-		CreateTime     string      `json:"create_time"`
-		DeviceCode     string      `json:"device_code"`
-		DeviceModel    interface{} `json:"device_model"`
-		DeviceModelID  interface{} `json:"device_model_id"`
+		CreateTime     api.DateTime      `json:"create_time"`
+		DeviceCode     api.Integer      `json:"device_code"`
+		DeviceModel    api.String `json:"device_model"`
+		DeviceModelID  api.String `json:"device_model_id"`
 		ExpireSecond   api.Integer `json:"expire_second"`
-		LogType        string      `json:"log_type"`
-		LoggerCode     string      `json:"logger_code"`
+		LogType        api.Integer      `json:"log_type"`
+		LoggerCode     api.Integer      `json:"logger_code"`
 		OperateUserID  api.Integer `json:"operate_user_id"`
-		OverTime       string      `json:"over_time"`
-		Remark         string      `json:"remark"`
+		OverTime       api.DateTime      `json:"over_time"`
+		Remark         api.String      `json:"remark"`
 		SetCancelNum   api.Integer `json:"set_cancel_num"`
 		SetFailNum     api.Integer `json:"set_fail_num"`
 		SetFinishNum   api.Integer `json:"set_finish_num"`
 		SetOvertimeNum api.Integer `json:"set_overtime_num"`
 		SetSuccessNum  api.Integer `json:"set_success_num"`
 		SetTotalNum    api.Integer `json:"set_total_num"`
-		Sn             string      `json:"sn"`
+		Sn             api.String      `json:"sn"`
 		TaskID         api.Integer `json:"task_id"`
-		TaskName       string      `json:"task_name"`
-		UpdateTime     string      `json:"update_time"`
+		TaskName       api.Integer      `json:"task_name"`
+		UpdateTime     api.DateTime      `json:"update_time"`
 	} `json:"pageList"`
 	RowCount   api.Integer `json:"rowCount"`
 	Size       api.Integer `json:"size"`
-	StartIndex interface{} `json:"startIndex"`
-	TotalPage  interface{} `json:"totalPage"`
+	StartIndex api.Integer `json:"startIndex"`
+	TotalPage  api.Integer `json:"totalPage"`
 }
 
 func (e *ResultData) IsValid() error {

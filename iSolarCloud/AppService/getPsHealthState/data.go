@@ -1,6 +1,7 @@
 package getPsHealthState
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
@@ -9,7 +10,7 @@ const Url = "/v1/powerStationService/getPsHealthState"
 const Disabled = false
 
 type RequestData struct {
-	PsId string `json:"ps_id" required:"true"`
+	PsId api.Integer `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

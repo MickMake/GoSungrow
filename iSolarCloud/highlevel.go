@@ -90,10 +90,10 @@ func (sg *SunGrow) GetTemplateData(template string, date string, filter string) 
 
 			ep := sg.GetByStruct(
 				"AppService.queryMutiPointDataList",
-				queryMutiPointDataList.RequestData{
+				queryMutiPointDataList.RequestData {
 					// PsID:           api.SetIntegerValue(psId),
 					PsID:           psId,
-					PsKey:          pointNames.PrintKeys(),
+					PsKey:          api.SetPsKeyValue(pointNames.PrintKeys()),
 					Points:         pointNames.PrintPoints(),
 					MinuteInterval: "5",
 					StartTimeStamp: when.GetDayStartTimestamp(),
@@ -578,7 +578,7 @@ func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints, psId
 				"AppService.queryMutiPointDataList",
 				queryMutiPointDataList.RequestData{
 					PsID:           psId,
-					PsKey:          pointNames.PrintKeys(),
+					PsKey:          api.SetPsKeyValue(pointNames.PrintKeys()),
 					Points:         pointNames.PrintPoints(),
 					MinuteInterval: "5",
 					StartTimeStamp: when.GetDayStartTimestamp(),

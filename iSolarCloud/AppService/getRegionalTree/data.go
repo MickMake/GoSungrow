@@ -1,13 +1,13 @@
 package getRegionalTree
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"errors"
 	"fmt"
 )
 
 const Url = "/v1/orgService/getRegionalTree"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
 	// DeviceType string `json:"device_type" required:"true"`
@@ -23,18 +23,29 @@ func (rd RequestData) Help() string {
 }
 
 
-type ResultData struct {
-	Dummy string `json:"dummy"`
+type ResultData   struct {
+	ResultList []struct {
+		Checked    api.Bool   `json:"checked"`
+		ID         api.String `json:"id"`
+		IsFirstOrg api.Bool   `json:"isFirstOrg"`
+		IsParent   api.Bool `json:"isParent"`
+		Name       api.String `json:"name"`
+		Open       api.Bool   `json:"open"`
+		OrgID      api.Integer  `json:"org_id"`
+		PID        api.Integer `json:"pId"`
+		PsID       api.Integer `json:"ps_id"`
+		ShareType  int64  `json:"share_type"`
+	} `json:"resultList"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
+	// switch {
+	// case e.Dummy == "":
+	// 	break
+	// default:
+	// 	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
+	// }
 	return err
 }
 

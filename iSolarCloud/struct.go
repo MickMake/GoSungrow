@@ -102,33 +102,29 @@ func (sg *SunGrow) GetByJson(endpoint string, request string) api.EndPoint {
 	var ret api.EndPoint
 	for range Only.Once {
 		ret = sg.GetEndpoint(endpoint)
+		sg.Error = ret.GetError()
 		if sg.Error != nil {
-			break
-		}
-		if ret.IsError() {
-			sg.Error = ret.GetError()
 			break
 		}
 
 		if request != "" {
 			ret = ret.SetRequestByJson(output.Json(request))
-			if ret.IsError() {
+			sg.Error = ret.GetError()
+			if sg.Error != nil {
 				fmt.Println(ret.Help())
-				sg.Error = ret.GetError()
 				break
 			}
 		}
 
 		ret = ret.Call()
-		if !ret.IsError() {
-			break
-		}
 		sg.Error = ret.GetError()
-		if strings.Contains(sg.Error.Error(), "er_token_login_invalid") {
-			_ = sg.ApiRoot.WebCacheRemove(sg.Auth)
-			_ = sg.Auth.RemoveToken()
-			// _ = sg.Auth.ApiRemoveDataFile()
-			break
+		if sg.Error != nil {
+			if strings.Contains(sg.Error.Error(), "er_token_login_invalid") {
+				_ = sg.ApiRoot.WebCacheRemove(sg.Auth)
+				_ = sg.Auth.RemoveToken()
+				// _ = sg.Auth.ApiRemoveDataFile()
+				break
+			}
 		}
 
 		switch {
