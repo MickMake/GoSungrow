@@ -67,23 +67,51 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 		// 		ValueTemplate = "{{ value_json.value }}"
 		// }
 
-		device := m.Device
-		device.Name = JoinStrings(m.Device.Name, config.ParentId)
-		device.Connections = [][]string {
-			{ m.Device.Name, JoinStringsForId(m.Device.Name, config.ParentId) },
-			{ JoinStringsForId(m.Device.Name, config.ParentId), JoinStringsForId(m.Device.Name, config.ParentId, config.Name) },
+		// var ok bool
+		// var device Device
+		// if device, ok = m.Devices[config.ParentName]; !ok {
+		// 	break
+		// }
+		//
+		// newDevice := Device{
+		// 	ConfigurationUrl: device.ConfigurationUrl,
+		// 	Connections:      [][]string {
+		// 		{ device.Name, JoinStringsForId(device.Name, config.ParentName) },
+		// 		{ JoinStringsForId(device.Name, config.ParentName), JoinStringsForId(device.Name, config.ParentId) },
+		// 	},
+		// 	Identifiers:      []string{ JoinStringsForId(device.Name, config.ParentId) },
+		// 	Manufacturer:     device.Manufacturer,
+		// 	Model:            device.Model,
+		// 	Name:             JoinStrings(device.Name, config.ParentName),
+		// 	SuggestedArea:    device.SuggestedArea,
+		// 	SwVersion:        device.SwVersion,
+		// 	ViaDevice:        device.ViaDevice,
+		// }
+
+		// // device.Name = JoinStrings(m.Device.Name, config.ParentId)
+		// device.Name = JoinStrings(m.Device.Name, config.ParentName)	// , config.ValueName)
+		// device.Connections = [][]string {
+		// 	{ m.Device.Name, JoinStringsForId(m.Device.Name, config.ParentName) },
+		// 	{ JoinStringsForId(m.Device.Name, config.ParentName), JoinStringsForId(m.Device.Name, config.ParentId) },
+		// 	// { JoinStringsForId(m.Device.Name, config.ParentId), JoinStringsForId(m.Device.Name, config.ParentId, config.Name) },
+		// }
+		// // device.Identifiers = []string{ JoinStringsForId(m.Device.Name, config.ParentId, config.Name) }
+		// device.Identifiers = []string{ JoinStringsForId(m.Device.Name, config.ParentId) }
+
+		ok, newDevice := m.NewDevice(config)
+		if !ok {
+			break
 		}
-		device.Identifiers = []string{ JoinStringsForId(m.Device.Name, config.ParentId) }
-		st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
-		// st := JoinStringsForId(m.Device.Name, config.ParentName, config.Name, config.UniqueId),
+
+		id := JoinStringsForId(m.DeviceName, config.FullId)
+		// id := JoinStringsForId(m.Device.Name, config.ParentName, config.Name, config.UniqueId),
 
 		payload := Sensor {
-			Device:                 device,
-			Name:                   JoinStrings(m.Device.Name, config.ParentName, config.FullId),
-			StateTopic:             JoinStringsForTopic(m.sensorPrefix, st, "state"),
-			// StateTopic:             m.GetSensorStateTopic(name, config.SubName),m.EntityPrefix, m.Device.FullName, config.SubName
+			Device:                 newDevice,
+			Name:                   JoinStrings(m.DeviceName, config.FullId),
+			StateTopic:             JoinStringsForTopic(m.sensorPrefix, id, "state"),
 			StateClass:             config.StateClass,
-			UniqueId:               st,
+			UniqueId:               id,
 			UnitOfMeasurement:      config.Units,
 			DeviceClass:            config.DeviceClass,
 			Qos:                    0,
@@ -113,8 +141,8 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 			// PayloadNotAvailable:    "",
 		}
 
-		ct := JoinStringsForTopic(m.sensorPrefix, st, "config")
-		t := m.client.Publish(ct, 0, true, payload.Json())
+		tag := JoinStringsForTopic(m.sensorPrefix, id, "config")
+		t := m.client.Publish(tag, 0, true, payload.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
 		}
@@ -126,17 +154,18 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 func (m *Mqtt) SensorPublishValue(config EntityConfig) error {
 
 	for range Only.Once {
-		if config.Units == LabelBinarySensor {
+		// if config.Units == LabelBinarySensor {
+		if !config.IsSensor() {
 			break
 		}
 
-		st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
+		id := JoinStringsForId(m.DeviceName, config.FullId)
 		payload := MqttState {
 			LastReset: m.GetLastReset(config.FullId),
 			Value:     config.Value,
 		}
-		st = JoinStringsForTopic(m.sensorPrefix, st, "state")
-		t := m.client.Publish(st, 0, true, payload.Json())
+		tag := JoinStringsForTopic(m.sensorPrefix, id, "state")
+		t := m.client.Publish(tag, 0, true, payload.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
 		}
@@ -193,7 +222,7 @@ func (m *Mqtt) PublishSensorValues(configs []EntityConfig) error {
 		topic := ""
 		for _, oid := range configs {
 			if topic == "" {
-				topic = JoinStringsForId(m.Device.Name, oid.ParentName, oid.Name)
+				topic = JoinStringsForId(m.DeviceName, oid.ParentName, oid.Name)
 			}
 			if _, ok := cs[oid.StateClass]; !ok {
 				cs[oid.StateClass] = make(Fields)
@@ -212,7 +241,7 @@ func (m *Mqtt) PublishSensorValues(configs []EntityConfig) error {
 }
 
 func (m *Mqtt) GetSensorStateTopic(config EntityConfig) string {
-	st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
+	st := JoinStringsForId(m.DeviceName, config.FullId)
 	st = JoinStringsForTopic(m.sensorPrefix, st, "state")		// m.GetSensorStateTopic(name, config.SubName),m.EntityPrefix, m.Device.FullName, config.SubName
 	return st
 }

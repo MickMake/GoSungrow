@@ -107,12 +107,60 @@ func (e *ResultData) IsValid() error {
 func (e *EndPoint) GetDataTable() output.Table {
 	var table output.Table
 	for range Only.Once {
+		// table = output.NewTable()
+		// table.SetTitle("")
+		// table.SetJson([]byte(e.GetJsonData(false)))
+		// table.SetRaw([]byte(e.GetJsonData(true)))
+		//
+		// _ = table.SetHeader(
+		// 	"Ps Key",
+		// 	"Ps Id",
+		// 	"Type",
+		// 	"Code",
+		// 	"Id",
+		// 	"Type Name",
+		// 	"Serial Number",
+		// 	"Model",
+		// 	"Model Id",
+		// 	"Name",
+		// 	"State",
+		// 	"Status",
+		// 	// "Factory Date",
+		// )
+		// for _, d := range e.Response.ResultData.PageList {
+		// 	_ = table.AddRow(
+		// 		d.PsKey.Value(),
+		// 		d.PsID.Value(),
+		// 		d.DeviceType.Value(),
+		// 		d.DeviceCode.Value(),
+		// 		d.ChannelId.Value(),
+		// 		d.TypeName.Value(),
+		// 		d.DeviceProSn.Value(),
+		// 		d.DeviceModel.Value(),
+		// 		d.DeviceModelID.Value(),
+		// 		d.DeviceName.Value(),
+		// 		d.DeviceState,
+		// 		d.DevStatus,
+		// 		// d.DeviceFactoryDate,
+		// 	)
+		// }
+
+		data := e.GetDevices()
+		table = GetDataTable(data)
+	}
+	return table
+}
+
+func GetDataTable(data Devices) output.Table {
+	var table output.Table
+	for range Only.Once {
 		table = output.NewTable()
 		table.SetTitle("")
-		table.SetJson([]byte(e.GetJsonData(false)))
-		table.SetRaw([]byte(e.GetJsonData(true)))
+		// table.SetJson([]byte(e.GetJsonData(false)))
+		// table.SetRaw([]byte(e.GetJsonData(true)))
 
 		_ = table.SetHeader(
+			"Vendor",
 			"Ps Key",
 			"Ps Id",
 			"Type",
@@ -125,25 +173,67 @@ func (e *EndPoint) GetDataTable() output.Table {
 			"Name",
 			"State",
 			"Status",
-			// "Factory Date",
+			"UUID",
 		)
-		for _, d := range e.Response.ResultData.PageList {
+		for _, d := range data {
 			_ = table.AddRow(
-				d.PsKey,
-				d.PsID,
-				d.DeviceType,
-				d.DeviceCode,
-				d.ChannelId,
-				d.TypeName,
-				d.DeviceProSn,
-				d.DeviceModel,
-				d.DeviceModelID,
-				d.DeviceName,
+				d.Vendor.Value(),
+				d.PsKey.Value(),
+				d.PsId.Value(),
+				d.DeviceType.Value(),
+				d.DeviceCode.Value(),
+				d.ChannelId.Value(),
+				d.TypeName.Value(),
+				d.DeviceProSn.Value(),
+				d.DeviceModel.Value(),
+				d.DeviceModelID.Value(),
+				d.DeviceName.Value(),
 				d.DeviceState,
 				d.DevStatus,
-				// d.DeviceFactoryDate,
+				d.Uuid.Value(),
 			)
 		}
 	}
 	return table
+}
+
+type Device struct {
+	Vendor        api.String
+	PsId          api.Integer
+	PsKey         api.PsKey
+	DeviceName    api.String
+	DeviceProSn   api.String
+	DeviceModel   api.String
+	DeviceType    api.Integer
+	DeviceCode    api.Integer
+	ChannelId     api.Integer
+	DeviceModelID api.Integer
+	TypeName      api.String
+	DeviceState   string
+	DevStatus     string
+	Uuid          api.Integer
+}
+type Devices []Device
+
+func (e *EndPoint) GetDevices() Devices {
+	var ret Devices
+	for _, d := range e.Response.ResultData.PageList {
+		ret = append(ret, Device{
+			Vendor:        d.FactoryName,
+			PsKey:         d.PsKey,
+			PsId:          d.PsID,
+			DeviceType:    d.DeviceType,
+			DeviceCode:    d.DeviceCode,
+			ChannelId:     d.ChannelId,
+			TypeName:      d.TypeName,
+			DeviceProSn:   d.DeviceProSn,
+			DeviceModel:   d.DeviceModel,
+			DeviceModelID: d.DeviceModelID,
+			DeviceName:    d.DeviceName,
+			DeviceState:   d.DeviceState,
+			DevStatus:     d.DevStatus,
+			Uuid:          d.ModuleUUID,
+		})
+	}
+	return ret
 }

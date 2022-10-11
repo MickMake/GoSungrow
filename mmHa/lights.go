@@ -6,14 +6,42 @@ import (
 )
 
 
-func (m *Mqtt) PublishLightConfig(id string, name string, subName string, units string, valueName string, class string) error {
+func (m *Mqtt) PublishLightConfig(config EntityConfig) error {
+	// func (m *Mqtt) PublishLightConfig(id string, name string, subName string, units string, valueName string, class string) error {
 	for range Only.Once {
-		id = JoinStringsForId(m.EntityPrefix, m.Device.Name, id)
+		config.FixConfig()
+		if !config.IsLight() {
+			break
+		}
+
+		ok, newDevice := m.NewDevice(config)
+		if !ok {
+			break
+		}
+
+		id := JoinStringsForId(m.DeviceName, config.FullId)
 
 		payload := Light {
-			Device:                 m.Device,
-			Name:                   JoinStrings(m.Device.ViaDevice, name),
+			Device:                 newDevice,
+			// Name:                   JoinStrings(newDevice.ViaDevice, config.Name),
+			Name:                   JoinStrings(m.DeviceName, config.FullId),
 			StateTopic:             JoinStringsForTopic(m.switchPrefix, id, "state"),
+
+			// StateClass:             config.StateClass,
+			// UniqueId:               id,
+			// UnitOfMeasurement:      config.Units,
+			// DeviceClass:            config.DeviceClass,
+			// Qos:                    0,
+			// ForceUpdate:            true,
+			// ExpireAfter:            0,
+			// Encoding:               "utf-8",
+			// EnabledByDefault:       true,
+			PayloadOn:              "true",
+			PayloadOff:             "false",
+			// LastResetValueTemplate: config.LastResetValueTemplate,
+			ValueTemplate:          config.ValueTemplate,
+			// Icon:                   config.Icon,
+
 			// StateClass:             "measurement",
 			// UniqueId:               id,
 			// UnitOfMeasurement:      units,
@@ -31,14 +59,9 @@ func (m *Mqtt) PublishLightConfig(id string, name string, subName string, units 
 			// LastResetValueTemplate: "{{ (as_datetime((value_json.last_reset | int | timestamp_utc)|string+'Z')).isoformat() }}",
 		}
 
-		m.client.Publish(JoinStringsForTopic(m.lightPrefix, id, "config"), 0, true, payload.Json())
-	}
-	return m.err
-}
-
-func (m *Mqtt) PublishLight(subtopic string, payload interface{}) error {
-	for range Only.Once {
-		t := m.client.Publish(JoinStringsForTopic(m.lightPrefix, subtopic), 0, true, payload)
+		// m.client.Publish(JoinStringsForTopic(m.lightPrefix, id, "config"), 0, true, payload.Json())
+		tag := JoinStringsForTopic(m.lightPrefix, id, "config")
+		t := m.client.Publish(tag, 0, true, payload.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
 		}
@@ -46,16 +69,51 @@ func (m *Mqtt) PublishLight(subtopic string, payload interface{}) error {
 	return m.err
 }
 
-func (m *Mqtt) PublishLightState(topic string, payload interface{}) error {
+func (m *Mqtt) LightPublishValue(config EntityConfig) error {
+
 	for range Only.Once {
-		topic = JoinStringsForId(m.EntityPrefix, m.Device.Name, topic)
-		t := m.client.Publish(JoinStringsForTopic(m.lightPrefix, topic, "state"), 0, true, payload)
+		// if config.Units != LabelBinarySensor {
+		if !config.IsLight() {
+			break
+		}
+
+		id := JoinStringsForId(m.DeviceName, config.FullId)
+		// tagId := JoinStringsForId(m.Device.Name, config.ParentName, config.Name, config.UniqueId),
+
+		payload := MqttState {
+			LastReset: m.GetLastReset(config.UniqueId),
+			Value:     config.Value,
+		}
+		tag := JoinStringsForTopic(m.lightPrefix, id, "state")
+		t := m.client.Publish(tag, 0, true, payload.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
 		}
 	}
+
 	return m.err
 }
+
+// func (m *Mqtt) PublishLight(subtopic string, payload interface{}) error {
+// 	for range Only.Once {
+// 		t := m.client.Publish(JoinStringsForTopic(m.lightPrefix, subtopic), 0, true, payload)
+// 		if !t.WaitTimeout(m.Timeout) {
+// 			m.err = t.Error()
+// 		}
+// 	}
+// 	return m.err
+// }
+//
+// func (m *Mqtt) PublishLightState(topic string, payload interface{}) error {
+// 	for range Only.Once {
+// 		topic = JoinStringsForId(m.EntityPrefix, m.DeviceName, topic)
+// 		t := m.client.Publish(JoinStringsForTopic(m.lightPrefix, topic, "state"), 0, true, payload)
+// 		if !t.WaitTimeout(m.Timeout) {
+// 			m.err = t.Error()
+// 		}
+// 	}
+// 	return m.err
+// }
 
 
 type Light struct {

@@ -14,21 +14,28 @@ func (m *Mqtt) SwitchPublishConfig(config EntityConfig) error {
 			break
 		}
 
-		device := m.Device
-		device.Name = JoinStrings(m.Device.Name, config.ParentId)
-		device.Connections = [][]string{
-			{ m.Device.Name, JoinStringsForId(m.Device.Name, config.ParentId) },
-			{ JoinStringsForId(m.Device.Name, config.ParentId), JoinStringsForId(m.Device.Name, config.ParentId, config.Name) },
+		// device := m.Device
+		// device.Name = JoinStrings(m.Device.Name, config.ParentId)
+		// device.Connections = [][]string{
+		// 	{ m.Device.Name, JoinStringsForId(m.Device.Name, config.ParentId) },
+		// 	{ JoinStringsForId(m.Device.Name, config.ParentId), JoinStringsForId(m.Device.Name, config.ParentId, config.Name) },
+		// }
+		// device.Identifiers = []string{ JoinStringsForId(m.Device.Name, config.ParentId) }
+		// st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
+
+		ok, newDevice := m.NewDevice(config)
+		if !ok {
+			break
 		}
-		device.Identifiers = []string{ JoinStringsForId(m.Device.Name, config.ParentId) }
-		st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
+
+		id := JoinStringsForId(m.DeviceName, config.FullId)
 
 		payload := Switch {
-			Device:                 device,
-			Name:                   JoinStrings(m.Device.Name, config.ParentName, config.FullId),
-			StateTopic:             JoinStringsForTopic(m.binarySensorPrefix, st, "state"),
-			CommandTopic:           JoinStringsForTopic(m.binarySensorPrefix, st, "cmd"),
-			UniqueId:               st,
+			Device:                 newDevice,
+			Name:                   JoinStrings(m.DeviceName, config.FullId),
+			StateTopic:             JoinStringsForTopic(m.switchPrefix, id, "state"),
+			CommandTopic:           JoinStringsForTopic(m.switchPrefix, id, "cmd"),
+			UniqueId:               id,
 			Qos:                    0,
 			Retain:                 true,
 
@@ -56,8 +63,8 @@ func (m *Mqtt) SwitchPublishConfig(config EntityConfig) error {
 			// PayloadNotAvailable:    "",
 		}
 
-		ct := JoinStringsForTopic(m.binarySensorPrefix, st, "config")
-		t := m.client.Publish(ct, 0, true, payload.Json())
+		tag := JoinStringsForTopic(m.switchPrefix, id, "config")
+		t := m.client.Publish(tag, 0, true, payload.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
 		}
@@ -69,17 +76,18 @@ func (m *Mqtt) SwitchPublishConfig(config EntityConfig) error {
 func (m *Mqtt) SwitchPublishValue(config EntityConfig) error {
 
 	for range Only.Once {
-		if config.Units != LabelSwitch {
+		// if config.Units != LabelSwitch {
+		if !config.IsSwitch() {
 			break
 		}
 
-		st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
+		id := JoinStringsForId(m.DeviceName, config.FullId)
 		payload := MqttState {
 			LastReset: m.GetLastReset(config.UniqueId),
 			Value:     config.Value,
 		}
-		st = JoinStringsForTopic(m.binarySensorPrefix, st, "state")
-		t := m.client.Publish(st, 0, true, payload.Json())
+		tag := JoinStringsForTopic(m.switchPrefix, id, "state")
+		t := m.client.Publish(tag, 0, true, payload.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
 		}

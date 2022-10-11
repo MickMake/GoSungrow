@@ -685,7 +685,7 @@ func (sg *SunGrow) SearchPointNames(pns ...string) error {
 	return sg.Error
 }
 
-func (sg *SunGrow) GetDevices(psIds ...api.Integer) error {
+func (sg *SunGrow) GetDeviceList(psIds ...api.Integer) error {
 	for range Only.Once {
 		if len(psIds) == 0 {
 			psIds, sg.Error = sg.GetPsIds()
@@ -694,6 +694,7 @@ func (sg *SunGrow) GetDevices(psIds ...api.Integer) error {
 			}
 		}
 
+		var ret getDeviceList.Devices
 		for _, psId := range psIds {
 			ep := sg.GetByStruct(
 				"AppService.getDeviceList",
@@ -706,28 +707,25 @@ func (sg *SunGrow) GetDevices(psIds ...api.Integer) error {
 			}
 
 			data := getDeviceList.Assert(ep)
-			table := data.GetDataTable()
-			if table.Error != nil {
-				sg.Error = table.Error
-				break
-			}
+			ret = append(ret, data.GetDevices()...)
+		}
 
-			table.SetTitle("Device Info %s", psId)
-			table.SetFilePrefix(data.SetFilenamePrefix("%d", psId))
-			table.SetGraphFilter("")
-			table.SetSaveFile(sg.SaveAsFile)
-			table.OutputType = sg.OutputType
-			sg.Error = table.Output()
-			if sg.Error != nil {
-				break
-			}
+		table := getDeviceList.GetDataTable(ret)
+		table.SetTitle("All Devices")
+		table.SetFilePrefix("")
+		table.SetGraphFilter("")
+		table.SetSaveFile(sg.SaveAsFile)
+		table.OutputType = sg.OutputType
+		sg.Error = table.Output()
+		if sg.Error != nil {
+			break
 		}
 	}
 
 	return sg.Error
 }
 
-func (sg *SunGrow) GetDeviceModels() error {
+func (sg *SunGrow) GetDeviceModelInfoList() error {
 	for range Only.Once {
 		ep := sg.GetByStruct(
 			"AppService.getDeviceModelInfoList",
@@ -1078,7 +1076,7 @@ func (sg *SunGrow) StringToPids(pids ...string) ([]api.Integer, error) {
 	return psIds, sg.Error
 }
 
-func (sg *SunGrow) GetPsName() ([]string, error) {
+func (sg *SunGrow) GetPsNames() ([]string, error) {
 	var ret []string
 
 	for range Only.Once {
@@ -1095,7 +1093,80 @@ func (sg *SunGrow) GetPsName() ([]string, error) {
 	return ret, sg.Error
 }
 
-func (sg *SunGrow) GetPsModel() ([]string, error) {
+func (sg *SunGrow) GetDevices(print bool) (getDeviceList.Devices, error) {
+	var ret getDeviceList.Devices
+
+	for range Only.Once {
+		ep := sg.GetByStruct("AppService.getPsList", nil, DefaultCacheTimeout)
+		if ep.IsError() {
+			sg.Error = ep.GetError()
+			break
+		}
+
+		_getPsList := getPsList.AssertResultData(ep)
+		psIds := _getPsList.GetPsDevices()
+
+		for _, psId := range psIds {
+			ret = append(ret, getDeviceList.Device{
+				Vendor:        api.SetStringValue(""),
+				PsId:          psId.PsID,
+				PsKey:         api.SetPsKeyValue(psId.PsID.String()),
+				DeviceName:    psId.PsName,
+				DeviceProSn:   psId.PsShortName,
+				DeviceModel:   api.SetStringValue(""),
+				DeviceType:    psId.PsType,
+				DeviceCode:    api.SetIntegerValue(0),
+				ChannelId:     api.SetIntegerValue(0),
+				DeviceModelID: api.SetIntegerValue(0),
+				TypeName:      api.SetStringValue("Ps Id"),
+				DeviceState:   psId.PsHealthStatus,
+				DevStatus:     psId.PsStatus.String(),
+				Uuid:          api.SetIntegerValue(0),
+
+				// 			PsFaultStatus:  d.PsFaultStatus,
+				//			PsHealthStatus: d.PsHealthStatus,
+				//			PsHolder:       d.PsHolder,
+				//			PsID:           d.PsID,
+				//			PsName:         d.PsName,
+				//			PsShortName:    d.PsShortName,
+				//			PsStatus:       d.PsStatus,
+				//			PsType:         d.PsType,
+			})
+
+			ep = sg.GetByStruct(
+				"AppService.getDeviceList",
+				// getDeviceList.RequestData{PsId: strconv.FormatInt(psId, 10)},
+				getDeviceList.RequestData{PsId: psId.PsID},
+				DefaultCacheTimeout,
+			)
+			if sg.Error != nil {
+				break
+			}
+
+			data := getDeviceList.Assert(ep)
+			ret = append(ret, data.GetDevices()...)
+		}
+
+		if !print {
+			break
+		}
+
+		table := getDeviceList.GetDataTable(ret)
+		table.SetTitle("All Devices")
+		table.SetFilePrefix("")
+		table.SetGraphFilter("")
+		table.SetSaveFile(sg.SaveAsFile)
+		table.OutputType = sg.OutputType
+		sg.Error = table.Output()
+		if sg.Error != nil {
+			break
+		}
+	}
+
+	return ret, sg.Error
+}
+
+func (sg *SunGrow) GetPsModels() ([]string, error) {
 	var ret []string
 
 	for range Only.Once {
@@ -1124,7 +1195,7 @@ func (sg *SunGrow) GetPsModel() ([]string, error) {
 	return ret, sg.Error
 }
 
-func (sg *SunGrow) GetPsSerial() ([]string, error) {
+func (sg *SunGrow) GetPsSerials() ([]string, error) {
 	var ret []string
 
 	for range Only.Once {

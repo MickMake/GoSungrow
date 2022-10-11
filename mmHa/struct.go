@@ -2,6 +2,7 @@ package mmHa
 
 import (
 	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/AppService/getDeviceList"
 	"GoSungrow/iSolarCloud/api"
 	"encoding/json"
 	"errors"
@@ -18,22 +19,24 @@ type Mqtt struct {
 	Password      string `json:"password"`
 	Host          string `json:"host"`
 	Port          string `json:"port"`
-	Timeout  time.Duration `json:"timeout"`
-	EntityPrefix string `json:"entity_prefix"`
+	Timeout       time.Duration `json:"timeout"`
+	EntityPrefix  string `json:"entity_prefix"`
 
 	url           *url.URL
 	client        mqtt.Client
 	pubClient     mqtt.Client
 	clientOptions *mqtt.ClientOptions
-	LastRefresh   time.Time `json:"-"`
-	PsId          api.Integer `json:"-"`
+	LastRefresh    time.Time             `json:"-"`
+	SungrowDevices getDeviceList.Devices `json:"-"`
+	SungrowPsIds   map[api.Integer]bool
 
-	Device Device
+	DeviceName  string
+	MqttDevices map[string]Device
 
-	servicePrefix string
-	sensorPrefix string
-	lightPrefix string
-	switchPrefix string
+	servicePrefix      string
+	sensorPrefix       string
+	lightPrefix        string
+	switchPrefix       string
 	binarySensorPrefix string
 
 	token    mqtt.Token
@@ -57,6 +60,9 @@ func New(req Mqtt) *Mqtt {
 		ret.lightPrefix = "homeassistant/light/" + req.ClientId
 		ret.switchPrefix = "homeassistant/switch/" + req.ClientId
 		ret.binarySensorPrefix = "homeassistant/binary_sensor/" + req.ClientId
+
+		ret.MqttDevices = make(map[string]Device)
+		ret.SungrowPsIds = make(map[api.Integer]bool)
 	}
 
 	return &ret
@@ -377,15 +383,23 @@ func (m *Mqtt) PublishValue(Type string, subtopic string, value string) error {
 // 	return m.err
 // }
 
-func (m *Mqtt) SetDeviceConfig(swname string, id string, name string, model string, vendor string, area string) error {
+func (m *Mqtt) SetDeviceConfig(swname string, parentId string, id string, name string, model string, vendor string, area string) error {
 	for range Only.Once {
-		id = JoinStringsForId(m.EntityPrefix, id)
+		// id = JoinStringsForId(m.EntityPrefix, id)
 
-		m.Device = Device {
-			Connections:  [][]string{
-				{swname, id},
-			},
-			Identifiers:  []string{id},
+		c := [][]string{
+			{swname, JoinStringsForId(m.EntityPrefix, parentId)},
+			{JoinStringsForId(m.EntityPrefix, parentId), JoinStringsForId(m.EntityPrefix, id)},
+		}
+		if swname == parentId {
+			c = [][]string{
+				{parentId, JoinStringsForId(m.EntityPrefix, id)},
+			}
+		}
+
+		m.MqttDevices[id] = Device {
+			Connections:  c,
+			Identifiers:  []string{JoinStringsForId(m.EntityPrefix, id)},
 			Manufacturer: vendor,
 			Model:        model,
 			Name:         name,
@@ -526,7 +540,7 @@ func (config *EntityConfig) IsLight() bool {
 	var ok bool
 
 	for range Only.Once {
-		if config.Units == LabelBinarySensor {
+		if config.Units == LabelLight {
 			ok = true
 			break
 		}

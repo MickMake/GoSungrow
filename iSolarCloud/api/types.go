@@ -15,6 +15,7 @@ type UnitValue struct {
 	float64 `json:"value_float,omitempty"`
 	int64 `json:"value_int,omitempty"`
 	isFloat bool
+	Valid   bool `json:"valid"`
 }
 
 func (t *UnitValue) UnitValueFix() UnitValue {
@@ -75,6 +76,8 @@ func (t *UnitValue) UnmarshalJSON(data []byte) error {
 	var err error
 
 	for range Only.Once {
+		t.Valid = false
+
 		if len(data) == 0 {
 			break
 		}
@@ -128,6 +131,8 @@ func (t UnitValue) MarshalJSON() ([]byte, error) {
 	var err error
 
 	for range Only.Once {
+		t.Valid = false
+
 		if t.isFloat {
 			// Store result to JSON string
 			data, err = json.Marshal(&struct {
@@ -137,6 +142,11 @@ func (t UnitValue) MarshalJSON() ([]byte, error) {
 				Unit:  t.unit,
 				Value: t.float64,
 			})
+			if err != nil {
+				break
+			}
+
+			t.Valid = true
 			break
 		}
 
@@ -148,6 +158,11 @@ func (t UnitValue) MarshalJSON() ([]byte, error) {
 			Unit:  t.unit,
 			Value: t.int64,
 		})
+		if err != nil {
+			break
+		}
+
+		t.Valid = true
 	}
 
 	return data, err
@@ -180,13 +195,14 @@ func (t *UnitValue) SetString(value string) UnitValue {
 	for range Only.Once {
 		t.string = value
 		t.int64 = 0
+		t.Valid = false
 
 		if value == "" {
 			break
 		}
 
 		if value == "--" {
-			value = ""
+			// value = ""
 			break
 		}
 
@@ -215,6 +231,7 @@ func (t *UnitValue) SetInteger(value int64) UnitValue {
 		t.int64 = value
 		t.float64 = float64(value)
 		t.isFloat = false
+		t.Valid = true
 
 		if value == 0 {
 			break
@@ -232,6 +249,7 @@ func (t *UnitValue) SetFloat(value float64) UnitValue {
 		t.int64 = int64(value)
 		t.float64 = value
 		t.isFloat = true
+		t.Valid = true
 
 		if value == 0 {
 			break
@@ -248,6 +266,7 @@ func (t *UnitValue) SetFloat(value float64) UnitValue {
 func (t *UnitValue) SetUnit(unit string) UnitValue {
 	for range Only.Once {
 		t.unit = unit
+		// t.Valid = true
 	}
 
 	return *t
@@ -291,6 +310,7 @@ func (u *UnitValueMap) Sort() []string {
 type Integer struct {
 	string `json:"string,omitempty"`
 	int64  `json:"integer,omitempty"`
+	Valid   bool `json:"valid"`
 }
 
 // UnmarshalJSON - Convert JSON to value
@@ -298,6 +318,8 @@ func (t *Integer) UnmarshalJSON(data []byte) error {
 	var err error
 
 	for range Only.Once {
+		t.Valid = false
+
 		if len(data) == 0 {
 			break
 		}
@@ -326,10 +348,13 @@ func (t Integer) MarshalJSON() ([]byte, error) {
 	var err error
 
 	for range Only.Once {
+		t.Valid = false
+
 		data, err = json.Marshal(t.int64)
 		if err != nil {
 			break
 		}
+		t.Valid = true
 		// t.string = strconv.FormatInt(t.int64, 10)
 	}
 
@@ -348,13 +373,14 @@ func (t *Integer) SetString(value string) Integer {
 	for range Only.Once {
 		t.string = value
 		t.int64 = 0
+		t.Valid = false
 
 		if value == "" {
 			break
 		}
 
 		if value == "--" {
-			value = ""
+			// value = ""
 			break
 		}
 
@@ -365,6 +391,7 @@ func (t *Integer) SetString(value string) Integer {
 			break
 		}
 		t.int64 = int64(v)
+		t.Valid = true
 	}
 
 	return *t
@@ -374,6 +401,7 @@ func (t *Integer) SetValue(value int64) Integer {
 	for range Only.Once {
 		t.string = ""
 		t.int64 = value
+		t.Valid = true
 
 		if value == 0 {
 			break
@@ -399,6 +427,7 @@ func SetIntegerValue(value int64) Integer {
 type Float struct {
 	string  `json:"string,omitempty"`
 	float64 `json:"float,omitempty"`
+	Valid   bool `json:"valid"`
 }
 
 // UnmarshalJSON - Convert JSON to value
@@ -406,6 +435,8 @@ func (t *Float) UnmarshalJSON(data []byte) error {
 	var err error
 
 	for range Only.Once {
+		t.Valid = false
+
 		if len(data) == 0 {
 			break
 		}
@@ -434,10 +465,13 @@ func (t Float) MarshalJSON() ([]byte, error) {
 	var err error
 
 	for range Only.Once {
+		t.Valid = false
+
 		data, err = json.Marshal(t.float64)
 		if err != nil {
 			break
 		}
+		t.Valid = true
 		// t.string = strconv.FormatFloat(t.float64, 'f', 12, 64)
 	}
 
@@ -456,13 +490,14 @@ func (t *Float) SetString(value string) Float {
 	for range Only.Once {
 		t.string = value
 		t.float64 = 0
+		t.Valid = false
 
 		if value == "" {
 			break
 		}
 
 		if value == "--" {
-			value = ""
+			// value = ""
 			break
 		}
 
@@ -471,6 +506,7 @@ func (t *Float) SetString(value string) Float {
 		if err == nil {
 			break
 		}
+		t.Valid = true
 	}
 
 	return *t
@@ -480,6 +516,7 @@ func (t *Float) SetValue(value float64) Float {
 	for range Only.Once {
 		t.string = ""
 		t.float64 = value
+		t.Valid = true
 
 		if value == 0 {
 			break
@@ -505,6 +542,7 @@ func SetFloatValue(value float64) Float {
 type Bool struct {
 	string `json:"string,omitempty"`
 	bool   `json:"bool,omitempty"`
+	Valid   bool `json:"valid"`
 }
 
 // UnmarshalJSON - Convert JSON to value
@@ -512,6 +550,8 @@ func (t *Bool) UnmarshalJSON(data []byte) error {
 	var err error
 
 	for range Only.Once {
+		t.Valid = false
+
 		if len(data) == 0 {
 			break
 		}
@@ -550,10 +590,13 @@ func (t Bool) MarshalJSON() ([]byte, error) {
 	var err error
 
 	for range Only.Once {
+		t.Valid = false
+
 		data, err = json.Marshal(t.bool)
 		if err != nil {
 			break
 		}
+		t.Valid = true
 		// t.string = strconv.FormatFloat(t.bool, 'f', 12, 64)
 	}
 
@@ -571,6 +614,7 @@ func (t Bool) String() string {
 func (t *Bool) SetString(value string) Bool {
 	for range Only.Once {
 		t.string = value
+		t.Valid = false
 
 		switch strings.ToLower(t.string) {
 			case "false":
@@ -582,10 +626,11 @@ func (t *Bool) SetString(value string) Bool {
 			case "0":
 				fallthrough
 			case "":
-				fallthrough
-			case "--":
+			// 	fallthrough
+			// case "--":
 				t.bool = false
 				t.string = "false"
+				t.Valid = true
 
 			case "true":
 				fallthrough
@@ -596,6 +641,7 @@ func (t *Bool) SetString(value string) Bool {
 			case "1":
 				t.bool = true
 				t.string = "true"
+				t.Valid = true
 		}
 	}
 
@@ -605,6 +651,7 @@ func (t *Bool) SetString(value string) Bool {
 func (t *Bool) SetValue(value bool) Bool {
 	for range Only.Once {
 		t.bool = value
+		t.Valid = true
 
 		if t.bool {
 			t.string = "true"
@@ -619,6 +666,8 @@ func (t *Bool) SetValue(value bool) Bool {
 
 func (t *Bool) SetInteger(value int64) Bool {
 	for range Only.Once {
+		t.Valid = true
+
 		if value == 0 {
 			t.bool = false
 			t.string = "false"
@@ -645,6 +694,7 @@ func SetBoolValue(value bool) Bool {
 
 type String struct {
 	string `json:"string,omitempty"`
+	Valid   bool `json:"valid"`
 }
 
 // UnmarshalJSON - Convert JSON to value
@@ -652,16 +702,18 @@ func (t *String) UnmarshalJSON(data []byte) error {
 	var err error
 
 	for range Only.Once {
+		t.Valid = false
+
 		if len(data) == 0 {
 			break
 		}
 
 		// Store result from string
 		err = json.Unmarshal(data, &t.string)
-		if err == nil {
-			t.SetString(t.string)
+		if err != nil {
 			break
 		}
+		t.SetString(t.string)
 	}
 
 	return err
@@ -673,10 +725,13 @@ func (t String) MarshalJSON() ([]byte, error) {
 	var err error
 
 	for range Only.Once {
+		t.Valid = false
+
 		data, err = json.Marshal(t.string)
 		if err != nil {
 			break
 		}
+		t.Valid = true
 	}
 
 	return data, err
@@ -693,6 +748,7 @@ func (t String) String() string {
 func (t *String) SetString(value string) String {
 	for range Only.Once {
 		t.string = value
+		t.Valid = true
 	}
 
 	return *t
@@ -701,6 +757,7 @@ func (t *String) SetString(value string) String {
 func (t *String) SetValue(value string) String {
 	for range Only.Once {
 		t.string = value
+		t.Valid = true
 	}
 
 	return *t
@@ -714,6 +771,7 @@ func SetStringValue(value string) String {
 
 type PsKey struct {
 	string `json:"string,omitempty"`
+	Valid   bool `json:"valid"`
 }
 
 // UnmarshalJSON - Convert JSON to value
@@ -721,16 +779,18 @@ func (t *PsKey) UnmarshalJSON(data []byte) error {
 	var err error
 
 	for range Only.Once {
+		t.Valid = false
+
 		if len(data) == 0 {
 			break
 		}
 
 		// Store result from string
 		err = json.Unmarshal(data, &t.string)
-		if err == nil {
-			t.SetPsKey(t.string)
+		if err != nil {
 			break
 		}
+		t.SetPsKey(t.string)
 	}
 
 	return err
@@ -742,10 +802,13 @@ func (t PsKey) MarshalJSON() ([]byte, error) {
 	var err error
 
 	for range Only.Once {
+		t.Valid = false
+
 		data, err = json.Marshal(t.string)
 		if err != nil {
 			break
 		}
+		t.Valid = true
 	}
 
 	return data, err
@@ -762,6 +825,7 @@ func (t PsKey) PsKey() string {
 func (t *PsKey) SetPsKey(value string) PsKey {
 	for range Only.Once {
 		t.string = value
+		t.Valid = true
 	}
 
 	return *t
@@ -770,6 +834,7 @@ func (t *PsKey) SetPsKey(value string) PsKey {
 func (t *PsKey) SetValue(value string) PsKey {
 	for range Only.Once {
 		t.string = value
+		t.Valid = true
 	}
 
 	return *t

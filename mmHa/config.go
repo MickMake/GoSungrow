@@ -1,6 +1,9 @@
 package mmHa
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"github.com/MickMake/GoUnify/Only"
+)
 
 
 type Config struct {
@@ -35,6 +38,70 @@ type Device struct {
 	SwVersion        string     `json:"sw_version,omitempty" required:"false"`
 	ViaDevice        string     `json:"via_device,omitempty" required:"false"`
 }
+
+func (m *Mqtt) NewDevice(config EntityConfig) (bool, Device) {
+	var ok bool
+	var ret Device
+
+	for range Only.Once {
+		var parent Device
+		if parent, ok = m.MqttDevices[config.ParentName]; !ok {
+			break
+		}
+
+		ret = Device {
+			ConfigurationUrl: parent.ConfigurationUrl,
+			Connections:      [][]string {
+				{ m.EntityPrefix, JoinStringsForId(m.EntityPrefix, config.ParentName) },
+				{ JoinStringsForId(m.EntityPrefix, config.ParentName), JoinStringsForId(m.EntityPrefix, config.ParentId) },
+			},
+			Identifiers:      []string{ JoinStringsForId(m.EntityPrefix, config.ParentId) },
+			Manufacturer:     parent.Manufacturer,
+			Model:            parent.Model,
+			Name:             JoinStrings(parent.Name, config.ParentName),
+			SuggestedArea:    parent.SuggestedArea,
+			SwVersion:        parent.SwVersion,
+			ViaDevice:        parent.ViaDevice,
+		}
+		ok = true
+	}
+
+	return ok, ret
+
+}
+
+// func (d *Device) NewDevice(config EntityConfig) Device {
+// 	var ret Device
+//
+// 	for range Only.Once {
+// 		ret = Device{
+// 			ConfigurationUrl: d.ConfigurationUrl,
+// 			Connections:      [][]string {
+// 				{ d.Name, JoinStringsForId(d.Name, config.ParentName) },
+// 				{ JoinStringsForId(d.Name, config.ParentName), JoinStringsForId(d.Name, config.ParentId) },
+// 			},
+// 			Identifiers:      []string{ JoinStringsForId(d.Name, config.ParentId) },
+// 			Manufacturer:     d.Manufacturer,
+// 			Model:            d.Model,
+// 			Name:             JoinStrings(d.Name, config.ParentName),
+// 			SuggestedArea:    d.SuggestedArea,
+// 			SwVersion:        d.SwVersion,
+// 			ViaDevice:        d.ViaDevice,
+// 		}
+//
+// 		// // device.Name = JoinStrings(m.Device.Name, config.ParentId)
+// 		// device.Name = JoinStrings(m.Device.Name, config.ParentName)	// , config.ValueName)
+// 		// device.Connections = [][]string {
+// 		// 	{ m.Device.Name, JoinStringsForId(m.Device.Name, config.ParentName) },
+// 		// 	{ JoinStringsForId(m.Device.Name, config.ParentName), JoinStringsForId(m.Device.Name, config.ParentId) },
+// 		// 	// { JoinStringsForId(m.Device.Name, config.ParentId), JoinStringsForId(m.Device.Name, config.ParentId, config.Name) },
+// 		// }
+// 		// // device.Identifiers = []string{ JoinStringsForId(m.Device.Name, config.ParentId, config.Name) }
+// 		// device.Identifiers = []string{ JoinStringsForId(m.Device.Name, config.ParentId) }
+// 	}
+//
+// 	return ret
+// }
 
 // {
 //	"device": {

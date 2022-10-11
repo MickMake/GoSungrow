@@ -373,21 +373,21 @@ func (e *EndPoint) GetData() api.DataMap {
 				// parent := api.ParentDevice{Key: e.Request.PsID}
 
 				uv := api.SetUnitValueFloat(d.P83076.Value(), d.P83076Unit.Value())
-				entries.AddUnitValue(name + ".p83076", e.Request.PsID.String(), "p83076", "", d.TimeStamp, uv)
+				entries.AddUnitValue(name + ".p83076", e.Request.PsID.String(), "p83076", "", "", d.TimeStamp, uv)
 				uv = api.SetUnitValueFloat(d.P83080.Value(), d.P83080Unit.Value())
-				entries.AddUnitValue(name + ".p83080", e.Request.PsID.String(), "p83080", "", d.TimeStamp, uv)
+				entries.AddUnitValue(name + ".p83080", e.Request.PsID.String(), "p83080", "", "", d.TimeStamp, uv)
 				uv = api.SetUnitValueFloat(d.P83086.Value(), d.P83086Unit.Value())
-				entries.AddUnitValue(name + ".p83086", e.Request.PsID.String(), "p83086", "", d.TimeStamp, uv)
+				entries.AddUnitValue(name + ".p83086", e.Request.PsID.String(), "p83086", "", "", d.TimeStamp, uv)
 				uv = api.SetUnitValueFloat(d.P83087.Value(), d.P83087Unit.Value())
-				entries.AddUnitValue(name + ".p83087", e.Request.PsID.String(), "p83087", "", d.TimeStamp, uv)
+				entries.AddUnitValue(name + ".p83087", e.Request.PsID.String(), "p83087", "", "", d.TimeStamp, uv)
 				uv = api.SetUnitValueFloat(d.P83096.Value(), d.P83096Unit.Value())
-				entries.AddUnitValue(name + ".p83096", e.Request.PsID.String(), "p83096", "", d.TimeStamp, uv)
+				entries.AddUnitValue(name + ".p83096", e.Request.PsID.String(), "p83096", "", "", d.TimeStamp, uv)
 				uv = api.SetUnitValueFloat(d.P83101.Value(), d.P83101Unit.Value())
-				entries.AddUnitValue(name + ".p83101", e.Request.PsID.String(), "p83101", "", d.TimeStamp, uv)
+				entries.AddUnitValue(name + ".p83101", e.Request.PsID.String(), "p83101", "", "", d.TimeStamp, uv)
 				uv = api.SetUnitValueFloat(d.P83106.Value(), d.P83106Unit.Value())
-				entries.AddUnitValue(name + ".p83106", e.Request.PsID.String(), "p83106", "", d.TimeStamp, uv)
+				entries.AddUnitValue(name + ".p83106", e.Request.PsID.String(), "p83106", "", "", d.TimeStamp, uv)
 				uv = api.SetUnitValueFloat(d.P83128.Value(), d.P83128Unit.Value())
-				entries.AddUnitValue(name + ".p83128", e.Request.PsID.String(), "p83128", "", d.TimeStamp, uv)
+				entries.AddUnitValue(name + ".p83128", e.Request.PsID.String(), "p83128", "", "", d.TimeStamp, uv)
 			}
 		}
 	}

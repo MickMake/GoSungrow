@@ -78,39 +78,39 @@ func (e *EndPoint) GetData() api.DataMap {
 		// entries.StructToPoints(*e.Response.ResultData.DayData, name, e.Request.PsID, time.Time{})
 
 		uv := api.SetUnitValueString(e.Response.ResultData.DayPowerQuantityTotal.Value, e.Response.ResultData.DayPowerQuantityTotal.Unit)
-		entries.AddUnitValue(name + ".DayPowerQuantityTotal", e.Request.PsId.String(), "DayPowerQuantityTotal", "", api.NewDateTime(""), uv)
+		entries.AddUnitValue(name + ".DayPowerQuantityTotal", e.Request.PsId.String(), "DayPowerQuantityTotal", "", "", api.NewDateTime(""), uv)
 
 		uv = api.SetUnitValueString(e.Response.ResultData.DayTotalProfit.Value, e.Response.ResultData.DayTotalProfit.Unit)
-		entries.AddUnitValue(name + ".DayTotalProfit", e.Request.PsId.String(), "DayTotalProfit", "", api.NewDateTime(""), uv)
+		entries.AddUnitValue(name + ".DayTotalProfit", e.Request.PsId.String(), "DayTotalProfit", "", "", api.NewDateTime(""), uv)
 
 		for _, d := range e.Response.ResultData.P34048List {
 			uv = api.SetUnitValueString(d, e.Response.ResultData.P34048Unit)
-			entries.AddUnitValue(name + ".p34048", e.Request.PsId.String(), "p34048", "", api.NewDateTime(""), uv)
+			entries.AddUnitValue(name + ".p34048", e.Request.PsId.String(), "p34048", "", "", api.NewDateTime(""), uv)
 		}
 
 		for _, d := range e.Response.ResultData.P83012List {
 			uv = api.SetUnitValueString(d, e.Response.ResultData.P83012Unit)
-			entries.AddUnitValue(name + ".p83012", e.Request.PsId.String(), "p83012", "", api.NewDateTime(""), uv)
+			entries.AddUnitValue(name + ".p83012", e.Request.PsId.String(), "p83012", "", "", api.NewDateTime(""), uv)
 		}
 
 		for _, d := range e.Response.ResultData.P83033List {
 			uv = api.SetUnitValueString(d, e.Response.ResultData.P83033Unit)
-			entries.AddUnitValue(name + ".p83033", e.Request.PsId.String(), "p83033", "", api.NewDateTime(""), uv)
+			entries.AddUnitValue(name + ".p83033", e.Request.PsId.String(), "p83033", "", "", api.NewDateTime(""), uv)
 		}
 
 		for _, d := range e.Response.ResultData.P83106List {
 			uv = api.SetUnitValueString(d, e.Response.ResultData.P83106Unit)
-			entries.AddUnitValue(name + ".p83106", e.Request.PsId.String(), "p83106", "", api.NewDateTime(""), uv)
+			entries.AddUnitValue(name + ".p83106", e.Request.PsId.String(), "p83106", "", "", api.NewDateTime(""), uv)
 		}
 
 		for _, d := range e.Response.ResultData.P83022List {
 			uv = api.SetUnitValueString(d, e.Response.ResultData.P83022Unit)
-			entries.AddUnitValue(name + ".p83022", e.Request.PsId.String(), "p83022", "", api.NewDateTime(""), uv)
+			entries.AddUnitValue(name + ".p83022", e.Request.PsId.String(), "p83022", "", "", api.NewDateTime(""), uv)
 		}
 
 		for _, d := range e.Response.ResultData.P83118List {
 			uv = api.SetUnitValueString(d, e.Response.ResultData.P83118Unit)
-			entries.AddUnitValue(name + ".p83118", e.Request.PsId.String(), "p83118", "", api.NewDateTime(""), uv)
+			entries.AddUnitValue(name + ".p83118", e.Request.PsId.String(), "p83118", "", "", api.NewDateTime(""), uv)
 		}
 	}
 

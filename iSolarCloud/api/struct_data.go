@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	datatable "go.pennock.tech/tabular/auto"
-	"log"
 	"reflect"
 	"strings"
 	"time"
@@ -43,6 +42,7 @@ type DataEntry struct {
 	ValueFloat float64      `json:"value_float"`
 	ValueBool  bool         `json:"value_bool"`
 	Index      int          `json:"index"`
+	Valid      bool         `json:"valid"`
 }
 
 func (de *DataEntry) IsValid() bool {
@@ -95,6 +95,9 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 			j := fieldTo.Tag.Get("json")
 			pid := fieldTo.Tag.Get("PointId")
 
+			if j == "" {
+				fmt.Sprintf("")
+			}
 			switch {
 				case pid != "":
 					j = pid
@@ -159,7 +162,7 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 						fallthrough
 					case "api.UnitValue":
 						uv = valueTo.(UnitValue)
-						uv = uv.UnitValueFix()
+						// uv = uv.UnitValueFix()
 
 					case "Float":
 						fallthrough
@@ -173,8 +176,34 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 						v := valueTo.(Integer)
 						uv = SetUnitValueInteger(v.Value(), "")
 
+					case "Bool":
+						fallthrough
+					case "api.Bool":
+						v := valueTo.(Bool)
+						uv = SetUnitValueString(v.String(), "binary")
+
+					case "String":
+						fallthrough
+					case "api.String":
+						v := valueTo.(String)
+						uv = SetUnitValueString(v.String(), "")
+
+					case "PsKey":
+						fallthrough
+					case "api.PsKey":
+						v := valueTo.(PsKey)
+						uv = SetUnitValueString(v.Value(), "")
+
+					case "DateTime":
+						fallthrough
+					case "api.DateTime":
+						v := valueTo.(DateTime)
+						uv = SetUnitValueString(v.String(), "")
+
 					case "bool":
-						log.Fatalln("INVALID BOOL TYPE")
+						v := valueTo.(bool)
+						uv = SetUnitValueString(fmt.Sprintf("%v", v), "")
+						// log.Fatalln("INVALID BOOL TYPE")
 						// uv.Unit = ""	// "binary"
 						// uv.Value = fmt.Sprintf("%v", valueTo)
 
@@ -224,9 +253,6 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 				now = NewDateTime(timestamp.String())
 			}
 
-			if parentId == "virtual" {
-				fmt.Sprintf("")
-			}
 			dm.AddEntry(endpoint, device, p, now, uv.String())
 
 			alias := fieldTo.Tag.Get("PointAlias")
@@ -339,6 +365,7 @@ func (dm *DataMap) LowerUpper(lower string, upper string, index int) float64 {
 
 		if l.ValueFloat > 0 {
 			ret = 0 - l.ValueFloat
+			break
 		}
 		ret = u.ValueFloat
 	}
@@ -487,7 +514,8 @@ func (dm *DataMap) AddEntry(endpoint string, parentId string, point Point, date 
 
 		dm.Add(JoinDevicePoint(endpoint, point.Id), DataEntry {
 			EndPoint:   endpoint,
-			FullId:     JoinDevicePoint(parent.Key, point.Id),
+			FullId:     JoinDevicePoint(endpoint, point.Id),
+			// FullId:     JoinDevicePoint(parent.Key, point.Id),
 			Parent:     parent,
 
 			Point:      &point,
@@ -582,7 +610,7 @@ func JoinDevicePoint(device string, pid PointId) PointId {
 	return ret
 }
 
-func (dm *DataMap) AddUnitValue(endpoint string, parentId string, pid PointId, name string, date DateTime, ref UnitValue) {
+func (dm *DataMap) AddUnitValue(endpoint string, parentId string, pid PointId, name string, groupName string, date DateTime, ref UnitValue) {
 	for range Only.Once {
 		if endpoint == "" {
 			endpoint = apiReflect.GetCallerPackage(2)
@@ -614,10 +642,14 @@ func (dm *DataMap) AddUnitValue(endpoint string, parentId string, pid PointId, n
 		if point.Name == "" {
 			point.Name = PointToName(pid)
 		}
+		if point.GroupName == "" {
+			point.GroupName = groupName
+		}
 
 		dm.Add(NameDevicePoint(endpoint, pid), DataEntry {
 			EndPoint:   endpoint,
-			FullId:     JoinDevicePoint(parent.Key, pid),
+			FullId:     JoinDevicePoint(endpoint, point.Id),
+			// FullId:     JoinDevicePoint(parent.Key, point.Id),
 			Parent:     parent,
 
 			Point:      point,
@@ -650,7 +682,8 @@ func (dm *DataMap) AddFloat(endpoint string, parentId string, pid PointId, name 
 
 		dm.Add(pid, DataEntry {
 			EndPoint:   endpoint,
-			FullId:     JoinDevicePoint(parent.Key, pid),
+			FullId:     JoinDevicePoint(endpoint, point.Id),
+			// FullId:     JoinDevicePoint(parent.Key, point.Id),
 			Parent:     parent,
 
 			Date:       date,
@@ -787,18 +820,20 @@ func (de *DataEntry) CreateAlias(endpoint string, parentId string, pid PointId, 
 		},
 		Date:       de.Date,
 		EndPoint:   endpoint,
-		FullId:     "",
-		Parent:     ParentDevice{},
-		Value:      "",
-		ValueFloat: 0,
-		ValueBool:  false,
-		Index:      0,
+		FullId:     JoinDevicePoint(endpoint, pid),
+		// FullId:     JoinDevicePoint(parentId, pid),
+		Parent:     de.Parent,		// ParentDevice{},
+		Value:      de.Value,
+		ValueFloat: de.ValueFloat,
+		ValueBool:  de.ValueBool,
+		Index:      de.Index,
 	}
 
 	ret.Parent.Set(parentId)
 	de.Point.Parents.Add(ret.Parent)
 
-	de.FullId = NameDevicePoint(ret.Parent.Key, pid)
+	// de.FullId = JoinDevicePoint(endpoint, pid)
+	// de.FullId = NameDevicePoint(ret.Parent.Key, pid)
 	// de.Point.Id = pid
 	// de.Point.Name = name
 	// de.Point.GroupName = parentId
@@ -828,34 +863,42 @@ func (de *DataEntry) CreateState(endpoint string, parentId string, pid PointId, 
 	}
 
 	de2 := de.CreateAlias(endpoint, parentId, pid, name)
-	de2.Value = fmt.Sprintf("%v", IsActive(de.ValueFloat))
-	// de2.ValueFloat = 0
+	if de2.ValueFloat == 0 {
+		de2.Value = "false"
+		de2.ValueBool = false
+		de2.ValueFloat = 0
+	} else {
+		de2.Value = "true"
+		de2.ValueBool = true
+		de2.ValueFloat = 1
+	}
 	de2.Point.Unit = "binary"
 
 	return de2
 }
 
-func (de *DataEntry) UpdateMeta(date *DateTime, parentId string, pid PointId, name string) {
-
-	if date != nil {
-		de.Date = *date
-	}
-	if name == "" {
-		name = PointToName(pid)
-	}
-
-	var parent ParentDevice
-	parent.Set(parentId)
-	de.Point.Parents.Add(parent)
-
-	de.FullId = NameDevicePoint(parentId, pid)
-	de.Parent.Key = parentId
-	de.Parent = parent
-	de.Point.Id = pid
-	de.Point.Name = name
-	de.Point.GroupName = parentId
-	de.Index = 0
-}
+// func (de *DataEntry) UpdateMeta(date *DateTime, endpoint string, parentId string, pid PointId, name string) {
+//
+// 	if date != nil {
+// 		de.Date = *date
+// 	}
+// 	if name == "" {
+// 		name = PointToName(pid)
+// 	}
+//
+// 	var parent ParentDevice
+// 	parent.Set(parentId)
+// 	de.Point.Parents.Add(parent)
+//
+// 	de.FullId = JoinDevicePoint(endpoint, pid)
+// 	// de.FullId = NameDevicePoint(parentId, pid)
+// 	de.Parent.Key = parentId
+// 	de.Parent = parent
+// 	de.Point.Id = pid
+// 	de.Point.Name = name
+// 	de.Point.GroupName = parentId
+// 	de.Index = 0
+// }
 
 
 func CreateDataEntryActive(date DateTime, endpoint string, parentId string, pid PointId, name string, value float64) DataEntry {
@@ -873,7 +916,8 @@ func CreateDataEntryActive(date DateTime, endpoint string, parentId string, pid 
 
 	return DataEntry {
 		EndPoint:   endpoint,
-		FullId:     JoinDevicePoint(parent.Key, pid),
+		FullId:     JoinDevicePoint(endpoint, point.Id),
+		// FullId:     JoinDevicePoint(parent.Key, point.Id),
 		Parent:     parent,
 
 		Point:      point,
@@ -899,7 +943,8 @@ func CreateDataEntryString(date DateTime, endpoint string, parentId string, pid 
 
 	return DataEntry {
 		EndPoint:   endpoint,
-		FullId:     JoinDevicePoint(parent.Key, pid),
+		FullId:     JoinDevicePoint(endpoint, pid),
+		// FullId:     JoinDevicePoint(parent.Key, pid),
 		Parent:     parent,
 
 		Point:      point,
@@ -927,7 +972,8 @@ func CreateDataEntryUnitValue(date DateTime, endpoint string, parentId string, p
 
 	return DataEntry {
 		EndPoint:   endpoint,
-		FullId:     JoinDevicePoint(parent.Key, pid),
+		FullId:     JoinDevicePoint(endpoint, pid),
+		// FullId:     JoinDevicePoint(parent.Key, pid),
 		Parent:     parent,
 
 		Point:      point,

@@ -78,16 +78,7 @@ func init() {
 
 		cmds.Mqtt = NewCmdMqtt()
 		cmds.Mqtt.AttachCommand(cmdRoot)
-
-		// cmds.Git = cmdGit.NewCmdGit()
-		// cmds.Git.AttachCommands(cmdRoot)
-		// cmds.Git.AttachFlags(cmdRoot, cmds.Unify.GetViper())
-		// _ = cmds.Git.SetDefaultEntities(defaults.DefaultAreas...)
-		//
-		// cmds.Google = cmdGoogle.NewCmdGoogle()
-		// cmds.Google.AttachCommands(cmdRoot)
-		//
-		// cmds.AttachFlags(cmdRoot, cmds.Unify.GetViper())
+		cmds.Mqtt.AttachFlags(cmdRoot, cmds.Unify.GetViper())
 	}
 }
 

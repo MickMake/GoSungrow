@@ -152,29 +152,10 @@ func (c *CmdMqtt) AttachFlags(cmd *cobra.Command, viper *viper.Viper) {
 
 func (ca *Cmds) MqttArgs(cmd *cobra.Command, args []string) error {
 	for range Only.Once {
-		cmdLog.LogPrintDate("Connecting to SunGrow...\n")
-		var id api.Integer
-		id, ca.Error = ca.Api.SunGrow.GetPsId()
-		if ca.Error != nil {
-			break
-		}
-
-		var model []string
-		model, ca.Error = ca.Api.SunGrow.GetPsModel()
-		if ca.Error != nil {
-			break
-		}
-
-		var serial []string
-		serial, ca.Error = ca.Api.SunGrow.GetPsSerial()
-		if ca.Error != nil {
-			break
-		}
-		cmdLog.LogPrintDate("Found SunGrow device %s id:%d serial:%s\n", model, id, serial)
-
 		cmdLog.LogPrintDate("Connecting to MQTT HASSIO Service...\n")
 		ca.Mqtt.Mqtt = mmHa.New(mmHa.Mqtt {
 			ClientId: "GoSunGrow",
+			EntityPrefix: "GoSungrow",
 			Username: ca.Mqtt.MqttUsername,
 			Password: ca.Mqtt.MqttPassword,
 			Host:     ca.Mqtt.MqttHost,
@@ -185,10 +166,46 @@ func (ca *Cmds) MqttArgs(cmd *cobra.Command, args []string) error {
 			break
 		}
 
-		// ca.Error = ca.Mqtt.Mqtt.SetDeviceConfig("GoSunGrow", strconv.FormatInt(id, 10), "GoSungrow", model[0], "Sungrow", "Roof")
-		ca.Error = ca.Mqtt.Mqtt.SetDeviceConfig("GoSunGrow", id.String(), "GoSungrow", model[0], "Sungrow", "Roof")
+		cmdLog.LogPrintDate("Connecting to SunGrow...\n")
+		ca.Mqtt.Mqtt.SungrowDevices, ca.Error = ca.Api.SunGrow.GetDevices(true)
 		if ca.Error != nil {
 			break
+		}
+		cmdLog.LogPrintDate("Found SunGrow %d devices\n", len(ca.Mqtt.Mqtt.SungrowDevices))
+
+		ca.Mqtt.Mqtt.DeviceName = "GoSungrow"
+		ca.Error = ca.Mqtt.Mqtt.SetDeviceConfig(
+			ca.Mqtt.Mqtt.DeviceName,
+			ca.Mqtt.Mqtt.DeviceName,
+			"virtual",
+			"virtual",
+			"",
+			"",
+			"Roof",
+		)
+		if ca.Error != nil {
+			break
+		}
+
+		for _, psId := range ca.Mqtt.Mqtt.SungrowDevices {
+			// ca.Error = ca.Mqtt.Mqtt.SetDeviceConfig("GoSunGrow", strconv.FormatInt(id, 10), "GoSungrow", model[0], "Sungrow", "Roof")
+			parent := psId.PsId.String()
+			if parent == psId.PsKey.Value() {
+				parent = ca.Mqtt.Mqtt.DeviceName
+			}
+			ca.Error = ca.Mqtt.Mqtt.SetDeviceConfig(
+				"GoSungrow",
+				parent,
+				psId.PsKey.Value(),
+				psId.DeviceName.Value(),
+				psId.DeviceModel.Value(),
+				psId.Vendor.Value(),
+				"Roof",
+				)
+			if ca.Error != nil {
+				break
+			}
+			ca.Mqtt.Mqtt.SungrowPsIds[psId.PsId] = true
 		}
 
 		ca.Error = ca.Mqtt.Mqtt.Connect()
@@ -259,22 +276,6 @@ func (ca *Cmds) CmdMqttRun(_ *cobra.Command, _ []string) error {
 			if ca.Error != nil {
 				break
 			}
-
-			// ep = c.Api.SunGrow.QueryDevice(psId)
-			// if ep.IsError() {
-			// 	c.Error = ep.GetError()
-			// 	break
-			// }
-			//
-			// data = ep.GetData()
-			// for _, r := range data.Entries {
-			// 	// fmt.Printf("%s ", r.PointId)
-			// 	c.Error = foo.SensorPublishState(r.PointId, r.Value)
-			// 	if err != nil {
-			// 		break
-			// 	}
-			// }
-			// // fmt.Println()
 		}
 	}
 
@@ -340,14 +341,19 @@ func (ca *Cmds) MqttCron() error {
 			newDay = true
 		}
 
-		ca.Error = ca.Update1(newDay)
-		if ca.Error != nil {
-			break
-		}
+		for psId, ok := range ca.Mqtt.Mqtt.SungrowPsIds {
+			if !ok {
+				continue
+			}
+			ca.Error = ca.Update1(psId, newDay)
+			if ca.Error != nil {
+				break
+			}
 
-		ca.Error = ca.Update2(newDay)
-		if ca.Error != nil {
-			break
+			ca.Error = ca.Update2(psId, newDay)
+			if ca.Error != nil {
+				break
+			}
 		}
 
 		ca.Mqtt.Mqtt.LastRefresh = time.Now()
@@ -359,10 +365,10 @@ func (ca *Cmds) MqttCron() error {
 	return ca.Error
 }
 
-func (ca *Cmds) Update1(newDay bool) error {
+func (ca *Cmds) Update1(psId api.Integer, newDay bool) error {
 	for range Only.Once {
 		// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
-		ep := ca.Api.SunGrow.QueryDevice(ca.Mqtt.Mqtt.PsId)
+		ep := ca.Api.SunGrow.QueryDevice(psId)
 		if ep.IsError() {
 			ca.Error = ep.GetError()
 			break
@@ -372,14 +378,22 @@ func (ca *Cmds) Update1(newDay bool) error {
 		if newDay {
 			cmdLog.LogPrintDate("New day: Configuring %d entries in HASSIO.\n", len(data.DataPoints))
 			for _, o := range data.Order {
-				fmt.Printf("C")
 				entries := data.DataPoints[o]
 				r := entries.GetEntry(api.LastEntry) // Gets the last entry
-				re := mmHa.EntityConfig{
-					Name:        string(r.Point.Id), // PointName,
+				// if !r.Point.Valid {
+				// 	fmt.Printf("\nInvalid: %v\n", r)
+				// 	continue
+				// }
+				if r.Point.Id == "device_status" {
+					fmt.Sprintf("")
+				}
+
+				fmt.Printf("C")
+				re := mmHa.EntityConfig {
+					Name:        r.Point.Name, // PointName,
 					SubName:     "",
 					ParentId:    r.EndPoint,
-					ParentName:  "",
+					ParentName:  r.Parent.Key,
 					UniqueId:    string(r.Point.Id),
 					FullId:      string(r.FullId),	// WAS r.Point.FullId
 					Units:       r.Point.Unit,
@@ -393,10 +407,6 @@ func (ca *Cmds) Update1(newDay bool) error {
 					// LastReset:              "",
 					// LastResetValueTemplate: "",
 				}
-
-				// if re.LastResetValueTemplate != "" {
-				// 	fmt.Printf("HEY\n")
-				// }
 
 				ca.Error = ca.Mqtt.Mqtt.BinarySensorPublishConfig(re)
 				if ca.Error != nil {
@@ -415,9 +425,17 @@ func (ca *Cmds) Update1(newDay bool) error {
 		for _, o := range data.Order {
 			entries := data.DataPoints[o]
 			r := entries.GetEntry(api.LastEntry) // Gets the last entry
+			if r.Point.Id == "device_status" {
+				fmt.Sprintf("")
+			}
+			if !r.Point.Valid {
+				fmt.Printf("\nInvalid: %v\n", r)
+				continue
+			}
+
 			fmt.Printf("U")
 			re := mmHa.EntityConfig{
-				Name:        string(r.Point.Id), // PointName,
+				Name:        r.Point.Name, // PointName,
 				SubName:     "",
 				ParentId:    r.EndPoint,
 				ParentName:  "",
@@ -452,10 +470,10 @@ func (ca *Cmds) Update1(newDay bool) error {
 	return ca.Error
 }
 
-func (ca *Cmds) Update2(newDay bool) error {
+func (ca *Cmds) Update2(psId api.Integer, newDay bool) error {
 	for range Only.Once {
 		// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
-		ep := ca.Api.SunGrow.QueryPs(ca.Mqtt.Mqtt.PsId)
+		ep := ca.Api.SunGrow.QueryPs(psId)
 		if ep.IsError() {
 			ca.Error = ep.GetError()
 			break
@@ -467,19 +485,24 @@ func (ca *Cmds) Update2(newDay bool) error {
 			for _, o := range data.Order {
 				entries := data.DataPoints[o]
 				r := entries.GetEntry(api.LastEntry) // Gets the last entry
+				// if !r.Point.Valid {
+				// 	fmt.Printf("\nInvalid: %v\n", r)
+				// 	continue
+				// }
+				if r.Point.Id == "device_status" {
+					fmt.Sprintf("")
+				}
+
 				fmt.Printf("C")
 				re := mmHa.EntityConfig {
-					Name:        string(r.Point.Id), // PointName,
+					Name:        r.Point.Name, // PointName,
 					SubName:     "",
 					ParentId:    r.EndPoint,
-					ParentName:  "",
+					ParentName:  r.Parent.Key,
 					UniqueId:    string(r.Point.Id),
-					// UniqueId:    r.Id,
 					FullId:      string(r.FullId),	// WAS r.Point.FullId
-					// FullName:    r.Point.Name,
 					Units:       r.Point.Unit,
 					ValueName:   r.Point.Name,
-					// ValueName:   r.Id,
 					DeviceClass: "",
 					StateClass:  r.Point.Type,
 					Value:       r.Value,
@@ -502,9 +525,17 @@ func (ca *Cmds) Update2(newDay bool) error {
 		for _, o := range data.Order {
 			entries := data.DataPoints[o]
 			r := entries.GetEntry(api.LastEntry) // Gets the last entry
+			if r.Point.Id == "device_status" {
+				fmt.Sprintf("")
+			}
+			if !r.Point.Valid {
+				fmt.Printf("\nInvalid: %v\n", r)
+				continue
+			}
+
 			fmt.Printf("U")
 			re := mmHa.EntityConfig {
-				Name:        string(r.Point.Id), // PointName,
+				Name:        r.Point.Name, // PointName,
 				SubName:     "",
 				ParentId:    r.EndPoint,
 				ParentName:  "",

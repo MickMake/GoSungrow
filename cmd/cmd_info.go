@@ -364,7 +364,7 @@ func (c *CmdInfo) AttachCmdInfoDevices(cmd *cobra.Command) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return cmds.Api.SunGrow.GetDevices(pids...)
+			return cmds.Api.SunGrow.GetDeviceList(pids...)
 		},
 		Args:                  cobra.MinimumNArgs(0),
 	}
@@ -397,7 +397,7 @@ func (c *CmdInfo) AttachCmdInfoDeviceModels(cmd *cobra.Command) *cobra.Command {
 		},
 		RunE:                  func(cmd *cobra.Command, args []string) error {
 			_ = cmds.SetOutputType(cmd)
-			return cmds.Api.SunGrow.GetDeviceModels()
+			return cmds.Api.SunGrow.GetDeviceModelInfoList()
 		},
 		Args:                  cobra.MinimumNArgs(0),
 	}
