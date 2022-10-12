@@ -1,4 +1,4 @@
-package nullEndPoint
+package nullEndpoint
 
 import (
 	"GoSungrow/Only"

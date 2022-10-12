@@ -41,7 +41,7 @@ func (m *Mqtt) BinarySensorPublishConfig(config EntityConfig) error {
 
 		payload := BinarySensor {
 			Device:                 newDevice,
-			Name:                   JoinStrings(m.DeviceName, config.FullId),
+			Name:                   JoinStrings(m.DeviceName, config.Name),
 			StateTopic:             JoinStringsForTopic(m.binarySensorPrefix, id, "state"),
 			StateClass:             config.StateClass,
 			UniqueId:               id,

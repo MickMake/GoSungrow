@@ -154,7 +154,7 @@ func (ca *Cmds) MqttArgs(cmd *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmdLog.LogPrintDate("Connecting to MQTT HASSIO Service...\n")
 		ca.Mqtt.Mqtt = mmHa.New(mmHa.Mqtt {
-			ClientId: "GoSunGrow",
+			ClientId: "GoSungrow",
 			EntityPrefix: "GoSungrow",
 			Username: ca.Mqtt.MqttUsername,
 			Password: ca.Mqtt.MqttPassword,
@@ -188,7 +188,7 @@ func (ca *Cmds) MqttArgs(cmd *cobra.Command, args []string) error {
 		}
 
 		for _, psId := range ca.Mqtt.Mqtt.SungrowDevices {
-			// ca.Error = ca.Mqtt.Mqtt.SetDeviceConfig("GoSunGrow", strconv.FormatInt(id, 10), "GoSungrow", model[0], "Sungrow", "Roof")
+			// ca.Error = ca.Mqtt.Mqtt.SetDeviceConfig("GoSungrow", strconv.FormatInt(id, 10), "GoSungrow", model[0], "Sungrow", "Roof")
 			parent := psId.PsId.String()
 			if parent == psId.PsKey.Value() {
 				parent = ca.Mqtt.Mqtt.DeviceName
@@ -239,18 +239,18 @@ func (ca *Cmds) CmdMqttRun(_ *cobra.Command, _ []string) error {
 		// 		Manufacturer: "MickMake",
 		// 		Model:        "SunGrow inverter",
 		// 		Name:         "SunGrow inverter online",
-		// 		SwVersion:    "GoSunGrow https://github.com/MickMake/GoSungrow",
-		// 		ViaDevice:    "GoSunGrow",
+		// 		SwVersion:    "GoSungrow https://github.com/MickMake/GoSungrow",
+		// 		ViaDevice:    "GoSungrow",
 		// 	},
 		// 	Name:         "SunGrow inverter online",
-		// 	StateTopic:   "homeassistant/binary_sensor/GoSunGrow_0/state",
+		// 	StateTopic:   "homeassistant/binary_sensor/GoSungrow_0/state",
 		// 	UniqueId:     "sungrow_bin_sensor_0",
 		// }
-		// err = foo.Publish("homeassistant/binary_sensor/GoSunGrow_0/config", 0, true, switch1.Json())
+		// err = foo.Publish("homeassistant/binary_sensor/GoSungrow_0/config", 0, true, switch1.Json())
 		// if err != nil {
 		// 	break
 		// }
-		// err = foo.Publish("homeassistant/binary_sensor/GoSunGrow_0/state", 0, true, "OFF")
+		// err = foo.Publish("homeassistant/binary_sensor/GoSungrow_0/state", 0, true, "OFF")
 		// if err != nil {
 		// 	break
 		// }
@@ -345,14 +345,12 @@ func (ca *Cmds) MqttCron() error {
 			if !ok {
 				continue
 			}
-			ca.Error = ca.Update1(psId, newDay)
-			if ca.Error != nil {
-				break
-			}
 
-			ca.Error = ca.Update2(psId, newDay)
-			if ca.Error != nil {
-				break
+			for _, endpoint := range All {
+				ca.Error = ca.Update(endpoint, psId, newDay)
+				if ca.Error != nil {
+					break
+				}
 			}
 		}
 
@@ -365,192 +363,80 @@ func (ca *Cmds) MqttCron() error {
 	return ca.Error
 }
 
-func (ca *Cmds) Update1(psId api.Integer, newDay bool) error {
+// var All = []string{ "queryDeviceList", "getPsList", "getPsDetailWithPsType" }
+var All = []string{ "getPsDetail" }
+func (ca *Cmds) Update(endpoint string, psId api.Integer, newDay bool) error {
 	for range Only.Once {
 		// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
-		ep := ca.Api.SunGrow.QueryDevice(psId)
-		if ep.IsError() {
-			ca.Error = ep.GetError()
-			break
-		}
-		data := ep.GetData()
+		var data api.DataMap
+		switch endpoint {
+			case "queryDeviceList":
+				ep := ca.Api.SunGrow.QueryDeviceList(psId)
+				data = ep.GetData()
 
-		if newDay {
-			cmdLog.LogPrintDate("New day: Configuring %d entries in HASSIO.\n", len(data.DataPoints))
-			for _, o := range data.Order {
-				entries := data.DataPoints[o]
-				r := entries.GetEntry(api.LastEntry) // Gets the last entry
-				// if !r.Point.Valid {
-				// 	fmt.Printf("\nInvalid: %v\n", r)
-				// 	continue
-				// }
-				if r.Point.Id == "device_status" {
-					fmt.Sprintf("")
-				}
+			case "getPsList":
+				ep := ca.Api.SunGrow.GetPsList()
+				data = ep.GetData()
 
-				fmt.Printf("C")
-				re := mmHa.EntityConfig {
-					Name:        r.Point.Name, // PointName,
-					SubName:     "",
-					ParentId:    r.EndPoint,
-					ParentName:  r.Parent.Key,
-					UniqueId:    string(r.Point.Id),
-					FullId:      string(r.FullId),	// WAS r.Point.FullId
-					Units:       r.Point.Unit,
-					ValueName:   r.Point.Name,
-					DeviceClass: "",
-					StateClass:  r.Point.Type,
-					Value:       r.Value,
+			case "getPsDetailWithPsType":
+				ep := ca.Api.SunGrow.GetPsDetailWithPsType(psId)
+				data = ep.GetData()
 
-					// Icon:                   "",
-					// ValueTemplate:          "",
-					// LastReset:              "",
-					// LastResetValueTemplate: "",
-				}
-
-				ca.Error = ca.Mqtt.Mqtt.BinarySensorPublishConfig(re)
-				if ca.Error != nil {
-					break
-				}
-
-				ca.Error = ca.Mqtt.Mqtt.SensorPublishConfig(re)
-				if ca.Error != nil {
-					break
-				}
-			}
-			fmt.Println()
+			case "getPsDetail":
+				ep := ca.Api.SunGrow.GetPsDetail(psId)
+				data = ep.GetData()
 		}
 
-		cmdLog.LogPrintDate("Updating %d entries to HASSIO.\n", len(data.DataPoints))
+		cmdLog.LogPrintDate("Syncing %d entries with HASSIO from %s.\n", len(data.DataPoints), endpoint)
 		for _, o := range data.Order {
 			entries := data.DataPoints[o]
 			r := entries.GetEntry(api.LastEntry) // Gets the last entry
-			if r.Point.Id == "device_status" {
-				fmt.Sprintf("")
-			}
 			if !r.Point.Valid {
 				fmt.Printf("\nInvalid: %v\n", r)
 				continue
 			}
 
-			fmt.Printf("U")
-			re := mmHa.EntityConfig{
-				Name:        r.Point.Name, // PointName,
-				SubName:     "",
-				ParentId:    r.EndPoint,
-				ParentName:  "",
-				UniqueId:    string(r.Point.Id),
-				// UniqueId:    r.Id,
-				FullId:      string(r.FullId),	// WAS r.Point.FullId
-				// FullName:    r.Point.Name,
-				Units:       r.Point.Unit,
-				ValueName:   r.Point.Name,
-				// ValueName:   r.Id,
-				DeviceClass: "",
-				StateClass:  r.Point.Type,
-				Value:       r.Value,
+			fullId := string(r.FullId)
+			if r.Point.GroupName == "alias" {
+				fullId = mmHa.JoinStringsForId(r.Parent.Key, r.Point.Parents.Index[0], string(r.Point.Id))
 			}
 
-			ca.Error = ca.Mqtt.Mqtt.BinarySensorPublishValue(re)
-			if ca.Error != nil {
-				break
-			}
-
-			ca.Error = ca.Mqtt.Mqtt.SensorPublishValue(re)
-			if ca.Error != nil {
-				break
-			}
-		}
-		fmt.Println()
-	}
-
-	if ca.Error != nil {
-		cmdLog.LogPrintDate("Error: %s\n", ca.Error)
-	}
-	return ca.Error
-}
-
-func (ca *Cmds) Update2(psId api.Integer, newDay bool) error {
-	for range Only.Once {
-		// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
-		ep := ca.Api.SunGrow.QueryPs(psId)
-		if ep.IsError() {
-			ca.Error = ep.GetError()
-			break
-		}
-		data := ep.GetData()
-
-		if newDay {
-			cmdLog.LogPrintDate("New day: Configuring %d entries in HASSIO.\n", len(data.DataPoints))
-			for _, o := range data.Order {
-				entries := data.DataPoints[o]
-				r := entries.GetEntry(api.LastEntry) // Gets the last entry
-				// if !r.Point.Valid {
-				// 	fmt.Printf("\nInvalid: %v\n", r)
-				// 	continue
-				// }
-				if r.Point.Id == "device_status" {
-					fmt.Sprintf("")
-				}
-
-				fmt.Printf("C")
-				re := mmHa.EntityConfig {
-					Name:        r.Point.Name, // PointName,
-					SubName:     "",
-					ParentId:    r.EndPoint,
-					ParentName:  r.Parent.Key,
-					UniqueId:    string(r.Point.Id),
-					FullId:      string(r.FullId),	// WAS r.Point.FullId
-					Units:       r.Point.Unit,
-					ValueName:   r.Point.Name,
-					DeviceClass: "",
-					StateClass:  r.Point.Type,
-					Value:       r.Value,
-				}
-
-				ca.Error = ca.Mqtt.Mqtt.BinarySensorPublishConfig(re)
-				if ca.Error != nil {
-					break
-				}
-
-				ca.Error = ca.Mqtt.Mqtt.SensorPublishConfig(re)
-				if ca.Error != nil {
-					break
-				}
-			}
-			fmt.Println()
-		}
-
-		cmdLog.LogPrintDate("Updating %d entries to HASSIO.\n", len(data.DataPoints))
-		for _, o := range data.Order {
-			entries := data.DataPoints[o]
-			r := entries.GetEntry(api.LastEntry) // Gets the last entry
-			if r.Point.Id == "device_status" {
-				fmt.Sprintf("")
-			}
-			if !r.Point.Valid {
-				fmt.Printf("\nInvalid: %v\n", r)
-				continue
-			}
-
-			fmt.Printf("U")
 			re := mmHa.EntityConfig {
-				Name:        r.Point.Name, // PointName,
+				Name:        mmHa.JoinStringsForName(" - ", fullId),	// r.Point.Name, // PointName,
 				SubName:     "",
 				ParentId:    r.EndPoint,
-				ParentName:  "",
+				ParentName:  r.Parent.Key,
 				UniqueId:    string(r.Point.Id),
 				// UniqueId:    r.Id,
-				FullId:      string(r.FullId),	// WAS r.Point.FullId
+				FullId:      fullId,	// string(r.FullId),	// WAS r.Point.FullId
 				// FullName:    r.Point.Name,
 				Units:       r.Point.Unit,
 				ValueName:   r.Point.Name,
 				// ValueName:   r.Id,
 				DeviceClass: "",
-				StateClass:  r.Point.Type,
+				StateClass:  r.Point.TimeSpan,
 				Value:       r.Value,
+
+				// Icon:                   "",
+				// ValueTemplate:          "",
+				// LastReset:              "",
+				// LastResetValueTemplate: "",
 			}
 
+			if newDay {
+				fmt.Printf("C")
+				ca.Error = ca.Mqtt.Mqtt.BinarySensorPublishConfig(re)
+				if ca.Error != nil {
+					break
+				}
+
+				ca.Error = ca.Mqtt.Mqtt.SensorPublishConfig(re)
+				if ca.Error != nil {
+					break
+				}
+			}
+
+			fmt.Printf("U")
 			ca.Error = ca.Mqtt.Mqtt.BinarySensorPublishValue(re)
 			if ca.Error != nil {
 				break
@@ -569,6 +455,246 @@ func (ca *Cmds) Update2(psId api.Integer, newDay bool) error {
 	}
 	return ca.Error
 }
+
+// func (ca *Cmds) Update1(psId api.Integer, newDay bool) error {
+// 	for range Only.Once {
+// 		// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
+// 		ep := ca.Api.SunGrow.QueryDevice(psId)
+// 		if ep.IsError() {
+// 			ca.Error = ep.GetError()
+// 			break
+// 		}
+// 		data := ep.GetData()
+//
+// 		cmdLog.LogPrintDate("Syncing %d entries with HASSIO.\n", len(data.DataPoints))
+// 		for _, o := range data.Order {
+// 			entries := data.DataPoints[o]
+// 			r := entries.GetEntry(api.LastEntry) // Gets the last entry
+// 			if !r.Point.Valid {
+// 				fmt.Printf("\nInvalid: %v\n", r)
+// 				continue
+// 			}
+//
+// 			if strings.Contains(strings.ToLower(string(r.Point.Id)), "count") {
+// 				fmt.Sprintf("")
+// 			}
+//
+// 			fullId := string(r.FullId)
+// 			if r.Point.GroupName == "alias" {
+// 				fullId = mmHa.JoinStringsForId(r.Parent.Key, r.Point.Parents.Index[0], string(r.Point.Id))
+// 			}
+//
+// 			re := mmHa.EntityConfig {
+// 				Name:        mmHa.JoinStringsForName(" - ", fullId),	// r.Point.Name, // PointName,
+// 				SubName:     "",
+// 				ParentId:    r.EndPoint,
+// 				ParentName:  r.Parent.Key,
+// 				UniqueId:    string(r.Point.Id),
+// 				// UniqueId:    r.Id,
+// 				FullId:      fullId,	// string(r.FullId),	// WAS r.Point.FullId
+// 				// FullName:    r.Point.Name,
+// 				Units:       r.Point.Unit,
+// 				ValueName:   r.Point.Name,
+// 				// ValueName:   r.Id,
+// 				DeviceClass: "",
+// 				StateClass:  r.Point.TimeSpan,
+// 				Value:       r.Value,
+//
+// 				// Icon:                   "",
+// 				// ValueTemplate:          "",
+// 				// LastReset:              "",
+// 				// LastResetValueTemplate: "",
+// 			}
+//
+// 			if newDay {
+// 				fmt.Printf("C")
+// 				ca.Error = ca.Mqtt.Mqtt.BinarySensorPublishConfig(re)
+// 				if ca.Error != nil {
+// 					break
+// 				}
+//
+// 				ca.Error = ca.Mqtt.Mqtt.SensorPublishConfig(re)
+// 				if ca.Error != nil {
+// 					break
+// 				}
+// 			}
+//
+// 			fmt.Printf("U")
+// 			ca.Error = ca.Mqtt.Mqtt.BinarySensorPublishValue(re)
+// 			if ca.Error != nil {
+// 				break
+// 			}
+//
+// 			ca.Error = ca.Mqtt.Mqtt.SensorPublishValue(re)
+// 			if ca.Error != nil {
+// 				break
+// 			}
+// 		}
+// 		fmt.Println()
+// 	}
+//
+// 	if ca.Error != nil {
+// 		cmdLog.LogPrintDate("Error: %s\n", ca.Error)
+// 	}
+// 	return ca.Error
+// }
+
+// func (ca *Cmds) Update2(psId api.Integer, newDay bool) error {
+// 	for range Only.Once {
+// 		ep := ca.Api.SunGrow.QueryPs(psId)
+// 		if ep.IsError() {
+// 			ca.Error = ep.GetError()
+// 			break
+// 		}
+// 		data := ep.GetData()
+//
+// 		cmdLog.LogPrintDate("Syncing %d entries with HASSIO.\n", len(data.DataPoints))
+// 		for _, o := range data.Order {
+// 			entries := data.DataPoints[o]
+// 			r := entries.GetEntry(api.LastEntry) // Gets the last entry
+// 			if !r.Point.Valid {
+// 				fmt.Printf("\nInvalid: %v\n", r)
+// 				continue
+// 			}
+//
+// 			fullId := string(r.FullId)
+// 			if r.Point.GroupName == "alias" {
+// 				fullId = mmHa.JoinStringsForId(r.Parent.Key, r.Point.Parents.Index[0], string(r.Point.Id))
+// 			}
+//
+// 			re := mmHa.EntityConfig {
+// 				Name:        mmHa.JoinStringsForName(" - ", fullId),	// r.Point.Name, // PointName,
+// 				SubName:     "",
+// 				ParentId:    r.EndPoint,
+// 				ParentName:  r.Parent.Key,
+// 				UniqueId:    string(r.Point.Id),
+// 				// UniqueId:    r.Id,
+// 				FullId:      fullId,	// string(r.FullId),	// WAS r.Point.FullId
+// 				// FullName:    r.Point.Name,
+// 				Units:       r.Point.Unit,
+// 				ValueName:   r.Point.Name,
+// 				// ValueName:   r.Id,
+// 				DeviceClass: "",
+// 				StateClass:  r.Point.TimeSpan,
+// 				Value:       r.Value,
+//
+// 				// Icon:                   "",
+// 				// ValueTemplate:          "",
+// 				// LastReset:              "",
+// 				// LastResetValueTemplate: "",
+// 			}
+//
+// 			if newDay {
+// 				fmt.Printf("C")
+// 				ca.Error = ca.Mqtt.Mqtt.BinarySensorPublishConfig(re)
+// 				if ca.Error != nil {
+// 					break
+// 				}
+//
+// 				ca.Error = ca.Mqtt.Mqtt.SensorPublishConfig(re)
+// 				if ca.Error != nil {
+// 					break
+// 				}
+// 			}
+//
+// 			fmt.Printf("U")
+// 			ca.Error = ca.Mqtt.Mqtt.BinarySensorPublishValue(re)
+// 			if ca.Error != nil {
+// 				break
+// 			}
+//
+// 			ca.Error = ca.Mqtt.Mqtt.SensorPublishValue(re)
+// 			if ca.Error != nil {
+// 				break
+// 			}
+// 		}
+// 		fmt.Println()
+// 	}
+//
+// 	if ca.Error != nil {
+// 		cmdLog.LogPrintDate("Error: %s\n", ca.Error)
+// 	}
+// 	return ca.Error
+// }
+
+// func (ca *Cmds) Update3(psId api.Integer, newDay bool) error {
+// 	for range Only.Once {
+// 		// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
+// 		ep := ca.Api.SunGrow.QueryPs(psId)
+// 		if ep.IsError() {
+// 			ca.Error = ep.GetError()
+// 			break
+// 		}
+// 		data := ep.GetData()
+//
+// 		cmdLog.LogPrintDate("Syncing %d entries with HASSIO.\n", len(data.DataPoints))
+// 		for _, o := range data.Order {
+// 			entries := data.DataPoints[o]
+// 			r := entries.GetEntry(api.LastEntry) // Gets the last entry
+// 			if !r.Point.Valid {
+// 				fmt.Printf("\nInvalid: %v\n", r)
+// 				continue
+// 			}
+//
+// 			fullId := string(r.FullId)
+// 			if r.Point.GroupName == "alias" {
+// 				fullId = mmHa.JoinStringsForId(r.Parent.Key, r.Point.Parents.Index[0], string(r.Point.Id))
+// 			}
+//
+// 			re := mmHa.EntityConfig {
+// 				Name:        mmHa.JoinStringsForName(" - ", fullId),	// r.Point.Name, // PointName,
+// 				SubName:     "",
+// 				ParentId:    r.EndPoint,
+// 				ParentName:  r.Parent.Key,
+// 				UniqueId:    string(r.Point.Id),
+// 				// UniqueId:    r.Id,
+// 				FullId:      fullId,	// string(r.FullId),	// WAS r.Point.FullId
+// 				// FullName:    r.Point.Name,
+// 				Units:       r.Point.Unit,
+// 				ValueName:   r.Point.Name,
+// 				// ValueName:   r.Id,
+// 				DeviceClass: "",
+// 				StateClass:  r.Point.TimeSpan,
+// 				Value:       r.Value,
+//
+// 				// Icon:                   "",
+// 				// ValueTemplate:          "",
+// 				// LastReset:              "",
+// 				// LastResetValueTemplate: "",
+// 			}
+//
+// 			if newDay {
+// 				fmt.Printf("C")
+// 				ca.Error = ca.Mqtt.Mqtt.BinarySensorPublishConfig(re)
+// 				if ca.Error != nil {
+// 					break
+// 				}
+//
+// 				ca.Error = ca.Mqtt.Mqtt.SensorPublishConfig(re)
+// 				if ca.Error != nil {
+// 					break
+// 				}
+// 			}
+//
+// 			fmt.Printf("U")
+// 			ca.Error = ca.Mqtt.Mqtt.BinarySensorPublishValue(re)
+// 			if ca.Error != nil {
+// 				break
+// 			}
+//
+// 			ca.Error = ca.Mqtt.Mqtt.SensorPublishValue(re)
+// 			if ca.Error != nil {
+// 				break
+// 			}
+// 		}
+// 		fmt.Println()
+// 	}
+//
+// 	if ca.Error != nil {
+// 		cmdLog.LogPrintDate("Error: %s\n", ca.Error)
+// 	}
+// 	return ca.Error
+// }
 
 
 // func toggle(v string) string {

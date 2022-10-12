@@ -6,6 +6,7 @@ import (
 	"GoSungrow/iSolarCloud/AppService"
 	"GoSungrow/iSolarCloud/AppService/login"
 	"GoSungrow/iSolarCloud/MttvScreenService"
+	"GoSungrow/iSolarCloud/NullArea"
 	"GoSungrow/iSolarCloud/PowerPointService"
 	"GoSungrow/iSolarCloud/WebAppService"
 	"GoSungrow/iSolarCloud/WebIscmAppService"
@@ -50,6 +51,7 @@ func (sg *SunGrow) Init() error {
 	for range Only.Once {
 		sg.Areas = make(api.Areas)
 
+		sg.Areas[api.GetArea(NullArea.Area{})] = api.AreaStruct(NullArea.Init(sg.ApiRoot))
 		sg.Areas[api.GetArea(AliSmsService.Area{})] = api.AreaStruct(AliSmsService.Init(sg.ApiRoot))
 		sg.Areas[api.GetArea(AppService.Area{})] = api.AreaStruct(AppService.Init(sg.ApiRoot))
 		sg.Areas[api.GetArea(MttvScreenService.Area{})] = api.AreaStruct(MttvScreenService.Init(sg.ApiRoot))
@@ -73,14 +75,9 @@ func (sg *SunGrow) GetEndpoint(ae string) api.EndPoint {
 			break
 		}
 
-		ep = sg.Areas.GetEndPoint(api.AreaName(area), api.EndPointName(endpoint))
-		if ep == nil {
-			sg.Error = errors.New("EndPoint not found")
-			break
-		}
-
-		if ep.IsDisabled() {
-			sg.Error = errors.New("API EndPoint is not implemented")
+		ep = sg.Areas.GetEndPoint(area, endpoint)
+		if ep.IsError() {
+			sg.Error = ep.GetError()
 			break
 		}
 
@@ -204,9 +201,9 @@ func (sg *SunGrow) GetByStruct(endpoint string, request interface{}, cache time.
 	return ret
 }
 
-func (sg *SunGrow) SplitEndPoint(ae string) (string, string) {
-	var area string
-	var endpoint string
+func (sg *SunGrow) SplitEndPoint(ae string) (api.AreaName, api.EndPointName) {
+	var area api.AreaName
+	var endpoint api.EndPointName
 
 	for range Only.Once {
 		s := strings.Split(ae, ".")
@@ -216,14 +213,14 @@ func (sg *SunGrow) SplitEndPoint(ae string) (string, string) {
 
 			case 1:
 				area = "AppService"
-				endpoint = s[0]
+				endpoint = api.EndPointName(s[0])
 
 			case 2:
-				area = s[0]
-				endpoint = s[1]
+				area = api.AreaName(s[0])
+				endpoint = api.EndPointName(s[1])
 
 			default:
-				sg.Error = errors.New("too many delimeters defined, (only one '.' allowed)")
+				sg.Error = errors.New("too many delimiters defined, (only one '.' allowed)")
 		}
 	}
 

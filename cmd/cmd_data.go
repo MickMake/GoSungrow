@@ -427,7 +427,7 @@ func (c *CmdData) AttachCmdDataPsDetails(cmd *cobra.Command) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return cmds.Api.SunGrow.GetPsDetails(pids...)
+			return cmds.Api.SunGrow.CmdDataPsDetail(pids...)
 		},
 		Args:                  cobra.MinimumNArgs(0),
 	}

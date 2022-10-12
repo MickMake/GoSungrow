@@ -62,7 +62,7 @@ func (t *UnitValue) UnitValueToPoint(endpoint string, parentId string, pid Point
 			GroupName: "",
 			Name:      name,
 			Unit:      uv.unit,
-			Type:      "PointTypeInstant",
+			TimeSpan:  "PointTimeSpanInstant",
 			Valid:     true,
 			States:    nil,
 		}
@@ -232,11 +232,6 @@ func (t *UnitValue) SetInteger(value int64) UnitValue {
 		t.float64 = float64(value)
 		t.isFloat = false
 		t.Valid = true
-
-		if value == 0 {
-			break
-		}
-
 		t.string = strconv.FormatInt(t.int64, 10)
 	}
 
@@ -250,11 +245,6 @@ func (t *UnitValue) SetFloat(value float64) UnitValue {
 		t.float64 = value
 		t.isFloat = true
 		t.Valid = true
-
-		if value == 0 {
-			break
-		}
-
 		// t.string = strconv.FormatFloat(t.float64, 'f', 12, 64)
 		// t.string = strings.TrimRight(t.string, "0")
 		t.string = strconv.FormatFloat(t.float64, 'f', -1, 64)
@@ -402,11 +392,6 @@ func (t *Integer) SetValue(value int64) Integer {
 		t.string = ""
 		t.int64 = value
 		t.Valid = true
-
-		if value == 0 {
-			break
-		}
-
 		t.string = strconv.FormatInt(t.int64, 10)
 	}
 
@@ -517,11 +502,6 @@ func (t *Float) SetValue(value float64) Float {
 		t.string = ""
 		t.float64 = value
 		t.Valid = true
-
-		if value == 0 {
-			break
-		}
-
 		t.string = strconv.FormatFloat(t.float64, 'f', 12, 64)
 	}
 
@@ -846,18 +826,116 @@ func SetPsKeyValue(value string) PsKey {
 }
 
 
-// func JsonToUnitValue(j string) UnitValue {
-// 	var ret UnitValue
-//
-// 	for range Only.Once {
-// 		err := json.Unmarshal([]byte(j), &ret)
-// 		if err != nil {
-// 			break
-// 		}
-// 	}
-//
-// 	return ret
-// }
+type Count struct {
+	string `json:"string,omitempty"`
+	int64  `json:"integer,omitempty"`
+	Valid   bool `json:"valid"`
+}
+
+// UnmarshalJSON - Convert JSON to value
+func (t *Count) UnmarshalJSON(data []byte) error {
+	var err error
+
+	for range Only.Once {
+		t.Valid = false
+
+		if len(data) == 0 {
+			break
+		}
+
+		// Store result from int
+		err = json.Unmarshal(data, &t.int64)
+		if err == nil {
+			t.SetValue(t.int64)
+			break
+		}
+
+		// Store result from string
+		err = json.Unmarshal(data, &t.string)
+		if err == nil {
+			t.SetString(t.string)
+			break
+		}
+	}
+
+	return err
+}
+
+// MarshalJSON - Convert value to JSON
+func (t Count) MarshalJSON() ([]byte, error) {
+	var data []byte
+	var err error
+
+	for range Only.Once {
+		t.Valid = false
+
+		data, err = json.Marshal(t.int64)
+		if err != nil {
+			break
+		}
+		t.Valid = true
+		// t.string = strconv.FormatInt(t.int64, 10)
+	}
+
+	return data, err
+}
+
+func (t Count) Value() int64 {
+	return t.int64
+}
+
+func (t Count) String() string {
+	return t.string
+}
+
+func (t *Count) SetString(value string) Count {
+	for range Only.Once {
+		t.string = value
+		t.int64 = 0
+		t.Valid = false
+
+		if value == "" {
+			break
+		}
+
+		if value == "--" {
+			// value = ""
+			break
+		}
+
+		var err error
+		var v int
+		v, err = strconv.Atoi(t.string)
+		if err != nil {
+			break
+		}
+		t.int64 = int64(v)
+		t.Valid = true
+	}
+
+	return *t
+}
+
+func (t *Count) SetValue(value int64) Count {
+	for range Only.Once {
+		t.string = ""
+		t.int64 = value
+		t.Valid = true
+		t.string = strconv.FormatInt(t.int64, 10)
+	}
+
+	return *t
+}
+
+func SetCountString(value string) Count {
+	var t Count
+	return t.SetString(value)
+}
+
+func SetCountValue(value int64) Count {
+	var t Count
+	return t.SetValue(value)
+}
 
 // func Float32ToString(num float64) string {
 // 	s := fmt.Sprintf("%.6f", num)
@@ -867,16 +945,4 @@ func SetPsKeyValue(value string) PsKey {
 // func Float64ToString(num float64) string {
 // 	s := fmt.Sprintf("%.6f", num)
 // 	return strings.TrimRight(strings.TrimRight(s, "0"), ".")
-// }
-
-// func (u *UnitValue) GetStructName() string {
-// 	var ret string
-// 	apiReflect.GetName()
-// 	return ret
-// }
-//
-// func (u *UnitValue) GetJsonName() string {
-// 	var ret string
-// 	apiReflect.GetOptionsRequired()
-// 	return ret
 // }

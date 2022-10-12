@@ -32,7 +32,7 @@ func (m *Mqtt) SwitchPublishConfig(config EntityConfig) error {
 
 		payload := Switch {
 			Device:                 newDevice,
-			Name:                   JoinStrings(m.DeviceName, config.FullId),
+			Name:                   JoinStrings(m.DeviceName, config.Name),
 			StateTopic:             JoinStringsForTopic(m.switchPrefix, id, "state"),
 			CommandTopic:           JoinStringsForTopic(m.switchPrefix, id, "cmd"),
 			UniqueId:               id,

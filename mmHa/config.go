@@ -49,6 +49,15 @@ func (m *Mqtt) NewDevice(config EntityConfig) (bool, Device) {
 			break
 		}
 
+		manu := parent.Manufacturer
+		if manu == "" {
+			manu = m.DeviceName
+		}
+		modl := parent.Model
+		if modl == "" {
+			modl = m.DeviceName
+		}
+
 		ret = Device {
 			ConfigurationUrl: parent.ConfigurationUrl,
 			Connections:      [][]string {
@@ -56,9 +65,9 @@ func (m *Mqtt) NewDevice(config EntityConfig) (bool, Device) {
 				{ JoinStringsForId(m.EntityPrefix, config.ParentName), JoinStringsForId(m.EntityPrefix, config.ParentId) },
 			},
 			Identifiers:      []string{ JoinStringsForId(m.EntityPrefix, config.ParentId) },
-			Manufacturer:     parent.Manufacturer,
-			Model:            parent.Model,
-			Name:             JoinStrings(parent.Name, config.ParentName),
+			Manufacturer:     manu,
+			Model:            modl,
+			Name:             JoinStrings(m.EntityPrefix, config.ParentName, "-", parent.Name),
 			SuggestedArea:    parent.SuggestedArea,
 			SwVersion:        parent.SwVersion,
 			ViaDevice:        parent.ViaDevice,

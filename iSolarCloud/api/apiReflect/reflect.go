@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/davecgh/go-spew/spew"
 	"hash/fnv"
 	"runtime"
 	"strconv"
@@ -288,6 +287,7 @@ func HeaderAsArray(i interface{}) []interface{} {
 
 	return ret
 }
+
 func AsArray(ref interface{}) []interface{} {
 	var ret []interface{}
 
@@ -600,17 +600,6 @@ func GetFingerprint(ref interface{}) string {
 	return ret
 }
 
-
-type DataStructureMap map[string]DataStructure
-type DataStructure struct {
-	Json string
-	PointId string
-	PointType string
-	PointUnit string
-	PointDevice string
-	PointName string
-}
-
 func GetCallerPackage(skip int) string {
 	var ret string
 	if pc, _, _, ok := runtime.Caller(skip); ok {
@@ -625,46 +614,143 @@ func GetCallerPackage(skip int) string {
 	return ret
 }
 
-func GetTagPointType(ref interface{}) DataStructureMap {
+
+type DataStructureMap map[string]DataStructure
+type DataStructure struct {
+	Json           string
+	PointId        string
+	// PointType      string
+	PointUnit      string
+	PointUnitFrom  string
+	PointDevice    string
+	PointName      string
+	PointTimeSpan  string
+	PointValueType string
+	PointAlias     string
+	PointIgnore    bool
+	PointGroupName string
+
+	Value         interface{}
+	ValueType     string
+	Endpoint      string
+}
+
+const (
+	PointId        = "PointId"			// Point id in the form p\d+ or \d+
+	// PointType      = "PointType"		// Type of point: energy, date, battery, temperature.
+	PointUnit      = "PointUnit"		// Units: Wh, kWh, C, h.
+	PointUnitFrom  = "PointUnitFrom"	// Get units from another point.
+	PointDevice    = "PointDevice"		// Associated device to point.
+	PointName      = "PointName"		// Human name of point.
+	PointTimeSpan  = "PointTimeSpan"	// Timespan Total, Yearly, Monthly, Day.
+	PointValueType = "PointValueType"	//
+	PointAlias     = "PointAlias"		// Alias this point to another entry.
+	PointIgnore    = "PointIgnore"		// Ignore this point.
+	PointGroupName = "PointGroupName"	// Point group name.
+)
+
+func GetPointTags(ref interface{}, name ...string) DataStructureMap {
 	ret := make(DataStructureMap)
 
 	for range Only.Once {
-		// required := GetOptionsRequired(ref)
-
 		vo := reflect.ValueOf(ref)
 		to := reflect.TypeOf(ref)
-		spew.Dump(&vo)
-		spew.Dump(&to)
 
 		// Iterate over all available fields and read the tag value
 		for i := 0; i < vo.NumField(); i++ {
 			fieldTo := to.Field(i)
-			spew.Dump(&fieldTo)
+			fieldVo := vo.Field(i)
 
-			// j := fieldTo.Tag.Get("json")
-			// pid := fieldTo.Tag.Get("json")
-
-			name := fieldTo.Name
-			foo := DataStructure{
-				Json:        fieldTo.Tag.Get("json"),
-				PointDevice: fieldTo.Tag.Get("PointDevice"),
-				PointId:     fieldTo.Tag.Get("PointId"),
-				PointName:   fieldTo.Tag.Get("PointName"),
-				PointUnit:   fieldTo.Tag.Get("PointUnit"),
-				PointType:   fieldTo.Tag.Get("PointType"),
+			ignore := false
+			ig := fieldTo.Tag.Get(PointIgnore)
+			if ig != "" {
+				ignore = true
 			}
-			ret[name] = foo
 
-			// fieldVo := vo.Field(i)
-			// value := fmt.Sprintf("%v", fieldVo.Interface())
-			// if value == "" {
-			// 	err = errors.New(fmt.Sprintf("option '%s' is empty", fieldTo.Name))
-			// 	break
+			// if fieldTo.Tag.Get("json") == "robot_num_sweep_capacity" {
+			// 	fmt.Sprintf("")
+			// }
+
+			if IsUnknownStructure(fieldTo, fieldVo) {
+				n2 := name
+				n2 = append(n2, fieldTo.Name)
+				t2 := GetPointTags(fieldVo.Interface(), n2...)
+				for k, v := range t2 {
+					ret[k] = v
+				}
+				break
+			}
+
+			endPointName := strings.Join(name, ".")
+			pointName := strings.TrimPrefix(endPointName + "." + fieldTo.Name, ".")
+			ret[pointName] = DataStructure {
+				PointId:        fieldTo.Tag.Get(PointId),
+				// PointType:      fieldTo.Tag.Get(PointType),
+				PointUnit:      fieldTo.Tag.Get(PointUnit),
+				PointUnitFrom:  fieldTo.Tag.Get(PointUnitFrom),
+				PointDevice:    fieldTo.Tag.Get(PointDevice),
+				PointName:      fieldTo.Tag.Get(PointName),
+				PointTimeSpan:  fieldTo.Tag.Get(PointTimeSpan),
+				PointValueType: fieldTo.Tag.Get(PointValueType),
+				PointAlias:     fieldTo.Tag.Get(PointAlias),
+				PointGroupName: fieldTo.Tag.Get(PointGroupName),
+				PointIgnore:    ignore,
+
+				Json:           fieldTo.Tag.Get("json"),
+				Value:          fieldVo.Interface(),
+				ValueType:      fieldTo.Type.String(),
+				Endpoint:       endPointName,
+			}
+
+			// if fieldTo.Tag.Get("json") == "robot_num_sweep_capacity" {
+			// 	fmt.Sprintf("")
 			// }
 		}
 	}
 
 	return ret
+}
+
+func (dsm *DataStructureMap) GetUnitFrom(ref ...string) string {
+	var ret string
+	for range Only.Once {
+		r := strings.Join(ref, ".")
+		if s, ok := (*dsm)[r]; ok {
+			ret = s.PointUnit
+		}
+
+		//
+	}
+	return ret
+}
+
+func IsUnknownStructure(fieldTo reflect.StructField, fieldVo reflect.Value) bool {
+	var ok bool
+
+	for range Only.Once {
+		// fmt.Printf("Key[%s]: '%s' / '%s'\n",
+		// 	fieldTo.Name,
+		// 	fieldTo.Type.String(),
+		// 	fieldVo.Kind(),
+		// )
+		if fieldVo.Kind() == reflect.Struct {
+			switch fieldTo.Type.String() {
+				case "api.UnitValue":
+				case "api.Float":
+				case "api.Integer":
+				case "api.Count":
+				case "api.Bool":
+				case "api.String":
+				case "api.PsKey":
+				case "api.DateTime":
+
+				default:
+					ok = true
+			}
+		}
+	}
+
+	return ok
 }
 
 func hash(s string) uint32 {

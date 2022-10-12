@@ -61,22 +61,44 @@ func (an *Areas) GetArea(area AreaName) *Area {
 	return ret
 }
 
-func (an *Areas) GetEndPoint(area AreaName, name EndPointName) EndPoint {
+func (an *Areas) GetEndPoint(area AreaName, endpoint EndPointName) EndPoint {
 	var ret EndPoint
 	for range Only.Once {
 		if area == "" {
-			ret.SetError("empty area name")
-			break
-		}
-		if name == "" {
-			ret.SetError("empty endpoint name")
-			break
-		}
-		if _, ok := (*an)[area]; !ok {
+			ret = ret.SetError("empty endpoint area name")
 			break
 		}
 
-		ret = (*an)[area].EndPoints[name]
+		if endpoint == "" {
+			ret = ret.SetError("empty endpoint name")
+			break
+		}
+
+		// err := an.EndpointExists(area, endpoint)
+		// if err != nil {
+		// 	fmt.Printf("ERROR: %s\n", err)
+		// 	break
+		// }
+
+		if _, ok := (*an)[area]; !ok {
+			ret = (*an)[NullAreaName].EndPoints[NullEndPointName]
+			ret = ret.SetError("unknown endpoint area '%s'", area)
+			break
+		}
+
+		if _, ok := (*an)[area].EndPoints[endpoint]; !ok {
+			ret = (*an)[NullAreaName].EndPoints[NullEndPointName]
+			ret = ret.SetError("unknown endpoint '%s.%s'", area, endpoint)
+			break
+		}
+
+		ret = (*an)[area].EndPoints[endpoint]
+
+		if ret.IsDisabled() {
+			ret.SetError("API EndPoint is not implemented")
+			break
+		}
+
 	}
 	return ret
 }
@@ -139,47 +161,35 @@ func (an Areas) ListEndpoints(area string) error {
 	return err
 }
 
-func (an *Areas) SetRequest(area AreaName, name EndPointName, ref interface{}) error {
+func (an *Areas) SetRequest(area AreaName, endpoint EndPointName, ref interface{}) error {
 	var err error
 
 	for range Only.Once {
-		err = an.EndpointExists(area, name)
-		if err != nil {
+		ep := an.GetEndPoint(area, endpoint)
+		if ep.IsError() {
+			err = ep.GetError()
 			break
 		}
 
-		point := (*an)[area].EndPoints[name]
-		point = point.SetRequest(ref)
-		err = point.GetError()
+		ep = ep.SetRequest(ref)
+		if ep.IsError() {
+			err = ep.GetError()
+			break
+		}
+
+		// point := (*an)[area].EndPoints[endpoint]
+		// point = point.SetRequest(ref)
+		// err = point.GetError()
 	}
 
 	return err
+	// return an.GetEndPoint(area, endpoint).SetRequest()
 }
 
 func (an *Areas) GetRequest(area AreaName, endpoint EndPointName) output.Json {
-	var ret output.Json
-
-	for range Only.Once {
-		err := an.EndpointExists(area, endpoint)
-		if err != nil {
-			break
-		}
-		ret = an.GetEndPoint(area, endpoint).GetRequestJson()
-	}
-
-	return ret
+	return an.GetEndPoint(area, endpoint).GetRequestJson()
 }
 
 func (an *Areas) GetResponse(area AreaName, endpoint EndPointName) output.Json {
-	var ret output.Json
-
-	for range Only.Once {
-		err := an.EndpointExists(area, endpoint)
-		if err != nil {
-			break
-		}
-		ret = an.GetEndPoint(area, endpoint).GetResponseJson()
-	}
-
-	return ret
+	return an.GetEndPoint(area, endpoint).GetResponseJson()
 }

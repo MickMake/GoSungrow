@@ -10,6 +10,22 @@ func JoinStrings(args ...string) string {
 	return strings.TrimSpace(strings.Join(args, " "))
 }
 
+func JoinStringsForName(sep string, args ...string) string {
+	var newargs []string
+	var re = regexp.MustCompile(`(\.)+`)
+	for _, a := range args {
+		if a == "" {
+			continue
+		}
+		a = strings.TrimSpace(a)
+		a = re.ReplaceAllString(a, ` `)
+		newargs = append(newargs, a)
+	}
+
+	ret := strings.TrimSpace(strings.Join(newargs, sep))
+	return ret
+}
+
 func JoinStringsForId(args ...string) string {
 	var newargs []string
 	var re = regexp.MustCompile(`(/| |:|\.)+`)

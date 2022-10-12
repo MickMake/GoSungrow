@@ -108,7 +108,7 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 
 		payload := Sensor {
 			Device:                 newDevice,
-			Name:                   JoinStrings(m.DeviceName, config.FullId),
+			Name:                   JoinStrings(m.DeviceName, config.Name),
 			StateTopic:             JoinStringsForTopic(m.sensorPrefix, id, "state"),
 			StateClass:             config.StateClass,
 			UniqueId:               id,

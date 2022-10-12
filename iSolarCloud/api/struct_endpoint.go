@@ -81,7 +81,7 @@ func (ep *EndPointStruct) IsValid() error {
 func (ep EndPointStruct) String() string {
 	var ret string
 	for range Only.Once {
-		if ep.Name == NullEndPoint {
+		if ep.Name == NullAreaName {
 			break
 		}
 

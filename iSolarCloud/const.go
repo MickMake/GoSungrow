@@ -2,4 +2,7 @@ package iSolarCloud
 
 import "time"
 
-const DefaultCacheTimeout = time.Minute * 5
+
+const (
+	DefaultCacheTimeout = time.Minute * 5
+)

@@ -3,6 +3,8 @@ package api
 import (
 	"GoSungrow/Only"
 	"fmt"
+	// "github.com/d4l3k/go-pcre"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -10,17 +12,15 @@ import (
 
 
 type Point struct {
-	// EndPoint  string            `json:"endpoint"`
-	// FullId    PointId           `json:"full_id"`
-	// Parent    ParentDevice      `json:"parent"`
-	Parents   ParentDevices     `json:"parents"`
-	Id        PointId           `json:"id"`
-	GroupName string            `json:"group_name"`
-	Name      string            `json:"name"`
-	Unit      string            `json:"unit"`
-	Type      string            `json:"type"`
-	Valid     bool              `json:"valid"`
-	States    map[string]string `json:"states"`
+	Parents   ParentDevices     `json:"parents,omitempty"`
+	Id        PointId           `json:"id,omitempty"`
+	GroupName string            `json:"group_name,omitempty"`
+	Name      string            `json:"name,omitempty"`
+	Unit      string            `json:"unit,omitempty"`
+	TimeSpan  string            `json:"time_span,omitempty"`
+	ValueType string            `json:"value_type,omitempty"`
+	Valid     bool              `json:"valid,omitempty"`
+	States    map[string]string `json:"states,omitempty"`
 }
 
 
@@ -68,39 +68,40 @@ func (p *Point) WhenReset() string {
 }
 
 func (p Point) String() string {
-	return p.Type
+	return fmt.Sprintf("Id:%s\tName:%s\tUnits:%s\tTimespan:%s", p.Id, p.Name, p.Unit, p.TimeSpan)
+	// return p.TimeSpan
 }
 
 func (p Point) IsInstant() bool {
-	if p.Type == PointTypeInstant {
+	if p.TimeSpan == PointTimeSpanInstant {
 		return true
 	}
 	return false
 }
 
 func (p Point) IsDaily() bool {
-	if p.Type == PointTypeDaily {
+	if p.TimeSpan == PointTimeSpanDaily {
 		return true
 	}
 	return false
 }
 
 func (p Point) IsMonthly() bool {
-	if p.Type == PointTypeMonthly {
+	if p.TimeSpan == PointTimeSpanMonthly {
 		return true
 	}
 	return false
 }
 
 func (p Point) IsYearly() bool {
-	if p.Type == PointTypeYearly {
+	if p.TimeSpan == PointTimeSpanYearly {
 		return true
 	}
 	return false
 }
 
 func (p Point) IsTotal() bool {
-	if p.Type == PointTypeTotal {
+	if p.TimeSpan == PointTimeSpanTotal {
 		return true
 	}
 	return false
@@ -152,6 +153,15 @@ func PointToName(s PointId) string {
 	ret = CleanString(ret)
 	ret = strings.ReplaceAll(ret, "_", " ")
 	ret = strings.Title(ret)
+
+	// Add space between lowercase and uppercase letters.
+	re := regexp.MustCompile("([a-z0-9])([A-Z])")
+	ret = re.ReplaceAllString(ret, "$1 $2")
+
+	// Lowercase point ids.
+	re = regexp.MustCompile("P([0-9]+)")
+	ret = re.ReplaceAllString(ret, "p$1")
+
 	return ret
 }
 

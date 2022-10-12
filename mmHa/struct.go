@@ -177,7 +177,7 @@ func (m *Mqtt) Connect() error {
 			break
 		}
 		if m.ClientId == "" {
-			m.ClientId = "GoSunGrow"
+			m.ClientId = "GoSungrow"
 		}
 
 		device := Config {
@@ -186,8 +186,8 @@ func (m *Mqtt) Connect() error {
 			UniqueId:   m.ClientId, 	// + "_Service",
 			StateTopic:   "~/state",
 			DeviceConfig: DeviceConfig {
-				Identifiers:  []string{"GoSunGrow"},
-				SwVersion:    "GoSunGrow https://github.com/MickMake/GoSungrow",
+				Identifiers:  []string{"GoSungrow"},
+				SwVersion:    "GoSungrow https://github.com/MickMake/GoSungrow",
 				Name:         m.ClientId + " Service",
 				Manufacturer: "MickMake",
 				Model:        "SunGrow",
@@ -217,7 +217,7 @@ func (m *Mqtt) Disconnect() error {
 	return m.err
 }
 
-// const ServiceBaseName = "GoSunGrow"
+// const ServiceBaseName = "GoSungrow"
 // const ServiceBaseUniqueId = ServiceBaseName + "_Service"
 // const ServiceBaseTopic = "homeassistant/sensor/" + ServiceBaseName
 // const SensorBaseTopic = "homeassistant/sensor/" + ServiceBaseName
@@ -448,7 +448,7 @@ func (m *Mqtt) GetLastReset(pointType string) string {
 		if !pt.Valid {
 			break
 		}
-		if pt.Type == "" {
+		if pt.TimeSpan == "" {
 			break
 		}
 		ret = pt.WhenReset()

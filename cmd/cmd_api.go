@@ -408,24 +408,23 @@ func (c *CmdApi) CmdApiGet(_ *cobra.Command, args []string) error {
 			c.Error = c.SunGrow.AllCritical()
 			break
 		}
+
 		ep := c.SunGrow.GetByJson(args[0], args[1])
 		if ep.IsError() {
 			c.Error = ep.GetError()
 			break
 		}
+
 		if c.SunGrow.Error != nil {
 			c.Error = c.SunGrow.Error
 			break
 		}
-		if c.Error != nil {
-			break
-		}
 
-		c.Error = ep.GetError()
 		if c.Error != nil {
 			break
 		}
 	}
+
 	return c.Error
 }
 

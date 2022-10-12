@@ -23,8 +23,7 @@ func (m *Mqtt) PublishLightConfig(config EntityConfig) error {
 
 		payload := Light {
 			Device:                 newDevice,
-			// Name:                   JoinStrings(newDevice.ViaDevice, config.Name),
-			Name:                   JoinStrings(m.DeviceName, config.FullId),
+			Name:                   JoinStrings(m.DeviceName, config.Name),
 			StateTopic:             JoinStringsForTopic(m.switchPrefix, id, "state"),
 
 			// StateClass:             config.StateClass,

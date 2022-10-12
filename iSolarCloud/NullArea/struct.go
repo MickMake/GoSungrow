@@ -1,9 +1,7 @@
-// Package AliSmsService
-// API endpoints pulled from the sqlite database, (./assets/interface.db), contained within the Android app com.isolarcloud.manager
-package AliSmsService
+package NullArea
 
 import (
-	"GoSungrow/iSolarCloud/AliSmsService/msgDownwardStatusReceipt"
+	"GoSungrow/iSolarCloud/NullArea/NullEndpoint"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
@@ -24,7 +22,7 @@ func Init(apiRoot api.Web) Area {
 		ApiRoot: apiRoot,
 		Name:    api.GetArea(Area{}),
 		EndPoints: api.TypeEndPoints{
-			api.GetName(msgDownwardStatusReceipt.EndPoint{}): msgDownwardStatusReceipt.Init(apiRoot),
+			api.GetName(NullEndpoint.EndPoint{}): NullEndpoint.Init(apiRoot),
 		},
 	}
 

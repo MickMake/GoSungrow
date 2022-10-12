@@ -1,3 +1,7 @@
 package api
 
-const NullEndPoint = "nullEndPoint"
+
+const (
+	NullAreaName = "NullArea"
+	NullEndPointName = "NullEndpoint"
+)
