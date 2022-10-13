@@ -44,4 +44,6 @@ type EndPoint interface {
 	CacheFilename() string
 	SetCacheTimeout(duration time.Duration) EndPoint
 	GetCacheTimeout() time.Duration
+
+	GetDataTable() output.Table
 }

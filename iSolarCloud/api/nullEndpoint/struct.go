@@ -374,7 +374,6 @@ func (e EndPoint) GetDataTable() output.Table {
 		_ = table.SetHeader(
 			"Date",
 			"Point Id",
-			// "Parents",
 			"Group Name",
 			"Description",
 			"Value",

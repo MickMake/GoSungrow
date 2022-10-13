@@ -1,12 +1,14 @@
 package getKpiInfo
 
 import (
+	"time"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api"
+	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
-	"sort"
 	"time"
 )
 
@@ -26,18 +28,18 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	ActualEnergy             []string      `json:"actual_energy"`
+	ActualEnergy             []api.Float   `json:"actual_energy" PointUnitFrom:"actual_energy_unit"`
 	ActualEnergyUnit         string        `json:"actual_energy_unit"`
-	ChargeTotalEnergy        string        `json:"charge_total_energy"`
+	ChargeTotalEnergy        api.Float     `json:"charge_total_energy" PointUnitFrom:"charge_total_energy_unit"`
 	ChargeTotalEnergyUnit    string        `json:"charge_total_energy_unit"`
-	DisChargeTotalEnergy     string        `json:"dis_charge_total_energy"`
+	DisChargeTotalEnergy     api.Float     `json:"dis_charge_total_energy" PointUnitFrom:"dis_charge_total_energy_unit"`
 	DisChargeTotalEnergyUnit string        `json:"dis_charge_total_energy_unit"`
 	MonthEnergy              api.UnitValue `json:"month_energy"`
-	OrgName                  string        `json:"org_name"`
+	OrgName                  api.String    `json:"org_name"`
 	P83024                   api.Float     `json:"p83024"`
-	PercentPlanMonth         string        `json:"percent_plan_month"`
-	PercentPlanYear          string        `json:"percent_plan_year"`
-	PlanEnergy               []string      `json:"plan_energy"`
+	PercentPlanMonth         api.Float     `json:"percent_plan_month"`
+	PercentPlanYear          api.Float     `json:"percent_plan_year"`
+	PlanEnergy               []api.Float   `json:"plan_energy" PointUnitFrom:"plan_energy_unit"`
 	PlanEnergyUnit           string        `json:"plan_energy_unit"`
 	PsCount                  api.Integer   `json:"ps_count"`
 	TodayEnergy              api.UnitValue `json:"today_energy"`
@@ -86,65 +88,4 @@ func (e *EndPoint) GetData() api.DataMap {
 	}
 
 	return entries
-}
-
-func (e *EndPoint) GetDataTable() output.Table {
-	var table output.Table
-	for range Only.Once {
-		table = output.NewTable()
-		table.SetTitle("")
-		table.SetJson([]byte(e.GetJsonData(false)))
-		table.SetRaw([]byte(e.GetJsonData(true)))
-
-		_ = table.SetHeader(
-			"Date",
-			"Point Id",
-			// "Parents",
-			"Group Name",
-			"Description",
-			"Value",
-			"Unit",
-		)
-
-		data := e.GetData()
-		var sorted []string
-		for p := range data.DataPoints {
-			sorted = append(sorted, string(p))
-		}
-		sort.Strings(sorted)
-
-		for _, p := range sorted {
-			entries := data.DataPoints[api.PointId(p)]
-			for _, de := range entries {
-				if de.Hide {
-					continue
-				}
-
-				_ = table.AddRow(
-					de.Date.Format(api.DtLayout),
-					// api.NameDevicePointInt(de.Point.Parents, p.PointID.Value()),
-					// de.Point.Id,
-					p,
-					// de.Point.Parents.String(),
-					de.Point.GroupName,
-					de.Point.Name,
-					de.Value,
-					de.Point.Unit,
-				)
-			}
-		}
-
-		// table.InitGraph(output.GraphRequest {
-		// 	Title:        "",
-		// 	TimeColumn:   output.SetInteger(1),
-		// 	SearchColumn: output.SetInteger(2),
-		// 	NameColumn:   output.SetInteger(4),
-		// 	ValueColumn:  output.SetInteger(5),
-		// 	UnitsColumn:  output.SetInteger(6),
-		// 	SearchString: output.SetString(""),
-		// 	MinLeftAxis:  output.SetFloat(0),
-		// 	MaxLeftAxis:  output.SetFloat(0),
-		// })
-	}
-	return table
 }

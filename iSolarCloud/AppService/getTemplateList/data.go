@@ -1,7 +1,12 @@
 package getTemplateList
 
 import (
-	"GoSungrow/Only"
+	"time"
+	"GoSungrow/iSolarCloud/api"
+	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/output"
+	"github.com/MickMake/GoUnify/Only"
+
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
@@ -94,4 +99,14 @@ func (e *EndPoint) GetDataTable() output.Table {
 	}
 
 	return table
+}
+
+func (e *EndPoint) GetData() api.DataMap {
+	entries := api.NewDataMap()
+
+	for range Only.Once {
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", time.Time{})
+	}
+
+	return entries
 }

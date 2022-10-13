@@ -1,7 +1,12 @@
 package getHouseholdStoragePsReport
 
 import (
-	"GoSungrow/Only"
+	"time"
+	"GoSungrow/iSolarCloud/api"
+	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/output"
+	"github.com/MickMake/GoUnify/Only"
+
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"encoding/json"
@@ -390,6 +395,16 @@ func (e *EndPoint) GetData() api.DataMap {
 				entries.AddUnitValue(name + ".p83128", e.Request.PsID.String(), "p83128", "", "", d.TimeStamp, uv)
 			}
 		}
+	}
+
+	return entries
+}
+
+func (e *EndPoint) GetData() api.DataMap {
+	entries := api.NewDataMap()
+
+	for range Only.Once {
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", time.Time{})
 	}
 
 	return entries

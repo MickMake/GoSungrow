@@ -1,9 +1,12 @@
 package viewDeviceModel
 
 import (
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
+	"time"
 )
 
 const Url = "/v1/devService/viewDeviceModel"
@@ -56,3 +59,13 @@ func (e *ResultData) IsValid() error {
 //
 //	return err
 //}
+
+func (e *EndPoint) GetData() api.DataMap {
+	entries := api.NewDataMap()
+
+	for range Only.Once {
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", time.Time{})
+	}
+
+	return entries
+}
