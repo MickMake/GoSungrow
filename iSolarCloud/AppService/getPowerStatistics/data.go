@@ -3,8 +3,8 @@ package getPowerStatistics
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/powerStationService/getPowerStatistics"
@@ -24,17 +24,17 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	PRVlaue        string        `json:"PRVlaue"`
+	PRVlaue        api.Float     `json:"PRVlaue" PointId:"PRValue"`
 	City           interface{}   `json:"city"`
 	DayPower       api.UnitValue `json:"dayPower"`
 	DesignCapacity api.UnitValue `json:"design_capacity"`
-	EqVlaue        string        `json:"eqVlaue"`
+	EqVlaue        api.Float     `json:"eqVlaue" PointId:"EQValue"`
 	NowCapacity    api.UnitValue `json:"nowCapacity"`
-	PsName         string        `json:"ps_name"`
-	PsShortName    string        `json:"ps_short_name"`
-	Status1        string        `json:"status1"`
-	Status2        string        `json:"status2"`
-	Status3        string        `json:"status3"`
+	PsName         api.String    `json:"ps_name"`
+	PsShortName    api.String    `json:"ps_short_name"`
+	Status1        api.Integer   `json:"status1"`
+	Status2        api.Integer   `json:"status2"`
+	Status3        api.Integer   `json:"status3"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -71,7 +71,8 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		pkg := apiReflect.GetName("", *e) + "." + e.Request.PsId.String()
+		entries.StructToPoints(e.Response.ResultData, pkg, e.Request.PsId.String(), api.NewDateTime(""))
 	}
 
 	return entries

@@ -3,8 +3,8 @@ package getPsHealthState
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/powerStationService/getPsHealthState"
@@ -24,9 +24,9 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	PsFaultStatus  string `json:"ps_fault_status"`
-	PsHealthStatus string `json:"ps_health_status"`
-	PsState        string `json:"ps_state"`
+	PsFaultStatus  api.String `json:"ps_fault_status"`
+	PsHealthStatus api.String `json:"ps_health_status"`
+	PsState        api.Bool   `json:"ps_state"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -63,7 +63,8 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		name := apiReflect.GetName("", *e) + "." + e.Request.PsId.String()
+		entries.StructToPoints(e.Response.ResultData, name, e.Request.PsId.String(), api.NewDateTime(""))
 	}
 
 	return entries

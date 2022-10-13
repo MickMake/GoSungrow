@@ -12,9 +12,14 @@ import (
 	"GoSungrow/iSolarCloud/AppService/getPowerChargeSettingInfo"
 	"GoSungrow/iSolarCloud/AppService/getPowerDevicePointInfo"
 	"GoSungrow/iSolarCloud/AppService/getPowerDevicePointNames"
+	"GoSungrow/iSolarCloud/AppService/getPowerStationBasicInfo"
 	"GoSungrow/iSolarCloud/AppService/getPowerStationData"
+	"GoSungrow/iSolarCloud/AppService/getPowerStationForHousehold"
+	"GoSungrow/iSolarCloud/AppService/getPowerStationInfo"
+	"GoSungrow/iSolarCloud/AppService/getPowerStatistics"
 	"GoSungrow/iSolarCloud/AppService/getPsDetail"
 	"GoSungrow/iSolarCloud/AppService/getPsDetailWithPsType"
+	"GoSungrow/iSolarCloud/AppService/getPsHealthState"
 	"GoSungrow/iSolarCloud/AppService/getPsList"
 	"GoSungrow/iSolarCloud/AppService/getTemplateList"
 	"GoSungrow/iSolarCloud/AppService/queryDeviceList"
@@ -1324,12 +1329,18 @@ func (sg *SunGrowData) New(ref *SunGrow) {
 		sg.EndPoints["getPsDetailWithPsType"] = EndPoint { Func: sg.getPsDetailWithPsType, HasArgs: true }
 		sg.EndPoints["getPsDetail"] = EndPoint { Func: sg.getPsDetail, HasArgs: true }
 		sg.EndPoints["findPsType"] = EndPoint { Func: sg.findPsType, HasArgs: true }
-		// sg.EndPoints["getAllDeviceByPsId"] = EndPoint { Func: sg.getAllDeviceByPsId, HasArgs: false }
+		// sg.EndPoints["getAllDeviceByPsId"] = EndPoint { Func: sg.getAllDeviceByPsId, HasArgs: false }	// Not working
 		sg.EndPoints["getDeviceList"] = EndPoint { Func: sg.getDeviceList, HasArgs: true }
 		sg.EndPoints["getIncomeSettingInfos"] = EndPoint { Func: sg.getIncomeSettingInfos, HasArgs: true }
 		sg.EndPoints["getKpiInfo"] = EndPoint { Func: sg.getKpiInfo, HasArgs: false }
 		sg.EndPoints["getPowerChargeSettingInfo"] = EndPoint { Func: sg.getPowerChargeSettingInfo, HasArgs: true }
 		sg.EndPoints["getHouseholdStoragePsReport"] = EndPoint { Func: sg.getHouseholdStoragePsReport, HasArgs: true }
+		// sg.EndPoints["getPowerStationBasicInfo"] = EndPoint { Func: sg.getPowerStationBasicInfo, HasArgs: true }	// Not working
+		sg.EndPoints["getPowerStationData"] = EndPoint { Func: sg.getPowerStationData, HasArgs: true }
+		sg.EndPoints["getPowerStationForHousehold"] = EndPoint { Func: sg.getPowerStationForHousehold, HasArgs: true }
+		sg.EndPoints["getPowerStationInfo"] = EndPoint { Func: sg.getPowerStationInfo, HasArgs: true }
+		sg.EndPoints["getPowerStatistics"] = EndPoint { Func: sg.getPowerStatistics, HasArgs: true }
+		sg.EndPoints["getPsHealthState"] = EndPoint { Func: sg.getPsHealthState, HasArgs: true }
 	}
 }
 
@@ -1712,139 +1723,140 @@ func (sg *SunGrowData) getHouseholdStoragePsReport(request SunGrowDataRequest) S
 	return response
 }
 
+func (sg *SunGrowData) getPowerStationBasicInfo(request SunGrowDataRequest) SunGrowDataResponse {
+	var response SunGrowDataResponse
+	for range Only.Once {
+		ep := sg.SunGrow.GetByStruct(
+			"AppService.getPowerStationBasicInfo",
+			getPowerStationBasicInfo.RequestData{ PsId: request.PsId },
+			api.DefaultTimeout,
+		)
 
-// func (sg *SunGrowData) getPowerStationBasicInfo(request SunGrowDataRequest) SunGrowDataResponse {
-// 	var response SunGrowDataResponse
-// 	for range Only.Once {
-// 		ep := sg.SunGrow.GetByStruct(
-// 			"AppService.getPowerStationBasicInfo",
-// 			getPowerStationBasicInfo.RequestData{ PsId: request.PsId },
-// 			api.DefaultTimeout,
-// 		)
-//
-// 		data := getPowerStationBasicInfo.Assert(ep)
-// 		if data.Error != nil {
-// 			sg.SunGrow.Error = data.Error
-// 			break
-// 		}
-//
-// 		response.Filename = data.SetFilenamePrefix("getPowerStationBasicInfo-%d", request.PsId)
-// 		response.Data = data.GetData()
-// 		response.Table = data.GetDataTable()
-// 	}
-// 	return response
-// }
-//
-// func (sg *SunGrowData) getPowerStationData(request SunGrowDataRequest) SunGrowDataResponse {
-// 	var response SunGrowDataResponse
-// 	for range Only.Once {
-// 		ep := sg.SunGrow.GetByStruct(
-// 			"AppService.getPowerStationData",
-// 			getPowerStationData.RequestData{ PsId: request.PsId },
-// 			api.DefaultTimeout,
-// 		)
-//
-// 		data := getPowerStationData.Assert(ep)
-// 		if data.Error != nil {
-// 			sg.SunGrow.Error = data.Error
-// 			break
-// 		}
-//
-// 		response.Filename = data.SetFilenamePrefix("getPowerStationData-%d", request.PsId)
-// 		response.Data = data.GetData()
-// 		response.Table = data.GetDataTable()
-// 	}
-// 	return response
-// }
-//
-// func (sg *SunGrowData) getPowerStationForHousehold(request SunGrowDataRequest) SunGrowDataResponse {
-// 	var response SunGrowDataResponse
-// 	for range Only.Once {
-// 		ep := sg.SunGrow.GetByStruct(
-// 			"AppService.getPowerStationForHousehold",
-// 			getPowerStationForHousehold.RequestData{ PsId: request.PsId },
-// 			api.DefaultTimeout,
-// 		)
-//
-// 		data := getPowerStationForHousehold.Assert(ep)
-// 		if data.Error != nil {
-// 			sg.SunGrow.Error = data.Error
-// 			break
-// 		}
-//
-// 		response.Filename = data.SetFilenamePrefix("getPowerStationForHousehold-%d", request.PsId)
-// 		response.Data = data.GetData()
-// 		response.Table = data.GetDataTable()
-// 	}
-// 	return response
-// }
-//
-// func (sg *SunGrowData) getPowerStationInfo(request SunGrowDataRequest) SunGrowDataResponse {
-// 	var response SunGrowDataResponse
-// 	for range Only.Once {
-// 		ep := sg.SunGrow.GetByStruct(
-// 			"AppService.getPowerStationInfo",
-// 			getPowerStationInfo.RequestData{ PsId: request.PsId },
-// 			api.DefaultTimeout,
-// 		)
-//
-// 		data := getPowerStationInfo.Assert(ep)
-// 		if data.Error != nil {
-// 			sg.SunGrow.Error = data.Error
-// 			break
-// 		}
-//
-// 		response.Filename = data.SetFilenamePrefix("getPowerStationInfo-%d", request.PsId)
-// 		response.Data = data.GetData()
-// 		response.Table = data.GetDataTable()
-// 	}
-// 	return response
-// }
-//
-// func (sg *SunGrowData) getPowerStatistics(request SunGrowDataRequest) SunGrowDataResponse {
-// 	var response SunGrowDataResponse
-// 	for range Only.Once {
-// 		ep := sg.SunGrow.GetByStruct(
-// 			"AppService.getPowerStatistics",
-// 			getPowerStatistics.RequestData{ PsId: request.PsId },
-// 			api.DefaultTimeout,
-// 		)
-//
-// 		data := getPowerStatistics.Assert(ep)
-// 		if data.Error != nil {
-// 			sg.SunGrow.Error = data.Error
-// 			break
-// 		}
-//
-// 		response.Filename = data.SetFilenamePrefix("getPowerStatistics-%d", request.PsId)
-// 		response.Data = data.GetData()
-// 		response.Table = data.GetDataTable()
-// 	}
-// 	return response
-// }
-//
-// func (sg *SunGrowData) getPsHealthState(request SunGrowDataRequest) SunGrowDataResponse {
-// 	var response SunGrowDataResponse
-// 	for range Only.Once {
-// 		ep := sg.SunGrow.GetByStruct(
-// 			"AppService.getPsHealthState",
-// 			getPsHealthState.RequestData{ PsId: request.PsId },
-// 			api.DefaultTimeout,
-// 		)
-//
-// 		data := getPsHealthState.Assert(ep)
-// 		if data.Error != nil {
-// 			sg.SunGrow.Error = data.Error
-// 			break
-// 		}
-//
-// 		response.Filename = data.SetFilenamePrefix("getPsHealthState-%d", request.PsId)
-// 		response.Data = data.GetData()
-// 		response.Table = data.GetDataTable()
-// 	}
-// 	return response
-// }
-//
+		data := getPowerStationBasicInfo.Assert(ep)
+		if data.Error != nil {
+			response.Error = data.Error
+			break
+		}
+
+		response.Filename = data.SetFilenamePrefix("getPowerStationBasicInfo-%d", request.PsId)
+		response.Data = data.GetData()
+		response.Table = data.GetDataTable()
+	}
+	return response
+}
+
+// @TODO - Add in the ability to increment values by 5 minutes.
+// Return from this function is an array of 288 values.
+func (sg *SunGrowData) getPowerStationData(request SunGrowDataRequest) SunGrowDataResponse {
+	var response SunGrowDataResponse
+	for range Only.Once {
+		ep := sg.SunGrow.GetByStruct(
+			"AppService.getPowerStationData",
+			getPowerStationData.RequestData{ PsId: request.PsId, DateType: request.Date.DateType, DateID: request.Date.Original() },
+			api.DefaultTimeout,
+		)
+
+		data := getPowerStationData.Assert(ep)
+		if data.Error != nil {
+			response.Error = ep.GetError()
+			break
+		}
+
+		response.Filename = data.SetFilenamePrefix("getPowerStationData-%d-%s", request.PsId, request.Date.Original())
+		response.Data = data.GetData()
+		response.Table = data.GetDataTable()
+	}
+	return response
+}
+
+func (sg *SunGrowData) getPowerStationForHousehold(request SunGrowDataRequest) SunGrowDataResponse {
+	var response SunGrowDataResponse
+	for range Only.Once {
+		ep := sg.SunGrow.GetByStruct(
+			"AppService.getPowerStationForHousehold",
+			getPowerStationForHousehold.RequestData{ PsId: request.PsId },
+			api.DefaultTimeout,
+		)
+
+		data := getPowerStationForHousehold.Assert(ep)
+		if data.Error != nil {
+			response.Error = ep.GetError()
+			break
+		}
+
+		response.Filename = data.SetFilenamePrefix("getPowerStationForHousehold-%d", request.PsId)
+		response.Data = data.GetData()
+		response.Table = data.GetDataTable()
+	}
+	return response
+}
+
+func (sg *SunGrowData) getPowerStationInfo(request SunGrowDataRequest) SunGrowDataResponse {
+	var response SunGrowDataResponse
+	for range Only.Once {
+		ep := sg.SunGrow.GetByStruct(
+			"AppService.getPowerStationInfo",
+			getPowerStationInfo.RequestData{ PsId: request.PsId },
+			api.DefaultTimeout,
+		)
+
+		data := getPowerStationInfo.Assert(ep)
+		if data.Error != nil {
+			response.Error = ep.GetError()
+			break
+		}
+
+		response.Filename = data.SetFilenamePrefix("getPowerStationInfo-%d", request.PsId)
+		response.Data = data.GetData()
+		response.Table = data.GetDataTable()
+	}
+	return response
+}
+
+func (sg *SunGrowData) getPowerStatistics(request SunGrowDataRequest) SunGrowDataResponse {
+	var response SunGrowDataResponse
+	for range Only.Once {
+		ep := sg.SunGrow.GetByStruct(
+			"AppService.getPowerStatistics",
+			getPowerStatistics.RequestData{ PsId: request.PsId },
+			api.DefaultTimeout,
+		)
+
+		data := getPowerStatistics.Assert(ep)
+		if data.Error != nil {
+			response.Error = ep.GetError()
+			break
+		}
+
+		response.Filename = data.SetFilenamePrefix("getPowerStatistics-%d", request.PsId)
+		response.Data = data.GetData()
+		response.Table = data.GetDataTable()
+	}
+	return response
+}
+
+func (sg *SunGrowData) getPsHealthState(request SunGrowDataRequest) SunGrowDataResponse {
+	var response SunGrowDataResponse
+	for range Only.Once {
+		ep := sg.SunGrow.GetByStruct(
+			"AppService.getPsHealthState",
+			getPsHealthState.RequestData{ PsId: request.PsId },
+			api.DefaultTimeout,
+		)
+
+		data := getPsHealthState.Assert(ep)
+		if data.Error != nil {
+			response.Error = ep.GetError()
+			break
+		}
+
+		response.Filename = data.SetFilenamePrefix("getPsHealthState-%d", request.PsId)
+		response.Data = data.GetData()
+		response.Table = data.GetDataTable()
+	}
+	return response
+}
+
 // func (sg *SunGrowData) getPsWeatherList(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
 // 	for range Only.Once {
@@ -1856,7 +1868,7 @@ func (sg *SunGrowData) getHouseholdStoragePsReport(request SunGrowDataRequest) S
 //
 // 		data := getPsWeatherList.Assert(ep)
 // 		if data.Error != nil {
-// 			sg.SunGrow.Error = data.Error
+// 			response.Error = ep.GetError()
 // 			break
 // 		}
 //
@@ -1878,7 +1890,7 @@ func (sg *SunGrowData) getHouseholdStoragePsReport(request SunGrowDataRequest) S
 //
 // 		data := getRemoteUpgradeTaskList.Assert(ep)
 // 		if data.Error != nil {
-// 			sg.SunGrow.Error = data.Error
+// 			response.Error = ep.GetError()
 // 			break
 // 		}
 //
@@ -1900,7 +1912,7 @@ func (sg *SunGrowData) getHouseholdStoragePsReport(request SunGrowDataRequest) S
 //
 // 		data := getReportData.Assert(ep)
 // 		if data.Error != nil {
-// 			sg.SunGrow.Error = data.Error
+// 			response.Error = ep.GetError()
 // 			break
 // 		}
 //
@@ -1922,7 +1934,7 @@ func (sg *SunGrowData) getHouseholdStoragePsReport(request SunGrowDataRequest) S
 //
 // 		data := psForcastInfo.Assert(ep)
 // 		if data.Error != nil {
-// 			sg.SunGrow.Error = data.Error
+// 			response.Error = ep.GetError()
 // 			break
 // 		}
 //
@@ -1944,7 +1956,7 @@ func (sg *SunGrowData) getHouseholdStoragePsReport(request SunGrowDataRequest) S
 //
 // 		data := queryAllPsIdAndName.Assert(ep)
 // 		if data.Error != nil {
-// 			sg.SunGrow.Error = data.Error
+// 			response.Error = ep.GetError()
 // 			break
 // 		}
 //
@@ -1966,7 +1978,7 @@ func (sg *SunGrowData) getHouseholdStoragePsReport(request SunGrowDataRequest) S
 //
 // 		data := queryPsIdList.Assert(ep)
 // 		if data.Error != nil {
-// 			sg.SunGrow.Error = data.Error
+// 			response.Error = ep.GetError()
 // 			break
 // 		}
 //
@@ -1988,7 +2000,7 @@ func (sg *SunGrowData) getHouseholdStoragePsReport(request SunGrowDataRequest) S
 //
 // 		data := queryPsNameByPsId.Assert(ep)
 // 		if data.Error != nil {
-// 			sg.SunGrow.Error = data.Error
+// 			response.Error = ep.GetError()
 // 			break
 // 		}
 //
@@ -2010,7 +2022,7 @@ func (sg *SunGrowData) getHouseholdStoragePsReport(request SunGrowDataRequest) S
 //
 // 		data := queryPowerStationInfo.Assert(ep)
 // 		if data.Error != nil {
-// 			sg.SunGrow.Error = data.Error
+// 			response.Error = ep.GetError()
 // 			break
 // 		}
 //
@@ -2032,7 +2044,7 @@ func (sg *SunGrowData) getHouseholdStoragePsReport(request SunGrowDataRequest) S
 //
 // 		data := queryPsProfit.Assert(ep)
 // 		if data.Error != nil {
-// 			sg.SunGrow.Error = data.Error
+// 			response.Error = ep.GetError()
 // 			break
 // 		}
 //
@@ -2054,7 +2066,7 @@ func (sg *SunGrowData) getHouseholdStoragePsReport(request SunGrowDataRequest) S
 //
 // 		data := reportList.Assert(ep)
 // 		if data.Error != nil {
-// 			sg.SunGrow.Error = data.Error
+// 			response.Error = ep.GetError()
 // 			break
 // 		}
 //
@@ -2076,7 +2088,7 @@ func (sg *SunGrowData) getHouseholdStoragePsReport(request SunGrowDataRequest) S
 //
 // 		data := getPsIdState.Assert(ep)
 // 		if data.Error != nil {
-// 			sg.SunGrow.Error = data.Error
+// 			response.Error = ep.GetError()
 // 			break
 // 		}
 //
@@ -2098,7 +2110,7 @@ func (sg *SunGrowData) getHouseholdStoragePsReport(request SunGrowDataRequest) S
 //
 // 		data := showPSView.Assert(ep)
 // 		if data.Error != nil {
-// 			sg.SunGrow.Error = data.Error
+// 			response.Error = ep.GetError()
 // 			break
 // 		}
 //
@@ -2120,7 +2132,7 @@ func (sg *SunGrowData) getHouseholdStoragePsReport(request SunGrowDataRequest) S
 //
 // 		data := getMaxDeviceIdByPsId.Assert(ep)
 // 		if data.Error != nil {
-// 			sg.SunGrow.Error = data.Error
+// 			response.Error = ep.GetError()
 // 			break
 // 		}
 //

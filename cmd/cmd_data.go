@@ -215,7 +215,7 @@ func SplitArg(arg string) []string {
 func (c *CmdData) GetEndpoints(cmd *cobra.Command, args []string) error {
 	// endpoints string, psIds string, date string
 	for range Only.Once {
-		_ = cmds.SetOutputType(cmd)
+		cmds.Api.SunGrow.SetOutputType(cmd.Use)
 		args = cmdConfig.FillArray(3, args)
 
 		var e []string

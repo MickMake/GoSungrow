@@ -29,7 +29,7 @@ type ResultData struct {
 	AccessType            interface{}  `json:"access_type"`
 	AreaID                interface{}  `json:"area_id"`
 	ArrearsStatus         api.Integer  `json:"arrears_status"`
-	BatteryType           string       `json:"battery_type"`
+	BatteryType           api.Integer  `json:"battery_type"`
 	CityCode              api.String   `json:"city_code"`
 	CityName              api.String   `json:"city_name"`
 	ComponentArea         interface{}  `json:"component_area"`
@@ -87,7 +87,7 @@ type ResultData struct {
 	PsBuildDate           api.DateTime `json:"ps_build_date"`
 	PsCountryID           api.Integer  `json:"ps_country_id"`
 	PsCreateUserID        api.Integer  `json:"ps_create_user_id"`
-	PsCurrentTimeZone     string       `json:"ps_current_time_zone"`
+	PsCurrentTimeZone     api.String   `json:"ps_current_time_zone"`
 	PsDirectOrgList       []struct {
 		OrgID        api.Integer `json:"org_id"`
 		OrgIndexCode api.String  `json:"org_index_code"`
@@ -123,20 +123,20 @@ type ResultData struct {
 		OrgIndexCode api.String  `json:"org_index_code"`
 		OrgName      api.String  `json:"org_name"`
 	} `json:"selectedOrgList"`
-	SetUserOrg      string      `json:"set_user_org"`
-	ShareType       string      `json:"share_type"`
+	SetUserOrg      api.Integer `json:"set_user_org"`
+	ShareType       api.Integer `json:"share_type"`
 	ShareUserType   interface{} `json:"share_user_type"`
 	ShippingAddress api.String  `json:"shipping_address"`
 	ShippingZipCode api.String  `json:"shipping_zip_code"`
-	Sn              api.String  `json:"sn"`
+	Sn              api.String  `json:"sn" PointName:"Serial Number"`
 	SnDetailList    []struct {
 		CommunicateDeviceType     api.Integer `json:"communicate_device_type"`
 		CommunicateDeviceTypeName api.String  `json:"communicate_device_type_name"`
 		ID                        api.Integer `json:"id"`
 		IsEnable                  api.Bool    `json:"is_enable"`
-		Sn                        api.String  `json:"sn"`
+		Sn                        api.String  `json:"sn" PointName:"Serial Number"`
 	} `json:"sn_detail_list"`
-	SummerTimeState    api.Integer `json:"summer_time_state"`
+	SummerTimeState    api.Bool    `json:"summer_time_state"`
 	SummerTimeZone     api.String  `json:"summer_time_zone"`
 	SummerTimeZoneID   api.Integer `json:"summer_time_zone_id"`
 	TimeZoneID         api.Integer `json:"time_zone_id"`
@@ -148,7 +148,7 @@ type ResultData struct {
 	UserMobileTel      api.String  `json:"user_moble_tel"`
 	UserName           api.String  `json:"user_name"`
 	UserTelNationCode  api.String  `json:"user_tel_nation_code"`
-	ValidFlag          api.Integer `json:"valid_flag"`
+	ValidFlag          api.Bool    `json:"valid_flag"`
 	WgsLatitude        api.Float   `json:"wgs_latitude"`
 	WgsLongitude       api.Float   `json:"wgs_longitude"`
 	ZipCode            api.String  `json:"zip_code"`
@@ -188,7 +188,33 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		pkg := apiReflect.GetName("", *e) + "." + e.Request.PsId.String()
+		entries.StructToPoints(e.Response.ResultData, pkg, e.Request.PsId.String(), api.NewDateTime(""))
+
+		for i, v := range e.Response.ResultData.PsDirectOrgList {
+			name := fmt.Sprintf("%s.PsDirectOrgList.%d", pkg, i)
+			entries.StructToPoints(v, name, e.Request.PsId.String(), api.NewDateTime(""))
+		}
+
+		for i, v := range e.Response.ResultData.PsOrgInfo {
+			name := fmt.Sprintf("%s.PsOrgInfo.%d", pkg, i)
+			entries.StructToPoints(v, name, e.Request.PsId.String(), api.NewDateTime(""))
+		}
+
+		for i, v := range e.Response.ResultData.SelectedOrgList {
+			name := fmt.Sprintf("%s.SelectedOrgList.%d", pkg, i)
+			entries.StructToPoints(v, name, e.Request.PsId.String(), api.NewDateTime(""))
+		}
+
+		for i, v := range e.Response.ResultData.PsDirectOrgList {
+			name := fmt.Sprintf("%s.PsDirectOrgList.%d", pkg, i)
+			entries.StructToPoints(v, name, e.Request.PsId.String(), api.NewDateTime(""))
+		}
+
+		for i, v := range e.Response.ResultData.SnDetailList {
+			name := fmt.Sprintf("%s.SnDetailList.%d", pkg, i)
+			entries.StructToPoints(v, name, e.Request.PsId.String(), api.NewDateTime(""))
+		}
 	}
 
 	return entries

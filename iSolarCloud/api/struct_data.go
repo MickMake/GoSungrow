@@ -122,6 +122,7 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 
 			// pUnit := fieldTo.Tag.Get("PointUnit")
 			var uv UnitValue
+			var uvs UnitValues
 			var ignore bool
 			switch f.ValueType {
 				case "int":
@@ -143,127 +144,116 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 					v := f.Value.(bool)
 					uv = SetUnitValueString(fmt.Sprintf("%v", v), "binary")
 
-				case "UnitValue":
-					fallthrough
 				case "api.UnitValue":
+					fallthrough
+				case "UnitValue":
 					uv = f.Value.(UnitValue)
 					// uv = uv.UnitValueFix()
 
-				case "[]UnitValue":
+				case "UnitValues":
 					fallthrough
 				case "[]api.UnitValue":
-					// v := strings.Join(f.Value.([]string), ",")
-					j, err := json.Marshal(f.Value.([]UnitValue))
-					if err != nil {
-						j = []byte(fmt.Sprintf("%v", f.Value.([]UnitValue)))
-					}
-					uv = SetUnitValueString(string(j), f.PointUnit)
-
-				case "Float":
 					fallthrough
+				case "[]UnitValue":
+					uvs = f.Value.([]UnitValue)
+
 				case "api.Float":
+					fallthrough
+				case "Float":
 					v := f.Value.(Float)
 					uv = SetUnitValueFloat(v.Value(), f.PointUnit)
 
-				case "[]Float":
-					fallthrough
 				case "[]api.Float":
-					// v := strings.Join(f.Value.([]string), ",")
-					j, err := json.Marshal(f.Value.([]Float))
-					if err != nil {
-						j = []byte(fmt.Sprintf("%v", f.Value.([]Float)))
-					}
-					uv = SetUnitValueString(string(j), f.PointUnit)
-
-				case "Integer":
 					fallthrough
+				case "[]Float":
+					v := f.Value.([]Float)
+					for _, val := range v {
+						uvs = append(uvs, SetUnitValueFloat(val.Value(), f.PointUnit))
+					}
+
 				case "api.Integer":
+					fallthrough
+				case "Integer":
 					v := f.Value.(Integer).Value()
 					uv = SetUnitValueInteger(v, f.PointUnit)
 
-				case "[]Integer":
-					fallthrough
 				case "[]api.Integer":
-					j, err := json.Marshal(f.Value.([]Integer))
-					if err != nil {
-						j = []byte(fmt.Sprintf("%v", f.Value.([]Integer)))
-					}
-					uv = SetUnitValueString(string(j), f.PointUnit)
-
-				case "Count":
 					fallthrough
+				case "[]Integer":
+					v := f.Value.([]Integer)
+					for _, val := range v {
+						uvs = append(uvs, SetUnitValueInteger(val.Value(), f.PointUnit))
+					}
+
 				case "api.Count":
+					fallthrough
+				case "Count":
 					v := f.Value.(Count).Value()
 					uv = SetUnitValueInteger(v, "counter")
 
-				case "[]Count":
-					fallthrough
 				case "[]api.Count":
-					j, err := json.Marshal(f.Value.([]Count))
-					if err != nil {
-						j = []byte(fmt.Sprintf("%v", f.Value.([]Count)))
-					}
-					uv = SetUnitValueString(string(j), f.PointUnit)
-
-				case "Bool":
 					fallthrough
+				case "[]Count":
+					v := f.Value.([]Count)
+					for _, val := range v {
+						uvs = append(uvs, SetUnitValueInteger(val.Value(), f.PointUnit))
+					}
+
 				case "api.Bool":
+					fallthrough
+				case "Bool":
 					v := f.Value.(Bool).String()
 					uv = SetUnitValueString(v, "binary")
 
-				case "[]Bool":
-					fallthrough
 				case "[]api.Bool":
-					j, err := json.Marshal(f.Value.([]Bool))
-					if err != nil {
-						j = []byte(fmt.Sprintf("%v", f.Value.([]Bool)))
-					}
-					uv = SetUnitValueString(string(j), f.PointUnit)
-
-				case "String":
 					fallthrough
+				case "[]Bool":
+					v := f.Value.([]Bool)
+					for _, val := range v {
+						uvs = append(uvs, SetUnitValueString(val.String(), f.PointUnit))
+					}
+
 				case "api.String":
+					fallthrough
+				case "String":
 					v := f.Value.(String).String()
 					uv = SetUnitValueString(v, f.PointUnit)
 
-				case "[]String":
-					fallthrough
 				case "[]api.String":
-					j, err := json.Marshal(f.Value.([]String))
-					if err != nil {
-						j = []byte(fmt.Sprintf("%v", f.Value.([]String)))
-					}
-					uv = SetUnitValueString(string(j), f.PointUnit)
-
-				case "PsKey":
 					fallthrough
+				case "[]String":
+					v := f.Value.([]String)
+					for _, val := range v {
+						uvs = append(uvs, SetUnitValueString(val.Value(), f.PointUnit))
+					}
+
 				case "api.PsKey":
+					fallthrough
+				case "PsKey":
 					v := f.Value.(PsKey).Value()
 					uv = SetUnitValueString(v, f.PointUnit)
 
-				case "[]PsKey":
-					fallthrough
 				case "[]api.PsKey":
-					j, err := json.Marshal(f.Value.([]PsKey))
-					if err != nil {
-						j = []byte(fmt.Sprintf("%v", f.Value.([]PsKey)))
-					}
-					uv = SetUnitValueString(string(j), f.PointUnit)
-
-				case "DateTime":
 					fallthrough
+				case "[]PsKey":
+					v := f.Value.([]PsKey)
+					for _, val := range v {
+						uvs = append(uvs, SetUnitValueString(val.Value(), f.PointUnit))
+					}
+
 				case "api.DateTime":
+					fallthrough
+				case "DateTime":
 					v := f.Value.(DateTime).String()
 					uv = SetUnitValueString(v, "date")
 
-				case "[]DateTime":
-					fallthrough
 				case "[]api.DateTime":
-					j, err := json.Marshal(f.Value.([]DateTime))
-					if err != nil {
-						j = []byte(fmt.Sprintf("%v", f.Value.([]DateTime)))
+					fallthrough
+				case "[]DateTime":
+					v := f.Value.([]DateTime)
+					for _, val := range v {
+						uvs = append(uvs, SetUnitValueString(val.String(), f.PointUnit))
 					}
-					uv = SetUnitValueString(string(j), f.PointUnit)
 
 				case "[]string":
 					// v := strings.Join(f.Value.([]string), ",")
@@ -276,6 +266,7 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 				default:
 					ignore = true
 			}
+			// fmt.Printf("TYPE: %s.%s (%s)\n", f.Endpoint, f.PointId, f.ValueType)
 			if ignore {
 				// fmt.Printf("IGNORE: %s.%s (%s)\n", f.Endpoint, f.PointId, f.ValueType)
 				continue
@@ -303,9 +294,6 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 				now = NewDateTime(timestamp.String())
 			}
 
-			// @TODO - Think about adding in arrays of values OR just marshal arrays into JSON.
-
-			// fullName := JoinDevicePoint(device, PointId(f.PointId))
 			p := Point {
 				Parents:   parents,
 				Id:        PointId(f.PointId),
@@ -318,12 +306,24 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 				States:    nil,
 			}
 
-			// if strings.Contains(strings.ToLower(f.Json), "p83012") {
-			// 	fmt.Sprintf("")
-			// }
+			// Add arrays as multiple entries.
+			if len(uvs) > 0 {
+				// @TODO - Think about adding in arrays of values OR just marshal arrays into JSON.
+				res := "%s.%d"
+				switch  {
+					case len(uvs) > 99:
+						res = "%s.%.3d"
+					case len(uvs) > 9:
+						res = "%s.%.2d"
+				}
+				for i, val := range uvs {
+					// fmt.Sprintf(res, f.Endpoint, i)
+					dm.AddEntry(fmt.Sprintf(res, f.Endpoint, i), f.PointDevice, p, now, val.String())
+				}
+				continue
+			}
 
 			dm.AddEntry(f.Endpoint, f.PointDevice, p, now, uv.String())
-
 			if f.PointAlias != "" {
 				// fullName = NameDevicePoint(device, PointId(alias))
 				p.Id = PointId(f.PointAlias)
@@ -332,9 +332,7 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 		}
 
 		for _, f := range tp {
-			// if strings.Contains(strings.ToLower(f.PointId), "p83012") {
-			// 	fmt.Sprintf("")
-			// }
+			// Reference Units from another data point.
 			if f.PointUnitFrom != "" {
 				sdp := dm.GetEntryFromPointId(f.PointUnitFrom)
 				if sdp == nil {
@@ -554,7 +552,6 @@ func (dm *DataMap) Add(pid PointId, de DataEntry) {
 		// Points[point] = *de.Point
 	}
 }
-
 
 func (dm *DataMap) AddEntry(endpoint string, parentId string, point Point, date DateTime, value string) {
 	for range Only.Once {
