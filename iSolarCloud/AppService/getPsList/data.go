@@ -281,7 +281,7 @@ func (e *ResultData) GetData() api.DataMap {
 
 		for _, p := range e.PageList {
 			psId := p.PsID.String()		// psId := strconv.FormatInt(p.PsID.Value(), 10)
-			name := "getPsList." + psId
+			name := apiReflect.GetName("", *e) + "." + psId
 			entries.StructToPoints(p, name, psId, time.Time{})
 		}
 	}

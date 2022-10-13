@@ -95,6 +95,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		c.AttachCmdDataPoints(cmdDataGet)
 		c.AttachCmdDataRealTime(cmdDataGet)
 		c.AttachCmdDataPsDetails(cmdDataGet)
+		c.AttachCmdDataAll(cmdDataGet)
 
 		// ********************************************************************************
 		var cmdDataRaw = &cobra.Command{
@@ -128,6 +129,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		c.AttachCmdDataPoints(cmdDataRaw)
 		c.AttachCmdDataRealTime(cmdDataRaw)
 		c.AttachCmdDataPsDetails(cmdDataRaw)
+		c.AttachCmdDataAll(cmdDataRaw)
 
 		// ********************************************************************************
 		var cmdDataJson = &cobra.Command{
@@ -161,6 +163,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		c.AttachCmdDataPoints(cmdDataJson)
 		c.AttachCmdDataRealTime(cmdDataJson)
 		c.AttachCmdDataPsDetails(cmdDataJson)
+		c.AttachCmdDataAll(cmdDataJson)
 
 		// ********************************************************************************
 		var cmdDataCsv = &cobra.Command{
@@ -194,6 +197,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		c.AttachCmdDataPoints(cmdDataCsv)
 		c.AttachCmdDataRealTime(cmdDataCsv)
 		c.AttachCmdDataPsDetails(cmdDataCsv)
+		c.AttachCmdDataAll(cmdDataCsv)
 
 		// ********************************************************************************
 		var cmdDataGraph = &cobra.Command{
@@ -226,6 +230,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		c.AttachCmdDataTemplate(cmdDataGraph)
 		c.AttachCmdDataPoints(cmdDataGraph)
 		c.AttachCmdDataRealTime(cmdDataGraph)
+		// c.AttachCmdDataAll(cmdDataGraph)
 
 		// ********************************************************************************
 		var cmdDataPut = &cobra.Command{
@@ -428,6 +433,43 @@ func (c *CmdData) AttachCmdDataPsDetails(cmd *cobra.Command) *cobra.Command {
 				return err
 			}
 			return cmds.Api.SunGrow.CmdDataPsDetail(pids...)
+		},
+		Args:                  cobra.MinimumNArgs(0),
+	}
+	cmd.AddCommand(c2)
+	c2.Example = cmdHelp.PrintExamples(c2, "")
+
+	return cmd
+}
+
+func (c *CmdData) AttachCmdDataAll(cmd *cobra.Command) *cobra.Command {
+	// ********************************************************************************
+	var c2 = &cobra.Command{
+		Use:                   "all",
+		Aliases:               []string{},
+		Annotations:           map[string]string{"group": "Data"},
+		Short:                 fmt.Sprintf("Get all iSolarCloud ps details."),
+		Long:                  fmt.Sprintf("Get all iSolarCloud ps details."),
+		DisableFlagParsing:    false,
+		DisableFlagsInUseLine: false,
+		PreRunE:               func(cmd *cobra.Command, args []string) error {
+			cmds.Error = cmds.ProcessArgs(cmd, args)
+			if cmds.Error != nil {
+				return cmds.Error
+			}
+			cmds.Error = cmds.SunGrowArgs(cmd, args)
+			if cmds.Error != nil {
+				return cmds.Error
+			}
+			return nil
+		},
+		RunE:                  func(cmd *cobra.Command, args []string) error {
+			_ = cmds.SetOutputType(cmd)
+			// pids, err := cmds.Api.SunGrow.StringToPids(args...)
+			// if err != nil {
+			// 	return err
+			// }
+			return cmds.Api.SunGrow.GetEndpoints(args)
 		},
 		Args:                  cobra.MinimumNArgs(0),
 	}

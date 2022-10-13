@@ -28,10 +28,10 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	DevCountByStatusMap struct {
-		FaultCount   api.Count   `json:"fault_count" PointId:"fault_count" PointValueType:"" PointTimeSpan:""`
-		OfflineCount api.Count   `json:"offline_count" PointId:"offline_count" PointValueType:"" PointTimeSpan:""`
-		RunCount     api.Count   `json:"run_count" PointId:"run_count" PointValueType:"" PointTimeSpan:""`
-		WarningCount api.Count   `json:"warning_count" PointId:"warning_count" PointValueType:"" PointTimeSpan:""`
+		FaultCount   api.Count `json:"fault_count" PointId:"fault_count"`
+		OfflineCount api.Count `json:"offline_count" PointId:"offline_count"`
+		RunCount     api.Count `json:"run_count" PointId:"run_count"`
+		WarningCount api.Count `json:"warning_count" PointId:"warning_count"`
 	} `json:"dev_count_by_status_map"`
 	DevCountByTypeMap map[string]api.Integer `json:"dev_count_by_type_map"`
 	// DevCountByTypeMap struct {
@@ -90,52 +90,52 @@ type ResultData struct {
 	// 	Nine9  string `json:"99"`
 	// } `json:"dev_type_definition"`
 	PageList []struct {
-		AlarmCount              api.Count   `json:"alarm_count" PointId:"alarm_count" PointValueType:"" PointTimeSpan:""`
-		ChannelId               api.Integer `json:"chnnl_id" PointId:"channel_id" PointValueType:"" PointTimeSpan:""`
-		CommandStatus           api.Integer `json:"command_status" PointId:"command_status" PointValueType:"" PointTimeSpan:""`
-		ComponentAmount         api.Integer `json:"component_amount" PointId:"component_amount" PointValueType:"" PointTimeSpan:""`
-		DataFlag                api.Integer `json:"data_flag" PointId:"data_flag" PointValueType:"" PointTimeSpan:""`
-		DataFlagDetail          api.Integer `json:"data_flag_detail" PointId:"data_flag_detail" PointValueType:"" PointTimeSpan:""`
-		DeviceArea              api.Integer `json:"device_area" PointId:"device_area" PointValueType:"" PointTimeSpan:""`
-		DeviceAreaName          api.String  `json:"device_area_name" PointId:"device_area_name" PointValueType:"" PointTimeSpan:""`
-		DeviceCode              api.Integer `json:"device_code" PointId:"device_code" PointValueType:"" PointTimeSpan:""`
-		DeviceID                api.Integer `json:"device_id" PointId:"device_id" PointValueType:"" PointTimeSpan:""`
-		DeviceModelCode         api.String  `json:"device_model_code" PointId:"device_model_code" PointValueType:"" PointTimeSpan:""`
-		DeviceModelID           api.Integer `json:"device_model_id" PointId:"device_model_id" PointValueType:"" PointTimeSpan:""`
-		DeviceName              api.String  `json:"device_name" PointId:"device_name" PointValueType:"" PointTimeSpan:""`
-		DeviceStatus            api.Bool    `json:"device_status" PointId:"device_status" PointValueType:"" PointTimeSpan:""`
-		DeviceType              api.Integer `json:"device_type" PointId:"device_type" PointValueType:"" PointTimeSpan:""`
-		FaultCount              api.Count   `json:"fault_count" PointId:"fault_count" PointValueType:"" PointTimeSpan:""`
-		FaultStatus             string      `json:"fault_status" PointId:"fault_status" PointValueType:"" PointTimeSpan:""`
-		FunctionEnum            api.String  `json:"function_enum" PointId:"function_enum" PointValueType:"" PointTimeSpan:""`
-		InstallerAlarmCount     api.Count   `json:"installer_alarm_count" PointId:"installer_alarm_count" PointValueType:"" PointTimeSpan:""`
-		InstallerDevFaultStatus api.Integer `json:"installer_dev_fault_status" PointId:"installer_dev_fault_status" PointValueType:"" PointTimeSpan:""`
-		InstallerFaultCount     api.Count   `json:"installer_fault_count" PointId:"installer_fault_count" PointValueType:"" PointTimeSpan:""`
-		InverterModelType       api.Integer `json:"inverter_model_type" PointId:"inverter_model_type" PointValueType:"" PointTimeSpan:""`
-		IsDeveloper             api.Bool    `json:"is_developer" PointId:"is_developer" PointValueType:"" PointTimeSpan:""`
-		IsG2point5Module        api.Bool    `json:"is_g2point5_module" PointId:"is_g2point5_module" PointValueType:"" PointTimeSpan:""`
-		IsInit                  api.Bool    `json:"is_init" PointId:"is_init" PointValueType:"" PointTimeSpan:""`
-		IsSecond                api.Bool    `json:"is_second" PointId:"is_second" PointValueType:"" PointTimeSpan:""`
-		IsSupportParamset       api.Bool    `json:"is_support_paramset" PointId:"is_support_paramset" PointValueType:"" PointTimeSpan:""`
-		NodeTimestamps          interface{} `json:"node_timestamps" PointId:"node_timestamps" PointValueType:"" PointTimeSpan:""`
-		OwnerAlarmCount         api.Count   `json:"owner_alarm_count" PointId:"owner_alarm_count" PointValueType:"" PointTimeSpan:""`
-		OwnerDevFaultStatus     api.Integer `json:"owner_dev_fault_status" PointId:"owner_dev_fault_status" PointValueType:"" PointTimeSpan:""`
-		OwnerFaultCount         api.Count   `json:"owner_fault_count" PointId:"owner_fault_count" PointValueType:"" PointTimeSpan:""`
+		AlarmCount              api.Count   `json:"alarm_count" PointId:"alarm_count"`
+		ChannelId               api.Integer `json:"chnnl_id" PointId:"channel_id"`
+		CommandStatus           api.Integer `json:"command_status" PointId:"command_status"`
+		ComponentAmount         api.Integer `json:"component_amount" PointId:"component_amount"`
+		DataFlag                api.Integer `json:"data_flag" PointId:"data_flag"`
+		DataFlagDetail          api.Integer `json:"data_flag_detail" PointId:"data_flag_detail"`
+		DeviceArea              api.Integer `json:"device_area" PointId:"device_area"`
+		DeviceAreaName          api.String  `json:"device_area_name" PointId:"device_area_name"`
+		DeviceCode              api.Integer `json:"device_code" PointId:"device_code"`
+		DeviceID                api.Integer `json:"device_id" PointId:"device_id"`
+		DeviceModelCode         api.String  `json:"device_model_code" PointId:"device_model_code"`
+		DeviceModelID           api.Integer `json:"device_model_id" PointId:"device_model_id"`
+		DeviceName              api.String  `json:"device_name" PointId:"device_name"`
+		DeviceStatus            api.Bool    `json:"device_status" PointId:"device_status"`
+		DeviceType              api.Integer `json:"device_type" PointId:"device_type"`
+		FaultCount              api.Count   `json:"fault_count" PointId:"fault_count"`
+		FaultStatus             string      `json:"fault_status" PointId:"fault_status"`
+		FunctionEnum            api.String  `json:"function_enum" PointId:"function_enum"`
+		InstallerAlarmCount     api.Count   `json:"installer_alarm_count" PointId:"installer_alarm_count"`
+		InstallerDevFaultStatus api.Integer `json:"installer_dev_fault_status" PointId:"installer_dev_fault_status"`
+		InstallerFaultCount     api.Count   `json:"installer_fault_count" PointId:"installer_fault_count"`
+		InverterModelType       api.Integer `json:"inverter_model_type" PointId:"inverter_model_type"`
+		IsDeveloper             api.Bool    `json:"is_developer" PointId:"is_developer"`
+		IsG2point5Module        api.Bool    `json:"is_g2point5_module" PointId:"is_g2point5_module"`
+		IsInit                  api.Bool    `json:"is_init" PointId:"is_init"`
+		IsSecond                api.Bool    `json:"is_second" PointId:"is_second"`
+		IsSupportParamset       api.Bool    `json:"is_support_paramset" PointId:"is_support_paramset"`
+		NodeTimestamps          interface{} `json:"node_timestamps" PointId:"node_timestamps"`
+		OwnerAlarmCount         api.Count   `json:"owner_alarm_count" PointId:"owner_alarm_count"`
+		OwnerDevFaultStatus     api.Integer `json:"owner_dev_fault_status" PointId:"owner_dev_fault_status"`
+		OwnerFaultCount         api.Count   `json:"owner_fault_count" PointId:"owner_fault_count"`
 		PointData               PointData   `json:"point_data"`
-		Points                  interface{} `json:"points" PointId:"points" PointValueType:"" PointTimeSpan:""`
+		Points                  interface{} `json:"points" PointId:"points"`
 		PsTimezoneInfo          struct {
 			IsDst    api.Bool   `json:"is_dst"`
 			TimeZone api.String `json:"time_zone"`
 		} `json:"psTimezoneInfo"`
-		PsID          api.Integer `json:"ps_id" PointId:"ps_id" PointValueType:"" PointTimeSpan:""`
-		PsKey         api.PsKey   `json:"ps_key" PointId:"ps_key" PointValueType:"" PointTimeSpan:""`
-		RelState      api.Integer `json:"rel_state" PointId:"rel_state" PointValueType:"" PointTimeSpan:""`
-		Sn            api.String  `json:"sn" PointId:"sn" PointValueType:"" PointTimeSpan:""`
-		StringAmount  api.Integer `json:"string_amount" PointId:"string_amount" PointValueType:"" PointTimeSpan:""`
-		TypeName      api.String  `json:"type_name" PointId:"type_name" PointValueType:"" PointTimeSpan:""`
-		UnitName      api.String  `json:"unit_name" PointId:"unit_name" PointValueType:"" PointTimeSpan:""`
-		UUID          api.Integer `json:"uuid" PointId:"uuid" PointValueType:"" PointTimeSpan:""`
-		UUIDIndexCode api.String  `json:"uuid_index_code" PointId:"uuid_index_code" PointValueType:"" PointTimeSpan:""`
+		PsID          api.Integer `json:"ps_id" PointId:"ps_id"`
+		PsKey         api.PsKey   `json:"ps_key" PointId:"ps_key"`
+		RelState      api.Integer `json:"rel_state" PointId:"rel_state"`
+		Sn            api.String  `json:"sn" PointId:"sn"`
+		StringAmount  api.Integer `json:"string_amount" PointId:"string_amount"`
+		TypeName      api.String  `json:"type_name" PointId:"type_name"`
+		UnitName      api.String  `json:"unit_name" PointId:"unit_name"`
+		UUID          api.Integer `json:"uuid" PointId:"uuid"`
+		UUIDIndexCode api.String  `json:"uuid_index_code" PointId:"uuid_index_code"`
 	} `json:"pageList"`
 	RowCount api.Integer `json:"rowCount"`
 }
@@ -164,12 +164,6 @@ type PointStruct struct {
 	Value                  api.Float    `json:"value"`
 	ValueDescription       api.String   `json:"value_description"`
 }
-
-// type VirtualPointStruct struct {
-// 	api.DataEntry
-// 	ValueFloat api.Float
-// }
-
 
 func (e *ResultData) IsValid() error {
 	var err error
@@ -219,83 +213,6 @@ func (e *ResultData) GetDataByName(name string) PointData {
 	return ret
 }
 
-func (e *EndPoint) GetDataTable() output.Table {
-	var table output.Table
-	for range Only.Once {
-		table = output.NewTable()
-		table.SetTitle("")
-		table.SetJson([]byte(e.GetJsonData(false)))
-		table.SetRaw([]byte(e.GetJsonData(true)))
-
-		_ = table.SetHeader(
-			"Date",
-			"Point Id",
-			// "Parents",
-			"Group Name",
-			"Description",
-			"Value",
-			"Unit",
-		)
-
-		data := e.GetData()
-		var sorted []string
-		for p := range data.DataPoints {
-			sorted = append(sorted, string(p))
-		}
-		sort.Strings(sorted)
-
-		for _, p := range sorted {
-			entries := data.DataPoints[api.PointId(p)]
-			for _, de := range entries {
-				if de.Hide {
-					continue
-				}
-
-				_ = table.AddRow(
-					de.Date.Format(api.DtLayout),
-					// api.NameDevicePointInt(de.Point.Parents, p.PointID.Value()),
-					// de.Point.Id,
-					p,
-					// de.Point.Parents.String(),
-					de.Point.GroupName,
-					de.Point.Name,
-					de.Value,
-					de.Point.Unit,
-				)
-			}
-		}
-
-		// for _, d := range e.Response.ResultData.PageList {
-		// 	for _, p := range d.PointData {
-		// 		// p.Value, p.Unit = api.DivideByThousandIfRequired(p.Value, p.Unit)
-		// 		uv := api.SetUnitValueFloat(p.Value.Value(), p.Unit)
-		// 		_ = table.AddRow(
-		// 			api.NewDateTime(p.TimeStamp).PrintFull(),
-		// 			api.NameDevicePointInt(d.PsKey, p.PointID.Value()),
-		// 			p.PointGroupName,
-		// 			p.PointName,
-		// 			uv.Value(),
-		// 			uv.Unit(),
-		// 		)
-		// 	}
-		// }
-
-		table.InitGraph(output.GraphRequest {
-			Title:        "",
-			TimeColumn:   output.SetInteger(1),
-			SearchColumn: output.SetInteger(2),
-			NameColumn:   output.SetInteger(4),
-			ValueColumn:  output.SetInteger(5),
-			UnitsColumn:  output.SetInteger(6),
-			SearchString: output.SetString(""),
-			MinLeftAxis:  output.SetFloat(0),
-			MaxLeftAxis:  output.SetFloat(0),
-		})
-
-	}
-	return table
-}
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
@@ -338,11 +255,12 @@ func (e *EndPoint) GetData() api.DataMap {
 		//
 		// var TotalEnergyConsumption VirtualPointStruct
 
-		name1 := "queryDeviceList." + e.Request.PsId.String()
+		pkg := apiReflect.GetName("", *e)
+		name1 := pkg + "." + e.Request.PsId.String()
 		entries.StructToPoints(e.Response.ResultData.DevCountByStatusMap, name1 + ".status", e.Request.PsId.String(), time.Time{})
 
 		for _, d := range e.Response.ResultData.PageList {
-			name2 := fmt.Sprintf("queryDeviceList.%s", d.PsKey.Value())
+			name2 := fmt.Sprintf("%s.%s", pkg, d.PsKey.Value())
 			entries.StructToPoints(d, name2, d.PsKey.Value(), time.Time{})
 
 			// entries.StructToPoints(d.PsTimezoneInfo, name2 + "PsTimezoneInfo", d.PsKey.Value(), time.Time{})
@@ -561,4 +479,81 @@ func (e *EndPoint) GetData() api.DataMap {
 	}
 
 	return entries
+}
+
+func (e *EndPoint) GetDataTable() output.Table {
+	var table output.Table
+	for range Only.Once {
+		table = output.NewTable()
+		table.SetTitle("")
+		table.SetJson([]byte(e.GetJsonData(false)))
+		table.SetRaw([]byte(e.GetJsonData(true)))
+
+		_ = table.SetHeader(
+			"Date",
+			"Point Id",
+			// "Parents",
+			"Group Name",
+			"Description",
+			"Value",
+			"Unit",
+		)
+
+		data := e.GetData()
+		var sorted []string
+		for p := range data.DataPoints {
+			sorted = append(sorted, string(p))
+		}
+		sort.Strings(sorted)
+
+		for _, p := range sorted {
+			entries := data.DataPoints[api.PointId(p)]
+			for _, de := range entries {
+				if de.Hide {
+					continue
+				}
+
+				_ = table.AddRow(
+					de.Date.Format(api.DtLayout),
+					// api.NameDevicePointInt(de.Point.Parents, p.PointID.Value()),
+					// de.Point.Id,
+					p,
+					// de.Point.Parents.String(),
+					de.Point.GroupName,
+					de.Point.Name,
+					de.Value,
+					de.Point.Unit,
+				)
+			}
+		}
+
+		// for _, d := range e.Response.ResultData.PageList {
+		// 	for _, p := range d.PointData {
+		// 		// p.Value, p.Unit = api.DivideByThousandIfRequired(p.Value, p.Unit)
+		// 		uv := api.SetUnitValueFloat(p.Value.Value(), p.Unit)
+		// 		_ = table.AddRow(
+		// 			api.NewDateTime(p.TimeStamp).PrintFull(),
+		// 			api.NameDevicePointInt(d.PsKey, p.PointID.Value()),
+		// 			p.PointGroupName,
+		// 			p.PointName,
+		// 			uv.Value(),
+		// 			uv.Unit(),
+		// 		)
+		// 	}
+		// }
+
+		table.InitGraph(output.GraphRequest {
+			Title:        "",
+			TimeColumn:   output.SetInteger(1),
+			SearchColumn: output.SetInteger(2),
+			NameColumn:   output.SetInteger(4),
+			ValueColumn:  output.SetInteger(5),
+			UnitsColumn:  output.SetInteger(6),
+			SearchString: output.SetString(""),
+			MinLeftAxis:  output.SetFloat(0),
+			MaxLeftAxis:  output.SetFloat(0),
+		})
+
+	}
+	return table
 }

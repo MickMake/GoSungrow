@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/mmHa"
 	"errors"
@@ -341,13 +342,19 @@ func (ca *Cmds) MqttCron() error {
 			newDay = true
 		}
 
+		var data iSolarCloud.SunGrowData
+		data.New(ca.Api.SunGrow)
+
+		// All := []string{ "queryDeviceList", "getPsList", "getPsDetailWithPsType", "getPsDetail" }
+		All := []string{ "getPsDetail" }
 		for psId, ok := range ca.Mqtt.Mqtt.SungrowPsIds {
 			if !ok {
 				continue
 			}
 
 			for _, endpoint := range All {
-				ca.Error = ca.Update(endpoint, psId, newDay)
+				response := data.Get(endpoint, iSolarCloud.SunGrowDataRequest{ PsId: psId })
+				ca.Error = ca.Update(endpoint, response.Data, newDay)
 				if ca.Error != nil {
 					break
 				}
@@ -363,31 +370,11 @@ func (ca *Cmds) MqttCron() error {
 	return ca.Error
 }
 
-// var All = []string{ "queryDeviceList", "getPsList", "getPsDetailWithPsType" }
-var All = []string{ "getPsDetail" }
-func (ca *Cmds) Update(endpoint string, psId api.Integer, newDay bool) error {
+func (ca *Cmds) Update(endpoint string, data api.DataMap, newDay bool) error {
 	for range Only.Once {
 		// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
-		var data api.DataMap
-		switch endpoint {
-			case "queryDeviceList":
-				ep := ca.Api.SunGrow.QueryDeviceList(psId)
-				data = ep.GetData()
-
-			case "getPsList":
-				ep := ca.Api.SunGrow.GetPsList()
-				data = ep.GetData()
-
-			case "getPsDetailWithPsType":
-				ep := ca.Api.SunGrow.GetPsDetailWithPsType(psId)
-				data = ep.GetData()
-
-			case "getPsDetail":
-				ep := ca.Api.SunGrow.GetPsDetail(psId)
-				data = ep.GetData()
-		}
-
 		cmdLog.LogPrintDate("Syncing %d entries with HASSIO from %s.\n", len(data.DataPoints), endpoint)
+
 		for _, o := range data.Order {
 			entries := data.DataPoints[o]
 			r := entries.GetEntry(api.LastEntry) // Gets the last entry

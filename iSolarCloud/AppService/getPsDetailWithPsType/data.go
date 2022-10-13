@@ -103,7 +103,7 @@ type ResultData struct {
 		DeviceType              api.Integer   `json:"device_type" PointId:"DeviceType" PointTimeSpan:"PointTimeSpanBoot"`
 		DrmStatus               api.Integer   `json:"drm_status" PointId:"DrmStatus" PointTimeSpan:"PointTimeSpanBoot"`
 		DrmStatusName           api.String    `json:"drm_status_name" PointId:"DrmStatusName" PointTimeSpan:"PointTimeSpanBoot"`
-		EnergyFlow              []string      `json:"energy_flow"`
+		EnergyFlow              []api.Integer `json:"energy_flow"`
 		HasAmmeter              api.Bool      `json:"has_ammeter" PointId:"HasAmmeter" PointTimeSpan:"PointTimeSpanBoot"`
 		InstallerDevFaultStatus api.Integer   `json:"installer_dev_fault_status" PointId:"InstallerDevFaultStatus" PointTimeSpan:"PointTimeSpanBoot"`
 		InverterSn              api.String    `json:"inverter_sn" PointId:"InverterSn" PointTimeSpan:"PointTimeSpanBoot"`
@@ -169,6 +169,10 @@ func (e *ResultData) IsValid() error {
 //
 //	return err
 //}
+
+func (e *EndPoint) GetData() api.DataMap {
+	return e.Response.ResultData.GetData()
+}
 
 func (e *EndPoint) GetDataTable() output.Table {
 	var table output.Table
@@ -303,15 +307,16 @@ func (e *EndPoint) GetDataTable() output.Table {
 	return table
 }
 
-func (e *EndPoint) GetData() api.DataMap {
+func (e *ResultData) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		name := fmt.Sprintf("getPsDetailWithPsType.%s", e.Response.ResultData.PsPsKey.Value())
-		entries.StructToPoints(e.Response.ResultData, name, e.Response.ResultData.PsPsKey.Value(), time.Time{})
+		pkg := apiReflect.GetName("", *e)
+		name := fmt.Sprintf("%s.%s", pkg, e.PsPsKey.Value())
+		entries.StructToPoints(*e, name, e.PsPsKey.Value(), time.Time{})
 
-		for _, sid := range e.Response.ResultData.StorageInverterData {
-			name = fmt.Sprintf("getPsDetailWithPsType.%s", sid.PsKey.Value())
+		for _, sid := range e.StorageInverterData {
+			name = fmt.Sprintf("%s.%s", pkg, sid.PsKey.Value())
 			entries.StructToPoints(sid, name, sid.PsKey.Value(), time.Time{})
 		}
 	}

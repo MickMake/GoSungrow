@@ -97,12 +97,9 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 		// fmt.Printf("TP: %v\n", tp)
 
 		for _, f := range tp {
-			// if strings.Contains(strings.ToLower(k), "robot") {
+			// if strings.Contains(strings.ToLower(f.Json), "p83012") {
 			// 	fmt.Sprintf("")
 			// }
-			if f.PointId == "" {
-				f.PointId = f.Json
-			}
 
 			if f.PointIgnore {
 				// fmt.Printf("IGNORE: %s\n", f.PointId)
@@ -152,11 +149,31 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 					uv = f.Value.(UnitValue)
 					// uv = uv.UnitValueFix()
 
+				case "[]UnitValue":
+					fallthrough
+				case "[]api.UnitValue":
+					// v := strings.Join(f.Value.([]string), ",")
+					j, err := json.Marshal(f.Value.([]UnitValue))
+					if err != nil {
+						j = []byte(fmt.Sprintf("%v", f.Value.([]UnitValue)))
+					}
+					uv = SetUnitValueString(string(j), f.PointUnit)
+
 				case "Float":
 					fallthrough
 				case "api.Float":
 					v := f.Value.(Float)
 					uv = SetUnitValueFloat(v.Value(), f.PointUnit)
+
+				case "[]Float":
+					fallthrough
+				case "[]api.Float":
+					// v := strings.Join(f.Value.([]string), ",")
+					j, err := json.Marshal(f.Value.([]Float))
+					if err != nil {
+						j = []byte(fmt.Sprintf("%v", f.Value.([]Float)))
+					}
+					uv = SetUnitValueString(string(j), f.PointUnit)
 
 				case "Integer":
 					fallthrough
@@ -164,11 +181,29 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 					v := f.Value.(Integer).Value()
 					uv = SetUnitValueInteger(v, f.PointUnit)
 
+				case "[]Integer":
+					fallthrough
+				case "[]api.Integer":
+					j, err := json.Marshal(f.Value.([]Integer))
+					if err != nil {
+						j = []byte(fmt.Sprintf("%v", f.Value.([]Integer)))
+					}
+					uv = SetUnitValueString(string(j), f.PointUnit)
+
 				case "Count":
 					fallthrough
 				case "api.Count":
 					v := f.Value.(Count).Value()
 					uv = SetUnitValueInteger(v, "counter")
+
+				case "[]Count":
+					fallthrough
+				case "[]api.Count":
+					j, err := json.Marshal(f.Value.([]Count))
+					if err != nil {
+						j = []byte(fmt.Sprintf("%v", f.Value.([]Count)))
+					}
+					uv = SetUnitValueString(string(j), f.PointUnit)
 
 				case "Bool":
 					fallthrough
@@ -176,11 +211,29 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 					v := f.Value.(Bool).String()
 					uv = SetUnitValueString(v, "binary")
 
+				case "[]Bool":
+					fallthrough
+				case "[]api.Bool":
+					j, err := json.Marshal(f.Value.([]Bool))
+					if err != nil {
+						j = []byte(fmt.Sprintf("%v", f.Value.([]Bool)))
+					}
+					uv = SetUnitValueString(string(j), f.PointUnit)
+
 				case "String":
 					fallthrough
 				case "api.String":
 					v := f.Value.(String).String()
 					uv = SetUnitValueString(v, f.PointUnit)
+
+				case "[]String":
+					fallthrough
+				case "[]api.String":
+					j, err := json.Marshal(f.Value.([]String))
+					if err != nil {
+						j = []byte(fmt.Sprintf("%v", f.Value.([]String)))
+					}
+					uv = SetUnitValueString(string(j), f.PointUnit)
 
 				case "PsKey":
 					fallthrough
@@ -188,17 +241,43 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 					v := f.Value.(PsKey).Value()
 					uv = SetUnitValueString(v, f.PointUnit)
 
+				case "[]PsKey":
+					fallthrough
+				case "[]api.PsKey":
+					j, err := json.Marshal(f.Value.([]PsKey))
+					if err != nil {
+						j = []byte(fmt.Sprintf("%v", f.Value.([]PsKey)))
+					}
+					uv = SetUnitValueString(string(j), f.PointUnit)
+
 				case "DateTime":
 					fallthrough
 				case "api.DateTime":
 					v := f.Value.(DateTime).String()
 					uv = SetUnitValueString(v, "date")
 
+				case "[]DateTime":
+					fallthrough
+				case "[]api.DateTime":
+					j, err := json.Marshal(f.Value.([]DateTime))
+					if err != nil {
+						j = []byte(fmt.Sprintf("%v", f.Value.([]DateTime)))
+					}
+					uv = SetUnitValueString(string(j), f.PointUnit)
+
+				case "[]string":
+					// v := strings.Join(f.Value.([]string), ",")
+					j, err := json.Marshal(f.Value.([]string))
+					if err != nil {
+						j = []byte(fmt.Sprintf("%v", f.Value.([]string)))
+					}
+					uv = SetUnitValueString(string(j), f.PointUnit)
+
 				default:
 					ignore = true
 			}
 			if ignore {
-				// fmt.Printf("IGNORE: %s\n", f.PointId)
+				// fmt.Printf("IGNORE: %s.%s (%s)\n", f.Endpoint, f.PointId, f.ValueType)
 				continue
 			}
 
@@ -217,6 +296,15 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 					f.PointTimeSpan = PointTimeSpanTotal
 			}
 
+			var now DateTime
+			if timestamp.IsZero() {
+				now = NewDateTime(time.Now().Round(5 * time.Minute).Format(DtLayoutZeroSeconds))
+			} else {
+				now = NewDateTime(timestamp.String())
+			}
+
+			// @TODO - Think about adding in arrays of values OR just marshal arrays into JSON.
+
 			// fullName := JoinDevicePoint(device, PointId(f.PointId))
 			p := Point {
 				Parents:   parents,
@@ -230,12 +318,9 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 				States:    nil,
 			}
 
-			var now DateTime
-			if timestamp.IsZero() {
-				now = NewDateTime(time.Now().Round(5 * time.Minute).Format(DtLayoutZeroSeconds))
-			} else {
-				now = NewDateTime(timestamp.String())
-			}
+			// if strings.Contains(strings.ToLower(f.Json), "p83012") {
+			// 	fmt.Sprintf("")
+			// }
 
 			dm.AddEntry(f.Endpoint, f.PointDevice, p, now, uv.String())
 
@@ -247,12 +332,15 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 		}
 
 		for _, f := range tp {
+			// if strings.Contains(strings.ToLower(f.PointId), "p83012") {
+			// 	fmt.Sprintf("")
+			// }
 			if f.PointUnitFrom != "" {
 				sdp := dm.GetEntryFromPointId(f.PointUnitFrom)
 				if sdp == nil {
 					continue
 				}
-				ddp := dm.GetEntryFromPointId(f.Json)
+				ddp := dm.GetEntryFromPointId(f.PointId)
 				if ddp == nil {
 					continue
 				}
@@ -492,6 +580,9 @@ func (dm *DataMap) AddEntry(endpoint string, parentId string, point Point, date 
 		point.Unit = ref.Unit()
 		point.Valid = true
 
+		if _, ok := dm.DataPoints[point.Id]; ok {
+			point.Id += ".BARF"
+		}
 		// dm.Add(JoinDevicePoint(endpoint, point.Id), DataEntry {
 		dm.Add(JoinDevicePoint(endpoint, point.Id), DataEntry {
 			EndPoint:   endpoint,

@@ -3,7 +3,12 @@ package queryDeviceListForApp
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
+	"sort"
+	"strings"
+	"time"
 )
 
 const Url = "/v1/devService/queryDeviceListForApp"
@@ -25,7 +30,7 @@ func (rd RequestData) Help() string {
 type ResultData struct {
 	PageList []struct {
 		AttrID                  api.Integer  `json:"attr_id"`
-		ChannelId               api.Integer  `json:"chnnl_id"`
+		ChannelId               api.Integer  `json:"chnnl_id" PointId:"channel_id"`
 		CommandStatus           api.Integer  `json:"command_status"`
 		ConnectState            api.Integer  `json:"connect_state"`
 		DataFlag                api.Integer  `json:"data_flag"`
@@ -65,7 +70,7 @@ type ResultData struct {
 		PsID                    api.Integer  `json:"ps_id"`
 		PsKey                   api.PsKey    `json:"ps_key"`
 		RelState                api.Integer  `json:"rel_state"`
-		Sn                      api.String   `json:"sn"`
+		Sn                      api.String   `json:"sn" PointName:"Serial Number"`
 		TypeName                api.String   `json:"type_name"`
 		UUID                    api.Integer  `json:"uuid"`
 	} `json:"pageList"`
@@ -101,3 +106,78 @@ func (e *ResultData) IsValid() error {
 //
 //	return err
 //}
+
+func (e *EndPoint) GetData() api.DataMap {
+	entries := api.NewDataMap()
+
+	for range Only.Once {
+		pkg := apiReflect.GetName("", *e)
+		for _, d := range e.Response.ResultData.PageList {
+			name := strings.Join([]string{pkg, d.PsKey.Value()}, ".")
+			entries.StructToPoints(d, name, d.PsKey.Value(), time.Time{})
+		}
+	}
+
+	return entries
+}
+
+func (e *EndPoint) GetDataTable() output.Table {
+	var table output.Table
+	for range Only.Once {
+		table = output.NewTable()
+		table.SetTitle("")
+		table.SetJson([]byte(e.GetJsonData(false)))
+		table.SetRaw([]byte(e.GetJsonData(true)))
+
+		_ = table.SetHeader(
+			"Date",
+			"Point Id",
+			// "Parents",
+			"Group Name",
+			"Description",
+			"Value",
+			"Unit",
+		)
+
+		data := e.GetData()
+		var sorted []string
+		for p := range data.DataPoints {
+			sorted = append(sorted, string(p))
+		}
+		sort.Strings(sorted)
+
+		for _, p := range sorted {
+			entries := data.DataPoints[api.PointId(p)]
+			for _, de := range entries {
+				if de.Hide {
+					continue
+				}
+
+				_ = table.AddRow(
+					de.Date.Format(api.DtLayout),
+					// api.NameDevicePointInt(de.Point.Parents, p.PointID.Value()),
+					// de.Point.Id,
+					p,
+					// de.Point.Parents.String(),
+					de.Point.GroupName,
+					de.Point.Name,
+					de.Value,
+					de.Point.Unit,
+				)
+			}
+		}
+
+		// table.InitGraph(output.GraphRequest {
+		// 	Title:        "",
+		// 	TimeColumn:   output.SetInteger(1),
+		// 	SearchColumn: output.SetInteger(2),
+		// 	NameColumn:   output.SetInteger(4),
+		// 	ValueColumn:  output.SetInteger(5),
+		// 	UnitsColumn:  output.SetInteger(6),
+		// 	SearchString: output.SetString(""),
+		// 	MinLeftAxis:  output.SetFloat(0),
+		// 	MaxLeftAxis:  output.SetFloat(0),
+		// })
+	}
+	return table
+}

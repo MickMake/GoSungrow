@@ -667,24 +667,31 @@ func GetPointTags(ref interface{}, name ...string) DataStructureMap {
 				ignore = true
 			}
 
-			// if fieldTo.Tag.Get("json") == "robot_num_sweep_capacity" {
+			// if fieldTo.Tag.Get("json") == "p83012" {
 			// 	fmt.Sprintf("")
 			// }
 
+			pointJson := fieldTo.Tag.Get("json")
+			pointId := fieldTo.Tag.Get(PointId)
+			if pointId == "" {
+				pointId = pointJson
+			}
+
 			if IsUnknownStructure(fieldTo, fieldVo) {
 				n2 := name
-				n2 = append(n2, fieldTo.Name)
+				n2 = append(n2, pointId)
 				t2 := GetPointTags(fieldVo.Interface(), n2...)
 				for k, v := range t2 {
 					ret[k] = v
 				}
-				break
+				continue
 			}
 
 			endPointName := strings.Join(name, ".")
-			pointName := strings.TrimPrefix(endPointName + "." + fieldTo.Name, ".")
+			pointName := strings.TrimPrefix(endPointName + "." + pointId, ".")
 			ret[pointName] = DataStructure {
-				PointId:        fieldTo.Tag.Get(PointId),
+				Json:           pointJson,
+				PointId:        pointId,
 				// PointType:      fieldTo.Tag.Get(PointType),
 				PointUnit:      fieldTo.Tag.Get(PointUnit),
 				PointUnitFrom:  fieldTo.Tag.Get(PointUnitFrom),
@@ -696,13 +703,12 @@ func GetPointTags(ref interface{}, name ...string) DataStructureMap {
 				PointGroupName: fieldTo.Tag.Get(PointGroupName),
 				PointIgnore:    ignore,
 
-				Json:           fieldTo.Tag.Get("json"),
 				Value:          fieldVo.Interface(),
 				ValueType:      fieldTo.Type.String(),
 				Endpoint:       endPointName,
 			}
 
-			// if fieldTo.Tag.Get("json") == "robot_num_sweep_capacity" {
+			// if fieldTo.Tag.Get("json") == "p83012" {
 			// 	fmt.Sprintf("")
 			// }
 		}

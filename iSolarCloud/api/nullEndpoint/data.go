@@ -1,11 +1,12 @@
 package nullEndpoint
 
 import (
-	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
 	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
+	"time"
 )
 
 
@@ -63,47 +64,13 @@ func (e *ResultData) IsValid() error {
 //	return err
 // }
 
-func (e *EndPoint) GetDataTable() output.Table {
-	var table output.Table
+
+func (e *EndPoint) GetData() api.DataMap {
+	entries := api.NewDataMap()
 
 	for range Only.Once {
-		table = output.NewTable()
-		table.SetTitle("")
-		table.SetJson([]byte(e.GetJsonData(false)))
-		table.SetRaw([]byte(e.GetJsonData(true)))
-
-		// e.Error = table.SetHeader(
-		// 	"Template Id",
-		// 	"Template Name",
-		// 	"Update On",
-		// )
-		// if e.Error != nil {
-		// 	break
-		// }
-
-		// for _, p := range e.Response.ResultData.PageList {
-		// 	_ = table.AddRow(
-		// 		p.TemplateID,
-		// 		p.TemplateName,
-		// 		api.NewDateTime(p.UpdateTime).PrintFull(),
-		// 	)
-		// 	if table.Error != nil {
-		// 		continue
-		// 	}
-		// }
-
-		// table.InitGraph(output.GraphRequest {
-		// 	Title:        "",
-		// 	TimeColumn:   output.SetInteger(1),
-		// 	SearchColumn: output.SetInteger(2),
-		// 	NameColumn:   output.SetInteger(3),
-		// 	ValueColumn:  output.SetInteger(4),
-		// 	UnitsColumn:  output.SetInteger(5),
-		// 	SearchString: output.SetString(""),
-		// 	MinLeftAxis:  output.SetFloat(0),
-		// 	MaxLeftAxis:  output.SetFloat(0),
-		// })
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "PsId", time.Time{})
 	}
 
-	return table
+	return entries
 }
