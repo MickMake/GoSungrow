@@ -1,14 +1,10 @@
 package getMqttConfigInfoByAppkey
 
 import (
-	"time"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
 	"github.com/MickMake/GoUnify/Only"
 
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
 )
 
@@ -78,43 +74,43 @@ func (e *ResultData) IsValid() error {
 //	return err
 // }
 
-func (e *EndPoint) GetDataTable() output.Table {
-	var table output.Table
-
-	for range Only.Once {
-		table = output.NewTable()
-		table.SetTitle("")
-		table.SetJson([]byte(e.GetJsonData(false)))
-		table.SetRaw([]byte(e.GetJsonData(true)))
-
-		e.Error = table.SetHeader(
-			"AppKey",
-			"Name",
-			"Value",
-		)
-		if e.Error != nil {
-			break
-		}
-
-		// @TODO - Think about providing an apiReflect function that does this automatically.
-		_ = table.AddRow(e.Request.AppKey, "Code", e.Response.ResultData.Code)
-		_ = table.AddRow(e.Request.AppKey, "Mqtt Username", e.Response.ResultData.MqttUsername)
-		_ = table.AddRow(e.Request.AppKey, "Mqtt Password", e.Response.ResultData.MqttPassword)
-		_ = table.AddRow(e.Request.AppKey, "Mqtt Rsa Public Key", e.Response.ResultData.MqttRsaPublicKey)
-		_ = table.AddRow(e.Request.AppKey, "Mqtt Type", e.Response.ResultData.MqttType)
-		_ = table.AddRow(e.Request.AppKey, "Mqtt URL List", e.Response.ResultData.MqttURLList)
-		_ = table.AddRow(e.Request.AppKey, "Mqtt URL List Lan", e.Response.ResultData.MqttURLListLan)
-
-	}
-
-	return table
-}
+// func (e *EndPoint) GetDataTable() output.Table {
+// 	var table output.Table
+//
+// 	for range Only.Once {
+// 		table = output.NewTable()
+// 		table.SetTitle("")
+// 		table.SetJson([]byte(e.GetJsonData(false)))
+// 		table.SetRaw([]byte(e.GetJsonData(true)))
+//
+// 		e.Error = table.SetHeader(
+// 			"AppKey",
+// 			"Name",
+// 			"Value",
+// 		)
+// 		if e.Error != nil {
+// 			break
+// 		}
+//
+// 		// @TODO - Think about providing an apiReflect function that does this automatically.
+// 		_ = table.AddRow(e.Request.AppKey, "Code", e.Response.ResultData.Code)
+// 		_ = table.AddRow(e.Request.AppKey, "Mqtt Username", e.Response.ResultData.MqttUsername)
+// 		_ = table.AddRow(e.Request.AppKey, "Mqtt Password", e.Response.ResultData.MqttPassword)
+// 		_ = table.AddRow(e.Request.AppKey, "Mqtt Rsa Public Key", e.Response.ResultData.MqttRsaPublicKey)
+// 		_ = table.AddRow(e.Request.AppKey, "Mqtt Type", e.Response.ResultData.MqttType)
+// 		_ = table.AddRow(e.Request.AppKey, "Mqtt URL List", e.Response.ResultData.MqttURLList)
+// 		_ = table.AddRow(e.Request.AppKey, "Mqtt URL List Lan", e.Response.ResultData.MqttURLListLan)
+//
+// 	}
+//
+// 	return table
+// }
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", time.Time{})
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
 	}
 
 	return entries

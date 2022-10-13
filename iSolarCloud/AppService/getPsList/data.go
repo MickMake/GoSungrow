@@ -1,18 +1,11 @@
 package getPsList
 
 import (
-	"time"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
 	"github.com/MickMake/GoUnify/Only"
 
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
-	"sort"
-	"time"
 )
 
 const Url = "/v1/powerStationService/getPsList"
@@ -287,104 +280,8 @@ func (e *ResultData) GetData() api.DataMap {
 		for _, p := range e.PageList {
 			psId := p.PsID.String()		// psId := strconv.FormatInt(p.PsID.Value(), 10)
 			name := apiReflect.GetName("", *e) + "." + psId
-			entries.StructToPoints(p, name, psId, time.Time{})
+			entries.StructToPoints(p, name, psId, api.NewDateTime(""))
 		}
 	}
-	return entries
-}
-
-func (e *EndPoint) GetDataTable() output.Table {
-	var table output.Table
-	for range Only.Once {
-		table = output.NewTable()
-		table.SetTitle("")
-		table.SetJson([]byte(e.GetJsonData(false)))
-		table.SetRaw([]byte(e.GetJsonData(true)))
-
-		_ = table.SetHeader(
-			"Date",
-			"Point Id",
-			// "Parents",
-			"Group Name",
-			"Description",
-			"Value",
-			"Unit",
-		)
-
-		data := e.GetData()
-		var sorted []string
-		for p := range data.DataPoints {
-			sorted = append(sorted, string(p))
-		}
-		sort.Strings(sorted)
-
-		for _, p := range sorted {
-			entries := data.DataPoints[api.PointId(p)]
-			for _, de := range entries {
-				if de.Hide {
-					continue
-				}
-				if string(de.Point.Id) == "owner_alarm_count" {
-					fmt.Sprintf("")
-				}
-				_ = table.AddRow(
-					de.Date.Format(api.DtLayout),
-					// api.NameDevicePointInt(de.Point.Parents, p.PointID.Value()),
-					// de.Point.Id,
-					p,
-					// de.Point.Parents.String(),
-					de.Point.GroupName,
-					de.Point.Name,
-					de.Value,
-					de.Point.Unit,
-				)
-			}
-		}
-
-		// for _, p := range e.Response.ResultData.PageList {
-		// 	_ = table.AddRow(now, fmt.Sprintf("%s.%d", p.PsID.String(), 0), "Co2 Reduce", p.Co2Reduce.Value(), p.Co2Reduce.Unit())
-		// 	_ = table.AddRow(now, fmt.Sprintf("%s.%d", p.PsID.String(), 0), "Co2 Reduce Total", p.Co2ReduceTotal.Value(), p.Co2ReduceTotal.Unit())
-		// 	_ = table.AddRow(now, fmt.Sprintf("%s.%d", p.PsID.String(), 0), "Curr Power", p.CurrPower.Value(), p.CurrPower.Unit())
-		// 	_ = table.AddRow(now, fmt.Sprintf("%s.%d", p.PsID.String(), 0), "Daily Irradiation", p.DailyIrradiation.Value(), p.DailyIrradiation.Unit())
-		// 	_ = table.AddRow(now, fmt.Sprintf("%s.%d", p.PsID.String(), 0), "Equivalent Hour", p.EquivalentHour.Value(), p.EquivalentHour.Unit())
-		// 	_ = table.AddRow(now, fmt.Sprintf("%s.%d", p.PsID.String(), 0), "Es Discharge Energy", p.EsDisenergy.Value(), p.EsDisenergy.Unit())
-		// 	_ = table.AddRow(now, fmt.Sprintf("%s.%d", p.PsID.String(), 0), "Es Energy", p.EsEnergy.Value(), p.EsEnergy.Unit())
-		// 	_ = table.AddRow(now, fmt.Sprintf("%s.%d", p.PsID.String(), 0), "Es Power", p.EsPower.Value(), p.EsPower.Unit())
-		// 	_ = table.AddRow(now, fmt.Sprintf("%s.%d", p.PsID.String(), 0), "Es Total Discharge Energy", p.EsTotalDisenergy.Value(), p.EsTotalDisenergy.Unit())
-		// 	_ = table.AddRow(now, fmt.Sprintf("%s.%d", p.PsID.String(), 0), "Es Total Energy", p.EsTotalEnergy.Value(), p.EsTotalEnergy.Unit())
-		// 	_ = table.AddRow(now, fmt.Sprintf("%s.%d", p.PsID.String(), 0), "Installed Power Map", p.InstalledPowerMap.Value(), p.InstalledPowerMap.Unit())
-		// 	_ = table.AddRow(now, fmt.Sprintf("%s.%d", p.PsID.String(), 0), "Pv Energy", p.PvEnergy.Value(), p.PvEnergy.Unit())
-		// 	_ = table.AddRow(now, fmt.Sprintf("%s.%d", p.PsID.String(), 0), "Pv Power", p.PvPower.Value(), p.PvPower.Unit())
-		// 	_ = table.AddRow(now, fmt.Sprintf("%s.%d", p.PsID.String(), 0), "Radiation", p.Radiation.Value(), p.Radiation.Unit())
-		// 	_ = table.AddRow(now, fmt.Sprintf("%s.%d", p.PsID.String(), 0), "Today Energy", p.TodayEnergy.Value(), p.TodayEnergy.Unit())
-		// 	_ = table.AddRow(now, fmt.Sprintf("%s.%d", p.PsID.String(), 0), "Today Income", p.TodayIncome.Value(), p.TodayIncome.Unit())
-		// 	_ = table.AddRow(now, fmt.Sprintf("%s.%d", p.PsID.String(), 0), "Total Capacity", p.TotalCapacity.Value(), p.TotalCapacity.Unit())
-		// 	_ = table.AddRow(now, fmt.Sprintf("%s.%d", p.PsID.String(), 0), "Total Energy", p.TotalEnergy.Value(), p.TotalEnergy.Unit())
-		// 	_ = table.AddRow(now, fmt.Sprintf("%s.%d", p.PsID.String(), 0), "Total Income", p.TotalIncome.Value(), p.TotalIncome.Unit())
-		// 	_ = table.AddRow(now, fmt.Sprintf("%s.%d", p.PsID.String(), 0), "Use Energy", p.UseEnergy.Value(), p.UseEnergy.Unit())
-		// }
-
-		// table.InitGraph(output.GraphRequest {
-		// 	Title:        "",
-		// 	TimeColumn:   output.SetInteger(1),
-		// 	SearchColumn: output.SetInteger(2),
-		// 	NameColumn:   output.SetInteger(3),
-		// 	ValueColumn:  output.SetInteger(4),
-		// 	UnitsColumn:  output.SetInteger(5),
-		// 	SearchString: output.SetString(""),
-		// 	MinLeftAxis:  output.SetFloat(0),
-		// 	MaxLeftAxis:  output.SetFloat(0),
-		// })
-	}
-	return table
-}
-
-func (e *EndPoint) GetData() api.DataMap {
-	entries := api.NewDataMap()
-
-	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", time.Time{})
-	}
-
 	return entries
 }

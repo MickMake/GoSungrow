@@ -86,7 +86,7 @@ func NewDataMap() DataMap {
 // }
 
 
-func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId string, timestamp time.Time) {
+func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId string, timestamp DateTime) {
 	for range Only.Once {
 		if endpoint == "" {
 			endpoint = apiReflect.GetCallerPackage(2)

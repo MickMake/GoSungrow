@@ -1,13 +1,9 @@
 package getPowerDeviceSetTaskDetailList
 
 import (
-	"time"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
 	"github.com/MickMake/GoUnify/Only"
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 )
 
@@ -70,7 +66,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", time.Time{})
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
 	}
 
 	return entries

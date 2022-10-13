@@ -1,18 +1,11 @@
 package getPsDetailWithPsType
 
 import (
-	"time"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
 	"github.com/MickMake/GoUnify/Only"
 
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
-	"sort"
-	"time"
 )
 
 const Url = "/v1/powerStationService/getPsDetailWithPsType"
@@ -179,150 +172,17 @@ func (e *EndPoint) GetData() api.DataMap {
 	return e.Response.ResultData.GetData()
 }
 
-func (e *EndPoint) GetDataTable() output.Table {
-	var table output.Table
-
-	for range Only.Once {
-		table = output.NewTable()
-		table.SetTitle("")
-		table.SetJson([]byte(e.GetJsonData(false)))
-		table.SetRaw([]byte(e.GetJsonData(true)))
-
-		_ = table.SetHeader(
-			"Date",
-			"Point Id",
-			"Group Name",
-			"Description",
-			"Value",
-			"Unit",
-		)
-
-		data := e.GetData()
-		var sorted []string
-		for p := range data.DataPoints {
-			sorted = append(sorted, string(p))
-		}
-		sort.Strings(sorted)
-
-		for _, p := range sorted {
-			entries := data.DataPoints[api.PointId(p)]
-			for _, de := range entries {
-				if de.Hide {
-					continue
-				}
-
-				_ = table.AddRow(
-					de.Date.Format(api.DtLayout),
-					// api.NameDevicePointInt(de.Point.Parents, p.PointID.Value()),
-					// de.Point.Id,
-					p,
-					// de.Point.Parents.String(),
-					de.Point.GroupName,
-					de.Point.Name,
-					de.Value,
-					de.Point.Unit,
-				)
-			}
-		}
-
-
-
-		// _ = table.SetHeader(
-		// 	"Date",
-		// 	"Point Id",
-		// 	"Description",
-		// 	"Value",
-		// 	"(Unit)",
-		// 	"(Unit)",
-		// )
-		//
-		// now := api.TimeNowString()
-		//
-		// keys := api.GetStructKeys(e.Response.ResultData)
-		// for _, n := range keys.Sort() {
-		// 	pn := api.PointId(n)
-		// 	p := api.GetPoint(e.Response.ResultData.PsPsKey.Value(), pn)
-		// 	if p.Valid {
-		// 		_ = table.AddRow(
-		// 			now,
-		// 			api.NameDevicePoint(e.Response.ResultData.PsPsKey.Value(), pn),
-		// 			p.Name,
-		// 			keys[pn].Value,
-		// 			p.Unit,
-		// 			keys[pn].Unit,
-		// 		)
-		// 		continue
-		// 	}
-		//
-		// 	_ = table.AddRow(
-		// 		now,
-		// 		api.NameDevicePoint(e.Response.ResultData.PsPsKey.Value(), pn),
-		// 		api.PointToName(pn),
-		// 		keys[pn].Value,
-		// 		keys[pn].Unit,
-		// 		keys[pn].Unit,
-		// 	)
-		// }
-		//
-		// if len(e.Response.ResultData.StorageInverterData) == 0 {
-		// 	break
-		// }
-		//
-		// for _, sid := range e.Response.ResultData.StorageInverterData {
-		// 	keys = api.GetStructKeys(sid)
-		// 	for _, n := range keys.Sort() {
-		// 		pn := api.PointId(n)
-		// 		p := api.GetPoint(sid.PsKey.Value(), pn)
-		// 		if p.Valid {
-		// 			_ = table.AddRow(
-		// 				now,
-		// 				api.NameDevicePoint(sid.PsKey.Value(), pn),
-		// 				p.Name,
-		// 				keys[pn].Value,
-		// 				p.Unit,
-		// 				keys[pn].Unit,
-		// 			)
-		// 			continue
-		// 		}
-		//
-		// 		_ = table.AddRow(
-		// 			now,
-		// 			api.NameDevicePoint(sid.PsKey.Value(), pn),
-		// 			api.PointToName(pn),
-		// 			keys[pn].Value,
-		// 			keys[pn].Unit,
-		// 			keys[pn].Unit,
-		// 		)
-		// 	}
-		// }
-
-		// table.InitGraph(output.GraphRequest {
-		// 	Title:        "",
-		// 	TimeColumn:   output.SetInteger(1),
-		// 	SearchColumn: output.SetInteger(2),
-		// 	NameColumn:   output.SetInteger(4),
-		// 	ValueColumn:  output.SetInteger(5),
-		// 	UnitsColumn:  output.SetInteger(6),
-		// 	SearchString: output.SetString(""),
-		// 	MinLeftAxis:  output.SetFloat(0),
-		// 	MaxLeftAxis:  output.SetFloat(0),
-		// })
-	}
-
-	return table
-}
-
 func (e *ResultData) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
 		pkg := apiReflect.GetName("", *e)
 		name := fmt.Sprintf("%s.%s", pkg, e.PsPsKey.Value())
-		entries.StructToPoints(*e, name, e.PsPsKey.Value(), time.Time{})
+		entries.StructToPoints(*e, name, e.PsPsKey.Value(), api.NewDateTime(""))
 
 		for _, sid := range e.StorageInverterData {
 			name = fmt.Sprintf("%s.%s", pkg, sid.PsKey.Value())
-			entries.StructToPoints(sid, name, sid.PsKey.Value(), time.Time{})
+			entries.StructToPoints(sid, name, sid.PsKey.Value(), api.NewDateTime(""))
 		}
 	}
 
@@ -375,125 +235,4 @@ func (e *EndPoint) GetDeviceSerial() string {
 		break
 	}
 	return ret
-}
-
-// ChargingDischargingPowerMap
-// Co2ReduceTotal
-// CoalReduceTotal
-// ConnectType
-// CurrPower
-// DesignCapacity
-// EnergyScheme
-// GcjLatitude
-// GcjLongitude
-// HasAmmeter
-// HouseholdInverterData
-// InstallerPsFaultStatus
-// IsHaveEsInverter
-// IsSingleInverter
-// IsTransformSystem
-// Latitude
-// LoadPowerMap
-// LoadPowerMapVirgin
-// Longitude
-// MapLatitude
-// MapLongitude
-// MeterReduceTotal
-// MobleTel
-// MonthEnergy
-// MonthEnergyVirgin
-// MonthIncome
-// NegativeLoadMsg
-// OwnerPsFaultStatus
-// P83081Map
-// P83081MapVirgin
-// P83102Map
-// P83102MapVirgin
-// P83102Percent
-// P83118Map
-// P83118MapVirgin
-// P83119Map
-// P83119MapVirgin
-// P83120Map
-// P83120MapVirgin
-// P83122
-// P83124Map
-// P83124MapVirgin
-// P83202Map
-// P83202MapVirgin
-// P83532MapVirgin
-// PowerChargeSetted
-// PowerGridPowerMap
-// PowerGridPowerMapVirgin
-// PsCountryID
-// PsDeviceType
-// PsFaultStatus
-// PsHealthStatus
-// PsLocation
-// PsName
-// PsPsKey
-// PsState
-// PsType
-// PvPowerMap
-// PvPowerMapVirgin
-// RobotNumSweepCapacity
-// Num
-// SweepCapacity
-// }
-// SelfConsumptionOffsetReminder
-// So2ReduceTotal
-// StorageInverterData
-// CommunicationDevSn
-// DevStatus
-// DeviceCode
-// DeviceModelCode
-// DeviceName
-// DeviceState
-// DeviceType
-// DrmStatus
-// DrmStatusName
-// EnergyFlow
-// HasAmmeter
-// InstallerDevFaultStatus
-// InverterSn
-// OwnerDevFaultStatus
-// P13003Map
-// P13003MapVirgin
-// P13119Map
-// P13119MapVirgin
-// P13121Map
-// P13121MapVirgin
-// P13126Map
-// P13126MapVirgin
-// P13141
-// P13149Map
-// P13149MapVirgin
-// P13150Map
-// P13150MapVirgin
-// PsKey
-// UUID
-// }
-// TodayEnergy
-// TodayEnergyVirgin
-// TodayIncome
-// TotalEnergy
-// TotalEnergyVirgin
-// TotalIncome
-// TreeReduceTotal
-// ValidFlag
-// WgsLatitude
-// WgsLongitude
-// ZfzyMap
-// ZfzyMapVirgin
-// ZjzzMap
-// ZjzzMapVirgin
-
-func (e *EndPoint) GetData() api.DataMap {
-	entries := api.NewDataMap()
-
-	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", time.Time{})
-	}
-
-	return entries
 }

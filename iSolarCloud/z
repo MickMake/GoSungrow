@@ -1,10 +1,8 @@
+#!/bin/bash
 
-func (e *EndPoint) GetData() api.DataMap {
-	entries := api.NewDataMap()
+echo "################################################################################"
+echo "# $1"
+awk '!/^\t"/{print;next} !visited[$0]++{print}' $1 > /tmp/z
+diff $1 /tmp/z
+cp /tmp/z $1
 
-	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", time.Time{})
-	}
-
-	return entries
-}

@@ -1,18 +1,11 @@
 package queryDeviceList
 
 import (
-	"time"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
 	"github.com/MickMake/GoUnify/Only"
 
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
-	"sort"
-	"time"
 )
 
 const Url = "/v1/devService/queryDeviceList"
@@ -262,13 +255,13 @@ func (e *EndPoint) GetData() api.DataMap {
 
 		pkg := apiReflect.GetName("", *e)
 		name1 := pkg + "." + e.Request.PsId.String()
-		entries.StructToPoints(e.Response.ResultData.DevCountByStatusMap, name1 + ".status", e.Request.PsId.String(), time.Time{})
+		entries.StructToPoints(e.Response.ResultData.DevCountByStatusMap, name1 + ".status", e.Request.PsId.String(), api.NewDateTime(""))
 
 		for _, d := range e.Response.ResultData.PageList {
 			name2 := fmt.Sprintf("%s.%s", pkg, d.PsKey.Value())
-			entries.StructToPoints(d, name2, d.PsKey.Value(), time.Time{})
+			entries.StructToPoints(d, name2, d.PsKey.Value(), api.NewDateTime(""))
 
-			// entries.StructToPoints(d.PsTimezoneInfo, name2 + "PsTimezoneInfo", d.PsKey.Value(), time.Time{})
+			// entries.StructToPoints(d.PsTimezoneInfo, name2 + "PsTimezoneInfo", d.PsKey.Value(), api.NewDateTime(""))
 
 			for _, p := range d.PointData {
 				pid := api.SetPointInt(p.PointID.Value())
@@ -481,93 +474,6 @@ func (e *EndPoint) GetData() api.DataMap {
 		entries.FromRefAddFloat("pv_feed_in",
 			api.VirtualPsId,"grid_energy", "",
 			entries.LowerUpper("pv_feed_in", "daily_purchased_energy", api.LastEntry))
-	}
-
-	return entries
-}
-
-func (e *EndPoint) GetDataTable() output.Table {
-	var table output.Table
-	for range Only.Once {
-		table = output.NewTable()
-		table.SetTitle("")
-		table.SetJson([]byte(e.GetJsonData(false)))
-		table.SetRaw([]byte(e.GetJsonData(true)))
-
-		_ = table.SetHeader(
-			"Date",
-			"Point Id",
-			// "Parents",
-			"Group Name",
-			"Description",
-			"Value",
-			"Unit",
-		)
-
-		data := e.GetData()
-		var sorted []string
-		for p := range data.DataPoints {
-			sorted = append(sorted, string(p))
-		}
-		sort.Strings(sorted)
-
-		for _, p := range sorted {
-			entries := data.DataPoints[api.PointId(p)]
-			for _, de := range entries {
-				if de.Hide {
-					continue
-				}
-
-				_ = table.AddRow(
-					de.Date.Format(api.DtLayout),
-					// api.NameDevicePointInt(de.Point.Parents, p.PointID.Value()),
-					// de.Point.Id,
-					p,
-					// de.Point.Parents.String(),
-					de.Point.GroupName,
-					de.Point.Name,
-					de.Value,
-					de.Point.Unit,
-				)
-			}
-		}
-
-		// for _, d := range e.Response.ResultData.PageList {
-		// 	for _, p := range d.PointData {
-		// 		// p.Value, p.Unit = api.DivideByThousandIfRequired(p.Value, p.Unit)
-		// 		uv := api.SetUnitValueFloat(p.Value.Value(), p.Unit)
-		// 		_ = table.AddRow(
-		// 			api.NewDateTime(p.TimeStamp).PrintFull(),
-		// 			api.NameDevicePointInt(d.PsKey, p.PointID.Value()),
-		// 			p.PointGroupName,
-		// 			p.PointName,
-		// 			uv.Value(),
-		// 			uv.Unit(),
-		// 		)
-		// 	}
-		// }
-
-		table.InitGraph(output.GraphRequest {
-			Title:        "",
-			TimeColumn:   output.SetInteger(1),
-			SearchColumn: output.SetInteger(2),
-			NameColumn:   output.SetInteger(4),
-			ValueColumn:  output.SetInteger(5),
-			UnitsColumn:  output.SetInteger(6),
-			SearchString: output.SetString(""),
-			MinLeftAxis:  output.SetFloat(0),
-			MaxLeftAxis:  output.SetFloat(0),
-		})
-
-	}
-	return table
-}
-
-func (e *EndPoint) GetData() api.DataMap {
-	entries := api.NewDataMap()
-
-	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", time.Time{})
 	}
 
 	return entries

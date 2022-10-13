@@ -1,18 +1,11 @@
 package getDeviceList
 
 import (
-	"time"
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
-	"github.com/MickMake/GoUnify/Only"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
-	"sort"
-	"time"
 )
 
 const Url = "/v1/devService/getDeviceList"
@@ -291,79 +284,8 @@ func (e *EndPoint) GetData() api.DataMap {
 		pkg := apiReflect.GetName("", *e)
 		for _, d := range e.Response.ResultData.PageList {
 			name := fmt.Sprintf("%s.%s", pkg, d.PsKey.Value())
-			entries.StructToPoints(d, name, e.Request.PsId.String(), time.Time{})
+			entries.StructToPoints(d, name, e.Request.PsId.String(), api.NewDateTime(""))
 		}
-	}
-
-	return entries
-}
-
-func (e *EndPoint) GetDataTable() output.Table {
-	var table output.Table
-	for range Only.Once {
-		table = output.NewTable()
-		table.SetTitle("")
-		table.SetJson([]byte(e.GetJsonData(false)))
-		table.SetRaw([]byte(e.GetJsonData(true)))
-
-		_ = table.SetHeader(
-			"Date",
-			"Point Id",
-			// "Parents",
-			"Group Name",
-			"Description",
-			"Value",
-			"Unit",
-		)
-
-		data := e.GetData()
-		var sorted []string
-		for p := range data.DataPoints {
-			sorted = append(sorted, string(p))
-		}
-		sort.Strings(sorted)
-
-		for _, p := range sorted {
-			entries := data.DataPoints[api.PointId(p)]
-			for _, de := range entries {
-				if de.Hide {
-					continue
-				}
-
-				_ = table.AddRow(
-					de.Date.Format(api.DtLayout),
-					// api.NameDevicePointInt(de.Point.Parents, p.PointID.Value()),
-					// de.Point.Id,
-					p,
-					// de.Point.Parents.String(),
-					de.Point.GroupName,
-					de.Point.Name,
-					de.Value,
-					de.Point.Unit,
-				)
-			}
-		}
-
-		// table.InitGraph(output.GraphRequest {
-		// 	Title:        "",
-		// 	TimeColumn:   output.SetInteger(1),
-		// 	SearchColumn: output.SetInteger(2),
-		// 	NameColumn:   output.SetInteger(4),
-		// 	ValueColumn:  output.SetInteger(5),
-		// 	UnitsColumn:  output.SetInteger(6),
-		// 	SearchString: output.SetString(""),
-		// 	MinLeftAxis:  output.SetFloat(0),
-		// 	MaxLeftAxis:  output.SetFloat(0),
-		// })
-	}
-	return table
-}
-
-func (e *EndPoint) GetData() api.DataMap {
-	entries := api.NewDataMap()
-
-	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", time.Time{})
 	}
 
 	return entries

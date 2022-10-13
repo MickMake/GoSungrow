@@ -1,15 +1,11 @@
 package getPowerDevicePointInfo
 
 import (
-	"time"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
 	"github.com/MickMake/GoUnify/Only"
 
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
 )
 
@@ -52,7 +48,7 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-func (e *EndPoint) GetData() ResultData {
+func (e *EndPoint) GetData2() ResultData {
 	return e.Response.ResultData
 }
 
@@ -82,7 +78,7 @@ func (e *EndPoint) AddDataTable(table output.Table) output.Table {
 	return table
 }
 
-func (e *EndPoint) GetDataTable() output.Table {
+func (e *EndPoint) GetPointDataTable() output.Table {
 	var table output.Table
 	for range Only.Once {
 		table = output.NewTable()
@@ -128,7 +124,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", time.Time{})
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
 	}
 
 	return entries

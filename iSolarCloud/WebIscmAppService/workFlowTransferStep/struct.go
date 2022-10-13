@@ -5,6 +5,7 @@
 package workFlowTransferStep
 
 import (
+	"sort"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
@@ -12,7 +13,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
-	"sort"
 	"time"
 )
 

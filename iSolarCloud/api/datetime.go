@@ -51,14 +51,14 @@ func (dt *DateTime) UnmarshalJSON(data []byte) error {
 		// Store result from string
 		err = json.Unmarshal(data, &dt.string)
 		if err == nil {
-			dt.SetString(dt.string)
+			dt = dt.SetString(dt.string)
 			break
 		}
 
 		// Store result from time
 		err = json.Unmarshal(data, &dt.Time)
 		if err == nil {
-			dt.SetValue(dt.Time)
+			dt = dt.SetValue(dt.Time)
 			break
 		}
 	}
@@ -90,7 +90,7 @@ func (dt DateTime) String() string {
 	return dt.string
 }
 
-func (dt *DateTime) SetString(value string) DateTime {
+func (dt *DateTime) SetString(value string) *DateTime {
 	for range Only.Once {
 		dt.string = value
 		dt.Time = time.Time{}
@@ -104,28 +104,20 @@ func (dt *DateTime) SetString(value string) DateTime {
 			break
 		}
 
-		dt.DateType = dt.getDateType()
 		for _, f := range inputLayout {
 			dt.Time, dt.Error = time.Parse(f, value)
 			if dt.Error == nil {
+				dt.string = dt.Time.Format(DtLayout)
+				dt.SetDateType(value)
 				break
 			}
 		}
-
-		// switch dt.DateType {
-		// 	case "3":
-		// 		ret = dt.Time.Format(DtLayoutYear)
-		// 	case "2":
-		// 		ret = dt.Time.Format(DtLayoutMonth)
-		// 	case "1":
-		// 		ret = dt.Time.Format(DtLayoutDay)
-		// }
 	}
 
-	return *dt
+	return dt
 }
 
-func (dt *DateTime) SetValue(value time.Time) DateTime {
+func (dt *DateTime) SetValue(value time.Time) *DateTime {
 	for range Only.Once {
 		dt.string = ""
 		dt.Time = value
@@ -138,15 +130,34 @@ func (dt *DateTime) SetValue(value time.Time) DateTime {
 		dt.DateType = "3"
 	}
 
-	return *dt
+	return dt
 }
 
-func SetDateTimeString(value string) DateTime {
+func (dt *DateTime) SetDateType(value string) {
+	switch len(value) {
+	case len(DtLayout):
+		dt.DateType = "1"
+	case len(DtLayoutYear):
+		dt.DateType = "3"
+	case len(DtLayoutMonth):
+		dt.DateType = "2"
+	case len(DtLayoutDay):
+		dt.DateType = "1"
+	case len(DtLayoutHour):
+		dt.DateType = "1"
+	case len(DtLayoutMinute):
+		dt.DateType = "1"
+	case len(DtLayoutSecond):
+		dt.DateType = "1"
+	}
+}
+
+func SetDateTimeString(value string) *DateTime {
 	var t DateTime
 	return t.SetString(value)
 }
 
-func SetDateTimeValue(value time.Time) DateTime {
+func SetDateTimeValue(value time.Time) *DateTime {
 	var t DateTime
 	return t.SetValue(value)
 }
@@ -168,55 +179,34 @@ func (dt *DateTime) GetDayEndTimestamp() string {
 	// return fmt.Sprintf("%s235900", dt.Time.Format(DtLayoutDay))
 }
 
-// func (dt DateTime) String() string {
-// 	// return dt.Time.Format(DtLayout)
-// 	var ret string
-// 	switch dt.DateType {
-// 		case "3":
-// 			ret = dt.Time.Format(DtLayoutYear)
-// 		case "2":
-// 			ret = dt.Time.Format(DtLayoutMonth)
-// 		case "1":
-// 			ret = dt.Time.Format(DtLayoutDay)
-// 	}
-// 	return ret
-// }
-
 func (dt DateTime) PrintFull() string {
 	return dt.Time.Format(DtLayout)
 }
 
-func (dt DateTime) getDateType() string {
+func (dt DateTime) Original() string {
 	var ret string
-	switch len(dt.string) {
-		case len(DtLayout):
-			ret = "1"
-		case len(DtLayoutYear):
-			ret = "3"
-		case len(DtLayoutMonth):
-			ret = "2"
-		case len(DtLayoutDay):
-			ret = "1"
-		case len(DtLayoutHour):
-			ret = "1"
-		case len(DtLayoutMinute):
-			ret = "1"
-		case len(DtLayoutSecond):
-			ret = "1"
+	switch dt.DateType {
+		case "3":
+			ret = dt.Time.Format(DtLayoutYear)
+		case "2":
+			ret = dt.Time.Format(DtLayoutMonth)
+		case "1":
+			ret = dt.Time.Format(DtLayoutDay)
 	}
 	return ret
 }
 
-func NewDateTime(date string) DateTime {
+const Now = "now"
+func NewDateTime(value string) DateTime {
 	var ret DateTime
-	if date == "" {
-		date = time.Now().Format(DtLayoutDay)
+	if (value == Now) || (value == "") {
+		value = time.Now().Format(DtLayout)
 	}
-	ret.string = date
-	ret.DateType = ret.getDateType()
 	for _, f := range inputLayout {
-		ret.Time, ret.Error = time.Parse(f, date)
+		ret.Time, ret.Error = time.Parse(f, value)
 		if ret.Error == nil {
+			ret.SetValue(ret.Time)
+			ret.SetDateType(value)
 			break
 		}
 	}

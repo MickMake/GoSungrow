@@ -1,15 +1,10 @@
 package getTemplateList
 
 import (
-	"time"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
 	"github.com/MickMake/GoUnify/Only"
 
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
 )
 
@@ -67,45 +62,11 @@ func (e *ResultData) IsValid() error {
 //	return err
 //}
 
-func (e *EndPoint) GetDataTable() output.Table {
-	var table output.Table
-
-	for range Only.Once {
-		table = output.NewTable()
-		table.SetTitle("")
-		table.SetJson([]byte(e.GetJsonData(false)))
-		table.SetRaw([]byte(e.GetJsonData(true)))
-
-		e.Error = table.SetHeader(
-			"Template Id",
-			"Template Name",
-			"Update On",
-		)
-		if e.Error != nil {
-			break
-		}
-
-		for _, p := range e.Response.ResultData.PageList {
-			_ = table.AddRow(
-				p.TemplateID,
-				p.TemplateName,
-				// api.NewDateTime(p.UpdateTime).PrintFull(),
-				p.UpdateTime.String(),
-			)
-			if table.Error != nil {
-				continue
-			}
-		}
-	}
-
-	return table
-}
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", time.Time{})
+		entries.StructToPoints(e.Response.ResultData.PageList, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
 	}
 
 	return entries

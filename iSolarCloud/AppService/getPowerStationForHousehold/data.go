@@ -1,12 +1,10 @@
 package getPowerStationForHousehold
 
 import (
-	"time"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
-	"time"
 )
 
 const Url = "/v1/powerStationService/getPowerStationForHousehold"
@@ -190,7 +188,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", time.Time{})
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
 	}
 
 	return entries

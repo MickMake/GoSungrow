@@ -1,15 +1,10 @@
 package getKpiInfo
 
 import (
-	"time"
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
-	"time"
 )
 
 const Url = "/v1/powerStationService/getKpiInfo"
@@ -84,7 +79,7 @@ func (e *EndPoint) GetData() api.DataMap {
 
 	for range Only.Once {
 		pkg := apiReflect.GetName("", *e)
-		entries.StructToPoints(e.Response.ResultData, pkg, "system", time.Time{})
+		entries.StructToPoints(e.Response.ResultData, pkg, "system", api.NewDateTime(""))
 	}
 
 	return entries

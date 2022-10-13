@@ -5,18 +5,15 @@
 package updateSysRoleValidFlag
 
 import (
+	"sort"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
 
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
-	"sort"
 	"time"
 )
 

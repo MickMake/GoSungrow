@@ -1,7 +1,6 @@
 package getPowerStationData
 
 import (
-	"time"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"fmt"
@@ -76,7 +75,7 @@ func (e *EndPoint) GetData() api.DataMap {
 
 	for range Only.Once {
 		name := "getPowerStationData." + e.Request.PsId.String()
-		// entries.StructToPoints(*e.Response.ResultData.DayData, name, e.Request.PsID, time.Time{})
+		// entries.StructToPoints(*e.Response.ResultData.DayData, name, e.Request.PsID, api.NewDateTime(""))
 
 		uv := api.SetUnitValueString(e.Response.ResultData.DayPowerQuantityTotal.Value, e.Response.ResultData.DayPowerQuantityTotal.Unit)
 		entries.AddUnitValue(name + ".DayPowerQuantityTotal", e.Request.PsId.String(), "DayPowerQuantityTotal", "", "", api.NewDateTime(""), uv)

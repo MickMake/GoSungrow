@@ -1,16 +1,11 @@
 package updateSysRoleValidFlag
 
 import (
-	"time"
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
-	"time"
 )
 
 const Url = "/v1/userService/updateSysRoleValidFlag"
@@ -68,7 +63,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", time.Time{})
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
 	}
 
 	return entries
