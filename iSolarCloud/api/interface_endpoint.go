@@ -38,12 +38,11 @@ type EndPoint interface {
 	IsResponseValid() error
 	ResponseString() string
 
-	// WriteCache() error
-	// ReadCache() EndPoint
-	// CheckCache() bool
 	CacheFilename() string
 	SetCacheTimeout(duration time.Duration) EndPoint
 	GetCacheTimeout() time.Duration
 
-	GetDataTable() output.Table
+	// GetDataTable() output.Table
+	GetEndPointData() DataMap
+	GetEndPointDataTable() output.Table
 }

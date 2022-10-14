@@ -3,6 +3,7 @@ package getModuleLogTaskList
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -23,37 +24,37 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	CurPage  api.Integer `json:"curPage"`
-	IsMore   api.Bool    `json:"isMore"`
+	CurPage  valueTypes.Integer `json:"curPage"`
+	IsMore   valueTypes.Bool    `json:"isMore"`
 	PageList []struct {
-		BatchID        api.String      `json:"batch_id"`
-		CommandStatus  api.Integer `json:"command_status"`
-		CommandType    api.Integer `json:"command_type"`
-		CreateTime     api.DateTime      `json:"create_time"`
-		DeviceCode     api.Integer      `json:"device_code"`
-		DeviceModel    api.String `json:"device_model"`
-		DeviceModelID  api.String `json:"device_model_id"`
-		ExpireSecond   api.Integer `json:"expire_second"`
-		LogType        api.Integer      `json:"log_type"`
-		LoggerCode     api.Integer      `json:"logger_code"`
-		OperateUserID  api.Integer `json:"operate_user_id"`
-		OverTime       api.DateTime      `json:"over_time"`
-		Remark         api.String      `json:"remark"`
-		SetCancelNum   api.Integer `json:"set_cancel_num"`
-		SetFailNum     api.Integer `json:"set_fail_num"`
-		SetFinishNum   api.Integer `json:"set_finish_num"`
-		SetOvertimeNum api.Integer `json:"set_overtime_num"`
-		SetSuccessNum  api.Integer `json:"set_success_num"`
-		SetTotalNum    api.Integer `json:"set_total_num"`
-		Sn             api.String      `json:"sn"`
-		TaskID         api.Integer `json:"task_id"`
-		TaskName       api.Integer      `json:"task_name"`
-		UpdateTime     api.DateTime      `json:"update_time"`
+		BatchID        valueTypes.String      `json:"batch_id"`
+		CommandStatus  valueTypes.Integer `json:"command_status"`
+		CommandType    valueTypes.Integer `json:"command_type"`
+		CreateTime     valueTypes.DateTime      `json:"create_time"`
+		DeviceCode     valueTypes.Integer      `json:"device_code"`
+		DeviceModel    valueTypes.String `json:"device_model"`
+		DeviceModelID  valueTypes.String `json:"device_model_id"`
+		ExpireSecond   valueTypes.Integer `json:"expire_second"`
+		LogType        valueTypes.Integer      `json:"log_type"`
+		LoggerCode     valueTypes.Integer      `json:"logger_code"`
+		OperateUserID  valueTypes.Integer `json:"operate_user_id"`
+		OverTime       valueTypes.DateTime      `json:"over_time"`
+		Remark         valueTypes.String      `json:"remark"`
+		SetCancelNum   valueTypes.Integer `json:"set_cancel_num"`
+		SetFailNum     valueTypes.Integer `json:"set_fail_num"`
+		SetFinishNum   valueTypes.Integer `json:"set_finish_num"`
+		SetOvertimeNum valueTypes.Integer `json:"set_overtime_num"`
+		SetSuccessNum  valueTypes.Integer `json:"set_success_num"`
+		SetTotalNum    valueTypes.Integer `json:"set_total_num"`
+		Sn             valueTypes.String      `json:"sn"`
+		TaskID         valueTypes.Integer `json:"task_id"`
+		TaskName       valueTypes.Integer      `json:"task_name"`
+		UpdateTime     valueTypes.DateTime      `json:"update_time"`
 	} `json:"pageList"`
-	RowCount   api.Integer `json:"rowCount"`
-	Size       api.Integer `json:"size"`
-	StartIndex api.Integer `json:"startIndex"`
-	TotalPage  api.Integer `json:"totalPage"`
+	RowCount   valueTypes.Integer `json:"rowCount"`
+	Size       valueTypes.Integer `json:"size"`
+	StartIndex valueTypes.Integer `json:"startIndex"`
+	TotalPage  valueTypes.Integer `json:"totalPage"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -90,7 +91,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

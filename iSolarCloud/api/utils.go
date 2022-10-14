@@ -3,6 +3,7 @@ package api
 import (
 	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"fmt"
 	"net/url"
 	"reflect"
@@ -56,12 +57,12 @@ func GetUrl(u string) *url.URL {
 	return ret
 }
 
-func GetStructKeys(ref interface{}, keys ...string) UnitValueMap {
-	ret := make(UnitValueMap)
+func GetStructKeys(ref interface{}, keys ...string) valueTypes.UnitValueMap {
+	ret := make(valueTypes.UnitValueMap)
 
 	for _, k := range apiReflect.GetStructKeys(ref, keys...) {
 		// p := UnitValue { Value: k.Value, Unit: "" }
-		p := SetUnitValueString(k.Value, "")
+		p := valueTypes.SetUnitValueString(k.Value, "", "")
 		if k.Type.Name() == "UnitValue" {
 			// v = JsonToUnitValue(k.JsonValue).Value
 			// u = JsonToUnitValue(k.JsonValue).Unit
@@ -74,25 +75,8 @@ func GetStructKeys(ref interface{}, keys ...string) UnitValueMap {
 		}
 
 		k.JsonName = strings.TrimSuffix(k.JsonName, "_map")	// Bit of a hack, but hey... @TODO - Future self take note.
-		ret[PointId(k.JsonName)] = p
+		ret[valueTypes.SetPointIdString(k.JsonName)] = p
 	}
 
 	return ret
 }
-
-// // DivideByThousandIfRequired Sigh.... Another dodgy one.
-// func DivideByThousandIfRequired(value string, unit string) (string, string) {
-// 	switch unit {
-// 		case "Wh":
-// 			fallthrough
-// 		case "W":
-// 			fv, err := strconv.ParseFloat(value, 64)
-// 			if err == nil {
-// 				fv = fv / 1000
-// 				value, _ = DivideByThousand(value)
-// 				unit = "k" + unit
-// 			}
-// 	}
-//
-// 	return value, unit
-// }

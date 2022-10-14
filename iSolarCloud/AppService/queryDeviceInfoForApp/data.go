@@ -3,6 +3,7 @@ package queryDeviceInfoForApp
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -28,59 +29,59 @@ type ResultData struct {
 	ArmVersion           interface{} `json:"arm_version"`
 	BatVersion           interface{} `json:"bat_version"`
 	BatteryVersion       interface{} `json:"battery_version"`
-	ChannelId            api.Integer `json:"chnnl_id"`
-	CommandStatus        api.Integer `json:"command_status"`
-	CommunicationDevUUID api.Integer `json:"communication_dev_uuid"`
+	ChannelId            valueTypes.Integer `json:"chnnl_id"`
+	CommandStatus        valueTypes.Integer `json:"command_status"`
+	CommunicationDevUUID valueTypes.Integer `json:"communication_dev_uuid"`
 	CountryID            interface{} `json:"country_id"`
 	CpldVersion          interface{} `json:"cpld_version"`
-	DataFlagDetail       api.Integer `json:"data_flag_detail"`
+	DataFlagDetail       valueTypes.Integer `json:"data_flag_detail"`
 	DevFaultStatus       string      `json:"dev_fault_status"`
 	DevStatus            string      `json:"dev_status"`
 	DeviceModelList      []struct {
-		DeviceModel     api.String  `json:"device_model"`
-		DeviceModelCode api.String  `json:"device_model_code"`
-		ModelID         api.Integer `json:"model_id"`
+		DeviceModel     valueTypes.String  `json:"device_model"`
+		DeviceModelCode valueTypes.String  `json:"device_model_code"`
+		ModelID         valueTypes.Integer `json:"model_id"`
 	} `json:"deviceModelList"`
 	DevicePropertyValueList []struct {
-		DeviceType     api.Integer `json:"device_type"`
-		PropertyCode   api.Integer `json:"property_code"`
-		PropertyDefVal api.String  `json:"property_def_val"`
-		PropertyName   api.String  `json:"property_name"`
+		DeviceType     valueTypes.Integer `json:"device_type"`
+		PropertyCode   valueTypes.Integer `json:"property_code"`
+		PropertyDefVal valueTypes.String  `json:"property_def_val"`
+		PropertyName   valueTypes.String  `json:"property_name"`
 		PropertyValue  interface{} `json:"property_value"`
-		UUID           api.String  `json:"uuid"`
+		UUID           valueTypes.String  `json:"uuid"`
 	} `json:"devicePropertyValueList"`
-	DeviceArea              api.String    `json:"device_area"`
-	DeviceAreaName          api.String    `json:"device_area_name"`
-	DeviceCode              api.Integer   `json:"device_code"`
+	DeviceArea              valueTypes.String    `json:"device_area"`
+	DeviceAreaName          valueTypes.String    `json:"device_area_name"`
+	DeviceCode              valueTypes.Integer   `json:"device_code"`
 	DeviceFactoryID         interface{}   `json:"device_factory_id"`
-	DeviceModel             api.String    `json:"device_model"`
-	DeviceModelCode         api.String    `json:"device_model_code"`
-	DeviceModelID           api.Integer   `json:"device_model_id"`
-	DeviceName              api.String    `json:"device_name"`
-	DeviceProSn             api.String    `json:"device_pro_sn"`
+	DeviceModel             valueTypes.String    `json:"device_model"`
+	DeviceModelCode         valueTypes.String    `json:"device_model_code"`
+	DeviceModelID           valueTypes.Integer   `json:"device_model_id"`
+	DeviceName              valueTypes.String    `json:"device_name"`
+	DeviceProSn             valueTypes.String    `json:"device_pro_sn"`
 	DeviceStatus            int64         `json:"device_status"`
 	DeviceType              int64         `json:"device_type"`
-	FactoryName             api.String    `json:"factory_name"`
+	FactoryName             valueTypes.String    `json:"factory_name"`
 	GridTypeID              interface{}   `json:"grid_type_id"`
 	InstallerDevFaultStatus interface{}   `json:"installer_dev_fault_status"`
 	InverterModelType       int64         `json:"inverter_model_type"`
-	IsCountryCheck          api.Bool      `json:"is_country_check"`
-	IsEnable                api.Bool      `json:"is_enable"`
-	IsG2point5Module        api.Bool      `json:"is_g2point5_module"`
-	IsHaveversion           api.Bool      `json:"is_haveversion"`
-	IsInit                  api.Bool      `json:"is_init"`
-	IsNeedModbusAddress     api.Bool      `json:"is_need_modbus_address"`
-	IsReadSet               api.Bool      `json:"is_read_set"`
-	IsReplacing             api.Bool      `json:"is_replacing"`
-	IsReset                 api.Bool      `json:"is_reset"`
-	IsSupportParamSet       api.Bool      `json:"is_support_param_set"`
-	IsSupportRemoteUpgrade  api.Bool      `json:"is_support_remote_upgrade"`
-	IsThirdParty            api.Bool      `json:"is_third_party"`
-	Latitude                api.Float     `json:"latitude"`
+	IsCountryCheck          valueTypes.Bool      `json:"is_country_check"`
+	IsEnable                valueTypes.Bool      `json:"is_enable"`
+	IsG2point5Module        valueTypes.Bool      `json:"is_g2point5_module"`
+	IsHaveversion           valueTypes.Bool      `json:"is_haveversion"`
+	IsInit                  valueTypes.Bool      `json:"is_init"`
+	IsNeedModbusAddress     valueTypes.Bool      `json:"is_need_modbus_address"`
+	IsReadSet               valueTypes.Bool      `json:"is_read_set"`
+	IsReplacing             valueTypes.Bool      `json:"is_replacing"`
+	IsReset                 valueTypes.Bool      `json:"is_reset"`
+	IsSupportParamSet       valueTypes.Bool      `json:"is_support_param_set"`
+	IsSupportRemoteUpgrade  valueTypes.Bool      `json:"is_support_remote_upgrade"`
+	IsThirdParty            valueTypes.Bool      `json:"is_third_party"`
+	Latitude                valueTypes.Float     `json:"latitude"`
 	LcdVersion              interface{}   `json:"lcd_version"`
-	LoggerCode              api.Integer   `json:"logger_code"`
-	Longitude               api.Float     `json:"longitude"`
-	MVersion                api.String    `json:"m_version"`
+	LoggerCode              valueTypes.Integer   `json:"logger_code"`
+	Longitude               valueTypes.Float     `json:"longitude"`
+	MVersion                valueTypes.String    `json:"m_version"`
 	MachineVersion          interface{}   `json:"machine_version"`
 	MasterNodeVersion       interface{}   `json:"master_node_version"`
 	McuVersion              interface{}   `json:"mcu_version"`
@@ -90,19 +91,19 @@ type ResultData struct {
 	OwnerDevFaultStatus     interface{}   `json:"owner_dev_fault_status"`
 	P2                      interface{}   `json:"p2"`
 	P24                     interface{}   `json:"p24"`
-	PsID                    api.Integer   `json:"ps_id"`
-	PsKey                   api.String    `json:"ps_key"`
-	PsName                  api.String    `json:"ps_name"`
-	PsShortName             api.String    `json:"ps_short_name"`
+	PsID                    valueTypes.Integer   `json:"ps_id"`
+	PsKey                   valueTypes.String    `json:"ps_key"`
+	PsName                  valueTypes.String    `json:"ps_name"`
+	PsShortName             valueTypes.String    `json:"ps_short_name"`
 	PvdVersion              interface{}   `json:"pvd_version"`
 	SdspVersion             interface{}   `json:"sdsp_version"`
-	Sn                      api.String    `json:"sn"`
+	Sn                      valueTypes.String    `json:"sn"`
 	SubTypeList             []interface{} `json:"subTypeList"`
 	TempVersion             interface{}   `json:"temp_version"`
-	TypeName                api.String    `json:"type_name"`
-	UpUUID                  api.Integer   `json:"up_uuid"`
+	TypeName                valueTypes.String    `json:"type_name"`
+	UpUUID                  valueTypes.Integer   `json:"up_uuid"`
 	UpgradeVersion          interface{}   `json:"upgrade_version"`
-	UUID                    api.Integer   `json:"uuid"`
+	UUID                    valueTypes.Integer   `json:"uuid"`
 	Version1                interface{}   `json:"version1"`
 	Version10               interface{}   `json:"version10"`
 	Version11               interface{}   `json:"version11"`
@@ -151,7 +152,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

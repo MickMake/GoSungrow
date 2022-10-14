@@ -3,6 +3,7 @@ package getReportEmailConfigInfo
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -26,26 +27,26 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	ReportEmailConfigInfoList []struct {
-		Email      api.String `json:"email"`
+		Email      valueTypes.String `json:"email"`
 		ReportList []struct {
-			CreateTime                 api.DateTime `json:"create_time"`
-			CreateUserID               api.Integer  `json:"create_user_id"`
-			EmailAddTime               api.DateTime `json:"email_add_time"`
-			ID                         api.Integer  `json:"id"`
-			IsAllowEmailSend           api.Bool     `json:"is_allow_email_send"`
-			IsBank                     api.Bool     `json:"is_bank"`
-			IsCanRenewSendConfirmEmail api.Bool     `json:"is_can_renew_send_confirm_email"`
-			IsNewWeb                   api.Bool     `json:"is_new_web"`
-			OrderID                    api.Integer  `json:"order_id"`
-			ReSendConfirmEmailTime     api.DateTime `json:"re_send_confirm_email_time"`
-			ReportID                   api.Integer  `json:"report_id"`
-			ReportName                 api.String   `json:"report_name"`
-			SendEmail                  api.String   `json:"send_email"`
-			Status                     api.Bool     `json:"status"`
-			TimeDimension              api.Integer  `json:"time_dimension"`
-			Type                       api.Integer  `json:"type"`
-			UpdateTime                 api.DateTime `json:"update_time"`
-			UserID                     api.Integer  `json:"user_id"`
+			CreateTime                 valueTypes.DateTime `json:"create_time"`
+			CreateUserID               valueTypes.Integer  `json:"create_user_id"`
+			EmailAddTime               valueTypes.DateTime `json:"email_add_time"`
+			ID                         valueTypes.Integer  `json:"id"`
+			IsAllowEmailSend           valueTypes.Bool     `json:"is_allow_email_send"`
+			IsBank                     valueTypes.Bool     `json:"is_bank"`
+			IsCanRenewSendConfirmEmail valueTypes.Bool     `json:"is_can_renew_send_confirm_email"`
+			IsNewWeb                   valueTypes.Bool     `json:"is_new_web"`
+			OrderID                    valueTypes.Integer  `json:"order_id"`
+			ReSendConfirmEmailTime     valueTypes.DateTime `json:"re_send_confirm_email_time"`
+			ReportID                   valueTypes.Integer  `json:"report_id"`
+			ReportName                 valueTypes.String   `json:"report_name"`
+			SendEmail                  valueTypes.String   `json:"send_email"`
+			Status                     valueTypes.Bool     `json:"status"`
+			TimeDimension              valueTypes.Integer  `json:"time_dimension"`
+			Type                       valueTypes.Integer  `json:"type"`
+			UpdateTime                 valueTypes.DateTime `json:"update_time"`
+			UserID                     valueTypes.Integer  `json:"user_id"`
 		} `json:"report_list"`
 	} `json:"report_email_config_info_list"`
 }
@@ -84,7 +85,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

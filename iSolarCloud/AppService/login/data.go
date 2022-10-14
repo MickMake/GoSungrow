@@ -3,6 +3,7 @@ package login
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 
 	"errors"
@@ -32,66 +33,66 @@ type ResultData struct {
 	Msg         string `json:"msg"`
 	RemainTimes string `json:"remain_times"`
 
-	AcceptOrderNum         api.Integer `json:"accept_order_num"`
-	BackgroundColor        api.Integer `json:"background_color"`
+	AcceptOrderNum         valueTypes.Integer `json:"accept_order_num"`
+	BackgroundColor        valueTypes.Integer `json:"background_color"`
 	Countryid              string      `json:"countryid"`
 	Createdate             string      `json:"createdate"`
 	Createuserid           string      `json:"createuserid"`
-	CurrentOrderNum        api.Integer `json:"current_order_num"`
+	CurrentOrderNum        valueTypes.Integer `json:"current_order_num"`
 	DisableTime            string      `json:"disable_time"`
 	Email                  string      `json:"email"`
 	Englishname            interface{} `json:"englishname"`
-	GcjLatitude            api.Float   `json:"gcj_latitude"`
-	GcjLongitude           api.Float   `json:"gcj_longitude"`
+	GcjLatitude            valueTypes.Float   `json:"gcj_latitude"`
+	GcjLongitude           valueTypes.Float   `json:"gcj_longitude"`
 	ImToken                interface{} `json:"im_token"`
-	IsDST                  api.Bool    `json:"isDST"`
-	IsAfsFlag              api.Bool    `json:"is_afs_flag"`
-	IsAgreeGdpr            api.Bool    `json:"is_agree_gdpr"`
-	IsAu                   api.Bool    `json:"is_au"`
-	IsCanModifyUserAccount api.Bool    `json:"is_can_modify_user_account"`
-	IsDisableMap           api.Bool    `json:"is_disable_map"`
-	IsGdpr                 api.Bool    `json:"is_gdpr"`
-	IsHaveIm               api.Bool    `json:"is_have_im"`
-	IsNewVersion           api.Bool    `json:"is_new_version"`
-	IsOnline               api.Bool    `json:"is_online"`
-	IsOpenProtocol         api.Bool    `json:"is_open_protocol"`
-	IsReceiveNotice        api.Bool    `json:"is_receive_notice"`
-	IsSharePosition        api.Bool    `json:"is_share_position"`
-	IsUploadLocation       api.Bool    `json:"is_upload_location"`
-	IsUseSungrowBrand      api.Bool    `json:"is_use_sungrow_brand"`
-	IsValidMobileEmail     api.Bool    `json:"is_valid_mobile_email"`
-	Isdst                  api.Bool    `json:"isdst"`
+	IsDST                  valueTypes.Bool    `json:"isDST"`
+	IsAfsFlag              valueTypes.Bool    `json:"is_afs_flag"`
+	IsAgreeGdpr            valueTypes.Bool    `json:"is_agree_gdpr"`
+	IsAu                   valueTypes.Bool    `json:"is_au"`
+	IsCanModifyUserAccount valueTypes.Bool    `json:"is_can_modify_user_account"`
+	IsDisableMap           valueTypes.Bool    `json:"is_disable_map"`
+	IsGdpr                 valueTypes.Bool    `json:"is_gdpr"`
+	IsHaveIm               valueTypes.Bool    `json:"is_have_im"`
+	IsNewVersion           valueTypes.Bool    `json:"is_new_version"`
+	IsOnline               valueTypes.Bool    `json:"is_online"`
+	IsOpenProtocol         valueTypes.Bool    `json:"is_open_protocol"`
+	IsReceiveNotice        valueTypes.Bool    `json:"is_receive_notice"`
+	IsSharePosition        valueTypes.Bool    `json:"is_share_position"`
+	IsUploadLocation       valueTypes.Bool    `json:"is_upload_location"`
+	IsUseSungrowBrand      valueTypes.Bool    `json:"is_use_sungrow_brand"`
+	IsValidMobileEmail     valueTypes.Bool    `json:"is_valid_mobile_email"`
+	Isdst                  valueTypes.Bool    `json:"isdst"`
 	Jobs                   interface{} `json:"jobs"`
 	Language               string      `json:"language"`
-	LoginFirstDate         api.DateTime      `json:"loginFirstDate"`
-	LoginFirstDate2        api.DateTime      `json:"loginFristDate"`
-	LoginLastDate          api.DateTime      `json:"loginLastDate"`
+	LoginFirstDate         valueTypes.DateTime      `json:"loginFirstDate"`
+	LoginFirstDate2        valueTypes.DateTime      `json:"loginFristDate"`
+	LoginLastDate          valueTypes.DateTime      `json:"loginLastDate"`
 	LoginLastIP            string      `json:"loginLastIp"`
-	LoginTimes             api.Integer `json:"loginTimes"`
+	LoginTimes             valueTypes.Integer `json:"loginTimes"`
 	Logo                   interface{} `json:"logo"`
 	LogoHTTPSURL           interface{} `json:"logo_https_url"`
 	MapType                string      `json:"map_type"`
-	MinDate                api.DateTime      `json:"min_date"`
+	MinDate                valueTypes.DateTime      `json:"min_date"`
 	MobileTel              interface{} `json:"mobile_tel"`
 	OrgID                  string      `json:"org_id"`
 	OrgName                string      `json:"org_name"`
 	OrgTimezone            string      `json:"org_timezone"`
-	PasswordIsSimple       api.Integer `json:"password_is_simple"`
+	PasswordIsSimple       valueTypes.Integer `json:"password_is_simple"`
 	PhotoID                interface{} `json:"photo_id"`
 	PhotoURL               interface{} `json:"photo_url"`
 	Privileges             []struct {
-		FatherID        api.Integer `json:"father_id"`
+		FatherID        valueTypes.Integer `json:"father_id"`
 		IconURL         interface{} `json:"icon_url"`
-		IsOpen          api.Bool    `json:"is_open"`
-		IsThirdPlatform api.Bool    `json:"is_third_platform"`
+		IsOpen          valueTypes.Bool    `json:"is_open"`
+		IsThirdPlatform valueTypes.Bool    `json:"is_third_platform"`
 		MenuCode        string      `json:"menu_code"`
-		MenuLevel       api.Integer `json:"menu_level"`
+		MenuLevel       valueTypes.Integer `json:"menu_level"`
 		MenuName        string      `json:"menu_name"`
 		MenuOrder       interface{} `json:"menu_order"`
 		MenuType        string      `json:"menu_type"`
 		MenuURL         string      `json:"menu_url"`
-		PrivilegeID     api.Integer `json:"privilege_id"`
-		RoleID          api.Integer `json:"role_id"`
+		PrivilegeID     valueTypes.Integer `json:"privilege_id"`
+		RoleID          valueTypes.Integer `json:"role_id"`
 		URLTarget       string      `json:"url_target"`
 		VueIcon         interface{} `json:"vue_icon"`
 		VuePath         interface{} `json:"vue_path"`
@@ -107,11 +108,11 @@ type ResultData struct {
 	Timezoneid                   string        `json:"timezoneid"`
 	Toggleflag                   string        `json:"toggleflag"`
 	Token                        string        `json:"token"`
-	UnlockLaveMinute             api.Integer   `json:"unlock_lave_minute"`
+	UnlockLaveMinute             valueTypes.Integer   `json:"unlock_lave_minute"`
 	UploadTime                   interface{}   `json:"upload_time"`
 	UserAccount                  string        `json:"user_account"`
-	UserAccountModifyCount       api.Integer   `json:"user_account_modify_count"`
-	UserAccountModifyRemainTimes api.Integer   `json:"user_account_modify_remain_times"`
+	UserAccountModifyCount       valueTypes.Integer   `json:"user_account_modify_count"`
+	UserAccountModifyRemainTimes valueTypes.Integer   `json:"user_account_modify_remain_times"`
 	UserDealerOrgCode            interface{}   `json:"user_dealer_org_code"`
 	UserID                       string        `json:"user_id"`
 	UserLevel                    string        `json:"user_level"`
@@ -129,8 +130,8 @@ type ResultData struct {
 	Validflag                    string        `json:"validflag"`
 	Voice                        string        `json:"voice"`
 	Welcometext                  string        `json:"welcometext"`
-	Wgs84Latitude                api.Float     `json:"wgs84_latitude"`
-	Wgs84Longitude               api.Float     `json:"wgs84_longitude"`
+	Wgs84Latitude                valueTypes.Float     `json:"wgs84_latitude"`
+	Wgs84Longitude               valueTypes.Float     `json:"wgs84_longitude"`
 	WorkTel                      interface{}   `json:"work_tel"`
 }
 
@@ -195,7 +196,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

@@ -3,6 +3,7 @@ package getPowerStationForHousehold
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
@@ -11,7 +12,7 @@ const Url = "/v1/powerStationService/getPowerStationForHousehold"
 const Disabled = false
 
 type RequestData struct {
-	PsId api.Integer `json:"ps_id" required:"true"`
+	PsId valueTypes.Integer `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -24,134 +25,134 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	LbsAreaCode           api.String   `json:"LbsAreaCode"`
-	LbsCountry            api.String   `json:"LbsCountry"`
+	LbsAreaCode           valueTypes.String   `json:"LbsAreaCode"`
+	LbsCountry            valueTypes.String   `json:"LbsCountry"`
 	AccessType            interface{}  `json:"access_type"`
 	AreaID                interface{}  `json:"area_id"`
-	ArrearsStatus         api.Integer  `json:"arrears_status"`
-	BatteryType           api.Integer  `json:"battery_type"`
-	CityCode              api.String   `json:"city_code"`
-	CityName              api.String   `json:"city_name"`
+	ArrearsStatus         valueTypes.Integer  `json:"arrears_status"`
+	BatteryType           valueTypes.Integer  `json:"battery_type"`
+	CityCode              valueTypes.String   `json:"city_code"`
+	CityName              valueTypes.String   `json:"city_name"`
 	ComponentArea         interface{}  `json:"component_area"`
-	ComponentStatus       api.Integer  `json:"component_status"`
-	ConnectType           api.Integer  `json:"connect_type"`
-	ConnectTypeDesc       api.String   `json:"connect_type_desc"`
-	ContactName           api.String   `json:"contact_name"`
-	CountryID             api.Integer  `json:"country_id"`
-	Description           api.String   `json:"description"`
-	DesignCapacity        api.Float    `json:"design_capacity"`
-	DesignCapacityBattery api.Float    `json:"design_capacity_battery"`
-	DistrictCode          api.String   `json:"district_code"`
-	DistrictName          api.String   `json:"district_name"`
-	DivisionCode          api.String   `json:"division_code"`
-	Email                 api.String   `json:"email"`
+	ComponentStatus       valueTypes.Integer  `json:"component_status"`
+	ConnectType           valueTypes.Integer  `json:"connect_type"`
+	ConnectTypeDesc       valueTypes.String   `json:"connect_type_desc"`
+	ContactName           valueTypes.String   `json:"contact_name"`
+	CountryID             valueTypes.Integer  `json:"country_id"`
+	Description           valueTypes.String   `json:"description"`
+	DesignCapacity        valueTypes.Float    `json:"design_capacity"`
+	DesignCapacityBattery valueTypes.Float    `json:"design_capacity_battery"`
+	DistrictCode          valueTypes.String   `json:"district_code"`
+	DistrictName          valueTypes.String   `json:"district_name"`
+	DivisionCode          valueTypes.String   `json:"division_code"`
+	Email                 valueTypes.String   `json:"email"`
 	EnergyScheme          interface{}  `json:"energy_scheme"`
-	ExpectInstallDate     api.DateTime `json:"expect_install_date"`
-	GcjLatitude           api.Float    `json:"gcj_latitude"`
-	GcjLongitude          api.Float    `json:"gcj_longitude"`
-	GprsLatitude          api.Float    `json:"gprs_latitude"`
-	GprsLongitude         api.Float    `json:"gprs_longitude"`
+	ExpectInstallDate     valueTypes.DateTime `json:"expect_install_date"`
+	GcjLatitude           valueTypes.Float    `json:"gcj_latitude"`
+	GcjLongitude          valueTypes.Float    `json:"gcj_longitude"`
+	GprsLatitude          valueTypes.Float    `json:"gprs_latitude"`
+	GprsLongitude         valueTypes.Float    `json:"gprs_longitude"`
 	GridLevel             interface{}  `json:"grid_level"`
-	Images                []api.String `json:"images"`
-	InstallDate           api.DateTime `json:"install_date"`
-	InstallDateZone       api.DateTime `json:"install_date_zone"`
-	InverterCount         api.Integer  `json:"inverter_count"`
-	InvestmentType        api.Integer  `json:"investment_type"`
-	InvestmentTypeDesc    api.String   `json:"investment_type_desc"`
-	IsAgreeGdpr           api.Bool     `json:"is_agree_gdpr"`
-	IsGdpr                api.Bool     `json:"is_gdpr"`
-	IsNewVersion          api.Bool     `json:"is_new_version"`
-	IsOpenProtocol        api.Bool     `json:"is_open_protocol"`
-	IsPsCreateUser        api.Bool     `json:"is_ps_create_user"`
-	IsPsOwner             api.Bool     `json:"is_ps_owner"`
-	IsReceiveNotice       api.Bool     `json:"is_receive_notice"`
-	IsSharePosition       api.Bool     `json:"is_share_position"`
-	IsValidMobileEmail    api.Bool     `json:"is_valid_mobile_email"`
-	Latitude              api.Float    `json:"latitude"`
-	Longitude             api.Float    `json:"longitude"`
-	MapLatitude           api.Float    `json:"map_latitude"`
-	MapLongitude          api.Float    `json:"map_longitude"`
-	MlpeFlag              api.Integer  `json:"mlpe_flag"`
-	MobileTel             api.String   `json:"moble_tel"`
-	MobileTelBak          api.String   `json:"moble_tel_bak"`
+	Images                []valueTypes.String `json:"images"`
+	InstallDate           valueTypes.DateTime `json:"install_date"`
+	InstallDateZone       valueTypes.DateTime `json:"install_date_zone"`
+	InverterCount         valueTypes.Integer  `json:"inverter_count"`
+	InvestmentType        valueTypes.Integer  `json:"investment_type"`
+	InvestmentTypeDesc    valueTypes.String   `json:"investment_type_desc"`
+	IsAgreeGdpr           valueTypes.Bool     `json:"is_agree_gdpr"`
+	IsGdpr                valueTypes.Bool     `json:"is_gdpr"`
+	IsNewVersion          valueTypes.Bool     `json:"is_new_version"`
+	IsOpenProtocol        valueTypes.Bool     `json:"is_open_protocol"`
+	IsPsCreateUser        valueTypes.Bool     `json:"is_ps_create_user"`
+	IsPsOwner             valueTypes.Bool     `json:"is_ps_owner"`
+	IsReceiveNotice       valueTypes.Bool     `json:"is_receive_notice"`
+	IsSharePosition       valueTypes.Bool     `json:"is_share_position"`
+	IsValidMobileEmail    valueTypes.Bool     `json:"is_valid_mobile_email"`
+	Latitude              valueTypes.Float    `json:"latitude"`
+	Longitude             valueTypes.Float    `json:"longitude"`
+	MapLatitude           valueTypes.Float    `json:"map_latitude"`
+	MapLongitude          valueTypes.Float    `json:"map_longitude"`
+	MlpeFlag              valueTypes.Integer  `json:"mlpe_flag"`
+	MobileTel             valueTypes.String   `json:"moble_tel"`
+	MobileTelBak          valueTypes.String   `json:"moble_tel_bak"`
 	ModuleModelID         interface{}  `json:"module_model_id"`
-	ModuleModelName       api.String   `json:"module_model_name"`
-	Nmi                   api.String   `json:"nmi"`
-	OperationBusName      api.String   `json:"operation_bus_name"`
-	OrgIndexCode          []api.String `json:"org_index_code"`
-	OwnerContact          api.String   `json:"owner_contact"`
-	ParamIncomeUnit       api.Integer  `json:"param_income_unit"`
-	ParamIncomeUnitName   api.String   `json:"param_income_unit_name"`
-	ProvinceCode          api.String   `json:"province_code"`
-	ProvinceName          api.String   `json:"province_name"`
-	PsBuildDate           api.DateTime `json:"ps_build_date"`
-	PsCountryID           api.Integer  `json:"ps_country_id"`
-	PsCreateUserID        api.Integer  `json:"ps_create_user_id"`
-	PsCurrentTimeZone     api.String   `json:"ps_current_time_zone"`
+	ModuleModelName       valueTypes.String   `json:"module_model_name"`
+	Nmi                   valueTypes.String   `json:"nmi"`
+	OperationBusName      valueTypes.String   `json:"operation_bus_name"`
+	OrgIndexCode          []valueTypes.String `json:"org_index_code"`
+	OwnerContact          valueTypes.String   `json:"owner_contact"`
+	ParamIncomeUnit       valueTypes.Integer  `json:"param_income_unit"`
+	ParamIncomeUnitName   valueTypes.String   `json:"param_income_unit_name"`
+	ProvinceCode          valueTypes.String   `json:"province_code"`
+	ProvinceName          valueTypes.String   `json:"province_name"`
+	PsBuildDate           valueTypes.DateTime `json:"ps_build_date"`
+	PsCountryID           valueTypes.Integer  `json:"ps_country_id"`
+	PsCreateUserID        valueTypes.Integer  `json:"ps_create_user_id"`
+	PsCurrentTimeZone     valueTypes.String   `json:"ps_current_time_zone"`
 	PsDirectOrgList       []struct {
-		OrgID        api.Integer `json:"org_id"`
-		OrgIndexCode api.String  `json:"org_index_code"`
-		OrgName      api.String  `json:"org_name"`
+		OrgID        valueTypes.Integer `json:"org_id"`
+		OrgIndexCode valueTypes.String  `json:"org_index_code"`
+		OrgName      valueTypes.String  `json:"org_name"`
 	} `json:"ps_direct_org_list"`
-	PsHolder         api.String  `json:"ps_holder"`
-	PsID             api.Integer `json:"ps_id"`
-	PsInstalledPower api.Float   `json:"ps_installed_power"`
-	PsKey            api.PsKey   `json:"ps_key"`
-	PsLocation       api.String  `json:"ps_location"`
-	PsName           api.String  `json:"ps_name"`
+	PsHolder         valueTypes.String  `json:"ps_holder"`
+	PsID             valueTypes.Integer `json:"ps_id"`
+	PsInstalledPower valueTypes.Float   `json:"ps_installed_power"`
+	PsKey            valueTypes.PsKey   `json:"ps_key"`
+	PsLocation       valueTypes.String  `json:"ps_location"`
+	PsName           valueTypes.String  `json:"ps_name"`
 	PsOrgInfo        []struct {
-		DealerOrgCode   api.String  `json:"dealer_org_code"`
-		Installer       api.String  `json:"installer"`
-		InstallerEmail  api.String  `json:"installer_email"`
-		InstallerPhone  api.String  `json:"installer_phone"`
-		OrgID           api.Integer `json:"org_id"`
-		OrgIndexCode    api.String  `json:"org_index_code"`
-		OrgName         api.String  `json:"org_name"`
-		PsDealerOrgCode api.String  `json:"ps_dealer_org_code"`
-		UpOrgID         api.Integer `json:"up_org_id"`
+		DealerOrgCode   valueTypes.String  `json:"dealer_org_code"`
+		Installer       valueTypes.String  `json:"installer"`
+		InstallerEmail  valueTypes.String  `json:"installer_email"`
+		InstallerPhone  valueTypes.String  `json:"installer_phone"`
+		OrgID           valueTypes.Integer `json:"org_id"`
+		OrgIndexCode    valueTypes.String  `json:"org_index_code"`
+		OrgName         valueTypes.String  `json:"org_name"`
+		PsDealerOrgCode valueTypes.String  `json:"ps_dealer_org_code"`
+		UpOrgID         valueTypes.Integer `json:"up_org_id"`
 	} `json:"ps_org_info"`
-	PsPrice          api.Float    `json:"ps_price"`
-	PsPriceKwh       api.Float    `json:"ps_price_kwh"`
-	PsType           api.Integer  `json:"ps_type"`
-	PsTypeDesc       api.String   `json:"ps_type_desc"`
-	PsTypeName       api.String   `json:"ps_type_name"`
-	PsUserID         api.Integer  `json:"ps_user_id"`
-	RecordCreateTime api.DateTime `json:"recore_create_time"`
-	SafeStartDate    api.DateTime `json:"safe_start_date"`
+	PsPrice          valueTypes.Float    `json:"ps_price"`
+	PsPriceKwh       valueTypes.Float    `json:"ps_price_kwh"`
+	PsType           valueTypes.Integer  `json:"ps_type"`
+	PsTypeDesc       valueTypes.String   `json:"ps_type_desc"`
+	PsTypeName       valueTypes.String   `json:"ps_type_name"`
+	PsUserID         valueTypes.Integer  `json:"ps_user_id"`
+	RecordCreateTime valueTypes.DateTime `json:"recore_create_time"`
+	SafeStartDate    valueTypes.DateTime `json:"safe_start_date"`
 	SelectedOrgList  []struct {
-		OrgID        api.Integer `json:"org_id"`
-		OrgIndexCode api.String  `json:"org_index_code"`
-		OrgName      api.String  `json:"org_name"`
+		OrgID        valueTypes.Integer `json:"org_id"`
+		OrgIndexCode valueTypes.String  `json:"org_index_code"`
+		OrgName      valueTypes.String  `json:"org_name"`
 	} `json:"selectedOrgList"`
-	SetUserOrg      api.Integer `json:"set_user_org"`
-	ShareType       api.Integer `json:"share_type"`
+	SetUserOrg      valueTypes.Integer `json:"set_user_org"`
+	ShareType       valueTypes.Integer `json:"share_type"`
 	ShareUserType   interface{} `json:"share_user_type"`
-	ShippingAddress api.String  `json:"shipping_address"`
-	ShippingZipCode api.String  `json:"shipping_zip_code"`
-	Sn              api.String  `json:"sn" PointName:"Serial Number"`
+	ShippingAddress valueTypes.String  `json:"shipping_address"`
+	ShippingZipCode valueTypes.String  `json:"shipping_zip_code"`
+	Sn              valueTypes.String  `json:"sn" PointName:"Serial Number"`
 	SnDetailList    []struct {
-		CommunicateDeviceType     api.Integer `json:"communicate_device_type"`
-		CommunicateDeviceTypeName api.String  `json:"communicate_device_type_name"`
-		ID                        api.Integer `json:"id"`
-		IsEnable                  api.Bool    `json:"is_enable"`
-		Sn                        api.String  `json:"sn" PointName:"Serial Number"`
+		CommunicateDeviceType     valueTypes.Integer `json:"communicate_device_type"`
+		CommunicateDeviceTypeName valueTypes.String  `json:"communicate_device_type_name"`
+		ID                        valueTypes.Integer `json:"id"`
+		IsEnable                  valueTypes.Bool    `json:"is_enable"`
+		Sn                        valueTypes.String  `json:"sn" PointName:"Serial Number"`
 	} `json:"sn_detail_list"`
-	SummerTimeState    api.Bool    `json:"summer_time_state"`
-	SummerTimeZone     api.String  `json:"summer_time_zone"`
-	SummerTimeZoneID   api.Integer `json:"summer_time_zone_id"`
-	TimeZoneID         api.Integer `json:"time_zone_id"`
-	Timezone           api.String  `json:"timezone"`
-	UserAccount        api.String  `json:"user_account"`
-	UserCapacityStatus api.Integer `json:"user_capacity_status"`
-	UserEnglishName    api.String  `json:"user_english_name"`
-	UserLanguage       api.String  `json:"user_language"`
-	UserMobileTel      api.String  `json:"user_moble_tel"`
-	UserName           api.String  `json:"user_name"`
-	UserTelNationCode  api.String  `json:"user_tel_nation_code"`
-	ValidFlag          api.Bool    `json:"valid_flag"`
-	WgsLatitude        api.Float   `json:"wgs_latitude"`
-	WgsLongitude       api.Float   `json:"wgs_longitude"`
-	ZipCode            api.String  `json:"zip_code"`
+	SummerTimeState    valueTypes.Bool    `json:"summer_time_state"`
+	SummerTimeZone     valueTypes.String  `json:"summer_time_zone"`
+	SummerTimeZoneID   valueTypes.Integer `json:"summer_time_zone_id"`
+	TimeZoneID         valueTypes.Integer `json:"time_zone_id"`
+	Timezone           valueTypes.String  `json:"timezone"`
+	UserAccount        valueTypes.String  `json:"user_account"`
+	UserCapacityStatus valueTypes.Integer `json:"user_capacity_status"`
+	UserEnglishName    valueTypes.String  `json:"user_english_name"`
+	UserLanguage       valueTypes.String  `json:"user_language"`
+	UserMobileTel      valueTypes.String  `json:"user_moble_tel"`
+	UserName           valueTypes.String  `json:"user_name"`
+	UserTelNationCode  valueTypes.String  `json:"user_tel_nation_code"`
+	ValidFlag          valueTypes.Bool    `json:"valid_flag"`
+	WgsLatitude        valueTypes.Float   `json:"wgs_latitude"`
+	WgsLongitude       valueTypes.Float   `json:"wgs_longitude"`
+	ZipCode            valueTypes.String  `json:"zip_code"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -189,31 +190,31 @@ func (e *EndPoint) GetData() api.DataMap {
 
 	for range Only.Once {
 		pkg := apiReflect.GetName("", *e) + "." + e.Request.PsId.String()
-		entries.StructToPoints(e.Response.ResultData, pkg, e.Request.PsId.String(), api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, pkg, e.Request.PsId.String(), valueTypes.NewDateTime(""))
 
 		for i, v := range e.Response.ResultData.PsDirectOrgList {
 			name := fmt.Sprintf("%s.PsDirectOrgList.%d", pkg, i)
-			entries.StructToPoints(v, name, e.Request.PsId.String(), api.NewDateTime(""))
+			entries.StructToPoints(v, name, e.Request.PsId.String(), valueTypes.NewDateTime(""))
 		}
 
 		for i, v := range e.Response.ResultData.PsOrgInfo {
 			name := fmt.Sprintf("%s.PsOrgInfo.%d", pkg, i)
-			entries.StructToPoints(v, name, e.Request.PsId.String(), api.NewDateTime(""))
+			entries.StructToPoints(v, name, e.Request.PsId.String(), valueTypes.NewDateTime(""))
 		}
 
 		for i, v := range e.Response.ResultData.SelectedOrgList {
 			name := fmt.Sprintf("%s.SelectedOrgList.%d", pkg, i)
-			entries.StructToPoints(v, name, e.Request.PsId.String(), api.NewDateTime(""))
+			entries.StructToPoints(v, name, e.Request.PsId.String(), valueTypes.NewDateTime(""))
 		}
 
 		for i, v := range e.Response.ResultData.PsDirectOrgList {
 			name := fmt.Sprintf("%s.PsDirectOrgList.%d", pkg, i)
-			entries.StructToPoints(v, name, e.Request.PsId.String(), api.NewDateTime(""))
+			entries.StructToPoints(v, name, e.Request.PsId.String(), valueTypes.NewDateTime(""))
 		}
 
 		for i, v := range e.Response.ResultData.SnDetailList {
 			name := fmt.Sprintf("%s.SnDetailList.%d", pkg, i)
-			entries.StructToPoints(v, name, e.Request.PsId.String(), api.NewDateTime(""))
+			entries.StructToPoints(v, name, e.Request.PsId.String(), valueTypes.NewDateTime(""))
 		}
 	}
 

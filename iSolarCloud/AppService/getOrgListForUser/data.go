@@ -3,6 +3,7 @@ package getOrgListForUser
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -24,20 +25,20 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GcjLatitude    api.Float   `json:"gcj_latitude"`
-	GcjLongitude   api.Float   `json:"gcj_longitude"`
-	ID             api.Integer `json:"id"`
-	IsLeaf         api.Bool    `json:"is_leaf"`
+	GcjLatitude    valueTypes.Float   `json:"gcj_latitude"`
+	GcjLongitude   valueTypes.Float   `json:"gcj_longitude"`
+	ID             valueTypes.Integer `json:"id"`
+	IsLeaf         valueTypes.Bool    `json:"is_leaf"`
 	MapLevel       interface{} `json:"map_level"`
-	OrgID          api.Integer `json:"org_id"`
-	OrgIndexCode   api.String  `json:"org_index_code"`
-	OrgIsShow      api.Integer `json:"org_is_show"`
-	OrgLevel       api.Integer `json:"org_level"`
-	OrgName        api.String  `json:"org_name"`
-	SizeChild      api.Integer `json:"size_child"`
-	UpOrgID        api.Integer `json:"up_org_id"`
-	Wgs84Latitude  api.Float   `json:"wgs84_latitude"`
-	Wgs84Longitude api.Float   `json:"wgs84_longitude"`
+	OrgID          valueTypes.Integer `json:"org_id"`
+	OrgIndexCode   valueTypes.String  `json:"org_index_code"`
+	OrgIsShow      valueTypes.Integer `json:"org_is_show"`
+	OrgLevel       valueTypes.Integer `json:"org_level"`
+	OrgName        valueTypes.String  `json:"org_name"`
+	SizeChild      valueTypes.Integer `json:"size_child"`
+	UpOrgID        valueTypes.Integer `json:"up_org_id"`
+	Wgs84Latitude  valueTypes.Float   `json:"wgs84_latitude"`
+	Wgs84Longitude valueTypes.Float   `json:"wgs84_longitude"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -74,7 +75,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

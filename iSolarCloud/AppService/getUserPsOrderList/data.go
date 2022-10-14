@@ -3,6 +3,7 @@ package getUserPsOrderList
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -23,11 +24,11 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	CurPage    api.Integer   `json:"curPage"`
-	IsMore     api.Bool      `json:"isMore"`
+	CurPage    valueTypes.Integer   `json:"curPage"`
+	IsMore     valueTypes.Bool      `json:"isMore"`
 	PageList   []interface{} `json:"pageList"`
-	RowCount   api.Integer   `json:"rowCount"`
-	Size       api.Integer   `json:"size"`
+	RowCount   valueTypes.Integer   `json:"rowCount"`
+	Size       valueTypes.Integer   `json:"size"`
 	StartIndex interface{}   `json:"startIndex"`
 	TotalPage  interface{}   `json:"totalPage"`
 }
@@ -66,7 +67,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

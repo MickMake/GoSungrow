@@ -3,6 +3,7 @@ package queryUserCurveTemplateData
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 
 	"encoding/json"
@@ -90,8 +91,8 @@ type Devices map[string]DeviceData
 
 type DeviceData struct {
 	DeviceName string `json:"device_name"`
-	DeviceType api.Integer  `json:"device_type"`
-	DeviceUUID api.Integer  `json:"device_uuid"`
+	DeviceType valueTypes.Integer  `json:"device_type"`
+	DeviceUUID valueTypes.Integer  `json:"device_uuid"`
 	Points     Points `json:"points"`
 }
 
@@ -115,7 +116,7 @@ func (p *DeviceData) UnmarshalJSON(data []byte) error {
 		// Store DeviceData.Points
 		_ = json.Unmarshal(data, &dd.Points)
 		for i, k := range dd.Points {
-			if k.PointID == "" {
+			if k.PointID.String() == "" {
 				delete(dd.Points, i)
 				continue
 			}
@@ -126,7 +127,7 @@ func (p *DeviceData) UnmarshalJSON(data []byte) error {
 	return err
 }
 
-type Points map[api.PointId]Point
+type Points map[valueTypes.PointId]Point
 
 type Point struct {
 	Color    string `json:"color"`
@@ -135,7 +136,7 @@ type Point struct {
 		Value     string `json:"value"`
 	} `json:"data_list"`
 	DetailID   string      `json:"detail_id"`
-	PointID    api.PointId `json:"point_id"`
+	PointID    valueTypes.PointId `json:"point_id"`
 	PointName  string      `json:"point_name"`
 	PsID       string `json:"ps_id"`
 	PsKey      string `json:"ps_key"`
@@ -160,7 +161,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

@@ -3,6 +3,7 @@ package getPsListStaticData
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -26,27 +27,27 @@ func (rd RequestData) Help() string {
 type ResultData struct {
 	PageList []struct {
 		AreaID                 interface{} `json:"area_id"`
-		DesignCapacity         api.Float   `json:"design_capacity"`
-		GprsLatitude           api.Float   `json:"gprs_latitude"`
-		GprsLongitude          api.Float   `json:"gprs_longitude"`
-		InstallDate            api.DateTime      `json:"install_date"`
-		InstallerPsFaultStatus api.Integer `json:"installer_ps_fault_status"`
-		Latitude               api.Float   `json:"latitude"`
-		Location               api.String      `json:"location"`
-		Longitude              api.Float   `json:"longitude"`
-		MapLatitude            api.Float   `json:"map_latitude"`
-		MapLongitude           api.Float   `json:"map_longitude"`
-		OwnerPsFaultStatus     api.Integer `json:"owner_ps_fault_status"`
-		PsFaultStatus          api.Integer `json:"ps_fault_status"`
-		PsID                   api.Integer `json:"ps_id"`
-		PsName                 api.String      `json:"ps_name"`
-		PsShortName            api.String      `json:"ps_short_name"`
-		PsStatus               api.Integer `json:"ps_status"`
-		PsType                 api.Integer `json:"ps_type"`
-		ValidFlag              api.Integer `json:"valid_flag"`
-		WaitAssignOrderCount   api.Integer `json:"wait_assign_order_count"`
+		DesignCapacity         valueTypes.Float   `json:"design_capacity"`
+		GprsLatitude           valueTypes.Float   `json:"gprs_latitude"`
+		GprsLongitude          valueTypes.Float   `json:"gprs_longitude"`
+		InstallDate            valueTypes.DateTime      `json:"install_date"`
+		InstallerPsFaultStatus valueTypes.Integer `json:"installer_ps_fault_status"`
+		Latitude               valueTypes.Float   `json:"latitude"`
+		Location               valueTypes.String      `json:"location"`
+		Longitude              valueTypes.Float   `json:"longitude"`
+		MapLatitude            valueTypes.Float   `json:"map_latitude"`
+		MapLongitude           valueTypes.Float   `json:"map_longitude"`
+		OwnerPsFaultStatus     valueTypes.Integer `json:"owner_ps_fault_status"`
+		PsFaultStatus          valueTypes.Integer `json:"ps_fault_status"`
+		PsID                   valueTypes.Integer `json:"ps_id"`
+		PsName                 valueTypes.String      `json:"ps_name"`
+		PsShortName            valueTypes.String      `json:"ps_short_name"`
+		PsStatus               valueTypes.Integer `json:"ps_status"`
+		PsType                 valueTypes.Integer `json:"ps_type"`
+		ValidFlag              valueTypes.Integer `json:"valid_flag"`
+		WaitAssignOrderCount   valueTypes.Integer `json:"wait_assign_order_count"`
 	} `json:"pageList"`
-	RowCount api.Integer `json:"rowCount"`
+	RowCount valueTypes.Integer `json:"rowCount"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -83,7 +84,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

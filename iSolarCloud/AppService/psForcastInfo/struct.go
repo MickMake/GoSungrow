@@ -5,7 +5,6 @@
 package psForcastInfo
 
 import (
-	"sort"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
@@ -336,22 +335,6 @@ func (e EndPoint) CacheFilename() string {
 	return e.ApiCacheFilename(e.Request.RequestData)
 }
 
-// // CheckCache - Check if a cache file exists for this EndPoint.
-// func (e EndPoint) CheckCache() bool {
-// 	return e.ApiCheckCache(e.Request.RequestData)
-// }
-//
-// // ReadCache - Read a cache file and return it as an EndPoint structure.
-// func (e EndPoint) ReadCache() api.EndPoint {
-// 	e.Error = e.ApiReadCache(e.Request.RequestData, &e)
-// 	return e
-// }
-//
-// // WriteCache - Write this EndPoint structure out to a cache file.
-// func (e EndPoint) WriteCache() error {
-// 	return e.ApiWriteCache(e.Request.RequestData, e)
-// }
-
 // SetCacheTimeout - Set the cache timeout for this EndPoint. (Defaults to 1 hour.)
 func (e EndPoint) SetCacheTimeout(duration time.Duration) api.EndPoint {
 	e.ApiRoot.SetCacheTimeout(duration)
@@ -363,62 +346,11 @@ func (e EndPoint) GetCacheTimeout() time.Duration {
 	return e.ApiRoot.GetCacheTimeout()
 }
 
-func (e EndPoint) GetDataTable() output.Table {
-	var table output.Table
-	for range Only.Once {
-		table = output.NewTable()
-		table.SetTitle("")
-		table.SetJson([]byte(e.GetJsonData(false)))
-		table.SetRaw([]byte(e.GetJsonData(true)))
 
-		_ = table.SetHeader(
-			"Date",
-			"Point Id",
-			"Group Name",
-			"Description",
-			"Value",
-			"Unit",
-		)
+func (e EndPoint) GetEndPointData() api.DataMap {
+	return e.GetData()
+}
 
-		data := e.GetData()
-		var sorted []string
-		for p := range data.DataPoints {
-			sorted = append(sorted, string(p))
-		}
-		sort.Strings(sorted)
-
-		for _, p := range sorted {
-			entries := data.DataPoints[api.PointId(p)]
-			for _, de := range entries {
-				if de.Hide {
-					continue
-				}
-
-				_ = table.AddRow(
-					de.Date.Format(api.DtLayout),
-					// api.NameDevicePointInt(de.Point.Parents, p.PointID.Value()),
-					// de.Point.Id,
-					p,
-					// de.Point.Parents.String(),
-					de.Point.GroupName,
-					de.Point.Name,
-					de.Value,
-					de.Point.Unit,
-				)
-			}
-		}
-
-		// table.InitGraph(output.GraphRequest {
-		// 	Title:        "",
-		// 	TimeColumn:   output.SetInteger(1),
-		// 	SearchColumn: output.SetInteger(2),
-		// 	NameColumn:   output.SetInteger(4),
-		// 	ValueColumn:  output.SetInteger(5),
-		// 	UnitsColumn:  output.SetInteger(6),
-		// 	SearchString: output.SetString(""),
-		// 	MinLeftAxis:  output.SetFloat(0),
-		// 	MaxLeftAxis:  output.SetFloat(0),
-		// })
-	}
-	return table
+func (e EndPoint) GetEndPointDataTable() output.Table {
+	return e.ApiRoot.GetDataTable(e)
 }

@@ -3,6 +3,7 @@ package getPowerDevicePointInfo
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"GoSungrow/iSolarCloud/api/output"
 	"github.com/MickMake/GoUnify/Only"
 
@@ -13,7 +14,7 @@ const Url = "/v1/reportService/getPowerDevicePointInfo"
 const Disabled = false
 
 type RequestData struct {
-	Id api.Integer `json:"id" required:"true"`
+	Id valueTypes.Integer `json:"id" required:"true"`
 	// Id string `json:"id"`
 }
 
@@ -28,13 +29,13 @@ func (rd RequestData) Help() string {
 
 
 type ResultData struct {
-	DeviceType    api.Integer  `json:"device_type" PointId:"device_type" PointValueType:"" PointTimeSpan:""`
-	ID            api.Integer  `json:"id" PointId:"id" PointValueType:"" PointTimeSpan:""`
-	Period        api.Integer  `json:"period" PointId:"period" PointValueType:"" PointTimeSpan:""`
-	PointID       api.Integer  `json:"point_id" PointId:"point_id" PointValueType:"" PointTimeSpan:""`
+	DeviceType    valueTypes.Integer  `json:"device_type" PointId:"device_type" PointValueType:"" PointTimeSpan:""`
+	ID            valueTypes.Integer  `json:"id" PointId:"id" PointValueType:"" PointTimeSpan:""`
+	Period        valueTypes.Integer  `json:"period" PointId:"period" PointValueType:"" PointTimeSpan:""`
+	PointID       valueTypes.Integer  `json:"point_id" PointId:"point_id" PointValueType:"" PointTimeSpan:""`
 	PointName     string `json:"point_name" PointId:"point_name" PointValueType:"" PointTimeSpan:""`
 	ShowPointName string `json:"show_point_name" PointId:"show_point_name" PointValueType:"" PointTimeSpan:""`
-	TranslationID api.Integer  `json:"translation_id" PointId:"translation_id" PointValueType:"" PointTimeSpan:""`
+	TranslationID valueTypes.Integer  `json:"translation_id" PointId:"translation_id" PointValueType:"" PointTimeSpan:""`
 }
 
 func (e *ResultData) IsValid() error {
@@ -124,7 +125,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

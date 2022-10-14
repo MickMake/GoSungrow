@@ -3,6 +3,7 @@ package getPsReport
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -27,54 +28,54 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PsDateRangeTotalData struct {
-		Co2Reduce                      api.Float     `json:"co2_reduce"`
-		Co2ReduceMap                   api.UnitValue `json:"co2_reduce_map"`
-		Co2ReduceOriginalUnit          api.String        `json:"co2_reduce_original_unit"`
-		PowerQuantityTotal             api.Float     `json:"power_quantity_total"`
-		PowerQuantityTotalMap          api.UnitValue `json:"power_quantity_total_map"`
-		PowerQuantityTotalOriginalUnit api.String        `json:"power_quantity_total_original_unit"`
+		Co2Reduce                      valueTypes.Float     `json:"co2_reduce"`
+		Co2ReduceMap                   valueTypes.UnitValue `json:"co2_reduce_map"`
+		Co2ReduceOriginalUnit          valueTypes.String        `json:"co2_reduce_original_unit"`
+		PowerQuantityTotal             valueTypes.Float     `json:"power_quantity_total"`
+		PowerQuantityTotalMap          valueTypes.UnitValue `json:"power_quantity_total_map"`
+		PowerQuantityTotalOriginalUnit valueTypes.String        `json:"power_quantity_total_original_unit"`
 		ProfitList                     ProfitList    `json:"profit_list"`
-		TotalProfit                    api.Float     `json:"total_profit"`
+		TotalProfit                    valueTypes.Float     `json:"total_profit"`
 	} `json:"ps_date_range_total_data"`
 	PsTotalData struct {
-		Co2Reduce                      api.Float     `json:"co2_reduce"`
-		Co2ReduceMap                   api.UnitValue `json:"co2_reduce_map"`
-		Co2ReduceOriginalUnit          api.String        `json:"co2_reduce_original_unit"`
-		MinDateID                      api.DateTime   `json:"min_date_id"`
-		PowerQuantityTotal             api.Float     `json:"power_quantity_total"`
-		PowerQuantityTotalMap          api.UnitValue `json:"power_quantity_total_map"`
-		PowerQuantityTotalOriginalUnit api.String        `json:"power_quantity_total_original_unit"`
+		Co2Reduce                      valueTypes.Float     `json:"co2_reduce"`
+		Co2ReduceMap                   valueTypes.UnitValue `json:"co2_reduce_map"`
+		Co2ReduceOriginalUnit          valueTypes.String        `json:"co2_reduce_original_unit"`
+		MinDateID                      valueTypes.DateTime   `json:"min_date_id"`
+		PowerQuantityTotal             valueTypes.Float     `json:"power_quantity_total"`
+		PowerQuantityTotalMap          valueTypes.UnitValue `json:"power_quantity_total_map"`
+		PowerQuantityTotalOriginalUnit valueTypes.String        `json:"power_quantity_total_original_unit"`
 		ProfitList                     ProfitList    `json:"profit_list"`
-		TotalProfit                    api.Float     `json:"total_profit"`
+		TotalProfit                    valueTypes.Float     `json:"total_profit"`
 	} `json:"ps_total_data"`
 	ReportListData struct {
-		Co2ReduceUnit api.String `json:"co2_reduce_unit"`
+		Co2ReduceUnit valueTypes.String `json:"co2_reduce_unit"`
 		PageList      []struct {
-			Co2Reduce          api.Float  `json:"co2_reduce"`
-			IncomeUnitName     api.String     `json:"income_unit_name"`
-			PowerQuantityTotal api.Float  `json:"power_quantity_total"`
-			PsID               api.Integer`json:"ps_id"`
-			PsInstalledPower   api.Float  `json:"ps_installed_power"`
-			PsName             api.String     `json:"ps_name"`
-			PsTotalCo2Reduce   api.Float  `json:"ps_total_co2_reduce"`
-			PsTotalPower       api.Float  `json:"ps_total_power"`
-			PsType             api.Integer`json:"ps_type"`
+			Co2Reduce          valueTypes.Float  `json:"co2_reduce"`
+			IncomeUnitName     valueTypes.String     `json:"income_unit_name"`
+			PowerQuantityTotal valueTypes.Float  `json:"power_quantity_total"`
+			PsID               valueTypes.Integer`json:"ps_id"`
+			PsInstalledPower   valueTypes.Float  `json:"ps_installed_power"`
+			PsName             valueTypes.String     `json:"ps_name"`
+			PsTotalCo2Reduce   valueTypes.Float  `json:"ps_total_co2_reduce"`
+			PsTotalPower       valueTypes.Float  `json:"ps_total_power"`
+			PsType             valueTypes.Integer`json:"ps_type"`
 			ShareType          string     `json:"share_type"`
 			ProfitList         ProfitList `json:"profit_list"`
-			TotalProfit        api.Float  `json:"total_profit"`
+			TotalProfit        valueTypes.Float  `json:"total_profit"`
 		} `json:"pageList"`
-		PowerQuantityTotalUnit api.String `json:"power_quantity_total_unit"`
-		PsInstalledPowerUnit   api.String `json:"ps_installed_power_unit"`
-		PsTotalCo2ReduceUnit   api.String `json:"ps_total_co2_reduce_unit"`
-		PsTotalPowerUnit       api.String `json:"ps_total_power_unit"`
-		RowCount               api.Integer  `json:"rowCount"`
+		PowerQuantityTotalUnit valueTypes.String `json:"power_quantity_total_unit"`
+		PsInstalledPowerUnit   valueTypes.String `json:"ps_installed_power_unit"`
+		PsTotalCo2ReduceUnit   valueTypes.String `json:"ps_total_co2_reduce_unit"`
+		PsTotalPowerUnit       valueTypes.String `json:"ps_total_power_unit"`
+		RowCount               valueTypes.Integer  `json:"rowCount"`
 	} `json:"report_list_data"`
 }
 
 type ProfitList []struct {
-	IncomeUnitID   api.Integer   `json:"income_unit_id"`
-	IncomeUnitName api.String  `json:"income_unit_name"`
-	TotalProfit    api.Float `json:"total_profit"`
+	IncomeUnitID   valueTypes.Integer   `json:"income_unit_id"`
+	IncomeUnitName valueTypes.String  `json:"income_unit_name"`
+	TotalProfit    valueTypes.Float `json:"total_profit"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -111,7 +112,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

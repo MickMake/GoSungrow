@@ -3,6 +3,7 @@ package queryDeviceList
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 
 	"fmt"
@@ -12,7 +13,7 @@ const Url = "/v1/devService/queryDeviceList"
 const Disabled = false
 
 type RequestData struct {
-	PsId api.Integer `json:"ps_id" required:"true"`
+	PsId valueTypes.Integer `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -26,17 +27,17 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	DevCountByStatusMap struct {
-		FaultCount   api.Count `json:"fault_count" PointId:"fault_count"`
-		OfflineCount api.Count `json:"offline_count" PointId:"offline_count"`
-		RunCount     api.Count `json:"run_count" PointId:"run_count"`
-		WarningCount api.Count `json:"warning_count" PointId:"warning_count"`
+		FaultCount   valueTypes.Count `json:"fault_count" PointId:"fault_count"`
+		OfflineCount valueTypes.Count `json:"offline_count" PointId:"offline_count"`
+		RunCount     valueTypes.Count `json:"run_count" PointId:"run_count"`
+		WarningCount valueTypes.Count `json:"warning_count" PointId:"warning_count"`
 	} `json:"dev_count_by_status_map"`
-	DevCountByTypeMap map[string]api.Integer `json:"dev_count_by_type_map"`
+	DevCountByTypeMap map[string]valueTypes.Integer `json:"dev_count_by_type_map"`
 	// DevCountByTypeMap struct {
-	// 	One4 api.Integer `json:"14"`
-	// 	Two2 api.Integer `json:"22"`
+	// 	One4 valueTypes.Integer `json:"14"`
+	// 	Two2 valueTypes.Integer `json:"22"`
 	// } `json:"dev_count_by_type_map"`
-	DevTypeDefinition map[string]api.String `json:"dev_type_definition"`
+	DevTypeDefinition map[string]valueTypes.String `json:"dev_type_definition"`
 	// DevTypeDefinition struct {
 	// 	One    string `json:"1"`
 	// 	One0   string `json:"10"`
@@ -88,79 +89,79 @@ type ResultData struct {
 	// 	Nine9  string `json:"99"`
 	// } `json:"dev_type_definition"`
 	PageList []struct {
-		AlarmCount              api.Count   `json:"alarm_count" PointId:"alarm_count"`
-		ChannelId               api.Integer `json:"chnnl_id" PointId:"channel_id"`
-		CommandStatus           api.Integer `json:"command_status" PointId:"command_status"`
-		ComponentAmount         api.Integer `json:"component_amount" PointId:"component_amount"`
-		DataFlag                api.Integer `json:"data_flag" PointId:"data_flag"`
-		DataFlagDetail          api.Integer `json:"data_flag_detail" PointId:"data_flag_detail"`
-		DeviceArea              api.Integer `json:"device_area" PointId:"device_area"`
-		DeviceAreaName          api.String  `json:"device_area_name" PointId:"device_area_name"`
-		DeviceCode              api.Integer `json:"device_code" PointId:"device_code"`
-		DeviceID                api.Integer `json:"device_id" PointId:"device_id"`
-		DeviceModelCode         api.String  `json:"device_model_code" PointId:"device_model_code"`
-		DeviceModelID           api.Integer `json:"device_model_id" PointId:"device_model_id"`
-		DeviceName              api.String  `json:"device_name" PointId:"device_name"`
-		DeviceStatus            api.Bool    `json:"device_status" PointId:"device_status"`
-		DeviceType              api.Integer `json:"device_type" PointId:"device_type"`
-		FaultCount              api.Count   `json:"fault_count" PointId:"fault_count"`
+		AlarmCount              valueTypes.Count   `json:"alarm_count" PointId:"alarm_count"`
+		ChannelId               valueTypes.Integer `json:"chnnl_id" PointId:"channel_id"`
+		CommandStatus           valueTypes.Integer `json:"command_status" PointId:"command_status"`
+		ComponentAmount         valueTypes.Integer `json:"component_amount" PointId:"component_amount"`
+		DataFlag                valueTypes.Integer `json:"data_flag" PointId:"data_flag"`
+		DataFlagDetail          valueTypes.Integer `json:"data_flag_detail" PointId:"data_flag_detail"`
+		DeviceArea              valueTypes.Integer `json:"device_area" PointId:"device_area"`
+		DeviceAreaName          valueTypes.String  `json:"device_area_name" PointId:"device_area_name"`
+		DeviceCode              valueTypes.Integer `json:"device_code" PointId:"device_code"`
+		DeviceID                valueTypes.Integer `json:"device_id" PointId:"device_id"`
+		DeviceModelCode         valueTypes.String  `json:"device_model_code" PointId:"device_model_code"`
+		DeviceModelID           valueTypes.Integer `json:"device_model_id" PointId:"device_model_id"`
+		DeviceName              valueTypes.String  `json:"device_name" PointId:"device_name"`
+		DeviceStatus            valueTypes.Bool    `json:"device_status" PointId:"device_status"`
+		DeviceType              valueTypes.Integer `json:"device_type" PointId:"device_type"`
+		FaultCount              valueTypes.Count   `json:"fault_count" PointId:"fault_count"`
 		FaultStatus             string      `json:"fault_status" PointId:"fault_status"`
-		FunctionEnum            api.String  `json:"function_enum" PointId:"function_enum"`
-		InstallerAlarmCount     api.Count   `json:"installer_alarm_count" PointId:"installer_alarm_count"`
-		InstallerDevFaultStatus api.Integer `json:"installer_dev_fault_status" PointId:"installer_dev_fault_status"`
-		InstallerFaultCount     api.Count   `json:"installer_fault_count" PointId:"installer_fault_count"`
-		InverterModelType       api.Integer `json:"inverter_model_type" PointId:"inverter_model_type"`
-		IsDeveloper             api.Bool    `json:"is_developer" PointId:"is_developer"`
-		IsG2point5Module        api.Bool    `json:"is_g2point5_module" PointId:"is_g2point5_module"`
-		IsInit                  api.Bool    `json:"is_init" PointId:"is_init"`
-		IsSecond                api.Bool    `json:"is_second" PointId:"is_second"`
-		IsSupportParamset       api.Bool    `json:"is_support_paramset" PointId:"is_support_paramset"`
+		FunctionEnum            valueTypes.String  `json:"function_enum" PointId:"function_enum"`
+		InstallerAlarmCount     valueTypes.Count   `json:"installer_alarm_count" PointId:"installer_alarm_count"`
+		InstallerDevFaultStatus valueTypes.Integer `json:"installer_dev_fault_status" PointId:"installer_dev_fault_status"`
+		InstallerFaultCount     valueTypes.Count   `json:"installer_fault_count" PointId:"installer_fault_count"`
+		InverterModelType       valueTypes.Integer `json:"inverter_model_type" PointId:"inverter_model_type"`
+		IsDeveloper             valueTypes.Bool    `json:"is_developer" PointId:"is_developer"`
+		IsG2point5Module        valueTypes.Bool    `json:"is_g2point5_module" PointId:"is_g2point5_module"`
+		IsInit                  valueTypes.Bool    `json:"is_init" PointId:"is_init"`
+		IsSecond                valueTypes.Bool    `json:"is_second" PointId:"is_second"`
+		IsSupportParamset       valueTypes.Bool    `json:"is_support_paramset" PointId:"is_support_paramset"`
 		NodeTimestamps          interface{} `json:"node_timestamps" PointId:"node_timestamps"`
-		OwnerAlarmCount         api.Count   `json:"owner_alarm_count" PointId:"owner_alarm_count"`
-		OwnerDevFaultStatus     api.Integer `json:"owner_dev_fault_status" PointId:"owner_dev_fault_status"`
-		OwnerFaultCount         api.Count   `json:"owner_fault_count" PointId:"owner_fault_count"`
+		OwnerAlarmCount         valueTypes.Count   `json:"owner_alarm_count" PointId:"owner_alarm_count"`
+		OwnerDevFaultStatus     valueTypes.Integer `json:"owner_dev_fault_status" PointId:"owner_dev_fault_status"`
+		OwnerFaultCount         valueTypes.Count   `json:"owner_fault_count" PointId:"owner_fault_count"`
 		PointData               PointData   `json:"point_data"`
 		Points                  interface{} `json:"points" PointId:"points"`
 		PsTimezoneInfo          struct {
-			IsDst    api.Bool   `json:"is_dst"`
-			TimeZone api.String `json:"time_zone"`
+			IsDst    valueTypes.Bool   `json:"is_dst"`
+			TimeZone valueTypes.String `json:"time_zone"`
 		} `json:"psTimezoneInfo"`
-		PsID          api.Integer `json:"ps_id" PointId:"ps_id"`
-		PsKey         api.PsKey   `json:"ps_key" PointId:"ps_key"`
-		RelState      api.Integer `json:"rel_state" PointId:"rel_state"`
-		Sn            api.String  `json:"sn" PointId:"sn"`
-		StringAmount  api.Integer `json:"string_amount" PointId:"string_amount"`
-		TypeName      api.String  `json:"type_name" PointId:"type_name"`
-		UnitName      api.String  `json:"unit_name" PointId:"unit_name"`
-		UUID          api.Integer `json:"uuid" PointId:"uuid"`
-		UUIDIndexCode api.String  `json:"uuid_index_code" PointId:"uuid_index_code"`
+		PsID          valueTypes.Integer `json:"ps_id" PointId:"ps_id"`
+		PsKey         valueTypes.PsKey   `json:"ps_key" PointId:"ps_key"`
+		RelState      valueTypes.Integer `json:"rel_state" PointId:"rel_state"`
+		Sn            valueTypes.String  `json:"sn" PointId:"sn"`
+		StringAmount  valueTypes.Integer `json:"string_amount" PointId:"string_amount"`
+		TypeName      valueTypes.String  `json:"type_name" PointId:"type_name"`
+		UnitName      valueTypes.String  `json:"unit_name" PointId:"unit_name"`
+		UUID          valueTypes.Integer `json:"uuid" PointId:"uuid"`
+		UUIDIndexCode valueTypes.String  `json:"uuid_index_code" PointId:"uuid_index_code"`
 	} `json:"pageList"`
-	RowCount api.Integer `json:"rowCount"`
+	RowCount valueTypes.Integer `json:"rowCount"`
 }
 
 type PointData []PointStruct
 type PointStruct struct {
-	CodeID                 api.Integer  `json:"code_id"`
-	CodeIDOrderID          api.String   `json:"code_id_order_id"`
-	CodeName               api.String   `json:"code_name"`
-	DevPointLastUpdateTime api.DateTime `json:"dev_point_last_update_time"`
-	IsPlatformDefaultUnit  api.Bool     `json:"is_platform_default_unit"`
-	IsShow                 api.Bool     `json:"is_show"`
-	OrderID                api.Integer  `json:"order_id"`
-	OrderNum               api.Integer  `json:"order_num"`
-	PointGroupID           api.Integer  `json:"point_group_id"`
+	CodeID                 valueTypes.Integer  `json:"code_id"`
+	CodeIDOrderID          valueTypes.String   `json:"code_id_order_id"`
+	CodeName               valueTypes.String   `json:"code_name"`
+	DevPointLastUpdateTime valueTypes.DateTime `json:"dev_point_last_update_time"`
+	IsPlatformDefaultUnit  valueTypes.Bool     `json:"is_platform_default_unit"`
+	IsShow                 valueTypes.Bool     `json:"is_show"`
+	OrderID                valueTypes.Integer  `json:"order_id"`
+	OrderNum               valueTypes.Integer  `json:"order_num"`
+	PointGroupID           valueTypes.Integer  `json:"point_group_id"`
 	PointGroupIDOrderID    string       `json:"point_group_id_order_id"`
-	PointGroupName         api.String   `json:"point_group_name"`
-	PointID                api.Integer  `json:"point_id"`
-	PointName              api.String   `json:"point_name"`
-	PointSign              api.String   `json:"point_sign"`
-	Relate                 api.Integer  `json:"relate"`
-	TimeStamp              api.DateTime `json:"time_stamp"`
-	Unit                   api.String   `json:"unit"`
+	PointGroupName         valueTypes.String   `json:"point_group_name"`
+	PointID                valueTypes.Integer  `json:"point_id"`
+	PointName              valueTypes.String   `json:"point_name"`
+	PointSign              valueTypes.String   `json:"point_sign"`
+	Relate                 valueTypes.Integer  `json:"relate"`
+	TimeStamp              valueTypes.DateTime `json:"time_stamp"`
+	Unit                   valueTypes.String   `json:"unit"`
 	ValIsFixd              string       `json:"val_is_fixd"`
-	ValidSize              api.Integer  `json:"valid_size"`
-	Value                  api.Float    `json:"value"`
-	ValueDescription       api.String   `json:"value_description"`
+	ValidSize              valueTypes.Integer  `json:"valid_size"`
+	Value                  valueTypes.Float    `json:"value"`
+	ValueDescription       valueTypes.String   `json:"value_description"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -173,25 +174,6 @@ func (e *ResultData) IsValid() error {
 	// }
 	return err
 }
-
-// type DecodeResultData ResultData
-//
-// func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-// }
 
 func (e *ResultData) GetDataByName(name string) PointData {
 	var ret PointData
@@ -254,18 +236,17 @@ func (e *EndPoint) GetData() api.DataMap {
 		// var TotalEnergyConsumption VirtualPointStruct
 
 		pkg := apiReflect.GetName("", *e)
-		name1 := pkg + "." + e.Request.PsId.String()
-		entries.StructToPoints(e.Response.ResultData.DevCountByStatusMap, name1 + ".status", e.Request.PsId.String(), api.NewDateTime(""))
+		name := api.JoinWithDots(0, "", pkg, e.Request.PsId)
+
+		entries.StructToPoints(e.Response.ResultData.DevCountByStatusMap, name + ".status", e.Request.PsId.String(), valueTypes.NewDateTime(""))
 
 		for _, d := range e.Response.ResultData.PageList {
-			name2 := fmt.Sprintf("%s.%s", pkg, d.PsKey.Value())
-			entries.StructToPoints(d, name2, d.PsKey.Value(), api.NewDateTime(""))
-
-			// entries.StructToPoints(d.PsTimezoneInfo, name2 + "PsTimezoneInfo", d.PsKey.Value(), api.NewDateTime(""))
+			name2 := api.JoinWithDots(0, "", pkg, d.PsKey)
+			entries.StructToPoints(d, name2, d.PsKey.Value(), valueTypes.NewDateTime(""))
 
 			for _, p := range d.PointData {
-				pid := api.SetPointInt(p.PointID.Value())
-				uv := api.SetUnitValueFloat(p.Value.Value(), p.Unit.Value())
+				pid := valueTypes.SetPointIdValue(p.PointID.Value())
+				uv := valueTypes.SetUnitValueFloat(p.Value.Value(), p.Unit.Value(), "")
 				// name2 := fmt.Sprintf("%s.PointData.%s", name, pid)
 				// name3 := fmt.Sprintf("%s.PointData", name2)
 				entries.AddUnitValue(name2, d.PsKey.Value(), pid, p.PointName.Value(), p.PointGroupName.Value(), p.TimeStamp, uv)
@@ -398,7 +379,7 @@ func (e *EndPoint) GetData() api.DataMap {
 
 		// Add virtual entries.
 		// ts := ret.Entries[0].Date
-		// var value api.Float
+		// var value valueTypes.Float
 
 		entries.FromRefAddFloat("pv_self_consumption",
 			api.VirtualPsId,"pv_daily_yield", "",

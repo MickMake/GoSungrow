@@ -3,6 +3,7 @@ package getDeviceModelInfoList
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
@@ -30,9 +31,9 @@ type ResultData []struct {
 	DeviceFactoryName string `json:"device_factory_name"`
 	DeviceModel       string `json:"device_model"`
 	DeviceModelCode   string `json:"device_model_code"`
-	DeviceModelID     api.Integer  `json:"device_model_id"`
-	DeviceType        api.Integer  `json:"device_type"`
-	IsRemoteUpgrade   api.Bool     `json:"is_remote_upgrade"`
+	DeviceModelID     valueTypes.Integer  `json:"device_model_id"`
+	DeviceType        valueTypes.Integer  `json:"device_type"`
+	IsRemoteUpgrade   valueTypes.Bool     `json:"is_remote_upgrade"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -106,7 +107,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

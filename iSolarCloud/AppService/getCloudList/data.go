@@ -3,6 +3,7 @@ package getCloudList
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -24,10 +25,10 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	CloudList []struct {
-		CloudID    api.Integer  `json:"cloud_id"`
+		CloudID    valueTypes.Integer  `json:"cloud_id"`
 		CloudName  string `json:"cloud_name"`
 		GatewayURL string `json:"gateway_url"`
-		OrderID    api.Integer  `json:"order_id"`
+		OrderID    valueTypes.Integer  `json:"order_id"`
 		ServiceURL string `json:"service_url"`
 		Value      string `json:"value"`
 		ValueDeDe  string `json:"value_de_de"`
@@ -48,10 +49,10 @@ type ResultData struct {
 		WebURL     string `json:"web_url"`
 	} `json:"cloud_list"`
 	CurrentCloud struct {
-		CloudID    api.Integer  `json:"cloud_id"`
+		CloudID    valueTypes.Integer  `json:"cloud_id"`
 		CloudName  string `json:"cloud_name"`
 		GatewayURL string `json:"gateway_url"`
-		OrderID    api.Integer  `json:"order_id"`
+		OrderID    valueTypes.Integer  `json:"order_id"`
 		ServiceURL string `json:"service_url"`
 		Value      string `json:"value"`
 		ValueDeDe  string `json:"value_de_de"`
@@ -107,7 +108,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

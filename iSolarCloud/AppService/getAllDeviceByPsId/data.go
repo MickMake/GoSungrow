@@ -3,6 +3,7 @@ package getAllDeviceByPsId
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
@@ -12,7 +13,7 @@ const Url = "/v1/devService/getAllDeviceByPsId"
 const Disabled = false
 
 type RequestData struct {
-	PsId api.Integer `json:"ps_id" required:"true"`
+	PsId valueTypes.Integer `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -66,7 +67,7 @@ func (e *EndPoint) GetData() api.DataMap {
 		// pkg := apiReflect.GetName("", *e)
 		// for _, d := range e.Response.ResultData {
 		// 	name := fmt.Sprintf("findPsType.%s", e.Request.PsId.String())
-		// 	entries.StructToPoints(d, name, e.Request.PsId.String(), api.NewDateTime(""))
+		// 	entries.StructToPoints(d, name, e.Request.PsId.String(), valueTypes.NewDateTime(""))
 		// }
 	}
 

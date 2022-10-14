@@ -3,6 +3,7 @@ package getUserList
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -26,7 +27,7 @@ type ResultData []struct {
 	Email       string      `json:"email"`
 	Mobletel    interface{} `json:"mobletel"`
 	Useraccount string      `json:"useraccount"`
-	Userid      api.Integer `json:"userid"`
+	Userid      valueTypes.Integer `json:"userid"`
 	Username    string      `json:"username"`
 }
 
@@ -64,7 +65,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

@@ -3,6 +3,7 @@ package getPowerDeviceModelTechList
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -60,7 +61,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	CodeID          api.Integer `json:"code_id"`
+	CodeID          valueTypes.Integer `json:"code_id"`
 	CodeName        string      `json:"code_name"`
 	CodeValue       string      `json:"code_value"`
 	DefaultValue    interface{} `json:"default_value"`
@@ -101,7 +102,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

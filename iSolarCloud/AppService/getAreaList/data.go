@@ -3,6 +3,7 @@ package getAreaList
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -24,21 +25,21 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		FaultStationCount api.Integer   `json:"fault_station_count"`
-		IsHaveEsPs        api.Bool      `json:"is_have_es_ps"`
-		IsLeaf            api.Bool      `json:"is_leaf"`
-		OrgID             api.Integer   `json:"org_id"`
-		OrgName           api.String    `json:"org_name"`
-		P83048            api.UnitValue `json:"p83048"`
-		P83049            api.UnitValue `json:"p83049"`
-		P83050            api.UnitValue `json:"p83050"`
-		P83051            api.UnitValue `json:"p83051"`
+		FaultStationCount valueTypes.Integer   `json:"fault_station_count"`
+		IsHaveEsPs        valueTypes.Bool      `json:"is_have_es_ps"`
+		IsLeaf            valueTypes.Bool      `json:"is_leaf"`
+		OrgID             valueTypes.Integer   `json:"org_id"`
+		OrgName           valueTypes.String    `json:"org_name"`
+		P83048            valueTypes.UnitValue `json:"p83048"`
+		P83049            valueTypes.UnitValue `json:"p83049"`
+		P83050            valueTypes.UnitValue `json:"p83050"`
+		P83051            valueTypes.UnitValue `json:"p83051"`
 		PlanMonth         string        `json:"plan_month"`
-		StationCount      api.Integer   `json:"station_count"`
-		TodayEnergy       api.UnitValue `json:"today_energy"`
-		TotalEnergy       api.UnitValue `json:"total_energy"`
+		StationCount      valueTypes.Integer   `json:"station_count"`
+		TodayEnergy       valueTypes.UnitValue `json:"today_energy"`
+		TotalEnergy       valueTypes.UnitValue `json:"total_energy"`
 	} `json:"pageList"`
-	RowCount api.Integer `json:"rowCount"`
+	RowCount valueTypes.Integer `json:"rowCount"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -75,7 +76,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

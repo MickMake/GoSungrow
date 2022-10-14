@@ -3,6 +3,7 @@ package getFaultMsgListWithYYYYMM
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -25,16 +26,16 @@ func (rd RequestData) Help() string {
 
 
 type ResultData   []struct {
-	CreateTime    api.Integer  `json:"create_time"`
-	FaultCode     api.String   `json:"fault_code"`
-	FaultLevel    api.Integer  `json:"fault_level"`
-	FaultReason   api.String   `json:"fault_reason"`
-	FaultType     api.Integer  `json:"fault_type"`
-	FaultTypeCode api.Integer  `json:"fault_type_code"`
-	ID            api.Integer  `json:"id"`
-	PsID          api.Integer  `json:"ps_id"`
-	PsKey         api.PsKey    `json:"ps_key"`
-	UUID          api.Integer  `json:"uuid"`
+	CreateTime    valueTypes.Integer  `json:"create_time"`
+	FaultCode     valueTypes.String   `json:"fault_code"`
+	FaultLevel    valueTypes.Integer  `json:"fault_level"`
+	FaultReason   valueTypes.String   `json:"fault_reason"`
+	FaultType     valueTypes.Integer  `json:"fault_type"`
+	FaultTypeCode valueTypes.Integer  `json:"fault_type_code"`
+	ID            valueTypes.Integer  `json:"id"`
+	PsID          valueTypes.Integer  `json:"ps_id"`
+	PsKey         valueTypes.PsKey    `json:"ps_key"`
+	UUID          valueTypes.Integer  `json:"uuid"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -71,7 +72,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

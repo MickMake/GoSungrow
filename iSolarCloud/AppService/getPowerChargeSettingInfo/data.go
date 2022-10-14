@@ -3,6 +3,7 @@ package getPowerChargeSettingInfo
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
@@ -11,7 +12,7 @@ const Url = "/v1/powerStationService/getPowerChargeSettingInfo"
 const Disabled = false
 
 type RequestData struct {
-	PsId api.Integer `json:"ps_id" required:"true"`
+	PsId valueTypes.Integer `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -24,17 +25,17 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	ParamIncomeUnit          api.Integer  `json:"param_income_unit"`
+	ParamIncomeUnit          valueTypes.Integer  `json:"param_income_unit"`
 	ParamIncomeUnitName      string `json:"param_income_unit_name"`
 	PowerElectricalChargeMap struct {
-		DefaultCharge      api.Float   `json:"default_charge" PointUnit:"$"`
+		DefaultCharge      valueTypes.Float   `json:"default_charge" PointUnit:"$"`
 		IntervalTimeCharge interface{} `json:"interval_time_charge"`
 	} `json:"powerElectricalChargeMap"`
 	PowerSelfUseTimesChargeMap struct {
-		DefaultCharge      api.Float `json:"default_charge" PointUnit:"$"`
+		DefaultCharge      valueTypes.Float `json:"default_charge" PointUnit:"$"`
 		IntervalTimeCharge string  `json:"interval_time_charge"`
 	} `json:"powerSelfUseTimesChargeMap"`
-	PsID api.Integer `json:"ps_id"`
+	PsID valueTypes.Integer `json:"ps_id"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -72,7 +73,7 @@ func (e *EndPoint) GetData() api.DataMap {
 
 	for range Only.Once {
 		pkg := apiReflect.GetName("", *e)
-		entries.StructToPoints(e.Response.ResultData, pkg, "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, pkg, "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

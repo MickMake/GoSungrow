@@ -3,15 +3,16 @@ package getReportData
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"github.com/MickMake/GoUnify/Only"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/powerStationService/getReportData"
 const Disabled = false
 
 type RequestData struct {
-	PsId api.Integer `json:"ps_id" required:"true"`
+	PsId valueTypes.Integer `json:"ps_id" required:"true"`
 	ReportType string `json:"report_type" required:"true"`
 }
 
@@ -25,227 +26,161 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	DataList []struct {
-		CitySubsidyCharge                    api.Float    `json:"city_subsidy_charge"`
-		CitySubsidyChargeOriginalUnit        api.String   `json:"city_subsidy_charge_original_unit"`
-		CitySubsidyChargeTran                api.Float    `json:"city_subsidy_charge_tran"`
-		CitySubsidyChargeUnit                api.String   `json:"city_subsidy_charge_unit"`
-		CountrySubsidyCharge                 api.Float    `json:"country_subsidy_charge"`
-		CountrySubsidyChargeOriginalUnit     api.String   `json:"country_subsidy_charge_original_unit"`
-		CountrySubsidyChargeTran             api.Float    `json:"country_subsidy_charge_tran"`
-		CountrySubsidyChargeUnit             api.String   `json:"country_subsidy_charge_unit"`
-		CountySubsidyCharge                  api.Float    `json:"county_subsidy_charge"`
-		CountySubsidyChargeOriginalUnit      api.String   `json:"county_subsidy_charge_original_unit"`
-		CountySubsidyChargeTran              api.Float    `json:"county_subsidy_charge_tran"`
-		CountySubsidyChargeUnit              api.String   `json:"county_subsidy_charge_unit"`
-		CuspCharge                           api.Float    `json:"cusp_charge"`
-		CuspChargeOriginalUnit               api.String   `json:"cusp_charge_original_unit"`
-		CuspChargeTran                       api.Float    `json:"cusp_charge_tran"`
-		CuspChargeUnit                       api.String   `json:"cusp_charge_unit"`
-		CuspNetPowerQuantity                 api.Float    `json:"cusp_net_power_quantity"`
-		CuspNetPowerQuantityTran             api.Float    `json:"cusp_net_power_quantity_tran"`
-		CuspNetPowerQuantityUnit             api.String   `json:"cusp_net_power_quantity_unit"`
-		CuspPowerQuantity                    api.Float    `json:"cusp_power_quantity"`
-		CuspPowerQuantityTran                api.Float    `json:"cusp_power_quantity_tran"`
-		CuspPowerQuantityUnit                api.String   `json:"cusp_power_quantity_unit"`
-		CuspUsePowerQuantity                 api.Float    `json:"cusp_use_power_quantity"`
-		CuspUsePowerQuantityTran             api.Float    `json:"cusp_use_power_quantity_tran"`
-		CuspUsePowerQuantityUnit             api.String   `json:"cusp_use_power_quantity_unit"`
-		DateID                               api.DateTime `json:"date_id"`
-		DeviceName                           api.String   `json:"device_name"`
-		FlatCharge                           api.Float    `json:"flat_charge"`
-		FlatChargeOriginalUnit               api.String   `json:"flat_charge_original_unit"`
-		FlatChargeTran                       api.Float    `json:"flat_charge_tran"`
-		FlatChargeUnit                       api.String   `json:"flat_charge_unit"`
-		FlatNetPowerQuantity                 api.Float    `json:"flat_net_power_quantity"`
-		FlatNetPowerQuantityTran             api.Float    `json:"flat_net_power_quantity_tran"`
-		FlatNetPowerQuantityUnit             api.String   `json:"flat_net_power_quantity_unit"`
-		FlatPowerQuantity                    api.Float    `json:"flat_power_quantity"`
-		FlatPowerQuantityTran                api.Float    `json:"flat_power_quantity_tran"`
-		FlatPowerQuantityUnit                api.String   `json:"flat_power_quantity_unit"`
-		FlatUsePowerQuantity                 api.Float    `json:"flat_use_power_quantity"`
-		FlatUsePowerQuantityTran             api.Float    `json:"flat_use_power_quantity_tran"`
-		FlatUsePowerQuantityUnit             api.String   `json:"flat_use_power_quantity_unit"`
-		NetPowerProfit                       api.Float    `json:"net_power_profit"`
-		NetPowerProfitOriginalUnit           api.String   `json:"net_power_profit_original_unit"`
-		NetPowerProfitTran                   api.Float    `json:"net_power_profit_tran"`
-		NetPowerProfitUnit                   api.String   `json:"net_power_profit_unit"`
-		NetPowerQuantityTotal                api.Float    `json:"net_power_quantity_total"`
-		NetPowerQuantityTotalTran            api.Float    `json:"net_power_quantity_total_tran"`
-		NetPowerQuantityTotalUnit            api.String   `json:"net_power_quantity_total_unit"`
-		PeakCharge                           api.Float    `json:"peak_charge"`
-		PeakChargeOriginalUnit               api.String   `json:"peak_charge_original_unit"`
-		PeakChargeTran                       api.Float    `json:"peak_charge_tran"`
-		PeakChargeUnit                       api.String   `json:"peak_charge_unit"`
-		PeakNetPowerQuantity                 api.Float    `json:"peak_net_power_quantity"`
-		PeakNetPowerQuantityTran             api.Float    `json:"peak_net_power_quantity_tran"`
-		PeakNetPowerQuantityUnit             api.String   `json:"peak_net_power_quantity_unit"`
-		PeakPowerQuantity                    api.Float    `json:"peak_power_quantity"`
-		PeakPowerQuantityTran                api.Float    `json:"peak_power_quantity_tran"`
-		PeakPowerQuantityUnit                api.String   `json:"peak_power_quantity_unit"`
-		PeakUsePowerQuantity                 api.Float    `json:"peak_use_power_quantity"`
-		PeakUsePowerQuantityTran             api.Float    `json:"peak_use_power_quantity_tran"`
-		PeakUsePowerQuantityUnit             api.String   `json:"peak_use_power_quantity_unit"`
-		PowerQuantityTotal                   api.Float    `json:"power_quantity_total"`
-		PowerQuantityTotalTran               api.Float    `json:"power_quantity_total_tran"`
-		PowerQuantityTotalUnit               api.String   `json:"power_quantity_total_unit"`
-		ProvinceSubsidyCharge                api.Float    `json:"province_subsidy_charge"`
-		ProvinceSubsidyChargeOriginalUnit    api.String   `json:"province_subsidy_charge_original_unit"`
-		ProvinceSubsidyChargeTran            api.Float    `json:"province_subsidy_charge_tran"`
-		ProvinceSubsidyChargeUnit            api.String   `json:"province_subsidy_charge_unit"`
-		PsID                                 api.Integer  `json:"ps_id"`
-		SubsidyProfit                        api.Float    `json:"subsidy_profit"`
-		SubsidyProfitOriginalUnit            api.String   `json:"subsidy_profit_original_unit"`
-		SubsidyProfitTran                    api.Float    `json:"subsidy_profit_tran"`
-		SubsidyProfitUnit                    api.String   `json:"subsidy_profit_unit"`
-		TimeStamp                            int64        `json:"time_stamp"`
-		TotalProfit                          api.Float    `json:"total_profit"`
-		TotalProfitOriginalUnit              api.String   `json:"total_profit_original_unit"`
-		TotalProfitTran                      api.Float    `json:"total_profit_tran"`
-		TotalProfitUnit                      api.String   `json:"total_profit_unit"`
-		UpdateTime                           api.DateTime `json:"update_time"`
-		UsePowerByDiscountProfit             api.Float    `json:"use_power_by_discount_profit"`
-		UsePowerByDiscountProfitOriginalUnit api.String   `json:"use_power_by_discount_profit_original_unit"`
-		UsePowerByDiscountProfitTran         api.Float    `json:"use_power_by_discount_profit_tran"`
-		UsePowerByDiscountProfitUnit         api.String   `json:"use_power_by_discount_profit_unit"`
-		UsePowerProfit                       api.Float    `json:"use_power_profit"`
-		UsePowerProfitOriginalUnit           api.String   `json:"use_power_profit_original_unit"`
-		UsePowerProfitTran                   api.Float    `json:"use_power_profit_tran"`
-		UsePowerProfitUnit                   api.String   `json:"use_power_profit_unit"`
-		UsePowerQuantityTotal                api.Float    `json:"use_power_quantity_total"`
-		UsePowerQuantityTotalTran            api.Float    `json:"use_power_quantity_total_tran"`
-		UsePowerQuantityTotalUnit            api.String   `json:"use_power_quantity_total_unit"`
-		UUID                                 interface{}  `json:"uuid"`
-		ValleyCharge                         api.Float    `json:"valley_charge"`
-		ValleyChargeOriginalUnit             api.String   `json:"valley_charge_original_unit"`
-		ValleyChargeTran                     api.Float    `json:"valley_charge_tran"`
-		ValleyChargeUnit                     api.String   `json:"valley_charge_unit"`
-		ValleyNetPowerQuantity               api.Float    `json:"valley_net_power_quantity"`
-		ValleyNetPowerQuantityTran           api.Float    `json:"valley_net_power_quantity_tran"`
-		ValleyNetPowerQuantityUnit           api.String   `json:"valley_net_power_quantity_unit"`
-		ValleyPowerQuantity                  api.Float    `json:"valley_power_quantity"`
-		ValleyPowerQuantityTran              api.Float    `json:"valley_power_quantity_tran"`
-		ValleyPowerQuantityUnit              api.String   `json:"valley_power_quantity_unit"`
-		ValleyUsePowerQuantity               api.Float    `json:"valley_use_power_quantity"`
-		ValleyUsePowerQuantityTran           api.Float    `json:"valley_use_power_quantity_tran"`
-		ValleyUsePowerQuantityUnit           api.String   `json:"valley_use_power_quantity_unit"`
-	} `json:"dataList"`
-	Info []struct {
-		DesignCapacity         api.Float   `json:"design_capacity"`
-		InstallerPsFaultStatus int64       `json:"installer_ps_fault_status"`
-		OwnerPsFaultStatus     int64       `json:"owner_ps_fault_status"`
-		PsFaultStatus          int64       `json:"ps_fault_status"`
-		PsID                   api.Integer `json:"ps_id"`
-		PsName                 api.String  `json:"ps_name"`
-		PsStatus               int64       `json:"ps_status"`
-		PsType                 api.Integer `json:"ps_type"`
-		PsTypeName             api.String  `json:"ps_type_name"`
-		SysScheme              int64       `json:"sys_scheme"`
-		SysSchemeName          api.String  `json:"sys_scheme_name"`
-		ValidFlag              api.Bool    `json:"valid_flag"`
+	DataList []DataList `json:"dataList"`
+	Info     []struct {
+		DesignCapacity         valueTypes.Float   `json:"design_capacity" PointUnit:"W"`
+		InstallerPsFaultStatus valueTypes.Integer `json:"installer_ps_fault_status"`
+		OwnerPsFaultStatus     valueTypes.Integer `json:"owner_ps_fault_status"`
+		PsFaultStatus          valueTypes.Integer `json:"ps_fault_status"`
+		PsId                   valueTypes.Integer `json:"ps_id"`
+		PsName                 valueTypes.String  `json:"ps_name"`
+		PsStatus               valueTypes.Integer `json:"ps_status"`
+		PsType                 valueTypes.Integer `json:"ps_type"`
+		PsTypeName             valueTypes.String  `json:"ps_type_name"`
+		SysScheme              valueTypes.Integer `json:"sys_scheme"`
+		SysSchemeName          valueTypes.String  `json:"sys_scheme_name"`
+		ValidFlag              valueTypes.Bool    `json:"valid_flag"`
 	} `json:"info"`
 	MinDateID interface{} `json:"min_date_id"`
-	Total     []struct {
-		CitySubsidyCharge                    api.Float    `json:"city_subsidy_charge"`
-		CitySubsidyChargeOriginalUnit        api.String   `json:"city_subsidy_charge_original_unit"`
-		CitySubsidyChargeTran                api.Float    `json:"city_subsidy_charge_tran"`
-		CitySubsidyChargeUnit                api.String   `json:"city_subsidy_charge_unit"`
-		CountrySubsidyCharge                 api.Float    `json:"country_subsidy_charge"`
-		CountrySubsidyChargeOriginalUnit     api.String   `json:"country_subsidy_charge_original_unit"`
-		CountrySubsidyChargeTran             api.Float    `json:"country_subsidy_charge_tran"`
-		CountrySubsidyChargeUnit             api.String   `json:"country_subsidy_charge_unit"`
-		CountySubsidyCharge                  api.Float    `json:"county_subsidy_charge"`
-		CountySubsidyChargeOriginalUnit      api.String   `json:"county_subsidy_charge_original_unit"`
-		CountySubsidyChargeTran              api.Float    `json:"county_subsidy_charge_tran"`
-		CountySubsidyChargeUnit              api.String   `json:"county_subsidy_charge_unit"`
-		CuspCharge                           api.Float    `json:"cusp_charge"`
-		CuspChargeOriginalUnit               api.String   `json:"cusp_charge_original_unit"`
-		CuspChargeTran                       api.Float    `json:"cusp_charge_tran"`
-		CuspChargeUnit                       api.String   `json:"cusp_charge_unit"`
-		CuspNetPowerQuantity                 api.Float    `json:"cusp_net_power_quantity"`
-		CuspNetPowerQuantityTran             api.Float    `json:"cusp_net_power_quantity_tran"`
-		CuspNetPowerQuantityUnit             api.String   `json:"cusp_net_power_quantity_unit"`
-		CuspPowerQuantity                    api.Float    `json:"cusp_power_quantity"`
-		CuspPowerQuantityTran                api.Float    `json:"cusp_power_quantity_tran"`
-		CuspPowerQuantityUnit                api.String   `json:"cusp_power_quantity_unit"`
-		CuspUsePowerQuantity                 api.Float    `json:"cusp_use_power_quantity"`
-		CuspUsePowerQuantityTran             api.Float    `json:"cusp_use_power_quantity_tran"`
-		CuspUsePowerQuantityUnit             api.String   `json:"cusp_use_power_quantity_unit"`
-		FlatCharge                           api.Float    `json:"flat_charge"`
-		FlatChargeOriginalUnit               api.String   `json:"flat_charge_original_unit"`
-		FlatChargeTran                       api.Float    `json:"flat_charge_tran"`
-		FlatChargeUnit                       api.String   `json:"flat_charge_unit"`
-		FlatNetPowerQuantity                 api.Float    `json:"flat_net_power_quantity"`
-		FlatNetPowerQuantityTran             api.Float    `json:"flat_net_power_quantity_tran"`
-		FlatNetPowerQuantityUnit             api.String   `json:"flat_net_power_quantity_unit"`
-		FlatPowerQuantity                    api.Float    `json:"flat_power_quantity"`
-		FlatPowerQuantityTran                api.Float    `json:"flat_power_quantity_tran"`
-		FlatPowerQuantityUnit                api.String   `json:"flat_power_quantity_unit"`
-		FlatUsePowerQuantity                 api.Float    `json:"flat_use_power_quantity"`
-		FlatUsePowerQuantityTran             api.Float    `json:"flat_use_power_quantity_tran"`
-		FlatUsePowerQuantityUnit             api.String   `json:"flat_use_power_quantity_unit"`
-		NetPowerProfit                       api.Float    `json:"net_power_profit"`
-		NetPowerProfitOriginalUnit           api.String   `json:"net_power_profit_original_unit"`
-		NetPowerProfitTran                   api.Float    `json:"net_power_profit_tran"`
-		NetPowerProfitUnit                   api.String   `json:"net_power_profit_unit"`
-		NetPowerQuantityTotal                api.Float    `json:"net_power_quantity_total"`
-		NetPowerQuantityTotalTran            api.Float    `json:"net_power_quantity_total_tran"`
-		NetPowerQuantityTotalUnit            api.String   `json:"net_power_quantity_total_unit"`
-		PeakCharge                           api.Float    `json:"peak_charge"`
-		PeakChargeOriginalUnit               api.String   `json:"peak_charge_original_unit"`
-		PeakChargeTran                       api.Float    `json:"peak_charge_tran"`
-		PeakChargeUnit                       api.String   `json:"peak_charge_unit"`
-		PeakNetPowerQuantity                 api.Float    `json:"peak_net_power_quantity"`
-		PeakNetPowerQuantityTran             api.Float    `json:"peak_net_power_quantity_tran"`
-		PeakNetPowerQuantityUnit             api.String   `json:"peak_net_power_quantity_unit"`
-		PeakPowerQuantity                    api.Float    `json:"peak_power_quantity"`
-		PeakPowerQuantityTran                api.Float    `json:"peak_power_quantity_tran"`
-		PeakPowerQuantityUnit                api.String   `json:"peak_power_quantity_unit"`
-		PeakUsePowerQuantity                 api.Float    `json:"peak_use_power_quantity"`
-		PeakUsePowerQuantityTran             api.Float    `json:"peak_use_power_quantity_tran"`
-		PeakUsePowerQuantityUnit             api.String   `json:"peak_use_power_quantity_unit"`
-		PowerQuantityTotal                   api.Float    `json:"power_quantity_total"`
-		PowerQuantityTotalTran               api.Float    `json:"power_quantity_total_tran"`
-		PowerQuantityTotalUnit               api.String   `json:"power_quantity_total_unit"`
-		ProvinceSubsidyCharge                api.Float    `json:"province_subsidy_charge"`
-		ProvinceSubsidyChargeOriginalUnit    api.String   `json:"province_subsidy_charge_original_unit"`
-		ProvinceSubsidyChargeTran            api.Float    `json:"province_subsidy_charge_tran"`
-		ProvinceSubsidyChargeUnit            api.String   `json:"province_subsidy_charge_unit"`
-		PsID                                 api.Integer  `json:"ps_id"`
-		SubsidyProfit                        api.Float    `json:"subsidy_profit"`
-		SubsidyProfitOriginalUnit            api.String   `json:"subsidy_profit_original_unit"`
-		SubsidyProfitTran                    api.Float    `json:"subsidy_profit_tran"`
-		SubsidyProfitUnit                    api.String   `json:"subsidy_profit_unit"`
-		TotalProfit                          api.Float    `json:"total_profit"`
-		TotalProfitOriginalUnit              api.String   `json:"total_profit_original_unit"`
-		TotalProfitTran                      api.Float    `json:"total_profit_tran"`
-		TotalProfitUnit                      api.String   `json:"total_profit_unit"`
-		UpdateTime                           api.DateTime `json:"update_time"`
-		UsePowerByDiscountProfit             api.Float    `json:"use_power_by_discount_profit"`
-		UsePowerByDiscountProfitOriginalUnit api.String   `json:"use_power_by_discount_profit_original_unit"`
-		UsePowerByDiscountProfitTran         api.Float    `json:"use_power_by_discount_profit_tran"`
-		UsePowerByDiscountProfitUnit         api.String   `json:"use_power_by_discount_profit_unit"`
-		UsePowerProfit                       api.Float    `json:"use_power_profit"`
-		UsePowerProfitOriginalUnit           api.String   `json:"use_power_profit_original_unit"`
-		UsePowerProfitTran                   api.Float    `json:"use_power_profit_tran"`
-		UsePowerProfitUnit                   api.String   `json:"use_power_profit_unit"`
-		UsePowerQuantityTotal                api.Float    `json:"use_power_quantity_total"`
-		UsePowerQuantityTotalTran            api.Float    `json:"use_power_quantity_total_tran"`
-		UsePowerQuantityTotalUnit            api.String   `json:"use_power_quantity_total_unit"`
-		ValleyCharge                         api.Float    `json:"valley_charge"`
-		ValleyChargeOriginalUnit             api.String   `json:"valley_charge_original_unit"`
-		ValleyChargeTran                     api.Float    `json:"valley_charge_tran"`
-		ValleyChargeUnit                     api.String   `json:"valley_charge_unit"`
-		ValleyNetPowerQuantity               api.Float    `json:"valley_net_power_quantity"`
-		ValleyNetPowerQuantityTran           api.Float    `json:"valley_net_power_quantity_tran"`
-		ValleyNetPowerQuantityUnit           api.String   `json:"valley_net_power_quantity_unit"`
-		ValleyPowerQuantity                  api.Float    `json:"valley_power_quantity"`
-		ValleyPowerQuantityTran              api.Float    `json:"valley_power_quantity_tran"`
-		ValleyPowerQuantityUnit              api.String   `json:"valley_power_quantity_unit"`
-		ValleyUsePowerQuantity               api.Float    `json:"valley_use_power_quantity"`
-		ValleyUsePowerQuantityTran           api.Float    `json:"valley_use_power_quantity_tran"`
-		ValleyUsePowerQuantityUnit           api.String   `json:"valley_use_power_quantity_unit"`
-	} `json:"total"`
+	Total     []DataList  `json:"total"`
+}
+type DataList struct {
+	DateId     valueTypes.DateTime `json:"date_id"`
+	DeviceName interface{}  `json:"device_name"`
+	PsId       valueTypes.Integer  `json:"ps_id"`
+	TimeStamp  interface{}  `json:"time_stamp"` // Sad that this alternates between string and valueTypes.Integer.
+	UpdateTime valueTypes.DateTime `json:"update_time"`
+	UUID       interface{}  `json:"uuid"`
+	Co2Reduce  valueTypes.Float    `json:"co2_reduce"`
+
+	CitySubsidyCharge             valueTypes.Float `json:"city_subsidy_charge" PointUnitFrom:"city_subsidy_charge_original_unit"`
+	CitySubsidyChargeOriginalUnit string    `json:"city_subsidy_charge_original_unit"`
+	CitySubsidyChargeTran         valueTypes.Float `json:"city_subsidy_charge_tran" PointUnitFrom:"city_subsidy_charge_unit" PointIgnore:"true"`
+	CitySubsidyChargeUnit         string    `json:"city_subsidy_charge_unit" PointIgnore:"true"`
+
+	CountrySubsidyCharge             valueTypes.Float `json:"country_subsidy_charge" PointUnitFrom:"country_subsidy_charge_original_unit"`
+	CountrySubsidyChargeOriginalUnit string    `json:"country_subsidy_charge_original_unit"`
+	CountrySubsidyChargeTran         valueTypes.Float `json:"country_subsidy_charge_tran" PointUnitFrom:"country_subsidy_charge_unit" PointIgnore:"true"`
+	CountrySubsidyChargeUnit         string    `json:"country_subsidy_charge_unit" PointIgnore:"true"`
+
+	CountySubsidyCharge             valueTypes.Float `json:"county_subsidy_charge" PointUnitFrom:"county_subsidy_charge_original_unit"`
+	CountySubsidyChargeOriginalUnit string    `json:"county_subsidy_charge_original_unit"`
+	CountySubsidyChargeTran         valueTypes.Float `json:"county_subsidy_charge_tran" PointUnitFrom:"county_subsidy_charge_unit" PointIgnore:"true"`
+	CountySubsidyChargeUnit         string    `json:"county_subsidy_charge_unit" PointIgnore:"true"`
+
+	CuspCharge             valueTypes.Float `json:"cusp_charge" PointUnitFrom:"cusp_charge_original_unit"`
+	CuspChargeOriginalUnit string    `json:"cusp_charge_original_unit"`
+	CuspChargeTran         valueTypes.Float `json:"cusp_charge_tran" PointUnitFrom:"cusp_charge_unit" PointIgnore:"true"`
+	CuspChargeUnit         string    `json:"cusp_charge_unit" PointIgnore:"true"`
+
+	CuspNetPowerQuantity     valueTypes.Float `json:"cusp_net_power_quantity" PointUnitFrom:"cusp_net_power_quantity_unit"`
+	CuspNetPowerQuantityTran valueTypes.Float `json:"cusp_net_power_quantity_tran" PointUnitFrom:"cusp_net_power_quantity_unit" PointIgnore:"true"`
+	CuspNetPowerQuantityUnit string    `json:"cusp_net_power_quantity_unit"`
+
+	CuspPowerQuantity     valueTypes.Float `json:"cusp_power_quantity" PointUnitFrom:"cusp_power_quantity_unit"`
+	CuspPowerQuantityTran valueTypes.Float `json:"cusp_power_quantity_tran" PointUnitFrom:"cusp_power_quantity_unit" PointIgnore:"true"`
+	CuspPowerQuantityUnit string    `json:"cusp_power_quantity_unit"`
+
+	CuspUsePowerQuantity     valueTypes.Float `json:"cusp_use_power_quantity" PointUnitFrom:"cusp_use_power_quantity_unit"`
+	CuspUsePowerQuantityTran valueTypes.Float `json:"cusp_use_power_quantity_tran" PointUnitFrom:"cusp_use_power_quantity_unit" PointIgnore:"true"`
+	CuspUsePowerQuantityUnit string    `json:"cusp_use_power_quantity_unit"`
+
+	FlatCharge             valueTypes.Float `json:"flat_charge" PointUnitFrom:"flat_charge_original_unit"`
+	FlatChargeOriginalUnit string    `json:"flat_charge_original_unit"`
+
+	FlatChargeTran valueTypes.Float `json:"flat_charge_tran" PointUnitFrom:"flat_charge_unit"`
+	FlatChargeUnit string    `json:"flat_charge_unit"`
+
+	FlatNetPowerQuantity     valueTypes.Float `json:"flat_net_power_quantity" PointUnitFrom:"flat_net_power_quantity_unit"`
+	FlatNetPowerQuantityTran valueTypes.Float `json:"flat_net_power_quantity_tran" PointUnitFrom:"flat_net_power_quantity_unit" PointIgnore:"true"`
+	FlatNetPowerQuantityUnit string    `json:"flat_net_power_quantity_unit"`
+
+	FlatPowerQuantity     valueTypes.Float `json:"flat_power_quantity" PointUnitFrom:"flat_power_quantity_unit"`
+	FlatPowerQuantityTran valueTypes.Float `json:"flat_power_quantity_tran" PointUnitFrom:"flat_power_quantity_unit" PointIgnore:"true"`
+	FlatPowerQuantityUnit string    `json:"flat_power_quantity_unit"`
+
+	FlatUsePowerQuantity     valueTypes.Float `json:"flat_use_power_quantity" PointUnitFrom:"flat_use_power_quantity_unit"`
+	FlatUsePowerQuantityTran valueTypes.Float `json:"flat_use_power_quantity_tran" PointUnitFrom:"flat_use_power_quantity_unit" PointIgnore:"true"`
+	FlatUsePowerQuantityUnit string    `json:"flat_use_power_quantity_unit"`
+
+	NetPowerProfit             valueTypes.Float `json:"net_power_profit" PointUnitFrom:"net_power_profit_original_unit"`
+	NetPowerProfitOriginalUnit string    `json:"net_power_profit_original_unit"`
+	NetPowerProfitTran         valueTypes.Float `json:"net_power_profit_tran" PointUnitFrom:"net_power_profit_unit" PointIgnore:"true"`
+	NetPowerProfitUnit         string    `json:"net_power_profit_unit" PointIgnore:"true"`
+
+	NetPowerQuantityTotal     valueTypes.Float `json:"net_power_quantity_total" PointUnitFrom:"net_power_quantity_total_unit"`
+	NetPowerQuantityTotalTran valueTypes.Float `json:"net_power_quantity_total_tran" PointUnitFrom:"net_power_quantity_total_unit" PointIgnore:"true"`
+	NetPowerQuantityTotalUnit string    `json:"net_power_quantity_total_unit"`
+
+	PeakCharge             valueTypes.Float `json:"peak_charge" PointUnitFrom:"peak_charge_original_unit"`
+	PeakChargeOriginalUnit string    `json:"peak_charge_original_unit"`
+
+	PeakChargeTran valueTypes.Float `json:"peak_charge_tran" PointUnitFrom:"peak_charge_unit"`
+	PeakChargeUnit string    `json:"peak_charge_unit"`
+
+	PeakNetPowerQuantity     valueTypes.Float `json:"peak_net_power_quantity" PointUnitFrom:"peak_net_power_quantity_unit"`
+	PeakNetPowerQuantityTran valueTypes.Float `json:"peak_net_power_quantity_tran" PointUnitFrom:"peak_net_power_quantity_unit" PointIgnore:"true"`
+	PeakNetPowerQuantityUnit string    `json:"peak_net_power_quantity_unit"`
+
+	PeakPowerQuantity     valueTypes.Float `json:"peak_power_quantity" PointUnitFrom:"peak_power_quantity_unit"`
+	PeakPowerQuantityTran valueTypes.Float `json:"peak_power_quantity_tran" PointUnitFrom:"peak_power_quantity_unit" PointIgnore:"true"`
+	PeakPowerQuantityUnit string    `json:"peak_power_quantity_unit"`
+
+	PeakUsePowerQuantity     valueTypes.Float `json:"peak_use_power_quantity" PointUnitFrom:"peak_use_power_quantity_unit"`
+	PeakUsePowerQuantityTran valueTypes.Float `json:"peak_use_power_quantity_tran" PointUnitFrom:"peak_use_power_quantity_unit" PointIgnore:"true"`
+	PeakUsePowerQuantityUnit string    `json:"peak_use_power_quantity_unit"`
+
+	PowerQuantityTotal     valueTypes.Float `json:"power_quantity_total" PointUnitFrom:"power_quantity_total_unit"`
+	PowerQuantityTotalTran valueTypes.Float `json:"power_quantity_total_tran" PointUnitFrom:"power_quantity_total_unit" PointIgnore:"true"`
+	PowerQuantityTotalUnit string    `json:"power_quantity_total_unit"`
+
+	ProvinceSubsidyCharge             valueTypes.Float `json:"province_subsidy_charge" PointUnitFrom:"province_subsidy_charge_original_unit"`
+	ProvinceSubsidyChargeOriginalUnit string    `json:"province_subsidy_charge_original_unit"`
+
+	ProvinceSubsidyChargeTran valueTypes.Float `json:"province_subsidy_charge_tran" PointUnitFrom:"province_subsidy_charge_unit"`
+	ProvinceSubsidyChargeUnit string    `json:"province_subsidy_charge_unit"`
+
+	SubsidyProfit             valueTypes.Float `json:"subsidy_profit" PointUnitFrom:"subsidy_profit_original_unit"`
+	SubsidyProfitOriginalUnit string    `json:"subsidy_profit_original_unit"`
+
+	SubsidyProfitTran valueTypes.Float `json:"subsidy_profit_tran" PointUnitFrom:"subsidy_profit_unit"`
+	SubsidyProfitUnit string    `json:"subsidy_profit_unit"`
+
+	TotalProfit             valueTypes.Float `json:"total_profit" PointUnitFrom:"total_profit_original_unit"`
+	TotalProfitOriginalUnit string    `json:"total_profit_original_unit"`
+	TotalProfitTran         valueTypes.Float `json:"total_profit_tran" PointUnitFrom:"total_profit_unit" PointIgnore:"true"`
+	TotalProfitUnit         string    `json:"total_profit_unit" PointIgnore:"true"`
+
+	UsePowerByDiscountProfit             valueTypes.Float `json:"use_power_by_discount_profit" PointUnitFrom:"use_power_by_discount_profit_original_unit"`
+	UsePowerByDiscountProfitOriginalUnit string    `json:"use_power_by_discount_profit_original_unit"`
+	UsePowerByDiscountProfitTran         valueTypes.Float `json:"use_power_by_discount_profit_tran" PointUnitFrom:"use_power_by_discount_profit_unit" PointIgnore:"true"`
+	UsePowerByDiscountProfitUnit         string    `json:"use_power_by_discount_profit_unit" PointIgnore:"true"`
+
+	UsePowerProfit             valueTypes.Float `json:"use_power_profit" PointUnitFrom:"use_power_profit_original_unit"`
+	UsePowerProfitOriginalUnit string    `json:"use_power_profit_original_unit"`
+	UsePowerProfitTran         valueTypes.Float `json:"use_power_profit_tran" PointUnitFrom:"use_power_profit_unit" PointIgnore:"true"`
+	UsePowerProfitUnit         string    `json:"use_power_profit_unit" PointIgnore:"true"`
+
+	UsePowerQuantityTotal     valueTypes.Float `json:"use_power_quantity_total" PointUnitFrom:"use_power_quantity_total_unit"`
+	UsePowerQuantityTotalTran valueTypes.Float `json:"use_power_quantity_total_tran" PointUnitFrom:"use_power_quantity_total_unit" PointIgnore:"true"`
+	UsePowerQuantityTotalUnit string    `json:"use_power_quantity_total_unit"`
+
+	ValleyCharge             valueTypes.Float `json:"valley_charge" PointUnitFrom:"valley_charge_original_unit"`
+	ValleyChargeOriginalUnit string    `json:"valley_charge_original_unit"`
+	ValleyChargeTran         valueTypes.Float `json:"valley_charge_tran" PointUnitFrom:"valley_charge_unit" PointIgnore:"true"`
+	ValleyChargeUnit         string    `json:"valley_charge_unit" PointIgnore:"true"`
+
+	ValleyNetPowerQuantity     valueTypes.Float `json:"valley_net_power_quantity" PointUnitFrom:"valley_net_power_quantity_unit"`
+	ValleyNetPowerQuantityTran valueTypes.Float `json:"valley_net_power_quantity_tran" PointUnitFrom:"valley_net_power_quantity_unit" PointIgnore:"true"`
+	ValleyNetPowerQuantityUnit string    `json:"valley_net_power_quantity_unit"`
+
+	ValleyPowerQuantity     valueTypes.Float `json:"valley_power_quantity" PointUnitFrom:"valley_power_quantity_unit"`
+	ValleyPowerQuantityTran valueTypes.Float `json:"valley_power_quantity_tran" PointUnitFrom:"valley_power_quantity_unit" PointIgnore:"true"`
+	ValleyPowerQuantityUnit string    `json:"valley_power_quantity_unit"`
+
+	ValleyUsePowerQuantity     valueTypes.Float `json:"valley_use_power_quantity" PointUnitFrom:"valley_use_power_quantity_unit"`
+	ValleyUsePowerQuantityTran valueTypes.Float `json:"valley_use_power_quantity_tran" PointUnitFrom:"valley_use_power_quantity_unit" PointIgnore:"true"`
+	ValleyUsePowerQuantityUnit string    `json:"valley_use_power_quantity_unit"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -282,7 +217,23 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		pkg := apiReflect.GetName("", *e)
+		entries.StructToPoints(e.Response.ResultData, pkg, e.Request.PsId.String(), valueTypes.NewDateTime(""))
+
+		s := valueTypes.SizeOfArrayLength(e.Response.ResultData.DataList)
+		for _, v := range e.Response.ResultData.DataList {
+			entries.StructToPoints(v, api.JoinWithDots(s, valueTypes.DateTimeLayoutDay, pkg, "DataList", v.PsId, v.DateId), v.PsId.String(), valueTypes.NewDateTime(""))
+		}
+
+		s = valueTypes.SizeOfArrayLength(e.Response.ResultData.Info)
+		for i, v := range e.Response.ResultData.Info {
+			entries.StructToPoints(v, api.JoinWithDots(s, valueTypes.DateTimeLayoutDay, pkg, "Info", v.PsId, i), v.PsId.String(), valueTypes.NewDateTime(""))
+		}
+
+		s = valueTypes.SizeOfArrayLength(e.Response.ResultData.Total)
+		for i, v := range e.Response.ResultData.Total {
+			entries.StructToPoints(v, api.JoinWithDots(s, valueTypes.DateTimeLayoutDay, pkg, "Total", v.PsId, i), v.PsId.String(), valueTypes.NewDateTime(""))
+		}
 	}
 
 	return entries

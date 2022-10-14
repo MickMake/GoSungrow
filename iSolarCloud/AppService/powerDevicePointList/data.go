@@ -3,8 +3,9 @@ package powerDevicePointList
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"github.com/MickMake/GoUnify/Only"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/reportService/powerDevicePointList"
@@ -23,20 +24,20 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	CurrentPage  api.Integer `json:"currentPage"`
+	CurrentPage  valueTypes.Integer `json:"currentPage"`
 	PageDataList []struct {
-		CreateTime   string `json:"create_time"`
-		DeviceType   api.Integer  `json:"device_type"`
-		ID           api.Integer  `json:"id"`
-		Period       api.Integer  `json:"period"`
-		PointID      api.Integer  `json:"point_id"`
-		PointName    string `json:"point_name"`
-		PointNameNew string `json:"point_name_new"`
-		TypeName     string `json:"type_name"`
+		CreateTime   valueTypes.DateTime `json:"create_time"`
+		DeviceType   valueTypes.Integer  `json:"device_type"`
+		ID           valueTypes.Integer  `json:"id"`
+		Period       valueTypes.Integer  `json:"period"`		// 0, 1, 2, 3, 4
+		PointID      valueTypes.Integer  `json:"point_id"`
+		PointName    valueTypes.String `json:"point_name"`
+		PointNameNew valueTypes.String `json:"point_name_new"`
+		TypeName     valueTypes.String `json:"type_name"`
 	} `json:"pageDataList"`
-	PageSize    api.Integer `json:"pageSize"`
-	TotalCounts api.Integer `json:"totalCounts"`
-	TotalPages  api.Integer `json:"totalPages"`
+	PageSize    valueTypes.Integer `json:"pageSize"`
+	TotalCounts valueTypes.Integer `json:"totalCounts"`
+	TotalPages  valueTypes.Integer `json:"totalPages"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -73,7 +74,11 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		pkg := apiReflect.GetName("", *e)
+		entries.StructToPoints(e.Response.ResultData, pkg, "system", valueTypes.NewDateTime(""))
+		for _, v := range e.Response.ResultData.PageDataList {
+			entries.StructToPoints(v, fmt.Sprintf("%s.%.3d", pkg, v.ID.Value()), "system", valueTypes.NewDateTime(""))
+		}
 	}
 
 	return entries

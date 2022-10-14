@@ -3,6 +3,7 @@ package getDeviceUuid
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -11,7 +12,7 @@ const Url = "/v1/devService/getDeviceUuid"
 const Disabled = false
 
 type RequestData struct {
-	PsKey api.PsKey `json:"ps_key" required:"true"`
+	PsKey valueTypes.PsKey `json:"ps_key" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -59,7 +60,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

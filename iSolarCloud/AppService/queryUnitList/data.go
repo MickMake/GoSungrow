@@ -3,6 +3,7 @@ package queryUnitList
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -24,11 +25,11 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	IsBasicUnit  api.Bool     `json:"is_basic_unit"`
+	IsBasicUnit  valueTypes.Bool     `json:"is_basic_unit"`
 	TargetUnit   string       `json:"target_unit"`
-	UnitConverID api.Integer  `json:"unit_conver_id"`
+	UnitConverID valueTypes.Integer  `json:"unit_conver_id"`
 	UnitName     string       `json:"unit_name"`
-	UnitType     api.Integer  `json:"unit_type"`
+	UnitType     valueTypes.Integer  `json:"unit_type"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -65,7 +66,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

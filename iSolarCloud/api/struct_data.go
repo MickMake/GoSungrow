@@ -3,6 +3,7 @@ package api
 import (
 	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"encoding/json"
 	"fmt"
 	datatable "go.pennock.tech/tabular/auto"
@@ -20,11 +21,7 @@ const (
 	PointTimeSpanTotal   = "total"
 )
 
-type PointId string
 type DataPointEntries []DataEntry
-// type DataPoints struct {
-// 	Map map[PointId]DataPointEntries
-// }
 
 func (de *DataPointEntries) Hide() {
 	for range Only.Once {
@@ -36,24 +33,23 @@ func (de *DataPointEntries) Hide() {
 
 
 type DataMap struct {
-	DataPoints map[PointId]DataPointEntries
-	Order      []PointId
+	DataPoints map[string]DataPointEntries
+	Order      []string
 }
 
 type DataEntry struct {
-	Point      *Point       `json:"point"`
-	Date       DateTime     `json:"date"`
+	Point *Point              `json:"point"`
+	Date  valueTypes.DateTime `json:"date"`
 
-	EndPoint   string       `json:"endpoint"`
-	FullId     PointId      `json:"full_id"`
-	Parent     ParentDevice `json:"parent"`
-
-	Value      string       `json:"value"`
-	ValueFloat float64      `json:"value_float"`
-	ValueBool  bool         `json:"value_bool"`
-	Index      int          `json:"index"`
-	Valid      bool         `json:"valid"`
-	Hide       bool         `json:"hide"`
+	EndPoint   string               `json:"endpoint"`
+	// FullId     valueTypes.DataPoint `json:"full_id"`
+	Parent     ParentDevice         `json:"parent"`
+	Value      string               `json:"value"`
+	ValueFloat float64              `json:"value_float"`
+	ValueBool  bool                 `json:"value_bool"`
+	Index      int                  `json:"index"`
+	Valid      bool                 `json:"valid"`
+	Hide       bool                 `json:"hide"`
 }
 
 func (de *DataEntry) IsValid() bool {
@@ -73,10 +69,14 @@ func (de *DataEntry) IsNotValid() bool {
 	return !de.IsValid()
 }
 
+func (dm *DataEntry) FullId() string {
+	return dm.EndPoint + "." + dm.Point.Id.String()
+}
+
 
 func NewDataMap() DataMap {
 	return DataMap {
-		DataPoints: make(map[PointId]DataPointEntries),
+		DataPoints: make(map[string]DataPointEntries),
 	}
 }
 
@@ -86,7 +86,7 @@ func NewDataMap() DataMap {
 // }
 
 
-func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId string, timestamp DateTime) {
+func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId string, timestamp valueTypes.DateTime) {
 	for range Only.Once {
 		if endpoint == "" {
 			endpoint = apiReflect.GetCallerPackage(2)
@@ -97,17 +97,13 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 		// fmt.Printf("TP: %v\n", tp)
 
 		for _, f := range tp {
-			// if strings.Contains(strings.ToLower(f.Json), "p83012") {
-			// 	fmt.Sprintf("")
-			// }
-
 			if f.PointIgnore {
 				// fmt.Printf("IGNORE: %s\n", f.PointId)
 				continue
 			}
 
 			if f.PointName == "" {
-				f.PointName = PointToName(PointId(f.PointId))
+				f.PointName = valueTypes.PointToName(f.PointId)
 			}
 
 			if f.PointDevice == "" {
@@ -120,155 +116,9 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 			var parents ParentDevices
 			parents.Add(ParentDevice{Key: f.PointDevice})
 
-			// pUnit := fieldTo.Tag.Get("PointUnit")
-			var uv UnitValue
-			var uvs UnitValues
-			var ignore bool
-			switch f.ValueType {
-				case "int":
-					uv = SetUnitValueInteger(int64(f.Value.(int)), f.PointUnit)
-				case "int32":
-					uv = SetUnitValueInteger(int64(f.Value.(int32)), f.PointUnit)
-				case "int64":
-					uv = SetUnitValueInteger(f.Value.(int64), f.PointUnit)
-
-				case "float32":
-					uv = SetUnitValueFloat(float64(f.Value.(float32)), f.PointUnit)
-				case "float64":
-					uv = SetUnitValueFloat(f.Value.(float64), f.PointUnit)
-
-				case "string":
-					uv = SetUnitValueString(f.Value.(string), f.PointUnit)
-
-				case "bool":
-					v := f.Value.(bool)
-					uv = SetUnitValueString(fmt.Sprintf("%v", v), "binary")
-
-				case "api.UnitValue":
-					fallthrough
-				case "UnitValue":
-					uv = f.Value.(UnitValue)
-					// uv = uv.UnitValueFix()
-
-				case "UnitValues":
-					fallthrough
-				case "[]api.UnitValue":
-					fallthrough
-				case "[]UnitValue":
-					uvs = f.Value.([]UnitValue)
-
-				case "api.Float":
-					fallthrough
-				case "Float":
-					v := f.Value.(Float)
-					uv = SetUnitValueFloat(v.Value(), f.PointUnit)
-
-				case "[]api.Float":
-					fallthrough
-				case "[]Float":
-					v := f.Value.([]Float)
-					for _, val := range v {
-						uvs = append(uvs, SetUnitValueFloat(val.Value(), f.PointUnit))
-					}
-
-				case "api.Integer":
-					fallthrough
-				case "Integer":
-					v := f.Value.(Integer).Value()
-					uv = SetUnitValueInteger(v, f.PointUnit)
-
-				case "[]api.Integer":
-					fallthrough
-				case "[]Integer":
-					v := f.Value.([]Integer)
-					for _, val := range v {
-						uvs = append(uvs, SetUnitValueInteger(val.Value(), f.PointUnit))
-					}
-
-				case "api.Count":
-					fallthrough
-				case "Count":
-					v := f.Value.(Count).Value()
-					uv = SetUnitValueInteger(v, "counter")
-
-				case "[]api.Count":
-					fallthrough
-				case "[]Count":
-					v := f.Value.([]Count)
-					for _, val := range v {
-						uvs = append(uvs, SetUnitValueInteger(val.Value(), f.PointUnit))
-					}
-
-				case "api.Bool":
-					fallthrough
-				case "Bool":
-					v := f.Value.(Bool).String()
-					uv = SetUnitValueString(v, "binary")
-
-				case "[]api.Bool":
-					fallthrough
-				case "[]Bool":
-					v := f.Value.([]Bool)
-					for _, val := range v {
-						uvs = append(uvs, SetUnitValueString(val.String(), f.PointUnit))
-					}
-
-				case "api.String":
-					fallthrough
-				case "String":
-					v := f.Value.(String).String()
-					uv = SetUnitValueString(v, f.PointUnit)
-
-				case "[]api.String":
-					fallthrough
-				case "[]String":
-					v := f.Value.([]String)
-					for _, val := range v {
-						uvs = append(uvs, SetUnitValueString(val.Value(), f.PointUnit))
-					}
-
-				case "api.PsKey":
-					fallthrough
-				case "PsKey":
-					v := f.Value.(PsKey).Value()
-					uv = SetUnitValueString(v, f.PointUnit)
-
-				case "[]api.PsKey":
-					fallthrough
-				case "[]PsKey":
-					v := f.Value.([]PsKey)
-					for _, val := range v {
-						uvs = append(uvs, SetUnitValueString(val.Value(), f.PointUnit))
-					}
-
-				case "api.DateTime":
-					fallthrough
-				case "DateTime":
-					v := f.Value.(DateTime).String()
-					uv = SetUnitValueString(v, "date")
-
-				case "[]api.DateTime":
-					fallthrough
-				case "[]DateTime":
-					v := f.Value.([]DateTime)
-					for _, val := range v {
-						uvs = append(uvs, SetUnitValueString(val.String(), f.PointUnit))
-					}
-
-				case "[]string":
-					// v := strings.Join(f.Value.([]string), ",")
-					j, err := json.Marshal(f.Value.([]string))
-					if err != nil {
-						j = []byte(fmt.Sprintf("%v", f.Value.([]string)))
-					}
-					uv = SetUnitValueString(string(j), f.PointUnit)
-
-				default:
-					ignore = true
-			}
-			// fmt.Printf("TYPE: %s.%s (%s)\n", f.Endpoint, f.PointId, f.ValueType)
-			if ignore {
-				// fmt.Printf("IGNORE: %s.%s (%s)\n", f.Endpoint, f.PointId, f.ValueType)
+			// fmt.Printf("DEBUG: StructToPoints(): %s / %s\n", f.Endpoint, f.PointId)
+			uv, _, ok := valueTypes.AnyToUnitValue(f.Value, f.PointUnit, f.PointValueType)
+			if !ok {
 				continue
 			}
 
@@ -287,47 +137,42 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 					f.PointTimeSpan = PointTimeSpanTotal
 			}
 
-			var now DateTime
+			var now valueTypes.DateTime
 			if timestamp.IsZero() {
-				now = NewDateTime(time.Now().Round(5 * time.Minute).Format(DtLayoutZeroSeconds))
+				now = valueTypes.NewDateTime(time.Now().Round(5 * time.Minute).Format(valueTypes.DateTimeLayoutZeroSeconds))
 			} else {
-				now = NewDateTime(timestamp.String())
+				now = valueTypes.NewDateTime(timestamp.String())
 			}
 
 			p := Point {
 				Parents:   parents,
-				Id:        PointId(f.PointId),
+				Id:        valueTypes.SetPointIdString(f.PointId),
 				GroupName: f.PointGroupName,
 				Name:      f.PointName,
 				Unit:      uv.Unit(),
 				TimeSpan:  f.PointTimeSpan,
-				ValueType: f.PointValueType,
+				ValueType: uv.Type(),
 				Valid:     true,
 				States:    nil,
 			}
+			p.FixUnitType()
 
 			// Add arrays as multiple entries.
-			if len(uvs) > 0 {
+			if len(uv) > 1 {
 				// @TODO - Think about adding in arrays of values OR just marshal arrays into JSON.
-				res := "%s.%d"
-				switch  {
-					case len(uvs) > 99:
-						res = "%s.%.3d"
-					case len(uvs) > 9:
-						res = "%s.%.2d"
-				}
-				for i, val := range uvs {
-					// fmt.Sprintf(res, f.Endpoint, i)
-					dm.AddEntry(fmt.Sprintf(res, f.Endpoint, i), f.PointDevice, p, now, val.String())
+				res := valueTypes.SizeOfArrayLength(uv)
+				for i, val := range uv {
+					dm.AddEntry(JoinWithDots(res, valueTypes.DateTimeLayoutDay, f.Endpoint, i), f.PointDevice, p, now, val.String())
+					// dm.AddEntry(fmt.Sprintf(res, f.Endpoint, i), f.PointDevice, p, now, val.String())
 				}
 				continue
 			}
 
-			dm.AddEntry(f.Endpoint, f.PointDevice, p, now, uv.String())
+			dm.AddEntry(f.Endpoint, f.PointDevice, p, now, uv[0].String())
 			if f.PointAlias != "" {
 				// fullName = NameDevicePoint(device, PointId(alias))
-				p.Id = PointId(f.PointAlias)
-				dm.AddEntry(f.Endpoint, f.PointDevice, p, now, uv.String())
+				p.Id = valueTypes.SetPointIdString(f.PointAlias)
+				dm.AddEntry(f.Endpoint, f.PointDevice, p, now, uv[0].String())
 			}
 		}
 
@@ -389,14 +234,14 @@ func (de *DataPointEntries) SetUnits(units string) {
 func (dm *DataMap) GetEntry(entry string, index int) DataEntry {
 	var ret DataEntry
 	for range Only.Once {
-		pe := dm.DataPoints[PointId(entry)]
+		pe := dm.DataPoints[entry]
 		if pe != nil {
 			ret = pe.GetEntry(index)
 			break
 		}
 
 		for k, v := range dm.DataPoints {
-			if strings.HasSuffix(string(k), "." + entry) {
+			if strings.HasSuffix(k, "." + entry) {
 				ret = v.GetEntry(index)
 				break
 			}
@@ -414,7 +259,7 @@ func (dm *DataMap) GetEntryFromPointId(pointId string) *DataPointEntries {
 				continue
 			}
 
-			if string(pe.Point.Id) == pointId {
+			if pe.Point.Id.String() == pointId {
 				ret = &v
 				break
 			}
@@ -423,12 +268,12 @@ func (dm *DataMap) GetEntryFromPointId(pointId string) *DataPointEntries {
 	return ret
 }
 
-func (dm *DataMap) HideEntry(pointId string) {
-	for range Only.Once {
-		de := dm.GetEntryFromPointId(pointId)
-		de.Hide()
-	}
-}
+// func (dm *DataMap) HideEntry(pointId valueTypes.PointId) {
+// 	for range Only.Once {
+// 		de := dm.GetEntryFromPointId(pointId)
+// 		de.Hide()
+// 	}
+// }
 
 func (dm *DataMap) GetFloatValue(entry string, index int) float64 {
 	var ret float64
@@ -505,7 +350,7 @@ func (dm *DataMap) GetValue(entry string, index int) float64 {
 func (dm *DataMap) AppendMap(add DataMap) {
 	for range Only.Once {
 		if dm.DataPoints == nil {
-			dm.DataPoints = make(map[PointId]DataPointEntries)
+			dm.DataPoints = make(map[string]DataPointEntries)
 		}
 
 		for point, de := range add.DataPoints {
@@ -524,41 +369,62 @@ func (dm *DataMap) AppendMap(add DataMap) {
 			if Points.Exists(point) {
 				fmt.Printf("EXISTS: %s\n", point)
 			}
-			Points.Add(point, *de[len(de)-1].Point)
+			Points.Add(*de[len(de)-1].Point)
 		}
 	}
 }
 
-func (dm *DataMap) Add(pid PointId, de DataEntry) {
+func (dm *DataMap) Add(de DataEntry) {
 	for range Only.Once {
-		if !strings.Contains(string(pid), ".") {
-			pid = PointId(de.EndPoint + "." + string(pid))
-		}
-
-		de.Index = len(dm.Order)
-		dm.DataPoints[pid] = append(dm.DataPoints[pid], de)
-		dm.Order = append(dm.Order, pid)
-
-		if Points.Exists(pid) {
-			fmt.Printf("EXISTS: %s\n", pid)
-		}
-		Points.Add(pid, *de.Point)
-		// if ep, ok := Points[point]; ok {
-		// 	jep, _ := json.Marshal(ep)
-		// 	jde, _ := json.Marshal(ep)
-		// 	fmt.Printf("EXISTS[%s]:\n%s\n%s\n", point, jde, jep)
-		// 	continue
+		// if !strings.Contains(endpoint, ".") {
+		// 	// endpoint = valueTypes.PointId(de.EndPoint + "." + string(endpoint))
+		// 	endpoint = JoinWithDots(0, "", de.EndPoint, endpoint)
 		// }
-		// Points[point] = *de.Point
+
+		// DataEntry {
+		// 	Point:      Point{
+		// 		Parents:   ParentDevices{},
+		// 		Id:        valueTypes.PointId{},
+		// 		GroupName: "",
+		// 		Name:      "",
+		// 		Unit:      "",
+		// 		TimeSpan:  "",
+		// 		ValueType: "",
+		// 		Valid:     false,
+		// 		States:    nil,
+		// 	},
+		// 	Date:       valueTypes.DateTime{},
+		// 	EndPoint:   "",
+		// 	FullId:     valueTypes.DataPoint{},
+		// 	Parent:     ParentDevice{},
+		// 	Value:      "",
+		// 	ValueFloat: 0,
+		// 	ValueBool:  false,
+		// 	Index:      0,
+		// 	Valid:      false,
+		// 	Hide:       false,
+		// }
+
+		// fmt.Printf("DEBUG: dm.Add(): %s ?= %s.%s\n", de.FullId(), de.EndPoint, de.Point.Id)
+		endpoint := de.FullId()
+		de.Index = len(dm.Order)
+		dm.DataPoints[endpoint] = append(dm.DataPoints[endpoint], de)
+		dm.Order = append(dm.Order, endpoint)
+
+		if Points.Exists(endpoint) {
+			fmt.Printf("EXISTS: %s\n", endpoint)
+		}
+		Points.Add(*de.Point)
 	}
 }
 
-func (dm *DataMap) AddEntry(endpoint string, parentId string, point Point, date DateTime, value string) {
+func (dm *DataMap) AddEntry(endpoint string, parentId string, point Point, date valueTypes.DateTime, value string) {
 	for range Only.Once {
 		unit := point.Unit	// Save unit.
+		vType := point.ValueType	// Save type.
 
 		// Match to a previously defined point.
-		p := GetPoint(endpoint, point.Id)
+		p := GetPoint(point.Id.String())
 		if p == nil {
 			point = *p
 		}
@@ -570,20 +436,21 @@ func (dm *DataMap) AddEntry(endpoint string, parentId string, point Point, date 
 		point.Parents.Add(parent)
 
 		if point.Name == "" {
-			point.Name = PointToName(point.Id)
+			point.Name = point.Id.PointToName()
 		}
 		// fid := JoinDevicePoint(parent.Key, point.Id)
-		ref := SetUnitValueString(value, unit)
+		ref := valueTypes.SetUnitValueString(value, unit, vType)
 		point.Unit = ref.Unit()
 		point.Valid = true
 
-		if _, ok := dm.DataPoints[point.Id]; ok {
-			point.Id += ".BARF"
+		if _, ok := dm.DataPoints[point.Id.String()]; ok {
+			fmt.Printf("BARF: %s\n", point.Id)
 		}
+
 		// dm.Add(JoinDevicePoint(endpoint, point.Id), DataEntry {
-		dm.Add(JoinDevicePoint(endpoint, point.Id), DataEntry {
+		dm.Add(DataEntry {
 			EndPoint:   endpoint,
-			FullId:     JoinDevicePoint(endpoint, point.Id),
+			// FullId:     valueTypes.JoinDataPoint(endpoint, point.Id.String()),
 			// FullId:     JoinDevicePoint(parent.Key, point.Id),
 			Parent:     parent,
 
@@ -595,7 +462,7 @@ func (dm *DataMap) AddEntry(endpoint string, parentId string, point Point, date 
 	}
 }
 
-func (dm *DataMap) AddUnitValue(endpoint string, parentId string, pid PointId, name string, groupName string, date DateTime, ref UnitValue) {
+func (dm *DataMap) AddUnitValue(endpoint string, parentId string, pid valueTypes.PointId, name string, groupName string, date valueTypes.DateTime, ref valueTypes.UnitValue) {
 	for range Only.Once {
 		if endpoint == "" {
 			endpoint = apiReflect.GetCallerPackage(2)
@@ -604,13 +471,13 @@ func (dm *DataMap) AddUnitValue(endpoint string, parentId string, pid PointId, n
 		ref = ref.UnitValueFix()
 
 		if name == "" {
-			name = string(pid)
+			name = pid.PointToName()
 		}
 
-		point := GetPoint(parentId, pid)
+		point := GetPoint(pid.String())
 		if point == nil {
 			// No UV found. Create one.
-			dm.Add(pid, CreateDataEntryUnitValue(date, endpoint, parentId, pid, name, ref))
+			dm.Add(CreateDataEntryUnitValue(date, endpoint, parentId, pid, name, ref))
 			break
 		}
 
@@ -625,15 +492,15 @@ func (dm *DataMap) AddUnitValue(endpoint string, parentId string, pid PointId, n
 			point.Name = name
 		}
 		if point.Name == "" {
-			point.Name = PointToName(pid)
+			point.Name = pid.PointToName()
 		}
 		if point.GroupName == "" {
 			point.GroupName = groupName
 		}
 
-		dm.Add(NameDevicePoint(endpoint, pid), DataEntry {
+		dm.Add(DataEntry {
 			EndPoint:   endpoint,
-			FullId:     JoinDevicePoint(endpoint, point.Id),
+			// FullId:     valueTypes.JoinDataPoint(endpoint, point.Id.String()),
 			// FullId:     JoinDevicePoint(parent.Key, point.Id),
 			Parent:     parent,
 
@@ -645,90 +512,168 @@ func (dm *DataMap) AddUnitValue(endpoint string, parentId string, pid PointId, n
 	}
 }
 
-func (dm *DataMap) AddFloat(endpoint string, parentId string, pid PointId, name string, date DateTime, value float64) {
+// func (dm *DataMap) AddFloat(endpoint string, parentId string, pid PointId, name string, date valueTypes.DateTime, value float64) {
+// 	for range Only.Once {
+// 		// fvs := Float64ToString(value)
+// 		point := GetPoint(parentId, pid)
+// 		if point == nil {
+// 			// No UV found. Create one.
+// 			dm.Add(pid, CreateDataEntryUnitValue(date, endpoint, parentId, pid, name, valueTypes.SetUnitValueFloat(value, point.Unit, point.ValueType)))
+// 			break
+// 		}
+//
+// 		ref := valueTypes.SetUnitValueFloat(value, point.Unit, point.ValueType)
+// 		if ref.Unit() != point.Unit {
+// 			fmt.Printf("OOOPS: Unit mismatch - %f %s != %f %s\n", value, point.Unit, ref.ValueFloat(), ref.Unit())
+// 			point.Unit = ref.Unit()
+// 		}
+//
+// 		var parent ParentDevice
+// 		parent.Set(parentId)
+// 		point.Parents.Add(parent)
+//
+// 		dm.Add(pid, DataEntry {
+// 			EndPoint:   endpoint,
+// 			FullId:     JoinDevicePoint(endpoint, point.Id),
+// 			// FullId:     JoinDevicePoint(parent.Key, point.Id),
+// 			Parent:     parent,
+//
+// 			Date:       date,
+// 			Point:      point,
+// 			Value:      ref.String(),
+// 			ValueFloat: ref.Value(),
+// 		})
+// 	}
+//
+// 	uv := valueTypes.SetUnitValueFloat(value, "", "float")
+// 	de := CreateDataEntryUnitValue(date, endpoint, parentId, pid, name, uv)
+// 	// de := CreateDataEntryUnitValue(date, endpoint, parentId, pid, name, UnitValue {
+// 	// 	Unit:       "float",
+// 	// 	Value:      fmt.Sprintf("%f", value),
+// 	// 	ValueFloat: 0,
+// 	// })
+// 	dm.Add(pid, de)
+// }
+//
+// func (dm *DataMap) AddString(endpoint string, parentId string, pid PointId, name string, date valueTypes.DateTime, value string) {
+// 	dm.Add(pid, CreateDataEntryString(date, endpoint, parentId, pid, name, value))
+// }
+//
+// func (dm *DataMap) AddInt(endpoint string, parentId string, pid PointId, name string, date valueTypes.DateTime, value int64) {
+//
+// 	for range Only.Once {
+// 		uvs, ok := valueTypes.AnyToUnitValue(value, "", "")
+// 		if !ok {
+// 			fmt.Printf("ERROR: AddInt(endpoint '%s', parentId '%s', pid '%s', name '%s', date '%s', value %d)",
+// 				endpoint, parentId, pid, name, date, value)
+// 			break
+// 		}
+// 		for _, uv := range uvs {
+// 			de := CreateDataEntryUnitValue(date, endpoint, parentId, pid, name, uv)
+// 			dm.Add(pid, de)
+// 		}
+//
+// 		// uv := valueTypes.SetUnitValueInteger(value, "", "int")
+// 		// de := CreateDataEntryUnitValue(date, endpoint, parentId, pid, name, uv)
+// 		// // de := CreateDataEntryUnitValue(date, endpoint, parentId, pid, name, UnitValue {
+// 		// // 	Unit:       "int",
+// 		// // 	Value:      fmt.Sprintf("%d", value),
+// 		// // 	ValueFloat: float64(value),
+// 		// // })
+// 		// dm.Add(pid, de)
+// 	}
+// }
+
+func (dm *DataMap) AddAny(endpoint string, parentId string, pid valueTypes.PointId, name string, date valueTypes.DateTime, value interface{}) {
+
 	for range Only.Once {
-		// fvs := Float64ToString(value)
-		point := GetPoint(parentId, pid)
-		if point == nil {
-			// No UV found. Create one.
-			dm.Add(pid, CreateDataEntryUnitValue(date, endpoint, parentId, pid, name, SetUnitValueFloat(value, "float")))
+		uvs, isNil, ok := valueTypes.AnyToUnitValue(value, "", "")
+		if !ok {
+			fmt.Printf("ERROR: AddAny(endpoint '%s', parentId '%s', pid '%s', name '%s', date '%s', value '%v')",
+				endpoint, parentId, pid, name, date, value)
 			break
 		}
 
-		ref := SetUnitValueFloat(value, point.Unit)
-		if ref.Unit() != point.Unit {
-			fmt.Printf("OOOPS: Unit mismatch - %f %s != %f %s\n", value, point.Unit, ref.ValueFloat(), ref.Unit())
-			point.Unit = ref.Unit()
+		point := GetPoint(parentId + "." + pid.String())
+		if point == nil {
+			// No UV found. Create one.
+			for _, uv := range uvs {
+				de := CreateDataEntryUnitValue(date, endpoint, parentId, pid, name, uv)
+				if isNil {
+					de.Point.ValueType += "(NIL)"
+				}
+				dm.Add(de)
+			}
+			// dm.Add(pid, CreateDataEntryUnitValue(date, endpoint, parentId, pid, name,
+			// 	valueTypes.SetUnitValueFloat(value, point.Unit, point.ValueType)))
+			break
 		}
 
-		var parent ParentDevice
-		parent.Set(parentId)
-		point.Parents.Add(parent)
+		// ref := valueTypes.SetUnitValueFloat(value, point.Unit, point.ValueType)
+		// if ref.Unit() != point.Unit {
+		// 	fmt.Printf("OOOPS: Unit mismatch - %f %s != %f %s\n", value, point.Unit, ref.ValueFloat(), ref.Unit())
+		// 	point.Unit = ref.Unit()
+		// }
 
-		dm.Add(pid, DataEntry {
-			EndPoint:   endpoint,
-			FullId:     JoinDevicePoint(endpoint, point.Id),
-			// FullId:     JoinDevicePoint(parent.Key, point.Id),
-			Parent:     parent,
+		if isNil {
+			point.ValueType += "(NIL)"
+		}
 
-			Date:       date,
-			Point:      point,
-			Value:      ref.String(),
-			ValueFloat: ref.Value(),
-		})
+		for _, uv := range uvs {
+			if uv.Unit() != point.Unit {
+				fmt.Printf("OOOPS: Unit mismatch - %f %s != %f %s\n", value, point.Unit, uv.ValueFloat(), uv.Unit())
+				point.Unit = uv.Unit()
+			}
+
+			var parent ParentDevice
+			parent.Set(parentId)
+			point.Parents.Add(parent)
+
+			dm.Add(DataEntry{
+				EndPoint: endpoint,
+				// FullId:     valueTypes.JoinDataPoint(endpoint, point.Id.String()),
+				Parent:   parent,
+
+				Date:       date,
+				Point:      point,
+				Value:      uv.String(),
+				ValueFloat: uv.Value(),
+				ValueBool:  uv.ValueBool(),
+			})
+		}
+
+		for _, uv := range uvs {
+			de := CreateDataEntryUnitValue(date, endpoint, parentId, pid, name, uv)
+			dm.Add(de)
+		}
 	}
-
-	uv := SetUnitValueFloat(value, "float")
-	de := CreateDataEntryUnitValue(date, endpoint, parentId, pid, name, uv)
-	// de := CreateDataEntryUnitValue(date, endpoint, parentId, pid, name, UnitValue {
-	// 	Unit:       "float",
-	// 	Value:      fmt.Sprintf("%f", value),
-	// 	ValueFloat: 0,
-	// })
-	dm.Add(pid, de)
 }
 
-func (dm *DataMap) AddString(endpoint string, parentId string, pid PointId, name string, date DateTime, value string) {
-	dm.Add(pid, CreateDataEntryString(date, endpoint, parentId, pid, name, value))
-}
-
-func (dm *DataMap) AddInt(endpoint string, parentId string, pid PointId, name string, date DateTime, value int64) {
-	uv := SetUnitValueInteger(value, "int")
-	de := CreateDataEntryUnitValue(date, endpoint, parentId, pid, name, uv)
-	// de := CreateDataEntryUnitValue(date, endpoint, parentId, pid, name, UnitValue {
-	// 	Unit:       "int",
-	// 	Value:      fmt.Sprintf("%d", value),
-	// 	ValueFloat: float64(value),
-	// })
-	dm.Add(pid, de)
-}
-
-
-func (dm *DataMap) FromRefAddAlias(entry string, parentId string, pid PointId, name string) {
+func (dm *DataMap) FromRefAddAlias(entry string, parentId string, pid string, name string) {
 	pe := dm.GetEntry(entry, 0)
 	if pe.IsNotValid() {
 		fmt.Printf("ERROR: FromRefAddAlias('%s', '%s', '%s', '%s')\n", entry, parentId, pid, name)
 		return
 	}
-	dm.Add(pid, pe.CreateAlias(pe.EndPoint, parentId, pid, name))
+	dm.Add(pe.CreateAlias(pe.EndPoint, parentId, valueTypes.SetPointIdString(pid), name))
 }
 
-func (dm *DataMap) FromRefAddState(entry string, parentId string, pid PointId, name string) {
+func (dm *DataMap) FromRefAddState(entry string, parentId string, pid string, name string) {
 	pe := dm.GetEntry(entry, 0)
 	if pe.IsNotValid() {
 		fmt.Printf("ERROR: FromRefAddState('%s', '%s', '%s', '%s')\n", entry, parentId, pid, name)
 		return
 	}
-	dm.Add(pid, pe.CreateState(pe.EndPoint, parentId, pid, name))
+	dm.Add(pe.CreateState(pe.EndPoint, parentId, valueTypes.SetPointIdString(pid), name))
 }
 
-func (dm *DataMap) FromRefAddFloat(entry string, parentId string, pid PointId, name string, value float64) {
+func (dm *DataMap) FromRefAddFloat(entry string, parentId string, pid string, name string, value float64) {
 	pe := dm.GetEntry(entry, 0)
 	if pe.IsNotValid() {
 		fmt.Printf("ERROR: FromRefAddFloat('%s', '%s', '%s', '%s')\n", entry, parentId, pid, name)
 		return
 	}
-	dm.Add(pid, pe.CreateFloat(pe.EndPoint, parentId, pid, name, value))
+	dm.Add(pe.CreateFloat(pe.EndPoint, parentId, valueTypes.SetPointIdString(pid), name, value))
 }
 
 
@@ -780,9 +725,9 @@ func (dm *DataMap) Print() {
 }
 
 
-func (de *DataEntry) CreateAlias(endpoint string, parentId string, pid PointId, name string) DataEntry {
+func (de *DataEntry) CreateAlias(endpoint string, parentId string, pid valueTypes.PointId, name string) DataEntry {
 	if name == "" {
-		name = PointToName(pid)
+		name = pid.PointToName()
 	}
 
 	ret := DataEntry {
@@ -798,7 +743,7 @@ func (de *DataEntry) CreateAlias(endpoint string, parentId string, pid PointId, 
 		},
 		Date:       de.Date,
 		EndPoint:   endpoint,
-		FullId:     JoinDevicePoint(endpoint, pid),
+		// FullId:     valueTypes.JoinDataPoint(endpoint, pid.String()),
 		// FullId:     JoinDevicePoint(parentId, pid),
 		Parent:     de.Parent,		// ParentDevice{},
 		Value:      de.Value,
@@ -806,6 +751,7 @@ func (de *DataEntry) CreateAlias(endpoint string, parentId string, pid PointId, 
 		ValueBool:  de.ValueBool,
 		Index:      de.Index,
 	}
+	ret.Point.FixUnitType()
 
 	ret.Parent.Set(parentId)
 	de.Point.Parents.Add(ret.Parent)
@@ -822,24 +768,20 @@ func (de *DataEntry) CreateAlias(endpoint string, parentId string, pid PointId, 
 	return ret
 }
 
-func (de *DataEntry) CreateFloat(endpoint string, parentId string, pid PointId, name string, value float64) DataEntry {
+func (de *DataEntry) CreateFloat(endpoint string, parentId string, pid valueTypes.PointId, name string, value float64) DataEntry {
 	if name == "" {
-		name = PointToName(pid)
+		name = pid.PointToName()
 	}
 
 	de2 := de.CreateAlias(endpoint, parentId, pid, name)
-	uv := SetUnitValueFloat(value, de2.Point.Unit)
+	uv := valueTypes.SetUnitValueFloat(value, de2.Point.Unit, de2.Point.ValueType)
 	de2.Value = uv.String()
 	de2.ValueFloat = uv.Value()
 
 	return de2
 }
 
-func (de *DataEntry) CreateState(endpoint string, parentId string, pid PointId, name string) DataEntry {
-	if name == "" {
-		name = PointToName(pid)
-	}
-
+func (de *DataEntry) CreateState(endpoint string, parentId string, pid valueTypes.PointId, name string) DataEntry {
 	de2 := de.CreateAlias(endpoint, parentId, pid, name)
 	if de2.ValueFloat == 0 {
 		de2.Value = "false"
@@ -856,78 +798,67 @@ func (de *DataEntry) CreateState(endpoint string, parentId string, pid PointId, 
 }
 
 
-func JoinDevicePoint(device string, pid PointId) PointId {
-	var ret PointId
-	for range Only.Once {
-		if device == "" {
-			device = "virtual"
-		}
-		ret = PointId(fmt.Sprintf("%s.%s", device, pid))
-	}
-	return ret
-}
+// func CreateDataEntryActive(date valueTypes.DateTime, endpoint string, parentId string, pid valueTypes.PointId, name string, value float64) DataEntry {
+// 	point := GetPoint(parentId, pid)
+// 	if point == nil {
+// 		if name == "" {
+// 			name = pid.PointToName()
+// 		}
+// 		point = CreatePoint(parentId, pid, name, "state")
+// 	}
+//
+// 	var parent ParentDevice
+// 	parent.Set(parentId)
+// 	point.Parents.Add(parent)
+//
+// 	return DataEntry {
+// 		EndPoint:   endpoint,
+// 		FullId:     valueTypes.JoinDataPoint(endpoint, point.Id.String()),
+// 		// FullId:     JoinDevicePoint(parent.Key, point.Id),
+// 		Parent:     parent,
+//
+// 		Point:      point,
+// 		Date:       date,
+// 		Value:      fmt.Sprintf("%v", IsActive(value)),
+// 		ValueFloat: 0,
+// 		Index:      0,
+// 	}
+// }
+//
+// func CreateDataEntryString(date valueTypes.DateTime, endpoint string, parentId string, pid valueTypes.PointId, name string, value string) DataEntry {
+// 	point := GetPoint(parentId, pid)
+// 	if point == nil {
+// 		if name == "" {
+// 			name = pid.PointToName()
+// 		}
+// 		point = CreatePoint(parentId, pid, name, "string")
+// 	}
+//
+// 	var parent ParentDevice
+// 	parent.Set(parentId)
+// 	point.Parents.Add(parent)
+//
+// 	return DataEntry {
+// 		EndPoint:   endpoint,
+// 		FullId:     valueTypes.JoinDataPoint(endpoint, pid.String()),
+// 		// FullId:     JoinDevicePoint(parent.Key, pid),
+// 		Parent:     parent,
+//
+// 		Point:      point,
+// 		Date:       date,
+// 		Value:      value,
+// 		ValueFloat: 0,
+// 		Index:      0,
+// 	}
+// }
 
-func CreateDataEntryActive(date DateTime, endpoint string, parentId string, pid PointId, name string, value float64) DataEntry {
-	point := GetPoint(parentId, pid)
-	if point == nil {
-		if name == "" {
-			name = PointToName(pid)
-		}
-		point = CreatePoint(parentId, pid, name, "state")
-	}
-
-	var parent ParentDevice
-	parent.Set(parentId)
-	point.Parents.Add(parent)
-
-	return DataEntry {
-		EndPoint:   endpoint,
-		FullId:     JoinDevicePoint(endpoint, point.Id),
-		// FullId:     JoinDevicePoint(parent.Key, point.Id),
-		Parent:     parent,
-
-		Point:      point,
-		Date:       date,
-		Value:      fmt.Sprintf("%v", IsActive(value)),
-		ValueFloat: 0,
-		Index:      0,
-	}
-}
-
-func CreateDataEntryString(date DateTime, endpoint string, parentId string, pid PointId, name string, value string) DataEntry {
-	point := GetPoint(parentId, pid)
-	if point == nil {
-		if name == "" {
-			name = PointToName(pid)
-		}
-		point = CreatePoint(parentId, pid, name, "string")
-	}
-
-	var parent ParentDevice
-	parent.Set(parentId)
-	point.Parents.Add(parent)
-
-	return DataEntry {
-		EndPoint:   endpoint,
-		FullId:     JoinDevicePoint(endpoint, pid),
-		// FullId:     JoinDevicePoint(parent.Key, pid),
-		Parent:     parent,
-
-		Point:      point,
-		Date:       date,
-		Value:      value,
-		ValueFloat: 0,
-		Index:      0,
-	}
-}
-
-func CreateDataEntryUnitValue(date DateTime, endpoint string, parentId string, pid PointId, name string, value UnitValue) DataEntry {
+func CreateDataEntryUnitValue(date valueTypes.DateTime, endpoint string, parentId string, pid valueTypes.PointId, name string, value valueTypes.UnitValue) DataEntry {
 	value = value.UnitValueFix()
 
-	point := GetPoint(parentId, pid)
+	point := GetPoint(parentId + "." + pid.String())
 	if point == nil {
 		if name == "" {
-			name = PointToName(pid)
+			name = pid.PointToName()
 		}
 		point = CreatePoint(parentId, pid, name, value.Unit())
 	}
@@ -938,7 +869,7 @@ func CreateDataEntryUnitValue(date DateTime, endpoint string, parentId string, p
 
 	return DataEntry {
 		EndPoint:   endpoint,
-		FullId:     JoinDevicePoint(endpoint, pid),
+		// FullId:     valueTypes.JoinDataPoint(endpoint, pid.String()),
 		// FullId:     JoinDevicePoint(parent.Key, pid),
 		Parent:     parent,
 
@@ -950,9 +881,9 @@ func CreateDataEntryUnitValue(date DateTime, endpoint string, parentId string, p
 	}
 }
 
-func CreatePoint(parentId string, pid PointId, name string, unit string) *Point {
+func CreatePoint(parentId string, pid valueTypes.PointId, name string, unit string) *Point {
 	if name == "" {
-		name = PointToName(pid)
+		name = pid.PointToName()
 	}
 
 	ret := &Point {
@@ -963,15 +894,16 @@ func CreatePoint(parentId string, pid PointId, name string, unit string) *Point 
 		TimeSpan:  "",
 		Valid:     true,
 	}
+	ret.FixUnitType()
 	return ret
 }
 
-func IsActive(value float64) bool {
-	if (value > 0.01) || (value < -0.01) {
-		return true
-	}
-	return false
-}
+// func IsActive(value float64) bool {
+// 	if (value > 0.01) || (value < -0.01) {
+// 		return true
+// 	}
+// 	return false
+// }
 
 func GetPercent(value float64, max float64) float64 {
 	if max == 0 {
@@ -979,3 +911,35 @@ func GetPercent(value float64, max float64) float64 {
 	}
 	return (value / max) * 100
 }
+
+
+// func JoinDevicePoint(endpoint string, pid valueTypes.PointId) valueTypes.PointId {
+// 	var ret valueTypes.PointId
+// 	for range Only.Once {
+// 		if endpoint == "" {
+// 			endpoint = "virtual"
+// 		}
+// 		ret = valueTypes.PointId(JoinWithDots(0, "", endpoint, pid))
+// 	}
+// 	return ret
+// }
+
+func JoinWithDots(intSize int, dateFormat string, args ...interface{}) string {
+	var ret string
+	for range Only.Once {
+		var a []string
+		for _, e := range args {
+			v := valueTypes.TypeToString(intSize, dateFormat, e)
+			if v == "" {
+				continue
+			}
+			a = append(a, v)
+		}
+		ret = strings.Join(a, ".")
+	}
+	return ret
+}
+
+// func JoinStringsWithDots(args ...string) string {
+// 	return strings.Join(args, ".")
+// }

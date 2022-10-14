@@ -3,6 +3,7 @@ package getDeviceTypeList
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -24,9 +25,9 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	DeviceTypeList []struct {
-		DevListOrderID api.Integer  `json:"dev_list_order_id"`
-		DeviceType     api.Integer  `json:"device_type"`
-		TypeName       api.String   `json:"type_name"`
+		DevListOrderID valueTypes.Integer  `json:"dev_list_order_id"`
+		DeviceType     valueTypes.Integer  `json:"device_type"`
+		TypeName       valueTypes.String   `json:"type_name"`
 	} `json:"deviceTypeList"`
 }
 
@@ -64,7 +65,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

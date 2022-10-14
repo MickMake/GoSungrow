@@ -2,6 +2,7 @@ package apiReflect
 
 import (
 	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"crypto/md5"
 	"encoding/json"
 	"errors"
@@ -14,6 +15,184 @@ import (
 	"reflect"
 	"strings"
 )
+
+
+type DataStructureMap map[string]DataStructure
+type DataStructure struct {
+	Json           string
+	PointId        string
+	// PointType      string
+	PointUnit      string
+	PointUnitFrom  string
+	PointDevice    string
+	PointName      string
+	PointTimeSpan  string
+	PointValueType string
+	PointAlias     string
+	PointIgnore    bool
+	PointGroupName string
+
+	Value         interface{}
+	ValueType     string
+	ValueKind     string
+	Endpoint      string
+}
+
+const (
+	PointId        = "PointId"			// Point id in the form p\d+ or \d+
+	// PointType      = "PointType"		// Type of point: energy, date, battery, temperature.
+	PointUnit      = "PointUnit"		// Units: Wh, kWh, C, h.
+	PointUnitFrom  = "PointUnitFrom"	// Get units from another point.
+	PointDevice    = "PointDevice"		// Associated device to point.
+	PointName      = "PointName"		// Human name of point.
+	PointTimeSpan  = "PointTimeSpan"	// Timespan Total, Yearly, Monthly, Day.
+	PointValueType = "PointValueType"	//
+	PointAlias     = "PointAlias"		// Alias this point to another entry.
+	PointIgnore    = "PointIgnore"		// Ignore this point.
+	PointGroupName = "PointGroupName"	// Point group name.
+)
+
+func GetPointTags(ref interface{}, name ...string) DataStructureMap {
+	ret := make(DataStructureMap)
+
+	for range Only.Once {
+		vo := reflect.ValueOf(ref)
+		to := reflect.TypeOf(ref)
+
+		// Iterate over all available fields and read the tag value
+		for i := 0; i < vo.NumField(); i++ {
+			fieldTo := to.Field(i)
+			fieldVo := vo.Field(i)
+
+			pointValueType := fieldTo.Tag.Get(PointValueType)
+			if valueTypes.IsNil(ref) {
+				pointValueType = "NIL"
+			}
+
+			// fmt.Printf("DEBUG: Key[%s]:\tVT:'%s' Kind:'%s' => '%s'\n",
+			// 	fieldTo.Name,
+			// 	pointValueType,
+			// 	fieldVo.Kind(),
+			// 	fieldTo.Type.String(),
+			// )
+
+			ignore := false
+			ig := fieldTo.Tag.Get(PointIgnore)
+			if ig != "" {
+				ignore = true
+			}
+
+			pointJson := fieldTo.Tag.Get("json")
+			pointId := fieldTo.Tag.Get(PointId)
+			if pointId == "" {
+				pointId = pointJson
+			}
+
+			switch fieldVo.Kind() {
+				case reflect.Struct:
+					if valueTypes.IsUnknownStruct(fieldTo, fieldVo) {
+						n2 := name
+						n2 = append(n2, pointId)
+						t2 := GetPointTags(fieldVo.Interface(), n2...)
+						for k, v := range t2 {
+							ret[k] = v
+						}
+						continue
+					}
+
+				case reflect.Slice:
+					// @TODO - Handle slicing here.
+					// Will have to add more Point* tags.
+					// Replicate the JoinWithDots 1st and 2nd arguments.
+					// intSize int, dateFormat string
+					// EG: PointSliceIntSize, PointSliceDateFormat
+					if pointValueType == "" {
+						pointValueType = reflect.Slice.String()
+					}
+
+				case reflect.Invalid:
+					fallthrough
+				case reflect.Bool:
+					fallthrough
+				case reflect.String:
+					fallthrough
+				case reflect.Float32:
+					fallthrough
+				case reflect.Float64:
+					fallthrough
+				case reflect.Int:
+					fallthrough
+				case reflect.Int8:
+					fallthrough
+				case reflect.Int16:
+					fallthrough
+				case reflect.Int32:
+					fallthrough
+				case reflect.Int64:
+					fallthrough
+				case reflect.Uint:
+					fallthrough
+				case reflect.Uint8:
+					fallthrough
+				case reflect.Uint16:
+					fallthrough
+				case reflect.Uint32:
+					fallthrough
+				case reflect.Uint64:
+					fallthrough
+				case reflect.Interface:
+					// Pick up the unassigned types.
+					if pointValueType == "" {
+						pointValueType = reflect.Interface.String()
+					}
+			}
+
+			if !fieldTo.IsExported() {
+				fmt.Printf("DEBUG: NOTEXPORTED(%s): %s\n", fieldTo.Name, fieldTo.Tag.Get("json"))
+				continue
+			}
+
+			endPointName := strings.Join(name, ".")
+			pointName := strings.TrimPrefix(endPointName + "." + pointId, ".")
+			ds := DataStructure {
+				Json:           pointJson,
+				PointId:        pointId,
+				// PointType:      fieldTo.Tag.Get(PointType),
+				PointUnit:      fieldTo.Tag.Get(PointUnit),
+				PointUnitFrom:  fieldTo.Tag.Get(PointUnitFrom),
+				PointDevice:    fieldTo.Tag.Get(PointDevice),
+				PointName:      fieldTo.Tag.Get(PointName),
+				PointTimeSpan:  fieldTo.Tag.Get(PointTimeSpan),
+				PointValueType: pointValueType,
+				PointAlias:     fieldTo.Tag.Get(PointAlias),
+				PointGroupName: fieldTo.Tag.Get(PointGroupName),
+				PointIgnore:    ignore,
+
+				Value:          fieldVo.Interface(),
+				ValueType:      fieldTo.Type.String(),
+				ValueKind:      fieldVo.Kind().String(),
+				Endpoint:       endPointName,
+			}
+			ret[pointName] = ds
+		}
+	}
+
+	return ret
+}
+
+func (dsm *DataStructureMap) GetUnitFrom(ref ...string) string {
+	var ret string
+	for range Only.Once {
+		r := strings.Join(ref, ".")
+		if s, ok := (*dsm)[r]; ok {
+			ret = s.PointUnit
+		}
+
+		//
+	}
+	return ret
+}
+
 
 // GetArea Return an Area name if we are given an Area or EndPoint struct.
 func GetArea(trim string, v interface{}) string {
@@ -174,8 +353,7 @@ func PackageName(trim string, v interface{}) string {
 		ret = val.Type().PkgPath()
 		ret = strings.TrimPrefix(ret, trim)
 
-		fmt.Printf("%s\t%s\t%s\n", ret, ret2, ret3)
-		fmt.Println("")
+		ret = fmt.Sprintf("%s\t%s\t%s\n", ret, ret2, ret3)
 	}
 	return ret
 }
@@ -364,34 +542,34 @@ func ReflectAsJson(ref interface{}) string {
 
 	for range Only.Once {
 		switch reflect.TypeOf(ref).Kind() {
-		case reflect.Slice:
-		case reflect.Array:
-			fmt.Println("The interface is a slice.")
-			s := reflect.ValueOf(ref)
-			ret += "["
-			for i := 0; i < s.Len(); i++ {
-				ret += ReflectAsJson(s.Index(i))
-			}
-			ret += "]"
-
-		case reflect.Struct:
-			s := reflect.ValueOf(ref) // .Elem()
-			typeOf := s.Type()
-			for i := 0; i < s.NumField(); i++ {
-				value := fmt.Sprintf("%v", s.Field(i).Interface())
-				if value == "" {
-					continue
+			case reflect.Slice:
+			case reflect.Array:
+				fmt.Println("The interface is a slice.")
+				s := reflect.ValueOf(ref)
+				ret += "["
+				for i := 0; i < s.Len(); i++ {
+					ret += ReflectAsJson(s.Index(i))
 				}
-				ret += fmt.Sprintf("%s:%s\n",
-					typeOf.Field(i).Tag.Get("json"),
-					value,
-				)
-				// fmt.Printf("%d: %s %s = %v\n",
-				//	i,
-				//	typeOfT.Field(i).Name,
-				//	s.Field(i).Type(),
-				//	s.Field(i).Interface(),
-				// )
+				ret += "]"
+
+			case reflect.Struct:
+				s := reflect.ValueOf(ref) // .Elem()
+				typeOf := s.Type()
+				for i := 0; i < s.NumField(); i++ {
+					value := fmt.Sprintf("%v", s.Field(i).Interface())
+					if value == "" {
+						continue
+					}
+					ret += fmt.Sprintf("%s:%s\n",
+						typeOf.Field(i).Tag.Get("json"),
+						value,
+					)
+					// fmt.Printf("%d: %s %s = %v\n",
+					//	i,
+					//	typeOfT.Field(i).Name,
+					//	s.Field(i).Type(),
+					//	s.Field(i).Interface(),
+					// )
 			}
 		}
 	}
@@ -455,12 +633,12 @@ func GetNameOld(ref interface{}) (string, string) {
 	str = strings.ToLower(str)
 	sa := strings.SplitN(str, ".", 2)
 	switch len(sa) {
-	case 0:
-	case 1:
-		packageName = sa[0]
-	case 2:
-		packageName = sa[0]
-		structName = sa[1]
+		case 0:
+		case 1:
+			packageName = sa[0]
+		case 2:
+			packageName = sa[0]
+			structName = sa[1]
 	}
 	return packageName, structName
 }
@@ -614,151 +792,6 @@ func GetCallerPackage(skip int) string {
 	return ret
 }
 
-
-type DataStructureMap map[string]DataStructure
-type DataStructure struct {
-	Json           string
-	PointId        string
-	// PointType      string
-	PointUnit      string
-	PointUnitFrom  string
-	PointDevice    string
-	PointName      string
-	PointTimeSpan  string
-	PointValueType string
-	PointAlias     string
-	PointIgnore    bool
-	PointGroupName string
-
-	Value         interface{}
-	ValueType     string
-	Endpoint      string
-}
-
-const (
-	PointId        = "PointId"			// Point id in the form p\d+ or \d+
-	// PointType      = "PointType"		// Type of point: energy, date, battery, temperature.
-	PointUnit      = "PointUnit"		// Units: Wh, kWh, C, h.
-	PointUnitFrom  = "PointUnitFrom"	// Get units from another point.
-	PointDevice    = "PointDevice"		// Associated device to point.
-	PointName      = "PointName"		// Human name of point.
-	PointTimeSpan  = "PointTimeSpan"	// Timespan Total, Yearly, Monthly, Day.
-	PointValueType = "PointValueType"	//
-	PointAlias     = "PointAlias"		// Alias this point to another entry.
-	PointIgnore    = "PointIgnore"		// Ignore this point.
-	PointGroupName = "PointGroupName"	// Point group name.
-)
-
-func GetPointTags(ref interface{}, name ...string) DataStructureMap {
-	ret := make(DataStructureMap)
-
-	for range Only.Once {
-		vo := reflect.ValueOf(ref)
-		to := reflect.TypeOf(ref)
-
-		// Iterate over all available fields and read the tag value
-		for i := 0; i < vo.NumField(); i++ {
-			fieldTo := to.Field(i)
-			fieldVo := vo.Field(i)
-
-			ignore := false
-			ig := fieldTo.Tag.Get(PointIgnore)
-			if ig != "" {
-				ignore = true
-			}
-
-			// if fieldTo.Tag.Get("json") == "p83012" {
-			// 	fmt.Sprintf("")
-			// }
-
-			pointJson := fieldTo.Tag.Get("json")
-			pointId := fieldTo.Tag.Get(PointId)
-			if pointId == "" {
-				pointId = pointJson
-			}
-
-			if IsUnknownStructure(fieldTo, fieldVo) {
-				n2 := name
-				n2 = append(n2, pointId)
-				t2 := GetPointTags(fieldVo.Interface(), n2...)
-				for k, v := range t2 {
-					ret[k] = v
-				}
-				continue
-			}
-
-			endPointName := strings.Join(name, ".")
-			pointName := strings.TrimPrefix(endPointName + "." + pointId, ".")
-			ret[pointName] = DataStructure {
-				Json:           pointJson,
-				PointId:        pointId,
-				// PointType:      fieldTo.Tag.Get(PointType),
-				PointUnit:      fieldTo.Tag.Get(PointUnit),
-				PointUnitFrom:  fieldTo.Tag.Get(PointUnitFrom),
-				PointDevice:    fieldTo.Tag.Get(PointDevice),
-				PointName:      fieldTo.Tag.Get(PointName),
-				PointTimeSpan:  fieldTo.Tag.Get(PointTimeSpan),
-				PointValueType: fieldTo.Tag.Get(PointValueType),
-				PointAlias:     fieldTo.Tag.Get(PointAlias),
-				PointGroupName: fieldTo.Tag.Get(PointGroupName),
-				PointIgnore:    ignore,
-
-				Value:          fieldVo.Interface(),
-				ValueType:      fieldTo.Type.String(),
-				Endpoint:       endPointName,
-			}
-
-			// if fieldTo.Tag.Get("json") == "p83012" {
-			// 	fmt.Sprintf("")
-			// }
-		}
-	}
-
-	return ret
-}
-
-func (dsm *DataStructureMap) GetUnitFrom(ref ...string) string {
-	var ret string
-	for range Only.Once {
-		r := strings.Join(ref, ".")
-		if s, ok := (*dsm)[r]; ok {
-			ret = s.PointUnit
-		}
-
-		//
-	}
-	return ret
-}
-
-func IsUnknownStructure(fieldTo reflect.StructField, fieldVo reflect.Value) bool {
-	var ok bool
-
-	for range Only.Once {
-		// fmt.Printf("Key[%s]: '%s' / '%s'\n",
-		// 	fieldTo.Name,
-		// 	fieldTo.Type.String(),
-		// 	fieldVo.Kind(),
-		// )
-		if fieldVo.Kind() == reflect.Struct {
-			switch fieldTo.Type.String() {
-				case "api.UnitValue":
-				case "api.Float":
-				case "api.Integer":
-				case "api.Count":
-				case "api.Bool":
-				case "api.String":
-				case "api.PsKey":
-				case "api.DateTime":
-
-				default:
-					ok = true
-			}
-		}
-	}
-
-	return ok
-}
-
 func hash(s string) uint32 {
 	h := fnv.New32a()
 	_, _ = h.Write([]byte(s))
@@ -812,27 +845,6 @@ func GetStructKeys(ref interface{}, keys ...string) StructKeys {
 		keyMap[k] = true
 	}
 
-	// n := s.Names()
-	// fmt.Printf("%v\n", n)
-	//
-	// n2 := s.Name()
-	// fmt.Printf("%v\n", n2)
-	//
-	// n3 := s.TagName
-	// fmt.Printf("%v\n", n3)
-	//
-	// n4 := s.Fields()
-	// fmt.Printf("%v\n", n4)
-	//
-	// n5 := s.Map()
-	// fmt.Printf("%v\n", n5)
-	//
-	// n6 := s.Values()
-	// fmt.Printf("%v\n", n6)
-	//
-	// n7 := s.Field("")
-	// fmt.Printf("%v\n", n7)
-
 	for _, k := range New(ref).Fields() {
 		if _, ok := keyMap[k.Name()]; !ok {
 			continue
@@ -882,6 +894,7 @@ func (r *Required) IsRequired(field string) bool {
 	}
 	return ok
 }
+
 func (r *Required) IsNotRequired(field string) bool {
 	return !r.IsRequired(field)
 }

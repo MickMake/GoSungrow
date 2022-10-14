@@ -4,6 +4,7 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 
 	"encoding/json"
@@ -15,8 +16,8 @@ const Url = "/v1/commonService/queryMutiPointDataList"
 const Disabled = false
 
 type RequestData struct {
-	PsID           api.Integer  `json:"ps_id" required:"true"`
-	PsKey          api.PsKey `json:"ps_key" required:"true"`
+	PsID           valueTypes.Integer  `json:"ps_id" required:"true"`
+	PsKey          valueTypes.PsKey `json:"ps_key" required:"true"`
 	Points         string `json:"points" required:"true"`
 	MinuteInterval string `json:"minute_interval" required:"true"`
 	StartTimeStamp string `json:"start_time_stamp" required:"true"`
@@ -40,7 +41,7 @@ type Devices map[string]Device
 type Device struct {
 	Points Points `json:"points"`
 }
-type Points map[api.PointId]Point
+type Points map[valueTypes.PointId]Point
 type Point struct {
 	Name  string `json:"name"`
 	Units string `json:"units"`
@@ -48,7 +49,7 @@ type Point struct {
 }
 type Times []Time
 type Time struct {
-	Key   api.DateTime `json:"key"`
+	Key   valueTypes.DateTime `json:"key"`
 	Value string       `json:"value"`
 }
 
@@ -92,7 +93,7 @@ func (e *ResultData) UnmarshalJSON(data []byte) error {
 				times := Times{}
 				for time, value := range pointRef {
 					times = append(times, Time{
-						Key:   api.NewDateTime(time),
+						Key:   valueTypes.NewDateTime(time),
 						Value: value,
 					})
 				}
@@ -100,7 +101,7 @@ func (e *ResultData) UnmarshalJSON(data []byte) error {
 				sort.Slice(times, func(i, j int) bool {
 					return times[i].Key.Before(times[j].Key.Time)
 				})
-				points[api.PointId(pointName)] = Point{
+				points[valueTypes.SetPointIdString(pointName)] = Point{
 					Name:  "",
 					Units: "",
 					Times: times,
@@ -185,7 +186,7 @@ func (e *EndPoint) GetPointDataTable(points api.TemplatePoints) output.Table {
 			break
 		}
 
-		t := api.NewDateTime(e.Request.RequestData.StartTimeStamp)
+		t := valueTypes.NewDateTime(e.Request.RequestData.StartTimeStamp)
 		e.SetFilenamePrefix(t.String())
 		table.SetFilePrefix(t.String())
 
@@ -228,7 +229,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

@@ -3,6 +3,7 @@ package getRegionalTree
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -26,15 +27,15 @@ func (rd RequestData) Help() string {
 
 type ResultData   struct {
 	ResultList []struct {
-		Checked    api.Bool   `json:"checked"`
-		ID         api.String `json:"id"`
-		IsFirstOrg api.Bool   `json:"isFirstOrg"`
-		IsParent   api.Bool `json:"isParent"`
-		Name       api.String `json:"name"`
-		Open       api.Bool   `json:"open"`
-		OrgID      api.Integer  `json:"org_id"`
-		PID        api.Integer `json:"pId"`
-		PsID       api.Integer `json:"ps_id"`
+		Checked    valueTypes.Bool   `json:"checked"`
+		ID         valueTypes.String `json:"id"`
+		IsFirstOrg valueTypes.Bool   `json:"isFirstOrg"`
+		IsParent   valueTypes.Bool `json:"isParent"`
+		Name       valueTypes.String `json:"name"`
+		Open       valueTypes.Bool   `json:"open"`
+		OrgID      valueTypes.Integer  `json:"org_id"`
+		PID        valueTypes.Integer `json:"pId"`
+		PsID       valueTypes.Integer `json:"ps_id"`
 		ShareType  int64  `json:"share_type"`
 	} `json:"resultList"`
 }
@@ -73,7 +74,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

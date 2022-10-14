@@ -3,6 +3,7 @@ package queryDeviceListByUserId
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -24,7 +25,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	List     []interface{} `json:"list"`
-	RowCount api.Integer   `json:"rowCount"`
+	RowCount valueTypes.Integer   `json:"rowCount"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -61,7 +62,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

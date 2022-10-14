@@ -3,15 +3,16 @@ package getPsWeatherList
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"github.com/MickMake/GoUnify/Only"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/powerStationService/getPsWeatherList"
 const Disabled = false
 
 type RequestData struct {
-	PsId api.Integer `json:"ps_id" required:"true"`
+	PsId valueTypes.Integer `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -25,23 +26,23 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	WeatherList []struct {
-		Chill      string `json:"chill"`
-		Code       string `json:"code"`
-		CodeName   string `json:"code_name"`
-		DateTime   string `json:"date_time"`
-		Direction  string `json:"direction"`
-		High       string `json:"high"`
-		Highc      string `json:"highc"`
-		Humidity   string `json:"humidity"`
-		Low        string `json:"low"`
-		Lowc       string `json:"lowc"`
-		Pressure   string `json:"pressure"`
-		PsID       string `json:"ps_id"`
-		Rising     string `json:"rising"`
-		Speed      string `json:"speed"`
-		Sunrise    string `json:"sunrise"`
-		Sunset     string `json:"sunset"`
-		Visibility string `json:"visibility"`
+		Chill      valueTypes.Float    `json:"chill"`
+		Code       valueTypes.Float    `json:"code"`
+		CodeName   valueTypes.Float    `json:"code_name"`
+		DateTime   valueTypes.DateTime `json:"date_time"`
+		Direction  valueTypes.Float    `json:"direction"`
+		High       valueTypes.Float    `json:"high"`
+		Highc      valueTypes.Float    `json:"highc"`
+		Humidity   valueTypes.Float    `json:"humidity"`
+		Low        valueTypes.Float    `json:"low"`
+		Lowc       valueTypes.Float    `json:"lowc"`
+		Pressure   valueTypes.Float    `json:"pressure"`
+		PsID       valueTypes.Float    `json:"ps_id"`
+		Rising     valueTypes.Float    `json:"rising"`
+		Speed      valueTypes.Float    `json:"speed"`
+		Sunrise    valueTypes.Float    `json:"sunrise"`
+		Sunset     valueTypes.Float    `json:"sunset"`
+		Visibility valueTypes.Float    `json:"visibility"`
 	} `json:"weather_list"`
 }
 
@@ -56,30 +57,15 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		pkg := api.JoinWithDots(0, "", apiReflect.GetName("", *e), e.Request.PsId)
+		// entries.StructToPoints(e.Response.ResultData, pkg, e.Request.PsId.String(), valueTypes.NewDateTime(""))
+		for _, v := range e.Response.ResultData.WeatherList {
+			entries.StructToPoints(v, api.JoinWithDots(0, valueTypes.DateTimeLayoutDay, pkg, v.DateTime), e.Request.PsId.String(), valueTypes.NewDateTime(""))
+		}
 	}
 
 	return entries

@@ -3,6 +3,7 @@ package getOrgListByName
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -24,9 +25,9 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	IsLeaf  api.Bool    `json:"is_leaf"`
-	OrgID   api.Integer `json:"org_id"`
-	OrgName api.String  `json:"org_name"`
+	IsLeaf  valueTypes.Bool    `json:"is_leaf"`
+	OrgID   valueTypes.Integer `json:"org_id"`
+	OrgName valueTypes.String  `json:"org_name"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -63,7 +64,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

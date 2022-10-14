@@ -3,6 +3,7 @@ package getOSSConfig
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -25,15 +26,15 @@ func (rd RequestData) Help() string {
 
 
 type ResultData struct {
-	AccessId       api.String   `json:"accessid"`
-	Dir            api.String   `json:"dir"`
-	Expire         api.Integer   `json:"expire"`
-	Host           api.String   `json:"host"`
-	IsPrivateCloud api.Bool `json:"is_private_cloud"`
-	OssFileURL     api.String   `json:"oss_file_url"`
-	Policy         api.String   `json:"policy"`
-	SguZipDir      api.String   `json:"sgu_zip_dir"`
-	Signature      api.String   `json:"signature"`
+	AccessId       valueTypes.String   `json:"accessid"`
+	Dir            valueTypes.String   `json:"dir"`
+	Expire         valueTypes.Integer   `json:"expire"`
+	Host           valueTypes.String   `json:"host"`
+	IsPrivateCloud valueTypes.Bool `json:"is_private_cloud"`
+	OssFileURL     valueTypes.String   `json:"oss_file_url"`
+	Policy         valueTypes.String   `json:"policy"`
+	SguZipDir      valueTypes.String   `json:"sgu_zip_dir"`
+	Signature      valueTypes.String   `json:"signature"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -70,7 +71,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

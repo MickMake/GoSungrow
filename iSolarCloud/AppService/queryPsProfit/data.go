@@ -3,6 +3,7 @@ package queryPsProfit
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -11,7 +12,7 @@ const Url = "/v1/powerStationService/queryPsProfit"
 const Disabled = false
 
 type RequestData struct {
-	PsId     api.Integer `json:"ps_id" required:"true"`
+	PsId     valueTypes.Integer `json:"ps_id" required:"true"`
 	DateID   string `json:"date_id" required:"true"`
 	DateType string `json:"date_type" required:"true"`
 }
@@ -41,22 +42,22 @@ type ResultData   struct {
 		CuspNetPowerQuantity     interface{} `json:"cusp_net_power_quantity"`
 		CuspPowerQuantity        interface{} `json:"cusp_power_quantity"`
 		CuspUsePowerQuantity     interface{} `json:"cusp_use_power_quantity"`
-		DateID                   api.Integer `json:"date_id"`
-		FlatNetPowerQuantity     api.Float   `json:"flat_net_power_quantity"`
-		FlatPowerQuantity        api.Float   `json:"flat_power_quantity"`
-		FlatUsePowerQuantity     api.Float   `json:"flat_use_power_quantity"`
-		NetPowerProfit           api.Float   `json:"net_power_profit"`
-		NetPowerQuantityTotal    api.Float   `json:"net_power_quantity_total"`
+		DateID                   valueTypes.Integer `json:"date_id"`
+		FlatNetPowerQuantity     valueTypes.Float   `json:"flat_net_power_quantity"`
+		FlatPowerQuantity        valueTypes.Float   `json:"flat_power_quantity"`
+		FlatUsePowerQuantity     valueTypes.Float   `json:"flat_use_power_quantity"`
+		NetPowerProfit           valueTypes.Float   `json:"net_power_profit"`
+		NetPowerQuantityTotal    valueTypes.Float   `json:"net_power_quantity_total"`
 		PeakNetPowerQuantity     interface{} `json:"peak_net_power_quantity"`
 		PeakPowerQuantity        interface{} `json:"peak_power_quantity"`
 		PeakUsePowerQuantity     interface{} `json:"peak_use_power_quantity"`
-		PowerQuantityTotal       api.Float   `json:"power_quantity_total"`
+		PowerQuantityTotal       valueTypes.Float   `json:"power_quantity_total"`
 		SubsidyProfit            interface{} `json:"subsidy_profit"`
-		TotalProfit              api.Float   `json:"total_profit"`
+		TotalProfit              valueTypes.Float   `json:"total_profit"`
 		UpdateTime               string      `json:"update_time"`
-		UsePowerByDiscountProfit api.Float   `json:"use_power_by_discount_profit"`
-		UsePowerProfit           api.Float   `json:"use_power_profit"`
-		UsePowerQuantityTotal    api.Float   `json:"use_power_quantity_total"`
+		UsePowerByDiscountProfit valueTypes.Float   `json:"use_power_by_discount_profit"`
+		UsePowerProfit           valueTypes.Float   `json:"use_power_profit"`
+		UsePowerQuantityTotal    valueTypes.Float   `json:"use_power_quantity_total"`
 		ValleyNetPowerQuantity   interface{} `json:"valley_net_power_quantity"`
 		ValleyPowerQuantity      interface{} `json:"valley_power_quantity"`
 		ValleyUsePowerQuantity   interface{} `json:"valley_use_power_quantity"`
@@ -98,7 +99,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

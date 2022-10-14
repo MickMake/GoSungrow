@@ -3,8 +3,9 @@ package getRemoteUpgradeTaskList
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"github.com/MickMake/GoUnify/Only"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/getRemoteUpgradeTaskList"
@@ -20,6 +21,7 @@ func (rd RequestData) IsValid() error {
 
 func (rd RequestData) Help() string {
 	ret := fmt.Sprintf("")
+	// ret += api.HelpDataType()
 	return ret
 }
 
@@ -61,7 +63,8 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		pkg := apiReflect.GetName("", *e)
+		entries.StructToPoints(e.Response.ResultData, pkg, "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

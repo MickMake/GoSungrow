@@ -3,6 +3,7 @@ package getUpTimePoint
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -26,12 +27,12 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PointTimeRelation []struct {
-		Is24Hour  api.Bool `json:"is_24_hour"`
+		Is24Hour  valueTypes.Bool `json:"is_24_hour"`
 		PointList []struct {
-			PointID  api.Integer `json:"point_id"`
-			TimeType api.Integer `json:"time_type"`
+			PointID  valueTypes.Integer `json:"point_id"`
+			TimeType valueTypes.Integer `json:"time_type"`
 		} `json:"point_list"`
-		UpTimePointID api.Integer `json:"up_time_point_id"`
+		UpTimePointID valueTypes.Integer `json:"up_time_point_id"`
 	} `json:"point_time_relation"`
 }
 
@@ -69,7 +70,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

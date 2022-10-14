@@ -3,6 +3,7 @@ package getPsListByName
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -24,11 +25,11 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	PsID         api.Integer  `json:"ps_id"`
-	PsName       api.String `json:"ps_name"`
-	PsShortName  api.String `json:"ps_short_name"`
-	PsTimezone   api.String `json:"ps_timezone"`
-	PsTimezoneID api.Integer  `json:"ps_timezone_id"`
+	PsID         valueTypes.Integer  `json:"ps_id"`
+	PsName       valueTypes.String `json:"ps_name"`
+	PsShortName  valueTypes.String `json:"ps_short_name"`
+	PsTimezone   valueTypes.String `json:"ps_timezone"`
+	PsTimezoneID valueTypes.Integer  `json:"ps_timezone_id"`
 	ShareType    string `json:"share_type"`
 }
 
@@ -66,7 +67,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

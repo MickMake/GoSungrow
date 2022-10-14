@@ -3,6 +3,7 @@ package getTemplateList
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 
 	"fmt"
@@ -25,11 +26,11 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		TemplateID   api.Integer  `json:"template_id"`
-		TemplateName api.String `json:"template_name"`
-		UpdateTime   api.DateTime `json:"update_time"`
+		TemplateID   valueTypes.Integer  `json:"template_id"`
+		TemplateName valueTypes.String `json:"template_name"`
+		UpdateTime   valueTypes.DateTime `json:"update_time"`
 	} `json:"pageList"`
-	RowCount api.Integer `json:"rowCount"`
+	RowCount valueTypes.Integer `json:"rowCount"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -66,7 +67,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData.PageList, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData.PageList, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

@@ -3,6 +3,7 @@ package getPowerDeviceSetTaskList
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -11,8 +12,8 @@ const Url = "/v1/devService/getPowerDeviceSetTaskList"
 const Disabled = false
 
 type RequestData struct {
-	Size    api.Integer `json:"size" required:"true"`
-	CurPage api.Integer `json:"curPage" required:"true"`
+	Size    valueTypes.Integer `json:"size" required:"true"`
+	CurPage valueTypes.Integer `json:"curPage" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -26,29 +27,29 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		CommandStatus        api.Integer `json:"command_status"`
-		CommandType          api.Integer `json:"command_type"`
+		CommandStatus        valueTypes.Integer `json:"command_status"`
+		CommandType          valueTypes.Integer `json:"command_type"`
 		CreateTime           string      `json:"create_time"`
-		OperateUserID        api.Integer `json:"operate_user_id"`
+		OperateUserID        valueTypes.Integer `json:"operate_user_id"`
 		OverTime             string      `json:"over_time"`
-		PsID                 api.Integer `json:"ps_id"`
-		SetCancelNum         api.Integer `json:"set_cancel_num"`
-		SetFailNum           api.Integer `json:"set_fail_num"`
-		SetFinishNum         api.Integer `json:"set_finish_num"`
-		SetOvertimeNum       api.Integer `json:"set_overtime_num"`
-		SetSuccessNum        api.Integer `json:"set_success_num"`
-		SetTotalNum          api.Integer `json:"set_total_num"`
-		SweepDevParamSetType api.Integer `json:"sweep_dev_param_set_type"`
-		TaskID               api.Integer `json:"task_id"`
+		PsID                 valueTypes.Integer `json:"ps_id"`
+		SetCancelNum         valueTypes.Integer `json:"set_cancel_num"`
+		SetFailNum           valueTypes.Integer `json:"set_fail_num"`
+		SetFinishNum         valueTypes.Integer `json:"set_finish_num"`
+		SetOvertimeNum       valueTypes.Integer `json:"set_overtime_num"`
+		SetSuccessNum        valueTypes.Integer `json:"set_success_num"`
+		SetTotalNum          valueTypes.Integer `json:"set_total_num"`
+		SweepDevParamSetType valueTypes.Integer `json:"sweep_dev_param_set_type"`
+		TaskID               valueTypes.Integer `json:"task_id"`
 		TaskName             string      `json:"task_name"`
-		TaskType             api.Integer `json:"task_type"`
-		TemplateType         api.Integer `json:"template_type"`
+		TaskType             valueTypes.Integer `json:"task_type"`
+		TemplateType         valueTypes.Integer `json:"template_type"`
 		UpdateTime           string      `json:"update_time"`
 		UserEnglishName      interface{} `json:"user_english_name"`
 		UserName             string      `json:"user_name"`
-		UUID                 api.Integer `json:"uuid"`
+		UUID                 valueTypes.Integer `json:"uuid"`
 	} `json:"pageList"`
-	RowCount api.Integer `json:"rowCount"`
+	RowCount valueTypes.Integer `json:"rowCount"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -85,7 +86,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

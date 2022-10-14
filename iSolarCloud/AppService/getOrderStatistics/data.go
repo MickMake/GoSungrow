@@ -3,6 +3,7 @@ package getOrderStatistics
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -25,9 +26,9 @@ func (rd RequestData) Help() string {
 
 
 type ResultData   struct {
-	ProcessedCount  api.Integer `json:"processed_count"`
-	ProcessingCount api.Integer `json:"processing_count"`
-	UnProcessCount  api.Integer `json:"un_process_count"`
+	ProcessedCount  valueTypes.Integer `json:"processed_count"`
+	ProcessingCount valueTypes.Integer `json:"processing_count"`
+	UnProcessCount  valueTypes.Integer `json:"un_process_count"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -64,7 +65,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

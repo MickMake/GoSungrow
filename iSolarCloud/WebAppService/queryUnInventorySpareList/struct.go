@@ -5,7 +5,6 @@
 package queryUnInventorySpareList
 
 import (
-	"sort"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
@@ -363,62 +362,11 @@ func (e EndPoint) GetCacheTimeout() time.Duration {
 	return e.ApiRoot.GetCacheTimeout()
 }
 
-func (e EndPoint) GetDataTable() output.Table {
-	var table output.Table
-	for range Only.Once {
-		table = output.NewTable()
-		table.SetTitle("")
-		table.SetJson([]byte(e.GetJsonData(false)))
-		table.SetRaw([]byte(e.GetJsonData(true)))
 
-		_ = table.SetHeader(
-			"Date",
-			"Point Id",
-			"Group Name",
-			"Description",
-			"Value",
-			"Unit",
-		)
+func (e EndPoint) GetEndPointData() api.DataMap {
+	return e.GetData()
+}
 
-		data := e.GetData()
-		var sorted []string
-		for p := range data.DataPoints {
-			sorted = append(sorted, string(p))
-		}
-		sort.Strings(sorted)
-
-		for _, p := range sorted {
-			entries := data.DataPoints[api.PointId(p)]
-			for _, de := range entries {
-				if de.Hide {
-					continue
-				}
-
-				_ = table.AddRow(
-					de.Date.Format(api.DtLayout),
-					// api.NameDevicePointInt(de.Point.Parents, p.PointID.Value()),
-					// de.Point.Id,
-					p,
-					// de.Point.Parents.String(),
-					de.Point.GroupName,
-					de.Point.Name,
-					de.Value,
-					de.Point.Unit,
-				)
-			}
-		}
-
-		// table.InitGraph(output.GraphRequest {
-		// 	Title:        "",
-		// 	TimeColumn:   output.SetInteger(1),
-		// 	SearchColumn: output.SetInteger(2),
-		// 	NameColumn:   output.SetInteger(4),
-		// 	ValueColumn:  output.SetInteger(5),
-		// 	UnitsColumn:  output.SetInteger(6),
-		// 	SearchString: output.SetString(""),
-		// 	MinLeftAxis:  output.SetFloat(0),
-		// 	MaxLeftAxis:  output.SetFloat(0),
-		// })
-	}
-	return table
+func (e EndPoint) GetEndPointDataTable() output.Table {
+	return e.ApiRoot.GetDataTable(e)
 }

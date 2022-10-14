@@ -4,6 +4,7 @@ import (
 	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/AppService/getDeviceList"
 	"GoSungrow/iSolarCloud/api"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -28,7 +29,7 @@ type Mqtt struct {
 	clientOptions *mqtt.ClientOptions
 	LastRefresh    time.Time             `json:"-"`
 	SungrowDevices getDeviceList.Devices `json:"-"`
-	SungrowPsIds   map[api.Integer]bool
+	SungrowPsIds   map[valueTypes.Integer]bool
 
 	DeviceName  string
 	MqttDevices map[string]Device
@@ -62,7 +63,7 @@ func New(req Mqtt) *Mqtt {
 		ret.binarySensorPrefix = "homeassistant/binary_sensor/" + req.ClientId
 
 		ret.MqttDevices = make(map[string]Device)
-		ret.SungrowPsIds = make(map[api.Integer]bool)
+		ret.SungrowPsIds = make(map[valueTypes.Integer]bool)
 	}
 
 	return &ret

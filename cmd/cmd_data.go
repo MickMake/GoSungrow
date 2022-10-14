@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"GoSungrow/Only"
-	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/cmdConfig"
 	"github.com/MickMake/GoUnify/cmdHelp"
@@ -216,24 +216,35 @@ func (c *CmdData) GetEndpoints(cmd *cobra.Command, args []string) error {
 	// endpoints string, psIds string, date string
 	for range Only.Once {
 		cmds.Api.SunGrow.SetOutputType(cmd.Use)
-		args = cmdConfig.FillArray(3, args)
+		args = cmdConfig.FillArray(4, args)
+
+		for i := range args {
+			if args[i] == "." {
+				args[i] = ""
+			}
+		}
 
 		var e []string
 		if args[0] != "" {
 			e = SplitArg(args[0])
 		}
 
-		var p []api.Integer
+		var p []valueTypes.Integer
 		for _, psId := range SplitArg(args[1]) {
 			if psId == "" {
 				continue
 			}
-			p = append(p, api.SetIntegerString(psId))
+			p = append(p, valueTypes.SetIntegerString(psId))
 		}
 
-		d := api.SetDateTimeString(args[2])
+		d := valueTypes.SetDateTimeString(args[2])
 
-		c.Error = cmds.Api.SunGrow.GetEndpoints(e, p, *d)
+		rt := args[3]
+		if rt == "" {
+			rt = "1"
+		}
+
+		c.Error = cmds.Api.SunGrow.GetEndpoints(e, p, *d, rt)
 	}
 
 	return c.Error

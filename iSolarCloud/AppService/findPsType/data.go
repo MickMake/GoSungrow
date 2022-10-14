@@ -3,6 +3,7 @@ package findPsType
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
@@ -11,7 +12,7 @@ const Url = "/v1/powerStationService/findPsType"
 const Disabled = false
 
 type RequestData struct {
-	PsId api.Integer `json:"ps_id" required:"true"`
+	PsId valueTypes.Integer `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -24,8 +25,8 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	PsType    api.Integer `json:"ps_type"`
-	SysScheme api.Integer `json:"sys_scheme"`
+	PsType    valueTypes.Integer `json:"ps_type"`
+	SysScheme valueTypes.Integer `json:"sys_scheme"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -65,7 +66,7 @@ func (e *EndPoint) GetData() api.DataMap {
 		pkg := apiReflect.GetName("", *e)
 		for _, d := range e.Response.ResultData {
 			name := fmt.Sprintf("%s.%s", pkg, e.Request.PsId.String())
-			entries.StructToPoints(d, name, e.Request.PsId.String(), api.NewDateTime(""))
+			entries.StructToPoints(d, name, e.Request.PsId.String(), valueTypes.NewDateTime(""))
 		}
 	}
 

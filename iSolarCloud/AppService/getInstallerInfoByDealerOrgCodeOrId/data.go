@@ -3,6 +3,7 @@ package getInstallerInfoByDealerOrgCodeOrId
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -33,9 +34,9 @@ type ResultData struct {
 		InstallerEmail    string      `json:"installer_email"`
 		InstallerPhone    string      `json:"installer_phone"`
 		MobleTel          interface{} `json:"moble_tel"`
-		OrgID             api.Integer `json:"org_id"`
+		OrgID             valueTypes.Integer `json:"org_id"`
 		OrgName           string      `json:"org_name"`
-		UserID            api.Integer `json:"user_id"`
+		UserID            valueTypes.Integer `json:"user_id"`
 		UserName          string      `json:"user_name"`
 		UserTelNationCode interface{} `json:"user_tel_nation_code"`
 	} `json:"user_info_list"`
@@ -75,7 +76,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

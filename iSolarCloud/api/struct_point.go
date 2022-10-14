@@ -2,27 +2,55 @@ package api
 
 import (
 	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"fmt"
-	// "github.com/d4l3k/go-pcre"
-	"regexp"
-	"strconv"
+
 	"strings"
 	"time"
 )
 
 
 type Point struct {
-	Parents   ParentDevices     `json:"parents,omitempty"`
-	Id        PointId           `json:"id,omitempty"`
-	GroupName string            `json:"group_name,omitempty"`
-	Name      string            `json:"name,omitempty"`
-	Unit      string            `json:"unit,omitempty"`
-	TimeSpan  string            `json:"time_span,omitempty"`
-	ValueType string            `json:"value_type,omitempty"`
-	Valid     bool              `json:"valid,omitempty"`
-	States    map[string]string `json:"states,omitempty"`
+	Parents   ParentDevices      `json:"parents,omitempty"`
+	Id        valueTypes.PointId `json:"id,omitempty"`
+	GroupName string             `json:"group_name,omitempty"`
+	Name      string             `json:"name,omitempty"`
+	Unit      string             `json:"unit,omitempty"`
+	TimeSpan  string             `json:"time_span,omitempty"`
+	ValueType string             `json:"value_type,omitempty"`
+	Valid     bool               `json:"valid,omitempty"`
+	States    map[string]string  `json:"states,omitempty"`
 }
 
+
+func (p *Point) FixUnitType() Point {
+	for range Only.Once {
+		switch p.Unit {
+			case "Wh":
+				fallthrough
+			case "kWh":
+				fallthrough
+			case "MWh":
+				p.ValueType = "Energy"
+
+			case "kWp":
+				fallthrough
+			case "W":
+				fallthrough
+			case "kW":
+				fallthrough
+			case "MW":
+				p.ValueType = "Power"
+
+			case "AUD":
+				p.ValueType = "Currency"
+
+			case "kg":
+				p.ValueType = "Weight"
+		}
+	}
+	return *p
+}
 
 func (p *Point) WhenReset() string {
 	var ret string
@@ -108,74 +136,47 @@ func (p Point) IsTotal() bool {
 }
 
 
-func GetPoint(device string, point PointId) *Point {
-	return Points.Get(device, point)
-}
-
-func GetPointInt(device string, point int64) *Point {
-	return Points.Get(device, PointId(strconv.FormatInt(point, 10)))
+func GetPoint(point string) *Point {
+	return Points.Get(point)
 }
 
 func GetDevicePoint(devicePoint string) *Point {
 	return Points.GetDevicePoint(devicePoint)
 }
 
+// func GetPointInt(device string, point int64) *Point {
+// 	return Points.Get(device, valueTypes.PointId(strconv.FormatInt(point, 10)))
+// }
+//
 // func GetPointName(device string, point int64) string {
 // 	return fmt.Sprintf("%s.%d", device, point)
 // }
-
-func NameDevicePointInt(device string, point int64) PointId {
-	return PointId(fmt.Sprintf("%s.%d", device, point))
-}
-
-func NameDevicePoint(device string, point PointId) PointId {
-	return PointId(fmt.Sprintf("%s.%s", device, point))
-}
-
-func SetPoint(point PointId) PointId {
-	for range Only.Once {
-		p := strings.TrimPrefix(string(point), "p")
-		_, err := strconv.ParseInt(p, 10, 64)
-		if err == nil {
-			point = PointId("p" + p)
-			break
-		}
-	}
-	return point
-}
-
-func SetPointInt(point int64) PointId {
-	return PointId("p" + strconv.FormatInt(point, 10))
-}
-
-func PointToName(s PointId) string {
-	ret := string(s)
-	ret = CleanString(ret)
-	ret = strings.ReplaceAll(ret, "_", " ")
-	ret = strings.Title(ret)
-
-	// Add space between lowercase and uppercase letters.
-	re := regexp.MustCompile("([a-z0-9])([A-Z])")
-	ret = re.ReplaceAllString(ret, "$1 $2")
-
-	// Lowercase point ids.
-	re = regexp.MustCompile("P([0-9]+)")
-	ret = re.ReplaceAllString(ret, "p$1")
-
-	return ret
-}
-
-func (p *PointId) Fix() PointId {
-	for range Only.Once {
-		p := strings.TrimPrefix(string(*p), "p")
-		_, err := strconv.ParseInt(p, 10, 64)
-		if err == nil {
-			p = "p" + p
-			break
-		}
-	}
-	return *p
-}
+//
+// func NameDevicePointInt(device string, point int64) valueTypes.PointId {
+// 	return valueTypes.PointId(fmt.Sprintf("%s.%d", device, point))
+// }
+//
+// func SetPointInt(point int64) valueTypes.PointId {
+// 	// return valueTypes.PointId("p" + strconv.FormatInt(point, 10))
+// 	return valueTypes.SetPointIdValue(point)
+// }
+//
+// func NameDevicePoint(point valueTypes.DataPoint) valueTypes.DataPoint {
+// 	return point
+// }
+//
+// func SetPoint(point valueTypes.DataPoint) valueTypes.DataPoint {
+// 	// for range Only.Once {
+// 	// 	p := strings.TrimPrefix(string(point), "p")
+// 	// 	_, err := strconv.ParseInt(p, 10, 64)
+// 	// 	if err == nil {
+// 	// 		point = valueTypes.PointId("p" + p)
+// 	// 		break
+// 	// 	}
+// 	// }
+// 	// return point
+// 	return point
+// }
 
 
 type ParentDevice struct {

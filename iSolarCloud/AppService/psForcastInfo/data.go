@@ -3,15 +3,17 @@ package psForcastInfo
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"github.com/MickMake/GoUnify/Only"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
+
 
 const Url = "/v1/powerStationService/psForcastInfo"
 const Disabled = false
 
 type RequestData struct {
-	PsId api.Integer `json:"ps_id" required:"true"`
+	PsId valueTypes.Integer `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -26,34 +28,37 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	AreaForcastList []struct {
-		Chill             api.String   `json:"chill"`
-		City              api.String   `json:"city"`
-		Code              string       `json:"code"`
-		CodeName          api.String   `json:"code_name"`
-		DateTime          api.DateTime `json:"date_time"`
-		Direction         api.Float    `json:"direction"`
-		High              api.Float    `json:"high"`
-		Highc             api.Float    `json:"highc"`
-		Humidity          api.Float    `json:"humidity"`
-		Low               api.Float    `json:"low"`
-		Lowc              api.Float    `json:"lowc"`
-		Pressure          api.Float    `json:"pressure"`
-		PsKnowledge       api.String   `json:"ps_knowledge"`
-		Rising            string       `json:"rising"`
-		Speed             api.Float    `json:"speed"`
-		SpeedOriginal     api.Float    `json:"speed_original"`
-		SpeedOriginalUnit api.String   `json:"speed_original_unit"`
-		SpeedUnit         api.String   `json:"speed_unit"`
-		Sunrise           api.String   `json:"sunrise"`
-		Sunset            api.String   `json:"sunset"`
-		Visibility        api.Float    `json:"visibility"`
-		WeatherDesc       api.String   `json:"weather_desc"`
-		WeatherURL        api.String   `json:"weather_url"`
+		Chill             valueTypes.String   `json:"chill"`
+		City              valueTypes.String   `json:"city"`
+		Code              valueTypes.Integer  `json:"code"`
+		CodeName          valueTypes.String   `json:"code_name"`
+		DateTime          valueTypes.DateTime `json:"date_time"`
+		Direction         valueTypes.Float    `json:"direction"`
+		High              valueTypes.Float    `json:"high"`
+		Highc             valueTypes.Float    `json:"highc"`
+		Humidity          valueTypes.Float    `json:"humidity"`
+		Low               valueTypes.Float    `json:"low"`
+		Lowc              valueTypes.Float    `json:"lowc"`
+		Pressure          valueTypes.Float    `json:"pressure"`
+		PsKnowledge       valueTypes.String   `json:"ps_knowledge"`
+		Rising            valueTypes.Bool     `json:"rising"`
+
+		Speed             valueTypes.Float    `json:"speed" PointUnitFrom:"speed_unit"`
+		SpeedUnit         valueTypes.String   `json:"speed_unit"`
+
+		SpeedOriginal     valueTypes.Float    `json:"speed_original" PointUnitFrom:"speed_original_unit"`
+		SpeedOriginalUnit valueTypes.String   `json:"speed_original_unit"`
+
+		Sunrise           valueTypes.Time     `json:"sunrise"`
+		Sunset            valueTypes.Time     `json:"sunset"`
+		Visibility        valueTypes.Float    `json:"visibility"`
+		WeatherDesc       valueTypes.String   `json:"weather_desc"`
+		WeatherURL        valueTypes.String   `json:"weather_url"`
 	} `json:"areaForcastList"`
 	StationsCityCode []struct {
-		City   api.String  `json:"city"`
-		PsID   api.Integer `json:"ps_id"`
-		PsName api.String  `json:"ps_name"`
+		City   valueTypes.String  `json:"city"`
+		PsID   valueTypes.Integer `json:"ps_id"`
+		PsName valueTypes.String  `json:"ps_name"`
 	} `json:"stationsCityCode"`
 }
 
@@ -68,30 +73,16 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", api.NewDateTime(""))
+		pkg := apiReflect.GetName("", *e) + "." + e.Request.PsId.String()
+		// entries.StructToPoints(e.Response.ResultData, pkg, e.Request.PsId.String(), valueTypes.NewDateTime(""))
+
+		for _, v := range e.Response.ResultData.AreaForcastList {
+			entries.StructToPoints(v, api.JoinWithDots(0, valueTypes.DateTimeLayoutDay, pkg, v.DateTime), e.Request.PsId.String(), valueTypes.NewDateTime(""))
+		}
 	}
 
 	return entries
