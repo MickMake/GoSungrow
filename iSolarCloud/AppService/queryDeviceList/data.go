@@ -136,7 +136,7 @@ type ResultData struct {
 		UUID          valueTypes.Integer `json:"uuid" PointId:"uuid"`
 		UUIDIndexCode valueTypes.String  `json:"uuid_index_code" PointId:"uuid_index_code"`
 	} `json:"pageList"`
-	RowCount valueTypes.Integer `json:"rowCount"`
+	RowCount valueTypes.Integer `json:"rowCount" PointIgnore:"true"`
 }
 
 type PointData []PointStruct
@@ -150,7 +150,7 @@ type PointStruct struct {
 	OrderID                valueTypes.Integer  `json:"order_id"`
 	OrderNum               valueTypes.Integer  `json:"order_num"`
 	PointGroupID           valueTypes.Integer  `json:"point_group_id"`
-	PointGroupIDOrderID    string       `json:"point_group_id_order_id"`
+	PointGroupIDOrderID    valueTypes.Integer  `json:"point_group_id_order_id"`
 	PointGroupName         valueTypes.String   `json:"point_group_name"`
 	PointID                valueTypes.Integer  `json:"point_id"`
 	PointName              valueTypes.String   `json:"point_name"`
@@ -158,7 +158,7 @@ type PointStruct struct {
 	Relate                 valueTypes.Integer  `json:"relate"`
 	TimeStamp              valueTypes.DateTime `json:"time_stamp"`
 	Unit                   valueTypes.String   `json:"unit"`
-	ValIsFixd              string       `json:"val_is_fixd"`
+	ValIsFixd              valueTypes.Bool     `json:"val_is_fixd"`
 	ValidSize              valueTypes.Integer  `json:"valid_size"`
 	Value                  valueTypes.Float    `json:"value"`
 	ValueDescription       valueTypes.String   `json:"value_description"`
@@ -238,7 +238,7 @@ func (e *EndPoint) GetData() api.DataMap {
 		pkg := apiReflect.GetName("", *e)
 		name := api.JoinWithDots(0, "", pkg, e.Request.PsId)
 
-		entries.StructToPoints(e.Response.ResultData.DevCountByStatusMap, name + ".status", e.Request.PsId.String(), valueTypes.NewDateTime(""))
+		entries.StructToPoints(e.Response.ResultData, name, e.Request.PsId.String(), valueTypes.NewDateTime(""))
 
 		for _, d := range e.Response.ResultData.PageList {
 			name2 := api.JoinWithDots(0, "", pkg, d.PsKey)

@@ -2,7 +2,6 @@ package api
 
 import (
 	"GoSungrow/Only"
-	"GoSungrow/iSolarCloud/api/valueTypes"
 	"fmt"
 	"strings"
 )
@@ -40,28 +39,24 @@ func (pm *PointsMap) Resolve(point string) *Point {
 // }
 
 func (pm *PointsMap) Get(point string) *Point {
-	// dp := NameDevicePoint(device, string(SetPoint(point)))
-	// dp := PointName(device + "." + SetPoint(point))
-	// dp := SetPoint(point)
-	// p := valueTypes.SetDataPoint(point)
-
-	if p, ok := pm.Map[point]; ok {
+	var ok bool
+	var p *Point
+	if p, ok = pm.Map[point]; ok {
 		p.Valid = true
-		// p.FullId = NameDevicePoint(device, point)
 		return p
 	}
 
-
-	// parentDevice := ParentDevice{Key: device}
-	return &Point {
-		// FullId: NameDevicePoint(device, point),
-		// Parent: parentDevice.Split(),
-		Id:       valueTypes.SetPointIdString(point),
-		Name:     "",
-		Unit:     "",
-		TimeSpan: "",
-		Valid:    false,
-	}
+	return p
+	// // parentDevice := ParentDevice{Key: device}
+	// return &Point {
+	// 	// FullId: NameDevicePoint(device, point),
+	// 	// Parent: parentDevice.Split(),
+	// 	Id:       valueTypes.SetPointIdString(point),
+	// 	Name:     "",
+	// 	Unit:     "",
+	// 	TimeSpan: "",
+	// 	Valid:    false,
+	// }
 }
 
 func (pm *PointsMap) GetDevicePoint(devicePoint string) *Point {

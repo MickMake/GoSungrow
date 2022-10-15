@@ -50,7 +50,7 @@ func (e *Web) GetDataTable(endpoint EndPoint) output.Table {
 			"Description",
 			"Value",
 			"Unit",
-			"Type",
+			"Unit Type",
 		)
 
 		data := endpoint.GetEndPointData()

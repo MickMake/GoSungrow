@@ -47,6 +47,29 @@ func (p *Point) FixUnitType() Point {
 
 			case "kg":
 				p.ValueType = "Weight"
+
+			case "mV":
+				fallthrough
+			case "V":
+				p.ValueType = "Voltage"
+
+			case "A":
+				p.ValueType = "Current"
+
+			case "Hz":
+				p.ValueType = "Frequency"
+
+			case "kvar":
+				p.ValueType = "Reactive Power"
+
+			case "kΩ":
+				p.ValueType = "Resistance"
+
+			case "%":
+				p.ValueType = "Percent"
+
+			case "℃":
+				p.ValueType = "Temperature"
 		}
 	}
 	return *p
@@ -255,7 +278,6 @@ func (pd *ParentDevices) Types() string {
 func (pd *ParentDevice) Set(key string) {
 	for range Only.Once {
 		pd.Key = key
-
 	}
 }
 
