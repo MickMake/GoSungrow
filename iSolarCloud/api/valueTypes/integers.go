@@ -69,6 +69,13 @@ func (t Integer) String() string {
 	return t.string
 }
 
+func (t Integer) Match(comp int64) bool {
+	if t.int64 == comp {
+		return true
+	}
+	return false
+}
+
 func (t *Integer) SetString(value string) Integer {
 	for range Only.Once {
 		t.string = value
@@ -179,6 +186,13 @@ func (t Count) Value() int64 {
 
 func (t Count) String() string {
 	return t.string
+}
+
+func (t Count) Match(comp int64) bool {
+	if t.int64 == comp {
+		return true
+	}
+	return false
 }
 
 func (t *Count) SetString(value string) Count {

@@ -8,52 +8,102 @@ import (
 	"errors"
 	"fmt"
 	"hash/fnv"
-	"runtime"
-	"strconv"
-
 	"path/filepath"
 	"reflect"
+	"runtime"
+	"strconv"
 	"strings"
+	"time"
 )
 
 
-type DataStructureMap map[string]DataStructure
+type DataStructures struct {
+	Map map[string]DataStructure
+}
 type DataStructure struct {
-	Json           string
-	PointId        string
 	// PointType      string
-	PointUnit      string
-	PointUnitFrom  string
-	PointDevice    string
-	PointName      string
-	PointTimeSpan  string
-	PointValueType string
-	PointAlias     string
-	PointIgnore    bool
-	PointGroupName string
+	Json               string
+	PointId            string
+	PointParentId      string
+	PointUnit          string
+	PointUnitFrom      string
+	PointTimestamp     time.Time
+	PointName          string
+	PointUpdateFreq    string
+	PointValueType     string
+	PointAliasTo       string
+	PointIgnore        bool
+	PointGroupName     string
+	PointGroupNameFrom string
+	PointTimestampFrom string
 
-	Value         interface{}
-	ValueType     string
-	ValueKind     string
-	Endpoint      string
+	Value              interface{}
+	ValueType          string
+	ValueKind          string
+	Endpoint           string
 }
 
 const (
-	PointId        = "PointId"			// Point id in the form p\d+ or \d+
-	// PointType      = "PointType"		// Type of point: energy, date, battery, temperature.
-	PointUnit      = "PointUnit"		// Units: Wh, kWh, C, h.
-	PointUnitFrom  = "PointUnitFrom"	// Get units from another point.
-	PointDevice    = "PointDevice"		// Associated device to point.
-	PointName      = "PointName"		// Human name of point.
-	PointTimeSpan  = "PointTimeSpan"	// Timespan Total, Yearly, Monthly, Day.
-	PointValueType = "PointValueType"	//
-	PointAlias     = "PointAlias"		// Alias this point to another entry.
-	PointIgnore    = "PointIgnore"		// Ignore this point.
-	PointGroupName = "PointGroupName"	// Point group name.
+	PointId             = "PointId"             // Point id in the form p\d+ or \d+
+	PointUnit           = "PointUnit"           // Units: Wh, kWh, C, h.
+	PointUnitFrom       = "PointUnitFrom"       // Get PointUnit from another field structure.
+	PointParentId       = "PointParentId"       // Associated parent of point.
+	PointName           = "PointName"           // Human-readable name of point.
+	PointUpdateFreq     = "PointUpdateFreq"     // Point update frequency - Total, Yearly, Monthly, Day.
+	PointValueType      = "PointValueType"      // Value type of point: energy, date, battery, temperature.
+	PointAliasTo        = "PointAliasTo"        // Alias this point to another point.
+	PointAliasFrom      = "PointAliasFrom"      // Alias this point from another point.
+	PointIgnore         = "PointIgnore"         // Ignore this point.
+	PointGroupName      = "PointGroupName"      // Point group name.
+	PointGroupNameFrom  = "PointGroupNameFrom"  // Get PointGroupName from another field structure.
+	PointNameFromChild  = "PointNameFromChild"  // Searches child for field value to use for naming when hitting a slice, (as opposed to using an index).
+	PointNameFromParent = "PointNameFromParent" // Searches child for field value to use for naming when hitting a slice, (as opposed to using an index).
+	PointNameDateFormat = "PointNameDateFormat" // Date format when using PointNameFrom, (if the field is a time.Time type).
+	PointArrayFlatten   = "PointArrayFlatten"   // Flatten an array into a string. EG: ["one", "two", "three"]
+	PointTimestampFrom  = "PointTimestampFrom"  // Pull timestamp from another field structure.
 )
 
-func GetPointTags(ref interface{}, name ...string) DataStructureMap {
-	ret := make(DataStructureMap)
+func (dss *DataStructures) Add(name string, ds DataStructure)  {
+	for range Only.Once {
+		if dss.Map == nil {
+			dss.Map = make(map[string]DataStructure)
+		}
+		// fmt.Printf("DEBUG DataStructures.Add() %s - Kind:'%s' Type:'%s'\n", name, ds.ValueKind, ds.ValueType)
+		dss.Map[name] = ds
+	}
+}
+
+func (dss *DataStructures) Exists(name string) bool {
+	var yes bool
+	for range Only.Once {
+		if dss.Map == nil {
+			break
+		}
+		if _, ok := dss.Map[name]; ok {
+			yes = ok
+			break
+		}
+	}
+	return yes
+}
+
+func (dss *DataStructures) Append(dsm DataStructures)  {
+	for range Only.Once {
+		if dss.Map == nil {
+			dss.Map = make(map[string]DataStructure)
+		}
+		// fmt.Printf("Map BEFORE:[%d] (adding %d)\n", len(dss.Map), len(dsm.Map))
+		for name, ds := range dsm.Map {
+			dss.Map[name] = ds
+		}
+		// fmt.Printf("Map AFTER:[%d]\n", len(dss.Map))
+	}
+}
+
+
+func (dss *DataStructures) GetPointTags(parentRef interface{}, ref interface{}, name ...string) DataStructures {
+	// var ret DataStructures
+	// ret.Map = make(map[string]DataStructure)
 
 	for range Only.Once {
 		vo := reflect.ValueOf(ref)
@@ -64,22 +114,9 @@ func GetPointTags(ref interface{}, name ...string) DataStructureMap {
 			fieldTo := to.Field(i)
 			fieldVo := vo.Field(i)
 
-			pointValueType := fieldTo.Tag.Get(PointValueType)
-			if valueTypes.IsNil(ref) {
-				pointValueType = "NIL"
-			}
-
-			// fmt.Printf("DEBUG: Key[%s]:\tVT:'%s' Kind:'%s' => '%s'\n",
-			// 	fieldTo.Name,
-			// 	pointValueType,
-			// 	fieldVo.Kind(),
-			// 	fieldTo.Type.String(),
-			// )
-
-			ignore := false
-			ig := fieldTo.Tag.Get(PointIgnore)
-			if ig != "" {
-				ignore = true
+			if !fieldTo.IsExported() {
+				fmt.Printf("DEBUG: NOTEXPORTED(%s): Type %s\n", name, fieldTo.Name)
+				continue
 			}
 
 			pointJson := fieldTo.Tag.Get("json")
@@ -88,110 +125,434 @@ func GetPointTags(ref interface{}, name ...string) DataStructureMap {
 				pointId = pointJson
 			}
 
+			// fmt.Printf("DEBUG[%d]: %s.%s: Key[%s]:\tKind:'%s' Type:'%s'\n",
+			// 	len(dss.Map),
+			// 	strings.Join(name, "."), pointId,
+			// 	fieldTo.Name,
+			// 	fieldVo.Kind(),
+			// 	fieldTo.Type.String(),
+			// )
+			// if strings.Contains(pointId, "actual_energy") || strings.Contains(pointJson, "actual_energy") {
+			// 	fmt.Printf("F:%v\n", pointId)
+			// 	fmt.Println("")
+			// }
+
 			switch fieldVo.Kind() {
-				case reflect.Struct:
-					if valueTypes.IsUnknownStruct(fieldTo, fieldVo) {
-						n2 := name
-						n2 = append(n2, pointId)
-						t2 := GetPointTags(fieldVo.Interface(), n2...)
-						for k, v := range t2 {
-							ret[k] = v
+				case reflect.Uintptr:
+					fallthrough
+				case reflect.Complex64:
+					fallthrough
+				case reflect.Complex128:
+					fallthrough
+				case reflect.Chan:
+					fallthrough
+				case reflect.Func:
+					fallthrough
+				case reflect.Pointer:
+					fallthrough
+				case reflect.UnsafePointer:
+					fmt.Printf("Unsupported type: '%s.%s' (%s)\n", name, pointId, fieldVo.Type().String())
+					continue
+
+				case reflect.Slice:
+					// Handle slices here.
+					// Adds more Point* tags - PointNameFromChild, PointNameDateFormat
+					// Replicates the JoinWithDots 1st and 2nd arguments.
+					// intSize int, dateFormat string
+					// fmt.Printf("Kind: %s ##########################################\n", fieldVo.Kind().String())
+					pointNameFromChild := fieldTo.Tag.Get(PointNameFromChild)
+					pointNameFromParent := fieldTo.Tag.Get(PointNameFromParent)
+					pointNameDateFormat := fieldTo.Tag.Get(PointNameDateFormat)
+					intSize := valueTypes.SizeOfInt(fieldVo.Len())
+					pointArrayFlatten := fieldTo.Tag.Get(PointArrayFlatten)
+					n2 := append(name, pointId)
+
+					if pointArrayFlatten != "" {
+						// We want to flatten a slice down to EG "[1, 2, 3]"
+						endPointName, ds := makeDataStructure(parentRef, fieldTo, fieldVo, name)
+						ds.Value = valueTypes.AnyToValueString(fieldVo.Interface(), 0, "")
+						dss.Add(endPointName + "." + ds.PointId, ds)
+						continue
+					}
+
+					if valueTypes.IsUnknownStruct(fieldVo.Interface()) {
+						for si := 0; si < fieldVo.Len(); si++ {
+							// Are we using an index number for name or field key value?
+							pn := strconv.Itoa(si)
+							n3 := append(n2, pn)
+							if pointNameFromChild != "" {
+								// PointNameFromChild - In this case points to a field within a CHILD struct.
+								pn = GetPointNameFrom(fieldVo.Index(si).Interface(), pointNameFromChild, intSize, pointNameDateFormat)
+								n3 = append(n2[:len(n2) - 1], pn)
+							}
+							if pointNameFromParent != "" {
+								// PointNameFromChild - In this case points to a field within a CHILD struct.
+								pn = GetPointNameFrom(fieldVo.Interface(), pointNameFromParent, intSize, pointNameDateFormat)
+								n3 = append(n2[:len(n2) - 1], pn)
+							}
+
+							dss.GetPointTags(fieldVo.Index(si).Interface(), fieldVo.Index(si).Interface(), n3...)
 						}
 						continue
 					}
 
-				case reflect.Slice:
-					// @TODO - Handle slicing here.
-					// Will have to add more Point* tags.
-					// Replicate the JoinWithDots 1st and 2nd arguments.
+					// Flatten slice for []Integer / []Float objects.
+					endPointName, ds := makeDataStructure(parentRef, fieldTo, fieldVo, name)
+					ds.Value = valueTypes.AnyToValueString(fieldVo.Interface(), 0, "")
+					dss.Add(endPointName + "." + ds.PointId, ds)
+
+					// This commented-out section can handle []Integer fields.
+					// for si := 0; si < fieldVo.Len(); si++ {
+					// 	// Are we using an index number for name or field key value?
+					// 	pn := strconv.Itoa(si)
+					// 	n3 := append(n2, pn)
+					// 	if pointNameFromChild != "" {
+					// 		// PointNameFromChild - In this case points to a field within a CHILD struct.
+					// 		pn = GetPointNameFrom(fieldVo.Index(si).Interface(), pointNameFromChild, intSize, pointNameDateFormat)
+					// 		n3 = append(n2[:len(n2) - 1], pn)
+					// 	}
+					// 	if pointNameFromParent != "" {
+					// 		// PointNameFromChild - In this case points to a field within a CHILD struct.
+					// 		pn = GetPointNameFrom(fieldVo.Interface(), pointNameFromParent, intSize, pointNameDateFormat)
+					// 		n3 = append(n2[:len(n2) - 1], pn)
+					// 	}
+					//
+					// 	if valueTypes.IsUnknownStruct(fieldVo.Index(si).Interface()) {
+					// 		dss.GetPointTags(fieldVo.Index(si).Interface(), fieldVo.Index(si).Interface(), n3...)
+					// 		continue
+					// 	}
+					//
+					// 	// // We want to flatten a slice down to EG "[1, 2, 3]"
+					// 	// endPointName, ds := makeDataStructure(parentRef, fieldTo, fieldVo, n2)
+					// 	// ds.Value = valueTypes.AnyToValueString(fieldVo.Interface(), 0, "")
+					// 	// dss.Add(endPointName + "." + pn, ds)
+					// 	endPointName, ds := makeDataStructure(parentRef, fieldTo, fieldVo, n3)
+					// 	// ds.Json = pointId + pn
+					// 	ds.PointId = pn
+					// 	val := fieldVo.Index(si)
+					// 	ds.Value = val.Interface()
+					// 	dss.Add(endPointName, ds)
+					// }
+					continue
+
+				case reflect.Array:
+					// @TODO - Handle arrays here.
+					// Adds more Point* tags - PointNameFromChild, PointNameDateFormat
+					// Replicates the JoinWithDots 1st and 2nd arguments.
 					// intSize int, dateFormat string
-					// EG: PointSliceIntSize, PointSliceDateFormat
-					if pointValueType == "" {
-						pointValueType = reflect.Slice.String()
+					// fmt.Printf("Kind: %s ##########################################\n", fieldVo.Kind().String())
+					pointNameFromChild := fieldTo.Tag.Get(PointNameFromChild)
+					pointNameFromParent := fieldTo.Tag.Get(PointNameFromParent)
+					pointNameDateFormat := fieldTo.Tag.Get(PointNameDateFormat)
+					intSize := valueTypes.SizeOfInt(fieldVo.Len())
+					pointArrayFlatten := fieldTo.Tag.Get(PointArrayFlatten)
+					n2 := append(name, pointId)
+
+					if pointArrayFlatten != "" {
+						// We want to flatten a slice down to EG "[1, 2, 3]"
+						endPointName, ds := makeDataStructure(parentRef, fieldTo, fieldVo, name)
+						ds.Value = valueTypes.AnyToValueString(fieldVo.Interface(), 0, "")
+						dss.Add(endPointName + "." + ds.PointId, ds)
+						continue
 					}
 
-				case reflect.Invalid:
-					fallthrough
-				case reflect.Bool:
-					fallthrough
-				case reflect.String:
-					fallthrough
-				case reflect.Float32:
-					fallthrough
-				case reflect.Float64:
-					fallthrough
-				case reflect.Int:
-					fallthrough
-				case reflect.Int8:
-					fallthrough
-				case reflect.Int16:
-					fallthrough
-				case reflect.Int32:
-					fallthrough
-				case reflect.Int64:
-					fallthrough
-				case reflect.Uint:
-					fallthrough
-				case reflect.Uint8:
-					fallthrough
-				case reflect.Uint16:
-					fallthrough
-				case reflect.Uint32:
-					fallthrough
-				case reflect.Uint64:
-					fallthrough
-				case reflect.Interface:
-					// Pick up the unassigned types.
-					if pointValueType == "" {
-						pointValueType = reflect.Interface.String()
+					for si := 0; si < fieldVo.Len(); si++ {
+						// Are we using an index number for name or field key value?
+						pn := strconv.Itoa(si)
+						n3 := append(n2, pn)
+						if pointNameFromChild != "" {
+							// PointNameFromChild - In this case points to a field within a CHILD struct.
+							pn = GetPointNameFrom(fieldVo.Index(si).Interface(), pointNameFromChild, intSize, pointNameDateFormat)
+							n3 = append(n2[:len(n2) - 1], pn)
+						}
+						if pointNameFromParent != "" {
+							// PointNameFromChild - In this case points to a field within a CHILD struct.
+							pn = GetPointNameFrom(fieldVo.Interface(), pointNameFromParent, intSize, pointNameDateFormat)
+							n3 = append(n2[:len(n2) - 1], pn)
+						}
+
+						if valueTypes.IsUnknownStruct(fieldVo.Index(si).Interface()) {
+							dss.GetPointTags(fieldVo.Index(si).Interface(), fieldVo.Index(si).Interface(), n3...)
+							continue
+						}
+
+						// // We want to flatten a slice down to EG "[1, 2, 3]"
+						// endPointName, ds := makeDataStructure(parentRef, fieldTo, fieldVo, n2)
+						// ds.Value = valueTypes.AnyToValueString(fieldVo.Interface(), 0, "")
+						// dss.Add(endPointName + "." + pn, ds)
+						endPointName, ds := makeDataStructure(parentRef, fieldTo, fieldVo, n3)
+						// ds.Json = pointId + pn
+						ds.PointId = pointId + pn
+						val := fieldVo.Index(si)
+						ds.Value = val.Interface()
+						dss.Add(endPointName, ds)
 					}
+
+					// @TODO - Can't quite figure out what to do here. So will just flatten the array.
+					// for si := 0; si < fieldVo.Len(); si++ {
+					// 	// Are we using an index number for name or field key value?
+					// 	pn := strconv.Itoa(si)
+					// 	n3 := append(name)	// , pointId + pn)
+					// 	if pointNameFrom != "" {
+					// 		pn = GetPointNameFromChild(parentRef, pointNameFrom, intSize, pointNameDateFormat)
+					// 		n3 = append(n2[:len(n2) - 1], pn)
+					// 	}
+					//
+					// 	endPointName, ds := makeDataStructure(parentRef, fieldTo, fieldVo, n3)
+					// 	// ds.Json = pointId + pn
+					// 	ds.PointId = pointId + pn
+					// 	val := fieldVo.Index(si)
+					// 	ds.Value = val.Interface()
+					// 	dss.Add(endPointName, ds)
+					// }
+					continue
+
+				case reflect.Map:
+					// fmt.Printf("Kind: %s ##########################################\n", fieldVo.Kind().String())
+					n2 := append(name, pointId)
+					// pointNameFromChild := fieldTo.Tag.Get(PointNameFromChild)
+					// pointNameFromParent := fieldTo.Tag.Get(PointNameFromParent)
+
+					for _, key := range fieldVo.MapKeys() {
+						// @TODO - Implement this.
+						// if pointNameFromChild != "" {
+						// 	// PointNameFromChild - In this case points to a field within a CHILD struct.
+						// 	pn = GetPointNameFrom(fieldVo.Index(si).Interface(), pointNameFromChild, intSize, pointNameDateFormat)
+						// 	n3 = append(n2[:len(n2) - 1], pn)
+						// }
+						// if pointNameFromParent != "" {
+						// 	// PointNameFromChild - In this case points to a field within a CHILD struct.
+						// 	pn = GetPointNameFrom(fieldVo.Interface(), pointNameFromParent, intSize, pointNameDateFormat)
+						// 	n3 = append(n2[:len(n2) - 1], pn)
+						// }
+
+						endPointName, ds := makeDataStructure(fieldVo.Interface(), fieldTo, fieldVo, n2)
+						ds.Json = key.String()
+						ds.PointId = key.String()
+						val := fieldVo.MapIndex(key)
+						ds.Value = val.Interface()
+						dss.Add(endPointName + "." + ds.PointId, ds)
+					}
+					continue
+
+				case reflect.Struct:
+					// fmt.Printf("Kind: %s ##########################################\n", fieldVo.Kind().String())
+					if valueTypes.IsUnknownStruct(fieldVo.Interface()) {
+						n2 := append(name, pointId)
+						dss.GetPointTags(parentRef, fieldVo.Interface(), n2...)
+						continue
+					}
+
+					// fmt.Printf("[%s.%s] => %v\n", strings.Join(name, "."), pointId, fieldVo.Interface())
+					endPointName, ds := makeDataStructure(parentRef, fieldTo, fieldVo, name)
+					ds.Value = fieldVo.Interface()
+					dss.Add(endPointName + "." + ds.PointId, ds)
+					continue
 			}
 
-			if !fieldTo.IsExported() {
-				fmt.Printf("DEBUG: NOTEXPORTED(%s): %s\n", fieldTo.Name, fieldTo.Tag.Get("json"))
+			endPointName, ds := makeDataStructure(parentRef, fieldTo, fieldVo, name)
+			ds.Value = fieldVo.Interface()
+			dss.Add(endPointName + "." + ds.PointId, ds)
+		}
+	}
+
+	return *dss
+}
+
+func GetUnitFrom(ref interface{}, pointUnitFrom string) string {
+	var ret string
+	for range Only.Once {
+		vo := reflect.ValueOf(ref)
+		if vo.Kind() != reflect.Struct {
+			break
+		}
+
+		// Iterate over all available fields, looking for the field name.
+		for i := 0; i < vo.NumField(); i++ {
+			if vo.Type().Field(i).Name != pointUnitFrom {
 				continue
 			}
 
-			endPointName := strings.Join(name, ".")
-			pointName := strings.TrimPrefix(endPointName + "." + pointId, ".")
-			ds := DataStructure {
-				Json:           pointJson,
-				PointId:        pointId,
-				// PointType:      fieldTo.Tag.Get(PointType),
-				PointUnit:      fieldTo.Tag.Get(PointUnit),
-				PointUnitFrom:  fieldTo.Tag.Get(PointUnitFrom),
-				PointDevice:    fieldTo.Tag.Get(PointDevice),
-				PointName:      fieldTo.Tag.Get(PointName),
-				PointTimeSpan:  fieldTo.Tag.Get(PointTimeSpan),
-				PointValueType: pointValueType,
-				PointAlias:     fieldTo.Tag.Get(PointAlias),
-				PointGroupName: fieldTo.Tag.Get(PointGroupName),
-				PointIgnore:    ignore,
-
-				Value:          fieldVo.Interface(),
-				ValueType:      fieldTo.Type.String(),
-				ValueKind:      fieldVo.Kind().String(),
-				Endpoint:       endPointName,
-			}
-			ret[pointName] = ds
+			// fmt.Printf("GetUnitFrom: %v\n", fieldVo.Interface())
+			ret = valueTypes.AnyToValueString(vo.Field(i).Interface(), 0, "")
+			break
 		}
 	}
 
 	return ret
 }
 
-func (dsm *DataStructureMap) GetUnitFrom(ref ...string) string {
+func GetGroupNameFrom(ref interface{}, pointGroupNameFrom string) string {
 	var ret string
 	for range Only.Once {
-		r := strings.Join(ref, ".")
-		if s, ok := (*dsm)[r]; ok {
-			ret = s.PointUnit
+		vo := reflect.ValueOf(ref)
+		if vo.Kind() != reflect.Struct {
+			break
 		}
 
-		//
+		// Iterate over all available fields, looking for the field name.
+		for i := 0; i < vo.NumField(); i++ {
+			if vo.Type().Field(i).Name != pointGroupNameFrom {
+				continue
+			}
+
+			// fmt.Printf("GetGroupNameFrom: %v\n", fieldVo.Interface())
+			ret = valueTypes.AnyToValueString(vo.Field(i).Interface(), 0, "")
+			break
+		}
 	}
+
 	return ret
 }
+
+func GetTimestampFrom(ref interface{}, pointTimestampFrom string, dateFormat string) time.Time {
+	var ret time.Time
+	for range Only.Once {
+		vo := reflect.ValueOf(ref)
+		if vo.Kind() != reflect.Struct {
+			break
+		}
+
+		// Iterate over all available fields, looking for the field name.
+		for i := 0; i < vo.NumField(); i++ {
+			if vo.Type().Field(i).Name != pointTimestampFrom {
+				continue
+			}
+
+			// fmt.Printf("GetTimestampFrom: %v\n", fieldVo.Interface())
+			foo2 := fmt.Sprintf("%v", vo.Field(i).Interface())
+			ret = valueTypes.SetDateTimeString(foo2).Time
+			break
+		}
+	}
+
+	return ret
+}
+
+func GetPointNameFrom(ref interface{}, pointNameFrom string, intSize int, dateFormat string) string {
+	var ret string
+	for range Only.Once {
+		vo := reflect.ValueOf(ref)
+		if vo.Kind() != reflect.Struct {
+			break
+		}
+
+		// Iterate over all available fields, looking for the field name.
+		for i := 0; i < vo.NumField(); i++ {
+			if vo.Type().Field(i).Name != pointNameFrom {
+				continue
+			}
+
+			// fmt.Printf("GetPointNameFrom: %v\n", fieldVo.Interface())
+			ret = valueTypes.AnyToValueString(vo.Field(i).Interface(), intSize, dateFormat)
+			break
+		}
+	}
+
+	return ret
+}
+
+func makeDataStructure(parentRef interface{}, fieldTo reflect.StructField, fieldVo reflect.Value, name []string) (string, DataStructure) {
+	var endpoint string
+	var ds DataStructure
+
+	for range Only.Once {
+		if !fieldTo.IsExported() {
+			fmt.Printf("DEBUG: NOTEXPORTED(%s): %s\n", fieldTo.Name, fieldTo.Tag.Get("json"))
+			break
+		}
+
+		ignore := false
+		if fieldTo.Tag.Get(PointIgnore) != "" {
+			ignore = true
+		}
+
+		// if valueTypes.IsNil(ref) {
+		// 	pointValueType = "NIL"
+		// }
+
+		pointJson := fieldTo.Tag.Get("json")
+		pointId := fieldTo.Tag.Get(PointId)
+		if pointId == "" {
+			pointId = pointJson
+		}
+
+		pointValueType := fieldTo.Tag.Get(PointValueType)
+		if pointValueType == "" {
+			// pointValueType = fieldVo.Kind().String()
+		}
+
+		pointUnit := fieldTo.Tag.Get(PointUnit)
+		pointUnitFrom := fieldTo.Tag.Get(PointUnitFrom)
+		if pointUnitFrom != "" {
+			pointUnit = GetUnitFrom(parentRef, pointUnitFrom)
+		}
+
+		pointGroupName := fieldTo.Tag.Get(PointGroupName)
+		pointGroupNameFrom := fieldTo.Tag.Get(PointGroupNameFrom)
+		if pointGroupNameFrom != "" {
+			pointGroupName = GetGroupNameFrom(parentRef, pointGroupNameFrom)
+		}
+
+		pointTimestamp := time.Now()
+		pointTimestampFrom := fieldTo.Tag.Get(PointTimestampFrom)
+		if pointTimestampFrom != "" {
+			pointTimestamp = GetTimestampFrom(parentRef, pointTimestampFrom, valueTypes.DateTimeLayout)
+		}
+
+		endpoint = strings.TrimPrefix(strings.Join(name, "."), ".")
+
+		ds = DataStructure {
+			// PointType:      fieldTo.Tag.Get(PointType),
+			Json:               pointJson,
+			PointId:            pointId,
+			PointParentId:      fieldTo.Tag.Get(PointParentId),
+
+			PointUnit:          pointUnit,
+			PointUnitFrom:      pointUnitFrom,
+
+			PointTimestamp:     pointTimestamp,
+			PointTimestampFrom: pointTimestampFrom,
+
+			PointGroupName:     pointGroupName,
+			PointGroupNameFrom: pointGroupNameFrom,
+
+			PointName:       fieldTo.Tag.Get(PointName),
+			PointUpdateFreq: fieldTo.Tag.Get(PointUpdateFreq),
+			PointValueType:  pointValueType,
+			PointAliasTo:    fieldTo.Tag.Get(PointAliasTo),
+			PointIgnore:     ignore,
+			Value:           nil,
+			ValueType:       fieldTo.Type.String(),
+			ValueKind:       fieldVo.Kind().String(),
+			Endpoint:        endpoint,
+		}
+	}
+
+	return endpoint, ds
+}
+
+// func (dss *DataStructures) GetUnitFrom(ref ...string) string {
+// 	var ret string
+// 	for range Only.Once {
+// 		r := strings.Join(ref, ".")
+// 		if s, ok := dss.Map[r]; ok {
+// 			ret = s.PointUnit
+// 		}
+// 	}
+// 	return ret
+// }
+//
+// func (dss *DataStructures) GetPointGroupNameFrom(ref ...string) string {
+// 	var ret string
+// 	for range Only.Once {
+// 		r := strings.Join(ref, ".")
+// 		if s, ok := dss.Map[r]; ok {
+// 			ret = s.PointUnit
+// 		}
+// 	}
+// 	return ret
+// }
 
 
 // GetArea Return an Area name if we are given an Area or EndPoint struct.
@@ -861,7 +1222,7 @@ func GetStructKeys(ref interface{}, keys ...string) StructKeys {
 			case "int64":
 				value = strconv.FormatInt(k.Value().(int64), 10)
 			case "float64":
-				value = strconv.FormatFloat(k.Value().(float64), 'f', 6, 64)
+				value = strconv.FormatFloat(k.Value().(float64), 'f', -1, 64)
 			default:
 				j, e := json.Marshal(k.Value())
 				if e == nil {

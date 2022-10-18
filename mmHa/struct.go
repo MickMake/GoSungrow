@@ -449,7 +449,7 @@ func (m *Mqtt) GetLastReset(pointType string) string {
 		if !pt.Valid {
 			break
 		}
-		if pt.TimeSpan == "" {
+		if pt.UpdateFreq == "" {
 			break
 		}
 		ret = pt.WhenReset()

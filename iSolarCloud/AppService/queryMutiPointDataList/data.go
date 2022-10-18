@@ -197,7 +197,7 @@ func (e *EndPoint) GetPointDataTable(points api.TemplatePoints) output.Table {
 					_ = table.AddRow(
 						tim.Key.PrintFull(),
 						fmt.Sprintf("%s.%s", deviceName, pointId),
-						gp.Description,
+						gp.Name,
 						tim.Value,
 						gp.Unit,
 					)

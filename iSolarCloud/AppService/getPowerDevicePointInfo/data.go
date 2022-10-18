@@ -29,13 +29,13 @@ func (rd RequestData) Help() string {
 
 
 type ResultData struct {
-	DeviceType    valueTypes.Integer  `json:"device_type" PointId:"device_type" PointValueType:"" PointTimeSpan:""`
-	ID            valueTypes.Integer  `json:"id" PointId:"id" PointValueType:"" PointTimeSpan:""`
-	Period        valueTypes.Integer  `json:"period" PointId:"period" PointValueType:"" PointTimeSpan:""`
-	PointID       valueTypes.Integer  `json:"point_id" PointId:"point_id" PointValueType:"" PointTimeSpan:""`
-	PointName     string `json:"point_name" PointId:"point_name" PointValueType:"" PointTimeSpan:""`
-	ShowPointName string `json:"show_point_name" PointId:"show_point_name" PointValueType:"" PointTimeSpan:""`
-	TranslationID valueTypes.Integer  `json:"translation_id" PointId:"translation_id" PointValueType:"" PointTimeSpan:""`
+	DeviceType    valueTypes.Integer  `json:"device_type" PointId:"device_type" PointValueType:"" PointUpdateFreq:""`
+	ID            valueTypes.Integer  `json:"id" PointId:"id" PointValueType:"" PointUpdateFreq:""`
+	Period        valueTypes.Integer  `json:"period" PointId:"period" PointValueType:"" PointUpdateFreq:""`
+	PointID       valueTypes.Integer  `json:"point_id" PointId:"point_id" PointValueType:"" PointUpdateFreq:""`
+	PointName     string `json:"point_name" PointId:"point_name" PointValueType:"" PointUpdateFreq:""`
+	ShowPointName string `json:"show_point_name" PointId:"show_point_name" PointValueType:"" PointUpdateFreq:""`
+	TranslationID valueTypes.Integer  `json:"translation_id" PointId:"translation_id" PointValueType:"" PointUpdateFreq:""`
 }
 
 func (e *ResultData) IsValid() error {

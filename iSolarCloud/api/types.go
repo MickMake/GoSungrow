@@ -25,7 +25,7 @@ import (
 // 			GroupName: "",
 // 			Name:      name,
 // 			Unit:      uv.Unit(),
-// 			TimeSpan:  "PointTimeSpanInstant",
+// 			UpdateFreq:  "PointUpdateFreqInstant",
 // 			Valid:     true,
 // 			States:    nil,
 // 		}
@@ -46,22 +46,23 @@ func (e *Web) GetDataTable(endpoint EndPoint) output.Table {
 		_ = table.SetHeader(
 			"Date",
 			"Point Id",
-			"Group Name",
-			"Description",
 			"Value",
 			"Unit",
 			"Unit Type",
+			"Group Name",
+			"Description",
+			"Update Freq",
 		)
 
 		data := endpoint.GetEndPointData()
 		var sorted []string
-		for p := range data.DataPoints {
+		for p := range data.Map {
 			sorted = append(sorted, string(p))
 		}
 		sort.Strings(sorted)
 
 		for _, p := range sorted {
-			entries := data.DataPoints[p]
+			entries := data.Map[p].Entries
 			for _, de := range entries {
 				if de.Hide {
 					continue
@@ -69,15 +70,13 @@ func (e *Web) GetDataTable(endpoint EndPoint) output.Table {
 
 				_ = table.AddRow(
 					de.Date.Format(valueTypes.DateTimeLayout),
-					// api.NameDevicePointInt(de.Point.Parents, p.PointID.Value()),
-					// de.Point.Id,
 					p,
-					// de.Point.Parents.String(),
-					de.Point.GroupName,
-					de.Point.Name,
 					de.Value,
 					de.Point.Unit,
 					de.Point.ValueType,
+					de.Point.GroupName,
+					de.Point.Description,
+					de.Point.UpdateFreq,
 				)
 			}
 		}

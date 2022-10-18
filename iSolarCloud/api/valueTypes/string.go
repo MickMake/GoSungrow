@@ -59,6 +59,13 @@ func (t String) String() string {
 	return t.string
 }
 
+func (t String) Match(comp string) bool {
+	if t.string == comp {
+		return true
+	}
+	return false
+}
+
 func (t *String) SetString(value string) String {
 	for range Only.Once {
 		t.string = value
@@ -130,6 +137,17 @@ func (t PsKey) MarshalJSON() ([]byte, error) {
 
 func (t PsKey) Value() string {
 	return t.string
+}
+
+func (t PsKey) String() string {
+	return t.string
+}
+
+func (t PsKey) Match(comp string) bool {
+	if t.string == comp {
+		return true
+	}
+	return false
 }
 
 func (t PsKey) PsKey() string {

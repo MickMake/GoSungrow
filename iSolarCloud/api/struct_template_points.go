@@ -9,7 +9,7 @@ import (
 
 
 type TemplatePoint struct {
-	Description string
+	Name    string
 	PsKey   string
 	PointId valueTypes.PointId
 	Unit    string
@@ -61,10 +61,10 @@ func CreatePoints(points []string) TemplatePoints {
 				pa[1] = valueTypes.SetPointIdString(pa[1]).String()
 				// pa[1] = "p" + strings.TrimPrefix(pa[1], "p")
 				ret = append(ret, TemplatePoint{
-					Description: "",
-					PsKey:       pa[0],
-					PointId:     valueTypes.SetPointIdString(pa[1]),
-					Unit:        "",
+					Name:    "",
+					PsKey:   pa[0],
+					PointId: valueTypes.SetPointIdString(pa[1]),
+					Unit:    "",
 				})
 			}
 		}

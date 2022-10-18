@@ -15,18 +15,20 @@ type UnitValue struct {
 
 	TypeValue   string `json:"type_value"`
 
-	float64     `json:"value_float,omitempty"`
-	int64       `json:"value_int,omitempty"`
-	bool        `json:"value_bool,omitempty"`
+	*float64     `json:"value_float,omitempty"`
+	*int64       `json:"value_int,omitempty"`
+	*bool        `json:"value_bool,omitempty"`
 
-	isFloat     bool
+	// isFloat     bool
 	Valid       bool `json:"valid"`
 }
 
+var zero = int64(0)
+
 func (t *UnitValue) UnitValueFix() UnitValue {
 	switch t.UnitValue {
-	case "w":
-		t.UnitValue = "W"
+		case "w":
+			t.UnitValue = "W"
 	}
 
 	switch t.UnitValue {
@@ -112,14 +114,14 @@ func (t UnitValue) MarshalJSON() ([]byte, error) {
 	for range Only.Once {
 		t.Valid = false
 
-		if t.isFloat {
+		if t.float64 != nil {
 			// Store result to JSON string
 			data, err = json.Marshal(&struct {
 				Unit  string  `json:"unit"`
 				Value float64 `json:"value"`
 			}{
 				Unit:  t.UnitValue,
-				Value: t.float64,
+				Value: *t.float64,
 			})
 			if err != nil {
 				break
@@ -129,16 +131,32 @@ func (t UnitValue) MarshalJSON() ([]byte, error) {
 			break
 		}
 
-		// Store result to JSON string
-		data, err = json.Marshal(&struct {
-			Unit  string `json:"unit"`
-			Value int64  `json:"value"`
-		}{
-			Unit:  t.UnitValue,
-			Value: t.int64,
-		})
-		if err != nil {
-			break
+		if t.int64 != nil {
+			// Store result to JSON string
+			data, err = json.Marshal(&struct {
+				Unit  string `json:"unit"`
+				Value int64  `json:"value"`
+			}{
+				Unit:  t.UnitValue,
+				Value: *t.int64,
+			})
+			if err != nil {
+				break
+			}
+		}
+
+		if t.bool != nil {
+			// Store result to JSON string
+			data, err = json.Marshal(&struct {
+				Unit  string `json:"unit"`
+				Value bool   `json:"value"`
+			}{
+				Unit:  t.UnitValue,
+				Value: *t.bool,
+			})
+			if err != nil {
+				break
+			}
 		}
 
 		t.Valid = true
@@ -148,26 +166,102 @@ func (t UnitValue) MarshalJSON() ([]byte, error) {
 }
 
 func (t UnitValue) Value() float64 {
-	if t.isFloat {
-		return t.float64
+	var ret float64
+	for range Only.Once {
+		if t.float64 != nil {
+			ret = *t.float64
+			break
+		}
+
+		if t.int64 != nil {
+			ret = float64(*t.int64)
+			break
+		}
+
+		if t.bool != nil {
+			if *t.bool {
+				ret = 1
+				break
+			}
+			ret = 0
+			break
+		}
 	}
-	return float64(t.int64)
+	return ret
 }
 
 func (t UnitValue) ValueFloat() float64 {
-	return t.float64
+	if t.float64 == nil {
+		return 0
+	}
+	return *t.float64
 }
 
 func (t UnitValue) ValueInt() int64 {
-	return t.int64
+	if t.int64 == nil {
+		return 0
+	}
+	return *t.int64
 }
 
 func (t UnitValue) ValueBool() bool {
-	return t.bool
+	if t.float64 == nil {
+		return false
+	}
+	return *t.bool
 }
 
 func (t UnitValue) String() string {
-	return t.StringValue
+	var ret string
+	for range Only.Once {
+		if t.float64 != nil {
+			ret = strconv.FormatFloat(*t.float64, 'f', -1, 64)
+			break
+		}
+
+		if t.int64 != nil {
+			ret = strconv.FormatInt(*t.int64, 10)
+			break
+		}
+
+		if t.bool != nil {
+			ret = strconv.FormatBool(*t.bool)
+			break
+		}
+
+		ret = t.StringValue
+	}
+	return ret
+}
+
+func (t UnitValue) MatchFloat(comp float64) bool {
+	if t.float64 == nil {
+		return false
+	}
+	if *t.float64 == comp {
+		return true
+	}
+	return false
+}
+
+func (t UnitValue) MatchInt(comp int64) bool {
+	if t.int64 == nil {
+		return false
+	}
+	if *t.int64 == comp {
+		return true
+	}
+	return false
+}
+
+func (t UnitValue) MatchBool(comp bool) bool {
+	if t.bool == nil {
+		return false
+	}
+	if *t.bool == comp {
+		return true
+	}
+	return false
 }
 
 func (t UnitValue) Unit() string {
@@ -178,10 +272,14 @@ func (t UnitValue) Type() string {
 	return t.TypeValue
 }
 
+var varTrue = true
+var varFalse = false
 func (t *UnitValue) SetString(value string) UnitValue {
 	for range Only.Once {
 		t.StringValue = value
-		t.int64 = 0
+		t.float64 = nil
+		t.int64 = nil
+		t.bool = nil
 		t.Valid = false
 
 		if value == "" {
@@ -190,6 +288,15 @@ func (t *UnitValue) SetString(value string) UnitValue {
 
 		if value == "--" {
 			// value = ""
+			break
+		}
+
+		if value == "true" {
+			t.SetBool(true)
+			break
+		}
+		if value == "false" {
+			t.SetBool(false)
 			break
 		}
 
@@ -214,11 +321,12 @@ func (t *UnitValue) SetString(value string) UnitValue {
 
 func (t *UnitValue) SetInteger(value int64) UnitValue {
 	for range Only.Once {
-		t.int64 = value
-		t.float64 = float64(value)
-		t.isFloat = false
+		t.int64 = &value
+		// fv := float64(value); t.float64 = &fv
+		t.float64 = nil
+		t.bool = nil
 		t.Valid = true
-		t.StringValue = strconv.FormatInt(t.int64, 10)
+		t.StringValue = strconv.FormatInt(*t.int64, 10)
 	}
 
 	return *t
@@ -226,13 +334,15 @@ func (t *UnitValue) SetInteger(value int64) UnitValue {
 
 func (t *UnitValue) SetFloat(value float64) UnitValue {
 	for range Only.Once {
-		t.int64 = int64(value)
-		t.float64 = value
-		t.isFloat = true
+		// iv := int64(value)
+		// t.int64 = &iv
+		t.int64 = nil
+		t.float64 = &value
+		t.bool = nil
 		t.Valid = true
 		// t.String = strconv.FormatFloat(t.float64, 'f', 12, 64)
 		// t.String = strings.TrimRight(t.String, "0")
-		t.StringValue = strconv.FormatFloat(t.float64, 'f', -1, 64)
+		t.StringValue = strconv.FormatFloat(*t.float64, 'f', -1, 64)
 	}
 
 	return *t
@@ -240,19 +350,50 @@ func (t *UnitValue) SetFloat(value float64) UnitValue {
 
 func (t *UnitValue) SetBool(value bool) UnitValue {
 	for range Only.Once {
-		t.isFloat = false
 		t.Valid = true
-		if value {
-			t.bool = value
-			t.float64 = 0
-			t.int64 = 0
-			t.StringValue = "true"
-			break
+		t.float64 = nil
+		t.int64 = nil
+		t.bool = &value
+		t.StringValue = strconv.FormatBool(value)
+	}
+
+	return *t
+}
+
+func (t *UnitValue) SetBoolString(value string) UnitValue {
+	for range Only.Once {
+		t.Valid = true
+		t.float64 = nil
+		t.int64 = nil
+		// t.StringValue = strconv.FormatBool(value)
+
+		switch strings.ToLower(value) {
+			case "false":
+				fallthrough
+			case "no":
+				fallthrough
+			case "off":
+				fallthrough
+			case "0":
+				fallthrough
+			case "":
+				// 	fallthrough
+				// case "--":
+				t.bool = &varFalse
+				t.StringValue = "false"
+				t.Valid = true
+
+			case "true":
+				fallthrough
+			case "yes":
+				fallthrough
+			case "on":
+				fallthrough
+			case "1":
+				t.bool = &varTrue
+				t.StringValue = "true"
+				t.Valid = true
 		}
-		t.bool = value
-		t.float64 = 1
-		t.int64 = 1
-		t.StringValue = "false"
 	}
 
 	return *t
@@ -261,7 +402,6 @@ func (t *UnitValue) SetBool(value bool) UnitValue {
 func (t *UnitValue) SetUnit(unit string) UnitValue {
 	for range Only.Once {
 		t.UnitValue = unit
-		// t.Valid = true
 	}
 
 	return *t

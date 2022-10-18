@@ -46,42 +46,42 @@ type DayData struct {
 	JthdMapVirgin   valueTypes.UnitValue `json:"jthd_map_virgin"  PointIgnore:"true"`
 	JtydMap         valueTypes.UnitValue `json:"jtyd_map"`
 	JtydMapVirgin   valueTypes.UnitValue `json:"jtyd_map_virgin"  PointIgnore:"true"`
-	P83072Map       valueTypes.UnitValue `json:"p83072_map"  PointId:"p83072" PointValueType:"" PointTimeSpan:"PointTimeSpanDaily"`
+	P83072Map       valueTypes.UnitValue `json:"p83072_map"  PointId:"p83072" PointValueType:"" PointUpdateFreq:"UpdateFreqDaily"`
 	P83072MapVirgin valueTypes.UnitValue `json:"p83072_map_virgin"  PointIgnore:"true"`
-	P83077Map       valueTypes.UnitValue `json:"p83077_map"  PointId:"p83077" PointValueType:"" PointTimeSpan:"PointTimeSpanDaily"`
+	P83077Map       valueTypes.UnitValue `json:"p83077_map"  PointId:"p83077" PointValueType:"" PointUpdateFreq:"UpdateFreqDaily"`
 	P83077MapVirgin valueTypes.UnitValue `json:"p83077_map_virgin"  PointIgnore:"true"`
-	P83088Map       valueTypes.UnitValue `json:"p83088_map"  PointId:"p83088" PointValueType:"" PointTimeSpan:"PointTimeSpanDaily"`
+	P83088Map       valueTypes.UnitValue `json:"p83088_map"  PointId:"p83088" PointValueType:"" PointUpdateFreq:"UpdateFreqDaily"`
 	P83088MapVirgin valueTypes.UnitValue `json:"p83088_map_virgin"  PointIgnore:"true"`
-	P83089Map       valueTypes.UnitValue `json:"p83089_map"  PointId:"p83089" PointValueType:"" PointTimeSpan:"PointTimeSpanDaily"`
+	P83089Map       valueTypes.UnitValue `json:"p83089_map"  PointId:"p83089" PointValueType:"" PointUpdateFreq:"UpdateFreqDaily"`
 	P83089MapVirgin valueTypes.UnitValue `json:"p83089_map_virgin"  PointIgnore:"true"`
-	P83097Map       valueTypes.UnitValue `json:"p83097_map"  PointId:"p83097" PointValueType:"" PointTimeSpan:"PointTimeSpanDaily"`
+	P83097Map       valueTypes.UnitValue `json:"p83097_map"  PointId:"p83097" PointValueType:"" PointUpdateFreq:"UpdateFreqDaily"`
 	P83097MapVirgin valueTypes.UnitValue `json:"p83097_map_virgin"  PointIgnore:"true"`
-	P83102Map       valueTypes.UnitValue `json:"p83102_map"  PointId:"p83102" PointValueType:"" PointTimeSpan:"PointTimeSpanDaily"`
+	P83102Map       valueTypes.UnitValue `json:"p83102_map"  PointId:"p83102" PointValueType:"" PointUpdateFreq:"UpdateFreqDaily"`
 	P83102MapVirgin valueTypes.UnitValue `json:"p83102_map_virgin"  PointIgnore:"true"`
-	P83118Map       valueTypes.UnitValue `json:"p83118_map"  PointId:"p83118" PointValueType:"" PointTimeSpan:"PointTimeSpanDaily"`
+	P83118Map       valueTypes.UnitValue `json:"p83118_map"  PointId:"p83118" PointValueType:"" PointUpdateFreq:"UpdateFreqDaily"`
 	P83118MapVirgin valueTypes.UnitValue `json:"p83118_map_virgin"  PointIgnore:"true"`
-	P83119Map       valueTypes.UnitValue `json:"p83119_map"  PointId:"p83119" PointValueType:"" PointTimeSpan:"PointTimeSpanDaily"`
+	P83119Map       valueTypes.UnitValue `json:"p83119_map"  PointId:"p83119" PointValueType:"" PointUpdateFreq:"UpdateFreqDaily"`
 	P83119MapVirgin valueTypes.UnitValue `json:"p83119_map_virgin"  PointIgnore:"true"`
-	P83120Map       valueTypes.UnitValue `json:"p83120_map"  PointId:"p83120" PointValueType:"" PointTimeSpan:"PointTimeSpanDaily"`
+	P83120Map       valueTypes.UnitValue `json:"p83120_map"  PointId:"p83120" PointValueType:"" PointUpdateFreq:"UpdateFreqDaily"`
 	P83120MapVirgin valueTypes.UnitValue `json:"p83120_map_virgin"  PointIgnore:"true"`
-	P83121          valueTypes.Float        `json:"p83121"  PointId:"p83121" PointUnitFrom:"FOO" PointTimeSpan:"PointTimeSpanDaily"`
-	P83122          valueTypes.Float        `json:"p83122"  PointId:"p83122" PointUnitFrom:"FOO" PointTimeSpan:"PointTimeSpanDaily"`
+	P83121          valueTypes.Float        `json:"p83121"  PointId:"p83121" PointUnitFrom:"FOO" PointUpdateFreq:"UpdateFreqDaily"`
+	P83122          valueTypes.Float        `json:"p83122"  PointId:"p83122" PointUnitFrom:"FOO" PointUpdateFreq:"UpdateFreqDaily"`
 	PointData15List []struct {
-		P83076     valueTypes.Float  `json:"p83076"  PointId:"p83076" PointUnitFrom:"p83076_unit" PointTimeSpan:"PointTimeSpanDaily"`
+		P83076     valueTypes.Float  `json:"p83076"  PointId:"p83076" PointUnitFrom:"p83076_unit" PointUpdateFreq:"UpdateFreqDaily"`
 		P83076Unit valueTypes.String   `json:"p83076_unit"`
-		P83080     valueTypes.Float  `json:"p83080"  PointId:"p83080" PointUnitFrom:"p83080_unit" PointTimeSpan:"PointTimeSpanDaily"`
+		P83080     valueTypes.Float  `json:"p83080"  PointId:"p83080" PointUnitFrom:"p83080_unit" PointUpdateFreq:"UpdateFreqDaily"`
 		P83080Unit valueTypes.String   `json:"p83080_unit"`
-		P83086     valueTypes.Float  `json:"p83086"  PointId:"p83086" PointUnitFrom:"p83086_unit" PointTimeSpan:"PointTimeSpanDaily"`
+		P83086     valueTypes.Float  `json:"p83086"  PointId:"p83086" PointUnitFrom:"p83086_unit" PointUpdateFreq:"UpdateFreqDaily"`
 		P83086Unit valueTypes.String   `json:"p83086_unit"`
-		P83087     valueTypes.Float  `json:"p83087"  PointId:"p83087" PointUnitFrom:"p83087_unit" PointTimeSpan:"PointTimeSpanDaily"`
+		P83087     valueTypes.Float  `json:"p83087"  PointId:"p83087" PointUnitFrom:"p83087_unit" PointUpdateFreq:"UpdateFreqDaily"`
 		P83087Unit valueTypes.String   `json:"p83087_unit"`
-		P83096     valueTypes.Float  `json:"p83096"  PointId:"p83096" PointUnitFrom:"p83096_unit" PointTimeSpan:"PointTimeSpanDaily"`
+		P83096     valueTypes.Float  `json:"p83096"  PointId:"p83096" PointUnitFrom:"p83096_unit" PointUpdateFreq:"UpdateFreqDaily"`
 		P83096Unit valueTypes.String   `json:"p83096_unit"`
-		P83101     valueTypes.Float  `json:"p83101"  PointId:"p83101" PointUnitFrom:"p83101_unit" PointTimeSpan:"PointTimeSpanDaily"`
+		P83101     valueTypes.Float  `json:"p83101"  PointId:"p83101" PointUnitFrom:"p83101_unit" PointUpdateFreq:"UpdateFreqDaily"`
 		P83101Unit valueTypes.String   `json:"p83101_unit"`
-		P83106     valueTypes.Float  `json:"p83106"  PointId:"p83106" PointUnitFrom:"p83106_unit" PointTimeSpan:"PointTimeSpanDaily"`
+		P83106     valueTypes.Float  `json:"p83106"  PointId:"p83106" PointUnitFrom:"p83106_unit" PointUpdateFreq:"UpdateFreqDaily"`
 		P83106Unit valueTypes.String   `json:"p83106_unit"`
-		P83128     valueTypes.Float  `json:"p83128"  PointId:"p83128" PointUnitFrom:"p83128_unit" PointTimeSpan:"PointTimeSpanDaily"`
+		P83128     valueTypes.Float  `json:"p83128"  PointId:"p83128" PointUnitFrom:"p83128_unit" PointUpdateFreq:"UpdateFreqDaily"`
 		P83128Unit valueTypes.String   `json:"p83128_unit"`
 		TimeStamp  valueTypes.DateTime `json:"time_stamp"`
 		Zfzy       valueTypes.Float   `json:"zfzy" PointUnitFrom:"zfzy_unit"`
@@ -104,51 +104,51 @@ type MonthData struct {
 		JthdUnit                 valueTypes.String      `json:"jthd_unit"`
 		Jtyd                     valueTypes.Float      `json:"jtyd" PointUnitFrom:"jtyd_unit"`
 		JtydUnit                 valueTypes.String      `json:"jtyd_unit"`
-		P83022                   valueTypes.Float      `json:"p83022"  PointId:"p83022" PointTimeSpan:"PointTimeSpanMonthly"`
-		P83072                   valueTypes.Float      `json:"p83072"  PointId:"p83072" PointUnitFrom:"p83072_unit" PointTimeSpan:"PointTimeSpanMonthly"`
+		P83022                   valueTypes.Float      `json:"p83022"  PointId:"p83022" PointUpdateFreq:"UpdateFreqMonthly"`
+		P83072                   valueTypes.Float      `json:"p83072"  PointId:"p83072" PointUnitFrom:"p83072_unit" PointUpdateFreq:"UpdateFreqMonthly"`
 		P83072Unit               valueTypes.String      `json:"p83072_unit"`
-		P83077                   valueTypes.Float      `json:"p83077"  PointId:"p83077" PointUnitFrom:"p83077_unit" PointTimeSpan:"PointTimeSpanMonthly"`
+		P83077                   valueTypes.Float      `json:"p83077"  PointId:"p83077" PointUnitFrom:"p83077_unit" PointUpdateFreq:"UpdateFreqMonthly"`
 		P83077Unit               valueTypes.String      `json:"p83077_unit"`
-		P83088                   valueTypes.Float      `json:"p83088"  PointId:"p83088" PointUnitFrom:"p83088_unit" PointTimeSpan:"PointTimeSpanMonthly"`
+		P83088                   valueTypes.Float      `json:"p83088"  PointId:"p83088" PointUnitFrom:"p83088_unit" PointUpdateFreq:"UpdateFreqMonthly"`
 		P83088Unit               valueTypes.String      `json:"p83088_unit"`
-		P83089                   valueTypes.Float      `json:"p83089"  PointId:"p83089" PointUnitFrom:"p83089_unit" PointTimeSpan:"PointTimeSpanMonthly"`
+		P83089                   valueTypes.Float      `json:"p83089"  PointId:"p83089" PointUnitFrom:"p83089_unit" PointUpdateFreq:"UpdateFreqMonthly"`
 		P83089Unit               valueTypes.String      `json:"p83089_unit"`
-		P83097                   valueTypes.Float      `json:"p83097"  PointId:"p83097" PointUnitFrom:"p83097_unit" PointTimeSpan:"PointTimeSpanMonthly"`
+		P83097                   valueTypes.Float      `json:"p83097"  PointId:"p83097" PointUnitFrom:"p83097_unit" PointUpdateFreq:"UpdateFreqMonthly"`
 		P83097Unit               valueTypes.String      `json:"p83097_unit"`
-		P83102                   valueTypes.Float      `json:"p83102"  PointId:"p83102" PointUnitFrom:"p83102_unit" PointTimeSpan:"PointTimeSpanMonthly"`
+		P83102                   valueTypes.Float      `json:"p83102"  PointId:"p83102" PointUnitFrom:"p83102_unit" PointUpdateFreq:"UpdateFreqMonthly"`
 		P83102Unit               valueTypes.String      `json:"p83102_unit"`
-		P83118                   valueTypes.Float      `json:"p83118"  PointId:"p83118" PointUnitFrom:"p83118_unit" PointTimeSpan:"PointTimeSpanMonthly"`
+		P83118                   valueTypes.Float      `json:"p83118"  PointId:"p83118" PointUnitFrom:"p83118_unit" PointUpdateFreq:"UpdateFreqMonthly"`
 		P83118Unit               valueTypes.String      `json:"p83118_unit"`
-		P83119                   valueTypes.Float      `json:"p83119"  PointId:"p83119" PointUnitFrom:"p83119_unit" PointTimeSpan:"PointTimeSpanMonthly"`
+		P83119                   valueTypes.Float      `json:"p83119"  PointId:"p83119" PointUnitFrom:"p83119_unit" PointUpdateFreq:"UpdateFreqMonthly"`
 		P83119Unit               valueTypes.String      `json:"p83119_unit"`
-		P83120                   valueTypes.Float      `json:"p83120"  PointId:"p83120" PointTimeSpan:"PointTimeSpanMonthly"`
-		P83121                   valueTypes.Float      `json:"p83121"  PointId:"p83121" PointTimeSpan:"PointTimeSpanMonthly"`
-		P83122                   valueTypes.Float      `json:"p83122"  PointId:"p83122" PointTimeSpan:"PointTimeSpanMonthly"`
+		P83120                   valueTypes.Float      `json:"p83120"  PointId:"p83120" PointUpdateFreq:"UpdateFreqMonthly"`
+		P83121                   valueTypes.Float      `json:"p83121"  PointId:"p83121" PointUpdateFreq:"UpdateFreqMonthly"`
+		P83122                   valueTypes.Float      `json:"p83122"  PointId:"p83122" PointUpdateFreq:"UpdateFreqMonthly"`
 		PsID                     valueTypes.Integer    `json:"ps_id"`
 		SelfConsumptionYield     valueTypes.Float      `json:"self_consumption_yield" PointUnitFrom:"self_consumption_yield_unit"`
 		SelfConsumptionYieldUnit valueTypes.String      `json:"self_consumption_yield_unit"`
 		TimeStamp                valueTypes.DateTime      `json:"time_stamp"`
 	} `json:"month_data_day_list"`
-	P83073Map       valueTypes.UnitValue `json:"p83073_map"  PointId:"p83073" PointValueType:"" PointTimeSpan:"PointTimeSpanMonthly"`
+	P83073Map       valueTypes.UnitValue `json:"p83073_map"  PointId:"p83073" PointValueType:"" PointUpdateFreq:"UpdateFreqMonthly"`
 	P83073MapVirgin valueTypes.UnitValue `json:"p83073_map_virgin"  PointIgnore:"true"`
-	P83078Map       valueTypes.UnitValue `json:"p83078_map"  PointId:"p83078" PointValueType:"" PointTimeSpan:"PointTimeSpanMonthly"`
+	P83078Map       valueTypes.UnitValue `json:"p83078_map"  PointId:"p83078" PointValueType:"" PointUpdateFreq:"UpdateFreqMonthly"`
 	P83078MapVirgin valueTypes.UnitValue `json:"p83078_map_virgin"  PointIgnore:"true"`
-	P83088Map       valueTypes.UnitValue `json:"p83088_map"  PointId:"p83088" PointValueType:"" PointTimeSpan:"PointTimeSpanMonthly"`
+	P83088Map       valueTypes.UnitValue `json:"p83088_map"  PointId:"p83088" PointValueType:"" PointUpdateFreq:"UpdateFreqMonthly"`
 	P83088MapVirgin valueTypes.UnitValue `json:"p83088_map_virgin"  PointIgnore:"true"`
-	P83091Map       valueTypes.UnitValue `json:"p83091_map"  PointId:"p83091" PointValueType:"" PointTimeSpan:"PointTimeSpanMonthly"`
+	P83091Map       valueTypes.UnitValue `json:"p83091_map"  PointId:"p83091" PointValueType:"" PointUpdateFreq:"UpdateFreqMonthly"`
 	P83091MapVirgin valueTypes.UnitValue `json:"p83091_map_virgin"  PointIgnore:"true"`
-	P83097Map       valueTypes.UnitValue `json:"p83097_map"  PointId:"p83097" PointValueType:"" PointTimeSpan:"PointTimeSpanMonthly"`
+	P83097Map       valueTypes.UnitValue `json:"p83097_map"  PointId:"p83097" PointValueType:"" PointUpdateFreq:"UpdateFreqMonthly"`
 	P83097MapVirgin valueTypes.UnitValue `json:"p83097_map_virgin"  PointIgnore:"true"`
-	P83103Map       valueTypes.UnitValue `json:"p83103_map"  PointId:"p83103" PointValueType:"" PointTimeSpan:"PointTimeSpanMonthly"`
+	P83103Map       valueTypes.UnitValue `json:"p83103_map"  PointId:"p83103" PointValueType:"" PointUpdateFreq:"UpdateFreqMonthly"`
 	P83103MapVirgin valueTypes.UnitValue `json:"p83103_map_virgin"  PointIgnore:"true"`
-	P83118Map       valueTypes.UnitValue `json:"p83118_map"  PointId:"p83118" PointValueType:"" PointTimeSpan:"PointTimeSpanMonthly"`
+	P83118Map       valueTypes.UnitValue `json:"p83118_map"  PointId:"p83118" PointValueType:"" PointUpdateFreq:"UpdateFreqMonthly"`
 	P83118MapVirgin valueTypes.UnitValue `json:"p83118_map_virgin"  PointIgnore:"true"`
-	P83119Map       valueTypes.UnitValue `json:"p83119_map"  PointId:"p83119" PointValueType:"" PointTimeSpan:"PointTimeSpanMonthly"`
+	P83119Map       valueTypes.UnitValue `json:"p83119_map"  PointId:"p83119" PointValueType:"" PointUpdateFreq:"UpdateFreqMonthly"`
 	P83119MapVirgin valueTypes.UnitValue `json:"p83119_map_virgin"  PointIgnore:"true"`
-	P83120Map       valueTypes.UnitValue `json:"p83120_map"  PointId:"p83120" PointValueType:"" PointTimeSpan:"PointTimeSpanMonthly"`
+	P83120Map       valueTypes.UnitValue `json:"p83120_map"  PointId:"p83120" PointValueType:"" PointUpdateFreq:"UpdateFreqMonthly"`
 	P83120MapVirgin valueTypes.UnitValue `json:"p83120_map_virgin"  PointIgnore:"true"`
-	P83121          valueTypes.Float        `json:"p83121"  PointId:"p83121" PointUnitFrom:"FOO" PointTimeSpan:"PointTimeSpanMonthly"`
-	P83122          valueTypes.Float        `json:"p83122"  PointId:"p83122" PointUnitFrom:"FOO" PointTimeSpan:"PointTimeSpanMonthly"`
+	P83121          valueTypes.Float        `json:"p83121"  PointId:"p83121" PointUnitFrom:"FOO" PointUpdateFreq:"UpdateFreqMonthly"`
+	P83122          valueTypes.Float        `json:"p83122"  PointId:"p83122" PointUnitFrom:"FOO" PointUpdateFreq:"UpdateFreqMonthly"`
 	ZfzyMap         valueTypes.UnitValue `json:"zfzy_map"`
 	ZfzyMapVirgin   valueTypes.UnitValue `json:"zfzy_map_virgin"  PointIgnore:"true"`
 	ZjzzMap         valueTypes.UnitValue `json:"zjzz_map"`
@@ -160,52 +160,52 @@ type YearData struct {
 	JthdMapVirgin     valueTypes.UnitValue `json:"jthd_map_virgin"  PointIgnore:"true"`
 	JtydMap           valueTypes.UnitValue `json:"jtyd_map"`
 	JtydMapVirgin     valueTypes.UnitValue `json:"jtyd_map_virgin"  PointIgnore:"true"`
-	P83074         valueTypes.UnitValue `json:"p83074_map"  PointId:"p83074" PointValueType:"" PointTimeSpan:"PointTimeSpanYearly"`
+	P83074         valueTypes.UnitValue `json:"p83074_map"  PointId:"p83074" PointValueType:"" PointUpdateFreq:"UpdateFreqYearly"`
 	P83074MapVirgin   valueTypes.UnitValue `json:"p83074_map_virgin"  PointIgnore:"true"`
-	P83079         valueTypes.UnitValue `json:"p83079_map"  PointId:"p83079" PointValueType:"" PointTimeSpan:"PointTimeSpanYearly"`
+	P83079         valueTypes.UnitValue `json:"p83079_map"  PointId:"p83079" PointValueType:"" PointUpdateFreq:"UpdateFreqYearly"`
 	P83079MapVirgin   valueTypes.UnitValue `json:"p83079_map_virgin"  PointIgnore:"true"`
-	P83088         valueTypes.UnitValue `json:"p83088_map"  PointId:"p83088" PointValueType:"" PointTimeSpan:"PointTimeSpanYearly"`
+	P83088         valueTypes.UnitValue `json:"p83088_map"  PointId:"p83088" PointValueType:"" PointUpdateFreq:"UpdateFreqYearly"`
 	P83088MapVirgin   valueTypes.UnitValue `json:"p83088_map_virgin"  PointIgnore:"true"`
-	P83093         valueTypes.UnitValue `json:"p83093_map"  PointId:"p83093" PointValueType:"" PointTimeSpan:"PointTimeSpanYearly"`
+	P83093         valueTypes.UnitValue `json:"p83093_map"  PointId:"p83093" PointValueType:"" PointUpdateFreq:"UpdateFreqYearly"`
 	P83093MapVirgin   valueTypes.UnitValue `json:"p83093_map_virgin"  PointIgnore:"true"`
-	P83097         valueTypes.UnitValue `json:"p83097_map"  PointId:"p83097" PointValueType:"" PointTimeSpan:"PointTimeSpanYearly"`
+	P83097         valueTypes.UnitValue `json:"p83097_map"  PointId:"p83097" PointValueType:"" PointUpdateFreq:"UpdateFreqYearly"`
 	P83097MapVirgin   valueTypes.UnitValue `json:"p83097_map_virgin"  PointIgnore:"true"`
-	P83104         valueTypes.UnitValue `json:"p83104_map"  PointId:"p83104" PointValueType:"" PointTimeSpan:"PointTimeSpanYearly"`
+	P83104         valueTypes.UnitValue `json:"p83104_map"  PointId:"p83104" PointValueType:"" PointUpdateFreq:"UpdateFreqYearly"`
 	P83104MapVirgin   valueTypes.UnitValue `json:"p83104_map_virgin"  PointIgnore:"true"`
-	P83118         valueTypes.UnitValue `json:"p83118_map"  PointId:"p83118" PointValueType:"" PointTimeSpan:"PointTimeSpanYearly"`
+	P83118         valueTypes.UnitValue `json:"p83118_map"  PointId:"p83118" PointValueType:"" PointUpdateFreq:"UpdateFreqYearly"`
 	P83118MapVirgin   valueTypes.UnitValue `json:"p83118_map_virgin"  PointIgnore:"true"`
-	P83119         valueTypes.UnitValue `json:"p83119_map"  PointId:"p83119" PointValueType:"" PointTimeSpan:"PointTimeSpanYearly"`
+	P83119         valueTypes.UnitValue `json:"p83119_map"  PointId:"p83119" PointValueType:"" PointUpdateFreq:"UpdateFreqYearly"`
 	P83119MapVirgin   valueTypes.UnitValue `json:"p83119_map_virgin"  PointIgnore:"true"`
-	P83120         valueTypes.UnitValue `json:"p83120_map"  PointId:"p83120" PointValueType:"" PointTimeSpan:"PointTimeSpanYearly"`
+	P83120         valueTypes.UnitValue `json:"p83120_map"  PointId:"p83120" PointValueType:"" PointUpdateFreq:"UpdateFreqYearly"`
 	P83120MapVirgin   valueTypes.UnitValue `json:"p83120_map_virgin"  PointIgnore:"true"`
-	P83121            valueTypes.Float        `json:"p83121"  PointId:"p83121" PointUnitFrom:"FOO" PointTimeSpan:"PointTimeSpanYearly"`
-	P83122            valueTypes.Float        `json:"p83122"  PointId:"p83122" PointUnitFrom:"FOO" PointTimeSpan:"PointTimeSpanYearly"`
+	P83121            valueTypes.Float        `json:"p83121"  PointId:"p83121" PointUnitFrom:"FOO" PointUpdateFreq:"UpdateFreqYearly"`
+	P83122            valueTypes.Float        `json:"p83122"  PointId:"p83122" PointUnitFrom:"FOO" PointUpdateFreq:"UpdateFreqYearly"`
 	YearDataMonthList []struct {
 		DateID                   valueTypes.Integer  `json:"date_id"`
 		Jthd                     valueTypes.Float `json:"jthd" PointUnitFrom:"jthd_unit"`
 		JthdUnit                 valueTypes.String `json:"jthd_unit"`
 		Jtyd                     valueTypes.Float `json:"jtyd" PointUnitFrom:"jtyd_unit"`
 		JtydUnit                 valueTypes.String `json:"jtyd_unit"`
-		P83037                   valueTypes.Float `json:"p83037"  PointId:"p83037" PointTimeSpan:"PointTimeSpanYearly"`
-		P83073                   valueTypes.Float `json:"p83073"  PointId:"p83073" PointUnitFrom:"p83073_unit" PointTimeSpan:"PointTimeSpanYearly"`
+		P83037                   valueTypes.Float `json:"p83037"  PointId:"p83037" PointUpdateFreq:"UpdateFreqYearly"`
+		P83073                   valueTypes.Float `json:"p83073"  PointId:"p83073" PointUnitFrom:"p83073_unit" PointUpdateFreq:"UpdateFreqYearly"`
 		P83073Unit               valueTypes.String `json:"p83073_unit"`
-		P83078                   valueTypes.Float `json:"p83078"  PointId:"p83078" PointUnitFrom:"p83078_unit" PointTimeSpan:"PointTimeSpanYearly"`
+		P83078                   valueTypes.Float `json:"p83078"  PointId:"p83078" PointUnitFrom:"p83078_unit" PointUpdateFreq:"UpdateFreqYearly"`
 		P83078Unit               valueTypes.String `json:"p83078_unit"`
-		P83088                   valueTypes.Float `json:"p83088"  PointId:"p83088" PointUnitFrom:"p83088_unit" PointTimeSpan:"PointTimeSpanYearly"`
+		P83088                   valueTypes.Float `json:"p83088"  PointId:"p83088" PointUnitFrom:"p83088_unit" PointUpdateFreq:"UpdateFreqYearly"`
 		P83088Unit               valueTypes.String `json:"p83088_unit"`
-		P83091                   valueTypes.Float `json:"p83091"  PointId:"p83091" PointUnitFrom:"p83091_unit" PointTimeSpan:"PointTimeSpanYearly"`
+		P83091                   valueTypes.Float `json:"p83091"  PointId:"p83091" PointUnitFrom:"p83091_unit" PointUpdateFreq:"UpdateFreqYearly"`
 		P83091Unit               valueTypes.String `json:"p83091_unit"`
-		P83098                   valueTypes.Float `json:"p83098"  PointId:"p83098" PointUnitFrom:"p83098_unit" PointTimeSpan:"PointTimeSpanYearly"`
+		P83098                   valueTypes.Float `json:"p83098"  PointId:"p83098" PointUnitFrom:"p83098_unit" PointUpdateFreq:"UpdateFreqYearly"`
 		P83098Unit               valueTypes.String `json:"p83098_unit"`
-		P83103                   valueTypes.Float `json:"p83103"  PointId:"p83103" PointUnitFrom:"p83103_unit" PointTimeSpan:"PointTimeSpanYearly"`
+		P83103                   valueTypes.Float `json:"p83103"  PointId:"p83103" PointUnitFrom:"p83103_unit" PointUpdateFreq:"UpdateFreqYearly"`
 		P83103Unit               valueTypes.String `json:"p83103_unit"`
-		P83118                   valueTypes.Float `json:"p83118"  PointId:"p83118" PointUnitFrom:"p83118_unit" PointTimeSpan:"PointTimeSpanYearly"`
+		P83118                   valueTypes.Float `json:"p83118"  PointId:"p83118" PointUnitFrom:"p83118_unit" PointUpdateFreq:"UpdateFreqYearly"`
 		P83118Unit               valueTypes.String `json:"p83118_unit"`
-		P83119                   valueTypes.Float `json:"p83119"  PointId:"p83119" PointUnitFrom:"p83119_unit" PointTimeSpan:"PointTimeSpanYearly"`
+		P83119                   valueTypes.Float `json:"p83119"  PointId:"p83119" PointUnitFrom:"p83119_unit" PointUpdateFreq:"UpdateFreqYearly"`
 		P83119Unit               valueTypes.String `json:"p83119_unit"`
-		P83120                   valueTypes.Float `json:"p83120"  PointId:"p83120" PointTimeSpan:"PointTimeSpanYearly"`
-		P83121                   valueTypes.Float `json:"p83121"  PointId:"p83121" PointTimeSpan:"PointTimeSpanYearly"`
-		P83122                   valueTypes.Float `json:"p83122"  PointId:"p83122" PointTimeSpan:"PointTimeSpanYearly"`
+		P83120                   valueTypes.Float `json:"p83120"  PointId:"p83120" PointUpdateFreq:"UpdateFreqYearly"`
+		P83121                   valueTypes.Float `json:"p83121"  PointId:"p83121" PointUpdateFreq:"UpdateFreqYearly"`
+		P83122                   valueTypes.Float `json:"p83122"  PointId:"p83122" PointUpdateFreq:"UpdateFreqYearly"`
 		PsID                     valueTypes.Integer  `json:"ps_id"`
 		SelfConsumptionYield     valueTypes.Float `json:"self_consumption_yield" PointUnitFrom:"self_consumption_yield_unit"`
 		SelfConsumptionYieldUnit valueTypes.String `json:"self_consumption_yield_unit"`
@@ -222,23 +222,23 @@ type TotalData struct {
 	JthdMapVirgin     valueTypes.UnitValue `json:"jthd_map_virgin"  PointIgnore:"true"`
 	JtydMap           valueTypes.UnitValue `json:"jtyd_map"`
 	JtydMapVirgin     valueTypes.UnitValue `json:"jtyd_map_virgin"  PointIgnore:"true"`
-	P83075            valueTypes.UnitValue `json:"p83075_map"  PointId:"p83075" PointValueType:"" PointTimeSpan:"PointTimeSpanTotal"`
+	P83075            valueTypes.UnitValue `json:"p83075_map"  PointId:"p83075" PointValueType:"" PointUpdateFreq:"UpdateFreqTotal"`
 	P83075MapVirgin   valueTypes.UnitValue `json:"p83075_map_virgin"  PointIgnore:"true"`
-	P83094            valueTypes.UnitValue `json:"p83094_map"  PointId:"p83094" PointValueType:"" PointTimeSpan:"PointTimeSpanTotal"`
+	P83094            valueTypes.UnitValue `json:"p83094_map"  PointId:"p83094" PointValueType:"" PointUpdateFreq:"UpdateFreqTotal"`
 	P83094MapVirgin   valueTypes.UnitValue `json:"p83094_map_virgin"  PointIgnore:"true"`
-	P83095            valueTypes.UnitValue `json:"p83095_map"  PointId:"p83095" PointValueType:"" PointTimeSpan:"PointTimeSpanTotal"`
+	P83095            valueTypes.UnitValue `json:"p83095_map"  PointId:"p83095" PointValueType:"" PointUpdateFreq:"UpdateFreqTotal"`
 	P83095MapVirgin   valueTypes.UnitValue `json:"p83095_map_virgin"  PointIgnore:"true"`
-	P83105            valueTypes.UnitValue `json:"p83105_map"  PointId:"p83105" PointValueType:"" PointTimeSpan:"PointTimeSpanTotal"`
+	P83105            valueTypes.UnitValue `json:"p83105_map"  PointId:"p83105" PointValueType:"" PointUpdateFreq:"UpdateFreqTotal"`
 	P83105MapVirgin   valueTypes.UnitValue `json:"p83105_map_virgin"  PointIgnore:"true"`
-	P83107            valueTypes.UnitValue `json:"p83107_map"  PointId:"p83107" PointValueType:"" PointTimeSpan:"PointTimeSpanTotal"`
+	P83107            valueTypes.UnitValue `json:"p83107_map"  PointId:"p83107" PointValueType:"" PointUpdateFreq:"UpdateFreqTotal"`
 	P83107MapVirgin   valueTypes.UnitValue `json:"p83107_map_virgin"  PointIgnore:"true"`
-	P83123            valueTypes.UnitValue `json:"p83123_map"  PointId:"p83123" PointValueType:"" PointTimeSpan:"PointTimeSpanTotal"`
+	P83123            valueTypes.UnitValue `json:"p83123_map"  PointId:"p83123" PointValueType:"" PointUpdateFreq:"UpdateFreqTotal"`
 	P83123MapVirgin   valueTypes.UnitValue `json:"p83123_map_virgin"  PointIgnore:"true"`
-	P83124            valueTypes.UnitValue `json:"p83124_map"  PointId:"p83124" PointValueType:"" PointTimeSpan:"PointTimeSpanTotal"`
+	P83124            valueTypes.UnitValue `json:"p83124_map"  PointId:"p83124" PointValueType:"" PointUpdateFreq:"UpdateFreqTotal"`
 	P83124MapVirgin   valueTypes.UnitValue `json:"p83124_map_virgin"  PointIgnore:"true"`
-	P83125            valueTypes.Float        `json:"p83125"  PointId:"p83125" PointUnitFrom:"FOO" PointTimeSpan:"PointTimeSpanTotal"`
-	P83126            valueTypes.Float        `json:"p83126"  PointId:"p83126" PointUnitFrom:"FOO" PointTimeSpan:"PointTimeSpanTotal"`
-	P83127            valueTypes.UnitValue `json:"p83127_map"  PointId:"p83127" PointValueType:"" PointTimeSpan:"PointTimeSpanTotal"`
+	P83125            valueTypes.Float        `json:"p83125"  PointId:"p83125" PointUnitFrom:"FOO" PointUpdateFreq:"UpdateFreqTotal"`
+	P83126            valueTypes.Float        `json:"p83126"  PointId:"p83126" PointUnitFrom:"FOO" PointUpdateFreq:"UpdateFreqTotal"`
+	P83127            valueTypes.UnitValue `json:"p83127_map"  PointId:"p83127" PointValueType:"" PointUpdateFreq:"UpdateFreqTotal"`
 	P83127MapVirgin   valueTypes.UnitValue `json:"p83127_map_virgin"  PointIgnore:"true"`
 	TotalDataYearList []struct {
 		DateID                   valueTypes.Integer  `json:"date_id"`
@@ -246,26 +246,26 @@ type TotalData struct {
 		JthdUnit                 valueTypes.String `json:"jthd_unit"`
 		Jtyd                     valueTypes.Float `json:"jtyd" PointUnitFrom:"jtyd_unit"`
 		JtydUnit                 valueTypes.String `json:"jtyd_unit"`
-		P83038                   valueTypes.Float  `json:"p83038"  PointId:"p83038" PointTimeSpan:"PointTimeSpanTotal"`
-		P83074                   valueTypes.Float `json:"p83074"  PointId:"p83074" PointUnitFrom:"p83074_unit" PointTimeSpan:"PointTimeSpanTotal"`
+		P83038                   valueTypes.Float  `json:"p83038"  PointId:"p83038" PointUpdateFreq:"UpdateFreqTotal"`
+		P83074                   valueTypes.Float `json:"p83074"  PointId:"p83074" PointUnitFrom:"p83074_unit" PointUpdateFreq:"UpdateFreqTotal"`
 		P83074Unit               valueTypes.String `json:"p83074_unit"`
-		P83079                   valueTypes.Float `json:"p83079"  PointId:"p83079" PointUnitFrom:"p83079_unit" PointTimeSpan:"PointTimeSpanTotal"`
+		P83079                   valueTypes.Float `json:"p83079"  PointId:"p83079" PointUnitFrom:"p83079_unit" PointUpdateFreq:"UpdateFreqTotal"`
 		P83079Unit               valueTypes.String `json:"p83079_unit"`
-		P83088                   valueTypes.Float `json:"p83088"  PointId:"p83088" PointUnitFrom:"p83088_unit" PointTimeSpan:"PointTimeSpanTotal"`
+		P83088                   valueTypes.Float `json:"p83088"  PointId:"p83088" PointUnitFrom:"p83088_unit" PointUpdateFreq:"UpdateFreqTotal"`
 		P83088Unit               valueTypes.String `json:"p83088_unit"`
-		P83093                   valueTypes.Float `json:"p83093"  PointId:"p83093" PointUnitFrom:"p83093_unit" PointTimeSpan:"PointTimeSpanTotal"`
+		P83093                   valueTypes.Float `json:"p83093"  PointId:"p83093" PointUnitFrom:"p83093_unit" PointUpdateFreq:"UpdateFreqTotal"`
 		P83093Unit               valueTypes.String `json:"p83093_unit"`
-		P83099                   valueTypes.Float `json:"p83099"  PointId:"p83099" PointUnitFrom:"p83099_unit" PointTimeSpan:"PointTimeSpanTotal"`
+		P83099                   valueTypes.Float `json:"p83099"  PointId:"p83099" PointUnitFrom:"p83099_unit" PointUpdateFreq:"UpdateFreqTotal"`
 		P83099Unit               valueTypes.String `json:"p83099_unit"`
-		P83104                   valueTypes.Float `json:"p83104"  PointId:"p83104" PointUnitFrom:"p83104_unit" PointTimeSpan:"PointTimeSpanTotal"`
+		P83104                   valueTypes.Float `json:"p83104"  PointId:"p83104" PointUnitFrom:"p83104_unit" PointUpdateFreq:"UpdateFreqTotal"`
 		P83104Unit               valueTypes.String `json:"p83104_unit"`
-		P83118                   valueTypes.Float `json:"p83118"  PointId:"p83118" PointUnitFrom:"p83118_unit" PointTimeSpan:"PointTimeSpanTotal"`
+		P83118                   valueTypes.Float `json:"p83118"  PointId:"p83118" PointUnitFrom:"p83118_unit" PointUpdateFreq:"UpdateFreqTotal"`
 		P83118Unit               valueTypes.String `json:"p83118_unit"`
-		P83119                   valueTypes.Float `json:"p83119"  PointId:"p83119" PointUnitFrom:"p83119_unit" PointTimeSpan:"PointTimeSpanTotal"`
+		P83119                   valueTypes.Float `json:"p83119"  PointId:"p83119" PointUnitFrom:"p83119_unit" PointUpdateFreq:"UpdateFreqTotal"`
 		P83119Unit               valueTypes.String `json:"p83119_unit"`
-		P83120                   valueTypes.Float  `json:"p83120"  PointId:"p83120" PointTimeSpan:"PointTimeSpanTotal"`
-		P83121                   valueTypes.Float `json:"p83121"  PointId:"p83121" PointTimeSpan:"PointTimeSpanTotal"`
-		P83122                   valueTypes.Float `json:"p83122"  PointId:"p83122" PointTimeSpan:"PointTimeSpanTotal"`
+		P83120                   valueTypes.Float  `json:"p83120"  PointId:"p83120" PointUpdateFreq:"UpdateFreqTotal"`
+		P83121                   valueTypes.Float `json:"p83121"  PointId:"p83121" PointUpdateFreq:"UpdateFreqTotal"`
+		P83122                   valueTypes.Float `json:"p83122"  PointId:"p83122" PointUpdateFreq:"UpdateFreqTotal"`
 		PsID                     valueTypes.Integer  `json:"ps_id"`
 		SelfConsumptionYield     valueTypes.Float `json:"self_consumption_yield" PointUnitFrom:"self_consumption_yield_unit"`
 		SelfConsumptionYieldUnit valueTypes.String `json:"self_consumption_yield_unit"`

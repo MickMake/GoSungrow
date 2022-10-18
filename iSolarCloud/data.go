@@ -61,7 +61,7 @@ func (sg *SunGrow) GetEndpoints(endpoints []string, psIds []valueTypes.Integer, 
 		}
 
 		if date.IsZero() {
-			date = valueTypes.NewDateTime("now")
+			date = valueTypes.NewDateTime(valueTypes.Now)
 		}
 		// fmt.Printf("FilePrefix: %s\n", date.Original())
 		// fmt.Printf("String: %s\n", date.String())

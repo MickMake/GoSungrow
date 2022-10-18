@@ -99,7 +99,15 @@ func (dt DateTime) Value() time.Time {
 }
 
 func (dt DateTime) String() string {
-	return dt.Original()
+	// return dt.Original()
+	return dt.Time.Format(DateTimeLayout)
+}
+
+func (dt DateTime) Match(comp time.Time) bool {
+	if dt.Time == comp {
+		return true
+	}
+	return false
 }
 
 func (dt *DateTime) SetString(value string) *DateTime {

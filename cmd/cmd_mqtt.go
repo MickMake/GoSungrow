@@ -373,10 +373,10 @@ func (ca *Cmds) MqttCron() error {
 func (ca *Cmds) Update(endpoint string, data api.DataMap, newDay bool) error {
 	for range Only.Once {
 		// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
-		cmdLog.LogPrintDate("Syncing %d entries with HASSIO from %s.\n", len(data.DataPoints), endpoint)
+		cmdLog.LogPrintDate("Syncing %d entries with HASSIO from %s.\n", len(data.Map), endpoint)
 
 		for _, o := range data.Order {
-			entries := data.DataPoints[o]
+			entries := data.Map[o]
 			r := entries.GetEntry(api.LastEntry) // Gets the last entry
 			if !r.Point.Valid {
 				fmt.Printf("\nInvalid: %v\n", r)
@@ -398,11 +398,11 @@ func (ca *Cmds) Update(endpoint string, data api.DataMap, newDay bool) error {
 				FullId:      fullId,	// string(r.FullId),	// WAS r.Point.FullId
 				// FullName:    r.Point.Name,
 				Units:       r.Point.Unit,
-				ValueName:   r.Point.Name,
+				ValueName:   r.Point.Description,
 				// ValueName:   r.Id,
 				DeviceClass: "",
-				StateClass:  r.Point.TimeSpan,
-				Value:       r.Value,
+				StateClass:  r.Point.UpdateFreq,
+				Value:       r.Value.String(),
 
 				// Icon:                   "",
 				// ValueTemplate:          "",

@@ -11,15 +11,15 @@ import (
 
 
 type Point struct {
-	Parents   ParentDevices      `json:"parents,omitempty"`
-	Id        valueTypes.PointId `json:"id,omitempty"`
-	GroupName string             `json:"group_name,omitempty"`
-	Name      string             `json:"name,omitempty"`
-	Unit      string             `json:"unit,omitempty"`
-	TimeSpan  string             `json:"time_span,omitempty"`
-	ValueType string             `json:"value_type,omitempty"`
-	Valid     bool               `json:"valid,omitempty"`
-	States    map[string]string  `json:"states,omitempty"`
+	Parents     ParentDevices      `json:"parents,omitempty"`
+	Id          valueTypes.PointId `json:"id,omitempty"`
+	GroupName   string             `json:"group_name,omitempty"`
+	Description string             `json:"description,omitempty"`
+	Unit       string `json:"unit,omitempty"`
+	UpdateFreq string `json:"time_span,omitempty"`
+	ValueType  string `json:"value_type,omitempty"`
+	Valid       bool               `json:"valid,omitempty"`
+	States      map[string]string  `json:"states,omitempty"`
 }
 
 
@@ -119,43 +119,49 @@ func (p *Point) WhenReset() string {
 }
 
 func (p Point) String() string {
-	return fmt.Sprintf("Id:%s\tName:%s\tUnits:%s\tTimespan:%s", p.Id, p.Name, p.Unit, p.TimeSpan)
-	// return p.TimeSpan
+	return fmt.Sprintf("Id:%s\tName:%s\tUnits:%s\tUpdateFreq:%s", p.Id, p.Description, p.Unit, p.UpdateFreq)
 }
 
 func (p Point) IsInstant() bool {
-	if p.TimeSpan == PointTimeSpanInstant {
+	if p.UpdateFreq == UpdateFreqInstant {
 		return true
 	}
 	return false
 }
 
 func (p Point) IsDaily() bool {
-	if p.TimeSpan == PointTimeSpanDaily {
+	if p.UpdateFreq == UpdateFreqDaily {
 		return true
 	}
 	return false
 }
 
 func (p Point) IsMonthly() bool {
-	if p.TimeSpan == PointTimeSpanMonthly {
+	if p.UpdateFreq == UpdateFreqMonthly {
 		return true
 	}
 	return false
 }
 
 func (p Point) IsYearly() bool {
-	if p.TimeSpan == PointTimeSpanYearly {
+	if p.UpdateFreq == UpdateFreqYearly {
 		return true
 	}
 	return false
 }
 
 func (p Point) IsTotal() bool {
-	if p.TimeSpan == PointTimeSpanTotal {
+	if p.UpdateFreq == UpdateFreqTotal {
 		return true
 	}
 	return false
+}
+
+func (p *Point) SetName(name string) {
+	if name == "" {
+		name = p.Id.PointToName()
+	}
+	p.Description = name
 }
 
 
@@ -206,8 +212,49 @@ type ParentDevice struct {
 	Key  string `json:"ps_key"`
 	PsId string `json:"ps_id"`
 	Type string `json:"parent_type"`
-	Code string  `json:"parent_code"`
+	Code string `json:"parent_code"`
 }
+
+func NewParentDevice(key string) ParentDevice {
+	var ret ParentDevice
+	ret.Set(key)
+	return ret
+}
+
+func (pd *ParentDevice) Set(key string) {
+	for range Only.Once {
+		pd.Key = key
+	}
+}
+
+func (pd *ParentDevice) Split() {
+	for range Only.Once {
+		// if pd.Key == "virtual" {
+		// 	break
+		// }
+		if pd.Key == "" {
+			pd.Key = "virtual"
+			break
+		}
+
+		if !strings.Contains(pd.Key, "_") {
+			pd.PsId = pd.Key
+			break
+		}
+		s := strings.Split(pd.Key, "_")
+		if len(s) > 0 {
+			pd.PsId = s[0]
+		}
+		if len(s) > 1 {
+			pd.Type = s[1]
+		}
+		if len(s) > 2 {
+			pd.Code = s[2]
+		}
+	}
+}
+
+
 type ParentDevices struct {
 	Map map[string]*ParentDevice
 	Index []string
@@ -256,6 +303,17 @@ func (pd *ParentDevices) PsIds() string {
 	return ret
 }
 
+// func (pd *ParentDevices) Get() ParentDevice {
+// 	var ret ParentDevice
+// 	for range Only.Once {
+// 		if len(pd.Map) == 0 {
+// 			break
+// 		}
+// 		ret = *(pd.Map[len(pd.Map)-1])
+// 	}
+// 	return ret
+// }
+
 func (pd *ParentDevices) Codes() string {
 	var ret string
 	for _, l := range pd.Index {
@@ -272,40 +330,6 @@ func (pd *ParentDevices) Types() string {
 	}
 	ret = strings.TrimSuffix(ret, "\n")
 	return ret
-}
-
-
-func (pd *ParentDevice) Set(key string) {
-	for range Only.Once {
-		pd.Key = key
-	}
-}
-
-func (pd *ParentDevice) Split() {
-	for range Only.Once {
-		// if pd.Key == "virtual" {
-		// 	break
-		// }
-		if pd.Key == "" {
-			pd.Key = "virtual"
-			break
-		}
-
-		if !strings.Contains(pd.Key, "_") {
-			pd.PsId = pd.Key
-			break
-		}
-		s := strings.Split(pd.Key, "_")
-		if len(s) > 0 {
-			pd.PsId = s[0]
-		}
-		if len(s) > 1 {
-			pd.Type = s[1]
-		}
-		if len(s) > 2 {
-			pd.Code = s[2]
-		}
-	}
 }
 
 // type ParentDevice struct {

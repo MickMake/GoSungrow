@@ -55,7 +55,7 @@ func (t Float) MarshalJSON() ([]byte, error) {
 			break
 		}
 		t.Valid = true
-		// t.string = strconv.FormatFloat(t.float64, 'f', 12, 64)
+		// t.string = strconv.FormatFloat(t.float64, 'f', -1, 64)
 	}
 
 	return data, err
@@ -63,6 +63,13 @@ func (t Float) MarshalJSON() ([]byte, error) {
 
 func (t Float) Value() float64 {
 	return t.float64
+}
+
+func (t Float) Match(comp float64) bool {
+	if t.float64 == comp {
+		return true
+	}
+	return false
 }
 
 func (t Float) String() string {
@@ -100,7 +107,7 @@ func (t *Float) SetValue(value float64) Float {
 		t.string = ""
 		t.float64 = value
 		t.Valid = true
-		t.string = strconv.FormatFloat(t.float64, 'f', 12, 64)
+		t.string = strconv.FormatFloat(t.float64, 'f', -1, 64)
 	}
 
 	return *t

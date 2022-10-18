@@ -65,7 +65,7 @@ func (t Bool) MarshalJSON() ([]byte, error) {
 			break
 		}
 		t.Valid = true
-		// t.string = strconv.FormatFloat(t.bool, 'f', 12, 64)
+		// t.string = strconv.FormatFloat(t.bool, 'f', -1, 64)
 	}
 
 	return data, err
@@ -73,6 +73,13 @@ func (t Bool) MarshalJSON() ([]byte, error) {
 
 func (t Bool) Value() bool {
 	return t.bool
+}
+
+func (t Bool) Match(comp bool) bool {
+	if t.bool == comp {
+		return true
+	}
+	return false
 }
 
 func (t Bool) String() string {
@@ -85,31 +92,31 @@ func (t *Bool) SetString(value string) Bool {
 		t.Valid = false
 
 		switch strings.ToLower(t.string) {
-		case "false":
-			fallthrough
-		case "no":
-			fallthrough
-		case "off":
-			fallthrough
-		case "0":
-			fallthrough
-		case "":
-			// 	fallthrough
-			// case "--":
-			t.bool = false
-			t.string = "false"
-			t.Valid = true
+			case "false":
+				fallthrough
+			case "no":
+				fallthrough
+			case "off":
+				fallthrough
+			case "0":
+				fallthrough
+			case "":
+				// 	fallthrough
+				// case "--":
+				t.bool = false
+				t.string = "false"
+				t.Valid = true
 
-		case "true":
-			fallthrough
-		case "yes":
-			fallthrough
-		case "on":
-			fallthrough
-		case "1":
-			t.bool = true
-			t.string = "true"
-			t.Valid = true
+			case "true":
+				fallthrough
+			case "yes":
+				fallthrough
+			case "on":
+				fallthrough
+			case "1":
+				t.bool = true
+				t.string = "true"
+				t.Valid = true
 		}
 	}
 

@@ -6,7 +6,6 @@ import (
 	"GoSungrow/iSolarCloud/api/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
-	"strings"
 )
 
 const Url = "/v1/devService/queryDeviceListForApp"
@@ -33,8 +32,8 @@ type ResultData struct {
 		ConnectState            valueTypes.Integer  `json:"connect_state"`
 		DataFlag                valueTypes.Integer  `json:"data_flag"`
 		DataFlagDetail          valueTypes.Integer  `json:"data_flag_detail"`
-		DevFaultStatus          string       `json:"dev_fault_status"`
-		DevStatus               string       `json:"dev_status"`
+		DevFaultStatus          valueTypes.Integer  `json:"dev_fault_status"`
+		DevStatus               valueTypes.Integer  `json:"dev_status"`
 		DeviceArea              valueTypes.String   `json:"device_area"`
 		DeviceCode              valueTypes.Integer  `json:"device_code"`
 		DeviceFactoryDate       valueTypes.DateTime `json:"device_factory_date"`
@@ -44,12 +43,12 @@ type ResultData struct {
 		DeviceModelID           valueTypes.Integer  `json:"device_model_id"`
 		DeviceName              valueTypes.String   `json:"device_name"`
 		DeviceProSn             valueTypes.String   `json:"device_pro_sn"`
-		DeviceState             string       `json:"device_state"`
-		DeviceSubType           interface{}  `json:"device_sub_type"`
-		DeviceSubTypeName       interface{}  `json:"device_sub_type_name"`
+		DeviceState             valueTypes.Integer  `json:"device_state"`
+		DeviceSubType           interface{}         `json:"device_sub_type"`
+		DeviceSubTypeName       interface{}         `json:"device_sub_type_name"`
 		DeviceType              valueTypes.Integer  `json:"device_type"`
 		FactoryName             valueTypes.String   `json:"factory_name"`
-		InstallerDevFaultStatus string       `json:"installer_dev_fault_status"`
+		InstallerDevFaultStatus valueTypes.Integer  `json:"installer_dev_fault_status"`
 		InverterModelType       valueTypes.Integer  `json:"inverter_model_type"`
 		IsCountryCheck          valueTypes.Bool     `json:"is_country_check"`
 		IsHasFunctionEnum       valueTypes.Bool     `json:"is_has_function_enum"`
@@ -61,18 +60,18 @@ type ResultData struct {
 		IsSecond                valueTypes.Bool     `json:"is_second"`
 		IsThirdParty            valueTypes.Bool     `json:"is_third_party"`
 		ModuleUUID              valueTypes.Integer  `json:"module_uuid"`
-		OwnerDevFaultStatus     string       `json:"owner_dev_fault_status"`
-		P24                     interface{}  `json:"p24"`
-		Posx                    interface{}  `json:"posx"`
-		Posy                    interface{}  `json:"posy"`
-		PsID                    valueTypes.Integer  `json:"ps_id"`
+		OwnerDevFaultStatus     valueTypes.Integer  `json:"owner_dev_fault_status"`
+		P24                     interface{}         `json:"p24"`
+		Posx                    interface{}         `json:"posx"`
+		Posy                    interface{}         `json:"posy"`
+		PsId                    valueTypes.Integer  `json:"ps_id"`
 		PsKey                   valueTypes.PsKey    `json:"ps_key"`
 		RelState                valueTypes.Integer  `json:"rel_state"`
 		Sn                      valueTypes.String   `json:"sn" PointName:"Serial Number"`
 		TypeName                valueTypes.String   `json:"type_name"`
 		UUID                    valueTypes.Integer  `json:"uuid"`
-	} `json:"pageList"`
-	RowCount valueTypes.Integer `json:"rowCount"`
+	} `json:"pageList" PointNameFromChild:"PsKey"`
+	RowCount valueTypes.Integer `json:"rowCount" PointIgnore:"true"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -86,34 +85,13 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
 		pkg := apiReflect.GetName("", *e)
-		for _, d := range e.Response.ResultData.PageList {
-			name := strings.Join([]string{pkg, d.PsKey.Value()}, ".")
-			entries.StructToPoints(d, name, d.PsKey.Value(), valueTypes.NewDateTime(""))
-		}
+		dt := valueTypes.NewDateTime(valueTypes.Now)
+		entries.StructToPoints(e.Response.ResultData, pkg, "", dt)
 	}
 
 	return entries

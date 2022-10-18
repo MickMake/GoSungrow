@@ -73,6 +73,13 @@ func (t PointId) String() string {
 	return t.string
 }
 
+func (t PointId) Match(comp int64) bool {
+	if t.int64 == comp {
+		return true
+	}
+	return false
+}
+
 func (t *PointId) SetString(value string) PointId {
 	for range Only.Once {
 		t.string = value

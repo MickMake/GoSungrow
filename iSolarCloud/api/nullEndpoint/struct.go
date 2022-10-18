@@ -374,21 +374,21 @@ func (e EndPoint) GetDataTable() output.Table {
 		_ = table.SetHeader(
 			"Date",
 			"Point Id",
-			"Group Name",
-			"Description",
 			"Value",
 			"Unit",
+			"Group Name",
+			"Description",
 		)
 
 		data := e.GetData()
 		var sorted []string
-		for p := range data.DataPoints {
+		for p := range data.Map {
 			sorted = append(sorted, string(p))
 		}
 		sort.Strings(sorted)
 
 		for _, p := range sorted {
-			entries := data.DataPoints[api.PointId(p)]
+			entries := data.Map[api.PointId(p)]
 			for _, de := range entries {
 				if de.Hide {
 					continue
@@ -400,10 +400,10 @@ func (e EndPoint) GetDataTable() output.Table {
 					// de.Point.Id,
 					p,
 					// de.Point.Parents.String(),
-					de.Point.GroupName,
-					de.Point.Name,
 					de.Value,
 					de.Point.Unit,
+					de.Point.GroupName,
+					de.Point.Name,
 				)
 			}
 		}
