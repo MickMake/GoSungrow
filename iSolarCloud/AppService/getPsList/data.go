@@ -36,12 +36,12 @@ type ResultData struct {
 		Co2Reduce                 valueTypes.UnitValue `json:"co2_reduce" PointId:"co2_reduce"`
 		Co2ReduceTotal            valueTypes.UnitValue `json:"co2_reduce_total" PointId:"co2_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
 		CurrPower                 valueTypes.UnitValue `json:"curr_power" PointId:"curr_power"`
-		DailyIrradiation          valueTypes.UnitValue `json:"daily_irradiation" PointId:"daily_irradiation" PointUpdateFreq:"UpdateFreqDaily"`
+		DailyIrradiation          valueTypes.UnitValue `json:"daily_irradiation" PointId:"daily_irradiation" PointUpdateFreq:"UpdateFreqDay"`
 		DailyIrradiationVirgin    valueTypes.Float     `json:"daily_irradiation_virgin" PointIgnore:"true"`
 		DesignCapacity            valueTypes.Float     `json:"design_capacity" PointId:"design_capacity" PointUnitFrom:"design_capacity_unit"`
 		DesignCapacityUnit        valueTypes.String    `json:"design_capacity_unit" PointId:"design_capacity_unit"`
 		DesignCapacityVirgin      valueTypes.Float     `json:"design_capacity_virgin" PointIgnore:"true"`
-		EquivalentHour            valueTypes.UnitValue `json:"equivalent_hour" PointId:"equivalent_hour" PointUpdateFreq:"UpdateFreqDaily"`
+		EquivalentHour            valueTypes.UnitValue `json:"equivalent_hour" PointId:"equivalent_hour" PointUpdateFreq:"UpdateFreqDay"`
 		EsDischargeEnergy         valueTypes.UnitValue `json:"es_disenergy" PointId:"p83089" PointName:"ES Discharge Energy" PointUpdateFreq:"UpdateFreq5Mins"`
 		EsEnergy                  valueTypes.UnitValue `json:"es_energy" PointId:"p83120" PointName:"ES Energy" PointUpdateFreq:"UpdateFreq5Mins"`
 		EsPower                   valueTypes.UnitValue `json:"es_power" PointId:"p83081" PointName:"ES Power" PointUpdateFreq:"UpdateFreq5Mins"`
@@ -136,8 +136,8 @@ type ResultData struct {
 		ShareType              valueTypes.Integer   `json:"share_type" PointId:"share_type"`
 		ShippingAddress        valueTypes.String    `json:"shipping_address" PointId:"shipping_address"`
 		ShippingZipCode        valueTypes.String    `json:"shipping_zip_code" PointId:"shipping_zip_code"`
-		TodayEnergy            valueTypes.UnitValue `json:"today_energy" PointId:"today_energy" PointUpdateFreq:"UpdateFreqDaily"`
-		TodayIncome            valueTypes.UnitValue `json:"today_income" PointId:"today_income" PointUpdateFreq:"UpdateFreqDaily"`
+		TodayEnergy            valueTypes.UnitValue `json:"today_energy" PointId:"today_energy" PointUpdateFreq:"UpdateFreqDay"`
+		TodayIncome            valueTypes.UnitValue `json:"today_income" PointId:"today_income" PointUpdateFreq:"UpdateFreqDay"`
 		TotalCapacity          valueTypes.UnitValue `json:"total_capcity" PointId:"total_capacity" PointUpdateFreq:"UpdateFreqTotal"`
 		TotalEnergy            valueTypes.UnitValue `json:"total_energy" PointId:"total_energy" PointUpdateFreq:"UpdateFreqTotal"`
 		TotalIncome            valueTypes.UnitValue `json:"total_income" PointId:"total_income" PointUpdateFreq:"UpdateFreqTotal"`

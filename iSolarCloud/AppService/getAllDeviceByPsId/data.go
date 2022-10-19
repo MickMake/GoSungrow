@@ -41,34 +41,13 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		// pkg := apiReflect.GetName("", *e)
-		// for _, d := range e.Response.ResultData {
-		// 	name := fmt.Sprintf("findPsType.%s", e.Request.PsId.String())
-		// 	entries.StructToPoints(d, name, e.Request.PsId.String(), valueTypes.NewDateTime(""))
-		// }
+		pkg := apiReflect.GetName("", *e)
+		dt := valueTypes.NewDateTime(valueTypes.Now)
+		entries.StructToPoints(e.Response.ResultData, pkg, "", dt)
 	}
 
 	return entries

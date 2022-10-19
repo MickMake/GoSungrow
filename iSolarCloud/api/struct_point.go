@@ -130,21 +130,21 @@ func (p Point) IsInstant() bool {
 }
 
 func (p Point) IsDaily() bool {
-	if p.UpdateFreq == UpdateFreqDaily {
+	if p.UpdateFreq == UpdateFreqDay {
 		return true
 	}
 	return false
 }
 
 func (p Point) IsMonthly() bool {
-	if p.UpdateFreq == UpdateFreqMonthly {
+	if p.UpdateFreq == UpdateFreqMonth {
 		return true
 	}
 	return false
 }
 
 func (p Point) IsYearly() bool {
-	if p.UpdateFreq == UpdateFreqYearly {
+	if p.UpdateFreq == UpdateFreqYear {
 		return true
 	}
 	return false

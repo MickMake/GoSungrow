@@ -27,7 +27,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		AttrID                  valueTypes.Integer  `json:"attr_id"`
+		AttrId                  valueTypes.Integer  `json:"attr_id"`
 		ChannelId               valueTypes.Integer  `json:"chnnl_id" PointId:"channel_id"`
 		CommandStatus           valueTypes.Integer  `json:"command_status"`
 		ConnectState            valueTypes.Integer  `json:"connect_state"`
@@ -41,9 +41,9 @@ type ResultData struct {
 		DeviceID                valueTypes.Integer  `json:"device_id"`
 		DeviceModel             valueTypes.String   `json:"device_model"`
 		DeviceModelCode         valueTypes.String   `json:"device_model_code"`
-		DeviceModelID           valueTypes.Integer  `json:"device_model_id"`
+		DeviceModelId           valueTypes.Integer  `json:"device_model_id"`
 		DeviceName              valueTypes.String   `json:"device_name"`
-		DeviceProSn             valueTypes.String   `json:"device_pro_sn"`
+		DeviceProSn             valueTypes.String   `json:"device_pro_sn" PointName:"Device Serial Number"`
 		DeviceState             valueTypes.Integer  `json:"device_state"`
 		DeviceSubType           interface{}         `json:"device_sub_type"`
 		DeviceSubTypeName       interface{}         `json:"device_sub_type_name"`
@@ -65,14 +65,14 @@ type ResultData struct {
 		P24                     interface{}         `json:"p24"`
 		Posx                    interface{}         `json:"posx"`
 		Posy                    interface{}         `json:"posy"`
-		PsID                    valueTypes.Integer  `json:"ps_id"`
+		PsId                    valueTypes.Integer  `json:"ps_id"`
 		PsKey                   valueTypes.PsKey    `json:"ps_key"`
 		RelState                valueTypes.Integer  `json:"rel_state"`
 		Sn                      valueTypes.String   `json:"sn" PointName:"Serial Number"`
 		TypeName                valueTypes.String   `json:"type_name"`
 		UUID                    valueTypes.Integer  `json:"uuid"`
-	} `json:"pageList"`
-	RowCount valueTypes.Integer `json:"rowCount"`
+	} `json:"pageList" PointNameFromChild:"PsKey"`
+	RowCount valueTypes.Integer `json:"rowCount" PointIgnore:"true"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -110,14 +110,14 @@ func (e *EndPoint) GetDevices() Devices {
 		ret = append(ret, Device{
 			Vendor:        d.FactoryName,
 			PsKey:         d.PsKey,
-			PsId:          d.PsID,
+			PsId:          d.PsId,
 			DeviceType:    d.DeviceType,
 			DeviceCode:    d.DeviceCode,
 			ChannelId:     d.ChannelId,
 			TypeName:      d.TypeName,
 			DeviceProSn:   d.DeviceProSn,
 			DeviceModel:   d.DeviceModel,
-			DeviceModelID: d.DeviceModelID,
+			DeviceModelID: d.DeviceModelId,
 			DeviceName:    d.DeviceName,
 			DeviceState:   d.DeviceState,
 			DevStatus:     d.DevStatus,
@@ -264,10 +264,14 @@ func (e *EndPoint) GetData() api.DataMap {
 
 	for range Only.Once {
 		pkg := apiReflect.GetName("", *e)
-		for _, d := range e.Response.ResultData.PageList {
-			name := api.JoinWithDots(0, valueTypes.DateTimeLayoutDay, pkg, d.PsKey)
-			entries.StructToPoints(d, name, e.Request.PsId.String(), valueTypes.NewDateTime(""))
-		}
+		dt := valueTypes.NewDateTime(valueTypes.Now)
+		entries.StructToPoints(e.Response.ResultData, pkg, "", dt)
+
+		// pkg := apiReflect.GetName("", *e)
+		// for _, d := range e.Response.ResultData.PageList {
+		// 	name := api.JoinWithDots(0, valueTypes.DateTimeLayoutDay, pkg, d.PsKey)
+		// 	entries.StructToPoints(d, name, e.Request.PsId.String(), valueTypes.NewDateTime(""))
+		// }
 	}
 
 	return entries

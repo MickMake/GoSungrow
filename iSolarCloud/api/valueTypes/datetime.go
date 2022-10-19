@@ -22,6 +22,7 @@ var inputDateLayout = []string{
 
 const (
 	DateTimeLayout            = DateLayout + " " + TimeLayout
+	DateTimeAltLayout         = DateLayoutDay + "-" + TimeLayoutSecond
 	DateTimeLayoutZeroSeconds = DateLayout + " " + TimeLayoutZeroSeconds
 	DateTimeLayoutSecond      = DateLayoutDay + TimeLayoutSecond
 	DateTimeLayoutMinute      = DateLayoutDay + TimeLayoutMinute

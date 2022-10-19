@@ -40,7 +40,7 @@ type ResultData struct {
 	ContactPerson         valueTypes.String    `json:"contact_person"`
 	CurrPower             valueTypes.UnitValue `json:"curr_power"` // Pv Power
 	DataLastUpdateTime    valueTypes.DateTime  `json:"data_last_update_time"`
-	DayEqHours            valueTypes.Float     `json:"day_eq_hours" PointUnit:"h" PointUpdateFreq:"UpdateFreqDaily"`
+	DayEqHours            valueTypes.Float     `json:"day_eq_hours" PointUnit:"h" PointUpdateFreq:"UpdateFreqDay"`
 	Description           interface{}          `json:"description"`
 	DesignCapacity        valueTypes.UnitValue `json:"design_capacity"`
 	DesignCapacityBattery valueTypes.UnitValue `json:"design_capacity_battery"`
@@ -234,9 +234,9 @@ type ResultData struct {
 	SysScheme            valueTypes.Integer   `json:"sys_scheme"`
 	TimeZoneID           valueTypes.Integer   `json:"time_zone_id"`
 	Timezone             valueTypes.String    `json:"timezone"`
-	TodayEnergy          valueTypes.UnitValue `json:"today_energy" PointId:"today_energy" PointUpdateFreq:"UpdateFreqDaily"`
+	TodayEnergy          valueTypes.UnitValue `json:"today_energy" PointId:"today_energy" PointUpdateFreq:"UpdateFreqDay"`
 	TodayEnergyVirgin    valueTypes.UnitValue `json:"today_energy_virgin"  PointIgnore:"true"`
-	TodayIncome          valueTypes.UnitValue `json:"today_income" PointId:"today_income" PointUpdateFreq:"UpdateFreqDaily"`
+	TodayIncome          valueTypes.UnitValue `json:"today_income" PointId:"today_income" PointUpdateFreq:"UpdateFreqDay"`
 	TotalEnergy          valueTypes.UnitValue `json:"total_energy" PointId:"total_energy" PointUpdateFreq:"UpdateFreqTotal"`
 	TotalEnergyVirgin    valueTypes.UnitValue `json:"total_energy_virgin"  PointIgnore:"true"`
 	TotalEnergyYear      valueTypes.UnitValue `json:"total_energy_year" PointId:"total_energy_year" PointUpdateFreq:"UpdateFreqTotal"`

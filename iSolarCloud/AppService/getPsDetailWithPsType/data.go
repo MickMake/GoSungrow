@@ -50,9 +50,9 @@ type ResultData struct {
 	MapLongitude                valueTypes.Float     `json:"map_longitude" PointId:"map_longitude" PointUpdateFreq:"UpdateFreqBoot"`
 	MeterReduceTotal            valueTypes.UnitValue `json:"meter_reduce_total" PointId:"meter_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
 	MobileTel                   valueTypes.String    `json:"moble_tel" PointId:"mobile_tel" PointUpdateFreq:"UpdateFreqBoot"`
-	MonthEnergy                 valueTypes.UnitValue `json:"month_energy" PointId:"month_energy" PointUpdateFreq:"UpdateFreqMonthly"`
+	MonthEnergy                 valueTypes.UnitValue `json:"month_energy" PointId:"month_energy" PointUpdateFreq:"UpdateFreqMonth"`
 	MonthEnergyVirgin           valueTypes.UnitValue `json:"month_energy_virgin"  PointIgnore:"true"`
-	MonthIncome                 valueTypes.UnitValue `json:"month_income" PointId:"month_income" PointUpdateFreq:"UpdateFreqMonthly"`
+	MonthIncome                 valueTypes.UnitValue `json:"month_income" PointId:"month_income" PointUpdateFreq:"UpdateFreqMonth"`
 	NegativeLoadMsg             interface{}          `json:"negative_load_msg" PointId:"negative_load_msg"`
 	OwnerPsFaultStatus          valueTypes.Integer   `json:"owner_ps_fault_status" PointId:"owner_ps_fault_status" PointUpdateFreq:"UpdateFreqInstant"`
 	P83081Map                   valueTypes.UnitValue `json:"p83081_map" PointId:"p83081" PointName:"Load Power" PointUpdateFreq:"UpdateFreq5Mins"`
@@ -123,9 +123,9 @@ type ResultData struct {
 		PsKey                   valueTypes.PsKey     `json:"ps_key" PointId:"ps_key" PointUpdateFreq:"UpdateFreqBoot"`
 		UUID                    valueTypes.Integer   `json:"uuid" PointId:"uuid" PointUpdateFreq:"UpdateFreqBoot"`
 	} `json:"storage_inverter_data" PointNameFromChild:"PsKey"`
-	TodayEnergy       valueTypes.UnitValue `json:"today_energy" PointId:"today_energy" PointUpdateFreq:"UpdateFreqDaily"`
+	TodayEnergy       valueTypes.UnitValue `json:"today_energy" PointId:"today_energy" PointUpdateFreq:"UpdateFreqDay"`
 	TodayEnergyVirgin valueTypes.UnitValue `json:"today_energy_virgin"  PointIgnore:"true"`
-	TodayIncome       valueTypes.UnitValue `json:"today_income" PointId:"today_income" PointUpdateFreq:"UpdateFreqDaily"`
+	TodayIncome       valueTypes.UnitValue `json:"today_income" PointId:"today_income" PointUpdateFreq:"UpdateFreqDay"`
 	TotalEnergy       valueTypes.UnitValue `json:"total_energy" PointId:"total_energy" PointUpdateFreq:"UpdateFreqTotal"`
 	TotalEnergyVirgin valueTypes.UnitValue `json:"total_energy_virgin"  PointIgnore:"true"`
 	TotalIncome       valueTypes.UnitValue `json:"total_income" PointId:"total_income" PointUpdateFreq:"UpdateFreqTotal"`

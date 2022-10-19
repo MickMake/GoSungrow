@@ -22,6 +22,7 @@ import (
 	"GoSungrow/iSolarCloud/AppService/getReportData"
 	"GoSungrow/iSolarCloud/AppService/powerDevicePointList"
 	"GoSungrow/iSolarCloud/AppService/psForcastInfo"
+	"GoSungrow/iSolarCloud/AppService/queryDeviceInfo"
 	"GoSungrow/iSolarCloud/AppService/queryDeviceList"
 	"GoSungrow/iSolarCloud/AppService/queryDeviceListForApp"
 	"GoSungrow/iSolarCloud/AppService/reportList"
@@ -203,6 +204,7 @@ func (sg *SunGrowData) New(ref *SunGrow) {
 		sg.EndPoints = make(EndPoints)
 		sg.EndPoints["getPsList"] = EndPoint { Func: sg.getPsList, HasArgs: false }
 		sg.EndPoints["queryDeviceList"] = EndPoint { Func: sg.queryDeviceList, HasArgs: true }
+		sg.EndPoints["queryDeviceInfo"] = EndPoint { Func: sg.queryDeviceInfo, HasArgs: true }
 		sg.EndPoints["queryDeviceListForApp"] = EndPoint { Func: sg.queryDeviceListForApp, HasArgs: true }
 		sg.EndPoints["getPsDetailWithPsType"] = EndPoint { Func: sg.getPsDetailWithPsType, HasArgs: true }
 		sg.EndPoints["getPsDetail"] = EndPoint { Func: sg.getPsDetail, HasArgs: true }
@@ -229,6 +231,7 @@ func (sg *SunGrowData) New(ref *SunGrow) {
 	}
 }
 
+// getPowerStationInfo - Contains state decoding.
 
 func (sg *SunGrowData) getPsList(request SunGrowDataRequest) SunGrowDataResponse {
 	var response SunGrowDataResponse
@@ -276,6 +279,33 @@ func (sg *SunGrowData) queryDeviceList(request SunGrowDataRequest) SunGrowDataRe
 		}
 
 		response.Filename = data.SetFilenamePrefix("queryDeviceList-%d", request.PsId)
+		response.Data = data.GetEndPointData()
+		response.Table = data.GetEndPointDataTable()
+	}
+	return response
+}
+
+// @TODO - api get queryDeviceInfo '{"device_sn":"B2281302388","uuid":1179879}'
+func (sg *SunGrowData) queryDeviceInfo(request SunGrowDataRequest) SunGrowDataResponse {
+	var response SunGrowDataResponse
+	for range Only.Once {
+		ep := sg.SunGrow.GetByStruct(
+			"AppService.queryDeviceInfo",
+			queryDeviceInfo.RequestData{ Uuid: "1179877", DeviceSn: "B2281302388" },
+			api.DefaultTimeout,
+		)
+		if ep.IsError() {
+			response.Error = ep.GetError()
+			break
+		}
+
+		data := queryDeviceInfo.Assert(ep)
+		if data.Error != nil {
+			response.Error = data.Error
+			break
+		}
+
+		response.Filename = data.SetFilenamePrefix("queryDeviceInfo-%d", request.PsId)
 		response.Data = data.GetEndPointData()
 		response.Table = data.GetEndPointDataTable()
 	}
@@ -386,6 +416,7 @@ func (sg *SunGrowData) findPsType(request SunGrowDataRequest) SunGrowDataRespons
 	return response
 }
 
+// @TODO -
 func (sg *SunGrowData) getAllDeviceByPsId(request SunGrowDataRequest) SunGrowDataResponse {
 	var response SunGrowDataResponse
 	for range Only.Once {
@@ -544,6 +575,7 @@ func (sg *SunGrowData) getHouseholdStoragePsReport(request SunGrowDataRequest) S
 	return response
 }
 
+// @TODO -
 func (sg *SunGrowData) getPowerStationBasicInfo(request SunGrowDataRequest) SunGrowDataResponse {
 	var response SunGrowDataResponse
 	for range Only.Once {
@@ -612,6 +644,7 @@ func (sg *SunGrowData) getPowerStationForHousehold(request SunGrowDataRequest) S
 	return response
 }
 
+// @TODO - Figure out how to properly flatten some of these "two field" arrays.
 func (sg *SunGrowData) getPowerStationInfo(request SunGrowDataRequest) SunGrowDataResponse {
 	var response SunGrowDataResponse
 	for range Only.Once {

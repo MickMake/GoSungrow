@@ -40,8 +40,8 @@ type ResultData struct {
 	ContactName           valueTypes.String   `json:"contact_name"`
 	CountryID             valueTypes.Integer  `json:"country_id"`
 	Description           valueTypes.String   `json:"description"`
-	DesignCapacity        valueTypes.Float    `json:"design_capacity"`
-	DesignCapacityBattery valueTypes.Float    `json:"design_capacity_battery"`
+	DesignCapacity        valueTypes.Float    `json:"design_capacity" PointUnit:"W"`
+	DesignCapacityBattery valueTypes.Float    `json:"design_capacity_battery" PointUnit:"W"`
 	DistrictCode          valueTypes.String   `json:"district_code"`
 	DistrictName          valueTypes.String   `json:"district_name"`
 	DivisionCode          valueTypes.String   `json:"division_code"`
@@ -72,7 +72,7 @@ type ResultData struct {
 	Longitude             valueTypes.Float    `json:"longitude"`
 	MapLatitude           valueTypes.Float    `json:"map_latitude"`
 	MapLongitude          valueTypes.Float    `json:"map_longitude"`
-	MlpeFlag              valueTypes.Integer  `json:"mlpe_flag"`
+	MlpeFlag              valueTypes.Bool     `json:"mlpe_flag"`
 	MobileTel             valueTypes.String   `json:"moble_tel"`
 	MobileTelBak          valueTypes.String   `json:"moble_tel_bak"`
 	ModuleModelID         interface{}  `json:"module_model_id"`
@@ -96,7 +96,7 @@ type ResultData struct {
 	} `json:"ps_direct_org_list"`
 	PsHolder         valueTypes.String  `json:"ps_holder"`
 	PsID             valueTypes.Integer `json:"ps_id"`
-	PsInstalledPower valueTypes.Float   `json:"ps_installed_power"`
+	PsInstalledPower valueTypes.Float   `json:"ps_installed_power" PointUnit:"W"`
 	PsKey            valueTypes.PsKey   `json:"ps_key"`
 	PsLocation       valueTypes.String  `json:"ps_location"`
 	PsName           valueTypes.String  `json:"ps_name"`
@@ -111,19 +111,19 @@ type ResultData struct {
 		PsDealerOrgCode valueTypes.String  `json:"ps_dealer_org_code"`
 		UpOrgID         valueTypes.Integer `json:"up_org_id"`
 	} `json:"ps_org_info"`
-	PsPrice          valueTypes.Float    `json:"ps_price"`
-	PsPriceKwh       valueTypes.Float    `json:"ps_price_kwh"`
+	PsPrice          valueTypes.Float    `json:"ps_price" PointUnitFrom:"ParamIncomeUnitName"`
+	PsPriceKwh       valueTypes.Float    `json:"ps_price_kwh" PointUnitFrom:"ParamIncomeUnitName"`
 	PsType           valueTypes.Integer  `json:"ps_type"`
 	PsTypeDesc       valueTypes.String   `json:"ps_type_desc"`
 	PsTypeName       valueTypes.String   `json:"ps_type_name"`
 	PsUserID         valueTypes.Integer  `json:"ps_user_id"`
-	RecordCreateTime valueTypes.DateTime `json:"recore_create_time"`
+	RecordCreateTime valueTypes.DateTime `json:"recore_create_time" PointId:"record_create_time"`
 	SafeStartDate    valueTypes.DateTime `json:"safe_start_date"`
 	SelectedOrgList  []struct {
 		OrgID        valueTypes.Integer `json:"org_id"`
 		OrgIndexCode valueTypes.String  `json:"org_index_code"`
 		OrgName      valueTypes.String  `json:"org_name"`
-	} `json:"selectedOrgList"`
+	} `json:"selectedOrgList" PointId:"selected_org_list"`
 	SetUserOrg      valueTypes.Integer `json:"set_user_org"`
 	ShareType       valueTypes.Integer `json:"share_type"`
 	ShareUserType   interface{} `json:"share_user_type"`
@@ -166,56 +166,14 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		pkg := apiReflect.GetName("", *e) + "." + e.Request.PsId.String()
-		entries.StructToPoints(e.Response.ResultData, pkg, e.Request.PsId.String(), valueTypes.NewDateTime(""))
-
-		for i, v := range e.Response.ResultData.PsDirectOrgList {
-			name := fmt.Sprintf("%s.PsDirectOrgList.%d", pkg, i)
-			entries.StructToPoints(v, name, e.Request.PsId.String(), valueTypes.NewDateTime(""))
-		}
-
-		for i, v := range e.Response.ResultData.PsOrgInfo {
-			name := fmt.Sprintf("%s.PsOrgInfo.%d", pkg, i)
-			entries.StructToPoints(v, name, e.Request.PsId.String(), valueTypes.NewDateTime(""))
-		}
-
-		for i, v := range e.Response.ResultData.SelectedOrgList {
-			name := fmt.Sprintf("%s.SelectedOrgList.%d", pkg, i)
-			entries.StructToPoints(v, name, e.Request.PsId.String(), valueTypes.NewDateTime(""))
-		}
-
-		for i, v := range e.Response.ResultData.PsDirectOrgList {
-			name := fmt.Sprintf("%s.PsDirectOrgList.%d", pkg, i)
-			entries.StructToPoints(v, name, e.Request.PsId.String(), valueTypes.NewDateTime(""))
-		}
-
-		for i, v := range e.Response.ResultData.SnDetailList {
-			name := fmt.Sprintf("%s.SnDetailList.%d", pkg, i)
-			entries.StructToPoints(v, name, e.Request.PsId.String(), valueTypes.NewDateTime(""))
-		}
+		pkg := apiReflect.GetName("", *e)
+		dt := valueTypes.NewDateTime(valueTypes.Now)
+		name := pkg + "." + e.Response.ResultData.PsKey.String()
+		entries.StructToPoints(e.Response.ResultData, name, e.Response.ResultData.PsKey.String(), dt)
 	}
 
 	return entries

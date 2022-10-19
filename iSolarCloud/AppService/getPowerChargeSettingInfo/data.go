@@ -25,16 +25,16 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	ParamIncomeUnit          valueTypes.Integer  `json:"param_income_unit"`
-	ParamIncomeUnitName      string `json:"param_income_unit_name"`
+	ParamIncomeUnit          valueTypes.Integer `json:"param_income_unit"`
+	ParamIncomeUnitName      string             `json:"param_income_unit_name"`
 	PowerElectricalChargeMap struct {
-		DefaultCharge      valueTypes.Float   `json:"default_charge" PointUnit:"$"`
-		IntervalTimeCharge interface{} `json:"interval_time_charge"`
-	} `json:"powerElectricalChargeMap"`
+		DefaultCharge      valueTypes.Float `json:"default_charge" PointUnitFrom:"ParamIncomeUnitName"`
+		IntervalTimeCharge interface{}      `json:"interval_time_charge"`
+	} `json:"powerElectricalChargeMap" PointName:"power_electrical_charge_map"`
 	PowerSelfUseTimesChargeMap struct {
-		DefaultCharge      valueTypes.Float `json:"default_charge" PointUnit:"$"`
-		IntervalTimeCharge string  `json:"interval_time_charge"`
-	} `json:"powerSelfUseTimesChargeMap"`
+		DefaultCharge      valueTypes.Float `json:"default_charge" PointUnitFrom:"ParamIncomeUnitName"`
+		IntervalTimeCharge string           `json:"interval_time_charge"`
+	} `json:"powerSelfUseTimesChargeMap" PointName:"power_self_use_charge_map"`
 	PsID valueTypes.Integer `json:"ps_id"`
 }
 
@@ -49,31 +49,14 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
 		pkg := apiReflect.GetName("", *e)
-		entries.StructToPoints(e.Response.ResultData, pkg, "system", valueTypes.NewDateTime(""))
+		dt := valueTypes.NewDateTime(valueTypes.Now)
+		name := pkg + "." + e.Request.PsId.String()
+		entries.StructToPoints(e.Response.ResultData, name, e.Request.PsId.String(), dt)
 	}
 
 	return entries

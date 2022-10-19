@@ -46,8 +46,9 @@ func (e *EndPoint) GetData() api.DataMap {
 
 	for range Only.Once {
 		pkg := apiReflect.GetName("", *e)
-		name := api.JoinWithDots(0, "", pkg, e.Request.PsId)
-		entries.StructToPoints(e.Response.ResultData, name, e.Request.PsId.String(), valueTypes.NewDateTime(""))
+		dt := valueTypes.NewDateTime(valueTypes.Now)
+		name := pkg + "." + e.Request.PsId.String()
+		entries.StructToPoints(e.Response.ResultData, name, "", dt)
 	}
 
 	return entries

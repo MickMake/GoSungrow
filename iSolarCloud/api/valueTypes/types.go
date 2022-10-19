@@ -221,6 +221,19 @@ func SizeOfInt(i interface{}) int {
 	return ret
 }
 
+func GetIntFormatForPrintf(i interface{}) string {
+	var ret string
+	for range Only.Once {
+		s := SizeOfInt(i)
+		if s == 0 {
+			ret = "%d"
+			break
+		}
+		ret = "%." + strconv.Itoa(s) + "d"
+	}
+	return ret
+}
+
 func ArrayLength(i interface{}) int {
 	return reflect.ValueOf(i).Len()
 }
@@ -236,6 +249,10 @@ func TypeToString(intSize int, dateFormat string, e interface{}) string {
 			fmt.Println("NIL")
 			ret = "NIL"
 			break
+		}
+
+		if dateFormat == "" {
+			dateFormat = DateTimeAltLayout
 		}
 
 		// fmt.Printf("DEBUG: %s\n", reflect.TypeOf(e).String())
@@ -430,6 +447,10 @@ func AnyToUnitValue(e interface{}, unit string, Type string, dateFormat string) 
 			break
 		}
 		// fmt.Printf("DEBUG: AnyToUnitValue(): %s\n", reflect.TypeOf(e).String())
+
+		if dateFormat == "" {
+			dateFormat = DateTimeAltLayout
+		}
 
 		switch reflect.TypeOf(e).String() {
 			case "int":
@@ -692,6 +713,10 @@ func AnyToValueString(e interface{}, intSize int, dateFormat string) string {
 	for range Only.Once {
 		if IsNil(e) {
 			break
+		}
+
+		if dateFormat == "" {
+			dateFormat = DateTimeAltLayout
 		}
 
 		// fmt.Printf("DEBUG TYPE: %s\n", reflect.TypeOf(e).String())

@@ -16,9 +16,9 @@ const (
 	UpdateFreqInstant = "instant"
 	UpdateFreq5Mins   = "5mins"
 	UpdateFreqBoot    = "boot"
-	UpdateFreqDaily   = "daily"
-	UpdateFreqMonthly = "monthly"
-	UpdateFreqYearly  = "yearly"
+	UpdateFreqDay   = "daily"
+	UpdateFreqMonth = "monthly"
+	UpdateFreqYear  = "yearly"
 	UpdateFreqTotal   = "total"
 )
 
@@ -79,12 +79,12 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 					f.PointUpdateFreq = UpdateFreq5Mins
 				case "UpdateFreqBoot":
 					f.PointUpdateFreq = UpdateFreqBoot
-				case "UpdateFreqDaily":
-					f.PointUpdateFreq = UpdateFreqDaily
-				case "UpdateFreqMonthly":
-					f.PointUpdateFreq = UpdateFreqMonthly
-				case "UpdateFreqYearly":
-					f.PointUpdateFreq = UpdateFreqYearly
+				case "UpdateFreqDay":
+					f.PointUpdateFreq = UpdateFreqDay
+				case "UpdateFreqMonth":
+					f.PointUpdateFreq = UpdateFreqMonth
+				case "UpdateFreqYear":
+					f.PointUpdateFreq = UpdateFreqYear
 				case "UpdateFreqTotal":
 					f.PointUpdateFreq = UpdateFreqTotal
 			}
@@ -118,7 +118,6 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 				// @TODO - Think about adding in arrays of values OR just marshal arrays into JSON.
 				res := valueTypes.SizeOfArrayLength(uvs)
 				for i, uv := range uvs {
-					// dm.AddUnitValue(JoinWithDots(res, valueTypes.DateTimeLayoutDay, f.Endpoint, i), f.PointParentId, valueTypes.SetPointIdString(f.PointId), f.PointName, f.PointGroupName, when, uv)
 					dm.AddPointUnitValue(JoinWithDots(res, valueTypes.DateTimeLayoutDay, f.Endpoint, i), f.PointParentId, point, when, uv)
 				}
 				continue
@@ -128,83 +127,13 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 				fmt.Printf("OOOPS - UVS is nil for %s\n", f.PointId)
 				continue
 			}
-			// dm.AddUnitValue(f.Endpoint, f.PointParentId, valueTypes.SetPointIdString(f.PointId), f.PointName, f.PointGroupName, when, uvs[0])
 			dm.AddPointUnitValue(f.Endpoint, f.PointParentId, point, when, uvs[0])
 
 			if f.PointAliasTo != "" {
 				f.PointId = f.PointAliasTo
-				// dm.AddUnitValue(f.Endpoint, f.PointParentId, valueTypes.SetPointIdString(f.PointId), f.PointName, f.PointGroupName, when, uvs[0])
 				dm.AddPointUnitValue(f.Endpoint, f.PointParentId, point, when, uvs[0])
 			}
 		}
-
-		// for _, f := range tp.Map {
-		// 	// Reference Units from another data point.
-		// 	if f.PointUnitFrom != "" {
-		// 		sdp := dm.GetEntryFromPointId(f.PointUnitFrom)
-		// 		if sdp == nil {
-		// 			continue
-		// 		}
-		// 		ddp := dm.GetEntryFromPointId(f.PointId)
-		// 		if ddp == nil {
-		// 			continue
-		// 		}
-		// 		ddp2 := dm.GetEntryFromPointId(f.PointId)
-		// 		if ddp2 == nil {
-		// 			continue
-		// 		}
-		// 		ddp3 := dm.GetEntryFromPointId(f.PointId)
-		// 		if ddp3 == nil {
-		// 			continue
-		// 		}
-		// 		b := ddp.GetEntry(0).Point.Unit
-		// 		// ddp.SetUnits(sdp.GetEntry(0).Value)
-		// 		dm.SetEntryUnits(f.PointId, sdp.GetEntryValue(0).String())
-		// 		ddp = dm.GetEntryFromPointId(f.PointId)
-		// 		fmt.Printf("CHECK:PointUnitFrom [%s] from [%s] : '%s' <%s> '%s'\n", f.PointId, f.PointUnitFrom, b, sdp.GetEntry(0).Value, ddp.GetEntry(0).Point.Unit)
-		//
-		// 		// Matches, so hide reference unit point.
-		// 		sdp.Hide()
-		// 	}
-		//
-		// 	if f.PointGroupNameFrom != "" {
-		// 		sdp := dm.GetEntryFromPointId(f.PointGroupNameFrom)
-		// 		if sdp == nil {
-		// 			continue
-		// 		}
-		// 		ddp := dm.GetEntryFromPointId(f.PointId)
-		// 		if ddp == nil {
-		// 			continue
-		// 		}
-		// 		b := ddp.GetEntry(0).Point.GroupName
-		// 		// ddp.SetGroupName(sdp.GetEntry(0).Value)
-		// 		dm.SetEntryGroupName(f.PointId, sdp.GetEntryValue(0).String())
-		// 		ddp = dm.GetEntryFromPointId(f.PointId)
-		// 		fmt.Printf("CHECK:PointGroupNameFrom [%s] from [%s] : '%s' <%s> '%s'\n", f.PointId, f.PointGroupNameFrom, b, sdp.GetEntry(0).Value, ddp.GetEntry(0).Point.GroupName)
-		//
-		// 		// Matches, so hide reference unit point.
-		// 		sdp.Hide()
-		// 	}
-		//
-		// 	if f.PointTimestampFrom != "" {
-		// 		sdp := dm.GetEntryFromPointId(f.PointTimestampFrom)
-		// 		if sdp == nil {
-		// 			continue
-		// 		}
-		// 		ddp := dm.GetEntryFromPointId(f.PointId)
-		// 		if ddp == nil {
-		// 			continue
-		// 		}
-		// 		b := ddp.GetEntry(0).Date
-		// 		// ddp.SetTimestamp(sdp.GetEntry(0).Value)
-		// 		dm.SetEntryTimestamp(f.PointId, sdp.GetEntry(0).Date)
-		// 		ddp = dm.GetEntryFromPointId(f.PointId)
-		// 		fmt.Printf("CHECK:PointTimestampFrom [%s] from [%s] : '%s' <%s> '%s'\n", f.PointId, f.PointTimestampFrom, b, sdp.GetEntry(0).Value, ddp.GetEntry(0).Date)
-		//
-		// 		// Matches, so hide reference unit point.
-		// 		sdp.Hide()
-		// 	}
-		// }
 	}
 }
 
@@ -279,16 +208,7 @@ func (dm *DataMap) CopyPoint(refEndpoint string, endpoint string, pointId string
 			break
 		}
 
-		var des DataEntries
-		des = dep.Copy()
-		for i := range des.Entries {
-			des.Entries[i].SetEndpoint(endpoint, pointId)
-			des.Entries[i].SetPointName(name)
-			dm.Add(des.Entries[i])
-		}
-
-		epn := des.Entries[0].EndPoint + "." + des.Entries[0].Point.Id.String()
-		ret = dm.Map[epn]
+		ret = dm.CopyDataEntries(*dep, endpoint, pointId, name)
 	}
 	return ret
 }
@@ -313,18 +233,6 @@ func (dm *DataMap) CopyDataEntries(dep DataEntries, endpoint string, pointId str
 func (dm *DataMap) LowerUpper(lowerEntry DataEntries, upperEntry DataEntries) float64 {
 	var ret float64
 	for range Only.Once {
-		// l := dm.GetEntry(lowerEntry, index)
-		// if l.IsNotValid() {
-		// 	fmt.Printf("ERROR: LowerUpper('%s', '%s', %d)\n", lowerEntry, upperEntry, index)
-		// 	break
-		// }
-		//
-		// u := dm.GetEntry(upperEntry, index)
-		// if u.IsNotValid() {
-		// 	fmt.Printf("ERROR: LowerUpper('%s', '%s', %d)\n", lowerEntry, upperEntry, index)
-		// 	break
-		// }
-
 		if lowerEntry.GetFloat() > 0 {
 			ret = 0 - lowerEntry.GetFloat()
 			break
@@ -337,18 +245,6 @@ func (dm *DataMap) LowerUpper(lowerEntry DataEntries, upperEntry DataEntries) fl
 func (dm *DataMap) GetPercent(entry DataEntries, max DataEntries) float64 {
 	var ret float64
 	for range Only.Once {
-		// v := dm.GetEntry(entry, index)
-		// if v.IsNotValid() {
-		// 	fmt.Printf("ERROR: GetPercent('%s', '%s', %d)\n", entry, max, index)
-		// 	break
-		// }
-		//
-		// m := dm.GetEntry(max, index)
-		// if m.IsNotValid() {
-		// 	fmt.Printf("ERROR: GetPercent('%s', '%s', %d)\n", entry, max, index)
-		// 	break
-		// }
-
 		ret = GetPercent(entry.GetFloat(), max.GetFloat())
 	}
 	return ret
@@ -411,7 +307,6 @@ func (dm *DataMap) Add(de DataEntry) {
 		endpoint := de.FullId()
 		de.Index = len(dm.Order)
 
-		// dm.Map[endpoint] = append(dm.Map[endpoint], de)
 		if dm.Map[endpoint] == nil {
 			// make(
 			dm.Map[endpoint] = &DataEntries{ Entries: []DataEntry{} }
