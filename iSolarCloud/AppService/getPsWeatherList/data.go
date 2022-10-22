@@ -29,21 +29,21 @@ type ResultData struct {
 		Chill      valueTypes.Float    `json:"chill"`
 		Code       valueTypes.Float    `json:"code"`
 		CodeName   valueTypes.Float    `json:"code_name"`
-		DateTime   valueTypes.DateTime `json:"date_time"`
+		DateTime   valueTypes.DateTime `json:"date_time" PointIgnore:"true"`
 		Direction  valueTypes.Float    `json:"direction"`
-		High       valueTypes.Float    `json:"high"`
-		Highc      valueTypes.Float    `json:"highc"`
+		High       valueTypes.Float    `json:"high" PointUnit:"F"`
+		Highc      valueTypes.Float    `json:"highc" PointUnit:"C"`
 		Humidity   valueTypes.Float    `json:"humidity"`
-		Low        valueTypes.Float    `json:"low"`
-		Lowc       valueTypes.Float    `json:"lowc"`
-		Pressure   valueTypes.Float    `json:"pressure"`
+		Low        valueTypes.Float    `json:"low" PointUnit:"F"`
+		Lowc       valueTypes.Float    `json:"lowc" PointUnit:"C"`
+		Pressure   valueTypes.Float    `json:"pressure" PointUnit:"hPa"`
 		PsID       valueTypes.Float    `json:"ps_id"`
 		Rising     valueTypes.Float    `json:"rising"`
 		Speed      valueTypes.Float    `json:"speed"`
-		Sunrise    valueTypes.Float    `json:"sunrise"`
-		Sunset     valueTypes.Float    `json:"sunset"`
+		Sunrise    valueTypes.Time     `json:"sunrise"`
+		Sunset     valueTypes.Time     `json:"sunset"`
 		Visibility valueTypes.Float    `json:"visibility"`
-	} `json:"weather_list"`
+	} `json:"weather_list" PointNameFromChild:"DateTime" PointNameDateFormat:"20060102"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -61,11 +61,10 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		pkg := api.JoinWithDots(0, "", apiReflect.GetName("", *e), e.Request.PsId)
-		// entries.StructToPoints(e.Response.ResultData, pkg, e.Request.PsId.String(), valueTypes.NewDateTime(""))
-		for _, v := range e.Response.ResultData.WeatherList {
-			entries.StructToPoints(v, api.JoinWithDots(0, valueTypes.DateTimeLayoutDay, pkg, v.DateTime), e.Request.PsId.String(), valueTypes.NewDateTime(""))
-		}
+		pkg := apiReflect.GetName("", *e)
+		dt := valueTypes.NewDateTime(valueTypes.Now)
+		name := pkg + "." + e.Request.PsId.String()
+		entries.StructToPoints(e.Response.ResultData, name, e.Request.PsId.String(), dt)
 	}
 
 	return entries

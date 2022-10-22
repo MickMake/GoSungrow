@@ -57,6 +57,7 @@ const (
 	TypeValueTypesUnitValue = "valueTypes.UnitValue"
 )
 
+
 func IsUnknownStruct(ref interface{}) bool {
 	var ok bool
 
@@ -70,22 +71,28 @@ func IsUnknownStruct(ref interface{}) bool {
 		// fmt.Printf("fieldTo.Name(): %s\n", fieldTo.Name())
 		// fmt.Printf("fieldTo.Kind().String(): %s\n", fieldTo.Kind().String())
 
-		// fmt.Printf("DEBUYg:    K:%s / T:%s\n", fieldVo.Kind().String(), fieldVo.Type().String())
-		if fieldVo.Kind() == reflect.Slice {
+		kindy := fieldVo.Kind()
+		// fmt.Printf("DEBUYg:    K:%s / T:%v\n", kindy.String(), fieldVo)
+		if kindy == reflect.Interface {
+			ok = false
+			break
+		}
+
+		if kindy == reflect.Slice {
 			if fieldVo.Len() > 0 {
 				ok = IsUnknownStruct(fieldVo.Index(0).Interface())
 			}
 			break
 		}
 
-		if fieldVo.Kind() == reflect.Array {
+		if kindy == reflect.Array {
 			if fieldVo.Len() > 0 {
 				ok = IsUnknownStruct(fieldVo.Index(0).Interface())
 			}
 			break
 		}
 
-		if fieldVo.Kind() == reflect.Map {
+		if kindy == reflect.Map {
 			mk := fieldVo.MapKeys()
 			if len(mk) > 0 {
 				ok = IsUnknownStruct(fieldVo.MapIndex(mk[0]).Interface())
@@ -93,7 +100,7 @@ func IsUnknownStruct(ref interface{}) bool {
 			break
 		}
 
-		if fieldVo.Kind() == reflect.Struct {
+		if kindy == reflect.Struct {
 			switch fieldVo.Type().String() {
 				case TypeBool:
 				case TypeCount:
@@ -879,7 +886,12 @@ func AnyToValueString(e interface{}, intSize int, dateFormat string) string {
 			case TypeValueTypesDateTime:
 				fallthrough
 			case TypeDateTime:
-				ret = e.(DateTime).Format(dateFormat)
+				v := e.(DateTime)
+				if v.IsZero() {
+					ret = ""
+					break
+				}
+				ret = v.Format(dateFormat)
 
 			case TypeArrayValueTypesDateTime:
 				fallthrough
@@ -894,7 +906,12 @@ func AnyToValueString(e interface{}, intSize int, dateFormat string) string {
 			case TypeValueTypesTime:
 				fallthrough
 			case TypeTime:
-				ret = e.(Time).Format(dateFormat)
+				v := e.(Time)
+				if v.IsZero() {
+					ret = ""
+					break
+				}
+				ret = v.Format(dateFormat)
 
 			default:
 		}

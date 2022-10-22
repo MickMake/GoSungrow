@@ -92,7 +92,7 @@ func (e *EndPoint) GetData() api.DataMap {
 		pkg := apiReflect.GetName("", *e)
 		dt := valueTypes.NewDateTime(valueTypes.Now)
 		// name := pkg + "." + e.Request.PsId.String()
-		entries.StructToPoints(e.Response.ResultData, pkg, "", dt)
+		entries.StructToPoints(e.Response.ResultData, pkg, e.Request.PsId.String(), dt)
 	}
 
 	return entries

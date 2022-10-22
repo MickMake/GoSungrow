@@ -35,10 +35,10 @@ type ResultData struct {
 	IsHaveEsInverter  valueTypes.Bool `json:"is_have_es_inverter"`
 	IsTransformSystem valueTypes.Bool `json:"is_transform_system"`
 
-	DayData   *DayData   `json:"day_data,omitempty" PointName:"Day"`
-	MonthData *MonthData `json:"month_data,omitempty" PointName:"Month"`
-	YearData  *YearData  `json:"year_data,omitempty" PointName:"Year"`
-	TotalData *TotalData `json:"total_data,omitempty" PointName:"Total"`
+	DayData   *DayData   `json:"day_data,omitempty" PointId:"day"`
+	MonthData *MonthData `json:"month_data,omitempty" PointId:"month"`
+	YearData  *YearData  `json:"year_data,omitempty" PointId:"year"`
+	TotalData *TotalData `json:"total_data,omitempty" PointId:"total"`
 }
 
 type DayData struct {
@@ -64,8 +64,8 @@ type DayData struct {
 	P83119MapVirgin valueTypes.UnitValue `json:"p83119_map_virgin"  PointIgnore:"true"`
 	P83120Map       valueTypes.UnitValue `json:"p83120_map"  PointId:"p83120" PointUpdateFreq:"UpdateFreqDay"`
 	P83120MapVirgin valueTypes.UnitValue `json:"p83120_map_virgin"  PointIgnore:"true"`
-	P83121          valueTypes.Float     `json:"p83121"  PointId:"p83121" PointUnitFrom:"FOO" PointUpdateFreq:"UpdateFreqDay"`
-	P83122          valueTypes.Float     `json:"p83122"  PointId:"p83122" PointUnitFrom:"FOO" PointUpdateFreq:"UpdateFreqDay"`
+	P83121          valueTypes.Float     `json:"p83121"  PointId:"p83121" PointUpdateFreq:"UpdateFreqDay"`
+	P83122          valueTypes.Float     `json:"p83122"  PointId:"p83122" PointUpdateFreq:"UpdateFreqDay"`
 	PointData15List []struct {
 		P83076     valueTypes.Float    `json:"p83076"  PointId:"p83076" PointName:"PV Power" PointUnitFrom:"P83076Unit" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqDay"`
 		P83076Unit valueTypes.String   `json:"p83076_unit"  PointIgnore:"true"`
@@ -116,8 +116,8 @@ type MonthData struct {
 	P83119MapVirgin valueTypes.UnitValue `json:"p83119_map_virgin"  PointIgnore:"true"`
 	P83120Map       valueTypes.UnitValue `json:"p83120_map"  PointId:"p83120" PointUpdateFreq:"UpdateFreqMonth"`
 	P83120MapVirgin valueTypes.UnitValue `json:"p83120_map_virgin"  PointIgnore:"true"`
-	P83121          valueTypes.Float     `json:"p83121"  PointId:"p83121" PointUnitFrom:"FOO" PointUpdateFreq:"UpdateFreqMonth"`
-	P83122          valueTypes.Float     `json:"p83122"  PointId:"p83122" PointUnitFrom:"FOO" PointUpdateFreq:"UpdateFreqMonth"`
+	P83121          valueTypes.Float     `json:"p83121"  PointId:"p83121" PointUpdateFreq:"UpdateFreqMonth"`
+	P83122          valueTypes.Float     `json:"p83122"  PointId:"p83122" PointUpdateFreq:"UpdateFreqMonth"`
 	ZfzyMap         valueTypes.UnitValue `json:"zfzy_map"`
 	ZfzyMapVirgin   valueTypes.UnitValue `json:"zfzy_map_virgin"  PointIgnore:"true"`
 	ZjzzMap         valueTypes.UnitValue `json:"zjzz_map"`
@@ -178,8 +178,8 @@ type YearData struct {
 	P83119MapVirgin   valueTypes.UnitValue `json:"p83119_map_virgin"  PointIgnore:"true"`
 	P83120            valueTypes.UnitValue `json:"p83120_map"  PointId:"p83120" PointUpdateFreq:"UpdateFreqYear"`
 	P83120MapVirgin   valueTypes.UnitValue `json:"p83120_map_virgin"  PointIgnore:"true"`
-	P83121            valueTypes.Float     `json:"p83121"  PointId:"p83121" PointUnitFrom:"FOO" PointUpdateFreq:"UpdateFreqYear"`
-	P83122            valueTypes.Float     `json:"p83122"  PointId:"p83122" PointUnitFrom:"FOO" PointUpdateFreq:"UpdateFreqYear"`
+	P83121            valueTypes.Float     `json:"p83121"  PointId:"p83121" PointUpdateFreq:"UpdateFreqYear"`
+	P83122            valueTypes.Float     `json:"p83122"  PointId:"p83122" PointUpdateFreq:"UpdateFreqYear"`
 	ZfzyMap       valueTypes.UnitValue `json:"zfzy_map"`
 	ZfzyMapVirgin valueTypes.UnitValue `json:"zfzy_map_virgin"  PointIgnore:"true"`
 	ZjzzMap       valueTypes.UnitValue `json:"zjzz_map"`
@@ -236,8 +236,8 @@ type TotalData struct {
 	P83123MapVirgin   valueTypes.UnitValue `json:"p83123_map_virgin"  PointIgnore:"true"`
 	P83124            valueTypes.UnitValue `json:"p83124_map"  PointId:"p83124" PointUpdateFreq:"UpdateFreqTotal"`
 	P83124MapVirgin   valueTypes.UnitValue `json:"p83124_map_virgin"  PointIgnore:"true"`
-	P83125            valueTypes.Float     `json:"p83125"  PointId:"p83125" PointUnitFrom:"FOO" PointUpdateFreq:"UpdateFreqTotal"`
-	P83126            valueTypes.Float     `json:"p83126"  PointId:"p83126" PointUnitFrom:"FOO" PointUpdateFreq:"UpdateFreqTotal"`
+	P83125            valueTypes.Float     `json:"p83125"  PointId:"p83125" PointUpdateFreq:"UpdateFreqTotal"`
+	P83126            valueTypes.Float     `json:"p83126"  PointId:"p83126" PointUpdateFreq:"UpdateFreqTotal"`
 	P83127            valueTypes.UnitValue `json:"p83127_map"  PointId:"p83127" PointUpdateFreq:"UpdateFreqTotal"`
 	P83127MapVirgin   valueTypes.UnitValue `json:"p83127_map_virgin"  PointIgnore:"true"`
 	ZfzyMap       valueTypes.UnitValue `json:"zfzy_map"`

@@ -42,7 +42,9 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 
 		// Iterate over all available fields and read the tag values
 		var tp apiReflect.DataStructures
-		tp.GetPointTags(ref, ref, endpoint)
+		var Ref apiReflect.Reflect
+		Ref.SetByFieldName(ref, ref, "")
+		tp.GetPointTags(Ref, Ref, endpoint)
 
 		for _, f := range tp.Map {
 			if f.PointIgnore {
@@ -224,7 +226,7 @@ func (dm *DataMap) CopyDataEntries(dep DataEntries, endpoint string, pointId str
 			dm.Add(des.Entries[i])
 		}
 
-		epn := des.Entries[0].EndPoint + "." + des.Entries[0].Point.Id.String()
+		epn := des.Entries[0].EndPoint	// + "." + des.Entries[0].Point.Id.String()
 		ret = dm.Map[epn]
 	}
 	return ret

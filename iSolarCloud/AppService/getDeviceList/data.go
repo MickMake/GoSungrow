@@ -265,13 +265,8 @@ func (e *EndPoint) GetData() api.DataMap {
 	for range Only.Once {
 		pkg := apiReflect.GetName("", *e)
 		dt := valueTypes.NewDateTime(valueTypes.Now)
-		entries.StructToPoints(e.Response.ResultData, pkg, "", dt)
-
-		// pkg := apiReflect.GetName("", *e)
-		// for _, d := range e.Response.ResultData.PageList {
-		// 	name := api.JoinWithDots(0, valueTypes.DateTimeLayoutDay, pkg, d.PsKey)
-		// 	entries.StructToPoints(d, name, e.Request.PsId.String(), valueTypes.NewDateTime(""))
-		// }
+		name := pkg + "." + e.Request.PsId.String()
+		entries.StructToPoints(e.Response.ResultData, name, e.Request.PsId.String(), dt)
 	}
 
 	return entries

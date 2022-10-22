@@ -54,15 +54,6 @@ type ResultData struct {
 	GprsLatitude          valueTypes.Float     `json:"gprs_latitude"`
 	GprsLongitude         valueTypes.Float     `json:"gprs_longitude"`
 	HasAmmeter            valueTypes.Bool      `json:"has_ammeter"`
-	Images                []struct {
-		FileID      valueTypes.Integer `json:"file_id"`
-		ID          valueTypes.Integer `json:"id"`
-		PicLanguage valueTypes.Integer `json:"pic_language"`
-		PicType     valueTypes.Integer `json:"pic_type"`
-		PictureName valueTypes.String  `json:"picture_name"`
-		PictureURL  valueTypes.String  `json:"picture_url"`
-		PsUnitUUID  interface{}        `json:"ps_unit_uuid" PointName:"Images"`
-	} `json:"images" PointName:"Images"`
 	InstallDate            valueTypes.DateTime  `json:"install_date"`
 	InstallerPsFaultStatus valueTypes.Integer   `json:"installer_ps_fault_status"`
 	IsHaveEsInverter       valueTypes.Bool      `json:"is_have_es_inverter"`
@@ -182,16 +173,51 @@ type ResultData struct {
 	PsWindPos              string               `json:"ps_wind_pos"`
 	RecordCreateTime       valueTypes.DateTime  `json:"recore_create_time"`
 	ReportType             string               `json:"report_type"`
-	RobotNumSweepCapacity  struct {
-		Num           valueTypes.Integer `json:"num"`
-		SweepCapacity valueTypes.Float   `json:"sweep_capacity"`
-	} `json:"robot_num_sweep_capacity"`
 	SafeStartDate                 valueTypes.DateTime  `json:"safe_start_date"`
 	SelfConsumptionOffsetReminder valueTypes.Integer   `json:"self_consumption_offset_reminder"`
 	ShippingAddress               valueTypes.String    `json:"shipping_address"`
 	ShippingZipCode               valueTypes.String    `json:"shipping_zip_code"`
 	So2Reduce                     valueTypes.UnitValue `json:"so2_reduce"`
 	So2ReduceTotal                valueTypes.UnitValue `json:"so2_reduce_total" PointId:"so2_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
+	SysScheme            valueTypes.Integer   `json:"sys_scheme"`
+	TimeZoneID           valueTypes.Integer   `json:"time_zone_id"`
+	Timezone             valueTypes.String    `json:"timezone"`
+	TodayEnergy          valueTypes.UnitValue `json:"today_energy" PointId:"today_energy" PointUpdateFreq:"UpdateFreqDay"`
+	TodayEnergyVirgin    valueTypes.UnitValue `json:"today_energy_virgin"  PointIgnore:"true"`
+	TodayIncome          valueTypes.UnitValue `json:"today_income" PointId:"today_income" PointUpdateFreq:"UpdateFreqDay"`
+	TotalEnergy          valueTypes.UnitValue `json:"total_energy" PointId:"total_energy" PointUpdateFreq:"UpdateFreqTotal"`
+	TotalEnergyVirgin    valueTypes.UnitValue `json:"total_energy_virgin"  PointIgnore:"true"`
+	TotalEnergyYear      valueTypes.UnitValue `json:"total_energy_year" PointId:"total_energy_year" PointUpdateFreq:"UpdateFreqTotal"`
+	TotalIncome          valueTypes.UnitValue `json:"total_income" PointId:"total_income" PointUpdateFreq:"UpdateFreqTotal"`
+	TreeReduce           valueTypes.UnitValue `json:"tree_reduce"`
+	TreeReduceTotal      valueTypes.UnitValue `json:"tree_reduce_total" PointId:"tree_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
+	TuvLevel             string               `json:"tuv_level"`
+	ValidFlag            valueTypes.Bool      `json:"valid_flag"`
+	WaitAssignOrderCount valueTypes.Integer   `json:"wait_assign_order_count"`
+	WaterReduce          valueTypes.UnitValue `json:"water_reduce"`
+	WaterReduceTotal     valueTypes.UnitValue `json:"water_reduce_total" PointId:"water_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
+	WgsLatitude          valueTypes.Float     `json:"wgs_latitude"`
+	WgsLongitude         valueTypes.Float     `json:"wgs_longitude"`
+	Year                 valueTypes.Integer   `json:"year"`
+	ZfzyMap              valueTypes.UnitValue `json:"zfzy_map"`
+	ZfzyMapVirgin        valueTypes.UnitValue `json:"zfzy_map_virgin"  PointIgnore:"true"`
+	ZipCode              valueTypes.String    `json:"zip_code"`
+	ZjzzMap              valueTypes.UnitValue `json:"zjzz_map"`
+	ZjzzMapVirgin        valueTypes.UnitValue `json:"zjzz_map_virgin"  PointIgnore:"true"`
+
+	RobotNumSweepCapacity  struct {
+		Num           valueTypes.Integer `json:"num"`
+		SweepCapacity valueTypes.Float   `json:"sweep_capacity"`
+	} `json:"robot_num_sweep_capacity"`
+	Images                []struct {
+		FileID      valueTypes.Integer `json:"file_id"`
+		ID          valueTypes.Integer `json:"id"`
+		PicLanguage valueTypes.Integer `json:"pic_language"`
+		PicType     valueTypes.Integer `json:"pic_type"`
+		PictureName valueTypes.String  `json:"picture_name"`
+		PictureURL  valueTypes.String  `json:"picture_url"`
+		PsUnitUUID  interface{}        `json:"ps_unit_uuid" PointName:"Images"`
+	} `json:"images" PointName:"Images"`
 	StorageInverterData           []struct {
 		CommunicationDevSn      valueTypes.String    `json:"communication_dev_sn"`
 		DevFaultStatus          valueTypes.Integer   `json:"dev_fault_status"`
@@ -203,7 +229,7 @@ type ResultData struct {
 		DeviceType              valueTypes.Integer   `json:"device_type"`
 		DrmStatus               valueTypes.Integer   `json:"drm_status"`
 		DrmStatusName           valueTypes.String    `json:"drm_status_name"`
-		EnergyFlow              []valueTypes.Integer `json:"energy_flow" PointName:"Energy Flow"`
+		EnergyFlow              []valueTypes.Integer `json:"energy_flow" PointName:"Energy Flow" PointIgnoreZero:"false"`
 		HasAmmeter              valueTypes.Bool      `json:"has_ammeter"`
 		InstallerDevFaultStatus valueTypes.Integer   `json:"installer_dev_fault_status"`
 		InverterSn              valueTypes.String    `json:"inverter_sn"`
@@ -231,31 +257,6 @@ type ResultData struct {
 		UpdateTime              valueTypes.DateTime  `json:"update_time"`
 		UUID                    valueTypes.Integer   `json:"uuid"`
 	} `json:"storage_inverter_data" PointNameFromChild:"PsKey"`
-	SysScheme            valueTypes.Integer   `json:"sys_scheme"`
-	TimeZoneID           valueTypes.Integer   `json:"time_zone_id"`
-	Timezone             valueTypes.String    `json:"timezone"`
-	TodayEnergy          valueTypes.UnitValue `json:"today_energy" PointId:"today_energy" PointUpdateFreq:"UpdateFreqDay"`
-	TodayEnergyVirgin    valueTypes.UnitValue `json:"today_energy_virgin"  PointIgnore:"true"`
-	TodayIncome          valueTypes.UnitValue `json:"today_income" PointId:"today_income" PointUpdateFreq:"UpdateFreqDay"`
-	TotalEnergy          valueTypes.UnitValue `json:"total_energy" PointId:"total_energy" PointUpdateFreq:"UpdateFreqTotal"`
-	TotalEnergyVirgin    valueTypes.UnitValue `json:"total_energy_virgin"  PointIgnore:"true"`
-	TotalEnergyYear      valueTypes.UnitValue `json:"total_energy_year" PointId:"total_energy_year" PointUpdateFreq:"UpdateFreqTotal"`
-	TotalIncome          valueTypes.UnitValue `json:"total_income" PointId:"total_income" PointUpdateFreq:"UpdateFreqTotal"`
-	TreeReduce           valueTypes.UnitValue `json:"tree_reduce"`
-	TreeReduceTotal      valueTypes.UnitValue `json:"tree_reduce_total" PointId:"tree_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
-	TuvLevel             string               `json:"tuv_level"`
-	ValidFlag            valueTypes.Bool      `json:"valid_flag"`
-	WaitAssignOrderCount valueTypes.Integer   `json:"wait_assign_order_count"`
-	WaterReduce          valueTypes.UnitValue `json:"water_reduce"`
-	WaterReduceTotal     valueTypes.UnitValue `json:"water_reduce_total" PointId:"water_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
-	WgsLatitude          valueTypes.Float     `json:"wgs_latitude"`
-	WgsLongitude         valueTypes.Float     `json:"wgs_longitude"`
-	Year                 valueTypes.Integer   `json:"year"`
-	ZfzyMap              valueTypes.UnitValue `json:"zfzy_map"`
-	ZfzyMapVirgin        valueTypes.UnitValue `json:"zfzy_map_virgin"  PointIgnore:"true"`
-	ZipCode              valueTypes.String    `json:"zip_code"`
-	ZjzzMap              valueTypes.UnitValue `json:"zjzz_map"`
-	ZjzzMapVirgin        valueTypes.UnitValue `json:"zjzz_map_virgin"  PointIgnore:"true"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -276,16 +277,49 @@ func (e *EndPoint) GetData() api.DataMap {
 	for range Only.Once {
 		pkg := apiReflect.GetName("", *e)
 		dt := valueTypes.NewDateTime(valueTypes.Now)
-		entries.StructToPoints(e.Response.ResultData, pkg + "." + e.Request.PsId.String(), "", dt)
+		name := pkg + "." + e.Request.PsId.String()
+		entries.StructToPoints(e.Response.ResultData, name, e.Request.PsId.String(), dt)
 
-		// pkg := apiReflect.GetName("", *e)
-		// name := api.JoinWithDots(0, valueTypes.DateTimeLayoutDay, pkg, e.Request.PsId)
-		// entries.StructToPoints(e.Response.ResultData, name, e.Request.PsId.String(), valueTypes.NewDateTime(""))
+		// dstEndpoint := "virtual." + e.Request.PsId.String()
+		// srcEndpoint := fmt.Sprintf("%s.%s", pkg, e.Request.PsId.String())
 		//
-		// for _, sid := range e.Response.ResultData.StorageInverterData {
-		// 	name = api.JoinWithDots(0, valueTypes.DateTimeLayoutDay, pkg, sid.PsKey)
-		// 	entries.StructToPoints(sid, name, sid.PsKey.Value(), valueTypes.NewDateTime(""))
-		// }
+		// someting := entries.CopyPoint(srcEndpoint + ".p8301", dstEndpoint, "p8301", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83012", dstEndpoint, "p83012", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83013", dstEndpoint, "p83013", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83016", dstEndpoint, "p83016", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83017", dstEndpoint, "p83017", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p8302", dstEndpoint, "p8302", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83023", dstEndpoint, "p83023", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83036", dstEndpoint, "p83036", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p8304", dstEndpoint, "p8304", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83072", dstEndpoint, "p83072", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83073", dstEndpoint, "p83073", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83074", dstEndpoint, "p83074", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83075", dstEndpoint, "p83075", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83076", dstEndpoint, "p83076", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83077", dstEndpoint, "p83077", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83078", dstEndpoint, "p83078", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83079", dstEndpoint, "p83079", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83080", dstEndpoint, "p83080", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83088", dstEndpoint, "p83088", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83089", dstEndpoint, "p83089", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83094", dstEndpoint, "p83094", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83095", dstEndpoint, "p83095", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83097", dstEndpoint, "p83097", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83100", dstEndpoint, "p83100", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83101", dstEndpoint, "p83101", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83102", dstEndpoint, "p83102", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83105", dstEndpoint, "p83105", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83106", dstEndpoint, "p83106", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83107", dstEndpoint, "p83107", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83118", dstEndpoint, "p83118", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83119", dstEndpoint, "p83119", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p8312", dstEndpoint, "p8312", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83120", dstEndpoint, "p83120", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83123", dstEndpoint, "p83123", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83124", dstEndpoint, "p83124", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83128", dstEndpoint, "p83128", "")
+		// someting := entries.CopyPoint(srcEndpoint + ".p83202", dstEndpoint, "p83202", "")
 	}
 
 	return entries

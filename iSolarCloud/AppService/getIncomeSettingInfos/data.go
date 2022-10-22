@@ -75,7 +75,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	for range Only.Once {
 		pkg := apiReflect.GetName("", *e)
 		dt := valueTypes.NewDateTime(valueTypes.Now)
-		entries.StructToPoints(e.Response.ResultData, pkg, "", dt)
+		entries.StructToPoints(e.Response.ResultData, pkg, e.Request.PsId.String(), dt)
 	}
 
 	return entries

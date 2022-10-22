@@ -39,11 +39,11 @@ func (de *DataEntry) IsNotValid() bool {
 }
 
 func (de *DataEntry) FullId() string {
-	return de.EndPoint + "." + de.Point.Id.String()
+	return de.EndPoint	// + "." + de.Point.Id.String()
 }
 
 func (de *DataEntry) SetEndpoint(endpoint string, pointId string) {
-	de.EndPoint = endpoint	//  + "." + pointId
+	de.EndPoint = endpoint + "." + pointId
 	de.Point.Id.SetString(pointId)
 }
 

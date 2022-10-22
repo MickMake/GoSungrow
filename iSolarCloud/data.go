@@ -575,7 +575,7 @@ func (sg *SunGrowData) getHouseholdStoragePsReport(request SunGrowDataRequest) S
 	return response
 }
 
-// @TODO -
+// @TODO - Not working
 func (sg *SunGrowData) getPowerStationBasicInfo(request SunGrowDataRequest) SunGrowDataResponse {
 	var response SunGrowDataResponse
 	for range Only.Once {
@@ -711,6 +711,7 @@ func (sg *SunGrowData) getPsHealthState(request SunGrowDataRequest) SunGrowDataR
 	return response
 }
 
+// @TODO - Figure out how to properly flatten some of these "two field" arrays.
 func (sg *SunGrowData) powerDevicePointList(request SunGrowDataRequest) SunGrowDataResponse {
 	var response SunGrowDataResponse
 	for range Only.Once {
@@ -732,7 +733,6 @@ func (sg *SunGrowData) powerDevicePointList(request SunGrowDataRequest) SunGrowD
 	}
 	return response
 }
-
 
 func (sg *SunGrowData) getPsWeatherList(request SunGrowDataRequest) SunGrowDataResponse {
 	var response SunGrowDataResponse
@@ -756,12 +756,13 @@ func (sg *SunGrowData) getPsWeatherList(request SunGrowDataRequest) SunGrowDataR
 	return response
 }
 
+// @TODO - Not working
 func (sg *SunGrowData) getRemoteUpgradeTaskList(request SunGrowDataRequest) SunGrowDataResponse {
 	var response SunGrowDataResponse
 	for range Only.Once {
 		ep := sg.SunGrow.GetByStruct(
 			"AppService.getRemoteUpgradeTaskList",
-			getRemoteUpgradeTaskList.RequestData{ },	// PsId: request.PsId },
+			getRemoteUpgradeTaskList.RequestData{ PsIdList: "1171348,1121412"},	// PsId: request.PsId },
 			api.DefaultTimeout,
 		)
 
