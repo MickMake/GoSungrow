@@ -15,11 +15,13 @@ type Areas map[AreaName]AreaStruct // TypeEndPoints		// Map of EndPoints by area
 type AreaName string
 type AreaNames []AreaName
 
+
 func (an *Areas) Exists(area string) bool {
 	var ok bool
 	_, ok = (*an)[AreaName(area)]
 	return ok
 }
+
 func (an *Areas) NotExists(area string) bool {
 	return !an.Exists(area)
 }
@@ -101,6 +103,35 @@ func (an *Areas) GetEndPoint(area AreaName, endpoint EndPointName) EndPoint {
 
 	}
 	return ret
+}
+
+func (an *Areas) RequestArgs(area AreaName, endpoint EndPointName) map[string]string {
+	var args map[string]string
+	for range Only.Once {
+		ep := an.GetEndPoint(area, endpoint)
+		if ep.IsError() {
+			break
+		}
+
+		args = ep.GetRequestArgNames()
+	}
+	return args
+}
+
+func (an *Areas) RequestRequiresArgs(area AreaName, endpoint EndPointName) bool {
+	var yes bool
+	for range Only.Once {
+		ep := an.GetEndPoint(area, endpoint)
+		if ep.IsError() {
+			break
+		}
+
+		req := ep.GetRequestJson()
+		if req.String() != "{}" {
+			yes = true
+		}
+	}
+	return yes
 }
 
 func (an Areas) ListAreas() {

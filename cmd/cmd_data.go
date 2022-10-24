@@ -66,7 +66,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 
 		// ********************************************************************************
 		var cmdDataGet = &cobra.Command{
-			Use:                   "get",
+			Use:                   "get < [area.]<endpoint> | <command> >",
 			Aliases:               []string{output.StringTypeTable},
 			Annotations:           map[string]string{"group": "Data"},
 			Short:                 fmt.Sprintf("Get high-level data from iSolarCloud (table)"),
@@ -88,11 +88,11 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args:                  cobra.MinimumNArgs(0),
 		}
 		c.SelfCmd.AddCommand(cmdDataGet)
-		cmdDataGet.Example = cmdHelp.PrintExamples(cmdDataGet, "[area.]<endpoint>")
+		cmdDataGet.Example = cmdHelp.PrintExamples(cmdDataGet, "queryDeviceList", "WebAppService.showPSView", "stats")
 
 		// ********************************************************************************
 		var cmdDataRaw = &cobra.Command{
-			Use:                   output.StringTypeRaw,
+			Use:                   output.StringTypeRaw + " < [area.]<endpoint> | <command> >",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
 			Short:                 fmt.Sprintf("Get high-level data from iSolarCloud (raw)"),
@@ -118,7 +118,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 
 		// ********************************************************************************
 		var cmdDataJson = &cobra.Command{
-			Use:                   output.StringTypeJson,
+			Use:                   output.StringTypeJson + " < [area.]<endpoint> | <command> >",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
 			Short:                 fmt.Sprintf("Get high-level data from iSolarCloud (json)"),
@@ -140,11 +140,11 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args:                  cobra.MinimumNArgs(0),
 		}
 		c.SelfCmd.AddCommand(cmdDataJson)
-		cmdDataJson.Example = cmdHelp.PrintExamples(cmdDataJson, "[area.]<endpoint>")
+		cmdDataJson.Example = cmdHelp.PrintExamples(cmdDataJson, "queryDeviceList", "WebAppService.showPSView", "stats")
 
 		// ********************************************************************************
 		var cmdDataCsv = &cobra.Command{
-			Use:                   output.StringTypeCsv,
+			Use:                   output.StringTypeCsv + " < [area.]<endpoint> | <command> >",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
 			Short:                 fmt.Sprintf("Get high-level data from iSolarCloud (json)"),
@@ -166,11 +166,11 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args:                  cobra.MinimumNArgs(0),
 		}
 		c.SelfCmd.AddCommand(cmdDataCsv)
-		cmdDataCsv.Example = cmdHelp.PrintExamples(cmdDataCsv, "[area.]<endpoint>")
+		cmdDataCsv.Example = cmdHelp.PrintExamples(cmdDataCsv, "queryDeviceList", "WebAppService.showPSView", "stats")
 
 		// ********************************************************************************
 		var cmdDataGraph = &cobra.Command{
-			Use:                   output.StringTypeGraph,
+			Use:                   output.StringTypeGraph + " < [area.]<endpoint> | <command> >",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
 			Short:                 fmt.Sprintf("Get high-level data from iSolarCloud (graph)"),
@@ -192,7 +192,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args:                  cobra.MinimumNArgs(0),
 		}
 		c.SelfCmd.AddCommand(cmdDataGraph)
-		cmdDataGraph.Example = cmdHelp.PrintExamples(cmdDataGraph, "[area.]<endpoint> ''")
+		cmdDataGraph.Example = cmdHelp.PrintExamples(cmdDataGraph, "queryDeviceList", "WebAppService.showPSView", "stats")
 	}
 	return c.SelfCmd
 }
@@ -212,11 +212,18 @@ func SplitArg(arg string) []string {
 	return ret
 }
 
+const (
+	argEndpoints = 0
+	argPsIds = 1
+	argDate = 2
+	argReportType = 3
+	argFaultTypeCode = 4
+)
 func (c *CmdData) GetEndpoints(cmd *cobra.Command, args []string) error {
 	// endpoints string, psIds string, date string
 	for range Only.Once {
 		cmds.Api.SunGrow.SetOutputType(cmd.Use)
-		args = cmdConfig.FillArray(4, args)
+		args = cmdConfig.FillArray(5, args)
 
 		for i := range args {
 			if args[i] == "." {
@@ -225,26 +232,31 @@ func (c *CmdData) GetEndpoints(cmd *cobra.Command, args []string) error {
 		}
 
 		var e []string
-		if args[0] != "" {
-			e = SplitArg(args[0])
+		if args[argEndpoints] != "" {
+			e = SplitArg(args[argEndpoints])
 		}
 
 		var p []valueTypes.Integer
-		for _, psId := range SplitArg(args[1]) {
+		for _, psId := range SplitArg(args[argPsIds]) {
 			if psId == "" {
 				continue
 			}
 			p = append(p, valueTypes.SetIntegerString(psId))
 		}
 
-		d := valueTypes.SetDateTimeString(args[2])
+		d := valueTypes.SetDateTimeString(args[argDate])
 
-		rt := args[3]
+		rt := args[argReportType]
 		if rt == "" {
 			rt = "1"
 		}
 
-		c.Error = cmds.Api.SunGrow.GetEndpoints(e, p, *d, rt)
+		ftc := args[argFaultTypeCode]
+		// if ftc == "" {
+		// 	ftc = "1"
+		// }
+
+		c.Error = cmds.Api.SunGrow.GetEndpoints(e, p, *d, rt, ftc)
 	}
 
 	return c.Error

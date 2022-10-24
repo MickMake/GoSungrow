@@ -4,8 +4,8 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/powerStationService/queryAllPsIdAndName"
@@ -25,9 +25,9 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		PsID   valueTypes.Integer  `json:"ps_id"`
-		PsName string `json:"ps_name"`
-	} `json:"pageList"`
+		PsId   valueTypes.Integer `json:"ps_id"`
+		PsName valueTypes.String  `json:"ps_name"`
+	} `json:"pageList" PointNameFromChild:"PsId" PointNameFromAppend:"false"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -41,30 +41,14 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
+		pkg := apiReflect.GetName("", *e)
+		dt := valueTypes.NewDateTime(valueTypes.Now)
+		// name := pkg + "." + e.Request.PsId.String()
+		entries.StructToPoints(e.Response.ResultData, pkg, "system", dt)
 	}
 
 	return entries

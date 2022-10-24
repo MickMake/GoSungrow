@@ -31,6 +31,7 @@ type EndPoint interface {
 	IsRequestValid() error
 	RequestString() string
 	RequestFingerprint() string
+	GetRequestArgNames() map[string]string
 
 	SetResponse([]byte) EndPoint // EndPointStruct
 	ResponseRef() interface{}
@@ -45,4 +46,5 @@ type EndPoint interface {
 	// GetDataTable() output.Table
 	GetEndPointData() DataMap
 	GetEndPointDataTable() output.Table
+	SetFilenamePrefix(format string, args ...interface{}) string
 }

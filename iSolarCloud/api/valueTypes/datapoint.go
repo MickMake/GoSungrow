@@ -11,12 +11,11 @@ type DataPoint struct {
 	endPoint string `json:"end_point,omitempty"`
 	pointId  PointId `json:"point_id,omitempty"`
 	Valid   bool `json:"valid"`
+	Error   error `json:"-"`
 }
 
 // UnmarshalJSON - Convert JSON to value
 func (t *DataPoint) UnmarshalJSON(data []byte) error {
-	var err error
-
 	for range Only.Once {
 		t.Valid = false
 
@@ -26,32 +25,33 @@ func (t *DataPoint) UnmarshalJSON(data []byte) error {
 
 		var r string
 		// Store result from string
-		err = json.Unmarshal(data, &r)
-		if err == nil {
+		t.Error = json.Unmarshal(data, &r)
+		if t.Error == nil {
 			t.SetEndPoint(r)
 			break
 		}
+
+		t.SetEndPoint(string(data))
 	}
 
-	return err
+	return t.Error
 }
 
 // MarshalJSON - Convert value to JSON
 func (t DataPoint) MarshalJSON() ([]byte, error) {
 	var data []byte
-	var err error
 
 	for range Only.Once {
 		t.Valid = false
 
-		data, err = json.Marshal(t.String())
-		if err != nil {
+		data, t.Error = json.Marshal(t.String())
+		if t.Error != nil {
 			break
 		}
 		t.Valid = true
 	}
 
-	return data, err
+	return data, t.Error
 }
 
 func (t DataPoint) EndPoint() string {

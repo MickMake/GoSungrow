@@ -21,6 +21,7 @@ type UnitValue struct {
 
 	// isFloat     bool
 	Valid       bool `json:"valid"`
+	Error       error `json:"-"`
 }
 
 var zero = int64(0)
@@ -41,8 +42,8 @@ func (t *UnitValue) UnitValueFix() UnitValue {
 			t.SetFloat(fv)
 			t.SetUnit("k" + t.UnitValue)
 
-			// fv, err := strconv.ParseFloat(value, 64)
-			// if err == nil {
+			// fv, dt.Error := strconv.ParseFloat(value, 64)
+			// if dt.Error == nil {
 			// 	fv = fv / 1000
 			// 	value, _ = DivideByThousand(value)
 			// 	UnitValue = "k" + UnitValue
@@ -54,8 +55,6 @@ func (t *UnitValue) UnitValueFix() UnitValue {
 
 // UnmarshalJSON - Convert JSON to value
 func (t *UnitValue) UnmarshalJSON(data []byte) error {
-	var err error
-
 	for range Only.Once {
 		t.Valid = false
 
@@ -68,8 +67,8 @@ func (t *UnitValue) UnmarshalJSON(data []byte) error {
 			Value string `json:"value"`
 		}
 		// Store result from JSON string
-		err = json.Unmarshal(data, &resString)
-		if err == nil {
+		t.Error = json.Unmarshal(data, &resString)
+		if t.Error == nil {
 			t.SetString(resString.Value)
 			t.SetUnit(resString.Unit)
 			t.UnitValueFix()
@@ -81,8 +80,8 @@ func (t *UnitValue) UnmarshalJSON(data []byte) error {
 			Value int64  `json:"value"`
 		}
 		// Store result from JSON string
-		err = json.Unmarshal(data, &resInteger)
-		if err == nil {
+		t.Error = json.Unmarshal(data, &resInteger)
+		if t.Error == nil {
 			t.SetInteger(resInteger.Value)
 			t.SetUnit(resInteger.Unit)
 			t.UnitValueFix()
@@ -94,8 +93,8 @@ func (t *UnitValue) UnmarshalJSON(data []byte) error {
 			Value float64 `json:"value"`
 		}
 		// Store result from JSON string
-		err = json.Unmarshal(data, &resFloat)
-		if err == nil {
+		t.Error = json.Unmarshal(data, &resFloat)
+		if t.Error == nil {
 			t.SetFloat(resFloat.Value)
 			t.SetUnit(resFloat.Unit)
 			t.UnitValueFix()
@@ -103,27 +102,26 @@ func (t *UnitValue) UnmarshalJSON(data []byte) error {
 		}
 	}
 
-	return err
+	return t.Error
 }
 
 // MarshalJSON - Convert value to JSON
 func (t UnitValue) MarshalJSON() ([]byte, error) {
 	var data []byte
-	var err error
 
 	for range Only.Once {
 		t.Valid = false
 
 		if t.float64 != nil {
 			// Store result to JSON string
-			data, err = json.Marshal(&struct {
+			data, t.Error = json.Marshal(&struct {
 				Unit  string  `json:"unit"`
 				Value float64 `json:"value"`
 			}{
 				Unit:  t.UnitValue,
 				Value: *t.float64,
 			})
-			if err != nil {
+			if t.Error != nil {
 				break
 			}
 
@@ -133,28 +131,28 @@ func (t UnitValue) MarshalJSON() ([]byte, error) {
 
 		if t.int64 != nil {
 			// Store result to JSON string
-			data, err = json.Marshal(&struct {
+			data, t.Error = json.Marshal(&struct {
 				Unit  string `json:"unit"`
 				Value int64  `json:"value"`
 			}{
 				Unit:  t.UnitValue,
 				Value: *t.int64,
 			})
-			if err != nil {
+			if t.Error != nil {
 				break
 			}
 		}
 
 		if t.bool != nil {
 			// Store result to JSON string
-			data, err = json.Marshal(&struct {
+			data, t.Error = json.Marshal(&struct {
 				Unit  string `json:"unit"`
 				Value bool   `json:"value"`
 			}{
 				Unit:  t.UnitValue,
 				Value: *t.bool,
 			})
-			if err != nil {
+			if t.Error != nil {
 				break
 			}
 		}
@@ -162,7 +160,7 @@ func (t UnitValue) MarshalJSON() ([]byte, error) {
 		t.Valid = true
 	}
 
-	return data, err
+	return data, t.Error
 }
 
 func (t UnitValue) Value() float64 {
@@ -301,16 +299,18 @@ func (t *UnitValue) SetString(value string) UnitValue {
 		}
 
 		if strings.Contains(value, ".") {
-			v, err := strconv.ParseFloat(t.StringValue, 64)
-			if err != nil {
+			var v float64
+			v, t.Error = strconv.ParseFloat(t.StringValue, 64)
+			if t.Error != nil {
 				break
 			}
 			t.SetFloat(v)
 			break
 		}
 
-		v, err := strconv.Atoi(t.StringValue)
-		if err != nil {
+		var v int
+		v, t.Error = strconv.Atoi(t.StringValue)
+		if t.Error != nil {
 			break
 		}
 		t.SetInteger(int64(v))

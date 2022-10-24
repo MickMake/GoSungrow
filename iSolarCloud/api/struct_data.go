@@ -3,24 +3,26 @@ package api
 import (
 	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/output"
 	"GoSungrow/iSolarCloud/api/valueTypes"
 	"encoding/json"
 	"fmt"
 	datatable "go.pennock.tech/tabular/auto"
+	"sort"
 	"strings"
 	"time"
 )
 
 
-const (
-	UpdateFreqInstant = "instant"
-	UpdateFreq5Mins   = "5mins"
-	UpdateFreqBoot    = "boot"
-	UpdateFreqDay   = "daily"
-	UpdateFreqMonth = "monthly"
-	UpdateFreqYear  = "yearly"
-	UpdateFreqTotal   = "total"
-)
+// const (
+// 	UpdateFreqInstant = "instant"
+// 	UpdateFreq5Mins   = "5mins"
+// 	UpdateFreqBoot    = "boot"
+// 	UpdateFreqDay   = "daily"
+// 	UpdateFreqMonth = "monthly"
+// 	UpdateFreqYear  = "yearly"
+// 	UpdateFreqTotal   = "total"
+// )
 
 
 type DataMap struct {
@@ -51,11 +53,6 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 				continue
 			}
 
-			// if strings.Contains(f.PointId, "p83095") || strings.Contains(f.PointId, "es_total_disenergy") {
-			// 	fmt.Printf("F:%v\n", f)
-			// 	fmt.Println("")
-			// }
-
 			if f.PointName == "" {
 				f.PointName = valueTypes.PointToName(f.PointId)
 			}
@@ -74,22 +71,22 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 				continue
 			}
 
-			switch f.PointUpdateFreq {
-				case "UpdateFreqInstant":
-					f.PointUpdateFreq = UpdateFreqInstant
-				case "UpdateFreq5Mins":
-					f.PointUpdateFreq = UpdateFreq5Mins
-				case "UpdateFreqBoot":
-					f.PointUpdateFreq = UpdateFreqBoot
-				case "UpdateFreqDay":
-					f.PointUpdateFreq = UpdateFreqDay
-				case "UpdateFreqMonth":
-					f.PointUpdateFreq = UpdateFreqMonth
-				case "UpdateFreqYear":
-					f.PointUpdateFreq = UpdateFreqYear
-				case "UpdateFreqTotal":
-					f.PointUpdateFreq = UpdateFreqTotal
-			}
+			// switch f.PointUpdateFreq {
+			// 	case "UpdateFreqInstant":
+			// 		f.PointUpdateFreq = UpdateFreqInstant
+			// 	case "UpdateFreq5Mins":
+			// 		f.PointUpdateFreq = UpdateFreq5Mins
+			// 	case "UpdateFreqBoot":
+			// 		f.PointUpdateFreq = UpdateFreqBoot
+			// 	case "UpdateFreqDay":
+			// 		f.PointUpdateFreq = UpdateFreqDay
+			// 	case "UpdateFreqMonth":
+			// 		f.PointUpdateFreq = UpdateFreqMonth
+			// 	case "UpdateFreqYear":
+			// 		f.PointUpdateFreq = UpdateFreqYear
+			// 	case "UpdateFreqTotal":
+			// 		f.PointUpdateFreq = UpdateFreqTotal
+			// }
 
 			var when valueTypes.DateTime
 			if !f.PointTimestamp.IsZero() {
@@ -281,30 +278,6 @@ func (dm *DataMap) AppendMap(add DataMap) {
 
 func (dm *DataMap) Add(de DataEntry) {
 	for range Only.Once {
-		// DataEntry {
-		// 	Point:      Point{
-		// 		Parents:   ParentDevices{},
-		// 		Id:        valueTypes.PointId{},
-		// 		GroupName: "",
-		// 		Name:      "",
-		// 		Unit:      "",
-		// 		UpdateFreq:  "",
-		// 		ValueType: "",
-		// 		Valid:     false,
-		// 		States:    nil,
-		// 	},
-		// 	Date:       valueTypes.DateTime{},
-		// 	EndPoint:   "",
-		// 	FullId:     valueTypes.DataPoint{},
-		// 	Parent:     ParentDevice{},
-		// 	Value:      "",
-		// 	ValueFloat: 0,
-		// 	ValueBool:  false,
-		// 	Index:      0,
-		// 	Valid:      false,
-		// 	Hide:       false,
-		// }
-
 		// fmt.Printf("DEBUG DataMap.Add() %s - Value(%s):'%s' Parent:'%s'\n", de.FullId(), de.Point.ValueType, de.Value, de.Parent)
 		endpoint := de.FullId()
 		de.Index = len(dm.Order)
@@ -372,6 +345,59 @@ func (dm *DataMap) Print() {
 		fmt.Println(ret)
 	}
 }
+
+func (dm *DataMap) Sort() []string {
+	var sorted []string
+
+	for range Only.Once {
+		for p := range dm.Map {
+			sorted = append(sorted, p)
+		}
+		sort.Strings(sorted)
+	}
+	return sorted
+}
+
+func (dm *DataMap) CreateTable() output.Table {
+	table := output.NewTable()
+
+	for range Only.Once {
+		for _, p := range dm.Sort() {
+			_ = table.SetHeader(
+				"Date",
+				"Point Id",
+				"Value",
+				"Unit",
+				"Unit Type",
+				"Group Name",
+				"Description",
+				"Update Freq",
+			)
+
+			entries := dm.Map[p].Entries
+			for _, de := range entries {
+				if de.Hide {
+					continue
+				}
+
+				_ = table.AddRow(
+					de.Date.Format(valueTypes.DateTimeLayout),
+					p,
+					de.Value,
+					de.Point.Unit,
+					de.Point.ValueType,
+					de.Point.GroupName,
+					de.Point.Description,
+					de.Point.UpdateFreq,
+				)
+			}
+		}
+	}
+
+	return table
+}
+
+
 
 func GetPercent(value float64, max float64) float64 {
 	if max == 0 {

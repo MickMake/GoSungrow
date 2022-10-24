@@ -4,8 +4,8 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/powerStationService/getAreaList"
@@ -34,43 +34,18 @@ type ResultData struct {
 		P83049            valueTypes.UnitValue `json:"p83049"`
 		P83050            valueTypes.UnitValue `json:"p83050"`
 		P83051            valueTypes.UnitValue `json:"p83051"`
-		PlanMonth         string        `json:"plan_month"`
+		PlanMonth         valueTypes.String    `json:"plan_month"`
 		StationCount      valueTypes.Integer   `json:"station_count"`
 		TodayEnergy       valueTypes.UnitValue `json:"today_energy"`
 		TotalEnergy       valueTypes.UnitValue `json:"total_energy"`
-	} `json:"pageList"`
-	RowCount valueTypes.Integer `json:"rowCount"`
+	} `json:"pageList" PointId:"page_list" PointNameFromChild:"OrgID" PointNameFromAppend:"false"`
+	RowCount valueTypes.Integer `json:"rowCount" PointIgnore:"true"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	// switch {
-	// case e.Dummy == "":
-	//	break
-	// default:
-	//	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	// }
 	return err
 }
-
-// type DecodeResultData ResultData
-//
-// func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-// }
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

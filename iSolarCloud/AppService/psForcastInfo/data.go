@@ -32,29 +32,29 @@ type ResultData struct {
 		City              valueTypes.String   `json:"city"`
 		Code              valueTypes.Integer  `json:"code"`
 		CodeName          valueTypes.String   `json:"code_name"`
-		DateTime          valueTypes.DateTime `json:"date_time"`
+		DateTime          valueTypes.DateTime `json:"date_time" PointIgnore:"true"`
 		Direction         valueTypes.Float    `json:"direction"`
-		High              valueTypes.Float    `json:"high"`
-		Highc             valueTypes.Float    `json:"highc"`
+		High              valueTypes.Float    `json:"high" PointUnit:"F"`
+		Highc             valueTypes.Float    `json:"highc" PointUnit:"C"`
 		Humidity          valueTypes.Float    `json:"humidity"`
-		Low               valueTypes.Float    `json:"low"`
-		Lowc              valueTypes.Float    `json:"lowc"`
-		Pressure          valueTypes.Float    `json:"pressure"`
+		Low               valueTypes.Float    `json:"low PointUnit:"F""`
+		Lowc              valueTypes.Float    `json:"lowc" PointUnit:"C"`
+		Pressure          valueTypes.Float    `json:"pressure" PointUnit:"hPa"`
 		PsKnowledge       valueTypes.String   `json:"ps_knowledge"`
 		Rising            valueTypes.Bool     `json:"rising"`
 
-		Speed             valueTypes.Float    `json:"speed" PointUnitFrom:"speed_unit"`
+		Speed             valueTypes.Float    `json:"speed" PointUnitFrom:"SpeedUnit"`
 		SpeedUnit         valueTypes.String   `json:"speed_unit"`
 
-		SpeedOriginal     valueTypes.Float    `json:"speed_original" PointUnitFrom:"speed_original_unit"`
-		SpeedOriginalUnit valueTypes.String   `json:"speed_original_unit"`
+		SpeedOriginal     valueTypes.Float    `json:"speed_original" PointUnitFrom:"SpeedOriginalUnit"`
+		SpeedOriginalUnit valueTypes.String   `json:"speed_original_unit" PointIgnore:"true"`
 
 		Sunrise           valueTypes.Time     `json:"sunrise"`
 		Sunset            valueTypes.Time     `json:"sunset"`
 		Visibility        valueTypes.Float    `json:"visibility"`
 		WeatherDesc       valueTypes.String   `json:"weather_desc"`
 		WeatherURL        valueTypes.String   `json:"weather_url"`
-	} `json:"areaForcastList"`
+	} `json:"areaForcastList" PointNameFromChild:"DateTime" PointNameDateFormat:"20060102"`
 	StationsCityCode []struct {
 		City   valueTypes.String  `json:"city"`
 		PsID   valueTypes.Integer `json:"ps_id"`

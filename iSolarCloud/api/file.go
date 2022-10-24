@@ -12,7 +12,7 @@ import (
 )
 
 
-func (ep *EndPointStruct) SetFilenamePrefix(format string, args ...interface{}) string {
+func (ep *EndPointStruct) ApiSetFilenamePrefix(format string, args ...interface{}) string {
 	if format != "" {
 		ep.FileNamePrefix = fmt.Sprintf(format, args...)
 		// ep.FileNamePrefix = fmt.Sprintf("%s_%s-%s", ep.Area, ep.Name, ep.FileNamePrefix)
@@ -25,21 +25,21 @@ func (ep *EndPointStruct) SetFilenamePrefix(format string, args ...interface{}) 
 
 func (ep *EndPointStruct) GetCsvFilename() string {
 	if ep.FileNamePrefix == "" {
-		ep.SetFilenamePrefix("")
+		ep.ApiSetFilenamePrefix("")
 	}
 	return ep.FileNamePrefix + ".csv"
 }
 
 func (ep *EndPointStruct) GetJsonFilename() string {
 	if ep.FileNamePrefix == "" {
-		ep.SetFilenamePrefix("")
+		ep.ApiSetFilenamePrefix("")
 	}
 	return ep.FileNamePrefix + ".json"
 }
 
 func (ep *EndPointStruct) GetImageFilename() string {
 	if ep.FileNamePrefix == "" {
-		ep.SetFilenamePrefix("")
+		ep.ApiSetFilenamePrefix("")
 	}
 	return ep.FileNamePrefix + ".png"
 }

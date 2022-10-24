@@ -202,24 +202,6 @@ func (e *EndPoint) GetData() api.DataMap {
 		dt := valueTypes.NewDateTime(valueTypes.Now)
 		name := pkg + "." + e.Request.PsId.String()
 		entries.StructToPoints(e.Response.ResultData, name, e.Request.PsId.String(), dt)
-
-		// pkg := apiReflect.GetName("", *e)
-		// entries.StructToPoints(e.Response.ResultData, pkg, e.Request.PsId.String(), valueTypes.NewDateTime(""))
-		//
-		// s := valueTypes.SizeOfArrayLength(e.Response.ResultData.DataList)
-		// for _, v := range e.Response.ResultData.DataList {
-		// 	entries.StructToPoints(v, api.JoinWithDots(s, valueTypes.DateTimeLayoutDay, pkg, "DataList", v.PsId, v.DateId), v.PsId.String(), valueTypes.NewDateTime(""))
-		// }
-		//
-		// s = valueTypes.SizeOfArrayLength(e.Response.ResultData.Info)
-		// for i, v := range e.Response.ResultData.Info {
-		// 	entries.StructToPoints(v, api.JoinWithDots(s, valueTypes.DateTimeLayoutDay, pkg, "Info", v.PsId, i), v.PsId.String(), valueTypes.NewDateTime(""))
-		// }
-		//
-		// s = valueTypes.SizeOfArrayLength(e.Response.ResultData.Total)
-		// for i, v := range e.Response.ResultData.Total {
-		// 	entries.StructToPoints(v, api.JoinWithDots(s, valueTypes.DateTimeLayoutDay, pkg, "Total", v.PsId, i), v.PsId.String(), valueTypes.NewDateTime(""))
-		// }
 	}
 
 	return entries

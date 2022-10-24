@@ -14,12 +14,11 @@ type PointId struct {
 	int64  `json:"integer,omitempty"`
 	isInt  bool
 	Valid  bool `json:"valid"`
+	Error  error `json:"-"`
 }
 
 // UnmarshalJSON - Convert JSON to value
 func (t *PointId) UnmarshalJSON(data []byte) error {
-	var err error
-
 	for range Only.Once {
 		t.Valid = false
 
@@ -28,38 +27,39 @@ func (t *PointId) UnmarshalJSON(data []byte) error {
 		}
 
 		// Store result from int
-		err = json.Unmarshal(data, &t.int64)
-		if err == nil {
+		t.Error = json.Unmarshal(data, &t.int64)
+		if t.Error == nil {
 			t.SetValue(t.int64)
 			break
 		}
 
 		// Store result from string
-		err = json.Unmarshal(data, &t.string)
-		if err == nil {
+		t.Error = json.Unmarshal(data, &t.string)
+		if t.Error == nil {
 			t.SetString(t.string)
 			break
 		}
+
+		t.SetString(string(data))
 	}
 
-	return err
+	return t.Error
 }
 
 // MarshalJSON - Convert value to JSON
 func (t PointId) MarshalJSON() ([]byte, error) {
 	var data []byte
-	var err error
 
 	for range Only.Once {
 		if t.isInt {
-			data, err = json.Marshal(t.int64)
+			data, t.Error = json.Marshal(t.int64)
 			break
 		}
 
-		data, err = json.Marshal(t.string)
+		data, t.Error = json.Marshal(t.string)
 	}
 
-	return data, err
+	return data, t.Error
 }
 
 func (t PointId) Value() int64 {
@@ -96,10 +96,9 @@ func (t *PointId) SetString(value string) PointId {
 		}
 		t.Valid = true
 
-		var err error
 		var v int
-		v, err = strconv.Atoi(t.string)
-		if err != nil {
+		v, t.Error = strconv.Atoi(t.string)
+		if t.Error != nil {
 			break
 		}
 		t.int64 = int64(v)
@@ -125,8 +124,8 @@ func (t *PointId) SetValue(value int64) PointId {
 func (t *PointId) Fix() PointId {
 	for range Only.Once {
 		p := strings.TrimPrefix(t.string, "p")
-		_, err := strconv.ParseInt(p, 10, 64)
-		if err != nil {
+		_, t.Error = strconv.ParseInt(p, 10, 64)
+		if t.Error != nil {
 			t.Valid = false
 			break
 		}

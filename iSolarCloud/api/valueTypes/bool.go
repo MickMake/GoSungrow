@@ -11,11 +11,11 @@ type Bool struct {
 	string `json:"string,omitempty"`
 	bool   `json:"bool,omitempty"`
 	Valid   bool `json:"valid"`
+	Error   error `json:"-"`
 }
 
 // UnmarshalJSON - Convert JSON to value
 func (t *Bool) UnmarshalJSON(data []byte) error {
-	var err error
 
 	for range Only.Once {
 		t.Valid = false
@@ -26,49 +26,50 @@ func (t *Bool) UnmarshalJSON(data []byte) error {
 
 		var ret2 int64
 		// Store result from int
-		err = json.Unmarshal(data, &ret2)
-		if err == nil {
+		t.Error = json.Unmarshal(data, &ret2)
+		if t.Error == nil {
 			t.SetInteger(ret2)
 			break
 		}
 
 		var ret1 bool
 		// Store result from int
-		err = json.Unmarshal(data, &ret1)
-		if err == nil {
+		t.Error = json.Unmarshal(data, &ret1)
+		if t.Error == nil {
 			t.SetValue(ret1)
 			break
 		}
 
 		var ret3 string
 		// Store result from string
-		err = json.Unmarshal(data, &ret3)
-		if err == nil {
+		t.Error = json.Unmarshal(data, &ret3)
+		if t.Error == nil {
 			t.SetString(ret3)
 			break
 		}
+
+		t.SetString(string(data))
 	}
 
-	return err
+	return t.Error
 }
 
 // MarshalJSON - Convert value to JSON
 func (t Bool) MarshalJSON() ([]byte, error) {
 	var data []byte
-	var err error
 
 	for range Only.Once {
 		t.Valid = false
 
-		data, err = json.Marshal(t.bool)
-		if err != nil {
+		data, t.Error = json.Marshal(t.bool)
+		if t.Error != nil {
 			break
 		}
 		t.Valid = true
 		// t.string = strconv.FormatFloat(t.bool, 'f', -1, 64)
 	}
 
-	return data, err
+	return data, t.Error
 }
 
 func (t Bool) Value() bool {

@@ -422,3 +422,13 @@ func (e EndPoint) GetDataTable() output.Table {
 	}
 	return table
 }
+
+// SetFilenamePrefix - Produce filename based on area and endpoint name.
+func (e EndPoint) SetFilenamePrefix(format string, args ...interface{}) string {
+	return e.ApiSetFilenamePrefix(format, args...)
+}
+
+// GetRequestArgNames -
+func (e EndPoint) GetRequestArgNames() map[string]string {
+	return e.ApiGetRequestArgNames(e.Request.RequestData)
+}

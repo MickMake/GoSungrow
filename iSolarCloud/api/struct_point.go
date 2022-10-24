@@ -2,9 +2,9 @@ package api
 
 import (
 	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
 	"fmt"
-
 	"strings"
 	"time"
 )
@@ -123,35 +123,35 @@ func (p Point) String() string {
 }
 
 func (p Point) IsInstant() bool {
-	if p.UpdateFreq == UpdateFreqInstant {
+	if p.UpdateFreq == apiReflect.UpdateFreqInstant {
 		return true
 	}
 	return false
 }
 
 func (p Point) IsDaily() bool {
-	if p.UpdateFreq == UpdateFreqDay {
+	if p.UpdateFreq == apiReflect.UpdateFreqDay {
 		return true
 	}
 	return false
 }
 
 func (p Point) IsMonthly() bool {
-	if p.UpdateFreq == UpdateFreqMonth {
+	if p.UpdateFreq == apiReflect.UpdateFreqMonth {
 		return true
 	}
 	return false
 }
 
 func (p Point) IsYearly() bool {
-	if p.UpdateFreq == UpdateFreqYear {
+	if p.UpdateFreq == apiReflect.UpdateFreqYear {
 		return true
 	}
 	return false
 }
 
 func (p Point) IsTotal() bool {
-	if p.UpdateFreq == UpdateFreqTotal {
+	if p.UpdateFreq == apiReflect.UpdateFreqTotal {
 		return true
 	}
 	return false

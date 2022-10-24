@@ -4,8 +4,8 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/powerStationService/energyTrend"
@@ -25,17 +25,17 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	Echartunit string `json:"echartunit"`
-	EndTime    string `json:"endTime"`
+	Echartunit valueTypes.String   `json:"echartunit" PointId:"echart_unit"`
+	EndTime    valueTypes.DateTime `json:"endTime" PointId:"end_time"`
 	EnergyMap  struct {
-		ValStr string `json:"valStr"`
-	} `json:"energyMap"`
-	Energyunit string `json:"energyunit"`
+		ValStr valueTypes.String `json:"valStr" PointId:"val_str"`
+	} `json:"energyMap" PointId:"energy_map"`
+	Energyunit valueTypes.String `json:"energyunit" PointId:"energy_unit"`
 	PowerMap   struct {
-		Dates  []interface{} `json:"dates"`
-		Units  string        `json:"units"`
-		ValStr string        `json:"valStr"`
-	} `json:"powerMap"`
+		Dates  []valueTypes.DateTime `json:"dates"`
+		Units  valueTypes.String     `json:"units"`
+		ValStr valueTypes.String     `json:"valStr" PointId:"val_str"`
+	} `json:"powerMap" PointId:"power_map"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -49,31 +49,15 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
-
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
+		pkg := apiReflect.GetName("", *e)
+		dt := valueTypes.NewDateTime(valueTypes.Now)
+		// name := pkg + "." + e.Request.PsId.String()
+		entries.StructToPoints(e.Response.ResultData, pkg, "system", dt)
 	}
 
 	return entries

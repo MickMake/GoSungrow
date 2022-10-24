@@ -10,13 +10,12 @@ import (
 type Integer struct {
 	string `json:"string,omitempty"`
 	int64  `json:"integer,omitempty"`
-	Valid   bool `json:"valid"`
+	Valid  bool  `json:"valid"`
+	Error  error `json:"-"`
 }
 
 // UnmarshalJSON - Convert JSON to value
 func (t *Integer) UnmarshalJSON(data []byte) error {
-	var err error
-
 	for range Only.Once {
 		t.Valid = false
 
@@ -25,40 +24,40 @@ func (t *Integer) UnmarshalJSON(data []byte) error {
 		}
 
 		// Store result from int
-		err = json.Unmarshal(data, &t.int64)
-		if err == nil {
+		t.Error = json.Unmarshal(data, &t.int64)
+		if t.Error == nil {
 			t.SetValue(t.int64)
 			break
 		}
 
 		// Store result from string
-		err = json.Unmarshal(data, &t.string)
-		if err == nil {
+		t.Error = json.Unmarshal(data, &t.string)
+		if t.Error == nil {
 			t.SetString(t.string)
 			break
 		}
+
+		t.SetString(string(data))
 	}
 
-	return err
+	return t.Error
 }
 
 // MarshalJSON - Convert value to JSON
 func (t Integer) MarshalJSON() ([]byte, error) {
 	var data []byte
-	var err error
-
 	for range Only.Once {
 		t.Valid = false
 
-		data, err = json.Marshal(t.int64)
-		if err != nil {
+		data, t.Error = json.Marshal(t.int64)
+		if t.Error != nil {
 			break
 		}
 		t.Valid = true
 		// t.string = strconv.FormatInt(t.int64, 10)
 	}
 
-	return data, err
+	return data, t.Error
 }
 
 func (t Integer) Value() int64 {
@@ -91,10 +90,9 @@ func (t *Integer) SetString(value string) Integer {
 			break
 		}
 
-		var err error
 		var v int
-		v, err = strconv.Atoi(t.string)
-		if err != nil {
+		v, t.Error = strconv.Atoi(t.string)
+		if t.Error != nil {
 			break
 		}
 		t.int64 = int64(v)
@@ -130,12 +128,11 @@ type Count struct {
 	string `json:"string,omitempty"`
 	int64  `json:"integer,omitempty"`
 	Valid   bool `json:"valid"`
+	Error   error `json:"-"`
 }
 
 // UnmarshalJSON - Convert JSON to value
 func (t *Count) UnmarshalJSON(data []byte) error {
-	var err error
-
 	for range Only.Once {
 		t.Valid = false
 
@@ -144,40 +141,39 @@ func (t *Count) UnmarshalJSON(data []byte) error {
 		}
 
 		// Store result from int
-		err = json.Unmarshal(data, &t.int64)
-		if err == nil {
+		t.Error = json.Unmarshal(data, &t.int64)
+		if t.Error == nil {
 			t.SetValue(t.int64)
 			break
 		}
 
 		// Store result from string
-		err = json.Unmarshal(data, &t.string)
-		if err == nil {
+		t.Error = json.Unmarshal(data, &t.string)
+		if t.Error == nil {
 			t.SetString(t.string)
 			break
 		}
 	}
 
-	return err
+	return t.Error
 }
 
 // MarshalJSON - Convert value to JSON
 func (t Count) MarshalJSON() ([]byte, error) {
 	var data []byte
-	var err error
 
 	for range Only.Once {
 		t.Valid = false
 
-		data, err = json.Marshal(t.int64)
-		if err != nil {
+		data, t.Error = json.Marshal(t.int64)
+		if t.Error != nil {
 			break
 		}
 		t.Valid = true
 		// t.string = strconv.FormatInt(t.int64, 10)
 	}
 
-	return data, err
+	return data, t.Error
 }
 
 func (t Count) Value() int64 {
@@ -210,10 +206,9 @@ func (t *Count) SetString(value string) Count {
 			break
 		}
 
-		var err error
 		var v int
-		v, err = strconv.Atoi(t.string)
-		if err != nil {
+		v, t.Error = strconv.Atoi(t.string)
+		if t.Error != nil {
 			break
 		}
 		t.int64 = int64(v)

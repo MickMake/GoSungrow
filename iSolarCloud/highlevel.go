@@ -497,7 +497,7 @@ func (sg *SunGrow) CmdDataPsDetail(psIds ...valueTypes.Integer) error {
 		data.New(sg)
 
 		for _, psId := range psIds {
-			response := data.Get("getPsDetail", SunGrowDataRequest{PsId: psId})
+			response := data.GetByApi("getPsDetail", SunGrowDataRequest{PsId: psId})
 			if response.Error != nil {
 				break
 			}
@@ -506,7 +506,7 @@ func (sg *SunGrow) CmdDataPsDetail(psIds ...valueTypes.Integer) error {
 				break
 			}
 
-			response = data.Get("getPsDetailWithPsType", SunGrowDataRequest{PsId: psId})
+			response = data.GetByApi("getPsDetailWithPsType", SunGrowDataRequest{PsId: psId})
 			if response.Error != nil {
 				break
 			}

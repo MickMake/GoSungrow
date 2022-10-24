@@ -2,6 +2,7 @@ package api
 
 import (
 	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/output"
 	"encoding/json"
 	"errors"
@@ -114,6 +115,10 @@ func (ep EndPointStruct) ResponseAsJson(raw bool, r interface{}) output.Json {
 		ret = output.GetAsPrettyJson(r)
 	}
 	return ret
+}
+
+func (ep EndPointStruct) ApiGetRequestArgNames(req interface{}) map[string]string {
+	return apiReflect.GetStructFields(req)
 }
 
 func MarshalJSON(endpoint EndPoint) ([]byte, error) {

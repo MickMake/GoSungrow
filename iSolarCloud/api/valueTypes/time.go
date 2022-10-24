@@ -18,13 +18,11 @@ var inputTimeLayout = []string{
 type Time struct {
 	string    `json:"string,omitempty"`
 	time.Time `json:"time,omitempty"`
-	Error     error
+	Error     error `json:"-"`
 }
-
 
 // UnmarshalJSON - Convert JSON to value
 func (dt *Time) UnmarshalJSON(data []byte) error {
-	var err error
 
 	for range Only.Once {
 		if len(data) == 0 {
@@ -32,37 +30,38 @@ func (dt *Time) UnmarshalJSON(data []byte) error {
 		}
 
 		// Store result from string
-		err = json.Unmarshal(data, &dt.string)
-		if err == nil {
+		dt.Error = json.Unmarshal(data, &dt.string)
+		if dt.Error == nil {
 			dt.SetString(dt.string)
 			break
 		}
 
 		// Store result from time
-		err = json.Unmarshal(data, &dt.Time)
-		if err == nil {
+		dt.Error = json.Unmarshal(data, &dt.Time)
+		if dt.Error == nil {
 			dt.SetValue(dt.Time)
 			break
 		}
+
+		dt.SetString(string(data))
 	}
 
-	return err
+	return dt.Error
 }
 
 // MarshalJSON - Convert value to JSON
 func (dt Time) MarshalJSON() ([]byte, error) {
 	var data []byte
-	var err error
 
 	for range Only.Once {
-		// data, err = json.Marshal(dt.string)
-		// if err != nil {
+		// data, dt.Error = json.Marshal(dt.string)
+		// if dt.Error != nil {
 		// 	break
 		// }
 		data = []byte("\"" + dt.Time.Format(TimeLayout) + "\"")
 	}
 
-	return data, err
+	return data, dt.Error
 }
 
 func (dt Time) Value() time.Time {

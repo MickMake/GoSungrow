@@ -2,6 +2,7 @@ package valueTypes
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 	"time"
 )
@@ -49,50 +50,60 @@ type DateTime struct {
 	string    `json:"string,omitempty"`
 	time.Time `json:"time,omitempty"`
 	DateType  string
-	Error     error
+	Error     error `json:"-"`
 }
 
 // UnmarshalJSON - Convert JSON to value
 func (dt *DateTime) UnmarshalJSON(data []byte) error {
-	var err error
-
 	for range Only.Once {
 		if len(data) == 0 {
 			break
 		}
 
 		// Store result from string
-		err = json.Unmarshal(data, &dt.string)
-		if err == nil {
+		dt.Error = json.Unmarshal(data, &dt.string)
+		if dt.Error == nil {
 			dt = dt.SetString(dt.string)
 			break
 		}
 
 		// Store result from time
-		err = json.Unmarshal(data, &dt.Time)
-		if err == nil {
+		dt.Error = json.Unmarshal(data, &dt.Time)
+		if dt.Error == nil {
 			dt = dt.SetValue(dt.Time)
 			break
 		}
+
+		for _, f := range inputDateLayout {
+			dt.Time, dt.Error = time.Parse(f, string(data))
+			if dt.Error == nil {
+				dt.string = dt.Time.Format(DateTimeLayout)
+				dt.SetDateType(string(data))
+				break
+			}
+		}
+
+		if dt.Error != nil {
+			fmt.Printf("Error:UnmarshalJSON DateTime(%s) - %s\n", string(data), dt.Error)
+		}
 	}
 
-	return err
+	return dt.Error
 }
 
 // MarshalJSON - Convert value to JSON
 func (dt DateTime) MarshalJSON() ([]byte, error) {
 	var data []byte
-	var err error
 
 	for range Only.Once {
-		// data, err = json.Marshal(dt.string)
-		// if err != nil {
+		// data, dt.Error = json.Marshal(dt.string)
+		// if dt.Error != nil {
 		// 	break
 		// }
 		data = []byte("\"" + dt.Time.Format(DateTimeLayout) + "\"")
 	}
 
-	return data, err
+	return data, dt.Error
 }
 
 func (dt DateTime) Value() time.Time {
@@ -132,6 +143,10 @@ func (dt *DateTime) SetString(value string) *DateTime {
 				dt.SetDateType(value)
 				break
 			}
+		}
+
+		if dt.Error != nil {
+			fmt.Printf("Error:SetString DateTime(%s) - %s\n", value, dt.Error)
 		}
 	}
 
@@ -230,6 +245,10 @@ func NewDateTime(value string) DateTime {
 			ret.SetDateType(value)
 			break
 		}
+	}
+
+	if ret.Error != nil {
+		fmt.Printf("Error:NewDateTime DateTime(%s) - %s\n", value, ret.Error)
 	}
 	return ret
 }

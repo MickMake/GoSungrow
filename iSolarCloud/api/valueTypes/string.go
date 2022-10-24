@@ -9,11 +9,11 @@ import (
 type String struct {
 	string `json:"string,omitempty"`
 	Valid   bool `json:"valid"`
+	Error  error `json:"-"`
 }
 
 // UnmarshalJSON - Convert JSON to value
 func (t *String) UnmarshalJSON(data []byte) error {
-	var err error
 
 	for range Only.Once {
 		t.Valid = false
@@ -23,32 +23,31 @@ func (t *String) UnmarshalJSON(data []byte) error {
 		}
 
 		// Store result from string
-		err = json.Unmarshal(data, &t.string)
-		if err != nil {
+		t.Error = json.Unmarshal(data, &t.string)
+		if t.Error != nil {
 			break
 		}
 		t.SetString(t.string)
 	}
 
-	return err
+	return t.Error
 }
 
 // MarshalJSON - Convert value to JSON
 func (t String) MarshalJSON() ([]byte, error) {
 	var data []byte
-	var err error
 
 	for range Only.Once {
 		t.Valid = false
 
-		data, err = json.Marshal(t.string)
-		if err != nil {
+		data, t.Error = json.Marshal(t.string)
+		if t.Error != nil {
 			break
 		}
 		t.Valid = true
 	}
 
-	return data, err
+	return data, t.Error
 }
 
 func (t String) Value() string {
@@ -93,11 +92,11 @@ func SetStringValue(value string) String {
 type PsKey struct {
 	string `json:"string,omitempty"`
 	Valid   bool `json:"valid"`
+	Error  error `json:"-"`
 }
 
 // UnmarshalJSON - Convert JSON to value
 func (t *PsKey) UnmarshalJSON(data []byte) error {
-	var err error
 
 	for range Only.Once {
 		t.Valid = false
@@ -107,32 +106,31 @@ func (t *PsKey) UnmarshalJSON(data []byte) error {
 		}
 
 		// Store result from string
-		err = json.Unmarshal(data, &t.string)
-		if err != nil {
+		t.Error = json.Unmarshal(data, &t.string)
+		if t.Error != nil {
 			break
 		}
 		t.SetPsKey(t.string)
 	}
 
-	return err
+	return t.Error
 }
 
 // MarshalJSON - Convert value to JSON
 func (t PsKey) MarshalJSON() ([]byte, error) {
 	var data []byte
-	var err error
 
 	for range Only.Once {
 		t.Valid = false
 
-		data, err = json.Marshal(t.string)
-		if err != nil {
+		data, t.Error = json.Marshal(t.string)
+		if t.Error != nil {
 			break
 		}
 		t.Valid = true
 	}
 
-	return data, err
+	return data, t.Error
 }
 
 func (t PsKey) Value() string {

@@ -201,6 +201,34 @@ func (sg *SunGrow) GetByStruct(endpoint string, request interface{}, cache time.
 	return ret
 }
 
+func (sg *SunGrow) RequestRequiresArgs(ae string) bool {
+	var yes bool
+	for range Only.Once {
+		area, endpoint := sg.SplitEndPoint(ae)
+		if sg.Error != nil {
+			break
+		}
+
+		yes = sg.Areas.RequestRequiresArgs(area, endpoint)
+	}
+
+	return yes
+}
+
+func (sg *SunGrow) RequestArgs(ae string) map[string]string {
+	var ret map[string]string
+	for range Only.Once {
+		area, endpoint := sg.SplitEndPoint(ae)
+		if sg.Error != nil {
+			break
+		}
+
+		ret = sg.Areas.RequestArgs(area, endpoint)
+	}
+
+	return ret
+}
+
 func (sg *SunGrow) SplitEndPoint(ae string) (api.AreaName, api.EndPointName) {
 	var area api.AreaName
 	var endpoint api.EndPointName
