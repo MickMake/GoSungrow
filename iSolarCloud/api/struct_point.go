@@ -15,63 +15,16 @@ type Point struct {
 	Id          valueTypes.PointId `json:"id,omitempty"`
 	GroupName   string             `json:"group_name,omitempty"`
 	Description string             `json:"description,omitempty"`
-	Unit       string `json:"unit,omitempty"`
-	UpdateFreq string `json:"time_span,omitempty"`
-	ValueType  string `json:"value_type,omitempty"`
+	Unit        string             `json:"unit,omitempty"`
+	UpdateFreq  string             `json:"time_span,omitempty"`
+	ValueType   string             `json:"value_type,omitempty"`
 	Valid       bool               `json:"valid,omitempty"`
 	States      map[string]string  `json:"states,omitempty"`
 }
 
 
 func (p *Point) FixUnitType() Point {
-	for range Only.Once {
-		switch p.Unit {
-			case "Wh":
-				fallthrough
-			case "kWh":
-				fallthrough
-			case "MWh":
-				p.ValueType = "Energy"
-
-			case "kWp":
-				fallthrough
-			case "W":
-				fallthrough
-			case "kW":
-				fallthrough
-			case "MW":
-				p.ValueType = "Power"
-
-			case "AUD":
-				p.ValueType = "Currency"
-
-			case "kg":
-				p.ValueType = "Weight"
-
-			case "mV":
-				fallthrough
-			case "V":
-				p.ValueType = "Voltage"
-
-			case "A":
-				p.ValueType = "Current"
-
-			case "Hz":
-				p.ValueType = "Frequency"
-
-			case "kvar":
-				p.ValueType = "Reactive Power"
-
-			case "kΩ":
-				p.ValueType = "Resistance"
-
-			case "%":
-				p.ValueType = "Percent"
-
-			case "℃":
-				p.ValueType = "Temperature"
-		}
-	}
+	p.ValueType = valueTypes.UnitValueType(p.Unit)
 	return *p
 }
 

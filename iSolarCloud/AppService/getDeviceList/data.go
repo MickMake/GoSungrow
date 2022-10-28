@@ -13,7 +13,7 @@ const Url = "/v1/devService/getDeviceList"
 const Disabled = false
 
 type RequestData struct {
-	PsId valueTypes.Integer `json:"ps_id" required:"true"`
+	PsId valueTypes.PsId `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -38,7 +38,7 @@ type ResultData struct {
 		DeviceArea              valueTypes.Integer  `json:"device_area"`
 		DeviceCode              valueTypes.Integer  `json:"device_code"`
 		DeviceFactoryDate       valueTypes.DateTime `json:"device_factory_date"`
-		DeviceID                valueTypes.Integer  `json:"device_id"`
+		DeviceId                valueTypes.Integer  `json:"device_id"`
 		DeviceModel             valueTypes.String   `json:"device_model"`
 		DeviceModelCode         valueTypes.String   `json:"device_model_code"`
 		DeviceModelId           valueTypes.Integer  `json:"device_model_id"`
@@ -65,7 +65,7 @@ type ResultData struct {
 		P24                     interface{}         `json:"p24"`
 		Posx                    interface{}         `json:"posx"`
 		Posy                    interface{}         `json:"posy"`
-		PsId                    valueTypes.Integer  `json:"ps_id"`
+		PsId                    valueTypes.PsId     `json:"ps_id"`
 		PsKey                   valueTypes.PsKey    `json:"ps_key"`
 		RelState                valueTypes.Integer  `json:"rel_state"`
 		Sn                      valueTypes.String   `json:"sn" PointName:"Serial Number"`
@@ -88,7 +88,7 @@ func (e *ResultData) IsValid() error {
 
 type Device struct {
 	Vendor        valueTypes.String
-	PsId          valueTypes.Integer
+	PsId          valueTypes.PsId
 	PsKey         valueTypes.PsKey
 	DeviceName    valueTypes.String
 	DeviceProSn   valueTypes.String
@@ -96,7 +96,7 @@ type Device struct {
 	DeviceType    valueTypes.Integer
 	DeviceCode    valueTypes.Integer
 	ChannelId     valueTypes.Integer
-	DeviceModelID valueTypes.Integer
+	DeviceModelId valueTypes.Integer
 	TypeName      valueTypes.String
 	DeviceState   valueTypes.Integer
 	DevStatus     valueTypes.Integer
@@ -117,7 +117,7 @@ func (e *EndPoint) GetDevices() Devices {
 			TypeName:      d.TypeName,
 			DeviceProSn:   d.DeviceProSn,
 			DeviceModel:   d.DeviceModel,
-			DeviceModelID: d.DeviceModelId,
+			DeviceModelId: d.DeviceModelId,
 			DeviceName:    d.DeviceName,
 			DeviceState:   d.DeviceState,
 			DevStatus:     d.DevStatus,
@@ -153,14 +153,14 @@ func (e *EndPoint) GetDevicesTable() output.Table {
 		// for _, d := range e.Response.ResultData.PageList {
 		// 	_ = table.AddRow(
 		// 		d.PsKey.Value(),
-		// 		d.PsID.Value(),
+		// 		d.PsId.Value(),
 		// 		d.DeviceType.Value(),
 		// 		d.DeviceCode.Value(),
 		// 		d.ChannelId.Value(),
 		// 		d.TypeName.Value(),
 		// 		d.DeviceProSn.Value(),
 		// 		d.DeviceModel.Value(),
-		// 		d.DeviceModelID.Value(),
+		// 		d.DeviceModelId.Value(),
 		// 		d.DeviceName.Value(),
 		// 		d.DeviceState,
 		// 		d.DevStatus,
@@ -200,14 +200,14 @@ func GetDevicesTable(data Devices) output.Table {
 		// for _, d := range e.Response.ResultData.PageList {
 		// 	_ = table.AddRow(
 		// 		d.PsKey.Value(),
-		// 		d.PsID.Value(),
+		// 		d.PsId.Value(),
 		// 		d.DeviceType.Value(),
 		// 		d.DeviceCode.Value(),
 		// 		d.ChannelId.Value(),
 		// 		d.TypeName.Value(),
 		// 		d.DeviceProSn.Value(),
 		// 		d.DeviceModel.Value(),
-		// 		d.DeviceModelID.Value(),
+		// 		d.DeviceModelId.Value(),
 		// 		d.DeviceName.Value(),
 		// 		d.DeviceState,
 		// 		d.DevStatus,
@@ -247,7 +247,7 @@ func GetDevicesTable(data Devices) output.Table {
 				d.TypeName.Value(),
 				d.DeviceProSn.Value(),
 				d.DeviceModel.Value(),
-				d.DeviceModelID.Value(),
+				d.DeviceModelId.Value(),
 				d.DeviceName.Value(),
 				d.DeviceState,
 				d.DevStatus,

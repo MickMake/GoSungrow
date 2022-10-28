@@ -3,8 +3,8 @@ package getDeviceModelInfoList
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
 	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
@@ -27,11 +27,11 @@ func (rd RequestData) Help() string {
 
 type ResultData []struct {
 	ComType           string `json:"com_type"`
-	DeviceFactoryID   string `json:"device_factory_id"`
+	DeviceFactoryId   string `json:"device_factory_id"`
 	DeviceFactoryName string `json:"device_factory_name"`
 	DeviceModel       string `json:"device_model"`
 	DeviceModelCode   string `json:"device_model_code"`
-	DeviceModelID     valueTypes.Integer  `json:"device_model_id"`
+	DeviceModelId     valueTypes.Integer  `json:"device_model_id"`
 	DeviceType        valueTypes.Integer  `json:"device_type"`
 	IsRemoteUpgrade   valueTypes.Bool     `json:"is_remote_upgrade"`
 }
@@ -89,10 +89,10 @@ func (e *EndPoint) GetPointDataTable() output.Table {
 				d.DeviceModelCode = ""
 			}
 			_ = table.AddRow(
-				d.DeviceModelID,
+				d.DeviceModelId,
 				d.DeviceType,
 				d.ComType,
-				d.DeviceFactoryID,
+				d.DeviceFactoryId,
 				d.DeviceFactoryName,
 				d.DeviceModel,
 				d.DeviceModelCode,

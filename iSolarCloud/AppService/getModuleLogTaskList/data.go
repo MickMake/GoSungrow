@@ -27,17 +27,17 @@ type ResultData struct {
 	CurPage  valueTypes.Integer `json:"curPage"`
 	IsMore   valueTypes.Bool    `json:"isMore"`
 	PageList []struct {
-		BatchID        valueTypes.String      `json:"batch_id"`
+		BatchId        valueTypes.String      `json:"batch_id"`
 		CommandStatus  valueTypes.Integer `json:"command_status"`
 		CommandType    valueTypes.Integer `json:"command_type"`
 		CreateTime     valueTypes.DateTime      `json:"create_time"`
 		DeviceCode     valueTypes.Integer      `json:"device_code"`
 		DeviceModel    valueTypes.String `json:"device_model"`
-		DeviceModelID  valueTypes.String `json:"device_model_id"`
+		DeviceModelId  valueTypes.String `json:"device_model_id"`
 		ExpireSecond   valueTypes.Integer `json:"expire_second"`
 		LogType        valueTypes.Integer      `json:"log_type"`
 		LoggerCode     valueTypes.Integer      `json:"logger_code"`
-		OperateUserID  valueTypes.Integer `json:"operate_user_id"`
+		OperateUserId  valueTypes.Integer `json:"operate_user_id"`
 		OverTime       valueTypes.DateTime      `json:"over_time"`
 		Remark         valueTypes.String      `json:"remark"`
 		SetCancelNum   valueTypes.Integer `json:"set_cancel_num"`
@@ -47,7 +47,7 @@ type ResultData struct {
 		SetSuccessNum  valueTypes.Integer `json:"set_success_num"`
 		SetTotalNum    valueTypes.Integer `json:"set_total_num"`
 		Sn             valueTypes.String      `json:"sn"`
-		TaskID         valueTypes.Integer `json:"task_id"`
+		TaskId         valueTypes.Integer `json:"task_id"`
 		TaskName       valueTypes.Integer      `json:"task_name"`
 		UpdateTime     valueTypes.DateTime      `json:"update_time"`
 	} `json:"pageList"`

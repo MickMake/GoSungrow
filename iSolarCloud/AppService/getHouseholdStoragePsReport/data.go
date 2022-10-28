@@ -14,9 +14,9 @@ const Url = "/v1/powerStationService/getHouseholdStoragePsReport"
 const Disabled = false
 
 type RequestData struct {
-	DateID   string `json:"date_id" required:"true"`
+	DateId   string `json:"date_id" required:"true"`
 	DateType string `json:"date_type" required:"true"`
-	PsId     valueTypes.Integer `json:"ps_id" required:"true"`
+	PsId     valueTypes.PsId `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -123,7 +123,7 @@ type MonthData struct {
 	ZjzzMap         valueTypes.UnitValue `json:"zjzz_map"`
 	ZjzzMapVirgin   valueTypes.UnitValue `json:"zjzz_map_virgin"  PointIgnore:"true"`
 	MonthDataDayList []struct {
-		DateID                   valueTypes.Integer  `json:"date_id"`
+		DateId                   valueTypes.Integer  `json:"date_id"`
 		Jthd                     valueTypes.Float    `json:"jthd" PointUnitFrom:"JthdUnit" PointTimestampFrom:"TimeStamp"`
 		JthdUnit                 valueTypes.String   `json:"jthd_unit"  PointIgnore:"true"`
 		Jtyd                     valueTypes.Float    `json:"jtyd" PointUnitFrom:"JtydUnit" PointTimestampFrom:"TimeStamp"`
@@ -148,7 +148,7 @@ type MonthData struct {
 		P83120                   valueTypes.Float    `json:"p83120"  PointId:"p83120" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqMonth"`
 		P83121                   valueTypes.Float    `json:"p83121"  PointId:"p83121" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqMonth"`
 		P83122                   valueTypes.Float    `json:"p83122"  PointId:"p83122" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqMonth"`
-		PsID                     valueTypes.Integer  `json:"ps_id"`
+		PsId                     valueTypes.PsId  `json:"ps_id"`
 		SelfConsumptionYield     valueTypes.Float    `json:"self_consumption_yield" PointUnitFrom:"SelfConsumptionYieldUnit" PointTimestampFrom:"TimeStamp"`
 		SelfConsumptionYieldUnit valueTypes.String   `json:"self_consumption_yield_unit"  PointIgnore:"true"`
 		TimeStamp                valueTypes.DateTime `json:"time_stamp"`
@@ -185,7 +185,7 @@ type YearData struct {
 	ZjzzMap       valueTypes.UnitValue `json:"zjzz_map"`
 	ZjzzMapVirgin valueTypes.UnitValue `json:"zjzz_map_virgin"  PointIgnore:"true"`
 	YearDataMonthList []struct {
-		DateID                   valueTypes.Integer  `json:"date_id"`
+		DateId                   valueTypes.Integer  `json:"date_id"`
 		Jthd                     valueTypes.Float    `json:"jthd" PointUnitFrom:"JthdUnit" PointTimestampFrom:"TimeStamp"`
 		JthdUnit                 valueTypes.String   `json:"jthd_unit"  PointIgnore:"true"`
 		Jtyd                     valueTypes.Float    `json:"jtyd" PointUnitFrom:"JtydUnit" PointTimestampFrom:"TimeStamp"`
@@ -210,7 +210,7 @@ type YearData struct {
 		P83120                   valueTypes.Float    `json:"p83120"  PointId:"p83120" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqYear"`
 		P83121                   valueTypes.Float    `json:"p83121"  PointId:"p83121" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqYear"`
 		P83122                   valueTypes.Float    `json:"p83122"  PointId:"p83122" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqYear"`
-		PsID                     valueTypes.Integer  `json:"ps_id"`
+		PsId                     valueTypes.PsId  `json:"ps_id"`
 		SelfConsumptionYield     valueTypes.Float    `json:"self_consumption_yield" PointUnitFrom:"SelfConsumptionYieldUnit" PointTimestampFrom:"TimeStamp"`
 		SelfConsumptionYieldUnit valueTypes.String   `json:"self_consumption_yield_unit"  PointIgnore:"true"`
 		TimeStamp                valueTypes.DateTime `json:"time_stamp"`
@@ -245,7 +245,7 @@ type TotalData struct {
 	ZjzzMap       valueTypes.UnitValue `json:"zjzz_map"`
 	ZjzzMapVirgin valueTypes.UnitValue `json:"zjzz_map_virgin"  PointIgnore:"true"`
 	TotalDataYearList []struct {
-		DateID                   valueTypes.Integer  `json:"date_id"`
+		DateId                   valueTypes.Integer  `json:"date_id"`
 		Jthd                     valueTypes.Float    `json:"jthd" PointUnitFrom:"JthdUnit" PointTimestampFrom:"TimeStamp"`
 		JthdUnit                 valueTypes.String   `json:"jthd_unit"  PointIgnore:"true"`
 		Jtyd                     valueTypes.Float    `json:"jtyd" PointUnitFrom:"JtydUnit" PointTimestampFrom:"TimeStamp"`
@@ -270,7 +270,7 @@ type TotalData struct {
 		P83120                   valueTypes.Float    `json:"p83120"  PointId:"p83120" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqTotal"`
 		P83121                   valueTypes.Float    `json:"p83121"  PointId:"p83121" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqTotal"`
 		P83122                   valueTypes.Float    `json:"p83122"  PointId:"p83122" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqTotal"`
-		PsID                     valueTypes.Integer  `json:"ps_id"`
+		PsId                     valueTypes.PsId  `json:"ps_id"`
 		SelfConsumptionYield     valueTypes.Float    `json:"self_consumption_yield" PointUnitFrom:"SelfConsumptionYieldUnit" PointTimestampFrom:"TimeStamp"`
 		SelfConsumptionYieldUnit valueTypes.String   `json:"self_consumption_yield_unit"  PointIgnore:"true"`
 		TimeStamp                valueTypes.DateTime `json:"time_stamp"`
@@ -344,53 +344,9 @@ func (e *EndPoint) GetData() api.DataMap {
 
 	for range Only.Once {
 		pkg := apiReflect.GetName("", *e)
-		name := api.JoinWithDots(0, "", pkg, e.Request.PsId)
-		entries.StructToPoints(e.Response.ResultData, name, e.Request.PsId.String(), valueTypes.NewDateTime(valueTypes.Now))
-		break
-
-		// if e.Response.ResultData.DayData != nil {
-		// 	name := api.JoinWithDots(0, "", pkg, e.Request.PsId, "Day")
-		// 	entries.StructToPoints(*e.Response.ResultData.DayData, name, e.Request.PsId.String(), valueTypes.NewDateTime(valueTypes.Now))
-		//
-		// 	// s := valueTypes.SizeOfArrayLength(e.Response.ResultData.DayData.PointData15List)
-		// 	// for i, d := range e.Response.ResultData.DayData.PointData15List {
-		// 	// 	name2 := api.JoinWithDots(s, "", name, i)
-		// 	// 	entries.StructToPoints(*e.Response.ResultData.DayData, name2, e.Request.PsId.String(), d.TimeStamp)
-		// 	// }
-		// }
-		//
-		// if e.Response.ResultData.MonthData != nil {
-		// 	name := api.JoinWithDots(0, "", pkg, e.Request.PsId, "Month")
-		// 	entries.StructToPoints(*e.Response.ResultData.MonthData, name, e.Request.PsId.String(), valueTypes.NewDateTime(valueTypes.Now))
-		//
-		// 	// s := valueTypes.SizeOfArrayLength(e.Response.ResultData.MonthData.MonthDataDayList)
-		// 	// for i, d := range e.Response.ResultData.MonthData.MonthDataDayList {
-		// 	// 	name2 := api.JoinWithDots(s, "", name, i)
-		// 	// 	entries.StructToPoints(*e.Response.ResultData.MonthData, name2, e.Request.PsId.String(), d.TimeStamp)
-		// 	// }
-		// }
-		//
-		// if e.Response.ResultData.YearData != nil {
-		// 	name := api.JoinWithDots(0, "", pkg, e.Request.PsId, "Year")
-		// 	entries.StructToPoints(*e.Response.ResultData.YearData, name, e.Request.PsId.String(), valueTypes.NewDateTime(valueTypes.Now))
-		//
-		// 	// s := valueTypes.SizeOfArrayLength(e.Response.ResultData.YearData.YearDataMonthList)
-		// 	// for i, d := range e.Response.ResultData.YearData.YearDataMonthList {
-		// 	// 	name2 := api.JoinWithDots(s, "", name, i)
-		// 	// 	entries.StructToPoints(*e.Response.ResultData.YearData, name2, e.Request.PsId.String(), d.TimeStamp)
-		// 	// }
-		// }
-		//
-		// if e.Response.ResultData.TotalData != nil {
-		// 	name := api.JoinWithDots(0, "", pkg, e.Request.PsId, "Total")
-		// 	entries.StructToPoints(*e.Response.ResultData.TotalData, name, e.Request.PsId.String(), valueTypes.NewDateTime(valueTypes.Now))
-		//
-		// 	// s := valueTypes.SizeOfArrayLength(e.Response.ResultData.TotalData.TotalDataYearList)
-		// 	// for i, d := range e.Response.ResultData.TotalData.TotalDataYearList {
-		// 	// 	name2 := api.JoinWithDots(s, "", name, i)
-		// 	// 	entries.StructToPoints(*e.Response.ResultData.TotalData, name2, e.Request.PsId.String(), d.TimeStamp)
-		// 	// }
-		// }
+		dt := valueTypes.NewDateTime(valueTypes.Now)
+		name := pkg + "." + e.Request.PsId.String()
+		entries.StructToPoints(e.Response.ResultData, name, e.Request.PsId.String(), dt)
 	}
 
 	return entries

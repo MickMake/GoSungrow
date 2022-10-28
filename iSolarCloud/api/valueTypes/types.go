@@ -18,6 +18,7 @@ const (
 	TypeInteger   = "Integer"
 	TypePointId   = "PointId"
 	TypePsKey     = "PsKey"
+	TypePsId      = "PsId"
 	TypeString    = "String"
 	TypeTime      = "Time"
 	TypeUnitValue = "UnitValue"
@@ -29,32 +30,35 @@ const (
 	TypeArrayInteger   = "[]Integer"
 	TypeArrayPointId   = "[]PointId"
 	TypeArrayPsKey     = "[]PsKey"
+	TypeArrayPsId      = "[]PsId"
 	TypeArrayString    = "[]String"
 	TypeArrayTime      = "[]Time"
 	TypeArrayUnitValue = "[]UnitValue"
 	TypeUnitValues     = "UnitValues"
 
-	TypeArrayValueTypesBool      = "[]valueTypes.Bool"
-	TypeArrayValueTypesCount     = "[]valueTypes.Count"
-	TypeArrayValueTypesDateTime  = "[]valueTypes.DateTime"
-	TypeArrayValueTypesFloat     = "[]valueTypes.Float"
-	TypeArrayValueTypesInteger   = "[]valueTypes.Integer"
-	TypeArrayValueTypesPointId   = "[]valueTypes.PointId"
-	TypeArrayValueTypesPsKey     = "[]valueTypes.PsKey"
-	TypeArrayValueTypesString    = "[]valueTypes.String"
-	TypeArrayValueTypesTime      = "[]valueTypes.Time"
-	TypeArrayValueTypesUnitValue = "[]valueTypes.UnitValue"
-
-	TypeValueTypesBool      = "valueTypes.Bool"
-	TypeValueTypesCount     = "valueTypes.Count"
-	TypeValueTypesDateTime  = "valueTypes.DateTime"
-	TypeValueTypesFloat     = "valueTypes.Float"
-	TypeValueTypesInteger   = "valueTypes.Integer"
-	TypeValueTypesPointId   = "valueTypes.PointId"
-	TypeValueTypesPsKey     = "valueTypes.PsKey"
-	TypeValueTypesString    = "valueTypes.String"
-	TypeValueTypesTime      = "valueTypes.Time"
-	TypeValueTypesUnitValue = "valueTypes.UnitValue"
+	// TypeArrayValueTypesBool      = "[]valueTypes.Bool"
+	// TypeArrayValueTypesCount     = "[]valueTypes.Count"
+	// TypeArrayValueTypesDateTime  = "[]valueTypes.DateTime"
+	// TypeArrayValueTypesFloat     = "[]valueTypes.Float"
+	// TypeArrayValueTypesInteger   = "[]valueTypes.Integer"
+	// TypeArrayValueTypesPointId   = "[]valueTypes.PointId"
+	// TypeArrayValueTypesPsKey     = "[]valueTypes.PsKey"
+	// TypeArrayValuePsId           = "[]valueTypes.PsId"
+	// TypeArrayValueTypesString    = "[]valueTypes.String"
+	// TypeArrayValueTypesTime      = "[]valueTypes.Time"
+	// TypeArrayValueTypesUnitValue = "[]valueTypes.UnitValue"
+	//
+	// TypeValueTypesBool      = "valueTypes.Bool"
+	// TypeValueTypesCount     = "valueTypes.Count"
+	// TypeValueTypesDateTime  = "valueTypes.DateTime"
+	// TypeValueTypesFloat     = "valueTypes.Float"
+	// TypeValueTypesInteger   = "valueTypes.Integer"
+	// TypeValueTypesPointId   = "valueTypes.PointId"
+	// TypeValueTypesPsKey     = "valueTypes.PsKey"
+	// TypeValueTypesPsId      = "valueTypes.PsId"
+	// TypeValueTypesString    = "valueTypes.String"
+	// TypeValueTypesTime      = "valueTypes.Time"
+	// TypeValueTypesUnitValue = "valueTypes.UnitValue"
 )
 
 
@@ -101,27 +105,32 @@ func IsUnknownStruct(ref interface{}) bool {
 		}
 
 		if kindy == reflect.Struct {
-			switch fieldVo.Type().String() {
+			Type := fieldVo.Type().String()
+			Type = strings.ReplaceAll(Type, "valueTypes.", "")
+			switch Type {
 				case TypeBool:
 				case TypeCount:
 				case TypeDateTime:
 				case TypeFloat:
 				case TypeInteger:
 				case TypePointId:
+				case TypePsId:
 				case TypePsKey:
 				case TypeString:
 				case TypeTime:
 				case TypeUnitValue:
-				case TypeValueTypesBool:
-				case TypeValueTypesCount:
-				case TypeValueTypesDateTime:
-				case TypeValueTypesFloat:
-				case TypeValueTypesInteger:
-				case TypeValueTypesPointId:
-				case TypeValueTypesPsKey:
-				case TypeValueTypesString:
-				case TypeValueTypesTime:
-				case TypeValueTypesUnitValue:
+				case TypeArrayBool:
+				case TypeArrayCount:
+				case TypeArrayDateTime:
+				case TypeArrayFloat:
+				case TypeArrayInteger:
+				case TypeArrayPointId:
+				case TypeArrayPsId:
+				case TypeArrayPsKey:
+				case TypeArrayString:
+				case TypeArrayTime:
+				case TypeArrayUnitValue:
+				case TypeUnitValues:
 
 				default:
 					ok = true
@@ -161,7 +170,9 @@ func PrintInt(s int, i interface{}) string {
 	var ret string
 	for range Only.Once {
 		var val int64
-		switch reflect.TypeOf(i).String() {
+		Type := reflect.TypeOf(i).String()
+		Type = strings.ReplaceAll(Type, "valueTypes.", "")
+		switch Type {
 			case "int":
 				val = int64(i.(int))
 			case "int32":
@@ -169,15 +180,11 @@ func PrintInt(s int, i interface{}) string {
 			case "int64":
 				val = i.(int64)
 
-			case TypeValueTypesInteger:
-				fallthrough
 			case TypeInteger:
 				val = i.(Integer).Value()
 
-			case "valueTypes.Count":
-				fallthrough
 			case TypeCount:
-				val = i.(Integer).Value()
+				val = i.(Count).Value()
 		}
 
 		if s == 0 {
@@ -190,27 +197,25 @@ func PrintInt(s int, i interface{}) string {
 	return ret
 }
 
-func SizeOfInt(i interface{}) int {
+func SizeOfInt(ref interface{}) int {
 	var ret int
 	for range Only.Once {
 		var val int64
-		switch reflect.TypeOf(i).String() {
+		Type := reflect.TypeOf(ref).String()
+		Type = strings.ReplaceAll(Type, "valueTypes.", "")
+		switch Type {
 			case "int":
-				val = int64(i.(int))
+				val = int64(ref.(int))
 			case "int32":
-				val = int64(i.(int32))
+				val = int64(ref.(int32))
 			case "int64":
-				val = i.(int64)
+				val = ref.(int64)
 
-			case TypeValueTypesInteger:
-				fallthrough
 			case TypeInteger:
-				val = i.(Integer).Value()
+				val = ref.(Integer).Value()
 
-			case TypeValueTypesCount:
-				fallthrough
 			case TypeCount:
-				val = i.(Integer).Value()
+				val = ref.(Count).Value()
 		}
 		switch {
 			case val > 9999:
@@ -249,207 +254,14 @@ func SizeOfArrayLength(i interface{}) int {
 	return SizeOfInt(reflect.ValueOf(i).Len())
 }
 
-func TypeToString(intSize int, dateFormat string, e interface{}) string {
-	var ret string
-	for range Only.Once {
-		if IsNil(e) {
-			fmt.Println("NIL")
-			ret = "NIL"
-			break
-		}
-
-		if dateFormat == "" {
-			dateFormat = DateTimeAltLayout
-		}
-
-		// fmt.Printf("DEBUG: %s\n", reflect.TypeOf(e).String())
-		switch reflect.TypeOf(e).String() {
-			case "int":
-				ret = PrintInt(intSize, e.(int))
-			case "int32":
-				ret = PrintInt(intSize, e.(int32))
-			case "int64":
-				ret = PrintInt(intSize, e.(int64))
-			case "float32":
-				// ret = float64(s.(float32))
-				v , err := json.Marshal(e)
-				if err != nil {
-					break
-				}
-				ret = string(v)
-			case "float64":
-				// ret = s.(float64)
-				v , err := json.Marshal(e)
-				if err != nil {
-					break
-				}
-				ret = string(v)
-			case "string":
-				ret = strings.Trim(e.(string), ".")
-			case "bool":
-				ret = fmt.Sprintf("%v", e.(bool))
-			case "[]string":
-				// v := strings.Join(s.([]string), ",")
-				v , err := json.Marshal(e)
-				if err != nil {
-					break
-				}
-				ret = string(v)
-
-			case TypeValueTypesUnitValue:
-				fallthrough
-			case TypeUnitValue:
-				ret = e.(UnitValue).String()
-
-			case TypeUnitValues:
-				fallthrough
-			case TypeArrayUnitValue:
-				fallthrough
-			case TypeArrayValueTypesUnitValue:
-				// ret = s.([]UnitValue)
-				v , err := json.Marshal(e)
-				if err != nil {
-					break
-				}
-				ret = string(v)
-
-			case TypeValueTypesFloat:
-				fallthrough
-			case TypeFloat:
-				// ret = s.(Float)
-				v , err := json.Marshal(e)
-				if err != nil {
-					break
-				}
-				ret = string(v)
-
-			case TypeArrayValueTypesFloat:
-				fallthrough
-			case TypeArrayFloat:
-				// ret = s.([]Float)
-				v , err := json.Marshal(e)
-				if err != nil {
-					break
-				}
-				ret = string(v)
-
-			case TypeValueTypesInteger:
-				fallthrough
-			case TypeInteger:
-				ret = PrintInt(intSize, e.(Integer))
-
-			case TypeArrayValueTypesInteger:
-				fallthrough
-			case TypeArrayInteger:
-				// ret = s.([]Integer)
-				v , err := json.Marshal(e)
-				if err != nil {
-					break
-				}
-				ret = string(v)
-
-			case TypeValueTypesCount:
-				fallthrough
-			case TypeCount:
-				ret = PrintInt(intSize, e.(Count))
-
-			case TypeArrayValueTypesCount:
-				fallthrough
-			case TypeArrayCount:
-				// ret = s.([]Count)
-				v , err := json.Marshal(e)
-				if err != nil {
-					break
-				}
-				ret = string(v)
-
-			case TypeValueTypesBool:
-				fallthrough
-			case TypeBool:
-				ret = e.(Bool).String()
-
-			case TypeArrayValueTypesBool:
-				fallthrough
-			case TypeArrayBool:
-				// ret = s.([]Bool)
-				v , err := json.Marshal(e)
-				if err != nil {
-					break
-				}
-				ret = string(v)
-
-			case TypeValueTypesString:
-				fallthrough
-			case TypeString:
-				ret = strings.Trim(e.(String).String(), ".")
-
-			case TypeArrayValueTypesString:
-				fallthrough
-			case TypeArrayString:
-				// ret = s.([]String)
-				v , err := json.Marshal(e)
-				if err != nil {
-					break
-				}
-				ret = string(v)
-
-			case TypeValueTypesPsKey:
-				fallthrough
-			case TypePsKey:
-				ret = e.(PsKey).Value()
-
-			case TypeArrayValueTypesPsKey:
-				fallthrough
-			case TypeArrayPsKey:
-				// ret = s.([]PsKey)
-				v , err := json.Marshal(e)
-				if err != nil {
-					break
-				}
-				ret = string(v)
-
-			case TypeValueTypesPointId:
-				fallthrough
-			case TypePointId:
-				ret = e.(PointId).String()
-
-			case TypeArrayValueTypesPointId:
-				fallthrough
-			case TypeArrayPointId:
-				// ret = s.([]PointId)
-				v , err := json.Marshal(e)
-				if err != nil {
-					break
-				}
-				ret = string(v)
-
-			case TypeValueTypesDateTime:
-				fallthrough
-			case TypeDateTime:
-				ret = e.(DateTime).Format(dateFormat)
-
-			case TypeArrayValueTypesDateTime:
-				fallthrough
-			case TypeArrayDateTime:
-				// ret = s.([]DateTime)
-				v , err := json.Marshal(e)
-				if err != nil {
-					break
-				}
-				ret = string(v)
-			}
-	}
-	return ret
-}
-
-func AnyToUnitValue(e interface{}, unit string, Type string, dateFormat string) (UnitValues, bool, bool) {
+func AnyToUnitValue(ref interface{}, unit string, typeString string, dateFormat string) (UnitValues, bool, bool) {
 	var uv UnitValues
 	ok := true
 	isNil := false
 	for range Only.Once {
-		if IsNil(e) {
+		if IsNil(ref) {
 			// fmt.Println("DEBUG: AnyToUnitValue(): NIL")
-			uv = append(uv, SetUnitValueString("", unit, Type + "(unknown)"))
+			uv = append(uv, SetUnitValueString("", unit, typeString + "(unknown)"))
 			isNil = true
 			break
 		}
@@ -459,459 +271,407 @@ func AnyToUnitValue(e interface{}, unit string, Type string, dateFormat string) 
 			dateFormat = DateTimeAltLayout
 		}
 
-		switch reflect.TypeOf(e).String() {
+		Type := reflect.TypeOf(ref).String()
+		Type = strings.ReplaceAll(Type, "valueTypes.", "")
+		switch Type {
 			case "int":
-				if Type == "" {
-					Type = "--"
+				if typeString == "" {
+					typeString = "--"
 				}
-				uv = append(uv, SetUnitValueInteger(int64(e.(int)), unit, Type))
+				uv = append(uv, SetUnitValueInteger(int64(ref.(int)), unit, typeString))
 			case "int32":
-				if Type == "" {
-					Type = "--"
+				if typeString == "" {
+					typeString = "--"
 				}
-				uv = append(uv, SetUnitValueInteger(int64(e.(int32)), unit, Type))
+				uv = append(uv, SetUnitValueInteger(int64(ref.(int32)), unit, typeString))
 			case "int64":
-				if Type == "" {
-					Type = "--"
+				if typeString == "" {
+					typeString = "--"
 				}
-				uv = append(uv, SetUnitValueInteger(e.(int64), unit, Type))
+				uv = append(uv, SetUnitValueInteger(ref.(int64), unit, typeString))
 			case "float32":
-				if Type == "" {
-					Type = "--"
+				if typeString == "" {
+					typeString = "--"
 				}
-				uv = append(uv, SetUnitValueFloat(float64(e.(float32)), unit, Type))
+				uv = append(uv, SetUnitValueFloat(float64(ref.(float32)), unit, typeString))
 			case "float64":
-				if Type == "" {
-					Type = "--"
+				if typeString == "" {
+					typeString = "--"
 				}
-				uv = append(uv, SetUnitValueFloat(e.(float64), unit, Type))
+				uv = append(uv, SetUnitValueFloat(ref.(float64), unit, typeString))
 			case "string":
-				if Type == "" {
-					Type = "--"
+				if typeString == "" {
+					typeString = "--"
 				}
-				uv = append(uv, SetUnitValueString(e.(string), unit, Type))
+				uv = append(uv, SetUnitValueString(ref.(string), unit, typeString))
 			case "[]string":
 				// v := strings.Join(e.([]string), ",")
-				if Type == "" {
-					Type = "--"
+				if typeString == "" {
+					typeString = "--"
 				}
-				j, err := json.Marshal(e.([]string))
+				j, err := json.Marshal(ref.([]string))
 				if err != nil {
-					j = []byte(fmt.Sprintf("%v", e.([]string)))
+					j = []byte(fmt.Sprintf("%v", ref.([]string)))
 				}
-				uv = append(uv, SetUnitValueString(string(j), unit, Type))
+				uv = append(uv, SetUnitValueString(string(j), unit, typeString))
 			case "bool":
-				if Type == "" {
-					Type = "--"
+				if typeString == "" {
+					typeString = "--"
 				}
-				uv = append(uv, SetUnitValueBool(e.(bool)))
+				uv = append(uv, SetUnitValueBool(ref.(bool)))
 
-			case TypeValueTypesUnitValue:
-				fallthrough
 			case TypeUnitValue:
-				if Type == "" {
-					Type = "--"
+				if typeString == "" {
+					typeString = "--"
 				}
-				uv = append(uv, e.(UnitValue))
+				uv = append(uv, ref.(UnitValue))
 				// uv = uv.UnitValueFix()
-
 			case TypeUnitValues:
 				fallthrough
-			case TypeArrayValueTypesUnitValue:
-				fallthrough
 			case TypeArrayUnitValue:
-				for _, val := range e.([]UnitValue) {
+				for _, val := range ref.([]UnitValue) {
 					uv = append(uv, val)
 				}
 
-			case TypeValueTypesFloat:
-				fallthrough
 			case TypeFloat:
-				if Type == "" {
-					Type = TypeFloat
+				if typeString == "" {
+					typeString = TypeFloat
 				}
-				v := e.(Float)
-				uv = append(uv, SetUnitValueFloat(v.Value(), unit, Type))
-
-			case TypeArrayValueTypesFloat:
-				fallthrough
+				v := ref.(Float)
+				uv = append(uv, SetUnitValueFloat(v.Value(), unit, typeString))
 			case TypeArrayFloat:
-				if Type == "" {
-					Type = TypeFloat
+				if typeString == "" {
+					typeString = TypeFloat
 				}
-				v := e.([]Float)
+				v := ref.([]Float)
 				for _, val := range v {
-					uv = append(uv, SetUnitValueFloat(val.Value(), unit, Type))
+					uv = append(uv, SetUnitValueFloat(val.Value(), unit, typeString))
 				}
 
-			case TypeValueTypesInteger:
-				fallthrough
 			case TypeInteger:
-				if Type == "" {
-					Type = TypeInteger
+				if typeString == "" {
+					typeString = TypeInteger
 				}
-				v := e.(Integer).Value()
-				uv = append(uv, SetUnitValueInteger(v, unit, Type))
-
-			case TypeArrayValueTypesInteger:
-				fallthrough
+				v := ref.(Integer)
+				uv = append(uv, SetUnitValueInteger(v.Value(), unit, typeString))
 			case TypeArrayInteger:
-				if Type == "" {
-					Type = TypeInteger
+				if typeString == "" {
+					typeString = TypeInteger
 				}
-				v := e.([]Integer)
+				v := ref.([]Integer)
 				for _, val := range v {
-					uv = append(uv, SetUnitValueInteger(val.Value(), unit, Type))
+					uv = append(uv, SetUnitValueInteger(val.Value(), unit, typeString))
 				}
 				// HERE IS THE PROBLEM - need to return SOMETHING, even if it's null!
 
-			case TypeValueTypesCount:
-				fallthrough
 			case TypeCount:
-				if Type == "" {
-					Type = TypeCount
+				if typeString == "" {
+					typeString = TypeCount
 				}
-				v := e.(Count).Value()
-				uv = append(uv, SetUnitValueInteger(v, unit, Type))
-
-			case TypeArrayValueTypesCount:
-				fallthrough
+				v := ref.(Count)
+				uv = append(uv, SetUnitValueInteger(v.Value(), unit, typeString))
 			case TypeArrayCount:
-				if Type == "" {
-					Type = TypeCount
+				if typeString == "" {
+					typeString = TypeCount
 				}
-				v := e.([]Count)
+				v := ref.([]Count)
 				for _, val := range v {
-					uv = append(uv, SetUnitValueInteger(val.Value(), unit, Type))
+					uv = append(uv, SetUnitValueInteger(val.Value(), unit, typeString))
 				}
 
-			case TypeValueTypesBool:
-				fallthrough
 			case TypeBool:
-				if Type == "" {
-					Type = TypeBool
+				if typeString == "" {
+					typeString = TypeBool
 				}
-				v := e.(Bool)
+				v := ref.(Bool)
 				uv = append(uv, SetUnitValueBool(v.Value()))
-
-			case TypeArrayValueTypesBool:
-				fallthrough
 			case TypeArrayBool:
-				if Type == "" {
-					Type = TypeBool
+				if typeString == "" {
+					typeString = TypeBool
 				}
-				v := e.([]Bool)
+				v := ref.([]Bool)
 				for _, val := range v {
-					// uv = append(uv, SetUnitValueString(val.String(), unit, Type))
 					uv = append(uv, SetUnitValueBool(val.Value()))
 				}
 
-			case TypeValueTypesString:
-				fallthrough
 			case TypeString:
-				if Type == "" {
-					Type = TypeString
+				if typeString == "" {
+					typeString = TypeString
 				}
-				v := e.(String).String()
-				uv = append(uv, SetUnitValueString(v, unit, Type))
-
-			case TypeArrayValueTypesString:
-				fallthrough
+				v := ref.(String)
+				uv = append(uv, SetUnitValueString(v.String(), unit, typeString))
 			case TypeArrayString:
-				if Type == "" {
-					Type = TypeString
+				if typeString == "" {
+					typeString = TypeString
 				}
-				v := e.([]String)
+				v := ref.([]String)
 				for _, val := range v {
-					uv = append(uv, SetUnitValueString(val.Value(), unit, Type))
+					uv = append(uv, SetUnitValueString(val.Value(), unit, typeString))
 				}
 
-			case TypeValueTypesPsKey:
-				fallthrough
+			case TypePsId:
+				if typeString == "" {
+					typeString = TypePsId
+				}
+				v := ref.(PsId)
+				uv = append(uv, SetUnitValueString(v.String(), unit, typeString))
+
+			case TypeArrayPsId:
+				if typeString == "" {
+					typeString = TypePsId
+				}
+				v := ref.([]PsId)
+				for _, val := range v {
+					uv = append(uv, SetUnitValueString(val.String(), unit, typeString))
+				}
+
 			case TypePsKey:
-				if Type == "" {
-					Type = TypePsKey
+				if typeString == "" {
+					typeString = TypePsKey
 				}
-				v := e.(PsKey).Value()
-				uv = append(uv, SetUnitValueString(v, unit, Type))
+				v := ref.(PsKey)
+				uv = append(uv, SetUnitValueString(v.Value(), unit, typeString))
 
-			case TypeArrayValueTypesPsKey:
-				fallthrough
 			case TypeArrayPsKey:
-				if Type == "" {
-					Type = TypePsKey
+				if typeString == "" {
+					typeString = TypePsKey
 				}
-				v := e.([]PsKey)
+				v := ref.([]PsKey)
 				for _, val := range v {
-					uv = append(uv, SetUnitValueString(val.Value(), unit, Type))
+					uv = append(uv, SetUnitValueString(val.Value(), unit, typeString))
 				}
 
-			case TypeValueTypesPointId:
-				fallthrough
 			case TypePointId:
-				if Type == "" {
-					Type = TypePointId
+				if typeString == "" {
+					typeString = TypePointId
 				}
-				v := e.(PointId).String()
-				uv = append(uv, SetUnitValueString(v, unit, Type))
-
-			case TypeArrayValueTypesPointId:
-				fallthrough
+				v := ref.(PointId)
+				uv = append(uv, SetUnitValueString(v.String(), unit, typeString))
 			case TypeArrayPointId:
-				if Type == "" {
-					Type = TypePointId
+				if typeString == "" {
+					typeString = TypePointId
 				}
-				v := e.([]PointId)
+				v := ref.([]PointId)
 				for _, val := range v {
-					uv = append(uv, SetUnitValueString(val.String(), unit, Type))
+					uv = append(uv, SetUnitValueString(val.String(), unit, typeString))
 				}
 
-			case TypeValueTypesDateTime:
-				fallthrough
 			case TypeDateTime:
-				if Type == "" {
-					Type = TypeDateTime
+				if typeString == "" {
+					typeString = TypeDateTime
 				}
-				v := e.(DateTime).Format(dateFormat)
-				uv = append(uv, SetUnitValueString(v, unit, Type))
-
-			case TypeArrayValueTypesDateTime:
-				fallthrough
+				v := ref.(DateTime)
+				uv = append(uv, SetUnitValueString(v.Format(dateFormat), unit, typeString))
 			case TypeArrayDateTime:
-				if Type == "" {
-					Type = TypeDateTime
+				if typeString == "" {
+					typeString = TypeDateTime
 				}
-				v := e.([]DateTime)
+				v := ref.([]DateTime)
 				for _, val := range v {
-					uv = append(uv, SetUnitValueString(val.Format(dateFormat), unit, Type))
+					uv = append(uv, SetUnitValueString(val.Format(dateFormat), unit, typeString))
 				}
 
-			case TypeValueTypesTime:
-				fallthrough
 			case TypeTime:
-				if Type == "" {
-					Type = TypeTime
+				if typeString == "" {
+					typeString = TypeTime
 				}
-				v := e.(Time).Format(TimeLayout)
-				uv = append(uv, SetUnitValueString(v, unit, Type))
-
-			case TypeArrayValueTypesTime:
-				fallthrough
+				v := ref.(Time)
+				uv = append(uv, SetUnitValueString(v.Format(TimeLayout), unit, typeString))
 			case TypeArrayTime:
-				if Type == "" {
-					Type = TypeTime
+				if typeString == "" {
+					typeString = TypeTime
 				}
-				v := e.([]Time)
+				v := ref.([]Time)
 				for _, val := range v {
-					uv = append(uv, SetUnitValueString(val.Format(TimeLayout), unit, Type))
+					uv = append(uv, SetUnitValueString(val.Format(TimeLayout), unit, typeString))
 				}
 
 			default:
-				uv = append(uv, SetUnitValueString("", unit, Type + "(unknown)"))
+				uv = append(uv, SetUnitValueString("", unit, typeString+ "(unknown)"))
 				ok = false
 		}
 	}
 	return uv, isNil, ok
 }
 
-func AnyToValueString(e interface{}, intSize int, dateFormat string) string {
+func AnyToValueString(ref interface{}, intSize int, dateFormat string) string {
 	var ret string
 
 	for range Only.Once {
-		if IsNil(e) {
+		if IsNil(ref) {
 			break
 		}
 
-		if dateFormat == "" {
-			dateFormat = DateTimeAltLayout
-		}
-
 		// fmt.Printf("DEBUG TYPE: %s\n", reflect.TypeOf(e).String())
-		switch reflect.TypeOf(e).String() {
+		Type := reflect.TypeOf(ref).String()
+		Type = strings.ReplaceAll(Type, "valueTypes.", "")
+		switch Type {
 			case "bool":
-				ret = fmt.Sprintf("%v", e.(bool))
+				ret = fmt.Sprintf("%v", ref.(bool))
 			case "int":
-				ret = PrintInt(intSize, e.(int))
+				ret = PrintInt(intSize, ref.(int))
 			case "int32":
-				ret = PrintInt(intSize, e.(int32))
+				ret = PrintInt(intSize, ref.(int32))
 			case "int64":
-				ret = PrintInt(intSize, e.(int64))
+				ret = PrintInt(intSize, ref.(int64))
 			case "float32":
 				// ret = float64(s.(float32))
-				v , err := json.Marshal(e)
+				v , err := json.Marshal(ref)
 				if err != nil {
 					break
 				}
 				ret = string(v)
 			case "float64":
 				// ret = s.(float64)
-				v , err := json.Marshal(e)
+				v , err := json.Marshal(ref)
 				if err != nil {
 					break
 				}
 				ret = string(v)
 			case "string":
-				ret = e.(string)
-				// ret = strings.Trim(e.(string), ".")
+				ret = ref.(string)
+				// ret = strings.Trim(ref.(string), ".")
 			case "[]string":
 				// v := strings.Join(s.([]string), ",")
-				v , err := json.Marshal(e)
+				v , err := json.Marshal(ref)
 				if err != nil {
 					break
 				}
 				ret = string(v)
 
-			case TypeValueTypesUnitValue:
-				fallthrough
 			case TypeUnitValue:
-				ret = e.(UnitValue).String()
-
+				ret = ref.(UnitValue).String()
 			case TypeUnitValues:
 				fallthrough
 			case TypeArrayUnitValue:
-				fallthrough
-			case TypeArrayValueTypesUnitValue:
 				// ret = s.([]UnitValue)
-				v , err := json.Marshal(e)
+				v , err := json.Marshal(ref)
 				if err != nil {
 					break
 				}
 				ret = string(v)
 
-			case TypeValueTypesFloat:
-				fallthrough
 			case TypeFloat:
-				ret = e.(Float).String()
-
-			case TypeArrayValueTypesFloat:
-				fallthrough
+				ret = ref.(Float).String()
+				// v , err := json.Marshal(ref)
+				// if err != nil {
+				// 	break
+				// }
+				// ret = string(v)
 			case TypeArrayFloat:
 				// ret = s.([]Float)
-				v , err := json.Marshal(e)
+				v , err := json.Marshal(ref)
 				if err != nil {
 					break
 				}
 				ret = string(v)
 
-			case TypeValueTypesInteger:
-				fallthrough
 			case TypeInteger:
-				ret = PrintInt(intSize, e.(Integer))
-
-			case TypeArrayValueTypesInteger:
-				fallthrough
+				ret = PrintInt(intSize, ref.(Integer))
 			case TypeArrayInteger:
 				// ret = s.([]Integer)
-				v , err := json.Marshal(e)
+				v , err := json.Marshal(ref)
 				if err != nil {
 					break
 				}
 				ret = string(v)
 
-			case TypeValueTypesCount:
-				fallthrough
 			case TypeCount:
-				ret = PrintInt(intSize, e.(Count))
-
-			case TypeArrayValueTypesCount:
-				fallthrough
+				ret = PrintInt(intSize, ref.(Count))
 			case TypeArrayCount:
 				// ret = s.([]Count)
-				v , err := json.Marshal(e)
+				v , err := json.Marshal(ref)
 				if err != nil {
 					break
 				}
 				ret = string(v)
 
-			case TypeValueTypesBool:
-				fallthrough
 			case TypeBool:
-				ret = e.(Bool).String()
-
-			case TypeArrayValueTypesBool:
-				fallthrough
+				ret = ref.(Bool).String()
 			case TypeArrayBool:
 				// ret = s.([]Bool)
-				v , err := json.Marshal(e)
+				v , err := json.Marshal(ref)
 				if err != nil {
 					break
 				}
 				ret = string(v)
 
-			case TypeValueTypesString:
-				fallthrough
 			case TypeString:
-				ret = e.(String).String()
-
-			case TypeArrayValueTypesString:
-				fallthrough
+				ret = ref.(String).String()
+				// ret = strings.Trim(ref.(String).String(), ".")
 			case TypeArrayString:
 				// ret = s.([]String)
-				v , err := json.Marshal(e)
+				v , err := json.Marshal(ref)
 				if err != nil {
 					break
 				}
 				ret = string(v)
 
-			case TypeValueTypesPsKey:
-				fallthrough
 			case TypePsKey:
-				ret = e.(PsKey).Value()
-
-			case TypeArrayValueTypesPsKey:
-				fallthrough
+				ret = ref.(PsKey).String()
 			case TypeArrayPsKey:
 				// ret = s.([]PsKey)
-				v , err := json.Marshal(e)
+				v , err := json.Marshal(ref)
 				if err != nil {
 					break
 				}
 				ret = string(v)
 
-			case TypeValueTypesPointId:
-				fallthrough
-			case TypePointId:
-				ret = e.(PointId).String()
+			case TypePsId:
+				ret = ref.(PsId).String()
+			case TypeArrayPsId:
+				// ret = s.([]PsId)
+				v , err := json.Marshal(ref)
+				if err != nil {
+					break
+				}
+				ret = string(v)
 
-			case TypeArrayValueTypesPointId:
-				fallthrough
+			case TypePointId:
+				ret = ref.(PointId).String()
 			case TypeArrayPointId:
 				// ret = s.([]PointId)
-				v , err := json.Marshal(e)
+				v , err := json.Marshal(ref)
 				if err != nil {
 					break
 				}
 				ret = string(v)
 
-			case TypeValueTypesDateTime:
-				fallthrough
 			case TypeDateTime:
-				v := e.(DateTime)
+				if dateFormat == "" {
+					dateFormat = DateTimeAltLayout
+				}
+				v := ref.(DateTime)
 				if v.IsZero() {
 					ret = ""
 					break
 				}
 				ret = v.Format(dateFormat)
-
-			case TypeArrayValueTypesDateTime:
-				fallthrough
 			case TypeArrayDateTime:
 				// ret = s.([]DateTime)
-				v , err := json.Marshal(e)
+				v , err := json.Marshal(ref)
 				if err != nil {
 					break
 				}
 				ret = string(v)
 
-			case TypeValueTypesTime:
-				fallthrough
 			case TypeTime:
-				v := e.(Time)
+				if dateFormat == "" {
+					dateFormat = TimeLayoutSecond
+				}
+				v := ref.(Time)
 				if v.IsZero() {
 					ret = ""
 					break
 				}
 				ret = v.Format(dateFormat)
+			case TypeArrayTime:
+				// ret = s.([]Time)
+				v , err := json.Marshal(ref)
+				if err != nil {
+					break
+				}
+				ret = string(v)
 
 			default:
 		}

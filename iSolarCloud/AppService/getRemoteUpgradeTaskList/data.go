@@ -12,7 +12,7 @@ const Url = "/v1/devService/getRemoteUpgradeTaskList"
 const Disabled = false
 
 type RequestData struct {
-	PsIdList string `json:"ps_id_list" required:"true"`
+	PsIdList valueTypes.String `json:"ps_id_list" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

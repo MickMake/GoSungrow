@@ -32,7 +32,7 @@ type ResultData struct {
 	ChannelId            valueTypes.Integer `json:"chnnl_id" PointId:"channel_id"`
 	CommandStatus        valueTypes.Integer `json:"command_status"`
 	CommunicationDevUUID valueTypes.Integer `json:"communication_dev_uuid"`
-	CountryID            interface{}        `json:"country_id"`
+	CountryId            interface{}        `json:"country_id"`
 	CpldVersion          interface{}        `json:"cpld_version"`
 	DataFlagDetail       valueTypes.Integer `json:"data_flag_detail"`
 	DevFaultStatus       string             `json:"dev_fault_status"`
@@ -53,16 +53,16 @@ type ResultData struct {
 	DeviceArea              valueTypes.String  `json:"device_area"`
 	DeviceAreaName          valueTypes.String  `json:"device_area_name"`
 	DeviceCode              valueTypes.Integer `json:"device_code"`
-	DeviceFactoryID         interface{}        `json:"device_factory_id"`
+	DeviceFactoryId         interface{}        `json:"device_factory_id"`
 	DeviceModel             valueTypes.String  `json:"device_model"`
 	DeviceModelCode         valueTypes.String  `json:"device_model_code"`
-	DeviceModelID           valueTypes.Integer `json:"device_model_id"`
+	DeviceModelId           valueTypes.Integer `json:"device_model_id"`
 	DeviceName              valueTypes.String  `json:"device_name"`
 	DeviceProSn             valueTypes.String  `json:"device_pro_sn"`
 	DeviceStatus            int64              `json:"device_status"`
 	DeviceType              int64              `json:"device_type"`
 	FactoryName             valueTypes.String  `json:"factory_name"`
-	GridTypeID              interface{}        `json:"grid_type_id"`
+	GridTypeId              interface{}        `json:"grid_type_id"`
 	InstallerDevFaultStatus interface{}        `json:"installer_dev_fault_status"`
 	InverterModelType       int64              `json:"inverter_model_type"`
 	IsCountryCheck          valueTypes.Bool    `json:"is_country_check"`
@@ -91,7 +91,7 @@ type ResultData struct {
 	OwnerDevFaultStatus     interface{}        `json:"owner_dev_fault_status"`
 	P2                      interface{}        `json:"p2"`
 	P24                     interface{}        `json:"p24"`
-	PsID                    valueTypes.Integer `json:"ps_id"`
+	PsId                    valueTypes.PsId `json:"ps_id"`
 	PsKey                   valueTypes.String  `json:"ps_key"`
 	PsName                  valueTypes.String  `json:"ps_name"`
 	PsShortName             valueTypes.String  `json:"ps_short_name"`

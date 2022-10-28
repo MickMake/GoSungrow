@@ -16,7 +16,7 @@ const Url = "/v1/commonService/queryMutiPointDataList"
 const Disabled = false
 
 type RequestData struct {
-	PsID           valueTypes.Integer  `json:"ps_id" required:"true"`
+	PsId           valueTypes.PsId  `json:"ps_id" required:"true"`
 	PsKey          valueTypes.PsKey `json:"ps_key" required:"true"`
 	Points         string `json:"points" required:"true"`
 	MinuteInterval string `json:"minute_interval" required:"true"`

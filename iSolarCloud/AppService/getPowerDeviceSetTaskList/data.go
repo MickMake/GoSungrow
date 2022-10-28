@@ -4,8 +4,8 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/getPowerDeviceSetTaskList"
@@ -27,28 +27,28 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		CommandStatus        valueTypes.Integer `json:"command_status"`
-		CommandType          valueTypes.Integer `json:"command_type"`
-		CreateTime           string      `json:"create_time"`
-		OperateUserID        valueTypes.Integer `json:"operate_user_id"`
-		OverTime             string      `json:"over_time"`
-		PsID                 valueTypes.Integer `json:"ps_id"`
-		SetCancelNum         valueTypes.Integer `json:"set_cancel_num"`
-		SetFailNum           valueTypes.Integer `json:"set_fail_num"`
-		SetFinishNum         valueTypes.Integer `json:"set_finish_num"`
-		SetOvertimeNum       valueTypes.Integer `json:"set_overtime_num"`
-		SetSuccessNum        valueTypes.Integer `json:"set_success_num"`
-		SetTotalNum          valueTypes.Integer `json:"set_total_num"`
-		SweepDevParamSetType valueTypes.Integer `json:"sweep_dev_param_set_type"`
-		TaskID               valueTypes.Integer `json:"task_id"`
-		TaskName             string      `json:"task_name"`
-		TaskType             valueTypes.Integer `json:"task_type"`
-		TemplateType         valueTypes.Integer `json:"template_type"`
-		UpdateTime           string      `json:"update_time"`
-		UserEnglishName      interface{} `json:"user_english_name"`
-		UserName             string      `json:"user_name"`
-		UUID                 valueTypes.Integer `json:"uuid"`
-	} `json:"pageList"`
+		CommandStatus        valueTypes.Integer  `json:"command_status"`
+		CommandType          valueTypes.Integer  `json:"command_type"`
+		CreateTime           valueTypes.DateTime `json:"create_time"`
+		OperateUserId        valueTypes.Integer  `json:"operate_user_id"`
+		OverTime             valueTypes.DateTime `json:"over_time"`
+		PsId                 valueTypes.PsId     `json:"ps_id"`
+		SetCancelNum         valueTypes.Count    `json:"set_cancel_num"`
+		SetFailNum           valueTypes.Count    `json:"set_fail_num"`
+		SetFinishNum         valueTypes.Count    `json:"set_finish_num"`
+		SetOvertimeNum       valueTypes.Count    `json:"set_overtime_num"`
+		SetSuccessNum        valueTypes.Count    `json:"set_success_num"`
+		SetTotalNum          valueTypes.Count    `json:"set_total_num"`
+		SweepDevParamSetType valueTypes.Integer  `json:"sweep_dev_param_set_type"`
+		TaskId               valueTypes.Integer  `json:"task_id"`
+		TaskName             valueTypes.String   `json:"task_name"`
+		TaskType             valueTypes.Integer  `json:"task_type"`
+		TemplateType         valueTypes.Integer  `json:"template_type"`
+		UpdateTime           valueTypes.DateTime `json:"update_time"`
+		UserEnglishName      interface{}         `json:"user_english_name"`
+		UserName             valueTypes.String   `json:"user_name"`
+		UUID                 valueTypes.Integer  `json:"uuid"`
+	} `json:"pageList" PointId:"page_list" PointNameFromChild:"PsId.CreateTime" PointNameFromAppend:"false"`
 	RowCount valueTypes.Integer `json:"rowCount"`
 }
 
@@ -63,30 +63,14 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-// type DecodeResultData ResultData
-//
-// func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-// }
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
+		pkg := apiReflect.GetName("", *e)
+		dt := valueTypes.NewDateTime(valueTypes.Now)
+		// name := pkg + "." + e.Request.PsId.String()
+		entries.StructToPoints(e.Response.ResultData, pkg, "system", dt)
 	}
 
 	return entries

@@ -199,7 +199,7 @@ func (e *EndPoint) Print() {
 	fmt.Printf("Login Last IP:\t%s\n", e.LoginLastIP())
 	fmt.Printf("Login State:\t%s\n", e.LoginState())
 	fmt.Printf("User Account:\t%s\n", e.UserAccount())
-	fmt.Printf("User Id:\t%s\n", e.UserID())
+	fmt.Printf("User Id:\t%s\n", e.UserId())
 	fmt.Printf("User Name:\t%s\n", e.UserName())
 	fmt.Printf("Is Online:\t%v\n", e.IsOnline())
 	fmt.Printf("Token:\t%s\n", e.Token())

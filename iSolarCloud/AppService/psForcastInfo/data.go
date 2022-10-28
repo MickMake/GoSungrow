@@ -13,7 +13,7 @@ const Url = "/v1/powerStationService/psForcastInfo"
 const Disabled = false
 
 type RequestData struct {
-	PsId valueTypes.Integer `json:"ps_id" required:"true"`
+	PsId valueTypes.PsId `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -28,7 +28,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	AreaForcastList []struct {
-		Chill             valueTypes.String   `json:"chill"`
+		Chill             valueTypes.Float   `json:"chill"`
 		City              valueTypes.String   `json:"city"`
 		Code              valueTypes.Integer  `json:"code"`
 		CodeName          valueTypes.String   `json:"code_name"`
@@ -57,7 +57,7 @@ type ResultData struct {
 	} `json:"areaForcastList" PointNameFromChild:"DateTime" PointNameDateFormat:"20060102"`
 	StationsCityCode []struct {
 		City   valueTypes.String  `json:"city"`
-		PsID   valueTypes.Integer `json:"ps_id"`
+		PsId   valueTypes.PsId `json:"ps_id"`
 		PsName valueTypes.String  `json:"ps_name"`
 	} `json:"stationsCityCode"`
 }

@@ -9,8 +9,22 @@ import (
 	"github.com/MickMake/GoUnify/cmdPath"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
+
+func (ep *EndPointStruct) ApiSetFilenamePrefix2(ref interface{}, format string, args ...interface{}) string {
+	f := strings.Join(apiReflect.GetStructValuesAsArray(ref), "-")
+	fmt.Printf("[%s]\n", f)
+	if format != "" {
+		ep.FileNamePrefix = fmt.Sprintf(format, args...)
+		// ep.FileNamePrefix = fmt.Sprintf("%s_%s-%s", ep.Area, ep.Name, ep.FileNamePrefix)
+		ep.FileNamePrefix = string(ep.Area) + "_" + string(ep.Name) + "-" + ep.FileNamePrefix
+	} else {
+		ep.FileNamePrefix = string(ep.Area) + "_" + string(ep.Name)
+	}
+	return ep.FileNamePrefix
+}
 
 func (ep *EndPointStruct) ApiSetFilenamePrefix(format string, args ...interface{}) string {
 	if format != "" {

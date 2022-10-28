@@ -26,7 +26,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		TemplateID   valueTypes.Integer  `json:"template_id"`
+		TemplateId   valueTypes.Integer  `json:"template_id"`
 		TemplateName valueTypes.String `json:"template_name"`
 		UpdateTime   valueTypes.DateTime `json:"update_time"`
 	} `json:"pageList"`

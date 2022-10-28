@@ -29,7 +29,7 @@ type ResultData []struct {
 	Installer      string   `json:"installer"`
 	InstallerEmail string   `json:"installer_email"`
 	InstallerPhone string   `json:"installer_phone"`
-	OrgID          string   `json:"org_id"`
+	OrgId          string   `json:"org_id"`
 	PsNames        []string `json:"ps_names"`
 }
 

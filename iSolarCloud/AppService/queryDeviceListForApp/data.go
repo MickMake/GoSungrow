@@ -12,7 +12,7 @@ const Url = "/v1/devService/queryDeviceListForApp"
 const Disabled = false
 
 type RequestData struct {
-	PsId valueTypes.Integer `json:"ps_id" required:"true"`
+	PsId valueTypes.PsId `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -26,21 +26,21 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		AttrID                  valueTypes.Integer  `json:"attr_id"`
+		AttrId                  valueTypes.Integer  `json:"attr_id"`
 		ChannelId               valueTypes.Integer  `json:"chnnl_id" PointId:"channel_id"`
 		CommandStatus           valueTypes.Integer  `json:"command_status"`
 		ConnectState            valueTypes.Integer  `json:"connect_state"`
 		DataFlag                valueTypes.Integer  `json:"data_flag"`
 		DataFlagDetail          valueTypes.Integer  `json:"data_flag_detail"`
 		DevFaultStatus          valueTypes.Integer  `json:"dev_fault_status"`
-		DevStatus               valueTypes.Integer  `json:"dev_status"`
+		DevStatus               valueTypes.Bool     `json:"dev_status"`
 		DeviceArea              valueTypes.String   `json:"device_area"`
 		DeviceCode              valueTypes.Integer  `json:"device_code"`
 		DeviceFactoryDate       valueTypes.DateTime `json:"device_factory_date"`
-		DeviceID                valueTypes.Integer  `json:"device_id"`
+		DeviceId                valueTypes.Integer  `json:"device_id"`
 		DeviceModel             valueTypes.String   `json:"device_model"`
 		DeviceModelCode         valueTypes.String   `json:"device_model_code"`
-		DeviceModelID           valueTypes.Integer  `json:"device_model_id"`
+		DeviceModelId           valueTypes.Integer  `json:"device_model_id"`
 		DeviceName              valueTypes.String   `json:"device_name"`
 		DeviceProSn             valueTypes.String   `json:"device_pro_sn"`
 		DeviceState             valueTypes.Integer  `json:"device_state"`
@@ -64,7 +64,7 @@ type ResultData struct {
 		P24                     interface{}         `json:"p24"`
 		Posx                    interface{}         `json:"posx"`
 		Posy                    interface{}         `json:"posy"`
-		PsId                    valueTypes.Integer  `json:"ps_id"`
+		PsId                    valueTypes.PsId  `json:"ps_id"`
 		PsKey                   valueTypes.PsKey    `json:"ps_key"`
 		RelState                valueTypes.Integer  `json:"rel_state"`
 		Sn                      valueTypes.String   `json:"sn" PointName:"Serial Number"`

@@ -26,10 +26,10 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		AlarmCount                valueTypes.Integer   `json:"alarm_count" PointId:"alarm_count" PointUpdateFreq:"UpdateFreqBoot"`
-		AlarmDevCount             valueTypes.Integer   `json:"alarm_dev_count" PointId:"alarm_dev_count" PointUpdateFreq:"UpdateFreqBoot"`
-		AreaID                    interface{}          `json:"area_id" PointId:"area_id"`
-		AreaType                  interface{}          `json:"area_type" PointId:"area_type"`
+		AlarmCount                valueTypes.Count   `json:"alarm_count" PointId:"alarm_count" PointUpdateFreq:"UpdateFreqBoot"`
+		AlarmDevCount             valueTypes.Count   `json:"alarm_dev_count" PointId:"alarm_dev_count" PointUpdateFreq:"UpdateFreqBoot"`
+		AreaId                    interface{}          `json:"area_id" PointId:"area_id"`
+		AreaType                  valueTypes.Integer   `json:"area_type" PointId:"area_type"`
 		ArrearsStatus             valueTypes.Integer   `json:"arrears_status" PointId:"arrears_status"`
 		BuildDate                 valueTypes.DateTime  `json:"build_date" PointId:"build_date" PointUpdateFreq:"UpdateFreqBoot"`
 		BuildStatus               valueTypes.Integer   `json:"build_status" PointId:"build_status" PointUpdateFreq:"UpdateFreqBoot"`
@@ -48,28 +48,28 @@ type ResultData struct {
 		EsTotalDischargeEnergy    valueTypes.UnitValue `json:"es_total_disenergy" PointId:"p83095" PointName:"ES Total Discharge Energy" PointUpdateFreq:"UpdateFreqTotal"`
 		EsTotalEnergy             valueTypes.UnitValue `json:"es_total_energy" PointId:"p83127" PointName:"ES Total Energy" PointUpdateFreq:"UpdateFreqTotal"`
 		ExpectInstallDate         valueTypes.DateTime  `json:"expect_install_date" PointId:"expect_install_date"`
-		FaultAlarmOfflineDevCount valueTypes.Integer   `json:"fault_alarm_offline_dev_count" PointId:"fault_alarm_offline_dev_count"`
-		FaultCount                valueTypes.Integer   `json:"fault_count" PointId:"fault_count"`
-		FaultDevCount             valueTypes.Integer   `json:"fault_dev_count" PointId:"fault_dev_count"`
+		FaultAlarmOfflineDevCount valueTypes.Count   `json:"fault_alarm_offline_dev_count" PointId:"fault_alarm_offline_dev_count"`
+		FaultCount                valueTypes.Count   `json:"fault_count" PointId:"fault_count"`
+		FaultDevCount             valueTypes.Count   `json:"fault_dev_count" PointId:"fault_dev_count"`
 		GcjLatitude               valueTypes.Float     `json:"gcj_latitude" PointId:"gcj_latitude"`
 		GcjLongitude              valueTypes.Float     `json:"gcj_longitude" PointId:"gcj_longitude"`
 		GprsLatitude              valueTypes.Float     `json:"gprs_latitude" PointId:"gprs_latitude"`
 		GprsLongitude             valueTypes.Float     `json:"gprs_longitude" PointId:"gprs_longitude"`
 		Images                    []struct {
-			FileID      valueTypes.Integer `json:"file_id"`
-			ID          valueTypes.Integer `json:"id"`
+			FileId      valueTypes.Integer `json:"file_id"`
+			Id          valueTypes.Integer `json:"id"`
 			PicLanguage valueTypes.Integer `json:"pic_language"`
 			PicType     valueTypes.Integer `json:"pic_type"`
 			PictureName valueTypes.String  `json:"picture_name"`
 			PictureURL  valueTypes.String  `json:"picture_url"`
-			PsID        valueTypes.Integer `json:"ps_id"`
+			PsId        valueTypes.PsId `json:"ps_id"`
 			PsUnitUUID  interface{}        `json:"ps_unit_uuid"`
 		} `json:"images" PointName:"Images"`
 		InstallDate            valueTypes.DateTime  `json:"install_date" PointId:"install_date"`
 		InstalledPowerMap      valueTypes.UnitValue `json:"installed_power_map" PointId:"installed_power_map"`
 		InstalledPowerVirgin   valueTypes.Float     `json:"installed_power_virgin" PointIgnore:"true"`
-		InstallerAlarmCount    valueTypes.Integer   `json:"installer_alarm_count" PointId:"installer_alarm_count"`
-		InstallerFaultCount    valueTypes.Integer   `json:"installer_fault_count" PointId:"installer_fault_count"`
+		InstallerAlarmCount    valueTypes.Count   `json:"installer_alarm_count" PointId:"installer_alarm_count"`
+		InstallerFaultCount    valueTypes.Count   `json:"installer_fault_count" PointId:"installer_fault_count"`
 		InstallerPsFaultStatus valueTypes.Integer   `json:"installer_ps_fault_status" PointId:"installer_ps_fault_status"`
 		IsBankPs               valueTypes.Bool      `json:"is_bank_ps" PointId:"is_bank_ps"`
 		IsTuv                  valueTypes.Bool      `json:"is_tuv" PointId:"is_tuv"`
@@ -81,11 +81,11 @@ type ResultData struct {
 		MapLongitude           valueTypes.Float     `json:"map_longitude" PointId:"map_longitude"`
 		MlpeFlag               valueTypes.Integer   `json:"mlpe_flag" PointId:"mlpe_flag"`
 		Nmi                    valueTypes.String    `json:"nmi" PointId:"nmi"`
-		OfflineDevCount        valueTypes.Integer   `json:"offline_dev_count" PointId:"offline_dev_count"`
+		OfflineDevCount        valueTypes.Count   `json:"offline_dev_count" PointId:"offline_dev_count"`
 		OperateYear            interface{}          `json:"operate_year" PointId:"operate_year"`
 		OperationBusName       valueTypes.String    `json:"operation_bus_name" PointId:"operation_bus_name"`
-		OwnerAlarmCount        valueTypes.Integer   `json:"owner_alarm_count" PointId:"owner_alarm_count"`
-		OwnerFaultCount        valueTypes.Integer   `json:"owner_fault_count" PointId:"owner_fault_count"`
+		OwnerAlarmCount        valueTypes.Count   `json:"owner_alarm_count" PointId:"owner_alarm_count"`
+		OwnerFaultCount        valueTypes.Count   `json:"owner_fault_count" PointId:"owner_fault_count"`
 		OwnerPsFaultStatus     valueTypes.Integer   `json:"owner_ps_fault_status" PointId:"owner_ps_fault_status"`
 		P83022y                valueTypes.String    `json:"p83022y" PointId:"p83022" PointUpdateFreq:"UpdateFreq5Mins"`
 		P83046                 valueTypes.Float     `json:"p83046" PointId:"p83046" PointUpdateFreq:"UpdateFreq5Mins"`
@@ -116,11 +116,11 @@ type ResultData struct {
 		ParamWater             valueTypes.Float     `json:"param_water" PointId:"param_water"`
 		PrScale                string               `json:"pr_scale" PointId:"pr_scale"`
 		Producer               interface{}          `json:"producer" PointId:"producer"`
-		PsCountryID            valueTypes.Integer   `json:"ps_country_id" PointId:"ps_country_id"`
+		PsCountryId            valueTypes.Integer   `json:"ps_country_id" PointId:"ps_country_id"`
 		PsFaultStatus          valueTypes.Integer   `json:"ps_fault_status" PointId:"ps_fault_status"`
 		PsHealthStatus         valueTypes.Integer   `json:"ps_health_status" PointId:"ps_health_status"`
 		PsHolder               valueTypes.String    `json:"ps_holder" PointId:"ps_holder"`
-		PsId                   valueTypes.Integer   `json:"ps_id" PointId:"ps_id"`
+		PsId                   valueTypes.PsId      `json:"ps_id" PointId:"ps_id"`
 		PsIsNotInit            valueTypes.Bool      `json:"ps_is_not_init" PointId:"ps_is_not_init"`
 		PsName                 valueTypes.String    `json:"ps_name" PointId:"ps_name"`
 		PsShortName            valueTypes.String    `json:"ps_short_name" PointId:"ps_short_name"`
@@ -150,7 +150,7 @@ type ResultData struct {
 		WgsLongitude           valueTypes.Float     `json:"wgs_longitude" PointId:"wgs_longitude"`
 		ZipCode                valueTypes.String    `json:"zip_code" PointId:"zip_code"`
 	} `json:"pageList" PointNameFromChild:"PsId"`
-	RowCount valueTypes.Integer `json:"rowCount" PointIgnore:"true"`
+	RowCount valueTypes.Count `json:"rowCount" PointIgnore:"true"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -180,7 +180,7 @@ type Device struct {
 	PsFaultStatus          valueTypes.Integer
 	PsHealthStatus         valueTypes.Integer
 	PsHolder               valueTypes.String
-	PsID                   valueTypes.Integer
+	PsId                   valueTypes.PsId
 	PsName                 valueTypes.String
 	PsShortName            valueTypes.String
 	PsStatus               valueTypes.Integer
@@ -195,7 +195,7 @@ func (e *ResultData) GetPsDevices() Devices {
 			PsFaultStatus:  d.PsFaultStatus,
 			PsHealthStatus: d.PsHealthStatus,
 			PsHolder:       d.PsHolder,
-			PsID:           d.PsId,
+			PsId:           d.PsId,
 			PsName:         d.PsName,
 			PsShortName:    d.PsShortName,
 			PsStatus:       d.PsStatus,
@@ -205,8 +205,8 @@ func (e *ResultData) GetPsDevices() Devices {
 	return ret
 }
 
-func (e *ResultData) GetPsIds() []valueTypes.Integer {
-	var ret []valueTypes.Integer
+func (e *ResultData) GetPsIds() []valueTypes.PsId {
+	var ret []valueTypes.PsId
 	for range Only.Once {
 		i := len(e.PageList)
 		if i == 0 {
@@ -253,6 +253,6 @@ func (e *ResultData) GetPsSerial() []string {
 	return ret
 }
 
-func (e *EndPoint) GetPsIds() []valueTypes.Integer {
+func (e *EndPoint) GetPsIds() []valueTypes.PsId {
 	return e.Response.ResultData.GetPsIds()
 }

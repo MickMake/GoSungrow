@@ -74,7 +74,7 @@ func (rd RequestData) Help() string {
 
 type ResultData []struct {
 	PointCalType valueTypes.Integer  `json:"point_cal_type"`
-	PointID      valueTypes.Integer  `json:"point_id"`
+	PointId      valueTypes.Integer  `json:"point_id"`
 	PointName    string `json:"point_name"`
 }
 
@@ -133,7 +133,7 @@ func (e *EndPoint) GetPointDataTable() output.Table {
 			_ = table.AddRow(
 				e.Request.DeviceType,
 				p.PointCalType,
-				p.PointID,
+				p.PointId,
 				p.PointName,
 			)
 			if table.Error != nil {

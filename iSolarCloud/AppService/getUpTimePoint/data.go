@@ -29,10 +29,10 @@ type ResultData struct {
 	PointTimeRelation []struct {
 		Is24Hour  valueTypes.Bool `json:"is_24_hour"`
 		PointList []struct {
-			PointID  valueTypes.Integer `json:"point_id"`
+			PointId  valueTypes.Integer `json:"point_id"`
 			TimeType valueTypes.Integer `json:"time_type"`
 		} `json:"point_list"`
-		UpTimePointID valueTypes.Integer `json:"up_time_point_id"`
+		UpTimePointId valueTypes.Integer `json:"up_time_point_id"`
 	} `json:"point_time_relation"`
 }
 

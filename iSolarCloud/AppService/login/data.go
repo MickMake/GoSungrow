@@ -35,13 +35,13 @@ type ResultData struct {
 
 	AcceptOrderNum         valueTypes.Integer `json:"accept_order_num"`
 	BackgroundColor        valueTypes.Integer `json:"background_color"`
-	Countryid              string      `json:"countryid"`
-	Createdate             string      `json:"createdate"`
-	Createuserid           string      `json:"createuserid"`
+	CountryId              string      `json:"countryid"`
+	CreateDate             string      `json:"createdate"`
+	CreateUserId           string      `json:"createuserid"`
 	CurrentOrderNum        valueTypes.Integer `json:"current_order_num"`
 	DisableTime            string      `json:"disable_time"`
 	Email                  string      `json:"email"`
-	Englishname            interface{} `json:"englishname"`
+	EnglishName            interface{} `json:"englishname"`
 	GcjLatitude            valueTypes.Float   `json:"gcj_latitude"`
 	GcjLongitude           valueTypes.Float   `json:"gcj_longitude"`
 	ImToken                interface{} `json:"im_token"`
@@ -74,14 +74,14 @@ type ResultData struct {
 	MapType                string      `json:"map_type"`
 	MinDate                valueTypes.DateTime      `json:"min_date"`
 	MobileTel              interface{} `json:"mobile_tel"`
-	OrgID                  string      `json:"org_id"`
+	OrgId                  string      `json:"org_id"`
 	OrgName                string      `json:"org_name"`
 	OrgTimezone            string      `json:"org_timezone"`
 	PasswordIsSimple       valueTypes.Integer `json:"password_is_simple"`
-	PhotoID                interface{} `json:"photo_id"`
+	PhotoId                interface{} `json:"photo_id"`
 	PhotoURL               interface{} `json:"photo_url"`
 	Privileges             []struct {
-		FatherID        valueTypes.Integer `json:"father_id"`
+		FatherId        valueTypes.Integer `json:"father_id"`
 		IconURL         interface{} `json:"icon_url"`
 		IsOpen          valueTypes.Bool    `json:"is_open"`
 		IsThirdPlatform valueTypes.Bool    `json:"is_third_platform"`
@@ -91,13 +91,13 @@ type ResultData struct {
 		MenuOrder       interface{} `json:"menu_order"`
 		MenuType        string      `json:"menu_type"`
 		MenuURL         string      `json:"menu_url"`
-		PrivilegeID     valueTypes.Integer `json:"privilege_id"`
-		RoleID          valueTypes.Integer `json:"role_id"`
+		PrivilegeId     valueTypes.Integer `json:"privilege_id"`
+		RoleId          valueTypes.Integer `json:"role_id"`
 		URLTarget       string      `json:"url_target"`
 		VueIcon         interface{} `json:"vue_icon"`
 		VuePath         interface{} `json:"vue_path"`
 	} `json:"privileges"`
-	RoleID                       string        `json:"role_id"`
+	RoleId                       string        `json:"role_id"`
 	SecondaryOrgIds              []interface{} `json:"secondaryOrgIds"`
 	ServerTel                    string        `json:"server_tel"`
 	ServiceVersion               string        `json:"service_version"`
@@ -114,14 +114,14 @@ type ResultData struct {
 	UserAccountModifyCount       valueTypes.Integer   `json:"user_account_modify_count"`
 	UserAccountModifyRemainTimes valueTypes.Integer   `json:"user_account_modify_remain_times"`
 	UserDealerOrgCode            interface{}   `json:"user_dealer_org_code"`
-	UserID                       string        `json:"user_id"`
+	UserId                       string        `json:"user_id"`
 	UserLevel                    string        `json:"user_level"`
-	UserMasterOrgID              string        `json:"user_master_org_id"`
+	UserMasterOrgId              string        `json:"user_master_org_id"`
 	UserMasterOrgName            string        `json:"user_master_org_name"`
-	UserMasterOrgTimeZoneID      string        `json:"user_master_org_time_zone_id"`
+	UserMasterOrgTimeZoneId      string        `json:"user_master_org_time_zone_id"`
 	UserMasterOrgTimeZoneName    string        `json:"user_master_org_time_zone_name"`
 	UserName                     string        `json:"user_name"`
-	UserRoleIDList               []string      `json:"user_role_id_list"`
+	UserRoleIdList               []string      `json:"user_role_id_list"`
 	UserTelNationCode            interface{}   `json:"user_tel_nation_code"`
 	UserauthorURL                []interface{} `json:"userauthorURL"`
 	Userauthorbutto              []string      `json:"userauthorbutto"`
@@ -156,15 +156,11 @@ func (e *EndPoint) AppKey() string {
 	return e.Request.RequestCommon.Appkey
 }
 
-func (e *EndPoint) UserId() string {
-	return e.Response.ResultData.UserID
-}
-
 func (e *EndPoint) Email() string {
 	return e.Response.ResultData.Email
 }
 func (e *EndPoint) CreateDate() string {
-	return e.Response.ResultData.Createdate
+	return e.Response.ResultData.CreateDate
 }
 func (e *EndPoint) IsOnline() bool {
 	return e.Response.ResultData.IsOnline.Value()
@@ -184,8 +180,8 @@ func (e *EndPoint) Token() string {
 func (e *EndPoint) UserAccount() string {
 	return e.Response.ResultData.UserAccount
 }
-func (e *EndPoint) UserID() string {
-	return e.Response.ResultData.UserID
+func (e *EndPoint) UserId() string {
+	return e.Response.ResultData.UserId
 }
 func (e *EndPoint) UserName() string {
 	return e.Response.ResultData.UserName

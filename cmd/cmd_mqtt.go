@@ -353,7 +353,7 @@ func (ca *Cmds) MqttCron() error {
 			}
 
 			for _, endpoint := range All {
-				response := data.GetByApi(endpoint, iSolarCloud.SunGrowDataRequest{ PsId: psId })
+				response := data.GetByEndPointName(endpoint, iSolarCloud.SunGrowDataRequest{ PsId: &psId })
 				ca.Error = ca.Update(endpoint, response.Data, newDay)
 				if ca.Error != nil {
 					break

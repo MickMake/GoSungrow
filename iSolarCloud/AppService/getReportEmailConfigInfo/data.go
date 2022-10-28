@@ -30,23 +30,23 @@ type ResultData struct {
 		Email      valueTypes.String `json:"email"`
 		ReportList []struct {
 			CreateTime                 valueTypes.DateTime `json:"create_time"`
-			CreateUserID               valueTypes.Integer  `json:"create_user_id"`
+			CreateUserId               valueTypes.Integer  `json:"create_user_id"`
 			EmailAddTime               valueTypes.DateTime `json:"email_add_time"`
-			ID                         valueTypes.Integer  `json:"id"`
+			Id                         valueTypes.Integer  `json:"id"`
 			IsAllowEmailSend           valueTypes.Bool     `json:"is_allow_email_send"`
 			IsBank                     valueTypes.Bool     `json:"is_bank"`
 			IsCanRenewSendConfirmEmail valueTypes.Bool     `json:"is_can_renew_send_confirm_email"`
 			IsNewWeb                   valueTypes.Bool     `json:"is_new_web"`
-			OrderID                    valueTypes.Integer  `json:"order_id"`
+			OrderId                    valueTypes.Integer  `json:"order_id"`
 			ReSendConfirmEmailTime     valueTypes.DateTime `json:"re_send_confirm_email_time"`
-			ReportID                   valueTypes.Integer  `json:"report_id"`
+			ReportId                   valueTypes.Integer  `json:"report_id"`
 			ReportName                 valueTypes.String   `json:"report_name"`
 			SendEmail                  valueTypes.String   `json:"send_email"`
 			Status                     valueTypes.Bool     `json:"status"`
 			TimeDimension              valueTypes.Integer  `json:"time_dimension"`
 			Type                       valueTypes.Integer  `json:"type"`
 			UpdateTime                 valueTypes.DateTime `json:"update_time"`
-			UserID                     valueTypes.Integer  `json:"user_id"`
+			UserId                     valueTypes.Integer  `json:"user_id"`
 		} `json:"report_list"`
 	} `json:"report_email_config_info_list"`
 }

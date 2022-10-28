@@ -12,7 +12,7 @@ const Url = "/v1/powerStationService/getPowerStationInfo"
 const Disabled = false
 
 type RequestData struct {
-	PsId valueTypes.Integer `json:"ps_id" required:"true"`
+	PsId valueTypes.PsId `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -29,7 +29,7 @@ type ResultData struct {
 	RemindType       interface{}      `json:"remindType" PointId:"remind_type"`
 
 	PowerStationMap  struct {
-		AreaID            interface{}         `json:"area_id"`
+		AreaId            interface{}         `json:"area_id"`
 		ConnectType       valueTypes.Integer  `json:"connect_type"`
 		County            interface{}         `json:"county"`
 		CountyCode        interface{}         `json:"county_code"`
@@ -51,10 +51,10 @@ type ResultData struct {
 		Prov              interface{}         `json:"prov"`
 		ProvCode          interface{}         `json:"prov_code"`
 		PsBuildDate       valueTypes.DateTime `json:"ps_build_date"`
-		PsCountryID       valueTypes.Integer  `json:"ps_country_id"`
+		PsCountryId       valueTypes.Integer  `json:"ps_country_id"`
 		PsDesc            interface{}         `json:"ps_desc"`
 		PsHolder          valueTypes.String   `json:"ps_holder"`
-		PsID              valueTypes.Integer  `json:"ps_id"`
+		PsId              valueTypes.PsId  `json:"ps_id"`
 		PsLocation        valueTypes.String   `json:"ps_location"`
 		PsName            valueTypes.String   `json:"ps_name"`
 		PsType            valueTypes.Integer  `json:"ps_type"`
@@ -62,7 +62,7 @@ type ResultData struct {
 		ReportType        interface{}         `json:"report_type"`
 		ShippingAddress   valueTypes.String   `json:"shipping_address"`
 		ShippingZipCode   valueTypes.String   `json:"shipping_zip_code"`
-		TimeZoneID        valueTypes.Integer  `json:"time_zone_id"`
+		TimeZoneId        valueTypes.Integer  `json:"time_zone_id"`
 		ValidFlag         valueTypes.Integer  `json:"valid_flag"`
 		Village           interface{}         `json:"village"`
 		VillageCode       interface{}         `json:"village_code"`
@@ -76,19 +76,19 @@ type ResultData struct {
 		InstallerEmail valueTypes.String  `json:"installer_email"`
 		InstallerPhone valueTypes.String  `json:"installer_phone"`
 		OrgURL         interface{}        `json:"org_url"`
-		UpOrgID        valueTypes.Integer `json:"up_org_id"`
+		UpOrgId        valueTypes.Integer `json:"up_org_id"`
 	} `json:"installProviderInfo" PointId:"install_provider_info"`
 	PowerChargeDataMap struct {
 		CodeType            valueTypes.Integer  `json:"code_type"`
 		DefaultCharge       valueTypes.Float    `json:"default_charge"`
-		ElectricChargeID    valueTypes.Integer  `json:"electric_charge_id"`
+		ElectricChargeId    valueTypes.Integer  `json:"electric_charge_id"`
 		EndTime             valueTypes.DateTime `json:"end_time"`
 		IntervalTimeCharge  interface{}         `json:"interval_time_charge"`
 		ParamIncomeUnitName valueTypes.String   `json:"param_income_unit_name"`
 		StartTime           valueTypes.DateTime `json:"start_time"`
 	} `json:"powerChargeDataMap" PointId:"power_charge_data_map"`
 	SysTimeZones []struct {
-		ID           valueTypes.Integer `json:"id"`
+		Id           valueTypes.Integer `json:"id"`
 		TimezoneName valueTypes.String  `json:"timezone_name"`
 		TimezoneUtc  valueTypes.String  `json:"timezone_utc"`
 	} `json:"sysTimeZones" PointId:"sys_time_zones"`

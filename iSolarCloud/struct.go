@@ -117,9 +117,7 @@ func (sg *SunGrow) GetByJson(endpoint string, request string) api.EndPoint {
 		sg.Error = ret.GetError()
 		if sg.Error != nil {
 			if strings.Contains(sg.Error.Error(), "er_token_login_invalid") {
-				_ = sg.ApiRoot.WebCacheRemove(sg.Auth)
-				_ = sg.Auth.RemoveToken()
-				// _ = sg.Auth.ApiRemoveDataFile()
+				sg.Logout()
 				break
 			}
 		}
@@ -192,9 +190,8 @@ func (sg *SunGrow) GetByStruct(endpoint string, request interface{}, cache time.
 
 		sg.Error = ret.GetError()
 		if strings.Contains(sg.Error.Error(), "er_token_login_invalid") {
-			_ = sg.ApiRoot.WebCacheRemove(sg.Auth)
-			_ = sg.Auth.RemoveToken()
-			// _ = sg.Auth.ApiRemoveDataFile()
+			sg.Logout()
+			break
 		}
 	}
 
@@ -283,6 +280,14 @@ func (sg *SunGrow) Login(auth login.SunGrowAuth) error {
 	}
 
 	return sg.Error
+}
+
+func (sg *SunGrow) Logout() {
+	for range Only.Once {
+		_ = sg.ApiRoot.WebCacheRemove(sg.Auth)
+		_ = sg.Auth.RemoveToken()
+		// _ = sg.Auth.ApiRemoveDataFile()
+	}
 }
 
 func (sg *SunGrow) GetToken() string {

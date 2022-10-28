@@ -12,7 +12,7 @@ const Url = "/v1/commonService/findCodeValueList"
 const Disabled = false
 
 type RequestData struct {
-	CodeType string `json:"code_type" required:"true"`
+	CodeType valueTypes.String `json:"code_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

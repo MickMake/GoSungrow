@@ -13,7 +13,7 @@ const Url = "/v1/powerStationService/getPsDetailWithPsType"
 const Disabled = false
 
 type RequestData struct {
-	PsId valueTypes.Integer `json:"ps_id" required:"true"`
+	PsId valueTypes.PsId `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -75,7 +75,7 @@ type ResultData struct {
 	PowerChargeSetted           valueTypes.Bool      `json:"power_charge_setted" PointId:"power_charge_set" PointUpdateFreq:"UpdateFreqBoot"`
 	PowerGridPowerMap           valueTypes.UnitValue `json:"power_grid_power_map" PointId:"power_grid_power_map" PointUpdateFreq:"UpdateFreq5Mins"`
 	PowerGridPowerMapVirgin     valueTypes.UnitValue `json:"power_grid_power_map_virgin"  PointIgnore:"true"`
-	PsCountryID                 valueTypes.Integer   `json:"ps_country_id" PointId:"ps_country_id" PointUpdateFreq:"UpdateFreqBoot"`
+	PsCountryId                 valueTypes.Integer   `json:"ps_country_id" PointId:"ps_country_id" PointUpdateFreq:"UpdateFreqBoot"`
 	PsDeviceType                valueTypes.Integer   `json:"ps_device_type" PointId:"ps_device_type" PointUpdateFreq:"UpdateFreqBoot"`
 	PsFaultStatus               valueTypes.Integer   `json:"ps_fault_status" PointId:"ps_fault_status" PointUpdateFreq:"UpdateFreqInstant"`
 	PsHealthStatus              valueTypes.Integer   `json:"ps_health_status" PointId:"ps_health_status" PointUpdateFreq:"UpdateFreqInstant"`

@@ -3,9 +3,7 @@ package cmd
 import (
 	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api/output"
-	"GoSungrow/iSolarCloud/api/valueTypes"
 	"fmt"
-	"github.com/MickMake/GoUnify/cmdConfig"
 	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/spf13/cobra"
 	"strings"
@@ -222,41 +220,17 @@ const (
 func (c *CmdData) GetEndpoints(cmd *cobra.Command, args []string) error {
 	// endpoints string, psIds string, date string
 	for range Only.Once {
-		cmds.Api.SunGrow.SetOutputType(cmd.Use)
-		args = cmdConfig.FillArray(5, args)
+		cmds.Api.SunGrow.SetOutputType(cmd.Name())
 
-		for i := range args {
-			if args[i] == "." {
-				args[i] = ""
-			}
-		}
-
-		var e []string
-		if args[argEndpoints] != "" {
-			e = SplitArg(args[argEndpoints])
-		}
-
-		var p []valueTypes.Integer
-		for _, psId := range SplitArg(args[argPsIds]) {
-			if psId == "" {
-				continue
-			}
-			p = append(p, valueTypes.SetIntegerString(psId))
-		}
-
-		d := valueTypes.SetDateTimeString(args[argDate])
-
-		rt := args[argReportType]
-		if rt == "" {
-			rt = "1"
-		}
-
-		ftc := args[argFaultTypeCode]
-		// if ftc == "" {
-		// 	ftc = "1"
+		// args = cmdConfig.FillArray(5, args)
+		// for i := range args {
+		// 	if args[i] == "." {
+		// 		args[i] = ""
+		// 	}
 		// }
+		// c.Error = cmds.Api.SunGrow.GetEndpoints(SplitArg(args[argEndpoints]), SplitArg(args[argPsIds]), args[argDate], args[argReportType], args[argFaultTypeCode])
 
-		c.Error = cmds.Api.SunGrow.GetEndpoints(e, p, *d, rt, ftc)
+		c.Error = cmds.Api.SunGrow.GetEndpoints(SplitArg(args[argEndpoints]), args[1:]...)
 	}
 
 	return c.Error

@@ -3,8 +3,8 @@ package getPowerDevicePointInfo
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
 	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 
 	"fmt"
@@ -14,7 +14,7 @@ const Url = "/v1/reportService/getPowerDevicePointInfo"
 const Disabled = false
 
 type RequestData struct {
-	Id valueTypes.Integer `json:"id" required:"true"`
+	PsId valueTypes.PsId `json:"id" required:"true"`
 	// Id string `json:"id"`
 }
 
@@ -30,12 +30,12 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	DeviceType    valueTypes.Integer  `json:"device_type" PointId:"device_type" PointValueType:"" PointUpdateFreq:""`
-	ID            valueTypes.Integer  `json:"id" PointId:"id" PointValueType:"" PointUpdateFreq:""`
+	Id            valueTypes.Integer  `json:"id" PointId:"id" PointValueType:"" PointUpdateFreq:""`
 	Period        valueTypes.Integer  `json:"period" PointId:"period" PointValueType:"" PointUpdateFreq:""`
-	PointID       valueTypes.Integer  `json:"point_id" PointId:"point_id" PointValueType:"" PointUpdateFreq:""`
+	PointId       valueTypes.Integer  `json:"point_id" PointId:"point_id" PointValueType:"" PointUpdateFreq:""`
 	PointName     string `json:"point_name" PointId:"point_name" PointValueType:"" PointUpdateFreq:""`
 	ShowPointName string `json:"show_point_name" PointId:"show_point_name" PointValueType:"" PointUpdateFreq:""`
-	TranslationID valueTypes.Integer  `json:"translation_id" PointId:"translation_id" PointValueType:"" PointUpdateFreq:""`
+	TranslationId valueTypes.Integer  `json:"translation_id" PointId:"translation_id" PointValueType:"" PointUpdateFreq:""`
 }
 
 func (e *ResultData) IsValid() error {
@@ -71,10 +71,10 @@ func (e *EndPoint) AddDataTable(table output.Table) output.Table {
 	for range Only.Once {
 		rd := e.Response.ResultData
 
-		if rd.ID.Value() == 0 {
+		if rd.Id.Value() == 0 {
 			break
 		}
-		_ = table.AddRow(rd.DeviceType, rd.ID, rd.Period, rd.PointID,rd.PointName, rd.ShowPointName, rd.TranslationID)
+		_ = table.AddRow(rd.DeviceType, rd.Id, rd.Period, rd.PointId,rd.PointName, rd.ShowPointName, rd.TranslationId)
 	}
 	return table
 }
@@ -97,7 +97,7 @@ func (e *EndPoint) GetPointDataTable() output.Table {
 			"Translation Id",
 		)
 		rd := e.Response.ResultData
-		_ = table.AddRow(rd.DeviceType, rd.ID, rd.Period, rd.PointID,rd.PointName, rd.ShowPointName, rd.TranslationID)
+		_ = table.AddRow(rd.DeviceType, rd.Id, rd.Period, rd.PointId,rd.PointName, rd.ShowPointName, rd.TranslationId)
 	}
 	return table
 }

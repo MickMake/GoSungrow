@@ -12,8 +12,8 @@ const Url = "/v1/powerStationService/getPowerStationData"
 const Disabled = false
 
 type RequestData struct {
-	PsId     valueTypes.Integer `json:"ps_id" required:"true"`
-	DateID   string `json:"date_id" required:"true"`
+	PsId     valueTypes.PsId `json:"ps_id" required:"true"`
+	DateId   string `json:"date_id" required:"true"`
 	DateType string `json:"date_type" required:"true"`
 }
 

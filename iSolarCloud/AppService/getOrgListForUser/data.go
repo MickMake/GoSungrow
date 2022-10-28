@@ -27,16 +27,16 @@ func (rd RequestData) Help() string {
 type ResultData []struct {
 	GcjLatitude    valueTypes.Float   `json:"gcj_latitude"`
 	GcjLongitude   valueTypes.Float   `json:"gcj_longitude"`
-	ID             valueTypes.Integer `json:"id"`
+	Id             valueTypes.Integer `json:"id"`
 	IsLeaf         valueTypes.Bool    `json:"is_leaf"`
 	MapLevel       interface{} `json:"map_level"`
-	OrgID          valueTypes.Integer `json:"org_id"`
+	OrgId          valueTypes.Integer `json:"org_id"`
 	OrgIndexCode   valueTypes.String  `json:"org_index_code"`
 	OrgIsShow      valueTypes.Integer `json:"org_is_show"`
 	OrgLevel       valueTypes.Integer `json:"org_level"`
 	OrgName        valueTypes.String  `json:"org_name"`
 	SizeChild      valueTypes.Integer `json:"size_child"`
-	UpOrgID        valueTypes.Integer `json:"up_org_id"`
+	UpOrgId        valueTypes.Integer `json:"up_org_id"`
 	Wgs84Latitude  valueTypes.Float   `json:"wgs84_latitude"`
 	Wgs84Longitude valueTypes.Float   `json:"wgs84_longitude"`
 }

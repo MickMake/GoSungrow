@@ -12,7 +12,7 @@ const Url = "/v1/powerStationService/getPowerChargeSettingInfo"
 const Disabled = false
 
 type RequestData struct {
-	PsId valueTypes.Integer `json:"ps_id" required:"true"`
+	PsId valueTypes.PsId `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -35,7 +35,7 @@ type ResultData struct {
 		DefaultCharge      valueTypes.Float `json:"default_charge" PointUnitFrom:"ParamIncomeUnitName"`
 		IntervalTimeCharge string           `json:"interval_time_charge"`
 	} `json:"powerSelfUseTimesChargeMap" PointName:"power_self_use_charge_map"`
-	PsID valueTypes.Integer `json:"ps_id"`
+	PsId valueTypes.PsId `json:"ps_id"`
 }
 
 func (e *ResultData) IsValid() error {

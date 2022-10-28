@@ -92,7 +92,9 @@ func (t *Float) SetString(value string) Float {
 		}
 
 		t.float64, t.Error = strconv.ParseFloat(t.string, 64)
-		if t.Error == nil {
+		if t.Error != nil {
+			// @TODO - Figure out a good way to handle fields that *could be* float, but aren't always.
+			t.Error = nil
 			break
 		}
 		t.Valid = true

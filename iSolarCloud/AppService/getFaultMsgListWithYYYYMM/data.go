@@ -32,8 +32,8 @@ type ResultData   []struct {
 	FaultReason   valueTypes.String   `json:"fault_reason"`
 	FaultType     valueTypes.Integer  `json:"fault_type"`
 	FaultTypeCode valueTypes.Integer  `json:"fault_type_code"`
-	ID            valueTypes.Integer  `json:"id"`
-	PsID          valueTypes.Integer  `json:"ps_id"`
+	Id            valueTypes.Integer  `json:"id"`
+	PsId          valueTypes.PsId  `json:"ps_id"`
 	PsKey         valueTypes.PsKey    `json:"ps_key"`
 	UUID          valueTypes.Integer  `json:"uuid"`
 }

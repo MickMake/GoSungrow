@@ -9,6 +9,7 @@ import (
 
 
 var inputDateLayout = []string{
+	DateTimeFullLayout,
 	DateTimeLayout,
 	"2006/01/02 15:04:05",
 	DateLayout,
@@ -19,9 +20,11 @@ var inputDateLayout = []string{
 	DateTimeLayoutDay,
 	DateTimeLayoutMonth,
 	DateTimeLayoutYear,
+	DateTimeLayoutYear,
 }
 
 const (
+	DateTimeFullLayout        = time.RFC3339
 	DateTimeLayout            = DateLayout + " " + TimeLayout
 	DateTimeAltLayout         = DateLayoutDay + "-" + TimeLayoutSecond
 	DateTimeLayoutZeroSeconds = DateLayout + " " + TimeLayoutZeroSeconds
@@ -63,14 +66,14 @@ func (dt *DateTime) UnmarshalJSON(data []byte) error {
 		// Store result from string
 		dt.Error = json.Unmarshal(data, &dt.string)
 		if dt.Error == nil {
-			dt = dt.SetString(dt.string)
+			dt.SetString(dt.string)
 			break
 		}
 
 		// Store result from time
 		dt.Error = json.Unmarshal(data, &dt.Time)
 		if dt.Error == nil {
-			dt = dt.SetValue(dt.Time)
+			dt.SetValue(dt.Time)
 			break
 		}
 
@@ -96,11 +99,8 @@ func (dt DateTime) MarshalJSON() ([]byte, error) {
 	var data []byte
 
 	for range Only.Once {
-		// data, dt.Error = json.Marshal(dt.string)
-		// if dt.Error != nil {
-		// 	break
-		// }
-		data = []byte("\"" + dt.Time.Format(DateTimeLayout) + "\"")
+		// data = []byte("\"" + dt.Time.Format(DateTimeLayout) + "\"")
+		data = []byte("\"" + dt.string + "\"")
 	}
 
 	return data, dt.Error
@@ -122,7 +122,7 @@ func (dt DateTime) Match(comp time.Time) bool {
 	return false
 }
 
-func (dt *DateTime) SetString(value string) *DateTime {
+func (dt *DateTime) SetString(value string) DateTime {
 	for range Only.Once {
 		dt.string = value
 		dt.Time = time.Time{}
@@ -139,7 +139,7 @@ func (dt *DateTime) SetString(value string) *DateTime {
 		for _, f := range inputDateLayout {
 			dt.Time, dt.Error = time.Parse(f, value)
 			if dt.Error == nil {
-				dt.string = dt.Time.Format(DateTimeLayout)
+				dt.string = dt.Time.Format(f)
 				dt.SetDateType(value)
 				break
 			}
@@ -150,10 +150,10 @@ func (dt *DateTime) SetString(value string) *DateTime {
 		}
 	}
 
-	return dt
+	return *dt
 }
 
-func (dt *DateTime) SetValue(value time.Time) *DateTime {
+func (dt *DateTime) SetValue(value time.Time) DateTime {
 	for range Only.Once {
 		dt.string = ""
 		dt.Time = value
@@ -166,7 +166,7 @@ func (dt *DateTime) SetValue(value time.Time) *DateTime {
 		dt.DateType = "3"
 	}
 
-	return dt
+	return *dt
 }
 
 func (dt *DateTime) SetDateType(value string) {
@@ -188,12 +188,12 @@ func (dt *DateTime) SetDateType(value string) {
 	}
 }
 
-func SetDateTimeString(value string) *DateTime {
+func SetDateTimeString(value string) DateTime {
 	var t DateTime
 	return t.SetString(value)
 }
 
-func SetDateTimeValue(value time.Time) *DateTime {
+func SetDateTimeValue(value time.Time) DateTime {
 	var t DateTime
 	return t.SetValue(value)
 }
@@ -235,20 +235,25 @@ const Now = "now"
 
 func NewDateTime(value string) DateTime {
 	var ret DateTime
-	if (value == Now) || (value == "") {
-		value = time.Now().Format(DateTimeLayout)
-	}
-	for _, f := range inputDateLayout {
-		ret.Time, ret.Error = time.Parse(f, value)
-		if ret.Error == nil {
-			ret.SetValue(ret.Time)
-			ret.SetDateType(value)
+	for range Only.Once {
+		if (value == Now) || (value == "") {
+			// value = time.Now().Format(DateTimeLayout)
+			ret.SetValue(time.Now())
+			ret.SetDateType(ret.string)
 			break
 		}
-	}
+		for _, f := range inputDateLayout {
+			ret.Time, ret.Error = time.Parse(f, value)
+			if ret.Error == nil {
+				ret.SetValue(ret.Time)
+				ret.SetDateType(value)
+				break
+			}
+		}
 
-	if ret.Error != nil {
-		fmt.Printf("Error:NewDateTime DateTime(%s) - %s\n", value, ret.Error)
+		if ret.Error != nil {
+			fmt.Printf("Error:NewDateTime DateTime(%s) - %s\n", value, ret.Error)
+		}
 	}
 	return ret
 }

@@ -34,9 +34,9 @@ type ResultData struct {
 		InstallerEmail    string      `json:"installer_email"`
 		InstallerPhone    string      `json:"installer_phone"`
 		MobleTel          interface{} `json:"moble_tel"`
-		OrgID             valueTypes.Integer `json:"org_id"`
+		OrgId             valueTypes.Integer `json:"org_id"`
 		OrgName           string      `json:"org_name"`
-		UserID            valueTypes.Integer `json:"user_id"`
+		UserId            valueTypes.Integer `json:"user_id"`
 		UserName          string      `json:"user_name"`
 		UserTelNationCode interface{} `json:"user_tel_nation_code"`
 	} `json:"user_info_list"`

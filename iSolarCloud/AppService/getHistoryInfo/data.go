@@ -14,7 +14,7 @@ const Disabled = false
 
 type RequestData struct {
 	DateType string `json:"date_type" required:"true"`
-	DateID   string `json:"date_id" required:"true"`
+	DateId   string `json:"date_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

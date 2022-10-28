@@ -27,10 +27,10 @@ func (rd RequestData) Help() string {
 type ResultData struct {
 	BackgroundColor              valueTypes.Integer  `json:"background_color"`
 	BloodType                    valueTypes.String   `json:"blood_type"`
-	CountryID                    valueTypes.Integer  `json:"country_id"`
+	CountryId                    valueTypes.Integer  `json:"country_id"`
 	CountryName                  valueTypes.String   `json:"country_name"`
 	CreateDate                   valueTypes.DateTime `json:"create_date"`
-	CreateUserID                 valueTypes.Integer  `json:"create_user_id"`
+	CreateUserId                 valueTypes.Integer  `json:"create_user_id"`
 	DiseaseHis                   valueTypes.String   `json:"disease_his"`
 	Email                        valueTypes.String   `json:"email"`
 	EnglishName                  valueTypes.String   `json:"english_name"`
@@ -46,19 +46,19 @@ type ResultData struct {
 	LackOfInformation            valueTypes.Integer  `json:"lack_of_information"`
 	Language                     valueTypes.String   `json:"language"`
 	MobileTel                    valueTypes.String   `json:"moble_tel"`
-	OrgID                        valueTypes.Integer  `json:"org_id"`
-	PhotoID                      valueTypes.Integer  `json:"photo_id"`
+	OrgId                        valueTypes.Integer  `json:"org_id"`
+	PhotoId                      valueTypes.Integer  `json:"photo_id"`
 	PhotoURL                     valueTypes.String   `json:"photo_url"`
-	RootOrgID                    valueTypes.Integer  `json:"root_org_id"`
+	RootOrgId                    valueTypes.Integer  `json:"root_org_id"`
 	Sex                          valueTypes.String   `json:"sex"`
 	Stylename                    valueTypes.String   `json:"stylename"`
-	TimeZoneID                   valueTypes.Integer  `json:"time_zone_id"`
+	TimeZoneId                   valueTypes.Integer  `json:"time_zone_id"`
 	Timezone                     valueTypes.String   `json:"timezone"`
 	UserAccount                  valueTypes.String   `json:"user_account"`
 	UserAccountModifyCount       valueTypes.Integer  `json:"user_account_modify_count"`
 	UserAccountModifyRemainTimes valueTypes.Integer  `json:"user_account_modify_remain_times"`
 	UserDealerOrgCode            valueTypes.String   `json:"user_dealer_org_code"`
-	UserID                       valueTypes.Integer  `json:"user_id"`
+	UserId                       valueTypes.Integer  `json:"user_id"`
 	UserLanguage                 valueTypes.String   `json:"user_language"`
 	UserLevel                    valueTypes.Integer  `json:"user_level"`
 	UserName                     valueTypes.String   `json:"user_name"`
@@ -70,7 +70,7 @@ type ResultData struct {
 		InstallerPhone                valueTypes.String  `json:"installer_phone"`
 		IsCountryDefaultDealerOrgCode valueTypes.Bool    `json:"is_country_default_dealer_org_code"`
 		MobileTel                     valueTypes.String  `json:"moble_tel"`
-		OrgID                         valueTypes.Integer `json:"org_id"`
+		OrgId                         valueTypes.Integer `json:"org_id"`
 		OrgIndexCode                  valueTypes.String  `json:"org_index_code"`
 		OrgName                       valueTypes.String  `json:"org_name"`
 		UpDealerEmail                 valueTypes.String  `json:"up_dealer_email"`
@@ -81,7 +81,7 @@ type ResultData struct {
 		UpDealerOrgInstallerPhone     valueTypes.String  `json:"up_dealer_org_installer_phone"`
 		UpDealerUserName              valueTypes.String  `json:"up_dealer_user_name"`
 		UpDealerUserTelNationCode     valueTypes.String  `json:"up_dealer_user_tel_nation_code"`
-		UpOrgID                       valueTypes.Integer `json:"up_org_id"`
+		UpOrgId                       valueTypes.Integer `json:"up_org_id"`
 		UpOrgName                     valueTypes.String  `json:"up_org_name"`
 		UserName                      valueTypes.String  `json:"user_name"`
 		UserTelNationCode             valueTypes.String  `json:"user_tel_nation_code"`

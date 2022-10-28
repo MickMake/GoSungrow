@@ -69,6 +69,10 @@ func (t *Table) SetRaw(data []byte) {
 	t.raw = data
 }
 
+func (t *Table) AppendRaw(data []byte) {
+	t.raw = append(t.raw, data...)
+}
+
 func (t *Table) SetJson(data []byte) {
 	t.json = data
 }
@@ -130,6 +134,43 @@ func (t *Table) Output() error {
 		if t == nil {
 			break
 		}
+
+		// switch {
+		// case sg.OutputType.IsNone():
+		// 	if sg.Error != nil {
+		// 		fmt.Println(ret.Help())
+		// 		break
+		// 	}
+		//
+		// case sg.OutputType.IsRaw():
+		// 	// if sg.Error != nil {
+		// 	// 	fmt.Println(ret.Help())
+		// 	// 	break
+		// 	// }
+		// 	if sg.SaveAsFile {
+		// 		sg.Error = ret.WriteDataFile()
+		// 		break
+		// 	}
+		// 	fmt.Println(ret.GetJsonData(true))
+		//
+		// case sg.OutputType.IsJson():
+		// 	if sg.Error != nil {
+		// 		fmt.Println(ret.Help())
+		// 		break
+		// 	}
+		// 	if sg.SaveAsFile {
+		// 		sg.Error = ret.WriteDataFile()
+		// 		break
+		// 	}
+		// 	fmt.Println(ret.GetJsonData(false))
+		//
+		// default:
+		// 	if sg.Error != nil {
+		// 		fmt.Println(ret.Help())
+		// 		break
+		// 	}
+		// }
+
 		switch {
 			case t.OutputType.IsNone():
 
@@ -238,6 +279,10 @@ func (t *Table) WriteJson() error {
 
 func (t *Table) GetRaw() string {
 	return string(t.json)
+}
+
+func (t *Table) GetRawBytes() []byte {
+	return t.json
 }
 
 func (t *Table) WriteRaw() error {

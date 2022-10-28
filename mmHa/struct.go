@@ -29,7 +29,7 @@ type Mqtt struct {
 	clientOptions *mqtt.ClientOptions
 	LastRefresh    time.Time             `json:"-"`
 	SungrowDevices getDeviceList.Devices `json:"-"`
-	SungrowPsIds   map[valueTypes.Integer]bool
+	SungrowPsIds   map[valueTypes.PsId]bool
 
 	DeviceName  string
 	MqttDevices map[string]Device
@@ -63,7 +63,7 @@ func New(req Mqtt) *Mqtt {
 		ret.binarySensorPrefix = "homeassistant/binary_sensor/" + req.ClientId
 
 		ret.MqttDevices = make(map[string]Device)
-		ret.SungrowPsIds = make(map[valueTypes.Integer]bool)
+		ret.SungrowPsIds = make(map[valueTypes.PsId]bool)
 	}
 
 	return &ret

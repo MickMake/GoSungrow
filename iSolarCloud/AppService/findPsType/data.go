@@ -12,7 +12,7 @@ const Url = "/v1/powerStationService/findPsType"
 const Disabled = false
 
 type RequestData struct {
-	PsId valueTypes.Integer `json:"ps_id" required:"true"`
+	PsId valueTypes.PsId `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -46,12 +46,8 @@ func (e *EndPoint) GetData() api.DataMap {
 	for range Only.Once {
 		pkg := apiReflect.GetName("", *e)
 		dt := valueTypes.NewDateTime(valueTypes.Now)
-		entries.StructToPoints(e.Response.ResultData, pkg, e.Request.PsId.String(), dt)
-
-		// for _, d := range e.Response.ResultData {
-		// 	name := fmt.Sprintf("%s.%s", pkg, e.Request.PsId.String())
-		// 	entries.StructToPoints(d, name, e.Request.PsId.String(), dt)
-		// }
+		name := pkg + "." + e.Request.PsId.String()
+		entries.StructToPoints(e.Response.ResultData, name, e.Request.PsId.String(), dt)
 	}
 
 	return entries

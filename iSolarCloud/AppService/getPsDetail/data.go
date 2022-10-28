@@ -12,7 +12,7 @@ const Url = "/v1/powerStationService/getPsDetail"
 const Disabled = false
 
 type RequestData struct {
-	PsId valueTypes.Integer `json:"ps_id" required:"true"`
+	PsId valueTypes.PsId `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -27,8 +27,8 @@ func (rd RequestData) Help() string {
 type ResultData struct {
 	ActualEnergy          []valueTypes.Float   `json:"actual_energy" PointId:"actual_energy" PointName:"Actual Energy" PointUnitFrom:"ActualEnergyUnit"`
 	ActualEnergyUnit      valueTypes.String    `json:"actual_energy_unit" PointId:"actual_energy_unit"  PointIgnore:"true"`
-	AlarmCount            valueTypes.Integer   `json:"alarm_count"`
-	AreaID                interface{}          `json:"area_id"`
+	AlarmCount            valueTypes.Count   `json:"alarm_count"`
+	AreaId                interface{}          `json:"area_id"`
 	AreaType              valueTypes.Integer   `json:"area_type"`
 	BuildDate             valueTypes.DateTime  `json:"build_date"`
 	Co2Reduce             valueTypes.UnitValue `json:"co2_reduce"`
@@ -47,7 +47,7 @@ type ResultData struct {
 	DiagramURL            valueTypes.String    `json:"diagram_url"`
 	EnergyScheme          interface{}          `json:"energy_scheme"`
 	ExpectInstallDate     valueTypes.DateTime  `json:"expect_install_date"`
-	FaultCount            valueTypes.Integer   `json:"fault_count"`
+	FaultCount            valueTypes.Count   `json:"fault_count"`
 	FaultSendType         string               `json:"fault_send_type"`
 	GcjLatitude           valueTypes.Float     `json:"gcj_latitude"`
 	GcjLongitude          valueTypes.Float     `json:"gcj_longitude"`
@@ -159,7 +159,7 @@ type ResultData struct {
 	PowderReduceTotal      valueTypes.UnitValue `json:"powder_reduce_total" PointId:"powder_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
 	PowerChargeSetted      valueTypes.Bool      `json:"power_charge_setted" PointId:"power_charge_set" PointUpdateFreq:"UpdateFreqTotal"`
 	Producer               string               `json:"producer"`
-	PsCountryID            valueTypes.Integer   `json:"ps_country_id"`
+	PsCountryId            valueTypes.Integer   `json:"ps_country_id"`
 	PsFaultStatus          valueTypes.Integer   `json:"ps_fault_status"`
 	PsHealthStatus         valueTypes.Integer   `json:"ps_health_status"`
 	PsHolder               valueTypes.String    `json:"ps_holder"`
@@ -180,7 +180,7 @@ type ResultData struct {
 	So2Reduce                     valueTypes.UnitValue `json:"so2_reduce"`
 	So2ReduceTotal                valueTypes.UnitValue `json:"so2_reduce_total" PointId:"so2_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
 	SysScheme            valueTypes.Integer   `json:"sys_scheme"`
-	TimeZoneID           valueTypes.Integer   `json:"time_zone_id"`
+	TimeZoneId           valueTypes.Integer   `json:"time_zone_id"`
 	Timezone             valueTypes.String    `json:"timezone"`
 	TodayEnergy          valueTypes.UnitValue `json:"today_energy" PointId:"today_energy" PointUpdateFreq:"UpdateFreqDay"`
 	TodayEnergyVirgin    valueTypes.UnitValue `json:"today_energy_virgin"  PointIgnore:"true"`
@@ -193,7 +193,7 @@ type ResultData struct {
 	TreeReduceTotal      valueTypes.UnitValue `json:"tree_reduce_total" PointId:"tree_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
 	TuvLevel             string               `json:"tuv_level"`
 	ValidFlag            valueTypes.Bool      `json:"valid_flag"`
-	WaitAssignOrderCount valueTypes.Integer   `json:"wait_assign_order_count"`
+	WaitAssignOrderCount valueTypes.Count   `json:"wait_assign_order_count"`
 	WaterReduce          valueTypes.UnitValue `json:"water_reduce"`
 	WaterReduceTotal     valueTypes.UnitValue `json:"water_reduce_total" PointId:"water_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
 	WgsLatitude          valueTypes.Float     `json:"wgs_latitude"`
@@ -210,8 +210,8 @@ type ResultData struct {
 		SweepCapacity valueTypes.Float   `json:"sweep_capacity"`
 	} `json:"robot_num_sweep_capacity"`
 	Images                []struct {
-		FileID      valueTypes.Integer `json:"file_id"`
-		ID          valueTypes.Integer `json:"id"`
+		FileId      valueTypes.Integer `json:"file_id"`
+		Id          valueTypes.Integer `json:"id"`
 		PicLanguage valueTypes.Integer `json:"pic_language"`
 		PicType     valueTypes.Integer `json:"pic_type"`
 		PictureName valueTypes.String  `json:"picture_name"`

@@ -25,7 +25,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		PsId   valueTypes.Integer `json:"ps_id"`
+		PsId   valueTypes.PsId `json:"ps_id"`
 		PsName valueTypes.String  `json:"ps_name"`
 	} `json:"pageList" PointNameFromChild:"PsId" PointNameFromAppend:"false"`
 }

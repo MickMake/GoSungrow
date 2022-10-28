@@ -27,7 +27,7 @@ func (rd RequestData) Help() string {
 type ResultData []struct {
 	AttachNames     interface{}  `json:"attach_names"`
 	AttachPath      interface{}  `json:"attach_path"`
-	BusinessID      valueTypes.Integer  `json:"business_id"`
+	BusinessId      valueTypes.Integer  `json:"business_id"`
 	ClickNum        valueTypes.Integer  `json:"click_num"`
 	CreateTime      valueTypes.DateTime `json:"create_time"`
 	EndTime         valueTypes.DateTime `json:"end_time"`
@@ -48,7 +48,7 @@ type ResultData []struct {
 	MsgContentsTrTr valueTypes.String   `json:"msg_contents_tr_tr"`
 	MsgContentsViVn valueTypes.String   `json:"msg_contents_vi_vn"`
 	MsgContentsZhTw valueTypes.String   `json:"msg_contents_zh_tw"`
-	MsgID           valueTypes.Integer  `json:"msg_id"`
+	MsgId           valueTypes.Integer  `json:"msg_id"`
 	MsgLevel        valueTypes.Integer  `json:"msg_level"`
 	MsgTitle        valueTypes.String   `json:"msg_title"`
 	MsgTitleDeDe    valueTypes.String   `json:"msg_title_de_de"`
@@ -72,8 +72,8 @@ type ResultData []struct {
 	PublishTime     valueTypes.DateTime `json:"publish_time"`
 	RemindType      valueTypes.Integer  `json:"remind_type"`
 	StartTime       valueTypes.DateTime `json:"start_time"`
-	TypeID          valueTypes.Integer  `json:"type_id"`
-	UserID          valueTypes.Integer  `json:"user_id"`
+	TypeId          valueTypes.Integer  `json:"type_id"`
+	UserId          valueTypes.Integer  `json:"user_id"`
 	UserName        valueTypes.String   `json:"user_name"`
 }
 

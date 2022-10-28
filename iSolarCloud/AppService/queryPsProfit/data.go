@@ -12,8 +12,8 @@ const Url = "/v1/powerStationService/queryPsProfit"
 const Disabled = false
 
 type RequestData struct {
-	PsId     valueTypes.Integer `json:"ps_id" required:"true"`
-	DateID   string `json:"date_id" required:"true"`
+	PsId     valueTypes.PsId `json:"ps_id" required:"true"`
+	DateId   string `json:"date_id" required:"true"`
 	DateType string `json:"date_type" required:"true"`
 }
 
@@ -41,7 +41,7 @@ type ResultData struct {
 		CuspNetPowerQuantity     interface{}         `json:"cusp_net_power_quantity"`
 		CuspPowerQuantity        interface{}         `json:"cusp_power_quantity"`
 		CuspUsePowerQuantity     interface{}         `json:"cusp_use_power_quantity"`
-		DateID                   valueTypes.DateTime `json:"date_id"`
+		DateId                   valueTypes.DateTime `json:"date_id"`
 		FlatNetPowerQuantity     valueTypes.Float    `json:"flat_net_power_quantity"`
 		FlatPowerQuantity        valueTypes.Float    `json:"flat_power_quantity"`
 		FlatUsePowerQuantity     valueTypes.Float    `json:"flat_use_power_quantity"`

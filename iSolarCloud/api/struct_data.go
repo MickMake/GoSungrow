@@ -42,6 +42,8 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 			endpoint = apiReflect.GetCallerPackage(2)
 		}
 
+		now := valueTypes.SetDateTimeValue(time.Now().Round(5 * time.Minute))
+
 		// Iterate over all available fields and read the tag values
 		var tp apiReflect.DataStructures
 		var Ref apiReflect.Reflect
@@ -71,31 +73,14 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 				continue
 			}
 
-			// switch f.PointUpdateFreq {
-			// 	case "UpdateFreqInstant":
-			// 		f.PointUpdateFreq = UpdateFreqInstant
-			// 	case "UpdateFreq5Mins":
-			// 		f.PointUpdateFreq = UpdateFreq5Mins
-			// 	case "UpdateFreqBoot":
-			// 		f.PointUpdateFreq = UpdateFreqBoot
-			// 	case "UpdateFreqDay":
-			// 		f.PointUpdateFreq = UpdateFreqDay
-			// 	case "UpdateFreqMonth":
-			// 		f.PointUpdateFreq = UpdateFreqMonth
-			// 	case "UpdateFreqYear":
-			// 		f.PointUpdateFreq = UpdateFreqYear
-			// 	case "UpdateFreqTotal":
-			// 		f.PointUpdateFreq = UpdateFreqTotal
-			// }
-
 			var when valueTypes.DateTime
 			if !f.PointTimestamp.IsZero() {
-				dt := valueTypes.SetDateTimeValue(f.PointTimestamp)
-				when = *dt
+				// dt := valueTypes.SetDateTimeValue(f.PointTimestamp)
+				when = valueTypes.SetDateTimeValue(f.PointTimestamp)
 			} else {
 				if timestamp.IsZero() {
-					dt := valueTypes.SetDateTimeValue(time.Now().Round(5 * time.Minute))
-					when = *dt
+					// dt := valueTypes.SetDateTimeValue(time.Now().Round(5 * time.Minute))
+					when = now
 				} else {
 					when = timestamp
 				}
@@ -148,54 +133,6 @@ func (dm *DataMap) AddPointUnitValue(endpoint string, parentId string, point Poi
 		dm.Add(de)
 	}
 }
-
-func CreatePointDataEntry(endpoint string, parentId string, point Point, dateTime valueTypes.DateTime, uv valueTypes.UnitValue) DataEntry {
-	var ret DataEntry
-	for range Only.Once {
-		ret = DataEntry {
-			EndPoint:   endpoint,
-			Point:      &point,
-			Parent:     NewParentDevice(parentId),
-			Date:       dateTime,
-			Value:      uv,
-			Valid:      true,
-			Hide:       false,
-			Index:      0,
-		}
-	}
-
-	return ret
-}
-
-func CreatePoint(parentId string, pid valueTypes.PointId, name string, groupName string, unit string, Type string, timeSpan string) Point {
-	var point Point
-	for range Only.Once {
-		if name == "" {
-			name = pid.PointToName()
-		}
-
-		var parent ParentDevice
-		parent.Set(parentId)
-		var parents ParentDevices
-		parents.Add(parent)
-
-		point = Point {
-			Parents:     parents,
-			Id:          pid,
-			GroupName:   groupName,
-			Description: name,
-			Unit:        unit,
-			UpdateFreq:  timeSpan,
-			ValueType:   Type,
-			Valid:       true,
-			States:      nil,
-		}
-		point.FixUnitType()
-	}
-
-	return point
-}
-
 
 func (dm *DataMap) CopyPoint(refEndpoint string, endpoint string, pointId string, name string) *DataEntries {
 	var ret *DataEntries
@@ -397,32 +334,6 @@ func (dm *DataMap) CreateTable() output.Table {
 	return table
 }
 
-
-
-func GetPercent(value float64, max float64) float64 {
-	if max == 0 {
-		return 0
-	}
-	return (value / max) * 100
-}
-
-func JoinWithDots(intSize int, dateFormat string, args ...interface{}) string {
-	var ret string
-	for range Only.Once {
-		var a []string
-		for _, e := range args {
-			v := valueTypes.TypeToString(intSize, dateFormat, e)
-			if v == "" {
-				continue
-			}
-			a = append(a, v)
-		}
-		ret = strings.Join(a, ".")
-	}
-	return ret
-}
-
-
 func (dm *DataMap) AddAny(endpoint string, parentId string, pid valueTypes.PointId, name string, groupName string, date valueTypes.DateTime, value interface{}, unit string, Type string, timeSpan string) {
 
 	for range Only.Once {
@@ -514,6 +425,79 @@ func (dm *DataMap) AddUnitValue(endpoint string, parentId string, pid valueTypes
 		dm.Add(de)
 	}
 }
+
+
+func CreatePointDataEntry(endpoint string, parentId string, point Point, dateTime valueTypes.DateTime, uv valueTypes.UnitValue) DataEntry {
+	var ret DataEntry
+	for range Only.Once {
+		ret = DataEntry {
+			EndPoint:   endpoint,
+			Point:      &point,
+			Parent:     NewParentDevice(parentId),
+			Date:       dateTime,
+			Value:      uv,
+			Valid:      true,
+			Hide:       false,
+			Index:      0,
+		}
+	}
+
+	return ret
+}
+
+func CreatePoint(parentId string, pid valueTypes.PointId, name string, groupName string, unit string, Type string, timeSpan string) Point {
+	var point Point
+	for range Only.Once {
+		if name == "" {
+			name = pid.PointToName()
+		}
+
+		var parent ParentDevice
+		parent.Set(parentId)
+		var parents ParentDevices
+		parents.Add(parent)
+
+		point = Point {
+			Parents:     parents,
+			Id:          pid,
+			GroupName:   groupName,
+			Description: name,
+			Unit:        unit,
+			UpdateFreq:  timeSpan,
+			ValueType:   Type,
+			Valid:       true,
+			States:      nil,
+		}
+		point.FixUnitType()
+	}
+
+	return point
+}
+
+func GetPercent(value float64, max float64) float64 {
+	if max == 0 {
+		return 0
+	}
+	return (value / max) * 100
+}
+
+func JoinWithDots(intSize int, dateFormat string, args ...interface{}) string {
+	var ret string
+	for range Only.Once {
+		var a []string
+		for _, ref := range args {
+			v := valueTypes.AnyToValueString(ref, intSize, dateFormat)
+			if v == "" {
+				continue
+			}
+			v = strings.Trim(v, ".")
+			a = append(a, v)
+		}
+		ret = strings.Join(a, ".")
+	}
+	return ret
+}
+
 
 // func CreateDataEntry(endpoint string, parentId string, pid valueTypes.PointId, name string, groupName string, dateTime valueTypes.DateTime, uv valueTypes.UnitValue, timeSpan string) DataEntry {
 // 	var ret DataEntry

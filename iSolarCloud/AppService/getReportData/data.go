@@ -12,7 +12,7 @@ const Url = "/v1/powerStationService/getReportData"
 const Disabled = false
 
 type RequestData struct {
-	PsId valueTypes.Integer `json:"ps_id" required:"true"`
+	PsId valueTypes.PsId `json:"ps_id" required:"true"`
 	ReportType string `json:"report_type" required:"true"`
 }
 
@@ -32,7 +32,7 @@ type ResultData struct {
 		InstallerPsFaultStatus valueTypes.Integer `json:"installer_ps_fault_status"`
 		OwnerPsFaultStatus     valueTypes.Integer `json:"owner_ps_fault_status"`
 		PsFaultStatus          valueTypes.Integer `json:"ps_fault_status"`
-		PsId                   valueTypes.Integer `json:"ps_id"`
+		PsId                   valueTypes.PsId `json:"ps_id"`
 		PsName                 valueTypes.String  `json:"ps_name"`
 		PsStatus               valueTypes.Integer `json:"ps_status"`
 		PsType                 valueTypes.Integer `json:"ps_type"`
@@ -41,13 +41,13 @@ type ResultData struct {
 		SysSchemeName          valueTypes.String  `json:"sys_scheme_name"`
 		ValidFlag              valueTypes.Bool    `json:"valid_flag"`
 	} `json:"info"`
-	MinDateID interface{} `json:"min_date_id"`
+	MinDateId interface{} `json:"min_date_id"`
 	Total     []DataList  `json:"total" PointId:"total" PointIgnoreIfNilFromChild:"UpdateTime" PointNameFromChild:"DateId" PointNameDateFormat:"20060102" PointNameFromAppend:"true"`
 }
 type DataList struct {
 	DateId     valueTypes.DateTime `json:"date_id"`
 	DeviceName interface{}         `json:"device_name"`
-	PsId       valueTypes.Integer  `json:"ps_id"`
+	PsId       valueTypes.PsId  `json:"ps_id"`
 	TimeStamp  interface{}         `json:"time_stamp"` // Sad that this alternates between string and valueTypes.Integer.
 	UpdateTime valueTypes.DateTime `json:"update_time"`
 	UUID       interface{}         `json:"uuid"`

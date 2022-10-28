@@ -28,9 +28,9 @@ type ResultData struct {
 	PageDataList []struct {
 		CreateTime   valueTypes.DateTime `json:"create_time" PointIgnore:"true"`
 		DeviceType   valueTypes.Integer  `json:"device_type"`
-		ID           valueTypes.Integer  `json:"id"`
+		Id           valueTypes.Integer  `json:"id"`
 		Period       valueTypes.Integer  `json:"period"`		// 0, 1, 2, 3, 4
-		PointID      valueTypes.PointId  `json:"point_id"`
+		PointId      valueTypes.PointId  `json:"point_id"`
 		PointName    valueTypes.String `json:"point_name" PointIgnore:"true"`	// Old name of point.
 		PointNameNew valueTypes.String `json:"point_name_new" PointId:"name"`
 		TypeName     valueTypes.String `json:"type_name"`

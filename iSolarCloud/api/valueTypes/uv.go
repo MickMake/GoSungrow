@@ -2,6 +2,7 @@ package valueTypes
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 	"sort"
 	"strconv"
@@ -33,6 +34,8 @@ func (t *UnitValue) UnitValueFix() UnitValue {
 	}
 
 	switch t.UnitValue {
+		case "g":
+			fallthrough
 		case "Wp":
 			fallthrough
 		case "Wh":
@@ -51,6 +54,67 @@ func (t *UnitValue) UnitValueFix() UnitValue {
 	}
 
 	return *t
+}
+
+func UnitValueType(unit string) string {
+	var ret string
+	switch unit {
+		case "Wh":
+			fallthrough
+		case "kWh":
+			fallthrough
+		case "MWh":
+			ret = "Energy"
+
+		case "kWp":
+			fallthrough
+		case "W":
+			fallthrough
+		case "kW":
+			fallthrough
+		case "MW":
+			ret = "Power"
+
+		case "AUD":
+			ret = "Currency"
+
+		case "g":
+			fallthrough
+		case "kg":
+			ret = "Weight"
+
+		case "mV":
+			fallthrough
+		case "V":
+			ret = "Voltage"
+
+		case "mA":
+			fallthrough
+		case "A":
+			ret = "Current"
+
+		case "Hz":
+			ret = "Frequency"
+
+		case "kvar":
+			ret = "Reactive Power"
+
+		case "Ω":
+			fallthrough
+		case "kΩ":
+			ret = "Resistance"
+
+		case "%":
+			ret = "Percent"
+
+		case "F":
+			fallthrough
+		case "C":
+			fallthrough
+		case "℃":
+			ret = "Temperature"
+	}
+	return ret
 }
 
 // UnmarshalJSON - Convert JSON to value
@@ -156,6 +220,8 @@ func (t UnitValue) MarshalJSON() ([]byte, error) {
 				break
 			}
 		}
+
+		data = []byte(fmt.Sprintf(`{"unit":"%s","value":"--"}`, t.UnitValue))
 
 		t.Valid = true
 	}
@@ -402,6 +468,7 @@ func (t *UnitValue) SetBoolString(value string) UnitValue {
 func (t *UnitValue) SetUnit(unit string) UnitValue {
 	for range Only.Once {
 		t.UnitValue = unit
+		t.TypeValue = UnitValueType(unit)
 	}
 
 	return *t

@@ -1,5 +1,8 @@
 package output
 
+import (
+	"github.com/MickMake/GoUnify/Only"
+)
 
 const (
 	TypeNone  = iota
@@ -132,18 +135,28 @@ func (out *OutputType) IsStrGraph(t string) bool {
 
 
 func (out *OutputType) Set(outputType string) {
-	switch outputType {
-		case StringTypeJson:
-			out.SetJson()
-		case StringTypeCsv:
-			out.SetCsv()
-		case StringTypeRaw:
-			out.SetRaw()
-		case StringTypeGraph:
-			out.SetGraph()
-		case StringTypeTable:
-			fallthrough
-		default:
-			out.SetTable()
+	for range Only.Once {
+		// re := regexp.MustCompile(`^(\w+)\s`)
+		// ot := re.FindStringSubmatch(outputType)
+		// if len(ot) == 0 {
+		// 	break
+		// }
+		// fmt.Printf("%s\n", ot[0])
+		//
+		// switch strings.ToLower(ot[0]) {
+		switch outputType {
+			case StringTypeJson:
+				out.SetJson()
+			case StringTypeCsv:
+				out.SetCsv()
+			case StringTypeRaw:
+				out.SetRaw()
+			case StringTypeGraph:
+				out.SetGraph()
+			case StringTypeTable:
+				fallthrough
+			default:
+				out.SetTable()
+		}
 	}
 }

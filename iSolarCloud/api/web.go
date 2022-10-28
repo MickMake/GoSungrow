@@ -75,6 +75,11 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 			break
 		}
 		endpoint = endpoint.SetResponse(w.Body)
+		if endpoint.GetError() != nil {
+			w.Error = endpoint.GetError()
+			break
+		}
+
 		w.Error = endpoint.IsResponseValid()
 		if w.Error != nil {
 			_ = w.WebCacheRemove(endpoint)

@@ -12,7 +12,7 @@ const Url = "/v1/powerStationService/getPowerStatistics"
 const Disabled = false
 
 type RequestData struct {
-	PsId valueTypes.Integer `json:"ps_id" required:"true"`
+	PsId valueTypes.PsId `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -25,7 +25,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	City           interface{}          `json:"city"`
+	City           valueTypes.String    `json:"city"`
 	PsName         valueTypes.String    `json:"ps_name"`
 	PsShortName    valueTypes.String    `json:"ps_short_name"`
 	Status1        valueTypes.Integer   `json:"status1"`

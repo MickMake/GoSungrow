@@ -40,7 +40,7 @@ func (sg *SunGrow) GetPointNamesFromTemplate(template string) api.TemplatePoints
 
 		ep := sg.GetByStruct(
 			"WebAppService.queryUserCurveTemplateData",
-			queryUserCurveTemplateData.RequestData{TemplateID: template},
+			queryUserCurveTemplateData.RequestData{TemplateId: template},
 			time.Hour,
 		)
 		if sg.Error != nil {
@@ -55,7 +55,7 @@ func (sg *SunGrow) GetPointNamesFromTemplate(template string) api.TemplatePoints
 				}
 				ret = append(ret, api.TemplatePoint {
 					PsKey:   dn,
-					PointId: pr.PointID,
+					PointId: pr.PointId,
 					Name:    pr.PointName,
 					Unit:    pr.Unit,
 				})
@@ -77,7 +77,7 @@ func (sg *SunGrow) GetTemplateData(template string, date string, filter string) 
 		}
 		when := valueTypes.NewDateTime(date)
 
-		var psIds []valueTypes.Integer
+		var psIds []valueTypes.PsId
 		psIds, sg.Error = sg.StringToPids()
 		if sg.Error != nil {
 			break
@@ -92,8 +92,8 @@ func (sg *SunGrow) GetTemplateData(template string, date string, filter string) 
 			ep := sg.GetByStruct(
 				"AppService.queryMutiPointDataList",
 				queryMutiPointDataList.RequestData {
-					// PsID:           api.SetIntegerValue(psId),
-					PsID:           psId,
+					// PsId:           api.SetIntegerValue(psId),
+					PsId:           psId,
 					PsKey:          valueTypes.SetPsKeyValue(pointNames.PrintKeys()),
 					Points:         pointNames.PrintPoints(),
 					MinuteInterval: "5",
@@ -484,7 +484,7 @@ func (sg *SunGrow) GetRealTimeData(psKey string) error {
 	return sg.Error
 }
 
-func (sg *SunGrow) CmdDataPsDetail(psIds ...valueTypes.Integer) error {
+func (sg *SunGrow) CmdDataPsDetail(psIds ...valueTypes.PsId) error {
 	for range Only.Once {
 		if len(psIds) == 0 {
 			psIds, sg.Error = sg.GetPsIds()
@@ -497,7 +497,7 @@ func (sg *SunGrow) CmdDataPsDetail(psIds ...valueTypes.Integer) error {
 		data.New(sg)
 
 		for _, psId := range psIds {
-			response := data.GetByApi("getPsDetail", SunGrowDataRequest{PsId: psId})
+			response := data.GetByEndPointName("getPsDetail", SunGrowDataRequest{PsId: &psId})
 			if response.Error != nil {
 				break
 			}
@@ -506,7 +506,7 @@ func (sg *SunGrow) CmdDataPsDetail(psIds ...valueTypes.Integer) error {
 				break
 			}
 
-			response = data.GetByApi("getPsDetailWithPsType", SunGrowDataRequest{PsId: psId})
+			response = data.GetByEndPointName("getPsDetailWithPsType", SunGrowDataRequest{PsId: &psId})
 			if response.Error != nil {
 				break
 			}
@@ -520,7 +520,7 @@ func (sg *SunGrow) CmdDataPsDetail(psIds ...valueTypes.Integer) error {
 	return sg.Error
 }
 
-func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints, psIds ...valueTypes.Integer) error {
+func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints, psIds ...valueTypes.PsId) error {
 	for range Only.Once {
 		if len(pointNames) == 0 {
 			sg.Error = errors.New("no points defined")
@@ -543,7 +543,7 @@ func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints, psId
 			ep := sg.GetByStruct(
 				"AppService.queryMutiPointDataList",
 				queryMutiPointDataList.RequestData{
-					PsID:           psId,
+					PsId:           psId,
 					PsKey:          valueTypes.SetPsKeyValue(pointNames.PrintKeys()),
 					Points:         pointNames.PrintPoints(),
 					MinuteInterval: "5",
@@ -600,7 +600,7 @@ func (sg *SunGrow) SearchPointNames(pns ...string) error {
 				ep := sg.GetByStruct(
 					"AppService.getPowerDevicePointInfo",
 					// getPowerDevicePointInfo.RequestData{Id: strconv.FormatInt(int64(pni), 10)},
-					getPowerDevicePointInfo.RequestData{Id: valueTypes.SetIntegerValue(int64(pni)) },
+					getPowerDevicePointInfo.RequestData{PsId: valueTypes.SetPsIdValue(int64(pni)) },
 					DefaultCacheTimeout,
 				)
 				if sg.Error != nil {
@@ -620,7 +620,7 @@ func (sg *SunGrow) SearchPointNames(pns ...string) error {
 			for _, pn := range pns {
 				ep := sg.GetByStruct(
 					"AppService.getPowerDevicePointInfo",
-					getPowerDevicePointInfo.RequestData{Id: valueTypes.SetIntegerString(pn)},
+					getPowerDevicePointInfo.RequestData{PsId: valueTypes.SetPsIdString(pn)},
 					DefaultCacheTimeout,
 				)
 				if sg.Error != nil {
@@ -651,7 +651,7 @@ func (sg *SunGrow) SearchPointNames(pns ...string) error {
 	return sg.Error
 }
 
-func (sg *SunGrow) GetDeviceList(psIds ...valueTypes.Integer) error {
+func (sg *SunGrow) GetDeviceList(psIds ...valueTypes.PsId) error {
 	for range Only.Once {
 		if len(psIds) == 0 {
 			psIds, sg.Error = sg.GetPsIds()
@@ -723,7 +723,7 @@ func (sg *SunGrow) GetDeviceModelInfoList() error {
 	return sg.Error
 }
 
-func (sg *SunGrow) GetDevicePoints(psIds ...valueTypes.Integer) error {
+func (sg *SunGrow) GetDevicePoints(psIds ...valueTypes.PsId) error {
 	for range Only.Once {
 		var points api.DataMap
 
@@ -776,7 +776,7 @@ func (sg *SunGrow) GetDevicePoints(psIds ...valueTypes.Integer) error {
 
 			// getPowerStationData
 			// api raw getPowerStationData '{"date_id":"20221007","date_type":"1","ps_id":"1171348"}'
-			ep = sg.GetByStruct("AppService.getPowerStationData", getPowerStationData.RequestData{ PsId: psId, DateType: "1", DateID: "20221007"}, DefaultCacheTimeout)
+			ep = sg.GetByStruct("AppService.getPowerStationData", getPowerStationData.RequestData{ PsId: psId, DateType: "1", DateId: "20221007"}, DefaultCacheTimeout)
 			if sg.Error != nil {
 				break
 			}
@@ -789,7 +789,7 @@ func (sg *SunGrow) GetDevicePoints(psIds ...valueTypes.Integer) error {
 			points.AppendMap(data)
 
 			// api raw getPowerStationData '{"date_id":"202210","date_type":"2","ps_id":"1171348"}'
-			ep = sg.GetByStruct("AppService.getPowerStationData", getPowerStationData.RequestData{ PsId: psId, DateType: "2", DateID: "202210"}, DefaultCacheTimeout)
+			ep = sg.GetByStruct("AppService.getPowerStationData", getPowerStationData.RequestData{ PsId: psId, DateType: "2", DateId: "202210"}, DefaultCacheTimeout)
 			if sg.Error != nil {
 				break
 			}
@@ -802,7 +802,7 @@ func (sg *SunGrow) GetDevicePoints(psIds ...valueTypes.Integer) error {
 			points.AppendMap(data)
 
 			// api raw getPowerStationData '{"date_id":"2022","date_type":"3","ps_id":"1171348"}'
-			ep = sg.GetByStruct("AppService.getPowerStationData", getPowerStationData.RequestData{ PsId: psId, DateType: "3", DateID: "2022"}, DefaultCacheTimeout)
+			ep = sg.GetByStruct("AppService.getPowerStationData", getPowerStationData.RequestData{ PsId: psId, DateType: "3", DateId: "2022"}, DefaultCacheTimeout)
 			if sg.Error != nil {
 				break
 			}
@@ -834,7 +834,7 @@ func (sg *SunGrow) GetDevicePoints(psIds ...valueTypes.Integer) error {
 			// api get getHouseholdStoragePsReport '{"date_id":"20221001","date_type":"1","ps_id":"1129147"}'
 			ep = sg.GetByStruct(
 				"AppService.getHouseholdStoragePsReport",
-				getHouseholdStoragePsReport.RequestData{ DateID: "20221001", DateType: "1", PsId: psId },
+				getHouseholdStoragePsReport.RequestData{ DateId: "20221001", DateType: "1", PsId: psId },
 				DefaultCacheTimeout,
 				)
 			if sg.Error != nil {
@@ -947,11 +947,11 @@ func PrintPause(index int, max int) {
 	}
 }
 
-func (sg *SunGrow) GetPointName(psIds valueTypes.Integer) error {
+func (sg *SunGrow) GetPointName(psId valueTypes.PsId) error {
 	for range Only.Once {
 		ep := sg.GetByStruct(
 			"AppService.getPowerDevicePointInfo",
-			getPowerDevicePointInfo.RequestData{Id: psIds},
+			getPowerDevicePointInfo.RequestData{PsId: psId},
 			DefaultCacheTimeout,
 		)
 		if sg.Error != nil {
@@ -968,7 +968,7 @@ func (sg *SunGrow) GetPointName(psIds valueTypes.Integer) error {
 		// table2 := data.GetEndPointData()
 		// fmt.Printf("%v\n", table2)
 
-		table.SetTitle("Point Name %s", psIds)
+		table.SetTitle("Point Name %s", psId)
 		table.SetFilePrefix(data.SetFilenamePrefix(""))
 		table.SetGraphFilter("")
 		table.SetSaveFile(sg.SaveAsFile)
@@ -983,8 +983,8 @@ func (sg *SunGrow) GetPointName(psIds valueTypes.Integer) error {
 }
 
 
-func (sg *SunGrow) GetPsIds() ([]valueTypes.Integer, error) {
-	var ret []valueTypes.Integer
+func (sg *SunGrow) GetPsIds() ([]valueTypes.PsId, error) {
+	var ret []valueTypes.PsId
 
 	for range Only.Once {
 		ep := sg.GetByStruct("AppService.getPsList", nil, DefaultCacheTimeout)
@@ -1000,8 +1000,8 @@ func (sg *SunGrow) GetPsIds() ([]valueTypes.Integer, error) {
 	return ret, sg.Error
 }
 
-func (sg *SunGrow) GetPsId() (valueTypes.Integer, error) {
-	var ret valueTypes.Integer
+func (sg *SunGrow) GetPsId() (valueTypes.PsId, error) {
+	var ret valueTypes.PsId
 
 	for range Only.Once {
 
@@ -1023,15 +1023,15 @@ func (sg *SunGrow) GetPsId() (valueTypes.Integer, error) {
 	return ret, sg.Error
 }
 
-func (sg *SunGrow) StringToPids(pids ...string) ([]valueTypes.Integer, error) {
-	var psIds []valueTypes.Integer
+func (sg *SunGrow) StringToPids(pids ...string) ([]valueTypes.PsId, error) {
+	var psIds []valueTypes.PsId
 	for range Only.Once {
 		for _, pid := range pids {
 			// p, err := strconv.ParseInt(pid, 10, 64)
 			// if err != nil {
 			// 	continue
 			// }
-			psIds = append(psIds, valueTypes.SetIntegerString(pid))
+			psIds = append(psIds, valueTypes.SetPsIdString(pid))
 		}
 		if len(psIds) == 0 {
 			psIds, sg.Error = sg.GetPsIds()
@@ -1077,15 +1077,15 @@ func (sg *SunGrow) GetDevices(print bool) (getDeviceList.Devices, error) {
 		for _, psId := range psIds {
 			ret = append(ret, getDeviceList.Device{
 				Vendor:        valueTypes.SetStringValue(""),
-				PsId:          psId.PsID,
-				PsKey:         valueTypes.SetPsKeyValue(psId.PsID.String()),
+				PsId:          psId.PsId,
+				PsKey:         valueTypes.SetPsKeyValue(psId.PsId.String()),
 				DeviceName:    psId.PsName,
 				DeviceProSn:   psId.PsShortName,
 				DeviceModel:   valueTypes.SetStringValue(""),
 				DeviceType:    psId.PsType,
 				DeviceCode:    valueTypes.SetIntegerValue(0),
 				ChannelId:     valueTypes.SetIntegerValue(0),
-				DeviceModelID: valueTypes.SetIntegerValue(0),
+				DeviceModelId: valueTypes.SetIntegerValue(0),
 				TypeName:      valueTypes.SetStringValue("Ps Id"),
 				DeviceState:   psId.PsHealthStatus,
 				DevStatus:     psId.PsStatus,
@@ -1094,7 +1094,7 @@ func (sg *SunGrow) GetDevices(print bool) (getDeviceList.Devices, error) {
 				// 			PsFaultStatus:  d.PsFaultStatus,
 				//			PsHealthStatus: d.PsHealthStatus,
 				//			PsHolder:       d.PsHolder,
-				//			PsID:           d.PsID,
+				//			PsId:           d.PsId,
 				//			PsName:         d.PsName,
 				//			PsShortName:    d.PsShortName,
 				//			PsStatus:       d.PsStatus,
@@ -1104,7 +1104,7 @@ func (sg *SunGrow) GetDevices(print bool) (getDeviceList.Devices, error) {
 			ep = sg.GetByStruct(
 				"AppService.getDeviceList",
 				// getDeviceList.RequestData{PsId: strconv.FormatInt(psId, 10)},
-				getDeviceList.RequestData{PsId: psId.PsID},
+				getDeviceList.RequestData{PsId: psId.PsId},
 				DefaultCacheTimeout,
 			)
 			if sg.Error != nil {
@@ -1138,7 +1138,7 @@ func (sg *SunGrow) GetPsModels() ([]string, error) {
 	var ret []string
 
 	for range Only.Once {
-		var psIds []valueTypes.Integer
+		var psIds []valueTypes.PsId
 		psIds, sg.Error = sg.StringToPids()
 		if sg.Error != nil {
 			break
@@ -1167,7 +1167,7 @@ func (sg *SunGrow) GetPsSerials() ([]string, error) {
 	var ret []string
 
 	for range Only.Once {
-		var psIds []valueTypes.Integer
+		var psIds []valueTypes.PsId
 		psIds, sg.Error = sg.StringToPids()
 		if sg.Error != nil {
 			break
@@ -1196,7 +1196,7 @@ func (sg *SunGrow) GetPsKeys() ([]string, error) {
 	var ret []string
 
 	for range Only.Once {
-		var psIds []valueTypes.Integer
+		var psIds []valueTypes.PsId
 		psIds, sg.Error = sg.StringToPids()
 		if sg.Error != nil {
 			break

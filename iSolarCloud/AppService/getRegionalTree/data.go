@@ -28,14 +28,14 @@ func (rd RequestData) Help() string {
 type ResultData   struct {
 	ResultList []struct {
 		Checked    valueTypes.Bool   `json:"checked"`
-		ID         valueTypes.String `json:"id"`
+		Id         valueTypes.String `json:"id"`
 		IsFirstOrg valueTypes.Bool   `json:"isFirstOrg"`
 		IsParent   valueTypes.Bool `json:"isParent"`
 		Name       valueTypes.String `json:"name"`
 		Open       valueTypes.Bool   `json:"open"`
-		OrgID      valueTypes.Integer  `json:"org_id"`
-		PID        valueTypes.Integer `json:"pId"`
-		PsID       valueTypes.Integer `json:"ps_id"`
+		OrgId      valueTypes.Integer  `json:"org_id"`
+		ParentId   valueTypes.Integer `json:"pId"`
+		PsId       valueTypes.PsId `json:"ps_id"`
 		ShareType  int64  `json:"share_type"`
 	} `json:"resultList"`
 }

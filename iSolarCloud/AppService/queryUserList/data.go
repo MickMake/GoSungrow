@@ -24,7 +24,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	UserID   valueTypes.Integer  `json:"user_id"`
+	UserId   valueTypes.Integer  `json:"user_id"`
 	UserName string `json:"user_name"`
 }
 

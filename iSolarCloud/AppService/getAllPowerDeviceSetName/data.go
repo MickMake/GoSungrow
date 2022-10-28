@@ -25,7 +25,7 @@ func (rd RequestData) Help() string {
 
 type ResultData []struct {
 	Remark  string `json:"remark"`
-	SetID   valueTypes.Integer  `json:"set_id"`
+	SetId   valueTypes.Integer  `json:"set_id"`
 	SetName string `json:"set_name"`
 }
 

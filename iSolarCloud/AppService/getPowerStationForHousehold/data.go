@@ -12,7 +12,7 @@ const Url = "/v1/powerStationService/getPowerStationForHousehold"
 const Disabled = false
 
 type RequestData struct {
-	PsId valueTypes.Integer `json:"ps_id" required:"true"`
+	PsId valueTypes.PsId `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -25,10 +25,10 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	LbsAreaCode           valueTypes.String   `json:"LbsAreaCode"`
-	LbsCountry            valueTypes.String   `json:"LbsCountry"`
+	LbsAreaCode           valueTypes.String   `json:"LbsAreaCode" PointId:"lbs_area_code"`
+	LbsCountry            valueTypes.String   `json:"LbsCountry" PointId:"lbs_country"`
 	AccessType            interface{}  `json:"access_type"`
-	AreaID                interface{}  `json:"area_id"`
+	AreaId                interface{}  `json:"area_id"`
 	ArrearsStatus         valueTypes.Integer  `json:"arrears_status"`
 	BatteryType           valueTypes.Integer  `json:"battery_type"`
 	CityCode              valueTypes.String   `json:"city_code"`
@@ -38,7 +38,7 @@ type ResultData struct {
 	ConnectType           valueTypes.Integer  `json:"connect_type"`
 	ConnectTypeDesc       valueTypes.String   `json:"connect_type_desc"`
 	ContactName           valueTypes.String   `json:"contact_name"`
-	CountryID             valueTypes.Integer  `json:"country_id"`
+	CountryId             valueTypes.Integer  `json:"country_id"`
 	Description           valueTypes.String   `json:"description"`
 	DesignCapacity        valueTypes.Float    `json:"design_capacity" PointUnit:"W"`
 	DesignCapacityBattery valueTypes.Float    `json:"design_capacity_battery" PointUnit:"W"`
@@ -53,7 +53,15 @@ type ResultData struct {
 	GprsLatitude          valueTypes.Float    `json:"gprs_latitude"`
 	GprsLongitude         valueTypes.Float    `json:"gprs_longitude"`
 	GridLevel             interface{}  `json:"grid_level"`
-	Images                []valueTypes.String `json:"images"`
+	Images []struct {
+		FileID      valueTypes.Integer `json:"file_id"`
+		ID          valueTypes.Integer `json:"id"`
+		PicLanguage valueTypes.Integer `json:"pic_language"`
+		PicType     valueTypes.Integer `json:"pic_type"`
+		PictureName valueTypes.String  `json:"picture_name"`
+		PictureURL  valueTypes.String  `json:"picture_url"`
+		PsUnitUUID  interface{}        `json:"ps_unit_uuid"`
+	} `json:"images"`
 	InstallDate           valueTypes.DateTime `json:"install_date"`
 	InstallDateZone       valueTypes.DateTime `json:"install_date_zone"`
 	InverterCount         valueTypes.Integer  `json:"inverter_count"`
@@ -75,7 +83,7 @@ type ResultData struct {
 	MlpeFlag              valueTypes.Bool     `json:"mlpe_flag"`
 	MobileTel             valueTypes.String   `json:"moble_tel"`
 	MobileTelBak          valueTypes.String   `json:"moble_tel_bak"`
-	ModuleModelID         interface{}  `json:"module_model_id"`
+	ModuleModelId         interface{}  `json:"module_model_id"`
 	ModuleModelName       valueTypes.String   `json:"module_model_name"`
 	Nmi                   valueTypes.String   `json:"nmi"`
 	OperationBusName      valueTypes.String   `json:"operation_bus_name"`
@@ -86,16 +94,16 @@ type ResultData struct {
 	ProvinceCode          valueTypes.String   `json:"province_code"`
 	ProvinceName          valueTypes.String   `json:"province_name"`
 	PsBuildDate           valueTypes.DateTime `json:"ps_build_date"`
-	PsCountryID           valueTypes.Integer  `json:"ps_country_id"`
-	PsCreateUserID        valueTypes.Integer  `json:"ps_create_user_id"`
+	PsCountryId           valueTypes.Integer  `json:"ps_country_id"`
+	PsCreateUserId        valueTypes.Integer  `json:"ps_create_user_id"`
 	PsCurrentTimeZone     valueTypes.String   `json:"ps_current_time_zone"`
 	PsDirectOrgList       []struct {
-		OrgID        valueTypes.Integer `json:"org_id"`
+		OrgId        valueTypes.Integer `json:"org_id"`
 		OrgIndexCode valueTypes.String  `json:"org_index_code"`
 		OrgName      valueTypes.String  `json:"org_name"`
 	} `json:"ps_direct_org_list"`
 	PsHolder         valueTypes.String  `json:"ps_holder"`
-	PsID             valueTypes.Integer `json:"ps_id"`
+	PsId             valueTypes.PsId `json:"ps_id"`
 	PsInstalledPower valueTypes.Float   `json:"ps_installed_power" PointUnit:"W"`
 	PsKey            valueTypes.PsKey   `json:"ps_key"`
 	PsLocation       valueTypes.String  `json:"ps_location"`
@@ -105,22 +113,22 @@ type ResultData struct {
 		Installer       valueTypes.String  `json:"installer"`
 		InstallerEmail  valueTypes.String  `json:"installer_email"`
 		InstallerPhone  valueTypes.String  `json:"installer_phone"`
-		OrgID           valueTypes.Integer `json:"org_id"`
+		OrgId           valueTypes.Integer `json:"org_id"`
 		OrgIndexCode    valueTypes.String  `json:"org_index_code"`
 		OrgName         valueTypes.String  `json:"org_name"`
 		PsDealerOrgCode valueTypes.String  `json:"ps_dealer_org_code"`
-		UpOrgID         valueTypes.Integer `json:"up_org_id"`
+		UpOrgId         valueTypes.Integer `json:"up_org_id"`
 	} `json:"ps_org_info"`
 	PsPrice          valueTypes.Float    `json:"ps_price" PointUnitFrom:"ParamIncomeUnitName"`
 	PsPriceKwh       valueTypes.Float    `json:"ps_price_kwh" PointUnitFrom:"ParamIncomeUnitName"`
 	PsType           valueTypes.Integer  `json:"ps_type"`
 	PsTypeDesc       valueTypes.String   `json:"ps_type_desc"`
 	PsTypeName       valueTypes.String   `json:"ps_type_name"`
-	PsUserID         valueTypes.Integer  `json:"ps_user_id"`
+	PsUserId         valueTypes.Integer  `json:"ps_user_id"`
 	RecordCreateTime valueTypes.DateTime `json:"recore_create_time" PointId:"record_create_time"`
 	SafeStartDate    valueTypes.DateTime `json:"safe_start_date"`
 	SelectedOrgList  []struct {
-		OrgID        valueTypes.Integer `json:"org_id"`
+		OrgId        valueTypes.Integer `json:"org_id"`
 		OrgIndexCode valueTypes.String  `json:"org_index_code"`
 		OrgName      valueTypes.String  `json:"org_name"`
 	} `json:"selectedOrgList" PointId:"selected_org_list"`
@@ -133,14 +141,14 @@ type ResultData struct {
 	SnDetailList    []struct {
 		CommunicateDeviceType     valueTypes.Integer `json:"communicate_device_type"`
 		CommunicateDeviceTypeName valueTypes.String  `json:"communicate_device_type_name"`
-		ID                        valueTypes.Integer `json:"id"`
+		Id                        valueTypes.Integer `json:"id"`
 		IsEnable                  valueTypes.Bool    `json:"is_enable"`
 		Sn                        valueTypes.String  `json:"sn" PointName:"Serial Number"`
 	} `json:"sn_detail_list"`
 	SummerTimeState    valueTypes.Bool    `json:"summer_time_state"`
 	SummerTimeZone     valueTypes.String  `json:"summer_time_zone"`
-	SummerTimeZoneID   valueTypes.Integer `json:"summer_time_zone_id"`
-	TimeZoneID         valueTypes.Integer `json:"time_zone_id"`
+	SummerTimeZoneId   valueTypes.Integer `json:"summer_time_zone_id"`
+	TimeZoneId         valueTypes.Integer `json:"time_zone_id"`
 	Timezone           valueTypes.String  `json:"timezone"`
 	UserAccount        valueTypes.String  `json:"user_account"`
 	UserCapacityStatus valueTypes.Integer `json:"user_capacity_status"`

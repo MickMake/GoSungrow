@@ -12,7 +12,7 @@ const Url = "/v1/powerStationService/getPsWeatherList"
 const Disabled = false
 
 type RequestData struct {
-	PsId valueTypes.Integer `json:"ps_id" required:"true"`
+	PsId valueTypes.PsId `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -28,7 +28,7 @@ type ResultData struct {
 	WeatherList []struct {
 		Chill      valueTypes.Float    `json:"chill"`
 		Code       valueTypes.Float    `json:"code"`
-		CodeName   valueTypes.Float    `json:"code_name"`
+		CodeName   valueTypes.String   `json:"code_name"`
 		DateTime   valueTypes.DateTime `json:"date_time" PointIgnore:"true"`
 		Direction  valueTypes.Float    `json:"direction"`
 		High       valueTypes.Float    `json:"high" PointUnit:"F"`
@@ -37,7 +37,7 @@ type ResultData struct {
 		Low        valueTypes.Float    `json:"low" PointUnit:"F"`
 		Lowc       valueTypes.Float    `json:"lowc" PointUnit:"C"`
 		Pressure   valueTypes.Float    `json:"pressure" PointUnit:"hPa"`
-		PsID       valueTypes.Float    `json:"ps_id"`
+		PsId       valueTypes.PsId     `json:"ps_id"`
 		Rising     valueTypes.Float    `json:"rising"`
 		Speed      valueTypes.Float    `json:"speed"`
 		Sunrise    valueTypes.Time     `json:"sunrise"`

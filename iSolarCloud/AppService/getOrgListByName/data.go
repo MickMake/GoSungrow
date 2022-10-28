@@ -26,7 +26,7 @@ func (rd RequestData) Help() string {
 
 type ResultData []struct {
 	IsLeaf  valueTypes.Bool    `json:"is_leaf"`
-	OrgID   valueTypes.Integer `json:"org_id"`
+	OrgId   valueTypes.Integer `json:"org_id"`
 	OrgName valueTypes.String  `json:"org_name"`
 }
 

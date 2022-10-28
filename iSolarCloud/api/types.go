@@ -10,14 +10,13 @@ import (
 func (e *Web) GetDataTable(endpoint EndPoint) output.Table {
 	var table output.Table
 	for range Only.Once {
-		table = output.NewTable()
+		// table = output.NewTable()
+		data := endpoint.GetEndPointData()
+		table = data.CreateTable()
 		table.SetTitle(fmt.Sprintf("Data Request %s.%s", endpoint.GetArea(), endpoint.GetName()))
 		table.SetFilePrefix(fmt.Sprintf("%s_%s", endpoint.GetArea(), endpoint.GetName()))
 		table.SetJson([]byte(endpoint.GetJsonData(false)))
 		table.SetRaw([]byte(endpoint.GetJsonData(true)))
-
-		data := endpoint.GetEndPointData()
-		table = data.CreateTable()
 
 		// table.InitGraph(output.GraphRequest {
 		// 	Title:        "",

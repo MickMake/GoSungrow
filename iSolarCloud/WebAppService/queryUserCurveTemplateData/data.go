@@ -15,7 +15,7 @@ const Disabled = false
 
 // {"template_id":"","date_type":"","start_time":"","end_time":""}
 type RequestData struct {
-	TemplateID string `json:"template_id" required:"true"`
+	TemplateId string `json:"template_id" required:"true"`
 	// DateType   string `json:"date_type" required:"true"`
 	// StartTime  string `json:"start_time" required:"true"`
 	// EndTime    string `json:"end_time" required:"true"`
@@ -48,7 +48,7 @@ type ResultData struct {
 	OpenTime     string     `json:"open_time"`
 	PointsData   PointsData `json:"points_data"`
 	StartTime    string     `json:"start_time"`
-	TemplateID   string     `json:"template_id"`
+	TemplateId   string     `json:"template_id"`
 	TemplateName string     `json:"template_name"`
 	UpdateTime   string     `json:"update_time"`
 }
@@ -116,7 +116,7 @@ func (p *DeviceData) UnmarshalJSON(data []byte) error {
 		// Store DeviceData.Points
 		_ = json.Unmarshal(data, &dd.Points)
 		for i, k := range dd.Points {
-			if k.PointID.String() == "" {
+			if k.PointId.String() == "" {
 				delete(dd.Points, i)
 				continue
 			}
@@ -135,11 +135,11 @@ type Point struct {
 		TimeStamp string `json:"time_stamp"`
 		Value     string `json:"value"`
 	} `json:"data_list"`
-	DetailID   string      `json:"detail_id"`
-	PointID    valueTypes.PointId `json:"point_id"`
+	DetailId   string      `json:"detail_id"`
+	PointId    valueTypes.PointId `json:"point_id"`
 	PointName  string      `json:"point_name"`
-	PsID       string `json:"ps_id"`
-	PsKey      string `json:"ps_key"`
+	PsId       valueTypes.PsId `json:"ps_id"`
+	PsKey      valueTypes.PsKey `json:"ps_key"`
 	PsName     string `json:"ps_name"`
 	Statistics string `json:"statistics"`
 	Style      string `json:"style"`

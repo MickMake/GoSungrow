@@ -27,7 +27,7 @@ func (rd RequestData) Help() string {
 type ResultData []struct {
 	IsBasicUnit  valueTypes.Bool     `json:"is_basic_unit"`
 	TargetUnit   string       `json:"target_unit"`
-	UnitConverID valueTypes.Integer  `json:"unit_conver_id"`
+	UnitConverId valueTypes.Integer  `json:"unit_conver_id"`
 	UnitName     string       `json:"unit_name"`
 	UnitType     valueTypes.Integer  `json:"unit_type"`
 }

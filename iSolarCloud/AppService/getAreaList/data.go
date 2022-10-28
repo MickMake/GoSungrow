@@ -28,7 +28,7 @@ type ResultData struct {
 		FaultStationCount valueTypes.Integer   `json:"fault_station_count"`
 		IsHaveEsPs        valueTypes.Bool      `json:"is_have_es_ps"`
 		IsLeaf            valueTypes.Bool      `json:"is_leaf"`
-		OrgID             valueTypes.Integer   `json:"org_id"`
+		OrgId             valueTypes.Integer   `json:"org_id"`
 		OrgName           valueTypes.String    `json:"org_name"`
 		P83048            valueTypes.UnitValue `json:"p83048"`
 		P83049            valueTypes.UnitValue `json:"p83049"`
@@ -38,7 +38,7 @@ type ResultData struct {
 		StationCount      valueTypes.Integer   `json:"station_count"`
 		TodayEnergy       valueTypes.UnitValue `json:"today_energy"`
 		TotalEnergy       valueTypes.UnitValue `json:"total_energy"`
-	} `json:"pageList" PointId:"page_list" PointNameFromChild:"OrgID" PointNameFromAppend:"false"`
+	} `json:"pageList" PointId:"page_list" PointNameFromChild:"OrgId" PointNameFromAppend:"false"`
 	RowCount valueTypes.Integer `json:"rowCount" PointIgnore:"true"`
 }
 

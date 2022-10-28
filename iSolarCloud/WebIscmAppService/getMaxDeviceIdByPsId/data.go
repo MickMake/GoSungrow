@@ -12,7 +12,7 @@ const Url = "/v1/devService/getMaxDeviceIdByPsId"
 const Disabled = false
 
 type RequestData struct {
-	PsId     valueTypes.Integer `json:"ps_id" required:"true"`
+	PsId     valueTypes.PsId `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -26,7 +26,7 @@ func (rd RequestData) Help() string {
 
 
 type ResultData struct {
-	MaxDeviceID valueTypes.Integer `json:"max_device_id"`
+	MaxDeviceId valueTypes.Integer `json:"max_device_id"`
 }
 
 func (e *ResultData) IsValid() error {

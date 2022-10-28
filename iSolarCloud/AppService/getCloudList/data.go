@@ -25,10 +25,10 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	CloudList []struct {
-		CloudID    valueTypes.Integer  `json:"cloud_id"`
+		CloudId    valueTypes.Integer  `json:"cloud_id"`
 		CloudName  string `json:"cloud_name"`
 		GatewayURL string `json:"gateway_url"`
-		OrderID    valueTypes.Integer  `json:"order_id"`
+		OrderId    valueTypes.Integer  `json:"order_id"`
 		ServiceURL string `json:"service_url"`
 		Value      string `json:"value"`
 		ValueDeDe  string `json:"value_de_de"`
@@ -49,10 +49,10 @@ type ResultData struct {
 		WebURL     string `json:"web_url"`
 	} `json:"cloud_list"`
 	CurrentCloud struct {
-		CloudID    valueTypes.Integer  `json:"cloud_id"`
+		CloudId    valueTypes.Integer  `json:"cloud_id"`
 		CloudName  string `json:"cloud_name"`
 		GatewayURL string `json:"gateway_url"`
-		OrderID    valueTypes.Integer  `json:"order_id"`
+		OrderId    valueTypes.Integer  `json:"order_id"`
 		ServiceURL string `json:"service_url"`
 		Value      string `json:"value"`
 		ValueDeDe  string `json:"value_de_de"`
