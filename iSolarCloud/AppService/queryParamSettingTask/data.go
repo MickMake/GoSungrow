@@ -12,8 +12,8 @@ const Url = "/v1/devService/queryParamSettingTask"
 const Disabled = false
 
 type RequestData struct {
-	TaskId string `json:"task_id" required:"true"`
-	Uuid   string `json:"uuid" required:"true"`
+	TaskId valueTypes.String `json:"task_id" required:"true"`
+	Uuid   valueTypes.String `json:"uuid" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -26,7 +26,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	// Dummy string `json:"dummy"`
+	// Dummy valueTypes.String `json:"dummy"`
 }
 
 func (e *ResultData) IsValid() error {

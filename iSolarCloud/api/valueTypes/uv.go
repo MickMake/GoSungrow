@@ -41,6 +41,10 @@ func (t *UnitValue) UnitValueFix() UnitValue {
 		case "Wh":
 			fallthrough
 		case "W":
+			if t.float64 == nil {
+				// Only if we have a float.
+				break
+			}
 			fv := t.Value() / 1000
 			t.SetFloat(fv)
 			t.SetUnit("k" + t.UnitValue)

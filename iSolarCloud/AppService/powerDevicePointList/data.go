@@ -34,7 +34,7 @@ type ResultData struct {
 		PointName    valueTypes.String `json:"point_name" PointIgnore:"true"`	// Old name of point.
 		PointNameNew valueTypes.String `json:"point_name_new" PointId:"name"`
 		TypeName     valueTypes.String `json:"type_name"`
-	} `json:"pageDataList" PointId:"points"`
+	} `json:"pageDataList" PointId:"points" PointArrayFlatten:"false"`
 	PageSize    valueTypes.Integer `json:"pageSize" PointIgnore:"true"`
 	TotalCounts valueTypes.Integer `json:"totalCounts" PointId:"total_counts"`
 	TotalPages  valueTypes.Integer `json:"totalPages" PointIgnore:"true"`

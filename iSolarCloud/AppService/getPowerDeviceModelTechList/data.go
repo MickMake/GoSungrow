@@ -48,7 +48,7 @@ var DeviceTypes = []string{
 }
 
 type RequestData struct {
-	DeviceType string `json:"device_type" required:"true"`
+	DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

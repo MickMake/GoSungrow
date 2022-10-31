@@ -25,7 +25,7 @@ func (rd RequestData) Help() string {
 
 type ResultData []struct {
 	UserId   valueTypes.Integer  `json:"user_id"`
-	UserName string `json:"user_name"`
+	UserName valueTypes.String `json:"user_name"`
 }
 
 func (e *ResultData) IsValid() error {

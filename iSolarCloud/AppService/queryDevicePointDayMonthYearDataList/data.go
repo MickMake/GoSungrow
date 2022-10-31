@@ -4,16 +4,20 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
-	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/commonService/queryDevicePointDayMonthYearDataList"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
+	PsKey     valueTypes.PsKey    `json:"ps_key" required:"true"`
+	DataPoint valueTypes.String   `json:"data_point" required:"true"`
+	StartTime valueTypes.DateTime `json:"start_time" required:"true"`
+	EndTime   valueTypes.DateTime `json:"end_time" required:"true"`
+	DataType  valueTypes.String   `json:"data_type" required:"true"`
+	QueryType valueTypes.String   `json:"query_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -21,50 +25,30 @@ func (rd RequestData) IsValid() error {
 }
 
 func (rd RequestData) Help() string {
-	ret := fmt.Sprintf("")
+	ret := fmt.Sprintf("Parameter:query_type must be in (1,2,3)\n")
+	ret += fmt.Sprintf("1 - YYYYMMDD\n")
+	ret += fmt.Sprintf("2 - YYYYMM\n")
+	ret += fmt.Sprintf("3 - YYYY\n")
 	return ret
 }
 
-
-type ResultData struct {
-	Dummy string `json:"dummy"`
+type ResultData []struct {
+	TimeStamp string `json:"time_stamp"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
 	return err
 }
-
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
+		pkg := apiReflect.GetName("", *e)
+		dt := valueTypes.NewDateTime(valueTypes.Now)
+		name := pkg + "." + e.Request.PsKey.String()
+		entries.StructToPoints(e.Response.ResultData, name, e.Request.PsKey.String(), dt)
 	}
 
 	return entries

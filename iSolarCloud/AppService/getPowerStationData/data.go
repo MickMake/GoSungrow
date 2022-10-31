@@ -13,8 +13,8 @@ const Disabled = false
 
 type RequestData struct {
 	PsId     valueTypes.PsId `json:"ps_id" required:"true"`
-	DateId   string `json:"date_id" required:"true"`
-	DateType string `json:"date_type" required:"true"`
+	DateId   valueTypes.DateTime `json:"date_id" required:"true"`
+	DateType valueTypes.String `json:"date_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -47,21 +47,14 @@ type ResultData struct {
 	P83033Unit            valueTypes.String    `json:"p83033_unit" PointIgnore:"true"`
 	P83106List            []valueTypes.Float   `json:"p83106List" PointId:"p83106" PointUnitFrom:"P83106Unit"`
 	P83106Unit            valueTypes.String    `json:"p83106_unit" PointIgnore:"true"`
-
-	P83022List []valueTypes.Float `json:"p83022List" PointId:"p83022" PointUnitFrom:"P83022Unit"` // Used for Year, Month, Day
-	P83022Unit valueTypes.String  `json:"p83022_unit" PointIgnore:"true"`                         // Used for Year, Month, Day
-	P83118List []valueTypes.Float `json:"p83118List" PointId:"p83118" PointUnitFrom:"P83118Unit"` // Used for Year, Month, Day
-	P83118Unit valueTypes.String  `json:"p83118_unit" PointIgnore:"true"`                         // Used for Year, Month, Day
+	P83022List            []valueTypes.Float   `json:"p83022List" PointId:"p83022" PointUnitFrom:"P83022Unit"` // Used for Year, Month, Day
+	P83022Unit            valueTypes.String    `json:"p83022_unit" PointIgnore:"true"`                         // Used for Year, Month, Day
+	P83118List            []valueTypes.Float   `json:"p83118List" PointId:"p83118" PointUnitFrom:"P83118Unit"` // Used for Year, Month, Day
+	P83118Unit            valueTypes.String    `json:"p83118_unit" PointIgnore:"true"`                         // Used for Year, Month, Day
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	// switch {
-	// case e.Dummy == "":
-	// 	break
-	// default:
-	// 	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	// }
 	return err
 }
 

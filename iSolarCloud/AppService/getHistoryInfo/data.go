@@ -5,7 +5,6 @@ import (
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
-	"errors"
 	"fmt"
 )
 
@@ -13,8 +12,8 @@ const Url = "/v1/powerStationService/getHistoryInfo"
 const Disabled = false
 
 type RequestData struct {
-	DateType string `json:"date_type" required:"true"`
-	DateId   string `json:"date_id" required:"true"`
+	DateType valueTypes.String `json:"date_type" required:"true"`
+	DateId   valueTypes.DateTime `json:"date_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -29,17 +28,11 @@ func (rd RequestData) Help() string {
 
 
 type ResultData struct {
-	Dummy string `json:"dummy"`
+	Dummy valueTypes.String `json:"dummy"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
 	return err
 }
 

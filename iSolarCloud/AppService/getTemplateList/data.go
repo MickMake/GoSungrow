@@ -29,7 +29,7 @@ type ResultData struct {
 		TemplateId   valueTypes.Integer  `json:"template_id"`
 		TemplateName valueTypes.String `json:"template_name"`
 		UpdateTime   valueTypes.DateTime `json:"update_time"`
-	} `json:"pageList"`
+	} `json:"pageList" PointNameFromChild:"TemplateId" PointNameAppend:"false" PointArrayFlatten:"false"`
 	RowCount valueTypes.Integer `json:"rowCount"`
 }
 

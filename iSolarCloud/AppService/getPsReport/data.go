@@ -43,14 +43,14 @@ type ResultData struct {
 			TotalProfit        valueTypes.Float   `json:"total_profit" PointUnitFrom:"IncomeUnitName"`
 			IncomeUnitName     valueTypes.String  `json:"income_unit_name" PointIgnore:"true"`
 			ProfitList         ProfitList         `json:"profit_list"`
-		} `json:"pageList" PointId:"page_list" PointNameFromChild:"PsId" PointNameFromAppend:"false"`
+		} `json:"pageList" PointId:"page_list" PointNameFromChild:"PsId" PointNameAppend:"false" PointArrayFlatten:"false"`
 		Co2ReduceUnit          valueTypes.String  `json:"co2_reduce_unit" PointIgnore:"true"`
 		PowerQuantityTotalUnit valueTypes.String  `json:"power_quantity_total_unit" PointIgnore:"true"`
 		PsInstalledPowerUnit   valueTypes.String  `json:"ps_installed_power_unit" PointIgnore:"true"`
 		PsTotalCo2ReduceUnit   valueTypes.String  `json:"ps_total_co2_reduce_unit" PointIgnore:"true"`
 		PsTotalPowerUnit       valueTypes.String  `json:"ps_total_power_unit" PointIgnore:"true"`
 		RowCount               valueTypes.Integer `json:"rowCount" PointId:"row_count"`
-	} `json:"report_list_data" PointId:"total_by_ps" PointNameFromAppend:"false"`
+	} `json:"report_list_data" PointId:"total_by_ps" PointNameAppend:"false"`
 }
 
 type TotalData struct {
@@ -64,7 +64,7 @@ type TotalData struct {
 	PowerQuantityTotalMap          valueTypes.UnitValue `json:"power_quantity_total_map"`
 	PowerQuantityTotalOriginalUnit valueTypes.String    `json:"power_quantity_total_original_unit" PointIgnore:"true"`
 
-	ProfitList                     ProfitList           `json:"profit_list"`
+	ProfitList                     ProfitList           `json:"profit_list" PointArrayFlatten:"false"`
 	TotalProfit                    valueTypes.Float     `json:"total_profit" PointUnitFrom:"IncomeUnitName"`
 }
 

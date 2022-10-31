@@ -12,7 +12,7 @@ const Url = "/v1/faultService/queryNounList"
 const Disabled = false
 
 type RequestData struct {
-	FaultTypeCode string `json:"fault_type_code" required:"true"`
+	FaultTypeCode valueTypes.String `json:"fault_type_code" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

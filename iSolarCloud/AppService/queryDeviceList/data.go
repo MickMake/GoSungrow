@@ -39,54 +39,54 @@ type ResultData struct {
 	// } `json:"dev_count_by_type_map"`
 	DevTypeDefinition map[string]valueTypes.String `json:"dev_type_definition" PointId:"device_types" PointUpdateFreq:"UpdateFreqBoot"`
 	// DevTypeDefinition struct {
-	// 	One    string `json:"1"`
-	// 	One0   string `json:"10"`
-	// 	One1   string `json:"11"`
-	// 	One2   string `json:"12"`
-	// 	One3   string `json:"13"`
-	// 	One4   string `json:"14"`
-	// 	One5   string `json:"15"`
-	// 	One6   string `json:"16"`
-	// 	One7   string `json:"17"`
-	// 	One8   string `json:"18"`
-	// 	One9   string `json:"19"`
-	// 	Two0   string `json:"20"`
-	// 	Two1   string `json:"21"`
-	// 	Two2   string `json:"22"`
-	// 	Two3   string `json:"23"`
-	// 	Two4   string `json:"24"`
-	// 	Two5   string `json:"25"`
-	// 	Two6   string `json:"26"`
-	// 	Two8   string `json:"28"`
-	// 	Two9   string `json:"29"`
-	// 	Three  string `json:"3"`
-	// 	Three0 string `json:"30"`
-	// 	Three1 string `json:"31"`
-	// 	Three2 string `json:"32"`
-	// 	Three3 string `json:"33"`
-	// 	Three4 string `json:"34"`
-	// 	Three5 string `json:"35"`
-	// 	Three6 string `json:"36"`
-	// 	Three7 string `json:"37"`
-	// 	Three8 string `json:"38"`
-	// 	Three9 string `json:"39"`
-	// 	Four   string `json:"4"`
-	// 	Four0  string `json:"40"`
-	// 	Four1  string `json:"41"`
-	// 	Four2  string `json:"42"`
-	// 	Four3  string `json:"43"`
-	// 	Four4  string `json:"44"`
-	// 	Four5  string `json:"45"`
-	// 	Four6  string `json:"46"`
-	// 	Four7  string `json:"47"`
-	// 	Four8  string `json:"48"`
-	// 	Five   string `json:"5"`
-	// 	Five0  string `json:"50"`
-	// 	Six    string `json:"6"`
-	// 	Seven  string `json:"7"`
-	// 	Eight  string `json:"8"`
-	// 	Nine   string `json:"9"`
-	// 	Nine9  string `json:"99"`
+	// 	One    valueTypes.String `json:"1"`
+	// 	One0   valueTypes.String `json:"10"`
+	// 	One1   valueTypes.String `json:"11"`
+	// 	One2   valueTypes.String `json:"12"`
+	// 	One3   valueTypes.String `json:"13"`
+	// 	One4   valueTypes.String `json:"14"`
+	// 	One5   valueTypes.String `json:"15"`
+	// 	One6   valueTypes.String `json:"16"`
+	// 	One7   valueTypes.String `json:"17"`
+	// 	One8   valueTypes.String `json:"18"`
+	// 	One9   valueTypes.String `json:"19"`
+	// 	Two0   valueTypes.String `json:"20"`
+	// 	Two1   valueTypes.String `json:"21"`
+	// 	Two2   valueTypes.String `json:"22"`
+	// 	Two3   valueTypes.String `json:"23"`
+	// 	Two4   valueTypes.String `json:"24"`
+	// 	Two5   valueTypes.String `json:"25"`
+	// 	Two6   valueTypes.String `json:"26"`
+	// 	Two8   valueTypes.String `json:"28"`
+	// 	Two9   valueTypes.String `json:"29"`
+	// 	Three  valueTypes.String `json:"3"`
+	// 	Three0 valueTypes.String `json:"30"`
+	// 	Three1 valueTypes.String `json:"31"`
+	// 	Three2 valueTypes.String `json:"32"`
+	// 	Three3 valueTypes.String `json:"33"`
+	// 	Three4 valueTypes.String `json:"34"`
+	// 	Three5 valueTypes.String `json:"35"`
+	// 	Three6 valueTypes.String `json:"36"`
+	// 	Three7 valueTypes.String `json:"37"`
+	// 	Three8 valueTypes.String `json:"38"`
+	// 	Three9 valueTypes.String `json:"39"`
+	// 	Four   valueTypes.String `json:"4"`
+	// 	Four0  valueTypes.String `json:"40"`
+	// 	Four1  valueTypes.String `json:"41"`
+	// 	Four2  valueTypes.String `json:"42"`
+	// 	Four3  valueTypes.String `json:"43"`
+	// 	Four4  valueTypes.String `json:"44"`
+	// 	Four5  valueTypes.String `json:"45"`
+	// 	Four6  valueTypes.String `json:"46"`
+	// 	Four7  valueTypes.String `json:"47"`
+	// 	Four8  valueTypes.String `json:"48"`
+	// 	Five   valueTypes.String `json:"5"`
+	// 	Five0  valueTypes.String `json:"50"`
+	// 	Six    valueTypes.String `json:"6"`
+	// 	Seven  valueTypes.String `json:"7"`
+	// 	Eight  valueTypes.String `json:"8"`
+	// 	Nine   valueTypes.String `json:"9"`
+	// 	Nine9  valueTypes.String `json:"99"`
 	// } `json:"dev_type_definition"`
 	PageList []struct {
 		AlarmCount              valueTypes.Count   `json:"alarm_count" PointId:"alarm_count" PointUpdateFreq:"UpdateFreqTotal"`
@@ -135,7 +135,7 @@ type ResultData struct {
 		UnitName      valueTypes.String  `json:"unit_name" PointId:"unit_name" PointUpdateFreq:"UpdateFreqBoot"`
 		UUID          valueTypes.Integer `json:"uuid" PointId:"uuid" PointUpdateFreq:"UpdateFreqBoot"`							// Referenced by DeviceArea
 		UUIDIndexCode valueTypes.String  `json:"uuid_index_code" PointId:"uuid_index_code" PointUpdateFreq:"UpdateFreqBoot"`	// Referenced by DeviceArea
-	} `json:"pageList" PointNameFromChild:"PsKey" PointSliceDateFormat:""`
+	} `json:"pageList" PointNameFromChild:"PsKey" PointNameAppend:"false" PointArrayFlatten:"false"`
 	RowCount valueTypes.Integer `json:"rowCount" PointIgnore:"true"`
 }
 

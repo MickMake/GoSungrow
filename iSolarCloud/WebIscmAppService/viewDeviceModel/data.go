@@ -4,16 +4,15 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
-	"errors"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/viewDeviceModel"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
+	// DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -25,46 +24,56 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
-	Dummy string `json:"dummy"`
+	DeviceFactoryList []struct {
+		CustomerCode    valueTypes.String  `json:"customer_code"`
+		CustomerName    valueTypes.String  `json:"customer_name"`
+		FactoryAddress  valueTypes.String  `json:"factory_address"`
+		FactoryDesc     valueTypes.String  `json:"factory_desc"`
+		FactoryLogo     valueTypes.String  `json:"factory_logo"`
+		FactoryName     valueTypes.String  `json:"factory_name"`
+		FactoryNameEnUs valueTypes.String  `json:"factory_name_en_us"`
+		FileName        valueTypes.String  `json:"file_name"`
+		ID              valueTypes.Integer `json:"id"`
+		Industry        valueTypes.Integer `json:"industry"`
+		IndustryName    valueTypes.String  `json:"industry_name"`
+		LinkMan         valueTypes.String  `json:"link_man"`
+		LinkMethod      valueTypes.String  `json:"link_method"`
+		OweMonitor      interface{}        `json:"owe_monitor"`
+		OweRemind       interface{}        `json:"owe_remind"`
+		Remark          valueTypes.String  `json:"remark"`
+	} `json:"deviceFactoryList" PointId:"device_factory_list"`
+	DeviceTypeList []struct {
+		IsRemoteUpgrade valueTypes.Integer `json:"is_remote_upgrade"`
+		SysID           valueTypes.String  `json:"sys_id"`
+		SysName         valueTypes.String  `json:"sys_name"`
+		TypeCode        valueTypes.Integer `json:"type_code"`
+		TypeID          valueTypes.Integer `json:"type_id"`
+		TypeName        valueTypes.String  `json:"type_name"`
+		TypeNameEn      valueTypes.String  `json:"type_name_en"`
+		UpdateDate      valueTypes.String  `json:"update_date"`
+		ValidFlag       valueTypes.Integer `json:"valid_flag"`
+	} `json:"deviceTypeList" PointId:"device_type_list"`
+	SysTypeList []struct {
+		CodeName   valueTypes.String `json:"code_name"`
+		CodeValue  valueTypes.String `json:"code_value"`
+		CodeValue2 interface{}       `json:"code_value2"`
+	} `json:"sysTypeList" PointId:"sys_type_list"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
 	return err
 }
-
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
+		pkg := apiReflect.GetName("", *e)
+		dt := valueTypes.NewDateTime(valueTypes.Now)
+		// name := pkg + "." + e.Request.PsId.String()
+		entries.StructToPoints(e.Response.ResultData, pkg, "system", dt)
 	}
 
 	return entries

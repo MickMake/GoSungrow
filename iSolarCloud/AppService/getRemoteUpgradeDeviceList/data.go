@@ -12,7 +12,7 @@ const Url = "/v1/devService/getRemoteUpgradeDeviceList"
 const Disabled = false
 
 type RequestData struct {
-	DeviceType string `json:"device_type" required:"true"`
+	DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -27,7 +27,7 @@ func (rd RequestData) Help() string {
 
 type ResultData   struct {
 	MModuleNameList []valueTypes.String      `json:"m_module_name_list"`
-	PageList        []interface{} `json:"pageList"`
+	PageList        []interface{} `json:"pageList" PointNameAppend:"false" PointArrayFlatten:"false"`
 	RowCount        valueTypes.Integer         `json:"rowCount"`
 }
 

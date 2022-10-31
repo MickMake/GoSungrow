@@ -91,23 +91,23 @@ type ResultData struct {
 		Id           valueTypes.Integer `json:"id"`
 		TimezoneName valueTypes.String  `json:"timezone_name"`
 		TimezoneUtc  valueTypes.String  `json:"timezone_utc"`
-	} `json:"sysTimeZones" PointId:"sys_time_zones"`
+	} `json:"sysTimeZones" PointId:"sys_time_zones" PointArrayFlatten:"false"`
 
-	PowerPictureList []interface{} `json:"powerPictureList" PointId:"power_picture_list"`
+	PowerPictureList []interface{} `json:"powerPictureList" PointId:"power_picture_list" PointArrayFlatten:"false"`
 	SendReportConfigList []valueTypes.String `json:"sendReportConfigList" PointId:"send_report_config_list"`
 
 	CurrencyTypeList []struct {
 		CodeName  valueTypes.String  `json:"code_name"`
 		CodeValue valueTypes.Integer `json:"code_value"`
-	} `json:"currencyTypeList" PointId:"currency_type_list"`	// PointNameFromChild:"CodeValue"`
+	} `json:"currencyTypeList" PointId:"currency_type_list" PointArrayFlatten:"false"`	// PointNameFromChild:"CodeValue"`
 	ParallelTypes []struct {
 		CodeName  valueTypes.String  `json:"code_name"`
 		CodeValue valueTypes.Integer `json:"code_value"`
-	} `json:"parallelTypes" PointId:"parallel_types"`
+	} `json:"parallelTypes" PointId:"parallel_types" PointArrayFlatten:"false"`
 	StatusList []struct {
 		CodeName  valueTypes.String  `json:"code_name"`
 		CodeValue valueTypes.Integer `json:"code_value"`
-	} `json:"statusList" PointId:"status_list"`	// PointArrayFlatten:"true"`
+	} `json:"statusList" PointId:"status_list" PointArrayFlatten:"false"`	// PointArrayFlatten:"true"`
 }
 
 func (e *ResultData) IsValid() error {

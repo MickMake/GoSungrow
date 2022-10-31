@@ -3,8 +3,8 @@ package getPowerDevicePointNames
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
 	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 
 	"fmt"
@@ -50,7 +50,7 @@ var DeviceTypes = []string{
 }
 
 type RequestData struct {
-	DeviceType string `json:"device_type" required:"true"`
+	DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -75,7 +75,7 @@ func (rd RequestData) Help() string {
 type ResultData []struct {
 	PointCalType valueTypes.Integer  `json:"point_cal_type"`
 	PointId      valueTypes.Integer  `json:"point_id"`
-	PointName    string `json:"point_name"`
+	PointName    valueTypes.String `json:"point_name"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -127,7 +127,7 @@ func (e *EndPoint) GetPointDataTable() output.Table {
 			break
 		}
 
-		table.SetFilePrefix(e.Request.DeviceType)
+		table.SetFilePrefix(e.Request.DeviceType.String())
 
 		for _, p := range e.Response.ResultData {
 			_ = table.AddRow(

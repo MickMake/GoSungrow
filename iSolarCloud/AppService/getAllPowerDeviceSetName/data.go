@@ -24,9 +24,9 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	Remark  string `json:"remark"`
+	Remark  valueTypes.String `json:"remark"`
 	SetId   valueTypes.Integer  `json:"set_id"`
-	SetName string `json:"set_name"`
+	SetName valueTypes.String `json:"set_name"`
 }
 
 func (e *ResultData) IsValid() error {

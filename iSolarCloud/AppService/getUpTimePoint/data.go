@@ -12,7 +12,7 @@ const Url = "/v1/devService/getUpTimePoint"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
+	// DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -31,9 +31,9 @@ type ResultData struct {
 		PointList []struct {
 			PointId  valueTypes.Integer `json:"point_id"`
 			TimeType valueTypes.Integer `json:"time_type"`
-		} `json:"point_list"`
+		} `json:"point_list" PointArrayFlatten:"false"`
 		UpTimePointId valueTypes.Integer `json:"up_time_point_id"`
-	} `json:"point_time_relation"`
+	} `json:"point_time_relation" PointArrayFlatten:"false"`
 }
 
 func (e *ResultData) IsValid() error {

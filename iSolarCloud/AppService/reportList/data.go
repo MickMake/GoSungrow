@@ -1,6 +1,7 @@
 package reportList
 
 import (
+	"GoSungrow/iSolarCloud/Common"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
@@ -13,7 +14,7 @@ const Disabled = false
 
 type RequestData struct {
 	PsId       valueTypes.PsId `json:"ps_id" required:"true"`
-	ReportType string `json:"report_type" required:"true"`
+	ReportType valueTypes.String `json:"report_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -21,39 +22,26 @@ func (rd RequestData) IsValid() error {
 }
 
 func (rd RequestData) Help() string {
-	ret := fmt.Sprintf("report_type is from 1-4")
-	ret += fmt.Sprintf("1: Day Report.")
-	ret += fmt.Sprintf("2: Month Report.")
-	ret += fmt.Sprintf("3: Year Report.")
-	ret += fmt.Sprintf("4: Total Report.")
+	ret := fmt.Sprintf("report_type is from 1-4\n")
+	ret += fmt.Sprintf("1: Day Report.\n")
+	ret += fmt.Sprintf("2: Month Report.\n")
+	ret += fmt.Sprintf("3: Year Report.\n")
+	ret += fmt.Sprintf("4: Total Report.\n")
 	return ret
 }
 
 type ResultData struct {
-	DataList []DataList `json:"dataList" PointId:"data_list" PointIgnoreIfNilFromChild:"UpdateTime" PointNameFromChild:"DateId" PointNameDateFormat:"20060102" PointNameFromAppend:"true"`
-	Info     []struct {
-		DesignCapacity         valueTypes.Float   `json:"design_capacity" PointUnit:"W"`
-		InstallerPsFaultStatus valueTypes.Integer `json:"installer_ps_fault_status"`
-		OwnerPsFaultStatus     valueTypes.Integer `json:"owner_ps_fault_status"`
-		PsFaultStatus          valueTypes.Integer `json:"ps_fault_status"`
-		PsId                   valueTypes.PsId `json:"ps_id"`
-		PsName                 valueTypes.String  `json:"ps_name"`
-		PsStatus               valueTypes.Integer `json:"ps_status"`
-		PsType                 valueTypes.Integer `json:"ps_type"`
-		PsTypeName             valueTypes.String  `json:"ps_type_name"`
-		SysScheme              valueTypes.Integer `json:"sys_scheme"`
-		SysSchemeName          valueTypes.String  `json:"sys_scheme_name"`
-		ValidFlag              valueTypes.Bool    `json:"valid_flag"`
-	} `json:"info"`
+	DataList []DataList `json:"dataList" PointId:"data_list" PointIgnoreIfNilFromChild:"UpdateTime" PointNameFromChild:"DateId" PointNameDateFormat:"20060102" PointNameAppend:"true"`
+	Info     Common.ReportInfo `json:"info" PointArrayFlatten:"false"`
 	MinDateId interface{} `json:"min_date_id"`
-	Total     []DataList  `json:"total" PointId:"total" PointIgnoreIfNilFromChild:"UpdateTime" PointNameFromChild:"UpdateTime" PointNameDateFormat:"20060102" PointNameFromAppend:"true"`
+	Total     []DataList  `json:"total" PointId:"total" PointIgnoreIfNilFromChild:"UpdateTime" PointNameFromChild:"UpdateTime" PointNameDateFormat:"20060102" PointNameAppend:"true" PointArrayFlatten:"false"`
 }
 
 type DataList struct {
 	DateId     valueTypes.DateTime `json:"date_id"`
 	DeviceName interface{}         `json:"device_name"`
-	PsId       valueTypes.PsId  `json:"ps_id"`
-	TimeStamp  interface{}         `json:"time_stamp"` // Sad that this alternates between string and valueTypes.Integer.
+	PsId       valueTypes.PsId     `json:"ps_id"`
+	TimeStamp  valueTypes.Integer  `json:"time_stamp"` // Sad that this alternates between string and valueTypes.Integer.
 	UpdateTime valueTypes.DateTime `json:"update_time"`
 	UUID       interface{}         `json:"uuid"`
 	Co2Reduce  valueTypes.Float    `json:"co2_reduce"`

@@ -4,6 +4,7 @@ import (
 	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api/valueTypes"
 	"errors"
 	"fmt"
 	"time"
@@ -62,8 +63,8 @@ func (e *EndPoint) Login(auth *SunGrowAuth) error {
 	for range Only.Once {
 		e.Auth = auth
 		e.Request.RequestData = RequestData {
-			UserAccount:  auth.UserAccount,
-			UserPassword: auth.UserPassword,
+			UserAccount:  valueTypes.SetStringValue(auth.UserAccount),
+			UserPassword: valueTypes.SetStringValue(auth.UserPassword),
 		}
 		e.Request.RequestCommon = api.RequestCommon {
 			Appkey:  auth.AppKey,

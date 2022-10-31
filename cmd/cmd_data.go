@@ -4,9 +4,9 @@ import (
 	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api/output"
 	"fmt"
+	"github.com/MickMake/GoUnify/cmdConfig"
 	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/spf13/cobra"
-	"strings"
 )
 
 
@@ -196,41 +196,12 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 }
 
 
-func SplitArg(arg string) []string {
-	var ret []string
-	for range Only.Once {
-		ret = []string{arg}
-		for _, s := range []string{ ",", "/", " "} {
-			if strings.Contains(arg, s) {
-				ret = strings.Split(arg, s)
-				break
-			}
-		}
-	}
-	return ret
-}
-
-const (
-	argEndpoints = 0
-	argPsIds = 1
-	argDate = 2
-	argReportType = 3
-	argFaultTypeCode = 4
-)
 func (c *CmdData) GetEndpoints(cmd *cobra.Command, args []string) error {
 	// endpoints string, psIds string, date string
 	for range Only.Once {
 		cmds.Api.SunGrow.SetOutputType(cmd.Name())
-
-		// args = cmdConfig.FillArray(5, args)
-		// for i := range args {
-		// 	if args[i] == "." {
-		// 		args[i] = ""
-		// 	}
-		// }
-		// c.Error = cmds.Api.SunGrow.GetEndpoints(SplitArg(args[argEndpoints]), SplitArg(args[argPsIds]), args[argDate], args[argReportType], args[argFaultTypeCode])
-
-		c.Error = cmds.Api.SunGrow.GetEndpoints(SplitArg(args[argEndpoints]), args[1:]...)
+		args = cmdConfig.FillArray(2, args)
+		c.Error = cmds.Api.SunGrow.GetEndpoints(args[0], args[1:]...)
 	}
 
 	return c.Error

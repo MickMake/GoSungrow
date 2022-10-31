@@ -19,7 +19,7 @@ const (
 )
 
 type RequestData struct {
-	AppKey string `json:"app_key" required:"true"`
+	AppKey valueTypes.String `json:"app_key" required:"true"`
 }
 
 // IsValid Checks for validity of results data.
@@ -39,8 +39,8 @@ type ResultData struct {
 	MqttPassword     string   `json:"mqtt_password"`
 	MqttRsaPublicKey string   `json:"mqtt_rsa_public_key"`
 	MqttType         string   `json:"mqtt_type"`
-	MqttURLList      []string `json:"mqtt_url_list"`
-	MqttURLListLan   []string `json:"mqtt_url_list_lan"`
+	MqttURLList      []valueTypes.String `json:"mqtt_url_list"`
+	MqttURLListLan   []valueTypes.String `json:"mqtt_url_list_lan"`
 	MqttUsername     string   `json:"mqtt_username"`
 }
 

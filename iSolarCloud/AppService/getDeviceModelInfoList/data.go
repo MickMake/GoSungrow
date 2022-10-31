@@ -13,7 +13,7 @@ const Url = "/v1/devService/getDeviceModelInfoList"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
+	// DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -26,11 +26,11 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	ComType           string `json:"com_type"`
-	DeviceFactoryId   string `json:"device_factory_id"`
-	DeviceFactoryName string `json:"device_factory_name"`
-	DeviceModel       string `json:"device_model"`
-	DeviceModelCode   string `json:"device_model_code"`
+	ComType           valueTypes.String `json:"com_type"`
+	DeviceFactoryId   valueTypes.String `json:"device_factory_id"`
+	DeviceFactoryName valueTypes.String `json:"device_factory_name"`
+	DeviceModel       valueTypes.String `json:"device_model"`
+	DeviceModelCode   valueTypes.String `json:"device_model_code"`
 	DeviceModelId     valueTypes.Integer  `json:"device_model_id"`
 	DeviceType        valueTypes.Integer  `json:"device_type"`
 	IsRemoteUpgrade   valueTypes.Bool     `json:"is_remote_upgrade"`
@@ -86,7 +86,7 @@ func (e *EndPoint) GetPointDataTable() output.Table {
 		)
 		for _, d := range e.Response.ResultData {
 			if d.DeviceModel == d.DeviceModelCode {
-				d.DeviceModelCode = ""
+				d.DeviceModelCode.SetString("")
 			}
 			_ = table.AddRow(
 				d.DeviceModelId,

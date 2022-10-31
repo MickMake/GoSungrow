@@ -46,9 +46,11 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 
 		// Iterate over all available fields and read the tag values
 		var tp apiReflect.DataStructures
+		tp.Debug = true
+		tp.ShowEmpty = true
 		var Ref apiReflect.Reflect
 		Ref.SetByFieldName(ref, ref, "")
-		tp.GetPointTags(Ref, Ref, endpoint)
+		tp.GetPointTags(Ref, Ref, strings.Split(endpoint, "."))
 
 		for _, f := range tp.Map {
 			if f.PointIgnore {
@@ -87,7 +89,7 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 			}
 
 			var point Point
-			p := GetPoint(f.Endpoint + "." + f.PointId)
+			p := GetPoint(strings.Join(f.Endpoint, ".") + "." + f.PointId)
 			if p == nil {
 				// No point found. Create one.
 				point = CreatePoint(parentId, valueTypes.SetPointIdString(f.PointId), f.PointName, f.PointGroupName, uvs.Unit(), uvs.Type(), f.PointUpdateFreq)
@@ -111,11 +113,11 @@ func (dm *DataMap) StructToPoints(ref interface{}, endpoint string, parentId str
 				fmt.Printf("OOOPS - UVS is nil for %s\n", f.PointId)
 				continue
 			}
-			dm.AddPointUnitValue(f.Endpoint, f.PointParentId, point, when, uvs[0])
+			dm.AddPointUnitValue(strings.Join(f.Endpoint, "."), f.PointParentId, point, when, uvs[0])
 
 			if f.PointAliasTo != "" {
 				f.PointId = f.PointAliasTo
-				dm.AddPointUnitValue(f.Endpoint, f.PointParentId, point, when, uvs[0])
+				dm.AddPointUnitValue(strings.Join(f.Endpoint, "."), f.PointParentId, point, when, uvs[0])
 			}
 		}
 	}

@@ -18,10 +18,10 @@ const Disabled = false
 type RequestData struct {
 	PsId           valueTypes.PsId  `json:"ps_id" required:"true"`
 	PsKey          valueTypes.PsKey `json:"ps_key" required:"true"`
-	Points         string `json:"points" required:"true"`
-	MinuteInterval string `json:"minute_interval" required:"true"`
-	StartTimeStamp string `json:"start_time_stamp" required:"true"`
-	EndTimeStamp   string `json:"end_time_stamp" required:"true"`
+	Points         valueTypes.String `json:"points" required:"true"`
+	MinuteInterval valueTypes.String `json:"minute_interval" required:"true"`
+	StartTimeStamp valueTypes.String `json:"start_time_stamp" required:"true"`
+	EndTimeStamp   valueTypes.String `json:"end_time_stamp" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -43,8 +43,8 @@ type Device struct {
 }
 type Points map[valueTypes.PointId]Point
 type Point struct {
-	Name  string `json:"name"`
-	Units string `json:"units"`
+	Name  valueTypes.String `json:"name"`
+	Units valueTypes.String `json:"units"`
 	Times Times  `json:"times"`
 }
 type Times []Time
@@ -102,8 +102,8 @@ func (e *ResultData) UnmarshalJSON(data []byte) error {
 					return times[i].Key.Before(times[j].Key.Time)
 				})
 				points[valueTypes.SetPointIdString(pointName)] = Point{
-					Name:  "",
-					Units: "",
+					Name:  valueTypes.SetStringValue(""),
+					Units: valueTypes.SetStringValue(""),
 					Times: times,
 				}
 			}
@@ -186,7 +186,7 @@ func (e *EndPoint) GetPointDataTable(points api.TemplatePoints) output.Table {
 			break
 		}
 
-		t := valueTypes.NewDateTime(e.Request.RequestData.StartTimeStamp)
+		t := e.Request.RequestData.StartTimeStamp
 		e.SetFilenamePrefix(t.String())
 		table.SetFilePrefix(t.String())
 
@@ -229,7 +229,12 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
+		pkg := apiReflect.GetName("", *e)
+		dt := valueTypes.NewDateTime(valueTypes.Now)
+		name := pkg + "." + e.Request.PsId.String()
+		entries.StructToPoints(e.Response.ResultData, name, e.Request.PsId.String(), dt)
+
+		// entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
 	}
 
 	return entries

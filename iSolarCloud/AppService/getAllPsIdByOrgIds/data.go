@@ -9,7 +9,7 @@ import (
 )
 
 const Url = "/v1/devService/getAllPsIdByOrgIds"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
 	OrgIds valueTypes.String `json:"orgIds" required:"true"`

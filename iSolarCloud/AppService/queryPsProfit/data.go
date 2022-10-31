@@ -13,8 +13,8 @@ const Disabled = false
 
 type RequestData struct {
 	PsId     valueTypes.PsId `json:"ps_id" required:"true"`
-	DateId   string `json:"date_id" required:"true"`
-	DateType string `json:"date_type" required:"true"`
+	DateId   valueTypes.DateTime `json:"date_id" required:"true"`
+	DateType valueTypes.String `json:"date_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -60,9 +60,9 @@ type ResultData struct {
 		ValleyNetPowerQuantity   interface{}         `json:"valley_net_power_quantity"`
 		ValleyPowerQuantity      interface{}         `json:"valley_power_quantity"`
 		ValleyUsePowerQuantity   interface{}         `json:"valley_use_power_quantity"`
-	} `json:"actual_list" PointId:"actual" PointIgnoreIfNilFromChild:"UpdateTime" PointNameFromChild:"DateId" PointNameDateFormat:"20060102" PointNameFromAppend:"true"`
+	} `json:"actual_list" PointId:"actual" PointNameFromChild:"DateId" PointNameDateFormat:"20060102" PointArrayFlatten:"false"`	// PointIgnoreIfNilFromChild:"UpdateTime"`
 	// Need to fix this output - PointNameFromChild:"DateId" isn't working.
-	PlanList []interface{} `json:"plan_list"`
+	PlanList []interface{} `json:"plan_list" PointArrayFlatten:"false"`
 }
 
 func (e *ResultData) IsValid() error {

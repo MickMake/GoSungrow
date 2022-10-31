@@ -26,7 +26,7 @@ func (rd RequestData) Help() string {
 type ResultData struct {
 	CurPage    valueTypes.Integer   `json:"curPage"`
 	IsMore     valueTypes.Bool      `json:"isMore"`
-	PageList   []interface{} `json:"pageList"`
+	PageList   []interface{} `json:"pageList" PointNameAppend:"false" PointArrayFlatten:"false"`
 	RowCount   valueTypes.Integer   `json:"rowCount"`
 	Size       valueTypes.Integer   `json:"size"`
 	StartIndex interface{}   `json:"startIndex"`

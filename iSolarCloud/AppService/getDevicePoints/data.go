@@ -12,7 +12,7 @@ const Url = "/v1/devService/getDevicePoints"
 const Disabled = false
 
 type RequestData struct {
-	PointId string `json:"point_id" required:"true"`
+	PointId valueTypes.String `json:"point_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

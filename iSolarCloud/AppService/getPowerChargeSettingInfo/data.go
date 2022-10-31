@@ -26,15 +26,15 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	ParamIncomeUnit          valueTypes.Integer `json:"param_income_unit"`
-	ParamIncomeUnitName      string             `json:"param_income_unit_name"`
+	ParamIncomeUnitName      valueTypes.String  `json:"param_income_unit_name"`
 	PowerElectricalChargeMap struct {
-		DefaultCharge      valueTypes.Float `json:"default_charge" PointUnitFrom:"ParamIncomeUnitName"`
+		DefaultCharge      valueTypes.Float `json:"default_charge" PointUnitFromParent:"ParamIncomeUnitName"`
 		IntervalTimeCharge interface{}      `json:"interval_time_charge"`
-	} `json:"powerElectricalChargeMap" PointName:"power_electrical_charge_map"`
+	} `json:"powerElectricalChargeMap" PointId:"power_electrical_charge_map"`
 	PowerSelfUseTimesChargeMap struct {
-		DefaultCharge      valueTypes.Float `json:"default_charge" PointUnitFrom:"ParamIncomeUnitName"`
-		IntervalTimeCharge string           `json:"interval_time_charge"`
-	} `json:"powerSelfUseTimesChargeMap" PointName:"power_self_use_charge_map"`
+		DefaultCharge      valueTypes.Float  `json:"default_charge" PointUnitFromParent:"ParamIncomeUnitName"`
+		IntervalTimeCharge valueTypes.String `json:"interval_time_charge"`
+	} `json:"powerSelfUseTimesChargeMap" PointId:"power_self_use_charge_map"`
 	PsId valueTypes.PsId `json:"ps_id"`
 }
 

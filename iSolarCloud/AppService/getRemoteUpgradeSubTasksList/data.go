@@ -12,8 +12,8 @@ const Url = "/v1/devService/getRemoteUpgradeSubTasksList"
 const Disabled = false
 
 type RequestData struct {
-	QueryType string `json:"query_type" required:"true"`
-	TaskId    string `json:"task_id" required:"true"`
+	QueryType valueTypes.String `json:"query_type" required:"true"`
+	TaskId    valueTypes.String `json:"task_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -26,7 +26,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	PageList []interface{} `json:"pageList"`
+	PageList []interface{} `json:"pageList" PointNameAppend:"false" PointArrayFlatten:"false"`
 	RowCount valueTypes.Integer   `json:"rowCount"`
 }
 

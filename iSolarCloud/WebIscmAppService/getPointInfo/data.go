@@ -4,16 +4,15 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
-	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/getPointInfo"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
+	// DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -25,46 +24,44 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
-	Dummy string `json:"dummy"`
+	DeviceTypeList []struct {
+		DeviceName valueTypes.String  `json:"device_name"`
+		DeviceType valueTypes.Integer `json:"device_type"`
+	} `json:"deviceTypeList"`
+	DisplayModeList []struct {
+		CodeName  valueTypes.String `json:"code_name"`
+		PointType valueTypes.String `json:"point_type"`
+	} `json:"displayModeList"`
+	PointCalTypeList []struct {
+		CodeName   valueTypes.String `json:"code_name"`
+		CodeValue  valueTypes.String `json:"code_value"`
+		CodeValue2 interface{}       `json:"code_value2"`
+	} `json:"pointCalTypeList"`
+	PointTypeList []struct {
+		CodeName  valueTypes.String `json:"code_name"`
+		PointType valueTypes.String `json:"point_type"`
+	} `json:"pointTypeList"`
+	PolymerizationModeList []struct {
+		CodeName  valueTypes.String `json:"code_name"`
+		PointType valueTypes.String `json:"point_type"`
+	} `json:"polymerizationModeList"`
+	PowerPointManage interface{} `json:"powerPointManage"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
 	return err
 }
-
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
+		pkg := apiReflect.GetName("", *e)
+		dt := valueTypes.NewDateTime(valueTypes.Now)
+		name := pkg	// + "." + e.Request.PsId.String()
+		entries.StructToPoints(e.Response.ResultData, name, "system", dt)
 	}
 
 	return entries

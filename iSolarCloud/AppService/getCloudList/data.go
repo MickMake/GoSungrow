@@ -26,51 +26,51 @@ func (rd RequestData) Help() string {
 type ResultData struct {
 	CloudList []struct {
 		CloudId    valueTypes.Integer  `json:"cloud_id"`
-		CloudName  string `json:"cloud_name"`
-		GatewayURL string `json:"gateway_url"`
+		CloudName  valueTypes.String `json:"cloud_name"`
+		GatewayURL valueTypes.String `json:"gateway_url"`
 		OrderId    valueTypes.Integer  `json:"order_id"`
-		ServiceURL string `json:"service_url"`
-		Value      string `json:"value"`
-		ValueDeDe  string `json:"value_de_de"`
-		ValueEnUs  string `json:"value_en_us"`
-		ValueEsEs  string `json:"value_es_es"`
-		ValueFrFr  string `json:"value_fr_fr"`
-		ValueItIt  string `json:"value_it_it"`
-		ValueJaJp  string `json:"value_ja_jp"`
-		ValueKoKr  string `json:"value_ko_kr"`
-		ValueNlNl  string `json:"value_nl_nl"`
-		ValuePlPl  string `json:"value_pl_pl"`
-		ValuePtBr  string `json:"value_pt_br"`
-		ValuePtPt  string `json:"value_pt_pt"`
-		ValueTrTr  string `json:"value_tr_tr"`
-		ValueViVn  string `json:"value_vi_vn"`
-		ValueZhCn  string `json:"value_zh_cn"`
-		ValueZhTw  string `json:"value_zh_tw"`
-		WebURL     string `json:"web_url"`
+		ServiceURL valueTypes.String `json:"service_url"`
+		Value      valueTypes.String `json:"value"`
+		ValueDeDe  valueTypes.String `json:"value_de_de"`
+		ValueEnUs  valueTypes.String `json:"value_en_us"`
+		ValueEsEs  valueTypes.String `json:"value_es_es"`
+		ValueFrFr  valueTypes.String `json:"value_fr_fr"`
+		ValueItIt  valueTypes.String `json:"value_it_it"`
+		ValueJaJp  valueTypes.String `json:"value_ja_jp"`
+		ValueKoKr  valueTypes.String `json:"value_ko_kr"`
+		ValueNlNl  valueTypes.String `json:"value_nl_nl"`
+		ValuePlPl  valueTypes.String `json:"value_pl_pl"`
+		ValuePtBr  valueTypes.String `json:"value_pt_br"`
+		ValuePtPt  valueTypes.String `json:"value_pt_pt"`
+		ValueTrTr  valueTypes.String `json:"value_tr_tr"`
+		ValueViVn  valueTypes.String `json:"value_vi_vn"`
+		ValueZhCn  valueTypes.String `json:"value_zh_cn"`
+		ValueZhTw  valueTypes.String `json:"value_zh_tw"`
+		WebURL     valueTypes.String `json:"web_url"`
 	} `json:"cloud_list"`
 	CurrentCloud struct {
 		CloudId    valueTypes.Integer  `json:"cloud_id"`
-		CloudName  string `json:"cloud_name"`
-		GatewayURL string `json:"gateway_url"`
+		CloudName  valueTypes.String `json:"cloud_name"`
+		GatewayURL valueTypes.String `json:"gateway_url"`
 		OrderId    valueTypes.Integer  `json:"order_id"`
-		ServiceURL string `json:"service_url"`
-		Value      string `json:"value"`
-		ValueDeDe  string `json:"value_de_de"`
-		ValueEnUs  string `json:"value_en_us"`
-		ValueEsEs  string `json:"value_es_es"`
-		ValueFrFr  string `json:"value_fr_fr"`
-		ValueItIt  string `json:"value_it_it"`
-		ValueJaJp  string `json:"value_ja_jp"`
-		ValueKoKr  string `json:"value_ko_kr"`
-		ValueNlNl  string `json:"value_nl_nl"`
-		ValuePlPl  string `json:"value_pl_pl"`
-		ValuePtBr  string `json:"value_pt_br"`
-		ValuePtPt  string `json:"value_pt_pt"`
-		ValueTrTr  string `json:"value_tr_tr"`
-		ValueViVn  string `json:"value_vi_vn"`
-		ValueZhCn  string `json:"value_zh_cn"`
-		ValueZhTw  string `json:"value_zh_tw"`
-		WebURL     string `json:"web_url"`
+		ServiceURL valueTypes.String `json:"service_url"`
+		Value      valueTypes.String `json:"value"`
+		ValueDeDe  valueTypes.String `json:"value_de_de"`
+		ValueEnUs  valueTypes.String `json:"value_en_us"`
+		ValueEsEs  valueTypes.String `json:"value_es_es"`
+		ValueFrFr  valueTypes.String `json:"value_fr_fr"`
+		ValueItIt  valueTypes.String `json:"value_it_it"`
+		ValueJaJp  valueTypes.String `json:"value_ja_jp"`
+		ValueKoKr  valueTypes.String `json:"value_ko_kr"`
+		ValueNlNl  valueTypes.String `json:"value_nl_nl"`
+		ValuePlPl  valueTypes.String `json:"value_pl_pl"`
+		ValuePtBr  valueTypes.String `json:"value_pt_br"`
+		ValuePtPt  valueTypes.String `json:"value_pt_pt"`
+		ValueTrTr  valueTypes.String `json:"value_tr_tr"`
+		ValueViVn  valueTypes.String `json:"value_vi_vn"`
+		ValueZhCn  valueTypes.String `json:"value_zh_cn"`
+		ValueZhTw  valueTypes.String `json:"value_zh_tw"`
+		WebURL     valueTypes.String `json:"web_url"`
 	} `json:"current_cloud"`
 }
 

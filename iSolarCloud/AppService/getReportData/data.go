@@ -13,7 +13,7 @@ const Disabled = false
 
 type RequestData struct {
 	PsId valueTypes.PsId `json:"ps_id" required:"true"`
-	ReportType string `json:"report_type" required:"true"`
+	ReportType valueTypes.Integer `json:"report_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -26,7 +26,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	DataList []DataList `json:"dataList" PointId:"data_list" PointIgnoreIfNilFromChild:"UpdateTime" PointNameFromChild:"DateId" PointNameDateFormat:"20060102" PointNameFromAppend:"true"`
+	DataList []DataList `json:"dataList" PointId:"data_list" PointIgnoreIfNilFromChild:"UpdateTime" PointNameFromChild:"DateId" PointNameDateFormat:"20060102" PointNameAppend:"true" PointArrayFlatten:"false"`
 	Info     []struct {
 		DesignCapacity         valueTypes.Float   `json:"design_capacity" PointUnit:"W"`
 		InstallerPsFaultStatus valueTypes.Integer `json:"installer_ps_fault_status"`
@@ -40,9 +40,9 @@ type ResultData struct {
 		SysScheme              valueTypes.Integer `json:"sys_scheme"`
 		SysSchemeName          valueTypes.String  `json:"sys_scheme_name"`
 		ValidFlag              valueTypes.Bool    `json:"valid_flag"`
-	} `json:"info"`
+	} `json:"info" PointArrayFlatten:"false"`
 	MinDateId interface{} `json:"min_date_id"`
-	Total     []DataList  `json:"total" PointId:"total" PointIgnoreIfNilFromChild:"UpdateTime" PointNameFromChild:"DateId" PointNameDateFormat:"20060102" PointNameFromAppend:"true"`
+	Total     []DataList  `json:"total" PointId:"total" PointIgnoreIfNilFromChild:"UpdateTime" PointNameFromChild:"DateId" PointNameDateFormat:"20060102" PointNameAppend:"true" PointArrayFlatten:"false"`
 }
 type DataList struct {
 	DateId     valueTypes.DateTime `json:"date_id"`

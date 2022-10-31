@@ -12,7 +12,7 @@ const Url = "/v1/orgService/getInstallInfoList"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
+	// DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -30,7 +30,7 @@ type ResultData []struct {
 	InstallerEmail string   `json:"installer_email"`
 	InstallerPhone string   `json:"installer_phone"`
 	OrgId          string   `json:"org_id"`
-	PsNames        []string `json:"ps_names"`
+	PsNames        []valueTypes.String `json:"ps_names"`
 }
 
 func (e *ResultData) IsValid() error {

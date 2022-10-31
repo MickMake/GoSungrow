@@ -15,7 +15,7 @@ const Disabled = false
 
 type RequestData struct {
 	PsId valueTypes.PsId `json:"id" required:"true"`
-	// Id string `json:"id"`
+	// Id valueTypes.String `json:"id"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -33,8 +33,8 @@ type ResultData struct {
 	Id            valueTypes.Integer  `json:"id" PointId:"id" PointValueType:"" PointUpdateFreq:""`
 	Period        valueTypes.Integer  `json:"period" PointId:"period" PointValueType:"" PointUpdateFreq:""`
 	PointId       valueTypes.Integer  `json:"point_id" PointId:"point_id" PointValueType:"" PointUpdateFreq:""`
-	PointName     string `json:"point_name" PointId:"point_name" PointValueType:"" PointUpdateFreq:""`
-	ShowPointName string `json:"show_point_name" PointId:"show_point_name" PointValueType:"" PointUpdateFreq:""`
+	PointName     valueTypes.String `json:"point_name" PointId:"point_name" PointValueType:"" PointUpdateFreq:""`
+	ShowPointName valueTypes.String `json:"show_point_name" PointId:"show_point_name" PointValueType:"" PointUpdateFreq:""`
 	TranslationId valueTypes.Integer  `json:"translation_id" PointId:"translation_id" PointValueType:"" PointUpdateFreq:""`
 }
 

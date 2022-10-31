@@ -12,8 +12,8 @@ const Url = "/v1/orgService/getInstallerInfoByDealerOrgCodeOrId"
 const Disabled = false
 
 type RequestData struct {
-	DealerOrgCode string `json:"dealer_org_code"` // required:"true"`
-	OrgId         string `json:"org_id"`          // required:"true"`
+	DealerOrgCode valueTypes.String `json:"dealer_org_code"` // required:"true"`
+	OrgId         valueTypes.String `json:"org_id"`          // required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

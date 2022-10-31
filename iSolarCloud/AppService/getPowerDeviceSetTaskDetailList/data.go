@@ -12,9 +12,9 @@ const Url = "/v1/devService/getPowerDeviceSetTaskDetailList"
 const Disabled = false
 
 type RequestData struct {
-	QueryType string `json:"query_type" required:"true"`
-	TaskId    string `json:"task_id" required:"true"`
-	Uuid      string `json:"uuid" required:"true"`
+	QueryType valueTypes.String `json:"query_type" required:"true"`
+	TaskId    valueTypes.String `json:"task_id" required:"true"`
+	Uuid      valueTypes.String `json:"uuid" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -28,7 +28,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	DeviceList     []interface{} `json:"device_list"`
-	PageList       []interface{} `json:"pageList"`
+	PageList       []interface{} `json:"pageList" PointNameAppend:"false" PointArrayFlatten:"false"`
 	PsNameInfoList []interface{} `json:"ps_name_info_list"`
 	RowCount       valueTypes.Integer   `json:"rowCount"`
 }

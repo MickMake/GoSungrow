@@ -12,7 +12,7 @@ const Url = "/v1/devService/communicationModuleDetail"
 const Disabled = false
 
 type RequestData struct {
-	Sn string `json:"sn" required:"true"`
+	Sn valueTypes.String `json:"sn" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

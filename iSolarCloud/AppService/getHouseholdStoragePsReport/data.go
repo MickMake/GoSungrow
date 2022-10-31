@@ -14,8 +14,8 @@ const Url = "/v1/powerStationService/getHouseholdStoragePsReport"
 const Disabled = false
 
 type RequestData struct {
-	DateId   string `json:"date_id" required:"true"`
-	DateType string `json:"date_type" required:"true"`
+	DateId   valueTypes.DateTime `json:"date_id" required:"true"`
+	DateType valueTypes.String `json:"date_type" required:"true"`
 	PsId     valueTypes.PsId `json:"ps_id" required:"true"`
 }
 
@@ -86,7 +86,7 @@ type DayData struct {
 		TimeStamp  valueTypes.DateTime `json:"time_stamp"`
 		Zfzy       valueTypes.Float    `json:"zfzy" PointName:"PV Power To Battery" PointUnitFrom:"ZfzyUnit" PointTimestampFrom:"TimeStamp"`
 		ZfzyUnit   valueTypes.String   `json:"zfzy_unit"  PointIgnore:"true"`
-	} `json:"point_data_15_list" PointNameFromChild:"TimeStamp"`
+	} `json:"point_data_15_list" PointNameFromChild:"TimeStamp" PointArrayFlatten:"false"`
 	ZfzyMap       valueTypes.UnitValue `json:"zfzy_map"`
 	ZfzyMapVirgin valueTypes.UnitValue `json:"zfzy_map_virgin"  PointIgnore:"true"`
 	ZjzzMap       valueTypes.UnitValue `json:"zjzz_map"`

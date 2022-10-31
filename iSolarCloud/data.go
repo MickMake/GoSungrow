@@ -20,14 +20,20 @@ import (
 
 // ****************************************************** //
 
-// func (sg *SunGrow) GetEndpoints(endpoints []string, psIds []string, date string, reportType string, faultTypeCode string) error {
-
-func (sg *SunGrow) GetEndpoints(endpoints []string, args ...string) error {
+func (sg *SunGrow) GetEndpoints(endpoints string, args ...string) error {
 	for range Only.Once {
 		var data SunGrowData
 		data.New(sg)
 
-		if len(endpoints) == 0 {
+		var request SunGrowDataRequest
+		request = request.Set(args...)
+
+		eps := SplitArg(endpoints)
+		if endpoints == "all" {
+			eps = data.GetAllEndPoints()
+		}
+
+		if endpoints == "" {
 			fmt.Println("Additional commands available, (on top of endpoints):")
 			for _, ep := range data.GetAllEndPoints() {
 				fmt.Printf("\t%s\n", ep)
@@ -36,14 +42,7 @@ func (sg *SunGrow) GetEndpoints(endpoints []string, args ...string) error {
 			break
 		}
 
-		if endpoints[0] == "all" {
-			endpoints = data.GetAllEndPoints()
-		}
-
-		var request SunGrowDataRequest
-		request = request.Set(args...)
-
-		for _, endpoint := range endpoints {
+		for _, endpoint := range eps {
 			ep := sg.GetEndpoint(endpoint)
 			sg.Error = ep.GetError()
 			if sg.Error != nil {
@@ -76,14 +75,16 @@ func (sg *SunGrow) GetEndpoints(endpoints []string, args ...string) error {
 				var finalData api.DataMap
 				var finalRaw []byte
 
-				var pids valueTypes.PsIds
-				pids, sg.Error = sg.GetPsIds()
-				if sg.Error != nil {
-					break
+				if len(request.aPsId) == 0 {
+					var pids valueTypes.PsIds
+					pids, sg.Error = sg.GetPsIds()
+					if sg.Error != nil {
+						break
+					}
+					request.SetPsIds(pids.Strings())
 				}
-				request.SetPsIds(pids.Strings())
 
-				for _, psId := range pids {
+				for _, psId := range request.aPsId {
 					request.SetPsId(psId.String())
 
 					response := data.GetByApi(ep, request)
@@ -126,6 +127,20 @@ func (sg *SunGrow) GetEndpoints(endpoints []string, args ...string) error {
 	return sg.Error
 }
 
+func SplitArg(arg string) []string {
+	var ret []string
+	for range Only.Once {
+		ret = []string{arg}
+		for _, s := range []string{ ",", "/", " "} {
+			if strings.Contains(arg, s) {
+				ret = strings.Split(arg, s)
+				break
+			}
+		}
+	}
+	return ret
+}
+
 
 type EndPoints map[string]EndPoint
 type EndPoint struct {
@@ -137,18 +152,52 @@ type SunGrowDataFunction func(request SunGrowDataRequest) SunGrowDataResponse
 
 // SunGrowDataRequest - Collection of all possible request args.
 type SunGrowDataRequest struct {
+	// Be careful with types. If you see a general "error' response,
+	// then it's more likely a type mismatch.
 	PsId          *valueTypes.PsId     `json:"ps_id,omitempty"`
-	ReportType    *string              `json:"report_type,omitempty"`
+	ReportType    *valueTypes.String   `json:"report_type,omitempty"`
 	DateId        *valueTypes.DateTime `json:"date_id,omitempty"`
 	DateType      *string              `json:"date_type,omitempty"`
-	FaultTypeCode *string              `json:"fault_type_code,omitempty"`
-	Size          *valueTypes.Integer  `json:"page_size,omitempty"`
-	CurPage       *valueTypes.Integer  `json:"cur_page,omitempty"`
+	FaultTypeCode *valueTypes.Integer  `json:"fault_type_code,omitempty"`
+	Size          *valueTypes.Integer  `json:"size,omitempty"`
+	CurPage       *valueTypes.Integer  `json:"curPage,omitempty"`
 	DeviceType    *valueTypes.String   `json:"device_type,omitempty"`
 	ReportId      *valueTypes.String   `json:"report_id,omitempty"`
 	CodeType      *valueTypes.String   `json:"code_type,omitempty"`
 	OrgIds        *valueTypes.String   `json:"orgIds,omitempty"`
 	PsIdList      *valueTypes.String   `json:"ps_id_list,omitempty"`
+	Uuid          *valueTypes.String   `json:"uuid,omitempty"`
+
+	TemplateId    *valueTypes.String   `json:"template_id,omitempty"`
+
+	// PsId valueTypes.PsId `json:"id"`
+	// PsId valueTypes.PsId `json:"ps_id"`
+	// DeviceType valueTypes.String `json:"device_type"`
+	// DateType      *valueTypes.String   `json:"date_type,omitempty"`
+
+	// AppKey string `json:"app_key"`
+	// BeginTime string `json:"beginTime"`
+	// DealerOrgCode string `json:"dealer_org_code"`
+	// DeviceSn valueTypes.String `json:"device_sn"`
+	// EndTimeStamp string `json:"end_time_stamp"`
+	// FaultCode string `json:"fault_code"`
+	// FaultName string `json:"fault_name"`
+	// FaultTypeCode string `json:"fault_type_code"`
+	// Id string `json:"id"`
+	// MinuteInterval string `json:"minute_interval"`
+	// OrderId string `json:"order_id"`
+	// OrgId string `json:"org_id"`
+	// PointId string `json:"point_id"`
+	// Points string `json:"points"`
+	// Prefix string `json:"prefix"`
+	// PrimaryKey string `json:"primaryKey"`
+	// PsKey valueTypes.PsKey `json:"ps_key"`
+	// PsKeyList string `json:"ps_key_list"`
+	// QueryType valueTypes.String `json:"query_type"`
+	// Sn valueTypes.String `json:"sn"`
+	// StartTimeStamp string `json:"start_time_stamp"`
+	// Table string `json:"table"`
+	// TaskId valueTypes.String `json:"task_id"`
 
 	aPsId         valueTypes.PsIds
 }
@@ -166,6 +215,8 @@ const (
 	NameCodeType      = "CodeType"
 	NameOrgIds        = "OrgIds"
 	NamePsIdList      = "PsIdList"
+	NameUuid          = "Uuid"
+	NameTemplateId    = "TemplateId"
 )
 
 // MarshalJSON - Convert value to JSON
@@ -194,6 +245,8 @@ func (sgd SunGrowDataRequest) MarshalJSON() ([]byte, error) {
 			CodeType:      sgd.CodeType,
 			OrgIds:        sgd.OrgIds,
 			PsIdList:      sgd.PsIdList,
+			Uuid:          sgd.Uuid,
+			TemplateId:    sgd.TemplateId,
 		})
 		if err == nil {
 			break
@@ -218,17 +271,20 @@ func (sgd *SunGrowDataRequest) Set(args ...string) SunGrowDataRequest {
 
 			switch a[0] {
 				case NamePsId:
-					request.aPsId = valueTypes.SetPsIdStrings(strings.Split(a[1], ","))
+					request.aPsId = valueTypes.SetPsIdStrings(SplitArg(a[1]))
+						// strings.Split(a[1], ","))
 
 				case NameReportType:
-					request.ReportType = &a[1]
+					val := valueTypes.SetStringValue(a[1])
+					request.ReportType = &val
 
 				case NameDateId:
 					val := valueTypes.SetDateTimeString(a[1])
 					request.DateId = &val
 
 				case NameFaultTypeCode:
-					request.FaultTypeCode = &a[1]
+					val := valueTypes.SetIntegerString(a[1])
+					request.FaultTypeCode = &val
 
 				case NameSize:
 					val := valueTypes.SetIntegerString(a[1])
@@ -257,6 +313,14 @@ func (sgd *SunGrowDataRequest) Set(args ...string) SunGrowDataRequest {
 				case NamePsIdList:
 					val := valueTypes.SetStringValue(a[1])
 					request.PsIdList = &val
+
+				case NameUuid:
+					val := valueTypes.SetStringValue(a[1])
+					request.Uuid = &val
+
+				case NameTemplateId:
+					val := valueTypes.SetStringValue(a[1])
+					request.TemplateId = &val
 			}
 		}
 	}
@@ -337,71 +401,23 @@ func (sgd *SunGrowDataRequest) Validate(endpoint api.EndPoint) bool {
 						fmt.Printf("%s is required\n", key)
 						ok = false
 					}
+
+				case NameUuid:
+					if sgd.Uuid == nil {
+						fmt.Printf("%s is required\n", key)
+						ok = false
+					}
+
+				case NameTemplateId:
+					if sgd.TemplateId == nil {
+						fmt.Printf("%s is required\n", key)
+						ok = false
+					}
 			}
 		}
 	}
 	return ok
 }
-
-// func (sgd *SunGrowDataRequest) Create(endpoint api.EndPoint) SunGrowDataRequest {
-// 	var request SunGrowDataRequest
-// 	for range Only.Once {
-// 		args := endpoint.GetRequestArgNames()
-// 		for key, value := range args {
-// 			if value != "true" {
-// 				continue
-// 			}
-// 			switch key {
-// 				case NamePsId:
-// 						request.PsId = sgd.PsId
-//
-// 				case NameReportType:
-// 					request.ReportType = sgd.ReportType
-// 					if *request.ReportType == "" {
-// 						*request.ReportType = "1"
-// 					}
-//
-// 				case NameDateId:
-// 					request.DateId = sgd.DateId
-// 					if request.DateId.IsZero() {
-// 						did := valueTypes.SetDateTimeString(time.Now().Format(valueTypes.DateTimeLayoutDay))
-// 						request.DateId = &did
-// 					}
-//
-// 				case NameFaultTypeCode:
-// 					request.FaultTypeCode = sgd.FaultTypeCode
-//
-// 				case NameSize:
-// 					request.Size = sgd.Size
-// 					if request.Size.Value() == 0 {
-// 						request.Size.SetValue(100)
-// 					}
-//
-// 				case NameCurPage:
-// 					request.CurPage = sgd.CurPage
-// 					if request.CurPage.Value() == 0 {
-// 						request.CurPage.SetValue(1)
-// 					}
-//
-// 				case NameDeviceType:
-// 					request.DeviceType = sgd.DeviceType
-// 					// if request.DeviceType.String() == "" {
-// 					// 	request.DeviceType.SetValue("14")	// @TODO - Need to lookup the first device_type.
-// 					// }
-//
-// 				case NameReportId:
-// 					request.ReportId = sgd.ReportId
-// 					// if request.ReportId.String() == "" {
-// 					// 	request.ReportId.SetValue("8042")	// @TODO - Need to lookup the first device_type.
-// 					// }
-//
-// 				case NameCodeType:
-// 					request.CodeType = sgd.CodeType
-// 			}
-// 		}
-// 	}
-// 	return request
-// }
 
 func (sgd *SunGrowDataRequest) Help(endpoint api.EndPoint) {
 	for range Only.Once {
@@ -444,14 +460,20 @@ func (sgd *SunGrowDataRequest) GetFilename(prefix string) string {
 		}
 
 		if sgd.ReportType != nil {
-			if *sgd.ReportType != "" {
-				aret = append(aret, *sgd.ReportType)
+			if sgd.ReportType.String() != "" {
+				aret = append(aret, sgd.ReportType.String())
 			}
 		}
 
 		if sgd.FaultTypeCode != nil {
-			if *sgd.FaultTypeCode != "" {
-				aret = append(aret, *sgd.FaultTypeCode)
+			if sgd.FaultTypeCode.String() != "" {
+				aret = append(aret, sgd.FaultTypeCode.String())
+			}
+		}
+
+		if sgd.Uuid != nil {
+			if sgd.Uuid.String() != "" {
+				aret = append(aret, sgd.Uuid.String())
 			}
 		}
 
@@ -470,11 +492,13 @@ func (sgd *SunGrowDataRequest) SetDate(date string) {
 }
 
 func (sgd *SunGrowDataRequest) SetFaultTypeCode(ftc string) {
-	sgd.FaultTypeCode = &ftc
+	aftc := valueTypes.SetIntegerString(ftc)
+	sgd.FaultTypeCode = &aftc
 }
 
 func (sgd *SunGrowDataRequest) SetReportType(rt string) {
-	sgd.ReportType = &rt
+	art := valueTypes.SetStringValue(rt)
+	sgd.ReportType = &art
 }
 
 func (sgd *SunGrowDataRequest) SetPsIds(psIds []string) {
@@ -823,7 +847,7 @@ func (sgd *SunGrowData) queryFaultCodes(request SunGrowDataRequest) SunGrowDataR
 		ep := sgd.SunGrow.GetByStruct(
 			"WebAppService.queryFaultCodes",
 			// queryFaultCodes.RequestData{ PsId: request.PsId },
-			queryFaultCodes.RequestData{ FaultName: "417" },
+			queryFaultCodes.RequestData{ FaultName: valueTypes.SetStringValue("417") },
 			api.DefaultTimeout,
 		)
 
@@ -845,7 +869,7 @@ func (sgd *SunGrowData) queryNounList(request SunGrowDataRequest) SunGrowDataRes
 	for range Only.Once {
 		ep := sgd.SunGrow.GetByStruct(
 			"WebAppService.queryNounList",
-			queryNounList.RequestData{ FaultTypeCode: "718" },
+			queryNounList.RequestData{ FaultTypeCode: valueTypes.SetStringValue("718") },
 			// queryNounList.RequestData{ },
 			api.DefaultTimeout,
 		)

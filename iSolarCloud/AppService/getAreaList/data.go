@@ -38,7 +38,7 @@ type ResultData struct {
 		StationCount      valueTypes.Integer   `json:"station_count"`
 		TodayEnergy       valueTypes.UnitValue `json:"today_energy"`
 		TotalEnergy       valueTypes.UnitValue `json:"total_energy"`
-	} `json:"pageList" PointId:"page_list" PointNameFromChild:"OrgId" PointNameFromAppend:"false"`
+	} `json:"pageList" PointId:"page_list" PointNameFromChild:"OrgId" PointNameAppend:"false" PointArrayFlatten:"false"`
 	RowCount valueTypes.Integer `json:"rowCount" PointIgnore:"true"`
 }
 

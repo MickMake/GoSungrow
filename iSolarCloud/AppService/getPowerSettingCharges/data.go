@@ -12,7 +12,7 @@ const Url = "/v1/powerStationService/getPowerSettingCharges"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
+	// DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -27,8 +27,8 @@ func (rd RequestData) Help() string {
 
 type ResultData   struct {
 	CurrencyTypeList []struct {
-		CodeName  string `json:"code_name"`
-		CodeValue string `json:"code_value"`
+		CodeName  valueTypes.String `json:"code_name"`
+		CodeValue valueTypes.String `json:"code_value"`
 	} `json:"currencyTypeList"`
 	PowerChargeDataMap struct{} `json:"powerChargeDataMap"`
 }

@@ -12,7 +12,7 @@ const Url = "/v1/commonService/listOssFiles"
 const Disabled = false
 
 type RequestData struct {
-	Prefix string `json:"prefix" required:"true"`
+	Prefix valueTypes.String `json:"prefix" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -26,7 +26,7 @@ func (rd RequestData) Help() string {
 
 
 type ResultData []struct {
-	Dummy string `json:"dummy"`
+	Dummy valueTypes.String `json:"dummy"`
 }
 
 func (e *ResultData) IsValid() error {

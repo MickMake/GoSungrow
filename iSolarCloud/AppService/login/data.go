@@ -4,9 +4,9 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
+	"errors"
 	"github.com/MickMake/GoUnify/Only"
 
-	"errors"
 	"fmt"
 )
 
@@ -14,8 +14,8 @@ const Url = "/v1/userService/login"
 const Disabled = false
 
 type RequestData struct {
-	UserAccount  string `json:"user_account" required:"true"`
-	UserPassword string `json:"user_password" required:"true"`
+	UserAccount  valueTypes.String `json:"user_account" required:"true"`
+	UserPassword valueTypes.String `json:"user_password" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -28,10 +28,10 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	ErrTimes    string `json:"err_times"`
-	LoginState  string `json:"login_state"`
-	Msg         string `json:"msg"`
-	RemainTimes string `json:"remain_times"`
+	ErrTimes    valueTypes.String `json:"err_times"`
+	LoginState  valueTypes.String `json:"login_state"`
+	Msg         valueTypes.String `json:"msg"`
+	RemainTimes valueTypes.String `json:"remain_times"`
 
 	AcceptOrderNum         valueTypes.Integer `json:"accept_order_num"`
 	BackgroundColor        valueTypes.Integer `json:"background_color"`
@@ -139,11 +139,11 @@ func (e *ResultData) IsValid() error {
 	var err error
 	for range Only.Once {
 		switch {
-		case e.Msg == `账号不存在`:
+		case e.Msg.String() == `账号不存在`:
 			err = errors.New(fmt.Sprintf("Account does not exist '%s'", e.Msg))
-		case e.Msg == fmt.Sprintf(`账号或密码输入错误，还剩%s次机会`, e.RemainTimes):
+		case e.Msg.String() == fmt.Sprintf(`账号或密码输入错误，还剩%s次机会`, e.RemainTimes):
 			err = errors.New(fmt.Sprintf("The account number or password is entered incorrectly, there are %s chances left '%s'", e.RemainTimes, e.Msg))
-		case e.Msg == "":
+		case e.Msg.String() == "":
 			break
 		default:
 			err = errors.New(fmt.Sprintf("unknown error '%s'", e.Msg))
@@ -172,7 +172,7 @@ func (e *EndPoint) LoginLastIP() string {
 	return e.Response.ResultData.LoginLastIP
 }
 func (e *EndPoint) LoginState() string {
-	return e.Response.ResultData.LoginState
+	return e.Response.ResultData.LoginState.String()
 }
 func (e *EndPoint) Token() string {
 	return e.Response.ResultData.Token

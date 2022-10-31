@@ -4,7 +4,6 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
-	"errors"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
@@ -13,7 +12,7 @@ const Url = "/v1/faultService/queryFaultCodes"
 const Disabled = false
 
 type RequestData struct {
-	FaultName string `json:"fault_name" required:"true"`
+	FaultName valueTypes.String `json:"fault_name" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -27,17 +26,11 @@ func (rd RequestData) Help() string {
 
 
 type ResultData struct {
-	Dummy string `json:"dummy"`
+	Dummy valueTypes.String `json:"dummy"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
 	return err
 }
 

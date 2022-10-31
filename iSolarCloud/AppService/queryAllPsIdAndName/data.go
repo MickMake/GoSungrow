@@ -27,7 +27,7 @@ type ResultData struct {
 	PageList []struct {
 		PsId   valueTypes.PsId `json:"ps_id"`
 		PsName valueTypes.String  `json:"ps_name"`
-	} `json:"pageList" PointNameFromChild:"PsId" PointNameFromAppend:"false"`
+	} `json:"pageList" PointNameFromChild:"PsId" PointNameAppend:"false" PointNameAppend:"false"`
 }
 
 func (e *ResultData) IsValid() error {

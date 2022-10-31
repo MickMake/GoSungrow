@@ -122,7 +122,7 @@ type ResultData struct {
 		P13150MapVirgin         valueTypes.UnitValue `json:"p13150_map_virgin" PointIgnore:"true"`
 		PsKey                   valueTypes.PsKey     `json:"ps_key" PointId:"ps_key" PointUpdateFreq:"UpdateFreqBoot"`
 		UUID                    valueTypes.Integer   `json:"uuid" PointId:"uuid" PointUpdateFreq:"UpdateFreqBoot"`
-	} `json:"storage_inverter_data" PointNameFromChild:"PsKey"`
+	} `json:"storage_inverter_data" PointNameFromChild:"PsKey" PointArrayFlatten:"false"`
 	TodayEnergy       valueTypes.UnitValue `json:"today_energy" PointId:"today_energy" PointUpdateFreq:"UpdateFreqDay"`
 	TodayEnergyVirgin valueTypes.UnitValue `json:"today_energy_virgin"  PointIgnore:"true"`
 	TodayIncome       valueTypes.UnitValue `json:"today_income" PointId:"today_income" PointUpdateFreq:"UpdateFreqDay"`

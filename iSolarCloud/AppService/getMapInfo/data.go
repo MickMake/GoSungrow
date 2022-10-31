@@ -24,7 +24,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	// Dummy string `json:"dummy"`
+	// Dummy valueTypes.String `json:"dummy"`
 }
 
 func (e *ResultData) IsValid() error {

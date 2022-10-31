@@ -4,16 +4,15 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
-	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/powerStationService/psHourPointsValue"
-const Disabled = true
+const Disabled = false
 
 type RequestData struct {
-	// DeviceType string `json:"device_type" required:"true"`
+	PsId       valueTypes.PsId `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -25,46 +24,36 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
-	Dummy string `json:"dummy"`
+	P24001List []valueTypes.Float `json:"p24001List" PointId:"p24001" PointUnitFrom:"P24001Unit" PointArrayFlatten:"false"`
+	P24001Unit valueTypes.String  `json:"p24001_unit" PointIgnore:"true"`
+	P24004List []valueTypes.Float `json:"p24004List" PointId:"p24004" PointUnitFrom:"P24004Unit" PointArrayFlatten:"false"`
+	P24004Unit valueTypes.String  `json:"p24004_unit" PointIgnore:"true"`
+	P83002List []valueTypes.Float `json:"p83002List" PointId:"p83002" PointUnitFrom:"P83002Unit" PointArrayFlatten:"false"`
+	P83002Unit valueTypes.String  `json:"p83002_unit" PointIgnore:"true"`
+	P83012List []valueTypes.Float `json:"p83012List" PointId:"p83012" PointUnitFrom:"P83012Unit" PointArrayFlatten:"false"`
+	P83012Unit valueTypes.String  `json:"p83012_unit" PointIgnore:"true"`
+	P83022List []valueTypes.Float `json:"p83022List" PointId:"p83022" PointUnitFrom:"P83022Unit" PointArrayFlatten:"false"`
+	P83022Unit valueTypes.String  `json:"p83022_unit" PointIgnore:"true"`
+	P83033List []valueTypes.Float `json:"p83033List" PointId:"p83033" PointUnitFrom:"P83033Unit" PointArrayFlatten:"false"`
+	P83033Unit valueTypes.String  `json:"p83033_unit" PointIgnore:"true"`
+	P83039List []valueTypes.Float `json:"p83039List" PointId:"p83039" PointUnitFrom:"P83039Unit" PointArrayFlatten:"false"`
+	P83039Unit valueTypes.String  `json:"p83039_unit" PointIgnore:"true"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	switch {
-	case e.Dummy == "":
-		break
-	default:
-		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	}
 	return err
 }
-
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
+		pkg := apiReflect.GetName("", *e)
+		dt := valueTypes.NewDateTime(valueTypes.Now)
+		name := pkg + "." + e.Request.PsId.String()
+		entries.StructToPoints(e.Response.ResultData, name, e.Request.PsId.String(), dt)
 	}
 
 	return entries

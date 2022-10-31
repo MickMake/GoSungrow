@@ -48,8 +48,8 @@ type ResultData struct {
 		UserEnglishName      interface{}         `json:"user_english_name"`
 		UserName             valueTypes.String   `json:"user_name"`
 		UUID                 valueTypes.Integer  `json:"uuid"`
-	} `json:"pageList" PointId:"page_list" PointNameFromChild:"PsId.CreateTime" PointNameFromAppend:"false"`
-	RowCount valueTypes.Integer `json:"rowCount"`
+	} `json:"pageList" PointId:"page_list" PointNameFromChild:"PsId.CreateTime" PointNameAppend:"false" PointArrayFlatten:"false"`
+	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 }
 
 func (e *ResultData) IsValid() error {

@@ -50,7 +50,7 @@ type ResultData struct {
 		TaskId         valueTypes.Integer `json:"task_id"`
 		TaskName       valueTypes.Integer      `json:"task_name"`
 		UpdateTime     valueTypes.DateTime      `json:"update_time"`
-	} `json:"pageList"`
+	} `json:"pageList" PointNameFromChild:"TaskId" PointNameAppend:"false" PointArrayFlatten:"false"`
 	RowCount   valueTypes.Integer `json:"rowCount"`
 	Size       valueTypes.Integer `json:"size"`
 	StartIndex valueTypes.Integer `json:"startIndex"`
