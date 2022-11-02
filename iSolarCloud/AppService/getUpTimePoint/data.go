@@ -31,7 +31,7 @@ type ResultData struct {
 		PointList []struct {
 			PointId  valueTypes.Integer `json:"point_id"`
 			TimeType valueTypes.Integer `json:"time_type"`
-		} `json:"point_list" PointArrayFlatten:"false"`
+		} `json:"point_list" PointArrayFlatten:"false" DataTable:"true"`
 		UpTimePointId valueTypes.Integer `json:"up_time_point_id"`
 	} `json:"point_time_relation" PointArrayFlatten:"false"`
 }

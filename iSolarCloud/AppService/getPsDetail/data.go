@@ -69,9 +69,9 @@ type ResultData struct {
 		PsKey                   valueTypes.PsKey     `json:"ps_key"`
 		UpdateTime              valueTypes.DateTime  `json:"update_time"`
 		UUID                    valueTypes.Integer   `json:"uuid"`
-	} `json:"storage_inverter_data" PointNameAppend:"false" PointNameFromChild:"PsKey" PointArrayFlatten:"false"`
+	} `json:"storage_inverter_data" PointNameAppend:"false" PointNameFromChild:"PsKey" PointArrayFlatten:"false" DataTable:"true"`
 
-	ActualEnergy                  []valueTypes.Float   `json:"actual_energy" PointId:"actual_energy" PointName:"Actual Energy" PointUnitFrom:"ActualEnergyUnit" PointArrayFlatten:"true"`
+	ActualEnergy                  []valueTypes.Float   `json:"actual_energy" PointId:"actual_energy" PointName:"Actual Energy" PointUnitFrom:"ActualEnergyUnit" PointArrayFlatten:"true" DataTable:"true"`
 	ActualEnergyUnit              valueTypes.String    `json:"actual_energy_unit" PointId:"actual_energy_unit"  PointIgnore:"true"`
 	AlarmCount                    valueTypes.Count     `json:"alarm_count"`
 	AreaId                        interface{}          `json:"area_id"`
@@ -198,7 +198,7 @@ type ResultData struct {
 	P83202Map                     valueTypes.UnitValue `json:"p83202_map" PointId:"p83202"`
 	P83202MapVirgin               valueTypes.UnitValue `json:"p83202_map_virgin"  PointIgnore:"true"`
 	PercentPlanYear               valueTypes.Float     `json:"percent_plan_year"`
-	PlanEnergy                    []valueTypes.Float   `json:"plan_energy" PointUnitFrom:"PlanEnergyUnit" PointArrayFlatten:"true"`
+	PlanEnergy                    []valueTypes.Float   `json:"plan_energy" PointUnitFrom:"PlanEnergyUnit" PointArrayFlatten:"true" DataTable:"true"`
 	PlanEnergyUnit                valueTypes.String    `json:"plan_energy_unit" PointId:"plan_energy_unit"  PointIgnore:"true"`
 	PlanEnergyYear                valueTypes.UnitValue `json:"plan_energy_year"`
 	PowderReduce                  valueTypes.UnitValue `json:"powder_reduce"`

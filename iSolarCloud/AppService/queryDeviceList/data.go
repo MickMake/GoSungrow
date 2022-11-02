@@ -31,13 +31,13 @@ type ResultData struct {
 		OfflineCount valueTypes.Count `json:"offline_count" PointId:"offline_count" PointUpdateFreq:"UpdateFreqTotal"`
 		RunCount     valueTypes.Count `json:"run_count" PointId:"run_count" PointUpdateFreq:"UpdateFreqTotal"`
 		WarningCount valueTypes.Count `json:"warning_count" PointId:"warning_count" PointUpdateFreq:"UpdateFreqTotal"`
-	} `json:"dev_count_by_status_map" PointId:"device_status_count"`
-	DevCountByTypeMap map[string]valueTypes.Integer `json:"dev_count_by_type_map" PointId:"device_type_count" PointUpdateFreq:"UpdateFreqBoot"`
+	} `json:"dev_count_by_status_map" PointId:"device_status_count" DataTable:"true"`
+	DevCountByTypeMap map[string]valueTypes.Integer `json:"dev_count_by_type_map" PointId:"device_type_count" PointUpdateFreq:"UpdateFreqBoot" DataTable:"true"`
 	// DevCountByTypeMap struct {
 	// 	One4 valueTypes.Integer `json:"14"`
 	// 	Two2 valueTypes.Integer `json:"22"`
 	// } `json:"dev_count_by_type_map"`
-	DevTypeDefinition map[string]valueTypes.String `json:"dev_type_definition" PointId:"device_types" PointUpdateFreq:"UpdateFreqBoot"`
+	DevTypeDefinition map[string]valueTypes.String `json:"dev_type_definition" PointId:"device_types" PointUpdateFreq:"UpdateFreqBoot" DataTable:"true"`
 	// DevTypeDefinition struct {
 	// 	One    valueTypes.String `json:"1"`
 	// 	One0   valueTypes.String `json:"10"`
@@ -120,7 +120,7 @@ type ResultData struct {
 		OwnerAlarmCount         valueTypes.Count   `json:"owner_alarm_count" PointId:"owner_alarm_count" PointUpdateFreq:"UpdateFreqTotal"`
 		OwnerDevFaultStatus     valueTypes.Integer `json:"owner_dev_fault_status" PointId:"owner_dev_fault_status" PointUpdateFreq:"UpdateFreqInstant"`
 		OwnerFaultCount         valueTypes.Count   `json:"owner_fault_count" PointId:"owner_fault_count" PointUpdateFreq:"UpdateFreqTotal"`
-		PointData               []PointStruct      `json:"point_data" PointNameFromChild:"PointId"`
+		PointData               []PointStruct      `json:"point_data" PointNameFromChild:"PointId" DataTable:"true"`
 		Points                  interface{}        `json:"points" PointId:"points"`
 		PsTimezoneInfo          struct {
 			IsDst    valueTypes.Bool   `json:"is_dst" PointUpdateFreq:"UpdateFreqInstant"`

@@ -30,7 +30,7 @@ type ResultData []struct {
 	InstallerEmail string   `json:"installer_email"`
 	InstallerPhone string   `json:"installer_phone"`
 	OrgId          string   `json:"org_id"`
-	PsNames        []valueTypes.String `json:"ps_names"`
+	PsNames        []valueTypes.String `json:"ps_names" DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {

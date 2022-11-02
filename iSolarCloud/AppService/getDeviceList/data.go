@@ -71,7 +71,7 @@ type ResultData struct {
 		Sn                      valueTypes.String   `json:"sn" PointName:"Serial Number"`
 		TypeName                valueTypes.String   `json:"type_name"`
 		UUID                    valueTypes.Integer  `json:"uuid"`
-	} `json:"pageList" PointNameFromChild:"PsKey" PointNameAppend:"false" PointArrayFlatten:"false"`
+	} `json:"pageList" PointNameFromChild:"PsKey" PointNameAppend:"false" PointArrayFlatten:"false" DataTable:"true"`
 	RowCount valueTypes.Integer `json:"rowCount" PointIgnore:"true"`
 }
 

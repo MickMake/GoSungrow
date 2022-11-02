@@ -28,24 +28,24 @@ type ResultData struct {
 	DeviceTypeList []struct {
 		DeviceName valueTypes.String  `json:"device_name"`
 		DeviceType valueTypes.Integer `json:"device_type"`
-	} `json:"deviceTypeList"`
+	} `json:"deviceTypeList" PointId:"device_type_list" DataTable:"true"`
 	DisplayModeList []struct {
 		CodeName  valueTypes.String `json:"code_name"`
 		PointType valueTypes.String `json:"point_type"`
-	} `json:"displayModeList"`
+	} `json:"displayModeList" PointId:"display_mode_list" DataTable:"true"`
 	PointCalTypeList []struct {
 		CodeName   valueTypes.String `json:"code_name"`
 		CodeValue  valueTypes.String `json:"code_value"`
 		CodeValue2 interface{}       `json:"code_value2"`
-	} `json:"pointCalTypeList"`
+	} `json:"pointCalTypeList" PointId:"point_cal_type_list" DataTable:"true"`
 	PointTypeList []struct {
 		CodeName  valueTypes.String `json:"code_name"`
 		PointType valueTypes.String `json:"point_type"`
-	} `json:"pointTypeList"`
+	} `json:"pointTypeList" PointId:"point_type_list" DataTable:"true"`
 	PolymerizationModeList []struct {
 		CodeName  valueTypes.String `json:"code_name"`
 		PointType valueTypes.String `json:"point_type"`
-	} `json:"polymerizationModeList"`
+	} `json:"polymerizationModeList" PointId:"polymerization_mode_list" DataTable:"true"`
 	PowerPointManage interface{} `json:"powerPointManage"`
 }
 

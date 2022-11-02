@@ -54,12 +54,12 @@ type ResultData struct {
 		Visibility        valueTypes.Float    `json:"visibility"`
 		WeatherDesc       valueTypes.String   `json:"weather_desc"`
 		WeatherURL        valueTypes.String   `json:"weather_url"`
-	} `json:"areaForcastList" PointNameFromChild:"DateTime" PointNameDateFormat:"20060102"`
+	} `json:"areaForcastList" PointNameFromChild:"DateTime" PointNameDateFormat:"20060102" DataTable:"true"`
 	StationsCityCode []struct {
 		City   valueTypes.String  `json:"city"`
 		PsId   valueTypes.PsId `json:"ps_id"`
 		PsName valueTypes.String  `json:"ps_name"`
-	} `json:"stationsCityCode"`
+	} `json:"stationsCityCode" DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {

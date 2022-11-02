@@ -144,7 +144,7 @@ type ResultData struct {
 		WgsLatitude            valueTypes.Float     `json:"wgs_latitude" PointId:"wgs_latitude"`
 		WgsLongitude           valueTypes.Float     `json:"wgs_longitude" PointId:"wgs_longitude"`
 		ZipCode                valueTypes.String    `json:"zip_code" PointId:"zip_code"`
-	} `json:"pageList" PointNameFromChild:"PsId" PointNameAppend:"false" PointArrayFlatten:"false"`
+	} `json:"pageList" PointNameFromChild:"PsId" PointNameAppend:"false" PointArrayFlatten:"false" DataTable:"true"`
 	RowCount valueTypes.Count `json:"rowCount" PointIgnore:"true"`
 }
 

@@ -4,8 +4,8 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/faultService/getOrgUserMapData"
@@ -24,9 +24,14 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+	CurPage    valueTypes.Integer `json:"curPage"`
+	IsMore     interface{}        `json:"isMore"`
+	PageList   []interface{}      `json:"pageList"`
+	RowCount   valueTypes.Integer `json:"rowCount"`
+	Size       valueTypes.Integer `json:"size"`
+	StartIndex interface{}        `json:"startIndex"`
+	TotalPage  interface{}        `json:"totalPage"`
 }
 
 func (e *ResultData) IsValid() error {

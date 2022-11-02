@@ -3,7 +3,6 @@ package api
 import (
 	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
 	"fmt"
 	"net/url"
 	"reflect"
@@ -57,26 +56,26 @@ func GetUrl(u string) *url.URL {
 	return ret
 }
 
-func GetStructKeys(ref interface{}, keys ...string) valueTypes.UnitValueMap {
-	ret := make(valueTypes.UnitValueMap)
-
-	for _, k := range apiReflect.GetStructKeys(ref, keys...) {
-		// p := UnitValue { Value: k.Value, Unit: "" }
-		p := valueTypes.SetUnitValueString(k.Value, "", "")
-		if k.Type.Name() == "UnitValue" {
-			// v = JsonToUnitValue(k.JsonValue).Value
-			// u = JsonToUnitValue(k.JsonValue).Unit
-			// p = JsonToUnitValue(k.JsonValue)
-			// p.Value, p.Unit = DivideByThousandIfRequired(p.Value, p.Unit)
-			err := p.UnmarshalJSON([]byte(k.JsonValue))
-			if err != nil {
-				continue
-			}
-		}
-
-		k.JsonName = strings.TrimSuffix(k.JsonName, "_map")	// Bit of a hack, but hey... @TODO - Future self take note.
-		ret[valueTypes.SetPointIdString(k.JsonName)] = p
-	}
-
-	return ret
-}
+// func GetStructKeys(ref interface{}, keys ...string) valueTypes.UnitValueMap {
+// 	ret := make(valueTypes.UnitValueMap)
+//
+// 	for _, k := range apiReflect.GetStructKeys(ref, keys...) {
+// 		// p := UnitValue { Value: k.Value, Unit: "" }
+// 		p := valueTypes.SetUnitValueString(k.Value, "", "")
+// 		if k.Type.Name() == "UnitValue" {
+// 			// v = JsonToUnitValue(k.JsonValue).Value
+// 			// u = JsonToUnitValue(k.JsonValue).Unit
+// 			// p = JsonToUnitValue(k.JsonValue)
+// 			// p.Value, p.Unit = DivideByThousandIfRequired(p.Value, p.Unit)
+// 			err := p.UnmarshalJSON([]byte(k.JsonValue))
+// 			if err != nil {
+// 				continue
+// 			}
+// 		}
+//
+// 		k.JsonName = strings.TrimSuffix(k.JsonName, "_map")	// Bit of a hack, but hey... @TODO - Future self take note.
+// 		ret[valueTypes.SetPointIdString(k.JsonName)] = p
+// 	}
+//
+// 	return ret
+// }

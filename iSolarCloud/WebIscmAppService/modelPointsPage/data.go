@@ -30,7 +30,7 @@ type ResultData struct {
 		DeviceModelId   valueTypes.Integer `json:"device_model_id"`
 		DeviceModel     valueTypes.String  `json:"device_model"`
 		DeviceModelCode valueTypes.String  `json:"device_model_code"`
-	} `json:"modelList" PointId:"model_list" DataTable:"true" DataTableName:"Model List"`
+	} `json:"modelList" PointId:"model_list" DataTable:"true"`
 	PointList []struct {
 		PointId             valueTypes.Integer `json:"point_id" DataTableSort:"true"`
 		PointName           valueTypes.String  `json:"point_name"`

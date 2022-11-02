@@ -4,15 +4,15 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/getModelPoints"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
+	DeviceModelId valueTypes.String `json:"device_model_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -24,34 +24,17 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+type ResultData []struct {
+	CodeID        valueTypes.Integer `json:"code_id"`
+	DeviceModelID valueTypes.Integer `json:"device_model_id"`
+	OrderNum      valueTypes.Integer `json:"order_num"`
+	PointID       valueTypes.Integer `json:"point_id"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

@@ -28,7 +28,7 @@ type ResultData struct {
 		DevListOrderId valueTypes.Integer  `json:"dev_list_order_id"`
 		DeviceType     valueTypes.Integer  `json:"device_type"`
 		TypeName       valueTypes.String   `json:"type_name"`
-	} `json:"deviceTypeList"`
+	} `json:"deviceTypeList" DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {

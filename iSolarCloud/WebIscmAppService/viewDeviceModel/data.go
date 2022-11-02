@@ -42,7 +42,7 @@ type ResultData struct {
 		OweMonitor      interface{}        `json:"owe_monitor"`
 		OweRemind       interface{}        `json:"owe_remind"`
 		Remark          valueTypes.String  `json:"remark"`
-	} `json:"deviceFactoryList" PointId:"device_factory_list"`
+	} `json:"deviceFactoryList" PointId:"device_factory_list" DataTable:"true"`
 	DeviceTypeList []struct {
 		IsRemoteUpgrade valueTypes.Integer `json:"is_remote_upgrade"`
 		SysID           valueTypes.String  `json:"sys_id"`
@@ -53,12 +53,12 @@ type ResultData struct {
 		TypeNameEn      valueTypes.String  `json:"type_name_en"`
 		UpdateDate      valueTypes.String  `json:"update_date"`
 		ValidFlag       valueTypes.Integer `json:"valid_flag"`
-	} `json:"deviceTypeList" PointId:"device_type_list"`
+	} `json:"deviceTypeList" PointId:"device_type_list" DataTable:"true"`
 	SysTypeList []struct {
 		CodeName   valueTypes.String `json:"code_name"`
 		CodeValue  valueTypes.String `json:"code_value"`
 		CodeValue2 interface{}       `json:"code_value2"`
-	} `json:"sysTypeList" PointId:"sys_type_list"`
+	} `json:"sysTypeList" PointId:"sys_type_list" DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {

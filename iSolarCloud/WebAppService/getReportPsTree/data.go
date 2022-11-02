@@ -13,6 +13,7 @@ const Disabled = false
 
 type RequestData struct {
 	DeviceType valueTypes.String `json:"device_type" required:"true"`
+	PsId       valueTypes.PsId   `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

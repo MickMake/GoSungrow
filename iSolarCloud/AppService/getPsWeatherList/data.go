@@ -43,7 +43,7 @@ type ResultData struct {
 		Sunrise    valueTypes.Time     `json:"sunrise"`
 		Sunset     valueTypes.Time     `json:"sunset"`
 		Visibility valueTypes.Float    `json:"visibility"`
-	} `json:"weather_list" PointNameFromChild:"DateTime" PointNameDateFormat:"20060102"`
+	} `json:"weather_list" PointNameFromChild:"DateTime" PointNameDateFormat:"20060102" DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {

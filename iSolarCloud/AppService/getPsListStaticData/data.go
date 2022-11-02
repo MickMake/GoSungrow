@@ -46,7 +46,7 @@ type ResultData struct {
 		PsType                 valueTypes.Integer  `json:"ps_type"`
 		ValidFlag              valueTypes.Bool     `json:"valid_flag"`
 		WaitAssignOrderCount   valueTypes.Integer  `json:"wait_assign_order_count"`
-	} `json:"pageList" PointId:"page_list" PointNameFromChild:"PsId" PointNameAppend:"false" PointArrayFlatten:"false"`
+	} `json:"pageList" PointId:"page_list" PointNameFromChild:"PsId" PointNameAppend:"false" PointArrayFlatten:"false" DataTable:"true"`
 	RowCount valueTypes.Integer `json:"rowCount"`
 }
 

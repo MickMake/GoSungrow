@@ -46,6 +46,7 @@ func (sg *SunGrow) GetEndpoints(endpoints string, args ...string) error {
 			rargs := ep.GetRequestArgNames()
 			// fmt.Printf("args:%s\n", rargs)
 
+			// getOrgList.ResultData
 			if _, ok := rargs[NamePsId]; !ok {
 				response := data.GetByApi(ep, request)
 				if response.Error != nil {
@@ -59,7 +60,7 @@ func (sg *SunGrow) GetEndpoints(endpoints string, args ...string) error {
 
 				if sg.OutputType.IsTable() {
 					if len(response.Data.DataTables) == 0 {
-						fmt.Println("Now data tables defined - try a get instead.")
+						fmt.Println("No data tables defined - try a get instead.")
 						break
 					}
 					for _, t := range response.Data.DataTables {
@@ -236,9 +237,7 @@ func (sgd *SunGrowData) GetByApi(endpoint api.EndPoint, request SunGrowDataReque
 			fmt.Printf("GetByApi - ERR: %s\n", sgd.Error)
 			break
 		}
-		fmt.Printf("%s\n", req)
-
-		// newRequest := request.Create(endpoint)
+		// fmt.Printf("%s\n", req)
 
 		if string(req) != "" {
 			endpoint = endpoint.SetRequestByJson(output.Json(req))
@@ -248,7 +247,7 @@ func (sgd *SunGrowData) GetByApi(endpoint api.EndPoint, request SunGrowDataReque
 				break
 			}
 		}
-		fmt.Printf("%s\n", endpoint.GetRequestJson())
+		// fmt.Printf("%s\n", endpoint.GetRequestJson())
 
 		endpoint = endpoint.Call()
 		sgd.Error = endpoint.GetError()
@@ -261,33 +260,6 @@ func (sgd *SunGrowData) GetByApi(endpoint api.EndPoint, request SunGrowDataReque
 			break
 		}
 
-		// switch {
-		// 	case sgd.SunGrow.OutputType.IsNone():
-		//
-		// 	case sgd.SunGrow.OutputType.IsRaw():
-		// 		if sgd.SunGrow.SaveAsFile {
-		// 			sgd.SunGrow.Error = ep.WriteDataFile()
-		// 			break
-		// 		}
-		// 		fmt.Println(ep.GetJsonData(true))
-		//
-		// 	case sgd.SunGrow.OutputType.IsJson():
-		// 		if sgd.SunGrow.SaveAsFile {
-		// 			sgd.SunGrow.Error = ep.WriteDataFile()
-		// 			break
-		// 		}
-		// 		fmt.Println(ep.GetJsonData(false))
-		//
-		// 	default:
-		// }
-
-		// var fn []string
-		// if request.PsId.String() != "" {
-		// 	fn = append(fn, request.PsId.String())
-		// }
-		// if !request.DateId.IsZero() {
-		// 	fn = append(fn, request.DateId.Original())
-		// }
 		response.Filename = request.GetFilename("")
 		response.Filename = endpoint.SetFilenamePrefix(response.Filename)
 		// response.Filename = request.CreateFilename(ep)

@@ -47,7 +47,7 @@ type ResultData struct {
 		ValueZhCn  valueTypes.String `json:"value_zh_cn"`
 		ValueZhTw  valueTypes.String `json:"value_zh_tw"`
 		WebURL     valueTypes.String `json:"web_url"`
-	} `json:"cloud_list"`
+	} `json:"cloud_list" DataTable:"true"`
 	CurrentCloud struct {
 		CloudId    valueTypes.Integer  `json:"cloud_id"`
 		CloudName  valueTypes.String `json:"cloud_name"`

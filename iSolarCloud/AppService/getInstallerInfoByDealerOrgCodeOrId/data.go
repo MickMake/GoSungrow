@@ -39,7 +39,7 @@ type ResultData struct {
 		UserId            valueTypes.Integer `json:"user_id"`
 		UserName          string      `json:"user_name"`
 		UserTelNationCode interface{} `json:"user_tel_nation_code"`
-	} `json:"user_info_list"`
+	} `json:"user_info_list" DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {

@@ -656,10 +656,11 @@ func (dss *DataStructures) PointSplitOn(_ Reflect, Current Reflect, _ EndPointPa
 		// We want to split a string into separate points - currently only handles string types.
 		// @TODO - Fix this up! - Use PointSplitType to define a particular type.
 		soVal := valueTypes.AnyToValueString(Current.FieldVo.Interface(), 0, "")
+		soEP := Current.DataStructure.Endpoint
 		soSplit := strings.Split(soVal, Current.DataStructure.PointSplitOn)
 		for soI, soV := range soSplit {
-			Current.DataStructure.Value = soV
-			Current.DataStructure.Endpoint = append(Current.DataStructure.Endpoint, valueTypes.PrintInt(2, soI))
+			Current.DataStructure.Value = strings.ReplaceAll(soV, "&", ".p")
+			Current.DataStructure.Endpoint = append(soEP, valueTypes.PrintInt(2, soI))
 			dss.Add(Current.DataStructure)
 		}
 		yes = true
@@ -766,10 +767,54 @@ func (dt *DataTable) GetTable() DataTable {
 				}
 
 				if Child.Kind == reflect.Struct {
-					// Iterate over all available fields and read the tag value
 					var refs []Reflect
 
 					for col := 0; col < Child.Length; col++ {
+						var ChildStruct Reflect
+						ChildStruct.SetByIndex(dt.Reflect, Child, col, EndPointPath{})
+						if dt.Debug {
+							_, _ = fmt.Fprintf(os.Stderr,"SetByIndex() Child: %s\n", ChildStruct)
+						}
+
+						if !ChildStruct.IsExported {
+							_, _ = fmt.Fprintf(os.Stderr, "WARNING: Field '%s' type not exported: Type %s\n", ChildStruct.FieldName, ChildStruct.Kind.String())
+							continue
+						}
+						refs = append(refs, ChildStruct)
+					}
+
+					if row == 0 {
+						dt.AddHeader(refs...)
+					} else {
+						dt.AddRow(refs...)
+					}
+				}
+			}
+			break
+		}
+
+		if dt.Reflect.Kind == reflect.Map {
+			// Handle maps here.
+			for row := range dt.Reflect.FieldVo.MapKeys() {
+				var Child Reflect
+				Child.SetByIndex(dt.Reflect, dt.Reflect, row, EndPointPath{})
+				if dt.Debug {
+					_, _ = fmt.Fprintf(os.Stderr,"SetByIndex() Child[%s]: %s\n", dt.Reflect.DataStructure.DataTableId, Child)
+				}
+
+				if Child.IsKnown() {
+					// We have a known value
+					if row == 0 {
+						dt.AddHeader(dt.Reflect)
+					}
+					dt.AddRow(Child)
+					continue
+				}
+
+				if dt.Reflect.Kind == reflect.Map {
+					var refs []Reflect
+
+					for col := range dt.Reflect.FieldVo.MapKeys() {
 						var ChildStruct Reflect
 						ChildStruct.SetByIndex(dt.Reflect, Child, col, EndPointPath{})
 						if dt.Debug {

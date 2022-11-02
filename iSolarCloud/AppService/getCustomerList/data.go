@@ -4,8 +4,8 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/getCustomerList"
@@ -25,8 +25,10 @@ func (rd RequestData) Help() string {
 }
 
 
-type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+type ResultData []struct {
+	CustomerCode valueTypes.String `json:"customer_code"`
+	CustomerName valueTypes.String `json:"customer_name"`
+	FactoryID valueTypes.Integer `json:"factory_id"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -34,24 +36,6 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

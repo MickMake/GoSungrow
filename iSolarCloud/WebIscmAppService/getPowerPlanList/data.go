@@ -4,8 +4,8 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/powerStationService/getPowerPlanList"
@@ -24,34 +24,27 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+type ResultData []struct {
+	Eight         valueTypes.Integer `json:"eight"`
+	Eleven        valueTypes.Integer `json:"eleven"`
+	Five          valueTypes.Integer `json:"five"`
+	Four          valueTypes.Integer `json:"four"`
+	Nine          valueTypes.Integer `json:"nine"`
+	One           valueTypes.Integer `json:"one"`
+	PsID          valueTypes.Integer `json:"ps_id"`
+	Seven         valueTypes.Integer `json:"seven"`
+	Six           valueTypes.Integer `json:"six"`
+	Ten           valueTypes.Integer `json:"ten"`
+	Three         valueTypes.Integer `json:"three"`
+	Twelve        valueTypes.Integer `json:"twelve"`
+	Two           valueTypes.Integer `json:"two"`
+	YearPlanPower valueTypes.Integer `json:"year_plan_power"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

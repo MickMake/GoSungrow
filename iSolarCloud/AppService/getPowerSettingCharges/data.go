@@ -29,7 +29,7 @@ type ResultData   struct {
 	CurrencyTypeList []struct {
 		CodeName  valueTypes.String `json:"code_name"`
 		CodeValue valueTypes.String `json:"code_value"`
-	} `json:"currencyTypeList"`
+	} `json:"currencyTypeList" DataTable:"true"`
 	PowerChargeDataMap struct{} `json:"powerChargeDataMap"`
 }
 

@@ -4,8 +4,8 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/getPowerDeviceTypeList"
@@ -25,8 +25,16 @@ func (rd RequestData) Help() string {
 }
 
 
-type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+type ResultData []struct {
+	IsRemoteUpgrade valueTypes.Integer `json:"is_remote_upgrade"`
+	SysID           valueTypes.String  `json:"sys_id"`
+	SysName         valueTypes.String  `json:"sys_name"`
+	TypeCode        valueTypes.Integer `json:"type_code"`
+	TypeID          valueTypes.Integer `json:"type_id"`
+	TypeName        valueTypes.String  `json:"type_name"`
+	TypeNameEn      valueTypes.String  `json:"type_name_en"`
+	UpdateDate      valueTypes.String  `json:"update_date"`
+	ValidFlag       valueTypes.Integer `json:"valid_flag"`
 }
 
 func (e *ResultData) IsValid() error {

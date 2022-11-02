@@ -30,7 +30,7 @@ type ResultData struct {
 		DeviceModel     valueTypes.String  `json:"device_model"`
 		DeviceModelCode valueTypes.String  `json:"device_model_code"`
 		ModelId         valueTypes.Integer `json:"model_id"`
-	} `json:"deviceModelList" PointId:"device_model_list" PointNameFromChild:"ModelId" PointArrayFlatten:"false"`
+	} `json:"deviceModelList" PointId:"device_model_list" PointNameFromChild:"ModelId" PointArrayFlatten:"false" DataTable:"true"`
 	DevicePropertyValueList []struct {
 		DeviceType     valueTypes.Integer `json:"device_type"`
 		PropertyCode   valueTypes.Integer `json:"property_code"`
@@ -38,7 +38,7 @@ type ResultData struct {
 		PropertyName   valueTypes.String  `json:"property_name"`
 		PropertyValue  valueTypes.String  `json:"property_value"`
 		UUID           valueTypes.String  `json:"uuid"`
-	} `json:"devicePropertyValueList" PointId:"device_property_value_list" PointArrayFlatten:"false"`
+	} `json:"devicePropertyValueList" PointId:"device_property_value_list" PointArrayFlatten:"false" DataTable:"true"`
 
 	ArmVersion              interface{}        `json:"arm_version"`
 	BatVersion              valueTypes.String        `json:"bat_version"`

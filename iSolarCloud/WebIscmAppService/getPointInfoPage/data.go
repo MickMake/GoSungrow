@@ -4,8 +4,8 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/getPointInfoPage"
@@ -24,34 +24,21 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+	DeviceTypeList []struct {
+		DeviceName valueTypes.String  `json:"device_name"`
+		DeviceType valueTypes.Integer `json:"device_type"`
+	} `json:"deviceTypeList"`
+	PointTypeList []struct {
+		CodeName  valueTypes.String `json:"code_name"`
+		PointType valueTypes.String `json:"point_type"`
+	} `json:"pointTypeList"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

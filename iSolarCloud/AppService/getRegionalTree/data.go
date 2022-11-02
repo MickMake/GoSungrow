@@ -37,7 +37,7 @@ type ResultData   struct {
 		ParentId   valueTypes.Integer `json:"pId"`
 		PsId       valueTypes.PsId `json:"ps_id"`
 		ShareType  int64  `json:"share_type"`
-	} `json:"resultList"`
+	} `json:"resultList" DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {

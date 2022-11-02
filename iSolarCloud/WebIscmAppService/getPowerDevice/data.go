@@ -4,8 +4,8 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/getPowerDevice"
@@ -24,9 +24,23 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+	ChannelID        valueTypes.Integer `json:"channelId"`
+	ClassCode        valueTypes.Integer `json:"classCode"`
+	DeviceCode       valueTypes.Integer `json:"deviceCode"`
+	DeviceID         valueTypes.Integer `json:"deviceId"`
+	DeviceName       valueTypes.String  `json:"deviceName"`
+	DeviceStatus     interface{}        `json:"deviceStatus"`
+	IsDisplay        valueTypes.Integer `json:"isDisplay"`
+	IsUse            valueTypes.Integer `json:"isUse"`
+	ParentDeviceCode interface{}        `json:"parentDeviceCode"`
+	ParentGateWay    interface{}        `json:"parentGateWay"`
+	Producer         interface{}        `json:"producer"`
+	PsGUID           valueTypes.String  `json:"psGuid"`
+	SnCode           interface{}        `json:"snCode"`
+	SyncDate         interface{}        `json:"syncDate"`
+	UpdateDate       valueTypes.String  `json:"updateDate"`
+	UpdateUserCode   interface{}        `json:"updateUserCode"`
 }
 
 func (e *ResultData) IsValid() error {

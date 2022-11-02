@@ -106,7 +106,7 @@ type DeviceData struct {
 	DeviceName valueTypes.String  `json:"device_name"`
 	DeviceType valueTypes.Integer `json:"device_type"`
 	DeviceUUID valueTypes.Integer `json:"device_uuid"`
-	Points     Points             `json:"points" PointNameAppend:"false"`
+	Points     Points             `json:"points" PointNameAppend:"false" DataTable:"true"`
 }
 
 func (p *DeviceData) UnmarshalJSON(data []byte) error {
@@ -122,7 +122,7 @@ func (p *DeviceData) UnmarshalJSON(data []byte) error {
 		// Store DeviceData extras
 		err = json.Unmarshal(data, &dd)
 		if err != nil {
-			fmt.Printf("queryUserCurveTemplateData[dd] - err:%s data: %s\n", err, data)
+			// fmt.Printf("queryUserCurveTemplateData[dd] - err:%s data: %s\n", err, data)
 			// break
 		}
 		p.DeviceName = dd.DeviceName
@@ -132,7 +132,7 @@ func (p *DeviceData) UnmarshalJSON(data []byte) error {
 		// Store DeviceData.Points
 		_ = json.Unmarshal(data, &dd.Points)
 		if err != nil {
-			fmt.Printf("queryUserCurveTemplateData[dd.Points] - err:%s data: %s\n", err, data)
+			// fmt.Printf("queryUserCurveTemplateData[dd.Points] - err:%s data: %s\n", err, data)
 			// break
 		}
 
@@ -178,12 +178,12 @@ func (p *Points) UnmarshalJSON(data []byte) error {
 
 
 type Point struct {
-	Color      valueTypes.String  `json:"color"`
-	DetailId   valueTypes.String  `json:"detail_id"`
 	PointId    valueTypes.PointId `json:"point_id"`
 	PointName  valueTypes.String  `json:"point_name"`
 	PsId       valueTypes.PsId    `json:"ps_id"`
 	PsKey      valueTypes.PsKey   `json:"ps_key"`
+	Color      valueTypes.String  `json:"color"`
+	DetailId   valueTypes.String  `json:"detail_id"`
 	PsName     valueTypes.String  `json:"ps_name"`
 	Statistics valueTypes.String  `json:"statistics"`
 	Style      valueTypes.String  `json:"style"`
@@ -194,316 +194,8 @@ type Point struct {
 	} `json:"data_list" PointArrayFlatten:"false"`
 }
 
-// type Foo struct {
-// 	ReqSerialNum valueTypes.String `json:"req_serial_num"`
-// 	ResultCode   valueTypes.String `json:"result_code"`
-// 	ResultData   struct {
-// 		CreateTime valueTypes.String `json:"create_time"`
-// 		Cycle      valueTypes.String `json:"cycle"`
-// 		DateType   valueTypes.String `json:"date_type"`
-// 		EndTime    valueTypes.String `json:"end_time"`
-// 		OpenTime   valueTypes.String `json:"open_time"`
-// 		PointsData struct {
-// 			One171348_43_2_2 struct {
-// 				DeviceName valueTypes.String `json:"device_name"`
-// 				DeviceType int64  `json:"device_type"`
-// 				DeviceUUID int64  `json:"device_uuid"`
-// 				P58629     struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58629"`
-// 				P58630 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58630"`
-// 				P58631 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58631"`
-// 				P58632 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58632"`
-// 				P58633 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58633"`
-// 				P58635 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58635"`
-// 				P58636 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58636"`
-// 				P58815 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58815"`
-// 				P58816 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58816"`
-// 				P58817 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58817"`
-// 				P58818 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58818"`
-// 				P58819 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58819"`
-// 				P58820 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58820"`
-// 				P58821 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58821"`
-// 				P58822 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58822"`
-// 				P58823 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58823"`
-// 				P58824 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58824"`
-// 				P58825 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58825"`
-// 				P58826 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58826"`
-// 				P58827 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58827"`
-// 				P58828 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58828"`
-// 				P58829 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58829"`
-// 				P58830 struct {
-// 					Color      valueTypes.String `json:"color"`
-// 					DetailID   valueTypes.String `json:"detail_id"`
-// 					PointID    valueTypes.String `json:"point_id"`
-// 					PointName  valueTypes.String `json:"point_name"`
-// 					PsID       valueTypes.String `json:"ps_id"`
-// 					PsKey      valueTypes.String `json:"ps_key"`
-// 					PsName     valueTypes.String `json:"ps_name"`
-// 					Statistics valueTypes.String `json:"statistics"`
-// 					Style      valueTypes.String `json:"style"`
-// 					Unit       valueTypes.String `json:"unit"`
-// 				} `json:"p58830"`
-// 			} `json:"1171348_43_2_2"`
-// 			Order valueTypes.String `json:"order"`
-// 		} `json:"points_data"`
-// 		StartTime    valueTypes.String `json:"start_time"`
-// 		TemplateID   valueTypes.String `json:"template_id"`
-// 		TemplateName valueTypes.String `json:"template_name"`
-// 		UpdateTime   valueTypes.String `json:"update_time"`
-// 	} `json:"result_data"`
-// 	ResultMsg valueTypes.String `json:"result_msg"`
-// }
-
-
 func (e *ResultData) IsValid() error {
 	var err error
-	// switch {
-	// case e.Dummy == "":
-	//	break
-	// default:
-	//	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	// }
 	return err
 }
 
@@ -511,9 +203,6 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		// pkg := apiReflect.GetName("", *e)
-		// dt := valueTypes.NewDateTime(valueTypes.Now)
-		// name := pkg + "." + e.Request.TemplateId.String()
 		entries.StructToDataMap(*e, e.Request.TemplateId.String(), apiReflect.NewEndPointPath(e.Request.TemplateId.String()))
 	}
 

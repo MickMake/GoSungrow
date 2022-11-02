@@ -4,15 +4,15 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/queryDeviceListForBackSys"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
+	PsID       valueTypes.PsId     `json:"ps_id" require:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -24,9 +24,17 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+type ResultData []struct {
+	ChnnlID    valueTypes.Integer `json:"chnnl_id"`
+	DeviceCode valueTypes.Integer `json:"device_code"`
+	DeviceID   valueTypes.Integer `json:"device_id"`
+	DeviceName valueTypes.String  `json:"device_name"`
+	DeviceType valueTypes.Integer `json:"device_type"`
+	IsPublic   valueTypes.Integer `json:"is_public"`
+	RelState   valueTypes.Integer `json:"rel_state"`
+	TypeName   valueTypes.String  `json:"type_name"`
+	UpUUID     valueTypes.Integer `json:"up_uuid"`
+	UUID       valueTypes.Integer `json:"uuid"`
 }
 
 func (e *ResultData) IsValid() error {

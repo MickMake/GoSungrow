@@ -250,7 +250,15 @@ func (dm *DataMap) StructToDataMap(endpoint EndPoint, parentDeviceId string, nam
 				}
 				_ = table.AddRow(data...)
 			}
-			table.SetTitle(fmt.Sprintf("List %s-%s - %s", endpoint.GetArea(), endpoint.GetName(), dt.Reflect.DataStructure.DataTableTitle))
+			title := dt.Reflect.DataStructure.DataTableTitle
+			if title == "" {
+				title = dt.Reflect.DataStructure.DataTableName
+			}
+			if title == "" {
+				title = dt.Reflect.DataStructure.DataTableId
+			}
+
+			table.SetTitle(fmt.Sprintf("List %s-%s - %s", endpoint.GetArea(), endpoint.GetName(), title))
 			table.SetFilePrefix(fmt.Sprintf("%s-%s-%s", endpoint.GetArea(), endpoint.GetName(), dt.Reflect.DataStructure.DataTableId))
 			table.SetGraphFilter("")
 			dm.DataTables[dt.Reflect.DataStructure.DataTableId] = table

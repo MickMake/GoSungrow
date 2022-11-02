@@ -63,7 +63,7 @@ type ResultData struct {
 		UpdateTime              valueTypes.DateTime `json:"update_time"`
 		UpdateUser              valueTypes.Integer `json:"update_user"`
 		UUID                    valueTypes.Integer `json:"uuid"`
-	} `json:"device_point_data"`
+	} `json:"device_point_data" DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {

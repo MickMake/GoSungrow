@@ -96,7 +96,7 @@ type ResultData struct {
 		URLTarget       string      `json:"url_target"`
 		VueIcon         interface{} `json:"vue_icon"`
 		VuePath         interface{} `json:"vue_path"`
-	} `json:"privileges"`
+	} `json:"privileges" DataTable:"true"`
 	RoleId                       string        `json:"role_id"`
 	SecondaryOrgIds              []interface{} `json:"secondaryOrgIds"`
 	ServerTel                    string        `json:"server_tel"`
@@ -121,10 +121,10 @@ type ResultData struct {
 	UserMasterOrgTimeZoneId      string        `json:"user_master_org_time_zone_id"`
 	UserMasterOrgTimeZoneName    string        `json:"user_master_org_time_zone_name"`
 	UserName                     string        `json:"user_name"`
-	UserRoleIdList               []string      `json:"user_role_id_list"`
+	UserRoleIdList               []string      `json:"user_role_id_list" DataTable:"true"`
 	UserTelNationCode            interface{}   `json:"user_tel_nation_code"`
 	UserauthorURL                []interface{} `json:"userauthorURL"`
-	Userauthorbutto              []string      `json:"userauthorbutto"`
+	Userauthorbutto              []string      `json:"userauthorbutto" DataTable:"true"`
 	Userdesc                     interface{}   `json:"userdesc"`
 	Userpassword                 string        `json:"userpassword"`
 	Validflag                    string        `json:"validflag"`

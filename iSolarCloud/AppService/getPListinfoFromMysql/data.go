@@ -4,15 +4,16 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
 	"GoSungrow/iSolarCloud/api/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/powerStationService/getPListinfoFromMysql"
 const Disabled = false
+// ./goraw.sh AppService.getPListinfoFromMysql '{"psIds":1171348}'
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
+	PsIds      valueTypes.PsId   `json:"psIds" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -24,34 +25,30 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+	NowCapacity struct {
+		Unit  valueTypes.String `json:"unit"`
+		Value valueTypes.String `json:"value"`
+	} `json:"nowCapacity"`
+	TodayPower struct {
+		Unit  valueTypes.String `json:"unit"`
+		Value valueTypes.String `json:"value"`
+	} `json:"todayPower"`
+	TotalCapacity struct {
+		Unit  valueTypes.String `json:"unit"`
+		Value valueTypes.String `json:"value"`
+	} `json:"totalCapacity"`
+	TotalPower struct {
+		Unit  valueTypes.String `json:"unit"`
+		Value valueTypes.String `json:"value"`
+	} `json:"totalPower"`
+	TotalStation valueTypes.Integer `json:"totalStation"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

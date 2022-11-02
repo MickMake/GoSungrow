@@ -47,7 +47,7 @@ type ResultData struct {
 			Type                       valueTypes.Integer  `json:"type"`
 			UpdateTime                 valueTypes.DateTime `json:"update_time"`
 			UserId                     valueTypes.Integer  `json:"user_id"`
-		} `json:"report_list"`
+		} `json:"report_list" DataTable:"true"`
 	} `json:"report_email_config_info_list"`
 }
 

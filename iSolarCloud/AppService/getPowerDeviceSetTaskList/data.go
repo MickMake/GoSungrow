@@ -48,7 +48,7 @@ type ResultData struct {
 		UserEnglishName      interface{}         `json:"user_english_name"`
 		UserName             valueTypes.String   `json:"user_name"`
 		UUID                 valueTypes.Integer  `json:"uuid"`
-	} `json:"pageList" PointId:"page_list" PointNameFromChild:"PsId.CreateTime" PointNameAppend:"false" PointArrayFlatten:"false"`
+	} `json:"pageList" PointId:"page_list" PointNameFromChild:"PsId.CreateTime" PointNameAppend:"false" PointArrayFlatten:"false" DataTable:"true"`
 	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 }
 
