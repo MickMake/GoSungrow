@@ -64,11 +64,11 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 
 		// ********************************************************************************
 		var cmdDataGet = &cobra.Command{
-			Use:                   "get < [area.]<endpoint> | <command> >",
-			Aliases:               []string{output.StringTypeTable},
+			Use:                   output.StringTypeList + " <[area.]endpoint> [endpoint args ...]",
+			Aliases:               []string{"get"},
 			Annotations:           map[string]string{"group": "Data"},
-			Short:                 fmt.Sprintf("Get high-level data from iSolarCloud (table)"),
-			Long:                  fmt.Sprintf("Get high-level data from iSolarCloud (table)"),
+			Short:                 fmt.Sprintf("Get data from iSolarCloud (list)"),
+			Long:                  fmt.Sprintf("Get data from iSolarCloud (list)"),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               func(cmd *cobra.Command, args []string) error {
@@ -89,12 +89,38 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		cmdDataGet.Example = cmdHelp.PrintExamples(cmdDataGet, "queryDeviceList", "WebAppService.showPSView", "stats")
 
 		// ********************************************************************************
-		var cmdDataRaw = &cobra.Command{
-			Use:                   output.StringTypeRaw + " < [area.]<endpoint> | <command> >",
+		var cmdDataTable = &cobra.Command{
+			Use:                   output.StringTypeTable + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
-			Short:                 fmt.Sprintf("Get high-level data from iSolarCloud (raw)"),
-			Long:                  fmt.Sprintf("Get high-level data from iSolarCloud (raw)"),
+			Short:                 fmt.Sprintf("Get data from iSolarCloud (table)"),
+			Long:                  fmt.Sprintf("Get data from iSolarCloud (table)"),
+			DisableFlagParsing:    false,
+			DisableFlagsInUseLine: false,
+			PreRunE:               func(cmd *cobra.Command, args []string) error {
+				cmds.Error = cmds.ProcessArgs(cmd, args)
+				if cmds.Error != nil {
+					return cmds.Error
+				}
+				cmds.Error = cmds.SunGrowArgs(cmd, args)
+				if cmds.Error != nil {
+					return cmds.Error
+				}
+				return nil
+			},
+			RunE:                  c.GetEndpoints,
+			Args:                  cobra.MinimumNArgs(0),
+		}
+		c.SelfCmd.AddCommand(cmdDataTable)
+		cmdDataGet.Example = cmdHelp.PrintExamples(cmdDataTable, "queryDeviceList", "WebAppService.showPSView", "stats")
+
+		// ********************************************************************************
+		var cmdDataRaw = &cobra.Command{
+			Use:                   output.StringTypeRaw + " <[area.]endpoint> [endpoint args ...]",
+			Aliases:               []string{},
+			Annotations:           map[string]string{"group": "Data"},
+			Short:                 fmt.Sprintf("Get data from iSolarCloud (raw)"),
+			Long:                  fmt.Sprintf("Get data from iSolarCloud (raw)"),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               func(cmd *cobra.Command, args []string) error {
@@ -116,11 +142,11 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 
 		// ********************************************************************************
 		var cmdDataJson = &cobra.Command{
-			Use:                   output.StringTypeJson + " < [area.]<endpoint> | <command> >",
+			Use:                   output.StringTypeJson + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
-			Short:                 fmt.Sprintf("Get high-level data from iSolarCloud (json)"),
-			Long:                  fmt.Sprintf("Get high-level data from iSolarCloud (json)"),
+			Short:                 fmt.Sprintf("Get data from iSolarCloud (json)"),
+			Long:                  fmt.Sprintf("Get data from iSolarCloud (json)"),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               func(cmd *cobra.Command, args []string) error {
@@ -142,11 +168,11 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 
 		// ********************************************************************************
 		var cmdDataCsv = &cobra.Command{
-			Use:                   output.StringTypeCsv + " < [area.]<endpoint> | <command> >",
+			Use:                   output.StringTypeCsv + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
-			Short:                 fmt.Sprintf("Get high-level data from iSolarCloud (json)"),
-			Long:                  fmt.Sprintf("Get high-level data from iSolarCloud (json)"),
+			Short:                 fmt.Sprintf("Get data from iSolarCloud (csv)"),
+			Long:                  fmt.Sprintf("Get data from iSolarCloud (csv)"),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               func(cmd *cobra.Command, args []string) error {
@@ -168,11 +194,11 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 
 		// ********************************************************************************
 		var cmdDataGraph = &cobra.Command{
-			Use:                   output.StringTypeGraph + " < [area.]<endpoint> | <command> >",
+			Use:                   output.StringTypeGraph + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
-			Short:                 fmt.Sprintf("Get high-level data from iSolarCloud (graph)"),
-			Long:                  fmt.Sprintf("Get high-level data from iSolarCloud (graph)"),
+			Short:                 fmt.Sprintf("Get data from iSolarCloud (graph)"),
+			Long:                  fmt.Sprintf("Get data from iSolarCloud (graph)"),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               func(cmd *cobra.Command, args []string) error {

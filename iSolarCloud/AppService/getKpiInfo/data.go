@@ -47,12 +47,6 @@ type ResultData struct {
 
 func (e *ResultData) IsValid() error {
 	var err error
-	// switch {
-	// case e.Dummy == "":
-	// 	break
-	// default:
-	// 	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	// }
 	return err
 }
 
@@ -61,8 +55,8 @@ func (e *EndPoint) GetData() api.DataMap {
 
 	for range Only.Once {
 		pkg := apiReflect.GetName("", *e)
-		dt := valueTypes.NewDateTime(valueTypes.Now)
-		entries.StructToPoints(e.Response.ResultData, pkg, "", dt)
+		// dt := valueTypes.NewDateTime(valueTypes.Now)
+		entries.StructToDataMap(*e,  "system", nil)
 
 		_ = entries.CopyPoint(pkg + ".p83024", "virtual.system", "p83024", "")
 	}

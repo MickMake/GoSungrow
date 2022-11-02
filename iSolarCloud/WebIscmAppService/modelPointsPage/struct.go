@@ -367,8 +367,8 @@ func (e EndPoint) GetEndPointData() api.DataMap {
 	return e.GetData()
 }
 
-func (e EndPoint) GetEndPointDataTable() output.Table {
-	return e.ApiRoot.GetDataTable(e)
+func (e EndPoint) GetEndPointResultTable() output.Table {
+	return e.ApiRoot.ApiGetEndPointResultTable(e)
 }
 
 // SetFilenamePrefix - Produce filename based on area and endpoint name.
@@ -379,4 +379,13 @@ func (e EndPoint) SetFilenamePrefix(format string, args ...interface{}) string {
 // GetRequestArgNames -
 func (e EndPoint) GetRequestArgNames() map[string]string {
 	return e.ApiGetRequestArgNames(e.Request.RequestData)
+}
+
+func (e EndPoint) GetEndPointDataTables() output.Tables {
+	return e.ApiRoot.ApiGetEndPointDataTables(e)
+}
+
+// ResultDataRef - Return the locally scoped ResultData structure.
+func (e EndPoint) ResultDataRef() ResultData {
+	return e.Response.ResultData
 }

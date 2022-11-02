@@ -155,8 +155,8 @@ func (e *EndPoint) GetData() api.DataMap {
 
 	for range Only.Once {
 		pkg := apiReflect.GetName("", *e)
-		name := api.JoinWithDots(0, valueTypes.DateTimeLayoutDay, pkg, e.Response.ResultData.PsPsKey)
-		entries.StructToPoints(e.Response.ResultData, name, e.Response.ResultData.PsPsKey.Value(), valueTypes.NewDateTime(""))
+		// name := api.JoinWithDots(0, valueTypes.DateTimeLayoutDay, pkg, e.Response.ResultData.PsPsKey)
+		entries.StructToDataMap(*e,  e.Response.ResultData.PsPsKey.Value(), apiReflect.NewEndPointPath(e.Response.ResultData.PsPsKey.Value()))
 
 		dstEndpoint := "virtual." + e.Request.PsId.String()
 		srcEndpoint := fmt.Sprintf("%s.%s", pkg, e.Response.ResultData.PsPsKey.Value())
@@ -203,12 +203,12 @@ func (e *EndPoint) GetData() api.DataMap {
 
 		// for _, sid := range e.Response.ResultData.StorageInverterData {
 		// 	name = api.JoinWithDots(0, valueTypes.DateTimeLayoutDay, pkg, sid.PsKey)
-		// 	entries.StructToPoints(sid, name, sid.PsKey.Value(), valueTypes.NewDateTime(""))
+		// 	entries.StructToPointsHHHHH(sid, name, sid.PsKey.Value(), valueTypes.NewDateTime(""))
 		//
 		// 	// EnergyFlow
 		// 	for _, ef := range sid.EnergyFlow {
 		// 		name = api.JoinWithDots(0, valueTypes.DateTimeLayoutDay, pkg, sid.PsKey)
-		// 		entries.StructToPoints(ef, name, sid.PsKey.Value(), valueTypes.NewDateTime(""))
+		// 		entries.StructToPointsHHHHH(ef, name, sid.PsKey.Value(), valueTypes.NewDateTime(""))
 		//
 		// 		// EnergyFlow
 		// 	}

@@ -77,12 +77,12 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		pkg := apiReflect.GetName("", *e) + "." + e.Request.PsId.String()
-		// entries.StructToPoints(e.Response.ResultData, pkg, e.Request.PsId.String(), valueTypes.NewDateTime(""))
+		// pkg := apiReflect.GetName("", *e)
+		entries.StructToDataMap(*e, e.Request.PsId.String(), apiReflect.NewEndPointPath(e.Request.PsId.String()))
 
-		for _, v := range e.Response.ResultData.AreaForcastList {
-			entries.StructToPoints(v, api.JoinWithDots(0, valueTypes.DateTimeLayoutDay, pkg, v.DateTime), e.Request.PsId.String(), valueTypes.NewDateTime(""))
-		}
+		// for _, v := range e.Response.ResultData.AreaForcastList {
+		// 	entries.StructToDataMap(v, api.JoinWithDots(0, valueTypes.DateTimeLayoutDay, pkg, v.DateTime), e.Request.PsId.String(), valueTypes.NewDateTime(""))
+		// }
 	}
 
 	return entries

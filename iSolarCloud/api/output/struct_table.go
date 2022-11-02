@@ -23,6 +23,7 @@ type Table struct {
 	graphFilter string
 	Error      error
 }
+type Tables map[string]Table
 
 
 func NewTable() Table {
@@ -33,6 +34,10 @@ func NewTable() Table {
 		// graph: graph.New(""),
 		Error: nil,
 	}
+}
+
+func NewTables() Tables {
+	return make(Tables)
 }
 
 func (t *Table) String() string {
@@ -177,6 +182,9 @@ func (t *Table) Output() error {
 			case t.OutputType.IsTable():
 				t.Error = t.WriteTable()
 
+			case t.OutputType.IsList():
+				t.Error = t.WriteList()
+
 			case t.OutputType.IsCsv():
 				t.Error = t.WriteCsv()
 
@@ -205,25 +213,24 @@ func (t *Table) Output() error {
 
 
 func (t *Table) GetTable() string {
-	var ret string
-	for range Only.Once {
-		if t == nil {
-			break
-		}
-
-		ret, t.Error = t.table.Render()
-		if t.Error != nil {
-			break
-		}
-	}
-	return ret
+	return t.String()
 }
 
 func (t *Table) WriteTable() error {
 	if t.saveAsFile {
-		return t.writeFile(t.filePrefix+".txt", t.String(), DefaultFileMode)
+		return t.writeFile(t.filePrefix + "-table.txt", t.String(), DefaultFileMode)
 	}
-	fmt.Print(t.GetTable())
+	fmt.Printf("# %s\n", t.title)
+	fmt.Print(t.String())
+	return nil
+}
+
+func (t *Table) WriteList() error {
+	if t.saveAsFile {
+		return t.writeFile(t.filePrefix + ".txt", t.String(), DefaultFileMode)
+	}
+	fmt.Printf("# %s\n", t.title)
+	fmt.Print(t.String())
 	return nil
 }
 

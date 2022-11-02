@@ -294,7 +294,7 @@ func (sg *SunGrow) PrintCurrentStats() error {
 		}
 
 		_getPsList := getPsList.Assert(ep)
-		table := _getPsList.GetEndPointDataTable()
+		table := _getPsList.GetEndPointResultTable()
 		if table.Error != nil {
 			sg.Error = table.Error
 			break
@@ -323,7 +323,7 @@ func (sg *SunGrow) PrintCurrentStats() error {
 
 			data := queryDeviceList.Assert(ep)
 
-			table = data.GetEndPointDataTable()
+			table = data.GetEndPointResultTable()
 			if table.Error != nil {
 				sg.Error = table.Error
 				break
@@ -393,7 +393,7 @@ func (sg *SunGrow) GetTemplates() error {
 		}
 
 		data := getTemplateList.Assert(ep)
-		table := data.GetEndPointDataTable()
+		table := data.GetEndPointResultTable()
 		if table.Error != nil {
 			sg.Error = table.Error
 			break
@@ -429,7 +429,7 @@ func (sg *SunGrow) GetIsolarcloudMqtt(appKey string) error {
 		}
 
 		data := getMqttConfigInfoByAppkey.Assert(ep)
-		table := data.GetEndPointDataTable()
+		table := data.GetEndPointResultTable()
 		if table.Error != nil {
 			sg.Error = table.Error
 			break
@@ -471,7 +471,7 @@ func (sg *SunGrow) GetRealTimeData(psKey string) error {
 		}
 
 		data := queryDeviceRealTimeDataByPsKeys.Assert(ep)
-		table := data.GetEndPointDataTable()
+		table := data.GetEndPointResultTable()
 		if table.Error != nil {
 			sg.Error = table.Error
 			break
@@ -508,7 +508,7 @@ func (sg *SunGrow) CmdDataPsDetail(psIds ...valueTypes.PsId) error {
 			if response.Error != nil {
 				break
 			}
-			sg.Error = response.Table.Output()
+			sg.Error = response.Data.Table.Output()
 			if sg.Error != nil {
 				break
 			}
@@ -517,7 +517,7 @@ func (sg *SunGrow) CmdDataPsDetail(psIds ...valueTypes.PsId) error {
 			if response.Error != nil {
 				break
 			}
-			sg.Error = response.Table.Output()
+			sg.Error = response.Data.Table.Output()
 			if sg.Error != nil {
 				break
 			}

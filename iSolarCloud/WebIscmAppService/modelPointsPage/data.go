@@ -25,9 +25,21 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+	ModelList []struct {
+		DeviceModelId   valueTypes.Integer `json:"device_model_id"`
+		DeviceModel     valueTypes.String  `json:"device_model"`
+		DeviceModelCode valueTypes.String  `json:"device_model_code"`
+	} `json:"modelList" PointId:"model_list" DataTable:"true" DataTableName:"Model List"`
+	PointList []struct {
+		PointId             valueTypes.Integer `json:"point_id" DataTableSort:"true"`
+		PointName           valueTypes.String  `json:"point_name"`
+		CodeId              valueTypes.Integer `json:"code_id"`
+		DeviceModelId       valueTypes.Integer `json:"device_model_id"`
+		IsShow              valueTypes.Bool    `json:"is_show"`
+		IsSupportSecondData valueTypes.Bool    `json:"is_support_second_data"`
+		OrderNum            valueTypes.Integer `json:"order_num"`
+	} `json:"pointList" PointId:"point_list" DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -40,10 +52,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		pkg := apiReflect.GetName("", *e)
-		dt := valueTypes.NewDateTime(valueTypes.Now)
-		name := pkg	// + "." + e.Request.PsId.String()
-		entries.StructToPoints(e.Response.ResultData, name, "system", dt)
+		entries.StructToDataMap(*e, "system", nil)
 	}
 
 	return entries

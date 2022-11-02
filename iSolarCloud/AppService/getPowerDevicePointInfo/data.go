@@ -61,7 +61,7 @@ func (e *EndPoint) GetData2() ResultData {
 // 	entries := api.NewDataMap()
 //
 // 	for range Only.Once {
-// 		entries.StructToPoints("", *e)
+// 		entries.StructToPointsHHHHH("", *e)
 // 	}
 // 	return entries
 // }
@@ -125,7 +125,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
+		entries.StructToDataMap(*e, "system", nil)
 	}
 
 	return entries

@@ -45,6 +45,8 @@ type EndPoint interface {
 
 	// GetDataTable() output.Table
 	GetEndPointData() DataMap
-	GetEndPointDataTable() output.Table
+	GetEndPointResultTable() output.Table
+	GetEndPointDataTables() output.Tables
 	SetFilenamePrefix(format string, args ...interface{}) string
+	// ResultDataRef() ResultData
 }

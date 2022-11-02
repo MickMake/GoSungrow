@@ -83,24 +83,27 @@ func IsUnknownStruct(ref interface{}) bool {
 		}
 
 		if kindy == reflect.Slice {
-			if fieldVo.Len() > 0 {
-				ok = IsUnknownStruct(fieldVo.Index(0).Interface())
-			}
+			// if fieldVo.Len() > 0 {
+			// 	ok = IsUnknownStruct(fieldVo.Index(0).Interface())
+			// }
+			ok = true
 			break
 		}
 
 		if kindy == reflect.Array {
-			if fieldVo.Len() > 0 {
-				ok = IsUnknownStruct(fieldVo.Index(0).Interface())
-			}
+			// if fieldVo.Len() > 0 {
+			// 	ok = IsUnknownStruct(fieldVo.Index(0).Interface())
+			// }
+			ok = true
 			break
 		}
 
 		if kindy == reflect.Map {
-			mk := fieldVo.MapKeys()
-			if len(mk) > 0 {
-				ok = IsUnknownStruct(fieldVo.MapIndex(mk[0]).Interface())
-			}
+			// mk := fieldVo.MapKeys()
+			// if len(mk) > 0 {
+			// 	ok = IsUnknownStruct(fieldVo.MapIndex(mk[0]).Interface())
+			// }
+			ok = true
 			break
 		}
 

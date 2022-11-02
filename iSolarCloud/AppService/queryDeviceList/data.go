@@ -235,10 +235,10 @@ func (e *EndPoint) GetData() api.DataMap {
 		//
 		// var TotalEnergyConsumption VirtualPointStruct
 
-		pkg := apiReflect.GetName("", *e)
-		name := api.JoinWithDots(0, "", pkg, e.Request.PsId)
-		dt := valueTypes.NewDateTime(valueTypes.Now)
-		entries.StructToPoints(e.Response.ResultData, name, e.Request.PsId.String(), dt)
+		// // pkg := apiReflect.GetName("", *e)
+		// name := api.JoinWithDots(0, "", pkg, e.Request.PsId)
+		// dt := valueTypes.NewDateTime(valueTypes.Now)
+		entries.StructToDataMap(*e, e.Request.PsId.String(), apiReflect.NewEndPointPath(e.Request.PsId.String()))
 
 		if len(entries.Map) == 0 {
 			break

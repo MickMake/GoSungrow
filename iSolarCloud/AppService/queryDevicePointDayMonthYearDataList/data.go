@@ -45,10 +45,10 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		pkg := apiReflect.GetName("", *e)
-		dt := valueTypes.NewDateTime(valueTypes.Now)
-		name := pkg + "." + e.Request.PsKey.String()
-		entries.StructToPoints(e.Response.ResultData, name, e.Request.PsKey.String(), dt)
+		// pkg := apiReflect.GetName("", *e)
+		// dt := valueTypes.NewDateTime(valueTypes.Now)
+		// name := pkg + "." + e.Request.PsKey.String()
+		entries.StructToDataMap(*e,  e.Request.PsKey.String(), apiReflect.NewEndPointPath(e.Request.PsKey.String()))
 	}
 
 	return entries

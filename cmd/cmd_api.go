@@ -82,8 +82,8 @@ func (c *CmdApi) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		var cmdApi = &cobra.Command{
 			Use:                   "api",
 			Aliases:               []string{},
-			Short:                 fmt.Sprintf("Interact with the SunGrow api."),
-			Long:                  fmt.Sprintf("Interact with the SunGrow api."),
+			Short:                 fmt.Sprintf("Interact with the low-level SunGrow api."),
+			Long:                  fmt.Sprintf("Interact with the low-level SunGrow api."),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               nil,

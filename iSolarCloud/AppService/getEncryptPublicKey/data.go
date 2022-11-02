@@ -3,9 +3,8 @@ package getEncryptPublicKey
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/commonService/getEncryptPublicKey"
@@ -61,7 +60,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToPoints(e.Response.ResultData, apiReflect.GetName("", *e), "system", valueTypes.NewDateTime(""))
+		entries.StructToDataMap(*e, "system", nil)
 	}
 
 	return entries

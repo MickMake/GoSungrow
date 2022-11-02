@@ -89,10 +89,10 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		pkg := apiReflect.GetName("", *e)
-		dt := valueTypes.NewDateTime(valueTypes.Now)
-		name := pkg + "." + e.Request.DateId.Format(valueTypes.DateTimeLayoutDay)
-		entries.StructToPoints(e.Response.ResultData, name, e.Request.DateId.String(), dt)
+		// pkg := apiReflect.GetName("", *e)
+		// dt := valueTypes.NewDateTime(valueTypes.Now)
+		// name := pkg + "." + e.Request.DateId.Format(valueTypes.DateTimeLayoutDay)
+		entries.StructToDataMap(*e,  "system", apiReflect.NewEndPointPath(e.Request.DateId.Format(valueTypes.DateTimeLayoutDay)))
 	}
 
 	return entries

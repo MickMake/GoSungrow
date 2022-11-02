@@ -70,10 +70,10 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		pkg := apiReflect.GetName("", *e)
-		dt := valueTypes.NewDateTime(valueTypes.Now)
+		// pkg := apiReflect.GetName("", *e)
+		// dt := valueTypes.NewDateTime(valueTypes.Now)
 		// name := pkg + "." + e.Request.PsId.String()
-		entries.StructToPoints(e.Response.ResultData, pkg, "system", dt)
+		entries.StructToDataMap(*e, "system", nil)
 	}
 
 	return entries

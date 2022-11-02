@@ -76,4 +76,4 @@ type ReportInfo []struct {
 }
 
 // type foo queryBatteryBoardsList.Disabled
-// type fff getPointInfo.Disabled
+// type fff queryDevicePointMinuteDataList.Disabled

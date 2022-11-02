@@ -134,10 +134,10 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		pkg := apiReflect.GetName("", *e)
-		dt := valueTypes.NewDateTime(valueTypes.Now)
-		name := pkg + "." + e.Response.ResultData.PsId.String() + "." + e.Response.ResultData.PsKey.String()
-		entries.StructToPoints(e.Response.ResultData, name, e.Response.ResultData.PsId.String(), dt)
+		// pkg := apiReflect.GetName("", *e)
+		// dt := valueTypes.NewDateTime(valueTypes.Now)
+		// name := pkg + "." + e.Response.ResultData.PsId.String() + "." + e.Response.ResultData.PsKey.String()
+		entries.StructToDataMap(*e,  e.Response.ResultData.PsId.String(), apiReflect.NewEndPointPath(e.Response.ResultData.PsId.String()))
 	}
 
 	return entries
