@@ -121,7 +121,7 @@ type ResultData struct {
 		OwnerAlarmCount         valueTypes.Count   `json:"owner_alarm_count" PointId:"owner_alarm_count" PointUpdateFreq:"UpdateFreqTotal"`
 		OwnerDevFaultStatus     valueTypes.Integer `json:"owner_dev_fault_status" PointId:"owner_dev_fault_status" PointUpdateFreq:"UpdateFreqInstant"`
 		OwnerFaultCount         valueTypes.Count   `json:"owner_fault_count" PointId:"owner_fault_count" PointUpdateFreq:"UpdateFreqTotal"`
-		PointData               []PointStruct      `json:"point_data" PointNameFromChild:"PointId" DataTable:"true"`
+		PointData               []PointStruct      `json:"point_data" PointNameFromChild:"PointId" PointNameAppend:"false" DataTable:"true"`
 		Points                  interface{}        `json:"points" PointId:"points"`
 		PsTimezoneInfo          struct {
 			IsDst    valueTypes.Bool   `json:"is_dst" PointUpdateFreq:"UpdateFreqInstant"`
@@ -141,6 +141,14 @@ type ResultData struct {
 }
 
 type PointStruct struct {
+	PointId                valueTypes.PointId  `json:"point_id" PointIgnore:"true" PointUpdateFreq:"UpdateFreqBoot"`
+	PointGroupName         valueTypes.String   `json:"point_group_name" PointIgnore:"true" PointUpdateFreq:"UpdateFreqBoot"`
+	PointName              valueTypes.String   `json:"point_name" PointGroupNameFrom:"PointGroupName" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqBoot"`
+	TimeStamp              valueTypes.DateTime `json:"time_stamp" PointIgnore:"true" PointUpdateFreq:"UpdateFreq5Mins"`
+	Value                  valueTypes.Float    `json:"value" PointGroupNameFrom:"PointGroupName" PointTimestampFrom:"TimeStamp" PointUnitFrom:"Unit" PointUpdateFreq:"UpdateFreq5Mins"`
+	Unit                   valueTypes.String   `json:"unit" PointIgnore:"true" PointUpdateFreq:"UpdateFreqBoot"`
+	ValueDescription       valueTypes.String   `json:"value_description" PointGroupNameFrom:"PointGroupName" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqBoot"`
+
 	CodeId                 valueTypes.Integer  `json:"code_id" PointGroupNameFrom:"PointGroupName" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqBoot"`
 	CodeIdOrderId          valueTypes.String   `json:"code_id_order_id" PointGroupNameFrom:"PointGroupName" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqBoot"`
 	CodeName               valueTypes.String   `json:"code_name" PointGroupNameFrom:"PointGroupName" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqBoot"`
@@ -151,28 +159,14 @@ type PointStruct struct {
 	OrderNum               valueTypes.Integer  `json:"order_num" PointGroupNameFrom:"PointGroupName" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqBoot"`
 	PointGroupId           valueTypes.Integer  `json:"point_group_id" PointGroupNameFrom:"PointGroupName" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqBoot"`
 	PointGroupIdOrderId    valueTypes.Integer  `json:"point_group_id_order_id" PointGroupNameFrom:"PointGroupName" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqBoot"`
-	PointName              valueTypes.String   `json:"point_name" PointGroupNameFrom:"PointGroupName" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqBoot"`
 	PointSign              valueTypes.String   `json:"point_sign" PointGroupNameFrom:"PointGroupName" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqBoot"`
 	Relate                 valueTypes.Integer  `json:"relate" PointGroupNameFrom:"PointGroupName" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqBoot"`
-	ValIsFixd              valueTypes.Bool     `json:"val_is_fixd" PointGroupNameFrom:"PointGroupName" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqBoot"`
+	ValIsFixed             valueTypes.Bool     `json:"val_is_fixd" PointId:"value_is_fixed" PointGroupNameFrom:"PointGroupName" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqBoot"`
 	ValidSize              valueTypes.Integer  `json:"valid_size" PointGroupNameFrom:"PointGroupName" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqBoot"`
-	Value                  valueTypes.Float    `json:"value" PointGroupNameFrom:"PointGroupName" PointTimestampFrom:"TimeStamp" PointUnitFrom:"Unit" PointUpdateFreq:"UpdateFreq5Mins"`
-	ValueDescription       valueTypes.String   `json:"value_description" PointGroupNameFrom:"PointGroupName" PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqBoot"`
-
-	PointId                valueTypes.PointId  `json:"point_id" PointIgnore:"true" PointUpdateFreq:"UpdateFreqBoot"`
-	PointGroupName         valueTypes.String   `json:"point_group_name" PointIgnore:"true" PointUpdateFreq:"UpdateFreqBoot"`
-	TimeStamp              valueTypes.DateTime `json:"time_stamp" PointIgnore:"true" PointUpdateFreq:"UpdateFreq5Mins"`
-	Unit                   valueTypes.String   `json:"unit" PointIgnore:"true" PointUpdateFreq:"UpdateFreqBoot"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	// switch {
-	// case e.Dummy == "":
-	//	break
-	// default:
-	//	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	// }
 	return err
 }
 

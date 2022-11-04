@@ -50,7 +50,6 @@ func (dts *DataTables) GetDataMergedTables(timestamp valueTypes.DateTime, parent
 			headers = append(headers, "Date/Time", "Index")
 		}
 
-		// var names []string
 		var name string
 		for _, f := range dts.Get() {
 			if f == nil {
@@ -59,8 +58,6 @@ func (dts *DataTables) GetDataMergedTables(timestamp valueTypes.DateTime, parent
 			if !f.Reflect.DataStructure.DataTable {
 				continue
 			}
-
-			// names = append(names, f.Name)
 
 			dt := f.GetTable()
 			for index := range dt.Headers {
@@ -85,7 +82,6 @@ func (dts *DataTables) GetDataMergedTables(timestamp valueTypes.DateTime, parent
 						data = append(data, d)
 						continue
 					}
-					// data[rowIndex] = append(data[rowIndex], uvs[0].String())
 					data[rowIndex] = append(data[rowIndex], value[0].String())
 				}
 			}
@@ -236,7 +232,7 @@ func (dt *DataTable) GetTable() DataTable {
 			// Handle slices here.
 			for row := 0; row < dt.Reflect.Length; row++ {
 				var Child Reflect
-				Child.SetByIndex(*dt.Reflect, *dt.Reflect, row, reflect.Value{}, EndPointPath{})
+				Child.SetByIndex(*dt.Reflect, *dt.Reflect, row, reflect.Value{})
 
 				if Child.IsKnown() {
 					if row == 0 {
@@ -280,7 +276,7 @@ func (dt *DataTable) GetTable() DataTable {
 			// Handle slices here.
 			for row := 0; row < dt.Reflect.Length; row++ {
 				var Child Reflect
-				Child.SetByIndex(*dt.Reflect, *dt.Reflect, row, reflect.Value{}, EndPointPath{})
+				Child.SetByIndex(*dt.Reflect, *dt.Reflect, row, reflect.Value{})
 
 				if Child.IsKnown() {
 					if row == 0 {
@@ -324,7 +320,7 @@ func (dt *DataTable) GetTable() DataTable {
 			// Handle maps here.
 			for row, rowMap := range dt.Reflect.FieldVo.MapKeys() {
 				var Child Reflect
-				Child.SetByIndex(*dt.Reflect, *dt.Reflect, row, rowMap, EndPointPath{})
+				Child.SetByIndex(*dt.Reflect, *dt.Reflect, row, rowMap)
 
 				if Child.IsKnown() {
 					if row == 0 {
@@ -383,7 +379,7 @@ func (dt *DataTable) GetTableMap2(Parent *Reflect, Child *Reflect) (bool, []*Ref
 		ok = true
 		for col, colMap := range dt.Reflect.FieldVo.MapKeys() {
 			var ChildStruct Reflect
-			ChildStruct.SetByIndex(*dt.Reflect, *Child, col, colMap, EndPointPath{})
+			ChildStruct.SetByIndex(*dt.Reflect, *Child, col, colMap)
 
 			if dt.GoStructOptions(Parent, Child, &ChildStruct) {
 				continue
@@ -415,7 +411,7 @@ func (dt *DataTable) GetTableSlice2(Parent *Reflect, Child *Reflect) (bool, []*R
 		ok = true
 		for col := 0; col < Child.Length; col++ {
 			var ChildStruct Reflect
-			ChildStruct.SetByIndex(*dt.Reflect, *Child, col, reflect.Value{}, EndPointPath{})
+			ChildStruct.SetByIndex(*dt.Reflect, *Child, col, reflect.Value{})
 
 			if dt.GoStructOptions(Parent, Child, &ChildStruct) {
 				continue
@@ -447,7 +443,7 @@ func (dt *DataTable) GetTableStruct2(Parent *Reflect, Child *Reflect) (bool, []*
 		ok = true
 		for col := 0; col < Child.Length; col++ {
 			var ChildStruct Reflect
-			ChildStruct.SetByIndex(*dt.Reflect, *Child, col, reflect.Value{}, EndPointPath{})
+			ChildStruct.SetByIndex(*dt.Reflect, *Child, col, reflect.Value{})
 
 			if dt.GoStructOptions(Parent, Child, &ChildStruct) {
 				continue

@@ -47,7 +47,7 @@ func (r Reflect) String() string {
 				fallthrough
 			case reflect.Slice:
 				ret = fmt.Sprintf("%s (%s)\tFieldName:%s Kind:%s Length:%d (IsNil:%v IsUnknown:%v IsExported:%v)",
-					strings.Join(r.DataStructure.Endpoint, "."),
+					r.DataStructure.Endpoint.String(),
 					r.DataStructure.PointId,
 					fn,
 					r.Kind.String(),
@@ -57,7 +57,7 @@ func (r Reflect) String() string {
 
 			default:
 				ret = fmt.Sprintf("%s (%s)\tFieldName:%s Kind:%s (IsNil:%v IsUnknown:%v IsExported:%v)",
-					strings.Join(r.DataStructure.Endpoint, "."),
+					r.DataStructure.Endpoint.String(),
 					r.DataStructure.PointId,
 					fn,
 					r.Kind.String(),
@@ -124,7 +124,8 @@ func (r *Reflect) SetByFieldName(parent interface{}, current interface{}, name s
 	}
 }
 
-func (r *Reflect) SetByIndex(parent Reflect, current Reflect, index int, indexName reflect.Value, name EndPointPath) {
+func (r *Reflect) SetByIndex(parent Reflect, current Reflect, index int, indexName reflect.Value) {
+// func (r *Reflect) SetByIndex(parent Reflect, current Reflect, index int, indexName reflect.Value, name EndPointPath) {
 	for range Only.Once {
 		// Get child interface from parent.
 		// pt := current.TypeOf
@@ -181,8 +182,8 @@ func (r *Reflect) SetByIndex(parent Reflect, current Reflect, index int, indexNa
 			r.FieldName = r.FieldTo.Name
 
 			r.DataStructure = r.DataStructure.Set(parent.Interface, current.Interface, r.FieldTo, r.FieldVo)
-			r.DataStructure.Endpoint = name.Copy()
-			r.DataStructure.Endpoint = append(r.DataStructure.Endpoint, r.DataStructure.PointId)
+			r.DataStructure.Endpoint = current.DataStructure.Endpoint.Copy()		// name.Copy()
+			r.DataStructure.Endpoint.Append(r.DataStructure.PointId)
 			break
 		}
 
@@ -205,8 +206,8 @@ func (r *Reflect) SetByIndex(parent Reflect, current Reflect, index int, indexNa
 			}
 			f = fmt.Sprintf(f, index)
 
-			r.DataStructure.Endpoint = name.Copy()
-			r.DataStructure.Endpoint = append(r.DataStructure.Endpoint, f)
+			r.DataStructure.Endpoint = current.DataStructure.Endpoint.Copy()		// name.Copy()
+			r.DataStructure.Endpoint.Append(f)
 
 			if r.isUnknown {
 				r.DataStructure.Json = current.DataStructure.PointId
@@ -239,15 +240,15 @@ func (r *Reflect) SetByIndex(parent Reflect, current Reflect, index int, indexNa
 			// r.DataStructure.Json = r.FieldVo.String()
 			// r.DataStructure.PointId = r.FieldVo.String()
 
-			r.DataStructure.Endpoint = name.Copy()
-			r.DataStructure.Endpoint = append(r.DataStructure.Endpoint, r.DataStructure.PointId)
+			r.DataStructure.Endpoint = current.DataStructure.Endpoint.Copy()		// name.Copy()
+			r.DataStructure.Endpoint.Append(r.DataStructure.PointId)
 			break
 		}
 	}
 }
 
 // setPointName - Are we using an index number for name or field key value?
-func (r *Reflect) setPointName(parent Reflect, current Reflect, name []string, index int) []string {
+func (r *Reflect) setPointName(parent Reflect, current Reflect, name EndPointPath, index int) EndPointPath {
 	for range Only.Once {
 		var pn string
 		var intSize int
@@ -273,41 +274,51 @@ func (r *Reflect) setPointName(parent Reflect, current Reflect, name []string, i
 				// PointNameFromChild - In this case points to a field within a CHILD struct.
 				pn = reflection.GetPointNameFrom(current.Interface, r.DataStructure.PointNameFromChild, intSize, r.DataStructure.PointNameDateFormat)
 				if r.DataStructure.PointNameAppend == false {
-					name = append(name[:len(name) - 1], pn)
+					// name = append(name[:len(name) - 1], pn)
+					name.PopLast()
 				} else {
-					name = append(name, pn)
+					// name = append(name, pn)
 				}
+				name.Append(pn)
 
 			case r.DataStructure.PointNameFromParent != "":
 				// PointNameFromChild - In this case points to a field within a CHILD struct.
 				pn = reflection.GetPointNameFrom(parent.Interface, r.DataStructure.PointNameFromParent, intSize, r.DataStructure.PointNameDateFormat)
 				if r.DataStructure.PointNameAppend == false {
-					name = append(name[:len(name) - 1], pn)
+					// name = append(name[:len(name) - 1], pn)
+					name.PopLast()
 				} else {
-					name = append(name, pn)
+					// name = append(name, pn)
 				}
+				name.Append(pn)
 
 			default:
 				if r.DataStructure.PointNameAppend == false {
-					name = append(name[:len(name) - 1], pn)
+					// name = append(name[:len(name) - 1], pn)
+					name.PopLast()
 				} else {
-					name = append(name, pn)
+					// name = append(name, pn)
 				}
+				name.Append(pn)
 		}
 	}
 
 	return name
 }
 
-func (r *Reflect) PointNameFromChild(child Reflect, name EndPointPath) []string {
+func (r *Reflect) PointNameFromChild(child *Reflect) EndPointPath {
 	for range Only.Once {
 		if r.DataStructure.PointNameFromChild != "" {
 			// PointNameFromChild - In this case points to a field within a CHILD struct.
 			pn := reflection.GetPointNameFrom(child.Interface, r.DataStructure.PointNameFromChild, 0, r.DataStructure.PointNameDateFormat)
-			name = append(name, pn)
+			// child.DataStructure.Endpoint.Append(pn)
+			// if child.DataStructure.PointNameAppend == false {
+			child.DataStructure.Endpoint.PopLast()
+			// }
+			child.DataStructure.Endpoint.Append(pn)
 		}
 	}
-	return name
+	return child.DataStructure.Endpoint
 }
 
 
@@ -337,12 +348,12 @@ func FindStart(fieldName string, Parent Reflect, Current Reflect, name EndPointP
 			// Iterate over all available fields and read the tag value
 			for si := 0; si < Current.Length; si++ {
 				var Child Reflect
-				Child.SetByIndex(Parent, Current, si, reflect.Value{}, name)
+				Child.SetByIndex(Parent, Current, si, reflect.Value{})
 				if Child.FieldName == fieldName {
 					// if !Child.DataStructure.PointNameAppend {
 					// 	Child.DataStructure.Endpoint = Child.DataStructure.Endpoint.PopLast()
 					// }
-					name = name.Append(Child.DataStructure.PointId)
+					// Child.DataStructure.Endpoint = name.Append(Child.DataStructure.PointId)
 					ret = Child
 					break
 				}
@@ -369,12 +380,12 @@ func FindStart(fieldName string, Parent Reflect, Current Reflect, name EndPointP
 			// Iterate over all available fields and read the tag value
 			for si := 0; si < Current.Length; si++ {
 				var Child Reflect
-				Child.SetByIndex(Parent, Current, si, reflect.Value{}, name)
+				Child.SetByIndex(Parent, Current, si, reflect.Value{})
 				if Child.FieldName == fieldName {
 					// if !Child.DataStructure.PointNameAppend {
 					// 	Child.DataStructure.Endpoint = Child.DataStructure.Endpoint.PopLast()
 					// }
-					name = name.Append(Child.DataStructure.PointId)
+					// Child.DataStructure.Endpoint = name.Append(Child.DataStructure.PointId)
 					ret = Child
 					break
 				}
@@ -388,11 +399,6 @@ func FindStart(fieldName string, Parent Reflect, Current Reflect, name EndPointP
 				}
 
 				Child = *FindStart(fieldName, Current, Child, name)
-				// if Child.FieldName == fieldName {
-				// 	name = name.Append(Child.DataStructure.PointId)
-				// 	ret = Child
-				// 	break
-				// }
 			}
 			break
 		}
@@ -420,7 +426,7 @@ func GetStructFields(ref interface{}) map[string]string {
 			// Iterate over all available fields and read the tag value
 			for i := 0; i < Ref.Length; i++ {
 				var Child Reflect
-				Child.SetByIndex(Ref, Ref, i, reflect.Value{}, EndPointPath{})
+				Child.SetByIndex(Ref, Ref, i, reflect.Value{})
 
 				if !Child.IsExported {
 					continue
@@ -452,7 +458,7 @@ func GetStructFieldsAsArray(ref interface{}) []string {
 			// Iterate over all available fields and read the tag value
 			for i := 0; i < Ref.Length; i++ {
 				var Child Reflect
-				Child.SetByIndex(Ref, Ref, i, reflect.Value{}, EndPointPath{})
+				Child.SetByIndex(Ref, Ref, i, reflect.Value{})
 
 				if !Child.IsExported {
 					continue
@@ -483,7 +489,7 @@ func GetStructValuesAsArray(ref interface{}) []string {
 			// Iterate over all available fields and read the tag value
 			for i := 0; i < Ref.Length; i++ {
 				var Child Reflect
-				Child.SetByIndex(Ref, Ref, i, reflect.Value{}, EndPointPath{})
+				Child.SetByIndex(Ref, Ref, i, reflect.Value{})
 
 				if !Child.IsExported {
 					continue

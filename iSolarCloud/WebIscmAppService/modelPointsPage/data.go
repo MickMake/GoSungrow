@@ -52,7 +52,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToDataMap(*e, "system", nil)
+		entries.StructToDataMap(*e, "system", GoStruct.EndPointPath{})
 	}
 
 	return entries

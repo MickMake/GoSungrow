@@ -677,6 +677,11 @@ func AnyToValueString(ref interface{}, intSize int, dateFormat string) string {
 				ret = string(v)
 
 			default:
+				v , err := json.Marshal(ref)
+				if err != nil {
+					break
+				}
+				ret = string(v)
 		}
 	}
 	return ret

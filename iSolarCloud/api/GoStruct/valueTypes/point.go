@@ -9,6 +9,26 @@ import (
 )
 
 
+// @TODO - Consider standardizing points to a known format.
+// @TODO - queryUserCurveTemplateData is a good example of the structure.
+// type Point struct {
+//	PointId    valueTypes.PointId `json:"point_id"`
+//	PointName  valueTypes.String  `json:"point_name"`
+//	PsId       valueTypes.PsId    `json:"ps_id"`
+//	PsKey      valueTypes.PsKey   `json:"ps_key"`
+//	Color      valueTypes.String  `json:"color"`
+//	DetailId   valueTypes.String  `json:"detail_id"`
+//	PsName     valueTypes.String  `json:"ps_name"`
+//	Statistics valueTypes.String  `json:"statistics"`
+//	Style      valueTypes.String  `json:"style"`
+//	Unit       valueTypes.String  `json:"unit"`
+//	DataList   []struct {
+//		TimeStamp valueTypes.String `json:"time_stamp"`
+//		Value     valueTypes.String `json:"value"`
+//	} `json:"data_list" PointArrayFlatten:"false"`
+// }
+
+
 type PointId struct {
 	string `json:"string,omitempty"`
 	int64  `json:"integer,omitempty"`

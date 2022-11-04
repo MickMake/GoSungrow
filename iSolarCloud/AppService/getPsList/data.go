@@ -165,7 +165,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	for range Only.Once {
 		// pkg := reflection.GetName("", *e)
 		// dt := valueTypes.NewDateTime(valueTypes.Now)
-		entries.StructToDataMap(*e,  "system", nil)
+		entries.StructToDataMap(*e,  "system", GoStruct.EndPointPath{})
 	}
 	return entries
 }

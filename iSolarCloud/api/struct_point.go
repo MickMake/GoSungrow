@@ -24,7 +24,10 @@ type Point struct {
 
 
 func (p *Point) FixUnitType() Point {
-	p.ValueType = valueTypes.UnitValueType(p.Unit)
+	vt := valueTypes.UnitValueType(p.Unit)
+	if vt != "" {
+		p.ValueType = vt
+	}
 	return *p
 }
 

@@ -137,7 +137,7 @@ func (ds *DataStructure) Set(parent interface{}, current interface{}, fieldTo re
 
 		pointNameDateFormat := fieldTo.Tag.Get(PointNameDateFormat)
 		if pointNameDateFormat == "" {
-			pointNameDateFormat = valueTypes.DateTimeAltLayout
+			pointNameDateFormat = valueTypes.DateTimeLayout
 		}
 
 		pointUpdateFreq := fieldTo.Tag.Get(PointUpdateFreq)
@@ -258,13 +258,13 @@ func (dss *DataStructures) GetPointTags(Parent *Reflect, Current *Reflect, name 
 			_, _ = fmt.Fprintf(os.Stderr,"GetPointTags() Current: %s\n", Current)
 		}
 
-		name = dss.PointNameAppend(Parent, Current, name)
+		dss.PointNameAppend(Current)
 
-		if dss.PointIgnoreZero(Parent, Current, name) {
+		if dss.PointIgnoreZero(Parent, Current) {
 			break
 		}
 
-		if dss.PointIgnoreIfNilFromChild(Parent, Current, name) {
+		if dss.PointIgnoreIfNilFromChild(Parent, Current) {
 			break
 		}
 
@@ -387,13 +387,18 @@ func (dss *DataStructures) ProcessSlice(Parent *Reflect, Current *Reflect, name 
 
 		for si := 0; si < Current.Length; si++ {
 			var Child Reflect
-			Child.SetByIndex(*Parent, *Current, si, reflect.Value{}, name)
+			Child.SetByIndex(*Parent, *Current, si, reflect.Value{})
+			// Child.DataStructure.Endpoint = name.Copy()
 			if dss.Debug {
 				_, _ = fmt.Fprintf(os.Stderr,"SetByIndex() Child: %s\n", Child)
 			}
 			name2 := Child.DataStructure.Endpoint.Copy()
 			if Current.DataStructure.PointNameFromChild != "" {
-				name2 = Current.PointNameFromChild(Child, name)
+				name2 = Current.PointNameFromChild(&Child)
+			}
+
+			if dss.PointArrayFlatten(Parent, Current, name) {
+				break
 			}
 
 			if Child.IsUnknown() {
@@ -401,7 +406,7 @@ func (dss *DataStructures) ProcessSlice(Parent *Reflect, Current *Reflect, name 
 				continue
 			}
 
-			if dss.PointSplitOn(Current, &Child, name2) {
+			if dss.PointSplitOn(Current, &Child) {
 				continue
 			}
 
@@ -412,16 +417,21 @@ func (dss *DataStructures) ProcessSlice(Parent *Reflect, Current *Reflect, name 
 
 func (dss *DataStructures) ProcessStruct(Parent *Reflect, Current *Reflect, name EndPointPath) {
 	for range Only.Once {
+		if dss.PointArrayFlatten(Parent, Current, name) {
+			break
+		}
+
 		// Iterate over all available fields and read the tag value
 		for si := 0; si < Current.Length; si++ {
 			var Child Reflect
-			Child.SetByIndex(*Parent, *Current, si, reflect.Value{}, name)
+			Child.SetByIndex(*Parent, *Current, si, reflect.Value{})
+			// Child.DataStructure.Endpoint = Current.DataStructure.Endpoint.Append(Child.DataStructure.PointId)
 			if dss.Debug {
 				_, _ = fmt.Fprintf(os.Stderr,"SetByIndex() Child: %s\n", Child)
 			}
 			name2 := Child.DataStructure.Endpoint.Copy()
 			if Current.DataStructure.PointNameFromChild != "" {
-				name2 = Current.PointNameFromChild(Child, name)
+				name2 = Current.PointNameFromChild(&Child)
 			}
 
 			if !Child.IsExported {
@@ -429,7 +439,11 @@ func (dss *DataStructures) ProcessStruct(Parent *Reflect, Current *Reflect, name
 				continue
 			}
 
-			if dss.GoStructOptions(Parent, Current, &Child, name) {
+			if dss.PointArrayFlatten(Parent, Current, name) {
+				break
+			}
+
+			if dss.GoStructOptions(Parent, Current, &Child) {
 				continue
 			}
 
@@ -438,7 +452,7 @@ func (dss *DataStructures) ProcessStruct(Parent *Reflect, Current *Reflect, name
 				continue
 			}
 
-			if dss.PointSplitOn(Current, &Child, name2) {
+			if dss.PointSplitOn(Current, &Child) {
 				continue
 			}
 
@@ -450,17 +464,26 @@ func (dss *DataStructures) ProcessStruct(Parent *Reflect, Current *Reflect, name
 
 func (dss *DataStructures) ProcessMap(Parent *Reflect, Current *Reflect, name EndPointPath) {
 	for range Only.Once {
+		if dss.PointArrayFlatten(Parent, Current, name) {
+			break
+		}
+
 		for si, sm := range Current.FieldVo.MapKeys() {
 			// @TODO - Implement pointNameFromChild / pointNameFromParent.
 			// @TODO - Need to look at other types, besides known types.
 			var Child Reflect
-			Child.SetByIndex(*Parent, *Current, si, sm, name)
+			Child.SetByIndex(*Parent, *Current, si, sm)
+			// Child.DataStructure.Endpoint = name.Copy()
 			if dss.Debug {
 				_, _ = fmt.Fprintf(os.Stderr,"SetByIndex() Child: %s\n", Child)
 			}
 			name2 := Child.DataStructure.Endpoint.Copy()
 			if Current.DataStructure.PointNameFromChild != "" {
-				name2 = Current.PointNameFromChild(Child, name)
+				name2 = Current.PointNameFromChild(&Child)
+			}
+
+			if dss.PointArrayFlatten(Parent, Current, name) {
+				break
 			}
 
 			if Child.IsUnknown() {
@@ -468,7 +491,7 @@ func (dss *DataStructures) ProcessMap(Parent *Reflect, Current *Reflect, name En
 				continue
 			}
 
-			if dss.PointSplitOn(Current, &Child, name2) {
+			if dss.PointSplitOn(Current, &Child) {
 				continue
 			}
 
@@ -478,22 +501,38 @@ func (dss *DataStructures) ProcessMap(Parent *Reflect, Current *Reflect, name En
 	}
 }
 
-func (dss *DataStructures) PointNameAppend(_ *Reflect, Current *Reflect, name EndPointPath) EndPointPath {
+func (dss *DataStructures) PointNameAppend(Current *Reflect) EndPointPath {
 	for range Only.Once {
 		if Current.DataStructure.PointNameAppend == false {
-			if len(name) == 0 {
+			if Current.DataStructure.Endpoint.IsZero() {
 				break
 			}
-			name = name.PopLast()
+			Current.DataStructure.Endpoint.PopLast()
 		}
 	}
-	return name
+	return Current.DataStructure.Endpoint
 }
 
-func (dss *DataStructures) PointArrayFlatten(_ *Reflect, Current *Reflect, name EndPointPath) bool {
+func (dss *DataStructures) PointArrayFlatten(Parent *Reflect, Current *Reflect, name EndPointPath) bool {
 	var yes bool
 	for range Only.Once {
-		if Current.DataStructure.PointArrayFlatten == true {
+		if Parent.DataStructure.DataTable {
+			// Flatten a child if the parent is a table.
+			Current.DataStructure.PointArrayFlatten = true
+			if Current.DataStructure.PointUnit == "" {
+				Current.DataStructure.PointUnit = "--"
+			}
+			if Current.DataStructure.PointValueType == "" {
+				Current.DataStructure.PointValueType = "Table"
+			}
+			if Current.DataStructure.ValueType == "" {
+				Current.DataStructure.ValueType = "Table"
+			}
+			// @TODO - Consider standardizing points to a known format.
+			// queryUserCurveTemplateData is a good example of the structure.
+		}
+
+		if Current.DataStructure.PointArrayFlatten {
 			// We want to flatten a slice down to EG "[1, 2, 3]"
 			Current.DataStructure.Value = valueTypes.AnyToValueString(Current.FieldVo.Interface(), 0, "")
 			Current.DataStructure.Endpoint = name.Copy()
@@ -504,7 +543,7 @@ func (dss *DataStructures) PointArrayFlatten(_ *Reflect, Current *Reflect, name 
 	return yes
 }
 
-func (dss *DataStructures) PointIgnoreZero(_ *Reflect, Current *Reflect, _ EndPointPath) bool {
+func (dss *DataStructures) PointIgnoreZero(_ *Reflect, Current *Reflect) bool {
 	var yes bool
 	for range Only.Once {
 		if !Current.DataStructure.PointIgnoreZero {
@@ -523,7 +562,7 @@ func (dss *DataStructures) PointIgnoreZero(_ *Reflect, Current *Reflect, _ EndPo
 	return yes
 }
 
-func (dss *DataStructures) PointIgnoreIfNilFromChild(Parent *Reflect, Current *Reflect, _ EndPointPath) bool {
+func (dss *DataStructures) PointIgnoreIfNilFromChild(Parent *Reflect, Current *Reflect) bool {
 	var yes bool
 	for range Only.Once {
 		if Parent.DataStructure.PointIgnoreIfNilFromChild == "" {
@@ -544,7 +583,7 @@ func (dss *DataStructures) PointIgnoreIfNilFromChild(Parent *Reflect, Current *R
 	return yes
 }
 
-func (dss *DataStructures) PointSplitOn(_ *Reflect, Current *Reflect, _ EndPointPath) bool {
+func (dss *DataStructures) PointSplitOn(_ *Reflect, Current *Reflect) bool {
 	var yes bool
 	for range Only.Once {
 		if Current.DataStructure.PointSplitOn == "" {
@@ -553,11 +592,12 @@ func (dss *DataStructures) PointSplitOn(_ *Reflect, Current *Reflect, _ EndPoint
 		// We want to split a string into separate points - currently only handles string types.
 		// @TODO - Fix this up! - Use PointSplitType to define a particular type.
 		soVal := valueTypes.AnyToValueString(Current.FieldVo.Interface(), 0, "")
-		soEP := Current.DataStructure.Endpoint
+		soEP := Current.DataStructure.Endpoint.Copy()
 		soSplit := strings.Split(soVal, Current.DataStructure.PointSplitOn)
 		for soI, soV := range soSplit {
 			Current.DataStructure.Value = strings.ReplaceAll(soV, "&", ".p")
-			Current.DataStructure.Endpoint = append(soEP, valueTypes.PrintInt(2, soI))
+			Current.DataStructure.Endpoint = soEP.Copy()
+			Current.DataStructure.Endpoint.Append(valueTypes.PrintInt(2, soI))
 			dss.Add(Current.DataStructure)
 		}
 		yes = true
@@ -565,7 +605,7 @@ func (dss *DataStructures) PointSplitOn(_ *Reflect, Current *Reflect, _ EndPoint
 	return yes
 }
 
-func (dss *DataStructures) GoStructOptions(Parent *Reflect, Current *Reflect, Child *Reflect, _ EndPointPath) bool {
+func (dss *DataStructures) GoStructOptions(Parent *Reflect, Current *Reflect, Child *Reflect) bool {
 	var yes bool
 	for range Only.Once {
 		if Child.FieldName != NameGoStruct {

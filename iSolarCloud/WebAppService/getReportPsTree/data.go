@@ -42,7 +42,7 @@ func (e *EndPoint) GetData() api.DataMap {
 		// pkg := reflection.GetName("", *e)
 		// dt := valueTypes.NewDateTime(valueTypes.Now)
 		// name := pkg + "." + e.Request.DateId.Format(valueTypes.DateTimeLayoutDay)
-		entries.StructToDataMap(*e, "system", nil)
+		entries.StructToDataMap(*e, "system", GoStruct.EndPointPath{})
 	}
 
 	return entries

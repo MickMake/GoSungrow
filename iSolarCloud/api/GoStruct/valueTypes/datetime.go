@@ -112,6 +112,9 @@ func (dt DateTime) Value() time.Time {
 
 func (dt DateTime) String() string {
 	// return dt.Original()
+	if dt.IsZero() {
+		return "--"
+	}
 	return dt.Time.Format(DateTimeLayout)
 }
 

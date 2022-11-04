@@ -233,7 +233,7 @@ func (sgd *SunGrowData) GetData() error {
 				result.EndPointName = ep.GetName()
 				result.EndPoint = ep
 				result.Response = sgd.CallEndpoint(ep, result.Request)
-				sgd.results[result.EndPointName.String()] = result
+				sgd.results[result.EndPointName.String() + "/" + psId.String()] = result
 			}
 		}
 	}
@@ -249,21 +249,6 @@ func (sgd *SunGrowData) GetOutput() error {
 		}
 		for _, result := range sgd.results {
 			sgd.Error = result.Response.GetOutput(sgd.sunGrow.OutputType, sgd.sunGrow.SaveAsFile)
-
-			// if result.Response.Data.Table.OutputType.IsTable() {
-			// 	for _, t := range result.Response.Data.DataTables {
-			// 		t.OutputType = sgd.sunGrow.OutputType
-			// 		t.SetSaveFile(sgd.sunGrow.SaveAsFile)
-			// 		sgd.Error = t.Output()
-			// 		if sgd.Error != nil {
-			// 			break
-			// 		}
-			// 	}
-			// 	continue
-			// }
-			//
-			// ok = true
-			// sgd.Error = result.Response.Data.Table.Output()
 		}
 	}
 
@@ -273,20 +258,6 @@ func (sgd *SunGrowData) GetOutput() error {
 func (sgd *SunGrowData) GetResults() SunGrowDataResults {
 	return sgd.results
 }
-
-// func (sgd *SunGrowData) GetByEndPointName(endpoint string) SunGrowDataResponse {
-// 	var response SunGrowDataResponse
-// 	response.Data.Table = output.NewTable()
-// 	for range Only.Once {
-// 		ep := sgd.sunGrow.GetEndpoint(endpoint)
-// 		sgd.sunGrow.Error = ep.GetError()
-// 		if sgd.sunGrow.Error != nil {
-// 			break
-// 		}
-// 		response = sgd.GetEndpoint(ep)
-// 	}
-// 	return response
-// }
 
 func (sgd *SunGrowData) CallEndpoint(endpoint api.EndPoint, request SunGrowDataRequest) SunGrowDataResponse {
 	var response SunGrowDataResponse

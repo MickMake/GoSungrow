@@ -31,13 +31,15 @@ func NewDataMap() DataMap {
 func (dm *DataMap) StructToDataMap(endpoint EndPoint, parentDeviceId string, name GoStruct.EndPointPath) DataMap {
 	for range Only.Once {
 		epName := GoStruct.NewEndPointPath(reflection.GetName("", endpoint))
-		name = epName.Append(name...)
+		epName.Append(name.Strings()...)
+		name = epName.Copy()
 
 		timestamp := valueTypes.SetDateTimeValue(time.Now().Round(5 * time.Minute))
 
 		// Iterate over all available fields and read the tag values
 		var Parent GoStruct.Reflect
-		Parent.SetByFieldName(endpoint.ResponseRef(), endpoint.ResponseRef(), name[0])
+		Parent.SetByFieldName(endpoint.ResponseRef(), endpoint.ResponseRef(), name.Index(0))
+		Parent.DataStructure.Endpoint = name.Copy()
 		Current := GoStruct.FindStart("ResultData", Parent, Parent, name)
 		name = Current.DataStructure.Endpoint.Copy()
 
@@ -81,7 +83,7 @@ func (dm *DataMap) StructToDataMap(endpoint EndPoint, parentDeviceId string, nam
 			}
 
 			var point Point
-			p := GetPoint(strings.Join(f.Endpoint, ".") + "." + f.PointId)
+			p := GetPoint(f.Endpoint.String() + "." + f.PointId)
 			if p == nil {
 				// No point found. Create one.
 				point = CreatePoint(parentDeviceId, valueTypes.SetPointIdString(f.PointId), f.PointName, f.PointGroupName, uvs.Unit(), uvs.Type(), f.PointUpdateFreq)
@@ -105,11 +107,11 @@ func (dm *DataMap) StructToDataMap(endpoint EndPoint, parentDeviceId string, nam
 				fmt.Printf("OOOPS - UVS is nil for %s\n", f.PointId)
 				continue
 			}
-			dm.AddPointUnitValue(strings.Join(f.Endpoint, "."), f.PointParentId, point, when, uvs[0])
+			dm.AddPointUnitValue(f.Endpoint.String(), f.PointParentId, point, when, uvs[0])
 
 			if f.PointAliasTo != "" {
 				f.PointId = f.PointAliasTo
-				dm.AddPointUnitValue(strings.Join(f.Endpoint, "."), f.PointParentId, point, when, uvs[0])
+				dm.AddPointUnitValue(f.Endpoint.String(), f.PointParentId, point, when, uvs[0])
 			}
 		}
 
@@ -123,8 +125,6 @@ func (dm *DataMap) StructToDataMap(endpoint EndPoint, parentDeviceId string, nam
 		dm.DataTables = output.NewTables()
 		dm.DataTables = tp.DataTables.GetDataMergedTables(timestamp, parentDeviceId)
 		dm.DataTables = tp.DataTables.GetDataTables()
-		// dm.GetDataMergedTables(endpoint, tp.DataTables, timestamp, parentDeviceId)
-		// dm.GetDataTables(endpoint, tp.DataTables)
 	}
 	return *dm
 }
@@ -263,8 +263,12 @@ func (dm *DataMap) Print() {
 			"Parent Codes",
 		)
 
-		for i, k := range dm.Order {
+		// dm.Order - Produces double the amount of entries for some reason.
+		i := 0
+		for k := range dm.Map {
 			for _, v := range dm.Map[k].Entries {
+				i++
+
 				table.AddRowItems(
 					i,
 					v.EndPoint,

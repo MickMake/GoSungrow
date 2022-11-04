@@ -51,7 +51,7 @@ func (t *Table) String() string {
 			break
 		}
 
-		ret = t.table.Tabular("grid").String()
+		ret = t.table.Tabular("condensed").String()
 	}
 	return ret
 }
@@ -232,6 +232,7 @@ func (t *Table) WriteTable() error {
 
 		if t.saveAsFile {
 			t.Error = t.writeFile(t.filePrefix+"-table.txt", t.String(), DefaultFileMode)
+			break
 		}
 		fmt.Printf("# %s\n", t.title)
 		fmt.Print(t.String())
@@ -247,6 +248,7 @@ func (t *Table) WriteList() error {
 
 		if t.saveAsFile {
 			t.Error = t.writeFile(t.filePrefix+".txt", t.String(), DefaultFileMode)
+			break
 		}
 		fmt.Printf("# %s\n", t.title)
 		fmt.Print(t.String())
@@ -274,6 +276,10 @@ func (t *Table) GetCsv() string {
 
 func (t *Table) WriteCsv() error {
 	for range Only.Once {
+		if t.IsNotValid() {
+			break
+		}
+
 		if t.saveAsFile {
 			t.Error = t.writeFile(t.filePrefix+".csv", t.GetCsv(), DefaultFileMode)
 			break
@@ -303,6 +309,10 @@ func (t *Table) GetXml() string {
 
 func (t *Table) WriteXml() error {
 	for range Only.Once {
+		if t.IsNotValid() {
+			break
+		}
+
 		if t.saveAsFile {
 			t.Error = t.writeFile(t.filePrefix+".xml", t.GetXml(), DefaultFileMode)
 			break
@@ -319,6 +329,10 @@ func (t *Table) GetJson() string {
 
 func (t *Table) WriteJson() error {
 	for range Only.Once {
+		if t.IsNotValid() {
+			break
+		}
+
 		if t.saveAsFile {
 			t.Error = t.writeFile(t.filePrefix + ".json", string(t.json), DefaultFileMode)
 			break
@@ -339,6 +353,10 @@ func (t *Table) GetRawBytes() []byte {
 
 func (t *Table) WriteRaw() error {
 	for range Only.Once {
+		// if t.IsNotValid() {
+		// 	break
+		// }
+
 		if t.saveAsFile {
 			t.Error = t.writeFile(t.filePrefix+".raw", string(t.raw), DefaultFileMode)
 			break

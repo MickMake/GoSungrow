@@ -239,7 +239,7 @@ func (e *EndPoint) GetData() api.DataMap {
 		// name := pkg + "." + e.Request.PsId.String()
 		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
 
-		// entries.StructToDataMap(*e, "system", nil)
+		// entries.StructToDataMap(*e, "system", GoStruct.EndPointPath{})
 	}
 
 	return entries

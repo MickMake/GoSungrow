@@ -35,7 +35,7 @@ type ResultData struct {
 	DisChargeTotalEnergyUnit valueTypes.String    `json:"dis_charge_total_energy_unit" PointIgnore:"true"`
 	MonthEnergy              valueTypes.UnitValue `json:"month_energy" PointUpdateFreq:"UpdateFreqMonth"`
 	OrgName                  valueTypes.String    `json:"org_name"`
-	P83024                   valueTypes.Float     `json:"p83024"`
+	P83024                   valueTypes.Float     `json:"p83024" PointUnit:"Wh"`
 	PercentPlanMonth         valueTypes.Float     `json:"percent_plan_month" PointUnit:"%" PointUpdateFreq:"UpdateFreqMonth"`
 	PercentPlanYear          valueTypes.Float     `json:"percent_plan_year" PointUnit:"%" PointUpdateFreq:"UpdateFreqYear"`
 	PlanEnergyUnit           valueTypes.String    `json:"plan_energy_unit" PointIgnore:"true"`
@@ -58,7 +58,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	for range Only.Once {
 		pkg := reflection.GetName("", *e)
 		// dt := valueTypes.NewDateTime(valueTypes.Now)
-		entries.StructToDataMap(*e,  "system", nil)
+		entries.StructToDataMap(*e,  "system", GoStruct.EndPointPath{})
 
 		_ = entries.CopyPoint(pkg + ".p83024", "virtual.system", "p83024", "")
 	}
