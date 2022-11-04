@@ -1,5 +1,12 @@
 # GoSungrow - iSolarCloud API written in GoLang.
 
+Note: I'm currently going through a big refactor. The next major release, (v3.0.0), will:
+- support better api changes. This allows a much quicker change in my code when the api changes.
+- support multiple devices. Previous versions only allowed query of one device.
+- improve cli for queries. Now can fetch endpoints in either "list" or "table" formats, the latter showing point data in a similar fashion to pivot tables in spreadsheets.
+- multiple output formats supported - not only csv, png and ascii, but markdown, xml, HTML, sql and plain MQTT.
+- lots of bug fixes. :-).
+
 [Latest releases here](https://github.com/MickMake/GoSungrow/releases)
 
 
