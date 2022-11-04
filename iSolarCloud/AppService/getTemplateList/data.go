@@ -2,8 +2,8 @@ package getTemplateList
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 
 	"fmt"
@@ -16,7 +16,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -29,8 +29,8 @@ type ResultData struct {
 		TemplateId   valueTypes.Integer  `json:"template_id"`
 		TemplateName valueTypes.String `json:"template_name"`
 		UpdateTime   valueTypes.DateTime `json:"update_time"`
-	} `json:"pageList" PointNameFromChild:"TemplateId" PointNameAppend:"false" PointArrayFlatten:"false" DataTable:"true"`
-	RowCount valueTypes.Integer `json:"rowCount"`
+	} `json:"pageList" PointId:"page_list" PointNameFromChild:"TemplateId" PointNameAppend:"false" PointArrayFlatten:"false" DataTable:"true"`
+	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 }
 
 func (e *ResultData) IsValid() error {

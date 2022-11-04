@@ -1,4 +1,4 @@
-// API endpoints pulled from the sqlite database, (./assets/interface.db), contained within the Android app com.isolarcloud.manager
+// Package WebIscmAppService - API endpoints pulled from the sqlite database, (./assets/interface.db), contained within the Android app com.isolarcloud.manager
 package WebIscmAppService
 
 import (
@@ -187,7 +187,7 @@ import (
 	"GoSungrow/iSolarCloud/WebIscmAppService/workFlowIsStart"
 	"GoSungrow/iSolarCloud/WebIscmAppService/workFlowTransferStep"
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"fmt"
 )
 

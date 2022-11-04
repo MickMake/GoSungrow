@@ -1,4 +1,4 @@
-// API endpoints pulled from the sqlite database, (./assets/interface.db), contained within the Android app com.isolarcloud.manager
+// Package MttvScreenService - API endpoints pulled from the sqlite database, (./assets/interface.db), contained within the Android app com.isolarcloud.manager
 package MttvScreenService
 
 import (
@@ -33,7 +33,7 @@ import (
 	"GoSungrow/iSolarCloud/MttvScreenService/saveOrUpdatePosition"
 	"GoSungrow/iSolarCloud/MttvScreenService/updateBuildProgressing"
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"fmt"
 )
 

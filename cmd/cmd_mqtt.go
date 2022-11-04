@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"GoSungrow/Only"
-	"GoSungrow/iSolarCloud"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/mmHa"
 	"errors"
@@ -342,24 +341,38 @@ func (ca *Cmds) MqttCron() error {
 			newDay = true
 		}
 
-		var data iSolarCloud.SunGrowData
-		data.New(ca.Api.SunGrow)
+		data := ca.Api.SunGrow.NewSunGrowData()
+		data.SetPsIds()
 
 		// All := []string{ "queryDeviceList", "getPsList", "getPsDetailWithPsType", "getPsDetail" }
 		All := []string{ "getPsDetail" }
-		for psId, ok := range ca.Mqtt.Mqtt.SungrowPsIds {
-			if !ok {
-				continue
-			}
+		data.SetEndpoints(All...)
+		ca.Error = data.GetData()
+		if ca.Error != nil {
+			break
+		}
+		data.GetData()
 
-			for _, endpoint := range All {
-				response := data.GetByEndPointName(endpoint, iSolarCloud.SunGrowDataRequest{ PsId: &psId })
-				ca.Error = ca.Update(endpoint, response.Data, newDay)
-				if ca.Error != nil {
-					break
-				}
+		for _, result := range data.GetResults() {
+			ca.Error = ca.Update(string(result.EndPointName), result.Response.Data, newDay)
+			if ca.Error != nil {
+				break
 			}
 		}
+
+		// for psId, ok := range ca.Mqtt.Mqtt.SungrowPsIds {
+		// 	if !ok {
+		// 		continue
+		// 	}
+		//
+		// 	for _, endpoint := range All {
+		// 		response := data.GetByEndPointName(endpoint, iSolarCloud.SunGrowDataRequest{ PsId: &psId })
+		// 		ca.Error = ca.Update(endpoint, response.Data, newDay)
+		// 		if ca.Error != nil {
+		// 			break
+		// 		}
+		// 	}
+		// }
 
 		ca.Mqtt.Mqtt.LastRefresh = time.Now()
 	}

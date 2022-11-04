@@ -6,8 +6,8 @@ package getFaultDetail
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/reflection"
 	"github.com/MickMake/GoUnify/Only"
 
 	"encoding/json"
@@ -36,7 +36,7 @@ type Request struct {
 // Response - Holds the api.ResponseCommon and endpoint specific ResultData structures. See data.go for response fields.
 type Response struct {
 	api.ResponseCommon
-	ResultData ResultData `json:"result_data"`
+	ResultData ResultData `json:"result_data" PointNameAppend:"false"`
 }
 
 // Init - Used to initialize a new endpoint instance. Usually called from an area.
@@ -94,7 +94,7 @@ func AssertResultData(e api.EndPoint) ResultData {
 
 // Help - Return help information on the JSON structure used to populate RequestData.
 func (e EndPoint) Help() string {
-	ret := apiReflect.HelpOptions(e.Request.RequestData)
+	ret := reflection.HelpOptions(e.Request.RequestData)
 	ret += fmt.Sprintf("JSON request:\t%s\n", e.GetRequestJson())
 	ret += e.Request.Help()
 	return ret
@@ -174,18 +174,18 @@ func (e EndPoint) WriteDataFile() error {
 // SetRequest - Save an interface reference as either api.RequestCommon or RequestData.
 func (e EndPoint) SetRequest(ref interface{}) api.EndPoint {
 	for range Only.Once {
-		if apiReflect.GetPkgType(ref) == "api.RequestCommon" {
+		if reflection.GetPkgType(ref) == "api.RequestCommon" {
 			e.Request.RequestCommon = ref.(api.RequestCommon)
 			break
 		}
 
-		if apiReflect.GetType(ref) == "RequestData" {
+		if reflection.GetType(ref) == "RequestData" {
 			e.Request.RequestData = ref.(RequestData)
 			e.Error = e.IsRequestValid()
 			break
 		}
 
-		e.Error = apiReflect.DoPkgTypesMatch(e.Request, ref)
+		e.Error = reflection.DoPkgTypesMatch(e.Request, ref)
 		if e.Error != nil {
 			break
 		}
@@ -222,7 +222,7 @@ func (e EndPoint) GetRequestJson() output.Json {
 
 // // GetFingerprint - Used to formulate cache filenames.
 // func (e EndPoint) GetFingerprint() string {
-// 	return apiReflect.GetFingerprint(e.Request.RequestData)
+// 	return GoStruct.GetFingerprint(e.Request.RequestData)
 // }
 
 // IsRequestValid - Is api.RequestCommon and RequestData valid?

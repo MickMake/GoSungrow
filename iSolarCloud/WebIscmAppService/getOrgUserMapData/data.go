@@ -2,8 +2,8 @@ package getOrgUserMapData
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
@@ -16,7 +16,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -25,13 +25,13 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	CurPage    valueTypes.Integer `json:"curPage"`
-	IsMore     interface{}        `json:"isMore"`
-	PageList   []interface{}      `json:"pageList"`
-	RowCount   valueTypes.Integer `json:"rowCount"`
+	CurPage    valueTypes.Integer `json:"curPage" PointId:"cur_page"`
+	IsMore     interface{}        `json:"isMore" PointId:"is_more"`
+	PageList   []interface{}      `json:"pageList" PointId:"page_list"`
+	RowCount   valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 	Size       valueTypes.Integer `json:"size"`
-	StartIndex interface{}        `json:"startIndex"`
-	TotalPage  interface{}        `json:"totalPage"`
+	StartIndex interface{}        `json:"startIndex" PointId:"start_index"`
+	TotalPage  interface{}        `json:"totalPage" PointId:"total_page"`
 }
 
 func (e *ResultData) IsValid() error {

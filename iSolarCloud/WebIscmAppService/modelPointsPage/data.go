@@ -2,8 +2,8 @@ package modelPointsPage
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
@@ -17,7 +17,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -30,16 +30,16 @@ type ResultData struct {
 		DeviceModelId   valueTypes.Integer `json:"device_model_id"`
 		DeviceModel     valueTypes.String  `json:"device_model"`
 		DeviceModelCode valueTypes.String  `json:"device_model_code"`
-	} `json:"modelList" PointId:"model_list" DataTable:"true"`
+	} `json:"modelList" PointId:"model_list" DataTable:"true" DataTableSortOn:"DeviceModelId"`
 	PointList []struct {
-		PointId             valueTypes.Integer `json:"point_id" DataTableSort:"true"`
+		PointId             valueTypes.Integer `json:"point_id"`
 		PointName           valueTypes.String  `json:"point_name"`
 		CodeId              valueTypes.Integer `json:"code_id"`
 		DeviceModelId       valueTypes.Integer `json:"device_model_id"`
 		IsShow              valueTypes.Bool    `json:"is_show"`
 		IsSupportSecondData valueTypes.Bool    `json:"is_support_second_data"`
 		OrderNum            valueTypes.Integer `json:"order_num"`
-	} `json:"pointList" PointId:"point_list" DataTable:"true"`
+	} `json:"pointList" PointId:"point_list" DataTable:"true" DataTableSortOn:"PointId"`
 }
 
 func (e *ResultData) IsValid() error {

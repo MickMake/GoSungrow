@@ -2,8 +2,9 @@ package getPsDetailWithPsType
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/reflection"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 
 	"fmt"
@@ -17,7 +18,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -154,9 +155,9 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		pkg := apiReflect.GetName("", *e)
+		pkg := reflection.GetName("", *e)
 		// name := api.JoinWithDots(0, valueTypes.DateTimeLayoutDay, pkg, e.Response.ResultData.PsPsKey)
-		entries.StructToDataMap(*e,  e.Response.ResultData.PsPsKey.Value(), apiReflect.NewEndPointPath(e.Response.ResultData.PsPsKey.Value()))
+		entries.StructToDataMap(*e,  e.Response.ResultData.PsPsKey.Value(), GoStruct.NewEndPointPath(e.Response.ResultData.PsPsKey.Value()))
 
 		dstEndpoint := "virtual." + e.Request.PsId.String()
 		srcEndpoint := fmt.Sprintf("%s.%s", pkg, e.Response.ResultData.PsPsKey.Value())

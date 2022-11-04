@@ -2,8 +2,8 @@ package getInstallerInfoByDealerOrgCodeOrId
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -17,7 +17,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -33,7 +33,7 @@ type ResultData struct {
 		Installer         string      `json:"installer"`
 		InstallerEmail    string      `json:"installer_email"`
 		InstallerPhone    string      `json:"installer_phone"`
-		MobleTel          interface{} `json:"moble_tel"`
+		MobleTel          interface{} `json:"moble_tel" PointId:"mobile_tel"`
 		OrgId             valueTypes.Integer `json:"org_id"`
 		OrgName           string      `json:"org_name"`
 		UserId            valueTypes.Integer `json:"user_id"`

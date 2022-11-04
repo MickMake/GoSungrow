@@ -2,9 +2,9 @@ package getPowerDevicePointNames
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 
 	"fmt"
@@ -54,7 +54,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -112,17 +112,22 @@ func (e *EndPoint) GetPointDataTable() output.Table {
 	var table output.Table
 
 	for range Only.Once {
-		table = output.NewTable()
-		table.SetTitle("")
-		table.SetJson([]byte(e.GetJsonData(false)))
-		table.SetRaw([]byte(e.GetJsonData(true)))
-
-		e.Error = table.SetHeader(
+		table = output.NewTable(
 			"Device Type",
 			"Point Type",
 			"Point Id",
 			"Point Name",
 		)
+		table.SetTitle("")
+		table.SetJson([]byte(e.GetJsonData(false)))
+		table.SetRaw([]byte(e.GetJsonData(true)))
+
+		// e.Error = table.SetHeader(
+		// 	"Device Type",
+		// 	"Point Type",
+		// 	"Point Id",
+		// 	"Point Name",
+		// )
 		if e.Error != nil {
 			break
 		}
@@ -130,11 +135,10 @@ func (e *EndPoint) GetPointDataTable() output.Table {
 		table.SetFilePrefix(e.Request.DeviceType.String())
 
 		for _, p := range e.Response.ResultData {
-			_ = table.AddRow(
-				e.Request.DeviceType,
-				p.PointCalType,
-				p.PointId,
-				p.PointName,
+			_ = table.AddRow(e.Request.DeviceType.String(),
+				p.PointCalType.String(),
+				p.PointId.String(),
+				p.PointName.String(),
 			)
 			if table.Error != nil {
 				continue

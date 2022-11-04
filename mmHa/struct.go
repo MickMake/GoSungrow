@@ -4,7 +4,7 @@ import (
 	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/AppService/getDeviceList"
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -611,6 +611,12 @@ func (config *EntityConfig) FixConfig() {
 				config.Icon = SetDefault(config.Icon, "mdi:current-ac")
 				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
 
+			case "°F":
+				fallthrough
+			case "F":
+				fallthrough
+			case "℉":
+				fallthrough
 			case "°C":
 				fallthrough
 			case "C":

@@ -2,8 +2,8 @@ package queryUserCurveTemplateData
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"encoding/json"
 	"github.com/MickMake/GoUnify/Only"
 
@@ -24,7 +24,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -106,7 +106,7 @@ type DeviceData struct {
 	DeviceName valueTypes.String  `json:"device_name"`
 	DeviceType valueTypes.Integer `json:"device_type"`
 	DeviceUUID valueTypes.Integer `json:"device_uuid"`
-	Points     Points             `json:"points" PointNameAppend:"false" DataTable:"true"`
+	Points     Points             `json:"points" PointNameAppend:"false" DataTable:"true" DataTableSortOn:"PointId"`
 }
 
 func (p *DeviceData) UnmarshalJSON(data []byte) error {
@@ -203,7 +203,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToDataMap(*e, e.Request.TemplateId.String(), apiReflect.NewEndPointPath(e.Request.TemplateId.String()))
+		entries.StructToDataMap(*e, e.Request.TemplateId.String(), GoStruct.NewEndPointPath(e.Request.TemplateId.String()))
 	}
 
 	return entries

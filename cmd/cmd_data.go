@@ -2,7 +2,8 @@ package cmd
 
 import (
 	"GoSungrow/Only"
-	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"fmt"
 	"github.com/MickMake/GoUnify/cmdConfig"
 	"github.com/MickMake/GoUnify/cmdHelp"
@@ -227,7 +228,23 @@ func (c *CmdData) GetEndpoints(cmd *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.SetOutputType(cmd.Name())
 		args = cmdConfig.FillArray(2, args)
-		c.Error = cmds.Api.SunGrow.GetEndpoints(args[0], args[1:]...)
+		eps := iSolarCloud.SplitArg(args[0])
+
+		data := cmds.Api.SunGrow.NewSunGrowData()
+		data.SetOutput(cmd.Name())
+		data.SetSaveAsFile(cmds.Api.SaveFile)
+		data.SetEndpoints(eps...)
+		data.SetArgs(args[1:]...)
+
+		c.Error = data.GetData()
+		if c.Error != nil {
+			break
+		}
+
+		c.Error = data.GetOutput()
+		if c.Error != nil {
+			break
+		}
 	}
 
 	return c.Error

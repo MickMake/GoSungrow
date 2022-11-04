@@ -2,8 +2,8 @@ package getAreaList
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
@@ -15,7 +15,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -39,7 +39,7 @@ type ResultData struct {
 		TodayEnergy       valueTypes.UnitValue `json:"today_energy"`
 		TotalEnergy       valueTypes.UnitValue `json:"total_energy"`
 	} `json:"pageList" PointId:"page_list" PointNameFromChild:"OrgId" PointNameAppend:"false" PointArrayFlatten:"false" DataTable:"true"`
-	RowCount valueTypes.Integer `json:"rowCount" PointIgnore:"true"`
+	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count" PointIgnore:"true"`
 }
 
 func (e *ResultData) IsValid() error {

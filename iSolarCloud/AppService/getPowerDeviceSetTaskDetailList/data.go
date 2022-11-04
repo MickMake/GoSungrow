@@ -2,8 +2,8 @@ package getPowerDeviceSetTaskDetailList
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -18,7 +18,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -28,9 +28,9 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	DeviceList     []interface{} `json:"device_list"`
-	PageList       []interface{} `json:"pageList" PointNameAppend:"false" PointArrayFlatten:"false"`
+	PageList       []interface{} `json:"pageList" PointId:"page_list" PointNameAppend:"false" PointArrayFlatten:"false"`
 	PsNameInfoList []interface{} `json:"ps_name_info_list"`
-	RowCount       valueTypes.Integer   `json:"rowCount"`
+	RowCount       valueTypes.Integer   `json:"rowCount" PointId:"row_count"`
 }
 
 func (e *ResultData) IsValid() error {

@@ -4,7 +4,7 @@ import (
 	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud"
 	"GoSungrow/iSolarCloud/AppService/login"
-	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"fmt"
 	"github.com/MickMake/GoUnify/cmdConfig"
 	"github.com/MickMake/GoUnify/cmdHelp"

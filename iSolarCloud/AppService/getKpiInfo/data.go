@@ -2,8 +2,9 @@ package getKpiInfo
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/reflection"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
@@ -15,7 +16,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -24,7 +25,9 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	ActualEnergy             []valueTypes.Float   `json:"actual_energy" PointUnitFrom:"ActualEnergyUnit"`
+	ActualEnergy             []valueTypes.Float   `json:"actual_energy" PointUnitFrom:"ActualEnergyUnit" DataTable:"true" DataTableMerge:"true" DataTableShowIndex:"true"`
+	PlanEnergy               []valueTypes.Float   `json:"plan_energy" PointUnitFrom:"PlanEnergyUnit" DataTable:"true" DataTableMerge:"true" DataTableShowIndex:"true"`
+
 	ActualEnergyUnit         valueTypes.String    `json:"actual_energy_unit" PointIgnore:"true"`
 	ChargeTotalEnergy        valueTypes.Float     `json:"charge_total_energy" PointUnitFrom:"ChargeTotalEnergyUnit" PointUpdateFreq:"UpdateFreqTotal"`
 	ChargeTotalEnergyUnit    valueTypes.String    `json:"charge_total_energy_unit" PointIgnore:"true"`
@@ -35,7 +38,6 @@ type ResultData struct {
 	P83024                   valueTypes.Float     `json:"p83024"`
 	PercentPlanMonth         valueTypes.Float     `json:"percent_plan_month" PointUnit:"%" PointUpdateFreq:"UpdateFreqMonth"`
 	PercentPlanYear          valueTypes.Float     `json:"percent_plan_year" PointUnit:"%" PointUpdateFreq:"UpdateFreqYear"`
-	PlanEnergy               []valueTypes.Float   `json:"plan_energy" PointUnitFrom:"PlanEnergyUnit"`
 	PlanEnergyUnit           valueTypes.String    `json:"plan_energy_unit" PointIgnore:"true"`
 	PsCount                  valueTypes.Integer   `json:"ps_count"`
 	TodayEnergy              valueTypes.UnitValue `json:"today_energy" PointUpdateFreq:"UpdateFreqTotal"`
@@ -54,7 +56,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		pkg := apiReflect.GetName("", *e)
+		pkg := reflection.GetName("", *e)
 		// dt := valueTypes.NewDateTime(valueTypes.Now)
 		entries.StructToDataMap(*e,  "system", nil)
 

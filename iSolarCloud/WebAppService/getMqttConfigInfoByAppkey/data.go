@@ -2,8 +2,8 @@ package getMqttConfigInfoByAppkey
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 
 	"fmt"
@@ -24,7 +24,7 @@ type RequestData struct {
 
 // IsValid Checks for validity of results data.
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 // Help provides more info to the user on request JSON fields.
@@ -93,7 +93,7 @@ func (e *ResultData) IsValid() error {
 // 			break
 // 		}
 //
-// 		// @TODO - Think about providing an apiReflect function that does this automatically.
+// 		// @TODO - Think about providing an GoStruct function that does this automatically.
 // 		_ = table.AddRow(e.Request.AppKey, "Code", e.Response.ResultData.Code)
 // 		_ = table.AddRow(e.Request.AppKey, "Mqtt Username", e.Response.ResultData.MqttUsername)
 // 		_ = table.AddRow(e.Request.AppKey, "Mqtt Password", e.Response.ResultData.MqttPassword)

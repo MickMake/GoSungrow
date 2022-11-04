@@ -2,7 +2,7 @@ package queryBatchCreatePsTaskList
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/GoStruct"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
@@ -14,7 +14,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {

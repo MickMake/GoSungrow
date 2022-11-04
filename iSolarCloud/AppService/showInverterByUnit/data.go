@@ -2,10 +2,10 @@ package showInverterByUnit
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/showInverterByUnit"
@@ -16,7 +16,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -24,34 +24,20 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+type ResultData []struct {
+	AndName      valueTypes.String  `json:"and_name"`
+	AndUUID      valueTypes.Integer `json:"and_uuid"`
+	DeviceType   valueTypes.Integer `json:"device_type"`
+	InverterInfo valueTypes.String  `json:"inverterinfo" PointId:"inverter_info"`
+	Name         valueTypes.String  `json:"name"`
+	UnitName     valueTypes.String  `json:"unit_name"`
+	UnitUUID     valueTypes.Integer `json:"unit_uuid"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

@@ -2,8 +2,8 @@ package getRemoteUpgradeSubTasksList
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -17,7 +17,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -26,8 +26,8 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	PageList []interface{} `json:"pageList" PointNameAppend:"false" PointArrayFlatten:"false"`
-	RowCount valueTypes.Integer   `json:"rowCount"`
+	PageList []interface{} `json:"pageList" PointId:"page_list" PointNameAppend:"false" PointArrayFlatten:"false"`
+	RowCount valueTypes.Integer   `json:"rowCount" PointId:"row_count"`
 }
 
 func (e *ResultData) IsValid() error {

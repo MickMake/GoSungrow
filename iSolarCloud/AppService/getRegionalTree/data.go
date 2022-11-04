@@ -2,8 +2,8 @@ package getRegionalTree
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -16,7 +16,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -29,15 +29,15 @@ type ResultData   struct {
 	ResultList []struct {
 		Checked    valueTypes.Bool   `json:"checked"`
 		Id         valueTypes.String `json:"id"`
-		IsFirstOrg valueTypes.Bool   `json:"isFirstOrg"`
-		IsParent   valueTypes.Bool `json:"isParent"`
+		IsFirstOrg valueTypes.Bool   `json:"isFirstOrg" PointId:"is_first_org"`
+		IsParent   valueTypes.Bool `json:"isParent" PointId:"is_parent"`
 		Name       valueTypes.String `json:"name"`
 		Open       valueTypes.Bool   `json:"open"`
 		OrgId      valueTypes.Integer  `json:"org_id"`
-		ParentId   valueTypes.Integer `json:"pId"`
+		ParentId   valueTypes.Integer `json:"pId" PointId:"pid"`
 		PsId       valueTypes.PsId `json:"ps_id"`
 		ShareType  int64  `json:"share_type"`
-	} `json:"resultList" DataTable:"true"`
+	} `json:"resultList" PointId:"resulte_list" DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {

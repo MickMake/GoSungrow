@@ -2,9 +2,9 @@ package queryMutiPointDataList
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 
 	"encoding/json"
@@ -25,7 +25,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -170,18 +170,24 @@ func (e *EndPoint) GetPointDataTable(points api.TemplatePoints) output.Table {
 	var table output.Table
 
 	for range Only.Once {
-		table = output.NewTable()
-		table.SetTitle("")
-		table.SetJson([]byte(e.GetJsonData(false)))
-		table.SetRaw([]byte(e.GetJsonData(true)))
-
-		e.Error = table.SetHeader(
+		table = output.NewTable(
 			"Date/Time",
 			"Point Id",
 			"Point Name",
 			"Value",
 			"Units",
 		)
+		table.SetTitle("")
+		table.SetJson([]byte(e.GetJsonData(false)))
+		table.SetRaw([]byte(e.GetJsonData(true)))
+
+		// e.Error = table.SetHeader(
+		// 	"Date/Time",
+		// 	"Point Id",
+		// 	"Point Name",
+		// 	"Value",
+		// 	"Units",
+		// )
 		if e.Error != nil {
 			break
 		}
@@ -194,8 +200,7 @@ func (e *EndPoint) GetPointDataTable(points api.TemplatePoints) output.Table {
 			for pointId, pointRef := range deviceRef.Points {
 				for _, tim := range pointRef.Times {
 					gp := points.GetPoint(deviceName, pointId)
-					_ = table.AddRow(
-						tim.Key.PrintFull(),
+					_ = table.AddRow(tim.Key.PrintFull(),
 						fmt.Sprintf("%s.%s", deviceName, pointId),
 						gp.Name,
 						tim.Value,
@@ -210,11 +215,11 @@ func (e *EndPoint) GetPointDataTable(points api.TemplatePoints) output.Table {
 
 		table.InitGraph(output.GraphRequest {
 			Title:        "",
-			TimeColumn:   output.SetInteger(1),
-			SearchColumn: output.SetInteger(2),
-			NameColumn:   output.SetInteger(3),
-			ValueColumn:  output.SetInteger(4),
-			UnitsColumn:  output.SetInteger(5),
+			TimeColumn:   output.SetString("Date/Time"),
+			SearchColumn: output.SetString("Point Id"),
+			NameColumn:   output.SetString("Point Name"),
+			ValueColumn:  output.SetString("Value"),
+			UnitsColumn:  output.SetString("Units"),
 			SearchString: output.SetString(""),
 			MinLeftAxis:  output.SetFloat(0),
 			MaxLeftAxis:  output.SetFloat(0),
@@ -229,10 +234,10 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		// pkg := apiReflect.GetName("", *e)
+		// pkg := reflection.GetName("", *e)
 		// dt := valueTypes.NewDateTime(valueTypes.Now)
 		// name := pkg + "." + e.Request.PsId.String()
-		entries.StructToDataMap(*e, e.Request.PsId.String(), apiReflect.NewEndPointPath(e.Request.PsId.String()))
+		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
 
 		// entries.StructToDataMap(*e, "system", nil)
 	}

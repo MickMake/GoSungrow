@@ -3,8 +3,8 @@ package getPsDetail
 import (
 	"GoSungrow/iSolarCloud/Common"
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
@@ -17,7 +17,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -217,7 +217,7 @@ type ResultData struct {
 	PsTypeName                    valueTypes.String    `json:"ps_type_name"`
 	PsWindLevel                   valueTypes.String    `json:"ps_wind_level"`
 	PsWindPos                     valueTypes.String    `json:"ps_wind_pos"`
-	RecordCreateTime              valueTypes.DateTime  `json:"recore_create_time"`
+	RecordCreateTime              valueTypes.DateTime  `json:"recore_create_time" PointId:"record_create_time"`
 	ReportType                    valueTypes.String    `json:"report_type"`
 	SafeStartDate                 valueTypes.DateTime  `json:"safe_start_date"`
 	SelfConsumptionOffsetReminder valueTypes.Integer   `json:"self_consumption_offset_reminder"`
@@ -268,10 +268,10 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		// pkg := apiReflect.GetName("", *e)
+		// pkg := reflection.GetName("", *e)
 		// dt := valueTypes.NewDateTime(valueTypes.Now)
 		// name := pkg + "." + e.Request.PsId.String()
-		entries.StructToDataMap(*e, e.Request.PsId.String(), apiReflect.NewEndPointPath(e.Request.PsId.String()))
+		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
 
 		// dstEndpoint := "virtual." + e.Request.PsId.String()
 		// srcEndpoint := fmt.Sprintf("%s.%s", pkg, e.Request.PsId.String())

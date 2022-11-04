@@ -2,9 +2,9 @@ package getDeviceModelInfoList
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
@@ -17,7 +17,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -69,12 +69,7 @@ func (e *ResultData) IsValid() error {
 func (e *EndPoint) GetPointDataTable() output.Table {
 	var table output.Table
 	for range Only.Once {
-		table = output.NewTable()
-		table.SetTitle("")
-		table.SetJson([]byte(e.GetJsonData(false)))
-		table.SetRaw([]byte(e.GetJsonData(true)))
-
-		_ = table.SetHeader(
+		table = output.NewTable(
 			"Model Id",
 			"Type",
 			"Com Type",
@@ -84,19 +79,32 @@ func (e *EndPoint) GetPointDataTable() output.Table {
 			"Model Code",
 			"Is Remote Upgrade",
 		)
+		table.SetTitle("")
+		table.SetJson([]byte(e.GetJsonData(false)))
+		table.SetRaw([]byte(e.GetJsonData(true)))
+
+		// _ = table.SetHeader(
+		// 	"Model Id",
+		// 	"Type",
+		// 	"Com Type",
+		// 	"Factory Id",
+		// 	"Factory Name",
+		// 	"Model",
+		// 	"Model Code",
+		// 	"Is Remote Upgrade",
+		// )
 		for _, d := range e.Response.ResultData {
 			if d.DeviceModel == d.DeviceModelCode {
 				d.DeviceModelCode.SetString("")
 			}
-			_ = table.AddRow(
-				d.DeviceModelId,
-				d.DeviceType,
-				d.ComType,
-				d.DeviceFactoryId,
-				d.DeviceFactoryName,
-				d.DeviceModel,
-				d.DeviceModelCode,
-				d.IsRemoteUpgrade,
+			_ = table.AddRow(d.DeviceModelId.String(),
+				d.DeviceType.String(),
+				d.ComType.String(),
+				d.DeviceFactoryId.String(),
+				d.DeviceFactoryName.String(),
+				d.DeviceModel.String(),
+				d.DeviceModelCode.String(),
+				d.IsRemoteUpgrade.String(),
 			)
 		}
 	}

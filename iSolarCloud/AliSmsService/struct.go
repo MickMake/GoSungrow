@@ -5,7 +5,7 @@ package AliSmsService
 import (
 	"GoSungrow/iSolarCloud/AliSmsService/msgDownwardStatusReceipt"
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"fmt"
 )
 

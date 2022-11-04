@@ -2,8 +2,9 @@ package queryDeviceList
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/reflection"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 
 	"fmt"
@@ -17,7 +18,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -135,8 +136,8 @@ type ResultData struct {
 		UnitName      valueTypes.String  `json:"unit_name" PointId:"unit_name" PointUpdateFreq:"UpdateFreqBoot"`
 		UUID          valueTypes.Integer `json:"uuid" PointId:"uuid" PointUpdateFreq:"UpdateFreqBoot"`							// Referenced by DeviceArea
 		UUIDIndexCode valueTypes.String  `json:"uuid_index_code" PointId:"uuid_index_code" PointUpdateFreq:"UpdateFreqBoot"`	// Referenced by DeviceArea
-	} `json:"pageList" PointNameFromChild:"PsKey" PointNameAppend:"false" PointArrayFlatten:"false"`
-	RowCount valueTypes.Integer `json:"rowCount" PointIgnore:"true"`
+	} `json:"pageList" PointId:"page_list" PointNameFromChild:"PsKey" PointNameAppend:"false" PointArrayFlatten:"false"`
+	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count" PointIgnore:"true"`
 }
 
 type PointStruct struct {
@@ -235,10 +236,10 @@ func (e *EndPoint) GetData() api.DataMap {
 		//
 		// var TotalEnergyConsumption VirtualPointStruct
 
-		// // pkg := apiReflect.GetName("", *e)
+		// // pkg := reflection.GetName("", *e)
 		// name := api.JoinWithDots(0, "", pkg, e.Request.PsId)
 		// dt := valueTypes.NewDateTime(valueTypes.Now)
-		entries.StructToDataMap(*e, e.Request.PsId.String(), apiReflect.NewEndPointPath(e.Request.PsId.String()))
+		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
 
 		if len(entries.Map) == 0 {
 			break
@@ -293,7 +294,7 @@ func (e *EndPoint) GetEnergyStorageSystem(entries api.DataMap) {
 		//
 		// var TotalEnergyConsumption VirtualPointStruct
 
-		pkg := apiReflect.GetName("", *e)
+		pkg := reflection.GetName("", *e)
 
 		var devices []string
 		/*
@@ -457,7 +458,7 @@ func (e *EndPoint) GetEnergyStorageSystem(entries api.DataMap) {
 func (e *EndPoint) GetCommunicationModule(entries api.DataMap) {
 
 	for range Only.Once {
-		pkg := apiReflect.GetName("", *e)
+		pkg := reflection.GetName("", *e)
 
 		var devices []string
 		for _, device := range e.Response.ResultData.PageList {
@@ -483,7 +484,7 @@ func (e *EndPoint) GetCommunicationModule(entries api.DataMap) {
 func (e *EndPoint) GetBattery(entries api.DataMap) {
 
 	for range Only.Once {
-		pkg := apiReflect.GetName("", *e)
+		pkg := reflection.GetName("", *e)
 
 		var devices []string
 		for _, device := range e.Response.ResultData.PageList {

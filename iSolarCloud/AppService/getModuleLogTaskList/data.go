@@ -2,8 +2,8 @@ package getModuleLogTaskList
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -15,7 +15,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -24,8 +24,8 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	CurPage  valueTypes.Integer `json:"curPage"`
-	IsMore   valueTypes.Bool    `json:"isMore"`
+	CurPage  valueTypes.Integer `json:"curPage" PointId:"cur_page"`
+	IsMore   valueTypes.Bool    `json:"isMore" PointId:"is_more"`
 	PageList []struct {
 		BatchId        valueTypes.String      `json:"batch_id"`
 		CommandStatus  valueTypes.Integer `json:"command_status"`
@@ -50,11 +50,11 @@ type ResultData struct {
 		TaskId         valueTypes.Integer `json:"task_id"`
 		TaskName       valueTypes.Integer      `json:"task_name"`
 		UpdateTime     valueTypes.DateTime      `json:"update_time"`
-	} `json:"pageList" PointNameFromChild:"TaskId" PointNameAppend:"false" PointArrayFlatten:"false" DataTable:"true"`
-	RowCount   valueTypes.Integer `json:"rowCount"`
+	} `json:"pageList" PointId:"page_list" PointNameFromChild:"TaskId" PointNameAppend:"false" PointArrayFlatten:"false" DataTable:"true"`
+	RowCount   valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 	Size       valueTypes.Integer `json:"size"`
-	StartIndex valueTypes.Integer `json:"startIndex"`
-	TotalPage  valueTypes.Integer `json:"totalPage"`
+	StartIndex valueTypes.Integer `json:"startIndex" PointId:"start_index"`
+	TotalPage  valueTypes.Integer `json:"totalPage" PointId:"total_page"`
 }
 
 func (e *ResultData) IsValid() error {

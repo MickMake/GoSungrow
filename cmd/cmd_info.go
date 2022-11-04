@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdConfig"
@@ -368,11 +368,11 @@ func (c *CmdInfo) AttachCmdInfoDevices(cmd *cobra.Command) *cobra.Command {
 		},
 		RunE:                  func(cmd *cobra.Command, args []string) error {
 			_ = cmds.SetOutputType(cmd)
-			pids, err := cmds.Api.SunGrow.StringToPids(args...)
-			if err != nil {
-				return err
-			}
-			return cmds.Api.SunGrow.GetDeviceList(pids...)
+			// pids, err := cmds.Api.SunGrow.StringToPids(args...)
+			// if err != nil {
+			// 	return err
+			// }
+			return cmds.Api.SunGrow.GetDeviceList(args...)
 		},
 		Args:                  cobra.MinimumNArgs(0),
 	}
@@ -677,11 +677,11 @@ func (c *CmdInfo) AttachCmdInfoPsDetails(cmd *cobra.Command) *cobra.Command {
 		},
 		RunE:                  func(cmd *cobra.Command, args []string) error {
 			_ = cmds.SetOutputType(cmd)
-			pids, err := cmds.Api.SunGrow.StringToPids(args...)
-			if err != nil {
-				return err
-			}
-			return cmds.Api.SunGrow.CmdDataPsDetail(pids...)
+			// pids, err := cmds.Api.SunGrow.StringToPids(args...)
+			// if err != nil {
+			// 	return err
+			// }
+			return cmds.Api.SunGrow.CmdDataPsDetail(args...)
 		},
 		Args:                  cobra.MinimumNArgs(0),
 	}

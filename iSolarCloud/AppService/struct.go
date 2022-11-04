@@ -576,7 +576,7 @@ import (
 	"GoSungrow/iSolarCloud/AppService/userMailHasBound"
 	"GoSungrow/iSolarCloud/AppService/userRegister"
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"fmt"
 )
 

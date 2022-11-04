@@ -2,8 +2,8 @@ package getPsUser
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -16,7 +16,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -45,7 +45,7 @@ type ResultData struct {
 	IsValidMobileEmail           valueTypes.Bool     `json:"is_valid_mobile_email"`
 	LackOfInformation            valueTypes.Integer  `json:"lack_of_information"`
 	Language                     valueTypes.String   `json:"language"`
-	MobileTel                    valueTypes.String   `json:"moble_tel"`
+	MobileTel                    valueTypes.String   `json:"moble_tel" PointId:"mobile_tel"`
 	OrgId                        valueTypes.Integer  `json:"org_id"`
 	PhotoId                      valueTypes.Integer  `json:"photo_id"`
 	PhotoURL                     valueTypes.String   `json:"photo_url"`
@@ -69,12 +69,12 @@ type ResultData struct {
 		InstallerEmail                valueTypes.String  `json:"installer_email"`
 		InstallerPhone                valueTypes.String  `json:"installer_phone"`
 		IsCountryDefaultDealerOrgCode valueTypes.Bool    `json:"is_country_default_dealer_org_code"`
-		MobileTel                     valueTypes.String  `json:"moble_tel"`
+		MobileTel                     valueTypes.String  `json:"moble_tel" PointId:"mobile_tel"`
 		OrgId                         valueTypes.Integer `json:"org_id"`
 		OrgIndexCode                  valueTypes.String  `json:"org_index_code"`
 		OrgName                       valueTypes.String  `json:"org_name"`
 		UpDealerEmail                 valueTypes.String  `json:"up_dealer_email"`
-		UpDealerMobileTel             valueTypes.String  `json:"up_dealer_moble_tel"`
+		UpDealerMobileTel             valueTypes.String  `json:"up_dealer_moble_tel" PointId:up_dealer_mobile_tel"`
 		UpDealerOrgCode               valueTypes.String  `json:"up_dealer_org_code"`
 		UpDealerOrgInstaller          valueTypes.String  `json:"up_dealer_org_installer"`
 		UpDealerOrgInstallerEmail     valueTypes.String  `json:"up_dealer_org_installer_email"`

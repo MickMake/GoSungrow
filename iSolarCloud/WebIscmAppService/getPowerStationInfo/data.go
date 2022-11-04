@@ -2,8 +2,8 @@ package getPowerStationInfo
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
@@ -16,7 +16,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -46,7 +46,7 @@ type ResultData struct {
 		IsOpenProtocol        valueTypes.String  `json:"is_open_protocol"`
 		IsReceiveNotice       valueTypes.String  `json:"is_receive_notice"`
 		IsSharePosition       valueTypes.String  `json:"is_share_position"`
-		MobleTel              interface{}        `json:"moble_tel"`
+		MobleTel              interface{}        `json:"moble_tel" PointId:"mobile_tel"`
 		Monetary              interface{}        `json:"monetary"`
 		ParamCo2              float64            `json:"param_co2"`
 		ParamConverRate       valueTypes.Integer `json:"param_conver_rate"`
@@ -139,11 +139,11 @@ type ResultData struct {
 	} `json:"psMap"`
 	RemindType interface{} `json:"remindType"`
 	SnInfoList []struct {
-		ChnnlDesc    interface{}        `json:"chnnl_desc"`
-		ChnnlID      valueTypes.Integer `json:"chnnl_id"`
-		ChnnlName    valueTypes.String  `json:"chnnl_name"`
-		CrtDate      valueTypes.String  `json:"crt_date"`
-		CrtUserName  interface{}        `json:"crt_user_name"`
+		ChnnlDesc    interface{}        `json:"chnnl_desc" PointId:"channel_description"`
+		ChnnlID      valueTypes.Integer `json:"chnnl_id" PointId:"channel_id"`
+		ChnnlName    valueTypes.String  `json:"chnnl_name PointId:"channel_name"`
+		CrtDate      valueTypes.String  `json:"crt_date" PointId:"create_date"`
+		CrtUserName  interface{}        `json:"crt_user_name" PointId:"create_username"`
 		DataFlag     valueTypes.Integer `json:"data_flag"`
 		FlagServer   interface{}        `json:"flag_server"`
 		HostIP       interface{}        `json:"host_ip"`

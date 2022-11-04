@@ -3,8 +3,8 @@ package getPsList
 import (
 	"GoSungrow/iSolarCloud/Common"
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 
 	"fmt"
@@ -17,7 +17,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -144,8 +144,8 @@ type ResultData struct {
 		WgsLatitude            valueTypes.Float     `json:"wgs_latitude" PointId:"wgs_latitude"`
 		WgsLongitude           valueTypes.Float     `json:"wgs_longitude" PointId:"wgs_longitude"`
 		ZipCode                valueTypes.String    `json:"zip_code" PointId:"zip_code"`
-	} `json:"pageList" PointNameFromChild:"PsId" PointNameAppend:"false" PointArrayFlatten:"false" DataTable:"true"`
-	RowCount valueTypes.Count `json:"rowCount" PointIgnore:"true"`
+	} `json:"pageList" PointId:"page_list" PointNameFromChild:"PsId" PointNameAppend:"false" PointArrayFlatten:"false" DataTable:"true"`
+	RowCount valueTypes.Count `json:"rowCount" PointId:"row_count" PointIgnore:"true"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -163,7 +163,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		// pkg := apiReflect.GetName("", *e)
+		// pkg := reflection.GetName("", *e)
 		// dt := valueTypes.NewDateTime(valueTypes.Now)
 		entries.StructToDataMap(*e,  "system", nil)
 	}

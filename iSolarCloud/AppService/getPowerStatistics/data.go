@@ -2,8 +2,8 @@ package getPowerStatistics
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
@@ -16,7 +16,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -32,11 +32,11 @@ type ResultData struct {
 	Status2        valueTypes.Integer   `json:"status2"`
 	Status3        valueTypes.Integer   `json:"status3"`
 
-	DayPower       valueTypes.UnitValue `json:"dayPower"`
+	DayPower       valueTypes.UnitValue `json:"dayPower" PointId:"day_power"`
 	DesignCapacity valueTypes.UnitValue `json:"design_capacity"`
-	PRVlaue        valueTypes.Float     `json:"PRVlaue" PointId:"PRValue"`
-	EqVlaue        valueTypes.Float     `json:"eqVlaue" PointId:"EQValue"`
-	NowCapacity    valueTypes.UnitValue `json:"nowCapacity"`
+	PRVlaue        valueTypes.Float     `json:"PRVlaue" PointId:"pr_value"`
+	EqVlaue        valueTypes.Float     `json:"eqVlaue" PointId:"eq_value"`
+	NowCapacity    valueTypes.UnitValue `json:"nowCapacity" PointId:"now_capacity"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -54,10 +54,10 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		// pkg := apiReflect.GetName("", *e)
+		// pkg := reflection.GetName("", *e)
 		// dt := valueTypes.NewDateTime(valueTypes.Now)
 		// name := pkg + "." + e.Request.PsId.String()
-		entries.StructToDataMap(*e, e.Request.PsId.String(), apiReflect.NewEndPointPath(e.Request.PsId.String()))
+		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
 	}
 
 	return entries

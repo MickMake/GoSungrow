@@ -2,9 +2,9 @@ package getPowerDevicePointInfo
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 
 	"fmt"
@@ -19,7 +19,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -74,7 +74,14 @@ func (e *EndPoint) AddDataTable(table output.Table) output.Table {
 		if rd.Id.Value() == 0 {
 			break
 		}
-		_ = table.AddRow(rd.DeviceType, rd.Id, rd.Period, rd.PointId,rd.PointName, rd.ShowPointName, rd.TranslationId)
+		_ = table.AddRow(rd.DeviceType.String(),
+			rd.Id.String(),
+			rd.Period.String(),
+			rd.PointId.String(),
+			rd.PointName.String(),
+			rd.ShowPointName.String(),
+			rd.TranslationId.String(),
+			)
 	}
 	return table
 }
@@ -82,12 +89,7 @@ func (e *EndPoint) AddDataTable(table output.Table) output.Table {
 func (e *EndPoint) GetPointDataTable() output.Table {
 	var table output.Table
 	for range Only.Once {
-		table = output.NewTable()
-		table.SetTitle("")
-		table.SetJson([]byte(e.GetJsonData(false)))
-		table.SetRaw([]byte(e.GetJsonData(true)))
-
-		_ = table.SetHeader(
+		table = output.NewTable(
 			"DeviceType",
 			"Id",
 			"Period",
@@ -96,30 +98,32 @@ func (e *EndPoint) GetPointDataTable() output.Table {
 			"Show Point Name",
 			"Translation Id",
 		)
+		table.SetTitle("")
+		table.SetJson([]byte(e.GetJsonData(false)))
+		table.SetRaw([]byte(e.GetJsonData(true)))
+
+		// _ = table.SetHeader(
+		// 	"DeviceType",
+		// 	"Id",
+		// 	"Period",
+		// 	"Point Id",
+		// 	"Point Name",
+		// 	"Show Point Name",
+		// 	"Translation Id",
+		// )
 		rd := e.Response.ResultData
-		_ = table.AddRow(rd.DeviceType, rd.Id, rd.Period, rd.PointId,rd.PointName, rd.ShowPointName, rd.TranslationId)
+		_ = table.AddRow(rd.DeviceType.String(),
+			rd.Id.String(),
+			rd.Period.String(),
+			rd.PointId.String(),
+			rd.PointName.String(),
+			rd.ShowPointName.String(),
+			rd.TranslationId.String(),
+			)
 	}
 	return table
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

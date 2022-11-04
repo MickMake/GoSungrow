@@ -2,8 +2,8 @@ package queryDeviceListForApp
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
@@ -16,7 +16,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -70,8 +70,8 @@ type ResultData struct {
 		Sn                      valueTypes.String   `json:"sn" PointName:"Serial Number"`
 		TypeName                valueTypes.String   `json:"type_name"`
 		UUID                    valueTypes.Integer  `json:"uuid"`
-	} `json:"pageList" PointNameFromChild:"PsKey" PointNameAppend:"false" PointArrayFlatten:"false" DataTable:"true"`
-	RowCount valueTypes.Integer `json:"rowCount" PointIgnore:"true"`
+	} `json:"pageList" PointId:"page_list" PointNameFromChild:"PsKey" PointNameAppend:"false" PointArrayFlatten:"false" DataTable:"true"`
+	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count" PointIgnore:"true"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -89,7 +89,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		// pkg := apiReflect.GetName("", *e)
+		// pkg := reflection.GetName("", *e)
 		// dt := valueTypes.NewDateTime(valueTypes.Now)
 		// name := pkg + "." + e.Request.PsId.String()
 		entries.StructToDataMap(*e,  e.Request.PsId.String(), nil)

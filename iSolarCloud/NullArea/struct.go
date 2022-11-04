@@ -3,7 +3,7 @@ package NullArea
 import (
 	"GoSungrow/iSolarCloud/NullArea/NullEndpoint"
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"fmt"
 )
 

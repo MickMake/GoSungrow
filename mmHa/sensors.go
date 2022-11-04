@@ -56,6 +56,10 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 		// 		config.DeviceClass = "temperature"
 		// 		// point.Unit = "C"
 		//
+		// 	case "℉":
+		// 		config.DeviceClass = "temperature"
+		// 		// point.Unit = "C"
+		//
 		// 	case "C":
 		// 		config.DeviceClass = "temperature"
 		// 		config.Units = "℃"

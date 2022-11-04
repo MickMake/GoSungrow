@@ -2,8 +2,8 @@ package queryDeviceList
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
@@ -16,7 +16,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
-	return apiReflect.VerifyOptionsRequired(rd)
+	return GoStruct.VerifyOptionsRequired(rd)
 }
 
 func (rd RequestData) Help() string {
@@ -25,7 +25,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	ChnnlID    valueTypes.Integer `json:"chnnl_id"`
+	ChnnlID    valueTypes.Integer `json:"chnnl_id" PointId:"channel_id"`
 	DeviceCode valueTypes.Integer `json:"device_code"`
 	DeviceID   valueTypes.Integer `json:"device_id"`
 	DeviceName valueTypes.String  `json:"device_name"`
