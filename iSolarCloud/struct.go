@@ -11,13 +11,17 @@ import (
 	"GoSungrow/iSolarCloud/WebAppService"
 	"GoSungrow/iSolarCloud/WebIscmAppService"
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"errors"
 	"fmt"
 	"strings"
 	"time"
 )
 
+
+const (
+	DefaultCacheTimeout = time.Minute * 5
+)
 
 type SunGrow struct {
 	ApiRoot api.Web

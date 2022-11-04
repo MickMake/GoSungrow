@@ -19,8 +19,8 @@ import (
 	"GoSungrow/iSolarCloud/WebAppService/getMqttConfigInfoByAppkey"
 	"GoSungrow/iSolarCloud/WebAppService/queryUserCurveTemplateData"
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/output"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"errors"
 	"fmt"
 	"math"
@@ -142,21 +142,23 @@ func (sg *SunGrow) GetTemplatePoints(template string) error {
 			template = "8042"
 		}
 
-		table := output.NewTable()
-		sg.Error = table.SetHeader(
+		table := output.NewTable(
 			"PointStruct Id",
 			"Description",
 			"Unit",
-			)
+		)
+		// sg.Error = table.SetHeader(
+		// 	"PointStruct Id",
+		// 	"Description",
+		// 	"Unit",
+		// 	)
 		if sg.Error != nil {
 			break
 		}
 
 		ss := sg.GetPointNamesFromTemplate(template)
 		for _, s := range ss {
-			sg.Error = table.AddRow(
-				// api.NameDevicePoint(s.PsKey, s.PointId),
-				s.PsKey + "." + s.PointId.String(),
+			sg.Error = table.AddRow(s.PsKey + "." + s.PointId.String(),
 				s.Name,
 				s.Unit,
 			)
@@ -491,36 +493,20 @@ func (sg *SunGrow) GetRealTimeData(psKey string) error {
 	return sg.Error
 }
 
-func (sg *SunGrow) CmdDataPsDetail(psIds ...valueTypes.PsId) error {
+func (sg *SunGrow) CmdDataPsDetail(psIds ...string) error {
 	for range Only.Once {
-		if len(psIds) == 0 {
-			psIds, sg.Error = sg.GetPsIds()
-			if sg.Error != nil {
-				break
-			}
+		data := sg.NewSunGrowData()
+		data.SetPsIds(psIds...)
+		data.SetEndpoints("getPsDetail", "getPsDetailWithPsType")
+
+		sg.Error = data.GetData()
+		if sg.Error != nil {
+			break
 		}
 
-		var data SunGrowData
-		data.New(sg)
-
-		for _, psId := range psIds {
-			response := data.GetByEndPointName("getPsDetail", SunGrowDataRequest{PsId: &psId})
-			if response.Error != nil {
-				break
-			}
-			sg.Error = response.Data.Table.Output()
-			if sg.Error != nil {
-				break
-			}
-
-			response = data.GetByEndPointName("getPsDetailWithPsType", SunGrowDataRequest{PsId: &psId})
-			if response.Error != nil {
-				break
-			}
-			sg.Error = response.Data.Table.Output()
-			if sg.Error != nil {
-				break
-			}
+		sg.Error = data.GetOutput()
+		if sg.Error != nil {
+			break
 		}
 	}
 
@@ -587,9 +573,7 @@ func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints, psId
 
 func (sg *SunGrow) SearchPointNames(pns ...string) error {
 	for range Only.Once {
-		table := output.NewTable()
-
-		_ = table.SetHeader(
+		table := output.NewTable(
 			"DeviceType",
 			"Id",
 			"Period",
@@ -598,6 +582,16 @@ func (sg *SunGrow) SearchPointNames(pns ...string) error {
 			"Show Point Name",
 			"Translation Id",
 		)
+
+		// _ = table.SetHeader(
+		// 	"DeviceType",
+		// 	"Id",
+		// 	"Period",
+		// 	"Point Id",
+		// 	"Point Name",
+		// 	"Show Point Name",
+		// 	"Translation Id",
+		// )
 
 		if len(pns) == 0 {
 			fmt.Println("Searching up to id 1000 within getPowerDevicePointInfo")
@@ -658,41 +652,48 @@ func (sg *SunGrow) SearchPointNames(pns ...string) error {
 	return sg.Error
 }
 
-func (sg *SunGrow) GetDeviceList(psIds ...valueTypes.PsId) error {
+func (sg *SunGrow) GetDeviceList(psIds ...string) error {
 	for range Only.Once {
-		if len(psIds) == 0 {
-			psIds, sg.Error = sg.GetPsIds()
-			if sg.Error != nil {
-				break
-			}
-		}
+		data := sg.NewSunGrowData()
+		data.SetPsIds(psIds...)
+		data.SetEndpoints("getDeviceList")
 
-		var ret getDeviceList.Devices
-		for _, psId := range psIds {
-			ep := sg.GetByStruct(
-				"AppService.getDeviceList",
-				// getDeviceList.RequestData{PsId: strconv.FormatInt(psId, 10)},
-				getDeviceList.RequestData{PsId: psId},
-				DefaultCacheTimeout,
-			)
-			if sg.Error != nil {
-				break
-			}
-
-			data := getDeviceList.Assert(ep)
-			ret = append(ret, data.GetDevices()...)
-		}
-
-		table := getDeviceList.GetDevicesTable(ret)
-		table.SetTitle("All Devices")
-		table.SetFilePrefix("")
-		table.SetGraphFilter("")
-		table.SetSaveFile(sg.SaveAsFile)
-		table.OutputType = sg.OutputType
-		sg.Error = table.Output()
+		sg.Error = data.GetData()
 		if sg.Error != nil {
 			break
 		}
+
+		sg.Error = data.GetOutput()
+		if sg.Error != nil {
+			break
+		}
+
+		// var ret getDeviceList.Devices
+		// for _, psId := range psIds {
+		// 	ep := sg.GetByStruct(
+		// 		"AppService.getDeviceList",
+		// 		// getDeviceList.RequestData{PsId: strconv.FormatInt(psId, 10)},
+		// 		getDeviceList.RequestData{PsId: psId},
+		// 		DefaultCacheTimeout,
+		// 	)
+		// 	if sg.Error != nil {
+		// 		break
+		// 	}
+		//
+		// 	data := getDeviceList.Assert(ep)
+		// 	ret = append(ret, data.GetDevices()...)
+		// }
+		//
+		// table := getDeviceList.GetDevicesTable(ret)
+		// table.SetTitle("All Devices")
+		// table.SetFilePrefix("")
+		// table.SetGraphFilter("")
+		// table.SetSaveFile(sg.SaveAsFile)
+		// table.OutputType = sg.OutputType
+		// sg.Error = table.Output()
+		// if sg.Error != nil {
+		// 	break
+		// }
 	}
 
 	return sg.Error

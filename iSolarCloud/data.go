@@ -2,8 +2,8 @@ package iSolarCloud
 
 import (
 	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/output"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -14,113 +14,17 @@ import (
 
 // ****************************************************** //
 
-func (sg *SunGrow) GetEndpoints(endpoints string, args ...string) error {
+func (sg *SunGrow) NewSunGrowData() SunGrowData {
+	var data SunGrowData
 	for range Only.Once {
-		var data SunGrowData
 		data.New(sg)
 
-		var request SunGrowDataRequest
-		request = request.Set(args...)
-
-		eps := SplitArg(endpoints)
-		// if endpoints == "all" {
-		// 	eps = data.GetAllEndPoints()
-		// }
-
-		if endpoints == "" {
-			// fmt.Println("Additional commands available, (on top of endpoints):")
-			// for _, ep := range data.GetAllEndPoints() {
-			// 	fmt.Printf("\t%s\n", ep)
-			// }
-			sg.Error = errors.New("need an endpoint")
-			break
-		}
-
-		for _, endpoint := range eps {
-			ep := sg.GetEndpoint(endpoint)
-			sg.Error = ep.GetError()
-			if sg.Error != nil {
-				break
-			}
-
-			rargs := ep.GetRequestArgNames()
-			// fmt.Printf("args:%s\n", rargs)
-
-			// getOrgList.ResultData
-			if _, ok := rargs[NamePsId]; !ok {
-				response := data.GetByApi(ep, request)
-				if response.Error != nil {
-					sg.Error = response.Error
-					break
-				}
-				if data.Error != nil {
-					sg.Error = data.Error
-					break
-				}
-
-				if sg.OutputType.IsTable() {
-					if len(response.Data.DataTables) == 0 {
-						fmt.Println("No data tables defined - try a get instead.")
-						break
-					}
-					for _, t := range response.Data.DataTables {
-						t.OutputType = sg.OutputType
-						t.SetSaveFile(sg.SaveAsFile)
-						sg.Error = t.Output()
-						if sg.Error != nil {
-							break
-						}
-					}
-					break
-				}
-
-				response.Data.Table.SetFilePrefix(request.GetFilename(endpoint))
-				sg.Error = response.Data.Table.Output()
-				break
-			}
-
-			if len(request.aPsId) == 0 {
-				var pids valueTypes.PsIds
-				pids, sg.Error = sg.GetPsIds()
-				if sg.Error != nil {
-					break
-				}
-				request.SetPsIds(pids.Strings())
-			}
-			for _, psId := range request.aPsId {
-				request.SetPsId(psId.String())
-
-				response := data.GetByApi(ep, request)
-				if response.Error != nil {
-					sg.Error = response.Error
-					break
-				}
-				if data.Error != nil {
-					sg.Error = data.Error
-					break
-				}
-
-				if sg.OutputType.IsTable() {
-					for _, t := range response.Data.DataTables {
-						t.OutputType = sg.OutputType
-						t.SetSaveFile(sg.SaveAsFile)
-						sg.Error = t.Output()
-						if sg.Error != nil {
-							break
-						}
-					}
-					break
-				}
-
-				response.Data.Table.SetFilePrefix(request.GetFilename(endpoint))
-				sg.Error = response.Data.Table.Output()
-			}
-			break
-		}
+		data.SetOutputType(sg.OutputType)
+		data.SetSaveAsFile(sg.SaveAsFile)
 	}
-
-	return sg.Error
+	return data
 }
+
 
 func SplitArg(arg string) []string {
 	var ret []string
@@ -152,17 +56,60 @@ type SunGrowDataResponse struct {
 	Title    string
 	Error    error
 }
+type SunGrowDataResponses map[string]SunGrowDataResponse
+
+func (sgd *SunGrowDataResponse) GetOutput(outputType output.OutputType, saveAsFile bool) error {
+	for range Only.Once {
+		if sgd.Data.Table.OutputType.IsTable() {
+			var ok bool
+			for _, t := range sgd.Data.DataTables {
+				ok = true
+				t.OutputType = outputType
+				t.SetSaveFile(saveAsFile)
+				sgd.Error = t.Output()
+				if sgd.Error != nil {
+					break
+				}
+			}
+			if !ok {
+				fmt.Printf("No data table results for '%s'", sgd.Title)
+			}
+			break
+		}
+
+		sgd.Data.Table.OutputType = outputType
+		sgd.Data.Table.SetSaveFile(saveAsFile)
+		sgd.Error = sgd.Data.Table.Output()
+	}
+
+	return sgd.Error
+}
 
 
 type SunGrowData struct {
-	// EndPoints EndPoints
-	SunGrow   *SunGrow
-	Error     error
+	endPoints  []string
+	request    SunGrowDataRequest
+
+	results   SunGrowDataResults
+
+	sunGrow    *SunGrow
+	outputType output.OutputType
+	saveAsFile bool
+	Error      error
 }
+type SunGrowDataResult struct {
+	EndPointName api.EndPointName
+	EndPoint     api.EndPoint
+	Request      SunGrowDataRequest
+	Response     SunGrowDataResponse
+}
+type SunGrowDataResults map[string]SunGrowDataResult
 
 func (sgd *SunGrowData) New(ref *SunGrow) {
 	for range Only.Once {
-		sgd.SunGrow = ref
+		sgd.sunGrow = ref
+		sgd.results = make(SunGrowDataResults)
+
 		// sgd.EndPoints = make(EndPoints)
 		// sgd.EndPoints["getPsList"] = EndPoint { Func: sgd.getPsList, HasArgs: false }
 		// sgd.EndPoints["queryDeviceList"] = EndPoint { Func: sgd.queryDeviceList, HasArgs: true }
@@ -207,25 +154,143 @@ func (sgd *SunGrowData) New(ref *SunGrow) {
 	}
 }
 
-func (sgd *SunGrowData) GetByEndPointName(endpoint string, request SunGrowDataRequest) SunGrowDataResponse {
-	var response SunGrowDataResponse
-	response.Data.Table = output.NewTable()
-	for range Only.Once {
-		ep := sgd.SunGrow.GetEndpoint(endpoint)
-		sgd.SunGrow.Error = ep.GetError()
-		if sgd.SunGrow.Error != nil {
-			break
-		}
-		response = sgd.GetByApi(ep, request)
-	}
-	return response
+func (sgd *SunGrowData) SetOutput(t string) {
+	sgd.outputType.Set(t)
 }
 
-func (sgd *SunGrowData) GetByApi(endpoint api.EndPoint, request SunGrowDataRequest) SunGrowDataResponse {
-	var response SunGrowDataResponse
-	// response.Table = output.NewTable()
-	for range Only.Once {
+func (sgd *SunGrowData) SetOutputType(t output.OutputType) {
+	sgd.outputType = t
+}
 
+func (sgd *SunGrowData) SetSaveAsFile(yes bool) {
+	sgd.saveAsFile = yes
+}
+
+func (sgd *SunGrowData) SetEndpoints(endpoints ...string) {
+	sgd.endPoints = endpoints
+}
+
+func (sgd *SunGrowData) SetArgs(args ...string) {
+	sgd.request.Set(args...)
+}
+
+func (sgd *SunGrowData) SetPsIds(psids ...string) {
+	for range Only.Once {
+		if len(psids) == 0 {
+			var pids valueTypes.PsIds
+			pids, sgd.Error = sgd.sunGrow.GetPsIds()
+			if sgd.Error != nil {
+				break
+			}
+			sgd.request.SetPSIDs(pids.Strings())
+			break
+		}
+
+		sgd.request.SetPSIDs(psids)
+	}
+}
+
+func (sgd *SunGrowData) GetData() error {
+	for range Only.Once {
+		if len(sgd.endPoints) == 0 {
+			sgd.Error = errors.New("need an endpoint")
+			break
+		}
+
+		for _, endpoint := range sgd.endPoints {
+			// Lookup endpoint interface from string.
+			ep := sgd.sunGrow.GetEndpoint(endpoint)
+			sgd.sunGrow.Error = ep.GetError()
+			if sgd.sunGrow.Error != nil {
+				break
+			}
+
+			sgd.request.SetRequired(ep.GetRequestArgNames())
+			if sgd.request.IsNotRequired(NamePsId) {
+				var result SunGrowDataResult
+
+				result.EndPointName = ep.GetName()
+				result.EndPoint = ep
+				result.Request = sgd.request
+				result.Response = sgd.CallEndpoint(ep, result.Request)
+				sgd.results[result.EndPointName.String()] = result
+				break
+			}
+
+			if len(sgd.request.aPsId) == 0 {
+				sgd.SetPsIds()
+			}
+			for _, psId := range sgd.request.aPsId {
+				var result SunGrowDataResult
+
+				result.Request = sgd.request
+				if result.Request.IsRequired(NamePsId) {
+					result.Request.SetPsId(psId.String())
+				}
+				if result.Request.IsRequired(NamePsIds) {
+					result.Request.SetPsId(psId.String())
+				}
+				result.EndPointName = ep.GetName()
+				result.EndPoint = ep
+				result.Response = sgd.CallEndpoint(ep, result.Request)
+				sgd.results[result.EndPointName.String()] = result
+			}
+		}
+	}
+
+	return sgd.Error
+}
+
+func (sgd *SunGrowData) GetOutput() error {
+	for range Only.Once {
+		if len(sgd.results) == 0 {
+			fmt.Println("No results found.")
+			break
+		}
+		for _, result := range sgd.results {
+			sgd.Error = result.Response.GetOutput(sgd.sunGrow.OutputType, sgd.sunGrow.SaveAsFile)
+
+			// if result.Response.Data.Table.OutputType.IsTable() {
+			// 	for _, t := range result.Response.Data.DataTables {
+			// 		t.OutputType = sgd.sunGrow.OutputType
+			// 		t.SetSaveFile(sgd.sunGrow.SaveAsFile)
+			// 		sgd.Error = t.Output()
+			// 		if sgd.Error != nil {
+			// 			break
+			// 		}
+			// 	}
+			// 	continue
+			// }
+			//
+			// ok = true
+			// sgd.Error = result.Response.Data.Table.Output()
+		}
+	}
+
+	return sgd.Error
+}
+
+func (sgd *SunGrowData) GetResults() SunGrowDataResults {
+	return sgd.results
+}
+
+// func (sgd *SunGrowData) GetByEndPointName(endpoint string) SunGrowDataResponse {
+// 	var response SunGrowDataResponse
+// 	response.Data.Table = output.NewTable()
+// 	for range Only.Once {
+// 		ep := sgd.sunGrow.GetEndpoint(endpoint)
+// 		sgd.sunGrow.Error = ep.GetError()
+// 		if sgd.sunGrow.Error != nil {
+// 			break
+// 		}
+// 		response = sgd.GetEndpoint(ep)
+// 	}
+// 	return response
+// }
+
+func (sgd *SunGrowData) CallEndpoint(endpoint api.EndPoint, request SunGrowDataRequest) SunGrowDataResponse {
+	var response SunGrowDataResponse
+	for range Only.Once {
 		if !request.Validate(endpoint) {
 			request.Help(endpoint)
 			break
@@ -234,7 +299,7 @@ func (sgd *SunGrowData) GetByApi(endpoint api.EndPoint, request SunGrowDataReque
 		var req []byte
 		req, sgd.Error = json.Marshal(request)
 		if sgd.Error != nil {
-			fmt.Printf("GetByApi - ERR: %s\n", sgd.Error)
+			fmt.Printf("GetEndpoint - ERR: %s\n", sgd.Error)
 			break
 		}
 		// fmt.Printf("%s\n", req)
@@ -253,7 +318,7 @@ func (sgd *SunGrowData) GetByApi(endpoint api.EndPoint, request SunGrowDataReque
 		sgd.Error = endpoint.GetError()
 		if sgd.Error != nil {
 			if strings.Contains(sgd.Error.Error(), "er_token_login_invalid") {
-				sgd.SunGrow.Logout()
+				sgd.sunGrow.Logout()
 				break
 			}
 			fmt.Println(endpoint.Help())
@@ -271,11 +336,12 @@ func (sgd *SunGrowData) GetByApi(endpoint api.EndPoint, request SunGrowDataReque
 		// endpoint.GetEndPointDataTables()
 		// response.Table = endpoint.GetEndPointResultTable()
 		// response.Table.SetTitle(response.Title)
-		// response.Table.SetFilePrefix(response.Filename)
 		// response.Data.Table.SetGraphFilter("")
-		response.Data.Table.SetSaveFile(sgd.SunGrow.SaveAsFile)
-		response.Data.Table.OutputType = sgd.SunGrow.OutputType
+		response.Data.Table.SetFilePrefix(request.GetFilename(string(endpoint.GetName())))
+		response.Data.Table.SetSaveFile(sgd.saveAsFile)
+		response.Data.Table.OutputType = sgd.outputType
 	}
+
 	return response
 }
 
@@ -312,8 +378,8 @@ func (sgd *SunGrowData) GetByApi(endpoint api.EndPoint, request SunGrowDataReque
 // 		response.Data.Table.SetTitle(response.Title)
 // 		response.Data.Table.SetFilePrefix(response.Filename)
 // 		response.Data.Table.SetGraphFilter("")
-// 		response.Data.Table.SetSaveFile(sgd.SunGrow.SaveAsFile)
-// 		response.Data.Table.OutputType = sgd.SunGrow.OutputType
+// 		response.Data.Table.SetSaveFile(sgd.sunGrow.SaveAsFile)
+// 		response.Data.Table.OutputType = sgd.sunGrow.OutputType
 // 	}
 // 	return response
 // }
@@ -340,7 +406,7 @@ func (sgd *SunGrowData) GetByApi(endpoint api.EndPoint, request SunGrowDataReque
 // 			break
 // 		}
 //
-// 		ok = sgd.SunGrow.RequestRequiresArgs(endpoint)
+// 		ok = sgd.sunGrow.RequestRequiresArgs(endpoint)
 // 	}
 // 	return yes
 // }
@@ -349,7 +415,7 @@ func (sgd *SunGrowData) GetByApi(endpoint api.EndPoint, request SunGrowDataReque
 // func (sgd *SunGrowData) energyTrend(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
 // 	for range Only.Once {
-// 		ep := sgd.SunGrow.GetByStruct(
+// 		ep := sgd.sunGrow.GetByStruct(
 // 			"AppService.energyTrend",
 // 			// energyTrend.RequestData{ PsId: request.PsId },
 // 			energyTrend.RequestData{  },
@@ -372,7 +438,7 @@ func (sgd *SunGrowData) GetByApi(endpoint api.EndPoint, request SunGrowDataReque
 // func (sgd *SunGrowData) getAreaList(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
 // 	for range Only.Once {
-// 		ep := sgd.SunGrow.GetByStruct(
+// 		ep := sgd.sunGrow.GetByStruct(
 // 			"AppService.getAreaList",
 // 			// energyTrend.RequestData{ PsId: request.PsId },
 // 			getAreaList.RequestData{  },
@@ -397,7 +463,7 @@ func (sgd *SunGrowData) GetByApi(endpoint api.EndPoint, request SunGrowDataReque
 // func (sgd *SunGrowData) getAllPsIdByOrgIds(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
 // 	for range Only.Once {
-// 		ep := sgd.SunGrow.GetByStruct(
+// 		ep := sgd.sunGrow.GetByStruct(
 // 			"AppService.getAllPsIdByOrgIds",
 // 			// getAllPsIdByOrgIds.RequestData{ PsId: request.PsId },
 // 			getAllPsIdByOrgIds.RequestData{ OrgIds: valueTypes.SetStringValue("362245") },
@@ -421,7 +487,7 @@ func (sgd *SunGrowData) GetByApi(endpoint api.EndPoint, request SunGrowDataReque
 // func (sgd *SunGrowData) findCodeValueList(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
 // 	for range Only.Once {
-// 		ep := sgd.SunGrow.GetByStruct(
+// 		ep := sgd.sunGrow.GetByStruct(
 // 			"AppService.findCodeValueList",
 // 			// findCodeValueList.RequestData{ PsId: request.PsId },
 // 			findCodeValueList.RequestData{ CodeType: *request.CodeType },
@@ -445,7 +511,7 @@ func (sgd *SunGrowData) GetByApi(endpoint api.EndPoint, request SunGrowDataReque
 // func (sgd *SunGrowData) queryFaultCodes(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
 // 	for range Only.Once {
-// 		ep := sgd.SunGrow.GetByStruct(
+// 		ep := sgd.sunGrow.GetByStruct(
 // 			"WebAppService.queryFaultCodes",
 // 			// queryFaultCodes.RequestData{ PsId: request.PsId },
 // 			queryFaultCodes.RequestData{ FaultName: valueTypes.SetStringValue("417") },
@@ -468,7 +534,7 @@ func (sgd *SunGrowData) GetByApi(endpoint api.EndPoint, request SunGrowDataReque
 // func (sgd *SunGrowData) queryNounList(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
 // 	for range Only.Once {
-// 		ep := sgd.SunGrow.GetByStruct(
+// 		ep := sgd.sunGrow.GetByStruct(
 // 			"WebAppService.queryNounList",
 // 			queryNounList.RequestData{ FaultTypeCode: valueTypes.SetStringValue("718") },
 // 			// queryNounList.RequestData{ },

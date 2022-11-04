@@ -1,7 +1,7 @@
 package Common
 
 import (
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
 
