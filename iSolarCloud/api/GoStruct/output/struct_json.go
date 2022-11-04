@@ -2,7 +2,7 @@ package output
 
 import (
 	"GoSungrow/Only"
-	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/GoStruct/reflection"
 	"encoding/json"
 	"fmt"
 )
@@ -50,7 +50,7 @@ func GetAsString(r interface{}) string {
 			break
 		}
 
-		a, e := apiReflect.GetStructName(r)
+		a, e := reflection.GetStructName(r)
 		ret += fmt.Sprintf(`"%s.%s": %s`, a, e, j)
 	}
 	return ret
@@ -65,7 +65,7 @@ func GetRequestString(r interface{}) string {
 			break
 		}
 
-		a, e := apiReflect.GetStructName(r)
+		a, e := reflection.GetStructName(r)
 		ret += fmt.Sprintf(`"%s.%s": %s`, a, e, j)
 	}
 	return ret

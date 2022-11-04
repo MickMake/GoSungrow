@@ -2,7 +2,7 @@ package api
 
 import (
 	"GoSungrow/Only"
-	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"errors"
 	"fmt"
 	"github.com/olekukonko/tablewriter"

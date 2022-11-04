@@ -2,14 +2,13 @@ package api
 
 import (
 	"GoSungrow/Only"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/reflection"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"encoding/json"
 	"fmt"
 	datatable "go.pennock.tech/tabular/auto"
-	"os"
-	"reflect"
 	"sort"
 	"strings"
 	"time"
@@ -17,7 +16,6 @@ import (
 
 
 type DataMap struct {
-	// DataStructures apiReflect.DataStructures
 	Map        map[string]*DataEntries
 	Table      output.Table
 	DataTables output.Tables
@@ -30,21 +28,23 @@ func NewDataMap() DataMap {
 	}
 }
 
-func (dm *DataMap) StructToDataMap(endpoint EndPoint, parentDeviceId string, name apiReflect.EndPointPath) {
+func (dm *DataMap) StructToDataMap(endpoint EndPoint, parentDeviceId string, name GoStruct.EndPointPath) DataMap {
 	for range Only.Once {
-		epName := apiReflect.NewEndPointPath(apiReflect.GetName("", endpoint))
+		epName := GoStruct.NewEndPointPath(reflection.GetName("", endpoint))
 		name = epName.Append(name...)
 
 		timestamp := valueTypes.SetDateTimeValue(time.Now().Round(5 * time.Minute))
 
 		// Iterate over all available fields and read the tag values
-		var tp apiReflect.DataStructures
+		var Parent GoStruct.Reflect
+		Parent.SetByFieldName(endpoint.ResponseRef(), endpoint.ResponseRef(), name[0])
+		Current := GoStruct.FindStart("ResultData", Parent, Parent, name)
+		name = Current.DataStructure.Endpoint.Copy()
+
+		var tp GoStruct.DataStructures
 		tp.Debug = false
 		tp.ShowEmpty = true
-		var Ref apiReflect.Reflect
-		Ref.SetByFieldName(endpoint.ResponseRef(), endpoint.ResponseRef(), "")
-		Ref = FindResultData(Ref, Ref)
-		tp.GetPointTags(Ref, Ref, name)
+		tp.GetPointTags(&Parent, Current, name)
 
 		// Convert to DataMap
 		for _, f := range tp.DataMap {
@@ -65,7 +65,10 @@ func (dm *DataMap) StructToDataMap(endpoint EndPoint, parentDeviceId string, nam
 			}
 
 			// fmt.Printf("DEBUG: StructToPoints(): %s / %s\n", f.Endpoint, f.PointId)
-			uvs, _, ok := valueTypes.AnyToUnitValue(f.Value, f.PointUnit, f.PointValueType, valueTypes.DateTimeLayout)
+			if f.PointNameDateFormat == "" {
+				f.PointNameDateFormat = valueTypes.DateTimeLayout
+			}
+			uvs, _, ok := valueTypes.AnyToUnitValue(f.Value, f.PointUnit, f.PointValueType, f.PointNameDateFormat)
 			if !ok {
 				continue
 			}
@@ -110,160 +113,20 @@ func (dm *DataMap) StructToDataMap(endpoint EndPoint, parentDeviceId string, nam
 			}
 		}
 
-
 		// Create data tables.
 		dm.Table = dm.CreateEndPointResultTable()
-		dm.Table.SetTitle(fmt.Sprintf("EndPoint Data: %s", name))
-		dm.Table.SetFilePrefix(fmt.Sprintf("%s_%s", endpoint.GetArea(), endpoint.GetName()))
+		dm.Table.SetTitle("EndPoint Data: %s", name)
+		dm.Table.SetFilePrefix("%s_%s", endpoint.GetArea(), endpoint.GetName())
 		dm.Table.SetJson([]byte(endpoint.GetJsonData(false)))
 		dm.Table.SetRaw([]byte(endpoint.GetJsonData(true)))
 
 		dm.DataTables = output.NewTables()
-		if tp.DataTables.Merge {
-			var data [][]interface{}
-			var headers []interface{}
-
-			if tp.DataTables.Index {
-				headers = append(headers, "Date/Time", "Index")
-			}
-
-			for _, f := range tp.DataTables.Get() {
-				if f == nil {
-					continue
-				}
-				if !f.Reflect.DataStructure.DataTable {
-					continue
-				}
-
-				dt := f.GetTable()
-				for index := range dt.Headers {
-					headers = append(headers, dt.Headers[index])
-				}
-
-				for rowIndex, _ := range dt.Data {
-					if data == nil {
-						data = make([][]interface{}, 0)
-					}
-					for _, col := range dt.Data[rowIndex] {
-						// uvs, _, ok := valueTypes.AnyToUnitValue(col.DataStructure.Value, col.DataStructure.PointUnit, col.DataStructure.PointValueType, valueTypes.DateTimeLayout)
-						// if !ok {
-						// 	continue
-						// }
-
-						if (len(data) - 1) < rowIndex {
-							var d []interface{}
-							d = append(d, col.DataStructure.Value)
-							data = append(data, d)
-							continue
-						}
-						// data[rowIndex] = append(data[rowIndex], uvs[0].String())
-						data[rowIndex] = append(data[rowIndex], col.DataStructure.Value)
-					}
-				}
-			}
-
-			if tp.DataTables.Index {
-				for i := range data {
-					var t []interface{}
-					t = append(t, timestamp.String(), i)
-					data[i] = append(t, data[i]...)
-				}
-			}
-
-			table := output.NewTable()
-			for i := range data {
-				// fmt.Printf("DEBUG: StructToPoints(): %s / %s\n", f.Endpoint, f.PointId)
-
-				_ = table.AddRow(data[i]...)
-			}
-			_ = table.SetHeader(headers...)
-			table.SetTitle(fmt.Sprintf("Table %s-%s - (%s)", endpoint.GetArea(), endpoint.GetName(), parentDeviceId))
-			table.SetFilePrefix(fmt.Sprintf("%s-%s-%s", endpoint.GetArea(), endpoint.GetName(), parentDeviceId))
-			table.SetGraphFilter("")
-			dm.DataTables[fmt.Sprintf("%s.%s", endpoint.GetArea(), endpoint.GetName())] = table
-			break
-		}
-
-		// for _, f := range tp.DataTables.Get() {
-		// 	if f == nil {
-		// 		continue
-		// 	}
-		// 	if !f.Reflect.DataStructure.DataTable {
-		// 		continue
-		// 	}
-		//
-		// 	dt := f.GetTable()
-		// 	for index := range dt.Headers {
-		// 		headers = append(headers, dt.Headers[index])
-		// 	}
-		//
-		// 	for rowIndex, _ := range dt.Data {
-		// 		if data == nil {
-		// 			data = make([][]interface{}, 0)
-		// 		}
-		// 		for _, col := range dt.Data[rowIndex] {
-		// 			uvs, _, ok := valueTypes.AnyToUnitValue(col.DataStructure.Value, col.DataStructure.PointUnit, col.DataStructure.PointValueType, valueTypes.DateTimeLayout)
-		// 			if !ok {
-		// 				continue
-		// 			}
-		//
-		// 			// var point Point
-		// 			// p := GetPoint(strings.Join(col.DataStructure.Endpoint, ".") + "." + col.DataStructure.PointId)
-		// 			// if p == nil {
-		// 			// 	// No point found. Create one.
-		// 			// 	point = CreatePoint(parentDeviceId, valueTypes.SetPointIdString(col.DataStructure.PointId), col.DataStructure.PointName, col.DataStructure.PointGroupName, uvs.Unit(), uvs.Type(), col.DataStructure.PointUpdateFreq)
-		// 			// } else {
-		// 			// 	point = *p
-		// 			// }
-		// 			// point.UpdateFreq = col.DataStructure.PointUpdateFreq
-		// 			// point.SetName(col.DataStructure.PointName)
-		//
-		// 			if (len(data) - 1) < rowIndex {
-		// 				var d []interface{}
-		// 				d = append(d, uvs[0].String())
-		// 				data = append(data, d)
-		// 				continue
-		// 			}
-		// 			data[rowIndex] = append(data[rowIndex], uvs[0].String())
-		// 		}
-		// 	}
-		// }
-
-		for _, f := range tp.DataTables.Get() {
-			if !f.Reflect.DataStructure.DataTable {
-				continue
-			}
-
-			table := output.NewTable()
-			dt := f.GetTable()
-
-			var headers []interface{}
-			for _, h := range dt.Headers {
-				headers = append(headers, h)
-			}
-			_ = table.SetHeader(headers...)
-
-			for row := range dt.Data {
-				var data []interface{}
-				for _, col := range dt.Data[row] {
-					data = append(data, col.DataStructure.Value)
-				}
-				_ = table.AddRow(data...)
-			}
-			title := dt.Reflect.DataStructure.DataTableTitle
-			if title == "" {
-				title = dt.Reflect.DataStructure.DataTableName
-			}
-			if title == "" {
-				title = dt.Reflect.DataStructure.DataTableId
-			}
-
-			table.SetTitle(fmt.Sprintf("List %s-%s - %s", endpoint.GetArea(), endpoint.GetName(), title))
-			table.SetFilePrefix(fmt.Sprintf("%s-%s-%s", endpoint.GetArea(), endpoint.GetName(), dt.Reflect.DataStructure.DataTableId))
-			table.SetGraphFilter("")
-			dm.DataTables[dt.Reflect.DataStructure.DataTableId] = table
-		}
+		dm.DataTables = tp.DataTables.GetDataMergedTables(timestamp, parentDeviceId)
+		dm.DataTables = tp.DataTables.GetDataTables()
+		// dm.GetDataMergedTables(endpoint, tp.DataTables, timestamp, parentDeviceId)
+		// dm.GetDataTables(endpoint, tp.DataTables)
 	}
+	return *dm
 }
 
 func (dm *DataMap) AddPointUnitValue(endpoint string, parentDeviceId string, point Point, date valueTypes.DateTime, uv valueTypes.UnitValue) {
@@ -451,20 +314,29 @@ func (dm *DataMap) TableSort() []string {
 }
 
 func (dm *DataMap) CreateEndPointResultTable() output.Table {
-	table := output.NewTable()
+	table := output.NewTable(
+		"Date",
+		"Point Id",
+		"Value",
+		"Unit",
+		"Unit Type",
+		"Group Name",
+		"Description",
+		"Update Freq",
+	)
 
 	for range Only.Once {
 		for _, p := range dm.Sort() {
-			_ = table.SetHeader(
-				"Date",
-				"Point Id",
-				"Value",
-				"Unit",
-				"Unit Type",
-				"Group Name",
-				"Description",
-				"Update Freq",
-			)
+			// _ = table.SetHeader(
+			// 	"Date",
+			// 	"Point Id",
+			// 	"Value",
+			// 	"Unit",
+			// 	"Unit Type",
+			// 	"Group Name",
+			// 	"Description",
+			// 	"Update Freq",
+			// )
 
 			entries := dm.Map[p].Entries
 			for _, de := range entries {
@@ -472,10 +344,9 @@ func (dm *DataMap) CreateEndPointResultTable() output.Table {
 					continue
 				}
 
-				_ = table.AddRow(
-					de.Date.Format(valueTypes.DateTimeLayout),
+				_ = table.AddRow(de.Date.Format(valueTypes.DateTimeLayout),
 					p,
-					de.Value,
+					de.Value.String(),
 					de.Point.Unit,
 					de.Point.ValueType,
 					de.Point.GroupName,
@@ -624,60 +495,5 @@ func JoinWithDots(intSize int, dateFormat string, args ...interface{}) string {
 		}
 		ret = strings.Join(a, ".")
 	}
-	return ret
-}
-
-func FindResultData(Parent apiReflect.Reflect, Current apiReflect.Reflect) apiReflect.Reflect {
-	var ret apiReflect.Reflect
-
-	for range Only.Once {
-		if Current.Kind == reflect.Pointer {
-			// Special case:
-			// We're going to change the pointer to a proper object reference.
-			if Current.IsNil {
-				break
-			}
-			ref2 := Current.ValueOf.Elem().Interface()
-			if valueTypes.IsNil(ref2) {
-				break
-			}
-			Current.SetByFieldName(Current.Interface, ref2, "")
-			if Current.IsNil {
-				break
-			}
-			// DO NOT BREAK!
-			// KEEP FIRST!
-		}
-
-		if Current.Kind == reflect.Struct {
-			// Iterate over all available fields and read the tag value
-			for si := 0; si < Current.Length; si++ {
-				var Child apiReflect.Reflect
-				Child.SetByIndex(Parent, Current, si, apiReflect.EndPointPath{})
-				if Child.DataStructure.PointId == "result_data" {
-					ret = Child
-					break
-				}
-
-				if Child.Kind != reflect.Struct {
-					continue
-				}
-
-				if Child.IsKnown() {
-					continue
-				}
-
-				Child = FindResultData(Current, Child)
-				if Child.DataStructure.PointId == "ResultData" {
-					ret = Child
-					break
-				}
-			}
-			break
-		}
-
-		_, _ = fmt.Fprintf(os.Stderr,"ERROR: Field '%s' type not supported: Type %s\n", Current.FieldName, Current.Kind.String())
-	}
-
 	return ret
 }

@@ -1,5 +1,5 @@
-// Package apiReflect - Snaffooed from https://github.com/fatih/structs
-package apiReflect
+// Package GoStruct - Snaffooed from https://github.com/fatih/structs
+package GoStruct
 
 import (
 	"errors"

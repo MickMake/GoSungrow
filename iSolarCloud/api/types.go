@@ -1,7 +1,7 @@
 package api
 
 import (
-	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
 )
 
 
@@ -35,12 +35,12 @@ func (e *Web) ApiGetEndPointDataTables(endpoint EndPoint) output.Tables {
 	table := output.NewTables()
 	// for range Only.Once {
 	//
-	// 	var tp apiReflect.DataStructures
+	// 	var tp GoStruct.DataStructures
 	// 	tp.Debug = true
 	// 	tp.ShowEmpty = true
-	// 	var Ref apiReflect.Reflect
+	// 	var Ref GoStruct.Reflect
 	// 	Ref.SetByFieldName(endpoint.ResponseRef(), endpoint.ResponseRef(), "")
-	// 	// tp.FindDataTables(Ref, Ref, apiReflect.EndPointPath{}, false)
+	// 	// tp.FindDataTables(Ref, Ref, GoStruct.EndPointPath{}, false)
 	//
 	// 	// data := endpoint.GetEndPointData()
 	// 	//

@@ -2,7 +2,7 @@ package api
 
 import (
 	"GoSungrow/Only"
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
 	"strings"
 )

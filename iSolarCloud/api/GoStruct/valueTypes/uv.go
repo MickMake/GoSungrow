@@ -113,7 +113,13 @@ func UnitValueType(unit string) string {
 
 		case "F":
 			fallthrough
+		case "°F":
+			fallthrough
+		case "℉":
+			fallthrough
 		case "C":
+			fallthrough
+		case "°C":
 			fallthrough
 		case "℃":
 			ret = "Temperature"

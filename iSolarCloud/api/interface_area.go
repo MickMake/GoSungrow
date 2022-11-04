@@ -1,6 +1,6 @@
 package api
 
-import "GoSungrow/iSolarCloud/api/output"
+import "GoSungrow/iSolarCloud/api/GoStruct/output"
 
 type Area interface {
 	Init(*Web) AreaStruct

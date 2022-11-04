@@ -15,7 +15,6 @@ type Response struct {
 type ResponseCommon struct {
 	ReqSerialNum string        `json:"req_serial_num"`
 	ResultCode   string        `json:"result_code"`
-	ResultData   []interface{} `json:"result_data"`
 	ResultMsg    string        `json:"result_msg"`
 }
 

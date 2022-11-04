@@ -2,8 +2,8 @@ package api
 
 import (
 	"GoSungrow/Only"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"github.com/MickMake/GoUnify/cmdPath"
 	"path/filepath"
 	"time"
@@ -107,7 +107,7 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 func (w *Web) getApi(endpoint EndPoint) ([]byte, error) {
 	for range Only.Once {
 		request := endpoint.RequestRef()
-		w.Error = apiReflect.VerifyOptionsRequired(request)
+		w.Error = GoStruct.VerifyOptionsRequired(request)
 		if w.Error != nil {
 			break
 		}

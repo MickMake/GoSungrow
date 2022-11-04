@@ -1,7 +1,7 @@
 package api
 
 import (
-	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"time"
 )
 

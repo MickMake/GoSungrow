@@ -1,6 +1,6 @@
-// Package apiReflect - Snaffooed from https://github.com/fatih/structs
-// Package apiReflect contains various utilities functions to work with structs.
-package apiReflect
+// Package GoStruct - Snaffooed from https://github.com/fatih/structs
+// Package GoStruct contains various utilities functions to work with structs.
+package GoStruct
 
 import (
 	"fmt"

@@ -2,8 +2,9 @@ package api
 
 import (
 	"GoSungrow/Only"
-	"GoSungrow/iSolarCloud/api/apiReflect"
-	"GoSungrow/iSolarCloud/api/output"
+	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
+	"GoSungrow/iSolarCloud/api/GoStruct/reflection"
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoUnify/cmdPath"
@@ -14,7 +15,7 @@ import (
 
 
 func (ep *EndPointStruct) ApiSetFilenamePrefix2(ref interface{}, format string, args ...interface{}) string {
-	f := strings.Join(apiReflect.GetStructValuesAsArray(ref), "-")
+	f := strings.Join(GoStruct.GetStructValuesAsArray(ref), "-")
 	fmt.Printf("[%s]\n", f)
 	if format != "" {
 		ep.FileNamePrefix = fmt.Sprintf(format, args...)
@@ -171,12 +172,12 @@ func (ep *EndPointStruct) ApiRemoveDataFile() error {
 }
 
 func (ep *EndPointStruct) ApiCacheFilename(request interface{}) string {
-	postfix := apiReflect.GetFingerprint(request)
+	postfix := reflection.GetFingerprint(request)
 	return fmt.Sprintf("%s_%s-%s.json", ep.Area, ep.Name, postfix)
 }
 
 func (ep *EndPointStruct) ApiFingerprint(request interface{}) string {
-	return apiReflect.GetFingerprint(request)
+	return reflection.GetFingerprint(request)
 }
 
 // func (ep *EndPointStruct) ApiCacheFilePath(request interface{}) string {

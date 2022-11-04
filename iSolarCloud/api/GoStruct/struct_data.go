@@ -1,7 +1,8 @@
-package apiReflect
+package GoStruct
 
 import (
-	"GoSungrow/iSolarCloud/api/valueTypes"
+	"GoSungrow/iSolarCloud/api/GoStruct/reflection"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 	"os"
@@ -9,84 +10,6 @@ import (
 	"strings"
 	"time"
 )
-
-
-const (
-	PointId                   = "PointId"                   // Point id in the form p\d+ or \d+
-	PointParentId             = "PointParentId"             // Associated parent of point.
-	PointUpdateFreq           = "PointUpdateFreq"           // Point update frequency - Total, Yearly, Monthly, Day.
-	PointValueType            = "PointValueType"            // Value type of point: energy, date, battery, temperature.
-	PointIgnore               = "PointIgnore"               // Ignore this point.
-	PointIgnoreIfNil          = "PointIgnoreIfNil"          // Ignore this point if a child is nil or empty.
-	PointIgnoreIfNilFromChild = "PointIgnoreIfNilFromChild" // Ignore this point if a child is nil or empty.
-
-	PointAliasTo   = "PointAliasTo"   				// Alias this point to another point.
-	PointAliasFrom = "PointAliasFrom" 				// Alias this point from another point.
-
-	PointUnit           = "PointUnit"           	// Units: Wh, kWh, C, h.
-	PointUnitFrom       = "PointUnitFrom"       	// Get PointUnit from another field structure.
-	PointUnitFromParent = "PointUnitFromParent" 	// Get PointUnit from another parent field structure.
-
-	PointGroupName     = "PointGroupName"     		// Point group name.
-	PointGroupNameFrom = "PointGroupNameFrom" 		// Get PointGroupName from another field structure.
-
-	PointName           = "PointName"           	// Human-readable name of point.
-	PointNameFromChild  = "PointNameFromChild"  	// Searches child for field value to use for naming when hitting a slice, (as opposed to using an index).
-	PointNameFromParent = "PointNameFromParent" 	// Searches child for field value to use for naming when hitting a slice, (as opposed to using an index).
-	PointNameDateFormat = "PointNameDateFormat" 	// Date format when using PointNameFrom, (if the field is a time.Time type).
-	PointNameAppend     = "PointNameAppend"     	// Append PointNameFrom instead of replace.
-
-	PointArrayFlatten     = "PointArrayFlatten"     // Flatten an array into a string. EG: ["one", "two", "three"]
-	PointSplitOn          = "PointSplitOn"          // Split a point into an array separating by defined string.
-	PointSplitOnType      = "PointSplitOnType"      // What valueTypes will be used for a split.
-	PointIgnoreZero       = "PointIgnoreZero"       // Ignore arrays with zero size, (default true).
-
-	PointTimestampFrom = "PointTimestampFrom" 		// Pull timestamp from another field structure.
-
-	IsDataTable        = "DataTable"				// This entity is a data table - Will only traverse down one child.
-	DataTableId        = "DataTableId"				// Table id, (defaults to Json tag).
-	DataTableName      = "DataTableName"			// Table Name, (defaults to DataTableId).
-	DataTableTitle     = "DataTableTitle"			// Table Title, (defaults to DataTableId in name format).
-	DataTableMerge     = "DataTableMerge"			// Merge rows together - useful for when we use, for EG: []valueTypes.Float
-	DataTableShowIndex = "DataTableShowIndex" 		// Show index on table.
-)
-
-const (
-	UpdateFreqInstant = "instant"
-	UpdateFreq5Mins   = "5mins"
-	UpdateFreqBoot    = "boot"
-	UpdateFreqDay     = "daily"
-	UpdateFreqMonth   = "monthly"
-	UpdateFreqYear    = "yearly"
-	UpdateFreqTotal   = "total"
-)
-
-
-type EndPointPath []string
-
-func NewEndPointPath(path ...string) EndPointPath {
-	var epp EndPointPath
-	return epp.Append(path...)
-}
-
-func (e *EndPointPath) Copy() EndPointPath {
-	ret := make(EndPointPath, len(*e))
-	copy(ret, *e)
-	return ret
-}
-
-func (e *EndPointPath) Append(path ...string) EndPointPath {
-	ret := make(EndPointPath, len(*e))
-	copy(ret, *e)
-	for _, p := range path {
-		ret = append(ret, p)
-	}
-	return ret
-}
-
-func (e EndPointPath) String() string {
-	return strings.Join(e, ".")
-}
 
 
 type DataStructure struct {
@@ -129,6 +52,7 @@ type DataStructure struct {
 	DataTableTitle            string
 	DataTableMerge            bool
 	DataTableShowIndex        bool
+	DataTableSortOn           string
 
 	Value                     interface{}
 	ValueType                 string
@@ -145,7 +69,7 @@ func (ds *DataStructure) Set(parent interface{}, current interface{}, fieldTo re
 
 		pointIgnoreIfNil := fieldTo.Tag.Get(PointIgnoreIfNil)
 		if pointIgnoreIfNil != "" {
-			ret := GetStringFrom(current, pointIgnoreIfNil)
+			ret := reflection.GetStringFrom(current, pointIgnoreIfNil)
 			if (ret == "") || (ret == "--") {
 				ignore = true
 			}
@@ -173,7 +97,7 @@ func (ds *DataStructure) Set(parent interface{}, current interface{}, fieldTo re
 		// 	pointValueType = "NIL"
 		// }
 
-		pointJson := getJsonTag(fieldTo)
+		pointJson := reflection.GetJsonTag(fieldTo)
 		pointId := fieldTo.Tag.Get(PointId)
 		if pointId == "" {
 			pointId = pointJson
@@ -183,22 +107,22 @@ func (ds *DataStructure) Set(parent interface{}, current interface{}, fieldTo re
 		pointUnitFrom := fieldTo.Tag.Get(PointUnitFrom)
 		pointUnitFromParent := fieldTo.Tag.Get(PointUnitFromParent)
 		if pointUnitFrom != "" {
-			pointUnit = GetStringFrom(current, pointUnitFrom)
+			pointUnit = reflection.GetStringFrom(current, pointUnitFrom)
 		}
 		if pointUnitFromParent != "" {
-			pointUnit = GetStringFrom(parent, pointUnitFromParent)
+			pointUnit = reflection.GetStringFrom(parent, pointUnitFromParent)
 		}
 
 		pointGroupName := fieldTo.Tag.Get(PointGroupName)
 		pointGroupNameFrom := fieldTo.Tag.Get(PointGroupNameFrom)
 		if pointGroupNameFrom != "" {
-			pointGroupName = GetStringFrom(current, pointGroupNameFrom)
+			pointGroupName = reflection.GetStringFrom(current, pointGroupNameFrom)
 		}
 
 		pointTimestamp := time.Now()
 		pointTimestampFrom := fieldTo.Tag.Get(PointTimestampFrom)
 		if pointTimestampFrom != "" {
-			pointTimestamp = GetTimestampFrom(current, pointTimestampFrom, valueTypes.DateTimeLayout)
+			pointTimestamp = reflection.GetTimestampFrom(current, pointTimestampFrom, valueTypes.DateTimeLayout)
 		}
 
 		var valueType string
@@ -264,16 +188,6 @@ func (ds *DataStructure) Set(parent interface{}, current interface{}, fieldTo re
 			dataTableShowIndex = true
 		}
 
-		dtn := fieldTo.Tag.Get(DataTableName)
-		if dtn == "" {
-			dtn = valueTypes.PointToName(pointId)
-		}
-
-		did := fieldTo.Tag.Get(DataTableId)
-		if did == "" {
-			did = pointId
-		}
-
 		*ds = DataStructure {
 			Required:           required,
 			Json:               pointJson,
@@ -307,12 +221,13 @@ func (ds *DataStructure) Set(parent interface{}, current interface{}, fieldTo re
 			PointSplitOnType:          fieldTo.Tag.Get(PointSplitOnType),
 			PointIgnoreZero:           pointIgnoreZero,
 
-			DataTable:      dataTable,
-			DataTableId:    did,
-			DataTableName:  dtn,
-			DataTableTitle: fieldTo.Tag.Get(DataTableTitle),
-			DataTableMerge: dataTableMerge,
+			DataTable:          dataTable,
+			DataTableId:        fieldTo.Tag.Get(DataTableId),
+			DataTableName:      fieldTo.Tag.Get(DataTableName),
+			DataTableTitle:     fieldTo.Tag.Get(DataTableTitle),
+			DataTableMerge:     dataTableMerge,
 			DataTableShowIndex: dataTableShowIndex,
+			DataTableSortOn:    fieldTo.Tag.Get(DataTableSortOn),
 
 			Value:     fieldVo.Interface(),
 			ValueType: valueType,
@@ -323,14 +238,6 @@ func (ds *DataStructure) Set(parent interface{}, current interface{}, fieldTo re
 	return *ds
 }
 
-func COMPARE(name EndPointPath, ref1 interface{}, ref2 interface{}) {
-	t1 := fmt.Sprintf("%v", ref1)
-	t2 := fmt.Sprintf("%v", ref2)
-	if t1 != t2 {
-		fmt.Printf("[%s] VALUE ERROR: '%s' != '%s'\n", name, t1, t2)
-	}
-}
-
 type DataStructures struct {
 	DataMap    map[string]DataStructure
 	DataTables DataTables
@@ -338,7 +245,7 @@ type DataStructures struct {
 	Debug      bool
 }
 
-func (dss *DataStructures) GetPointTags(Parent Reflect, Current Reflect, name EndPointPath) DataStructures {
+func (dss *DataStructures) GetPointTags(Parent *Reflect, Current *Reflect, name EndPointPath) DataStructures {
 
 	for range Only.Once {
 		if Current.DataStructure.DataTable {
@@ -456,7 +363,7 @@ func (dss *DataStructures) Append(dsm DataStructures)  {
 	}
 }
 
-func (dss *DataStructures) ProcessUnsupported(_ Reflect, Current Reflect, name EndPointPath) {
+func (dss *DataStructures) ProcessUnsupported(_ *Reflect, Current *Reflect, name EndPointPath) {
 	for range Only.Once {
 		if dss.ShowEmpty {
 			dss.Add(Current.DataStructure)
@@ -466,7 +373,7 @@ func (dss *DataStructures) ProcessUnsupported(_ Reflect, Current Reflect, name E
 	}
 }
 
-func (dss *DataStructures) ProcessSlice(Parent Reflect, Current Reflect, name EndPointPath) {
+func (dss *DataStructures) ProcessSlice(Parent *Reflect, Current *Reflect, name EndPointPath) {
 	for range Only.Once {
 		// Handle slices here.
 		if dss.ShowEmpty {
@@ -480,7 +387,7 @@ func (dss *DataStructures) ProcessSlice(Parent Reflect, Current Reflect, name En
 
 		for si := 0; si < Current.Length; si++ {
 			var Child Reflect
-			Child.SetByIndex(Parent, Current, si, name)
+			Child.SetByIndex(*Parent, *Current, si, reflect.Value{}, name)
 			if dss.Debug {
 				_, _ = fmt.Fprintf(os.Stderr,"SetByIndex() Child: %s\n", Child)
 			}
@@ -489,111 +396,101 @@ func (dss *DataStructures) ProcessSlice(Parent Reflect, Current Reflect, name En
 				name2 = Current.PointNameFromChild(Child, name)
 			}
 
-			if Child.Kind == reflect.Slice {
-				if Child.IsUnknown() {
-					dss.GetPointTags(Current, Child, name2)
-					continue
-				}
-
-				if dss.PointSplitOn(Current, Child, name2) {
-					continue
-				}
-
-				COMPARE(Child.DataStructure.Endpoint, Child.DataStructure.Value, Child.Interface)
-				dss.Add(Child.DataStructure)
-				continue
-			}
-
 			if Child.IsUnknown() {
-				dss.GetPointTags(Current, Child, name2)
+				dss.GetPointTags(Current, &Child, name2)
 				continue
 			}
+
+			if dss.PointSplitOn(Current, &Child, name2) {
+				continue
+			}
+
 			dss.Add(Child.DataStructure)
 		}
 	}
 }
 
-func (dss *DataStructures) ProcessStruct(Parent Reflect, Current Reflect, name EndPointPath) {
+func (dss *DataStructures) ProcessStruct(Parent *Reflect, Current *Reflect, name EndPointPath) {
 	for range Only.Once {
 		// Iterate over all available fields and read the tag value
 		for si := 0; si < Current.Length; si++ {
 			var Child Reflect
-			Child.SetByIndex(Parent, Current, si, name)
+			Child.SetByIndex(*Parent, *Current, si, reflect.Value{}, name)
 			if dss.Debug {
 				_, _ = fmt.Fprintf(os.Stderr,"SetByIndex() Child: %s\n", Child)
 			}
 			name2 := Child.DataStructure.Endpoint.Copy()
+			if Current.DataStructure.PointNameFromChild != "" {
+				name2 = Current.PointNameFromChild(Child, name)
+			}
 
 			if !Child.IsExported {
 				_, _ = fmt.Fprintf(os.Stderr, "WARNING: Field '%s' type not exported (%s): Type %s\n", Child.FieldName, name2, Child.Kind.String())
 				continue
 			}
 
-			if Child.Kind == reflect.Struct {
-				if Child.IsUnknown() {
-					dss.GetPointTags(Current, Child, name2)
-					continue
-				}
-
-				if dss.PointSplitOn(Current, Child, name2) {
-					continue
-				}
-
-				COMPARE(Child.DataStructure.Endpoint, Child.DataStructure.Value, Child.Interface)
-				dss.Add(Child.DataStructure)
+			if dss.GoStructOptions(Parent, Current, &Child, name) {
 				continue
 			}
 
 			if Child.IsUnknown() {
-				dss.GetPointTags(Current, Child, name2)
+				dss.GetPointTags(Current, &Child, name2)
 				continue
 			}
-			COMPARE(Child.DataStructure.Endpoint, Child.DataStructure.Value, Child.Interface)
+
+			if dss.PointSplitOn(Current, &Child, name2) {
+				continue
+			}
+
+			// COMPARE(Child.DataStructure.Endpoint, Child.DataStructure.Value, Child.Interface)
 			dss.Add(Child.DataStructure)
 		}
 	}
 }
 
-func (dss *DataStructures) ProcessMap(Parent Reflect, Current Reflect, name EndPointPath) {
+func (dss *DataStructures) ProcessMap(Parent *Reflect, Current *Reflect, name EndPointPath) {
 	for range Only.Once {
-		for si := range Current.FieldVo.MapKeys() {
+		for si, sm := range Current.FieldVo.MapKeys() {
 			// @TODO - Implement pointNameFromChild / pointNameFromParent.
 			// @TODO - Need to look at other types, besides known types.
 			var Child Reflect
-			Child.SetByIndex(Parent, Current, si, name)
+			Child.SetByIndex(*Parent, *Current, si, sm, name)
 			if dss.Debug {
 				_, _ = fmt.Fprintf(os.Stderr,"SetByIndex() Child: %s\n", Child)
 			}
 			name2 := Child.DataStructure.Endpoint.Copy()
+			if Current.DataStructure.PointNameFromChild != "" {
+				name2 = Current.PointNameFromChild(Child, name)
+			}
 
 			if Child.IsUnknown() {
-				dss.GetPointTags(Current, Child, name2)
+				dss.GetPointTags(Current, &Child, name2)
 				continue
 			}
 
-			if dss.PointSplitOn(Current, Child, name2) {
+			if dss.PointSplitOn(Current, &Child, name2) {
 				continue
 			}
 
-			COMPARE(Child.DataStructure.Endpoint, Child.DataStructure.Value, Child.Interface)
+			// COMPARE(Child.DataStructure.Endpoint, Child.DataStructure.Value, Child.Interface)
 			dss.Add(Child.DataStructure)
 		}
 	}
 }
 
-func (dss *DataStructures) PointNameAppend(_ Reflect, Current Reflect, name EndPointPath) []string {
+func (dss *DataStructures) PointNameAppend(_ *Reflect, Current *Reflect, name EndPointPath) EndPointPath {
 	for range Only.Once {
 		if Current.DataStructure.PointNameAppend == false {
 			if len(name) == 0 {
 				break
 			}
-			name = name[:len(name) - 1]
+			name = name.PopLast()
 		}
 	}
 	return name
 }
 
-func (dss *DataStructures) PointArrayFlatten(_ Reflect, Current Reflect, name EndPointPath) bool {
+func (dss *DataStructures) PointArrayFlatten(_ *Reflect, Current *Reflect, name EndPointPath) bool {
 	var yes bool
 	for range Only.Once {
 		if Current.DataStructure.PointArrayFlatten == true {
@@ -607,7 +504,7 @@ func (dss *DataStructures) PointArrayFlatten(_ Reflect, Current Reflect, name En
 	return yes
 }
 
-func (dss *DataStructures) PointIgnoreZero(_ Reflect, Current Reflect, _ EndPointPath) bool {
+func (dss *DataStructures) PointIgnoreZero(_ *Reflect, Current *Reflect, _ EndPointPath) bool {
 	var yes bool
 	for range Only.Once {
 		if !Current.DataStructure.PointIgnoreZero {
@@ -626,7 +523,7 @@ func (dss *DataStructures) PointIgnoreZero(_ Reflect, Current Reflect, _ EndPoin
 	return yes
 }
 
-func (dss *DataStructures) PointIgnoreIfNilFromChild(Parent Reflect, Current Reflect, _ EndPointPath) bool {
+func (dss *DataStructures) PointIgnoreIfNilFromChild(Parent *Reflect, Current *Reflect, _ EndPointPath) bool {
 	var yes bool
 	for range Only.Once {
 		if Parent.DataStructure.PointIgnoreIfNilFromChild == "" {
@@ -637,7 +534,7 @@ func (dss *DataStructures) PointIgnoreIfNilFromChild(Parent Reflect, Current Ref
 			yes = false
 			break
 		}
-		ret := GetStringFrom(Current.Interface, Parent.DataStructure.PointIgnoreIfNilFromChild)
+		ret := reflection.GetStringFrom(Current.Interface, Parent.DataStructure.PointIgnoreIfNilFromChild)
 		if ret == "" {
 			yes = false
 			break
@@ -647,7 +544,7 @@ func (dss *DataStructures) PointIgnoreIfNilFromChild(Parent Reflect, Current Ref
 	return yes
 }
 
-func (dss *DataStructures) PointSplitOn(_ Reflect, Current Reflect, _ EndPointPath) bool {
+func (dss *DataStructures) PointSplitOn(_ *Reflect, Current *Reflect, _ EndPointPath) bool {
 	var yes bool
 	for range Only.Once {
 		if Current.DataStructure.PointSplitOn == "" {
@@ -668,213 +565,50 @@ func (dss *DataStructures) PointSplitOn(_ Reflect, Current Reflect, _ EndPointPa
 	return yes
 }
 
-
-type DataTables struct {
-	Map   []*DataTable
-	Merge bool
-	Index bool
-}
-
-func (dt *DataTables) Get() []*DataTable {
-	return dt.Map
-}
-
-
-type DataTable struct {
-	Reflect Reflect
-	Name    string
-	Merge   bool
-	Index   bool
-	Headers []string
-	Data    [][]Reflect
-	Debug   bool
-}
-
-func (dss *DataStructures) AddTable(ref Reflect) *DataTable {
-	var ret *DataTable
+func (dss *DataStructures) GoStructOptions(Parent *Reflect, Current *Reflect, Child *Reflect, _ EndPointPath) bool {
+	var yes bool
 	for range Only.Once {
-		if dss.DataTables.Map == nil {
-			dss.DataTables.Map = []*DataTable{}
-		}
-		ret = &DataTable {
-			Reflect: ref,
-			Name:    ref.DataStructure.DataTableId,
-			Merge:   ref.DataStructure.DataTableMerge,
-			Index:   ref.DataStructure.DataTableShowIndex,
-			Headers: nil,
-			Data:    nil,
-		}
-		dss.DataTables.Map = append(dss.DataTables.Map, ret)
-		if ref.DataStructure.DataTableMerge {
-			dss.DataTables.Merge = true
-		}
-		if ref.DataStructure.DataTableShowIndex {
-			dss.DataTables.Index = true
-		}
-		if dss.Debug {
-			_, _ = fmt.Fprintf(os.Stderr, "DEBUG DataStructures.AddTable() %s - Kind:'%s' Type:'%s'\n",
-				ref.DataStructure.Endpoint.String(), ref.DataStructure.ValueKind, ref.DataStructure.ValueType)
-		}
-	}
-	return ret
-}
-
-func (dt *DataTable) GetTable() DataTable {
-
-	for range Only.Once {
-		if dt.Debug {
-			_, _ = fmt.Fprintf(os.Stderr,"GetTable() Current[%s]: %s\n", dt.Reflect.DataStructure.DataTableId, dt.Reflect)
-		}
-		if !dt.Reflect.DataStructure.DataTable {
+		if Child.FieldName != NameGoStruct {
 			break
 		}
 
-		if dt.Reflect.Kind == reflect.Pointer {
-			// Special case:
-			// We're going to change the pointer to a proper object reference.
-			if dt.Reflect.IsNil {
-				break
-			}
-			ref2 := dt.Reflect.ValueOf.Elem().Interface()
-			if valueTypes.IsNil(ref2) {
-				break
-			}
-			dt.Reflect.SetByFieldName(dt.Reflect.Interface, ref2, "")
-			if dt.Reflect.IsNil {
-				break
-			}
+		// @TODO - Need to check here if the parent is a slice.
+		// If so - then "parent" is actually Parent.
+		// If not - then "parent" is actually Current.
 
-			// DO NOT BREAK!
-			// KEEP FIRST!
+		if Child.DataStructure.DataTable {
+			Parent.DataStructure.DataTable = Child.DataStructure.DataTable
+		}
+		if Child.DataStructure.DataTableMerge {
+			Parent.DataStructure.DataTableMerge = Child.DataStructure.DataTableMerge
+		}
+		if Child.DataStructure.DataTableShowIndex {
+			Parent.DataStructure.DataTableShowIndex = Child.DataStructure.DataTableShowIndex
+		}
+		if Child.DataStructure.DataTableId != "" {
+			Parent.DataStructure.DataTableId = Child.DataStructure.DataTableId
+		}
+		if Child.DataStructure.DataTableName != "" {
+			Parent.DataStructure.DataTableName = Child.DataStructure.DataTableName
+		}
+		if Child.DataStructure.DataTableTitle != "" {
+			Parent.DataStructure.DataTableTitle = Child.DataStructure.DataTableTitle
+		}
+		if Child.DataStructure.DataTableSortOn != "" {
+			Parent.DataStructure.DataTableSortOn = Child.DataStructure.DataTableSortOn
 		}
 
-		if dt.Reflect.Kind == reflect.Slice {
-			// Handle slices here.
-			for row := 0; row < dt.Reflect.Length; row++ {
-				var Child Reflect
-				Child.SetByIndex(dt.Reflect, dt.Reflect, row, EndPointPath{})
-				if dt.Debug {
-					_, _ = fmt.Fprintf(os.Stderr,"SetByIndex() Child[%s]: %s\n", dt.Reflect.DataStructure.DataTableId, Child)
-				}
-
-				if Child.IsKnown() {
-					// We have a known value
-					if row == 0 {
-						dt.AddHeader(dt.Reflect)
-					}
-					dt.AddRow(Child)
-					continue
-				}
-
-				if Child.Kind == reflect.Struct {
-					var refs []Reflect
-
-					for col := 0; col < Child.Length; col++ {
-						var ChildStruct Reflect
-						ChildStruct.SetByIndex(dt.Reflect, Child, col, EndPointPath{})
-						if dt.Debug {
-							_, _ = fmt.Fprintf(os.Stderr,"SetByIndex() Child: %s\n", ChildStruct)
-						}
-
-						if !ChildStruct.IsExported {
-							_, _ = fmt.Fprintf(os.Stderr, "WARNING: Field '%s' type not exported: Type %s\n", ChildStruct.FieldName, ChildStruct.Kind.String())
-							continue
-						}
-						refs = append(refs, ChildStruct)
-					}
-
-					if row == 0 {
-						dt.AddHeader(refs...)
-					} else {
-						dt.AddRow(refs...)
-					}
-				}
-			}
-			break
-		}
-
-		if dt.Reflect.Kind == reflect.Map {
-			// Handle maps here.
-			for row := range dt.Reflect.FieldVo.MapKeys() {
-				var Child Reflect
-				Child.SetByIndex(dt.Reflect, dt.Reflect, row, EndPointPath{})
-				if dt.Debug {
-					_, _ = fmt.Fprintf(os.Stderr,"SetByIndex() Child[%s]: %s\n", dt.Reflect.DataStructure.DataTableId, Child)
-				}
-
-				if Child.IsKnown() {
-					// We have a known value
-					if row == 0 {
-						dt.AddHeader(dt.Reflect)
-					}
-					dt.AddRow(Child)
-					continue
-				}
-
-				if dt.Reflect.Kind == reflect.Map {
-					var refs []Reflect
-
-					for col := range dt.Reflect.FieldVo.MapKeys() {
-						var ChildStruct Reflect
-						ChildStruct.SetByIndex(dt.Reflect, Child, col, EndPointPath{})
-						if dt.Debug {
-							_, _ = fmt.Fprintf(os.Stderr,"SetByIndex() Child: %s\n", ChildStruct)
-						}
-
-						if !ChildStruct.IsExported {
-							_, _ = fmt.Fprintf(os.Stderr, "WARNING: Field '%s' type not exported: Type %s\n", ChildStruct.FieldName, ChildStruct.Kind.String())
-							continue
-						}
-						refs = append(refs, ChildStruct)
-					}
-
-					if row == 0 {
-						dt.AddHeader(refs...)
-					} else {
-						dt.AddRow(refs...)
-					}
-				}
-			}
-			break
-		}
-
-		_, _ = fmt.Fprintf(os.Stderr,"ERROR: Field '%s' type not supported (%s): Type %s\n",
-			dt.Reflect.FieldName, dt.Reflect.DataStructure.DataTableId, dt.Reflect.Kind.String())
+		dss.AddTable(Parent)
+		yes = true
 	}
-
-	return *dt
+	return yes
 }
 
-func (dt *DataTable) AddHeader(headers ...Reflect) {
-	for range Only.Once {
-		for _, header := range headers {
-			name := valueTypes.PointToName(header.DataStructure.PointName)
-			if header.DataStructure.PointUnit != "" {
-				name += "\n" + header.DataStructure.PointUnit
-			}
-			dt.Headers = append(dt.Headers, name)
-		}
+
+func COMPARE(name EndPointPath, ref1 interface{}, ref2 interface{}) {
+	t1 := fmt.Sprintf("%v", ref1)
+	t2 := fmt.Sprintf("%v", ref2)
+	if t1 != t2 {
+		fmt.Printf("[%s] VALUE ERROR: '%s' != '%s'\n", name, t1, t2)
 	}
-}
-
-func (dt *DataTable) AddRow(refs ...Reflect) {
-	for range Only.Once {
-		if dt.Data == nil {
-			dt.Data = make([][]Reflect, 0)
-		}
-
-		var row []Reflect
-		row = append(row, refs...)
-		// for _, ref := range refs {
-		// }
-		dt.Data = append(dt.Data, row)
-	}
-}
-
-func (dt *DataTable) GetRow(row int) []Reflect {
-	return dt.Data[row]
-}
-
-func (dt *DataTable) Get() [][]Reflect {
-	return dt.Data
 }

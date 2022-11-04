@@ -2,7 +2,7 @@ package api
 
 import (
 	"GoSungrow/Only"
-	"GoSungrow/iSolarCloud/api/apiReflect"
+	"GoSungrow/iSolarCloud/api/GoStruct/reflection"
 	"fmt"
 	"net/url"
 	"reflect"
@@ -37,11 +37,11 @@ func AppendUrl(host string, endpoint string) *url.URL {
 }
 
 func GetArea(v interface{}) AreaName {
-	return AreaName(apiReflect.GetArea(thisPackagePath, v))
+	return AreaName(reflection.GetArea(thisPackagePath, v))
 }
 
 func GetName(v interface{}) EndPointName {
-	return EndPointName(apiReflect.GetName(thisPackagePath, v))
+	return EndPointName(reflection.GetName(thisPackagePath, v))
 }
 
 func GetUrl(u string) *url.URL {
@@ -59,7 +59,7 @@ func GetUrl(u string) *url.URL {
 // func GetStructKeys(ref interface{}, keys ...string) valueTypes.UnitValueMap {
 // 	ret := make(valueTypes.UnitValueMap)
 //
-// 	for _, k := range apiReflect.GetStructKeys(ref, keys...) {
+// 	for _, k := range GoStruct.GetStructKeys(ref, keys...) {
 // 		// p := UnitValue { Value: k.Value, Unit: "" }
 // 		p := valueTypes.SetUnitValueString(k.Value, "", "")
 // 		if k.Type.Name() == "UnitValue" {

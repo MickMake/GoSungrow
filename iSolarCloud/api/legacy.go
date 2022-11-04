@@ -274,7 +274,7 @@ package api
 // func (dm *DataMap) AddUnitValue(endpoint string, parentId string, pid valueTypes.PointId, name string, groupName string, date valueTypes.DateTime, ref valueTypes.UnitValue) {
 // 	for range Only.Once {
 // 		if endpoint == "" {
-// 			endpoint = apiReflect.GetCallerPackage(2)
+// 			endpoint = GoStruct.GetCallerPackage(2)
 // 		}
 //
 // 		ref = ref.UnitValueFix()

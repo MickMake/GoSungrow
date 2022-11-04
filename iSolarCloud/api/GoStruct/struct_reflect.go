@@ -1,14 +1,14 @@
-package apiReflect
+package GoStruct
 
 import (
 	"GoSungrow/Only"
-	"GoSungrow/iSolarCloud/api/valueTypes"
-	"crypto/md5"
+	"GoSungrow/iSolarCloud/api/GoStruct/reflection"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"errors"
 	"fmt"
+	"os"
 	"reflect"
 	"strings"
-	"time"
 )
 
 
@@ -124,7 +124,7 @@ func (r *Reflect) SetByFieldName(parent interface{}, current interface{}, name s
 	}
 }
 
-func (r *Reflect) SetByIndex(parent Reflect, current Reflect, index int, name EndPointPath) {
+func (r *Reflect) SetByIndex(parent Reflect, current Reflect, index int, indexName reflect.Value, name EndPointPath) {
 	for range Only.Once {
 		// Get child interface from parent.
 		// pt := current.TypeOf
@@ -143,8 +143,9 @@ func (r *Reflect) SetByIndex(parent Reflect, current Reflect, index int, name En
 			case reflect.Array:
 				r.Interface = current.ValueOf.Index(index).Interface()
 			case reflect.Map:
-				mk := current.ValueOf.MapKeys()
-				r.Interface = current.ValueOf.MapIndex(mk[index]).Interface()
+				// mk := current.ValueOf.MapKeys()
+				// r.Interface = current.ValueOf.MapIndex(mk[index]).Interface()
+				r.Interface = current.ValueOf.MapIndex(indexName).Interface()
 		}
 
 		r.Valid = true
@@ -192,7 +193,7 @@ func (r *Reflect) SetByIndex(parent Reflect, current Reflect, index int, name En
 			r.FieldTo = reflect.StructField{}
 			r.IsExported = true
 			r.FieldVo = current.ValueOf.Index(index)
-			r.FieldName = r.FieldVo.String()
+			r.FieldName = current.FieldName		// r.FieldVo.String()
 			r.DataStructure = r.DataStructure.Set(parent.Interface, current.Interface, r.FieldTo, r.FieldVo)
 			if r.Length == 0 {
 				r.DataStructure.PointNameAppend = false
@@ -225,13 +226,18 @@ func (r *Reflect) SetByIndex(parent Reflect, current Reflect, index int, name En
 			// r.IsExported = r.FieldTo.IsExported()
 			r.FieldTo = reflect.StructField{}
 			r.IsExported = true
-			mk := current.ValueOf.MapKeys()
-			r.FieldVo = current.ValueOf.MapIndex(mk[index])
-			r.FieldName = mk[index].String()
+			// mk := current.ValueOf.MapKeys()
+			// r.FieldVo = current.ValueOf.MapIndex(mk[index])
+			r.FieldVo = current.ValueOf.MapIndex(indexName)
+			r.FieldName = current.FieldName		// mk[index].String()
 
 			r.DataStructure = r.DataStructure.Set(parent.Interface, current.Interface, r.FieldTo, r.FieldVo)
-			r.DataStructure.Json = mk[index].String()
-			r.DataStructure.PointId = mk[index].String()
+			// r.DataStructure.Json = current.ValueOf.MapIndex(indexName).String()
+			// r.DataStructure.PointId = current.ValueOf.MapIndex(indexName).String()
+			r.DataStructure.Json = indexName.String()
+			r.DataStructure.PointId = indexName.String()
+			// r.DataStructure.Json = r.FieldVo.String()
+			// r.DataStructure.PointId = r.FieldVo.String()
 
 			r.DataStructure.Endpoint = name.Copy()
 			r.DataStructure.Endpoint = append(r.DataStructure.Endpoint, r.DataStructure.PointId)
@@ -265,7 +271,7 @@ func (r *Reflect) setPointName(parent Reflect, current Reflect, name []string, i
 		switch {
 			case r.DataStructure.PointNameFromChild != "":
 				// PointNameFromChild - In this case points to a field within a CHILD struct.
-				pn = GetPointNameFrom(current.Interface, r.DataStructure.PointNameFromChild, intSize, r.DataStructure.PointNameDateFormat)
+				pn = reflection.GetPointNameFrom(current.Interface, r.DataStructure.PointNameFromChild, intSize, r.DataStructure.PointNameDateFormat)
 				if r.DataStructure.PointNameAppend == false {
 					name = append(name[:len(name) - 1], pn)
 				} else {
@@ -274,7 +280,7 @@ func (r *Reflect) setPointName(parent Reflect, current Reflect, name []string, i
 
 			case r.DataStructure.PointNameFromParent != "":
 				// PointNameFromChild - In this case points to a field within a CHILD struct.
-				pn = GetPointNameFrom(parent.Interface, r.DataStructure.PointNameFromParent, intSize, r.DataStructure.PointNameDateFormat)
+				pn = reflection.GetPointNameFrom(parent.Interface, r.DataStructure.PointNameFromParent, intSize, r.DataStructure.PointNameDateFormat)
 				if r.DataStructure.PointNameAppend == false {
 					name = append(name[:len(name) - 1], pn)
 				} else {
@@ -297,13 +303,105 @@ func (r *Reflect) PointNameFromChild(child Reflect, name EndPointPath) []string 
 	for range Only.Once {
 		if r.DataStructure.PointNameFromChild != "" {
 			// PointNameFromChild - In this case points to a field within a CHILD struct.
-			pn := GetPointNameFrom(child.Interface, r.DataStructure.PointNameFromChild, 0, r.DataStructure.PointNameDateFormat)
+			pn := reflection.GetPointNameFrom(child.Interface, r.DataStructure.PointNameFromChild, 0, r.DataStructure.PointNameDateFormat)
 			name = append(name, pn)
 		}
 	}
 	return name
 }
 
+
+func FindStart(fieldName string, Parent Reflect, Current Reflect, name EndPointPath) *Reflect {
+	var ret Reflect
+
+	for range Only.Once {
+		if Current.Kind == reflect.Pointer {
+			// Special case:
+			// We're going to change the pointer to a proper object reference.
+			if Current.IsNil {
+				break
+			}
+			ref2 := Current.ValueOf.Elem().Interface()
+			if valueTypes.IsNil(ref2) {
+				break
+			}
+			Current.SetByFieldName(Current.Interface, ref2, "")
+			if Current.IsNil {
+				break
+			}
+			// DO NOT BREAK!
+			// KEEP FIRST!
+		}
+
+		if Current.Kind == reflect.Struct {
+			// Iterate over all available fields and read the tag value
+			for si := 0; si < Current.Length; si++ {
+				var Child Reflect
+				Child.SetByIndex(Parent, Current, si, reflect.Value{}, name)
+				if Child.FieldName == fieldName {
+					// if !Child.DataStructure.PointNameAppend {
+					// 	Child.DataStructure.Endpoint = Child.DataStructure.Endpoint.PopLast()
+					// }
+					name = name.Append(Child.DataStructure.PointId)
+					ret = Child
+					break
+				}
+
+				if Child.Kind != reflect.Struct {
+					continue
+				}
+
+				if Child.IsKnown() {
+					continue
+				}
+
+				Child = *FindStart(fieldName, Current, Child, name)
+				// if Child.FieldName == fieldName {
+				// 	name = name.Append(Child.DataStructure.PointId)
+				// 	ret = Child
+				// 	break
+				// }
+			}
+			break
+		}
+
+		if Current.Kind == reflect.Slice {
+			// Iterate over all available fields and read the tag value
+			for si := 0; si < Current.Length; si++ {
+				var Child Reflect
+				Child.SetByIndex(Parent, Current, si, reflect.Value{}, name)
+				if Child.FieldName == fieldName {
+					// if !Child.DataStructure.PointNameAppend {
+					// 	Child.DataStructure.Endpoint = Child.DataStructure.Endpoint.PopLast()
+					// }
+					name = name.Append(Child.DataStructure.PointId)
+					ret = Child
+					break
+				}
+
+				if Child.Kind != reflect.Slice {
+					continue
+				}
+
+				if Child.IsKnown() {
+					continue
+				}
+
+				Child = *FindStart(fieldName, Current, Child, name)
+				// if Child.FieldName == fieldName {
+				// 	name = name.Append(Child.DataStructure.PointId)
+				// 	ret = Child
+				// 	break
+				// }
+			}
+			break
+		}
+
+		_, _ = fmt.Fprintf(os.Stderr,"ERROR: Field '%s' type not supported: Type %s\n", Current.FieldName, Current.Kind.String())
+	}
+
+	return &ret
+}
 
 func GetStructFields(ref interface{}) map[string]string {
 	ret := make(map[string]string)
@@ -322,7 +420,7 @@ func GetStructFields(ref interface{}) map[string]string {
 			// Iterate over all available fields and read the tag value
 			for i := 0; i < Ref.Length; i++ {
 				var Child Reflect
-				Child.SetByIndex(Ref, Ref, i, EndPointPath{})
+				Child.SetByIndex(Ref, Ref, i, reflect.Value{}, EndPointPath{})
 
 				if !Child.IsExported {
 					continue
@@ -354,7 +452,7 @@ func GetStructFieldsAsArray(ref interface{}) []string {
 			// Iterate over all available fields and read the tag value
 			for i := 0; i < Ref.Length; i++ {
 				var Child Reflect
-				Child.SetByIndex(Ref, Ref, i, EndPointPath{})
+				Child.SetByIndex(Ref, Ref, i, reflect.Value{}, EndPointPath{})
 
 				if !Child.IsExported {
 					continue
@@ -385,7 +483,7 @@ func GetStructValuesAsArray(ref interface{}) []string {
 			// Iterate over all available fields and read the tag value
 			for i := 0; i < Ref.Length; i++ {
 				var Child Reflect
-				Child.SetByIndex(Ref, Ref, i, EndPointPath{})
+				Child.SetByIndex(Ref, Ref, i, reflect.Value{}, EndPointPath{})
 
 				if !Child.IsExported {
 					continue
@@ -399,238 +497,44 @@ func GetStructValuesAsArray(ref interface{}) []string {
 	return ret
 }
 
-func GetStringFrom(ref interface{}, name string) string {
-	var ret string
+
+type Required []string
+
+func (r *Required) IsRequired(field string) bool {
+	var ok bool
+	for _, f := range *r {
+		if f == field {
+			ok = true
+		}
+	}
+	return ok
+}
+
+func (r *Required) IsNotRequired(field string) bool {
+	return !r.IsRequired(field)
+}
+
+// GetOptionsRequired Get field options within the structure that are required.
+func GetOptionsRequired(ref interface{}) Required {
+	var ret []string
+
 	for range Only.Once {
-		vo := reflect.ValueOf(ref)
+		t := reflect.TypeOf(ref)
+		for i := 0; i < t.NumField(); i++ {
+			field := t.Field(i)
+			required := field.Tag.Get("required")
+			if required == "" {
+				continue
+			}
 
-		switch vo.Kind() {
-			case reflect.Struct:
-				// Iterate over all available fields, looking for the field name.
-				for i := 0; i < vo.NumField(); i++ {
-					if vo.Type().Field(i).Name == name {
-						ret = valueTypes.AnyToValueString(vo.Field(i).Interface(), 0, "")
-						break
-					}
-				}
-
-			case reflect.Map:
-				// Iterate over all available fields, looking for the field name.
-				for _, key := range vo.MapKeys() {
-					if key.String() == name {
-						ret = valueTypes.AnyToValueString(vo.MapIndex(key).Interface(), 0, "")
-						break
-					}
-				}
+			ret = append(ret, field.Name)
 		}
 	}
 
 	return ret
 }
 
-func GetTimestampFrom(ref interface{}, name string, dateFormat string) time.Time {
-	var ret time.Time
-	for range Only.Once {
-		if dateFormat == "" {
-			dateFormat = valueTypes.DateTimeAltLayout
-		}
-		vo := reflect.ValueOf(ref)
-
-		switch vo.Kind() {
-			case reflect.Struct:
-				// Iterate over all available fields, looking for the field name.
-				for i := 0; i < vo.NumField(); i++ {
-					if vo.Type().Field(i).Name == name {
-						v := fmt.Sprintf("%v", vo.Field(i).Interface())
-						ret = valueTypes.SetDateTimeString(v).Time
-						break
-					}
-				}
-
-			case reflect.Map:
-				// Iterate over all available fields, looking for the field name.
-				for _, key := range vo.MapKeys() {
-					if key.String() == name {
-						v := fmt.Sprintf("%v", vo.MapIndex(key).Interface())
-						ret = valueTypes.SetDateTimeString(v).Time
-						break
-					}
-				}
-		}
-	}
-
-	return ret
-}
-
-func GetPointNameFrom(ref interface{}, name string, intSize int, dateFormat string) string {
-	var ret string
-	for range Only.Once {
-		if dateFormat == "" {
-			dateFormat = valueTypes.DateTimeAltLayout
-		}
-		vo := reflect.ValueOf(ref)
-
-		var ra []string
-		switch vo.Kind() {
-			case reflect.Struct:
-				for _, pnf := range strings.Split(name, ".") {
-					// Iterate over all available fields, looking for the field name.
-					for i := 0; i < vo.NumField(); i++ {
-						fn := vo.Type().Field(i).Name
-						if fn == pnf {
-							ra = append(ra, valueTypes.AnyToValueString(vo.Field(i).Interface(), intSize, dateFormat))
-							break
-						}
-					}
-				}
-
-			case reflect.Map:
-				for _, pnf := range strings.Split(name, ".") {
-					// Iterate over all available keys, looking for the key name.
-					for _, key := range vo.MapKeys() {
-						if key.String() == pnf {
-							ra = append(ra, valueTypes.AnyToValueString(vo.MapIndex(key).Interface(), intSize, dateFormat))
-							break
-						}
-					}
-				}
-		}
-		ret = strings.Join(ra, ".")
-	}
-
-	return ret
-}
-
-func getJsonTag(fieldTo reflect.StructField) string {
-	var ret string
-
-	for range Only.Once {
-		ret = fieldTo.Tag.Get("json")
-		ret = strings.ReplaceAll(ret, "omitempty", "")
-		ret = strings.TrimSuffix(ret, ",")
-	}
-
-	return ret
-}
-
-
-// GetArea Return an Area name if we are given an Area or EndPoint struct.
-func GetArea(trim string, v interface{}) string {
-	var ret string
-	for range Only.Once {
-		if v == nil {
-			break
-		}
-
-		val := reflect.ValueOf(v)
-		ret1 := val.Type().PkgPath()
-		ret1 = strings.TrimPrefix(ret1, trim)
-		ret2 := val.Type().Name()
-
-		if ret2 == "Area" {
-			s := strings.Split(ret1, "/")
-			ret = s[len(s)-1]
-			break
-		}
-
-		if ret2 == "EndPoint" {
-			s := strings.Split(ret1, "/")
-			ret = s[len(s)-2]
-			break
-		}
-
-		ret = ret1
-	}
-	return ret
-}
-
-// GetName Return an endpoint name if we are given an Area or EndPoint struct.
-func GetName(trim string, v interface{}) string {
-	var ret string
-	for range Only.Once {
-		val := reflect.ValueOf(v)
-		ret1 := val.Type().PkgPath()
-		ret1 = strings.TrimPrefix(ret1, trim)
-		ret2 := val.Type().Name()
-
-		if ret2 == "Area" {
-			s := strings.Split(ret1, "/")
-			ret = s[len(s)-2]
-			break
-		}
-
-		if ret2 == "EndPoint" {
-			s := strings.Split(ret1, "/")
-			ret = s[len(s)-1]
-			break
-		}
-
-		ret = ret1
-	}
-	return ret
-}
-
-func GetType(v interface{}) string {
-	return reflect.ValueOf(v).Type().Name()
-}
-
-func GetPkgType(v interface{}) string {
-	return reflect.ValueOf(v).Type().String()
-}
-
-func GetStructName(v interface{}) (string, string) {
-	var area string
-	var endpoint string
-	for range Only.Once {
-		val := reflect.ValueOf(v)
-		// ret = val.Type().Name()		// Returns structure, (EndPoint name).
-		// ret = val.Type().PkgPath()	// Returns structure path.
-		// ret = val.Type().String()	// Returns
-
-		// @TODO - Need to check for pointers to struct
-		// 	if t := reflect.TypeOf(ref); t.Kind() == reflect.Ptr {
-		// 		ret = strings.ToLower(t.Elem().Name())
-		// 	} else {
-		// 		ret = strings.ToLower(t.Name())
-		// 	}
-
-		s := strings.Split(val.Type().String(), ".")
-		if len(s) < 2 {
-			break
-		}
-		area = s[0]
-		endpoint = s[1]
-	}
-	return area, endpoint
-}
-
-func DoTypesMatch(a interface{}, b interface{}) error {
-	var err error
-	for range Only.Once {
-		aName := GetType(a)
-		bName := GetType(b)
-		if aName == bName {
-			break
-		}
-		err = errors.New(fmt.Sprintf("interface '%s' doesn't match '%s'", aName, bName))
-	}
-	return err
-}
-
-func DoPkgTypesMatch(a interface{}, b interface{}) error {
-	var err error
-	for range Only.Once {
-		aName := GetPkgType(a)
-		bName := GetPkgType(b)
-		if aName == bName {
-			break
-		}
-		err = errors.New(fmt.Sprintf("interface '%s' doesn't match '%s'", aName, bName))
-	}
-	return err
-}
-
-// VerifyOptionsRequired Verify fields within the structure that are required.
+// VerifyOptionsRequired Verify fields within the structure are required.
 func VerifyOptionsRequired(ref interface{}) error {
 	var err error
 
@@ -660,113 +564,4 @@ func VerifyOptionsRequired(ref interface{}) error {
 	}
 
 	return err
-}
-
-func HelpOptions(ref interface{}) string {
-	var ret string
-
-	for range Only.Once {
-		t := reflect.TypeOf(ref)
-		for i := 0; i < t.NumField(); i++ {
-			field := t.Field(i)
-			required := field.Tag.Get("required")
-			if required == "" {
-				ret += fmt.Sprintf("%s: optional\n", field.Name)
-				continue
-			}
-
-			ret += fmt.Sprintf("%s: required\n", field.Name)
-		}
-	}
-
-	return ret
-}
-
-func FindRequestData(ref interface{}) string {
-	var ret string
-
-	for range Only.Once {
-		vo := reflect.ValueOf(ref)
-		to := reflect.TypeOf(ref)
-
-		// Iterate over all available fields and read the tag value
-		for i := 0; i < vo.NumField(); i++ {
-			fieldTo := to.Field(i)
-			// required := fieldTo.Tag.GetByJson("required")
-			fmt.Printf(">%s\t", fieldTo.Name)
-
-			fieldVo := vo.Field(i)
-
-			fmt.Printf(">%s\n", fieldVo.String())
-			value := fmt.Sprintf("%v", fieldVo.Interface())
-			if value == "" {
-				break
-			}
-		}
-	}
-
-	return ret
-}
-
-func GetRequestString(ref interface{}) string {
-	var ret string
-
-	for range Only.Once {
-		vo := reflect.ValueOf(ref)
-		// Iterate over all available fields and read the tag value
-		for i := 0; i < vo.NumField(); i++ {
-			fieldVo := vo.Field(i)
-			ret += fmt.Sprintf("-%v", fieldVo.Interface())
-		}
-	}
-
-	return ret
-}
-
-func GetFingerprint(ref interface{}) string {
-	var ret string
-
-	for range Only.Once {
-		// h := hash(GetRequestString(ref))
-		h := md5.Sum([]byte(GetRequestString(ref)))
-		ret = fmt.Sprintf("%x", h)
-	}
-
-	return ret
-}
-
-
-type Required []string
-
-func (r *Required) IsRequired(field string) bool {
-	var ok bool
-	for _, f := range *r {
-		if f == field {
-			ok = true
-		}
-	}
-	return ok
-}
-
-func (r *Required) IsNotRequired(field string) bool {
-	return !r.IsRequired(field)
-}
-
-func GetOptionsRequired(ref interface{}) Required {
-	var ret []string
-
-	for range Only.Once {
-		t := reflect.TypeOf(ref)
-		for i := 0; i < t.NumField(); i++ {
-			field := t.Field(i)
-			required := field.Tag.Get("required")
-			if required == "" {
-				continue
-			}
-
-			ret = append(ret, field.Name)
-		}
-	}
-
-	return ret
 }

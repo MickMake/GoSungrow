@@ -7,22 +7,22 @@ import (
 	"fmt"
 	"github.com/wcharczuk/go-chart/v2"
 	"github.com/wcharczuk/go-chart/v2/drawing"
-	"go.pennock.tech/tabular"
 	"os"
 	"strconv"
 	"strings"
 	"time"
 )
-
+// 	"go.pennock.tech/tabular"
+// 	tabular "github.com/agrison/go-tablib"
 
 type GraphRequest struct {
 	Title        string  `json:"title"`
 
-	TimeColumn   *int     `json:"time_column"`
-	ValueColumn  *int     `json:"value_column"`
-	UnitsColumn  *int     `json:"units_column"`
-	NameColumn   *int     `json:"name_column"`
-	SearchColumn *int     `json:"search_column"`
+	TimeColumn   *string  `json:"time_column"`
+	ValueColumn  *string  `json:"value_column"`
+	UnitsColumn  *string  `json:"units_column"`
+	NameColumn   *string  `json:"name_column"`
+	SearchColumn *string  `json:"search_column"`
 	SearchString *string  `json:"search_string"`
 
 	MinLeftAxis  *float64 `json:"min_left_axis"`
@@ -130,67 +130,72 @@ func (t *Table) GetSearchColumn() SearchStrings {
 
 func (t *Table) ProcessGraphData() error {
 	for range Only.Once {
+		fmt.Println("This is currently broken!")
+		break
 		req := t.graph.req
 
 		t.graph.searchName = ""
 		var units string
 		var times []time.Time
 		var values []float64
-		for row := 0; row < t.table.NRows(); row++ {
+		for row := 0; row < t.RowLength(); row++ {
 			// Get the search column
-			var cell *tabular.Cell
-			cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: *req.SearchColumn})
+			var cell interface{}
+			// cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: *req.SearchColumn})
+			cell, t.Error = t.GetCell(row, *req.SearchColumn)
 			if t.Error != nil {
 				continue
 			}
-			if !strings.Contains(cell.String(), *req.SearchString) {
-				continue
-			}
+			// if !strings.Contains(cell.String(), *req.SearchString) {
+			// 	continue
+			// }
 
 			if req.Title == "" {
-				t.SetTitle(cell.String())
+				t.SetTitle(cell.(string))
 			}
 
 			if t.graph.searchName == "" {
-				if *req.NameColumn > 0 {
-					cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: *req.NameColumn})
+				if req.NameColumn != nil {
+					// cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: *req.NameColumn})
+					cell, t.Error = t.GetCell(row, *req.NameColumn)
 					if t.Error != nil {
 						continue
 					}
-					t.graph.searchName = cell.String()
+					t.graph.searchName = cell.(string)
 				}
 			}
 
 			// Get units
 			if units == "" {
-				if *req.UnitsColumn > 0 {
-					cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: *req.UnitsColumn})
+				if req.UnitsColumn != nil {
+					// cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: *req.UnitsColumn})
+					cell, t.Error = t.GetCell(row, *req.UnitsColumn)
 					if t.Error != nil {
 						continue
 					}
-					units = cell.String()
+					units = cell.(string)
 				}
 			}
 
-			//
-			cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: *req.TimeColumn})
+			// cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: *req.TimeColumn})
+			cell, t.Error = t.GetCell(row, *req.TimeColumn)
 			if t.Error != nil {
 				continue
 			}
 			var tim time.Time
-			tim, t.Error = time.ParseInLocation(DateTimeSearchLayout, cell.String(), time.Local)	// @TODO - May have to revisit this!
+			tim, t.Error = time.ParseInLocation(DateTimeSearchLayout, cell.(string), time.Local)	// @TODO - May have to revisit this!
 			if t.Error != nil {
 				continue
 			}
 			times = append(times, tim)
 
-			//
-			cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: *req.ValueColumn})
+			// cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: *req.ValueColumn})
+			cell, t.Error = t.GetCell(row, *req.ValueColumn)
 			if t.Error != nil {
 				continue
 			}
 			var val float64
-			val, t.Error = strconv.ParseFloat(cell.String(), 64)
+			val, t.Error = strconv.ParseFloat(cell.(string), 64)
 			if t.Error != nil {
 				val = 0
 			}
@@ -219,19 +224,22 @@ func (t *Table) ProcessGraphData() error {
 type SearchStrings map[string]int
 func (t *Table) FindSearchStrings() error {
 	for range Only.Once {
+		fmt.Println("This is currently broken!")
+		break
 		t.graph.otherSearch = make(SearchStrings)
 
-		for row := 0; row < t.table.NRows(); row++ {
+		for row := 0; row < t.RowLength(); row++ {
 			// Get the search column
-			var cell *tabular.Cell
-			cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: *t.graph.req.SearchColumn})
+			var cell interface{}
+			// cell, t.Error = t.table.CellAt(tabular.CellLocation{Row: row, Column: *t.graph.req.SearchColumn})
+			cell, t.Error = t.GetCell(row, *t.graph.req.SearchColumn)
 			if t.Error != nil {
 				continue
 			}
-			if _, ok := t.graph.otherSearch[cell.String()]; ok {
-				t.graph.otherSearch[cell.String()] += 1
+			if _, ok := t.graph.otherSearch[cell.(string)]; ok {
+				t.graph.otherSearch[cell.(string)] += 1
 			} else {
-				t.graph.otherSearch[cell.String()] = 0
+				t.graph.otherSearch[cell.(string)] = 0
 			}
 		}
 	}
