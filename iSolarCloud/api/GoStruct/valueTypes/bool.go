@@ -7,6 +7,9 @@ import (
 )
 
 
+var VarTrue = true
+var VarFalse = false
+
 type Bool struct {
 	string `json:"string,omitempty"`
 	bool   `json:"bool,omitempty"`

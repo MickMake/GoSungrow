@@ -24,7 +24,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStruct      GoStruct.GoStruct  `json:"GoStruct" DataTable:"true" DataTableSortOn:"UnitConvertId"`
+	GoStructParent      GoStruct.GoStructParent  `json:"GoStruct" DataTable:"true" DataTableSortOn:"UnitConvertId"`
 
 	UnitConvertId valueTypes.Integer `json:"unit_conver_id" PointId:"unit_convert_id"`
 	UnitName      valueTypes.String  `json:"unit_name"`
@@ -41,7 +41,7 @@ func (e *ResultData) IsValid() error {
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 	for range Only.Once {
-		entries.StructToDataMap(*e, "system", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	}
-	return entries.StructToDataMap(*e, "system", GoStruct.EndPointPath{})
+	return entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 }

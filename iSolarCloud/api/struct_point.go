@@ -126,7 +126,11 @@ func GetPoint(point string) *Point {
 }
 
 func GetDevicePoint(devicePoint string) *Point {
-	return Points.GetDevicePoint(devicePoint)
+	point := Points.GetDevicePoint(devicePoint)
+	if point == nil {
+		point = &Point{Valid: false}
+	}
+	return point
 }
 
 // func GetPointInt(device string, point int64) *Point {

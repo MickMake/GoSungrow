@@ -72,7 +72,7 @@ func (sgd *SunGrowDataResponse) GetOutput(outputType output.OutputType, saveAsFi
 				}
 			}
 			if !ok {
-				fmt.Printf("No data table results for '%s'", sgd.Title)
+				fmt.Printf("No data table results for '%s'\n", sgd.Title)
 			}
 			break
 		}
@@ -296,21 +296,12 @@ func (sgd *SunGrowData) CallEndpoint(endpoint api.EndPoint, request SunGrowDataR
 			break
 		}
 
-		response.Filename = request.GetFilename("")
-		response.Filename = endpoint.SetFilenamePrefix(response.Filename)
-		// response.Filename = request.CreateFilename(ep)
-		if response.Title == "" {
-			response.Title = fmt.Sprintf("Data Request %s", endpoint.GetName())
-		}
-
 		response.Data = endpoint.GetEndPointData()
-		// endpoint.GetEndPointDataTables()
-		// response.Table = endpoint.GetEndPointResultTable()
-		// response.Table.SetTitle(response.Title)
-		// response.Data.Table.SetGraphFilter("")
-		response.Data.Table.SetFilePrefix(request.GetFilename(string(endpoint.GetName())))
+		response.Data.Table.AppendFilePrefix(request.RequestAsFilePrefix())		// request.GetFilename(endpoint.GetName().String()))
 		response.Data.Table.SetSaveFile(sgd.saveAsFile)
 		response.Data.Table.OutputType = sgd.outputType
+		response.Title = response.Data.Table.GetTitle()
+		response.Filename = response.Data.Table.GetFilePrefix()
 	}
 
 	return response

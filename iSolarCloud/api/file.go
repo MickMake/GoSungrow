@@ -2,7 +2,6 @@ package api
 
 import (
 	"GoSungrow/Only"
-	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"GoSungrow/iSolarCloud/api/GoStruct/reflection"
 	"errors"
@@ -10,22 +9,21 @@ import (
 	"github.com/MickMake/GoUnify/cmdPath"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
 
-func (ep *EndPointStruct) ApiSetFilenamePrefix2(ref interface{}, format string, args ...interface{}) string {
-	f := strings.Join(GoStruct.GetStructValuesAsArray(ref), "-")
-	fmt.Printf("[%s]\n", f)
-	if format != "" {
-		ep.FileNamePrefix = fmt.Sprintf(format, args...)
-		// ep.FileNamePrefix = fmt.Sprintf("%s_%s-%s", ep.Area, ep.Name, ep.FileNamePrefix)
-		ep.FileNamePrefix = string(ep.Area) + "_" + string(ep.Name) + "-" + ep.FileNamePrefix
-	} else {
-		ep.FileNamePrefix = string(ep.Area) + "_" + string(ep.Name)
-	}
-	return ep.FileNamePrefix
-}
+// func (ep *EndPointStruct) ApiSetFilenamePrefix2(ref interface{}, format string, args ...interface{}) string {
+// 	f := strings.Join(GoStruct.GetStructValuesAsArray(ref), "-")
+// 	fmt.Printf("[%s]\n", f)
+// 	if format != "" {
+// 		ep.FileNamePrefix = fmt.Sprintf(format, args...)
+// 		// ep.FileNamePrefix = fmt.Sprintf("%s_%s-%s", ep.Area, ep.Name, ep.FileNamePrefix)
+// 		ep.FileNamePrefix = string(ep.Area) + "_" + string(ep.Name) + "-" + ep.FileNamePrefix
+// 	} else {
+// 		ep.FileNamePrefix = string(ep.Area) + "_" + string(ep.Name)
+// 	}
+// 	return ep.FileNamePrefix
+// }
 
 func (ep *EndPointStruct) ApiSetFilenamePrefix(format string, args ...interface{}) string {
 	if format != "" {
@@ -38,26 +36,40 @@ func (ep *EndPointStruct) ApiSetFilenamePrefix(format string, args ...interface{
 	return ep.FileNamePrefix
 }
 
-func (ep *EndPointStruct) GetCsvFilename() string {
-	if ep.FileNamePrefix == "" {
-		ep.ApiSetFilenamePrefix("")
-	}
-	return ep.FileNamePrefix + ".csv"
-}
+// func (ep *EndPointStruct) ApiGetCsvFilename() string {
+// 	if ep.FileNamePrefix == "" {
+// 		ep.FileNamePrefix = ep.ApiSetFilenamePrefix("")
+// 	}
+// 	return ep.FileNamePrefix + ".csv"
+// }
+//
+// func (ep *EndPointStruct) ApiGetTableFilename() string {
+// 	if ep.FileNamePrefix == "" {
+// 		ep.FileNamePrefix = ep.ApiSetFilenamePrefix("")
+// 	}
+// 	return ep.FileNamePrefix + "-table.txt"
+// }
+//
+// func (ep *EndPointStruct) ApiGetListFilename() string {
+// 	if ep.FileNamePrefix == "" {
+// 		ep.FileNamePrefix = ep.ApiSetFilenamePrefix("")
+// 	}
+// 	return ep.FileNamePrefix + ".txt"
+// }
 
-func (ep *EndPointStruct) GetJsonFilename() string {
+func (ep *EndPointStruct) ApiGetJsonFilename() string {
 	if ep.FileNamePrefix == "" {
-		ep.ApiSetFilenamePrefix("")
+		ep.FileNamePrefix = ep.ApiSetFilenamePrefix("")
 	}
 	return ep.FileNamePrefix + ".json"
 }
 
-func (ep *EndPointStruct) GetImageFilename() string {
-	if ep.FileNamePrefix == "" {
-		ep.ApiSetFilenamePrefix("")
-	}
-	return ep.FileNamePrefix + ".png"
-}
+// func (ep *EndPointStruct) GetImageFilename() string {
+// 	if ep.FileNamePrefix == "" {
+// 		ep.FileNamePrefix = ep.ApiSetFilenamePrefix("")
+// 	}
+// 	return ep.FileNamePrefix + ".png"
+// }
 
 func (ep *EndPointStruct) GetFilePath() string {
 	var ret string
@@ -69,37 +81,25 @@ func (ep *EndPointStruct) GetFilePath() string {
 			break
 		}
 
-		ret = filepath.Join(hd, ".GoSungrow", ep.GetJsonFilename())
+		ret = filepath.Join(hd, ".GoSungrow", ep.ApiGetJsonFilename())
 	}
 
 	return ret
 }
 
 
-// FileExists Checks for existance of a local file.
+// FileExists Checks for existence of a local file.
 func (ep *EndPointStruct) FileExists(fn string) bool {
 	var ok bool
 
 	for range Only.Once {
 		if fn == "" {
-			fn = ep.GetJsonFilename()
+			fn = ep.ApiGetJsonFilename()
 			if ep.Error != nil {
 				break
 			}
 		}
 
-		// var f os.FileInfo
-		// f, ep.Error = os.Stat(fn)
-		// if ep.Error != nil {
-		// 	if os.IsNotExist(ep.Error) {
-		// 		ep.Error = nil
-		// 	}
-		// 	break
-		// }
-		// if f.IsDir() {
-		// 	ep.Error = errors.New("file is a directory")
-		// 	break
-		// }
 		p := cmdPath.NewPath(fn)
 		if p.DirExists() {
 			ep.Error = errors.New("file is a directory")
@@ -119,56 +119,17 @@ func (ep *EndPointStruct) FileExists(fn string) bool {
 
 // ApiReadDataFile - Retrieves data from a local file.
 func (ep *EndPointStruct) ApiReadDataFile(ref interface{}) error {
-	return output.FileRead(ep.GetJsonFilename(), ref)
-
-	// // var ret []byte
-	//
-	// for range Only.Once {
-	// 	if fn == "" {
-	// 		fn = ep.GetJsonFilename()
-	// 		if ep.Error != nil {
-	// 			break
-	// 		}
-	// 	}
-	//
-	// 	var f *os.File
-	// 	f, ep.Error = os.Open(fn)
-	// 	if ep.Error != nil {
-	// 		if os.IsNotExist(ep.Error) {
-	// 			ep.Error = nil
-	// 		}
-	// 		break
-	// 	}
-	//
-	// 	//goland:noinspection GoUnhandledErrorResult,GoDeferInLoop
-	// 	defer f.Close()
-	//
-	// 	ep.Error = json.NewDecoder(f).Decode(&ref)
-	// }
-	//
-	// // for range Only.Once {
-	// //	fn := ep.GetFilename()
-	// //	if ep.Error != nil {
-	// //		break
-	// //	}
-	// //
-	// //	ret, ep.Error = os.FileRead(fn)
-	// //	if ep.Error != nil {
-	// //		break
-	// //	}
-	// // }
-	//
-	// return ep.Error
+	return output.FileRead(ep.ApiGetJsonFilename(), ref)
 }
 
 // ApiWriteDataFile - Saves data to a file path.
 func (ep *EndPointStruct) ApiWriteDataFile(ref interface{}) error {
-	return output.FileWrite(ep.GetJsonFilename(), ref, output.DefaultFileMode)
+	return output.FileWrite(ep.ApiGetJsonFilename(), ref, output.DefaultFileMode)
 }
 
 // ApiRemoveDataFile - Saves data to a file path.
 func (ep *EndPointStruct) ApiRemoveDataFile() error {
-	return output.FileRemove(ep.GetJsonFilename())
+	return output.FileRemove(ep.ApiGetJsonFilename())
 }
 
 func (ep *EndPointStruct) ApiCacheFilename(request interface{}) string {
@@ -179,68 +140,3 @@ func (ep *EndPointStruct) ApiCacheFilename(request interface{}) string {
 func (ep *EndPointStruct) ApiFingerprint(request interface{}) string {
 	return reflection.GetFingerprint(request)
 }
-
-// func (ep *EndPointStruct) ApiCacheFilePath(request interface{}) string {
-// 	return filepath.Join(ep.ApiRoot.GetCacheDir(), ep.ApiCacheFilename(request))
-// }
-//
-// // ApiCheckCache Retrieves cache data from a local file.
-// func (ep *EndPointStruct) ApiCheckCache(request interface{}) bool {
-// 	var ok bool
-// 	for range Only.Once {
-// 		fn := ep.ApiCacheFilePath(request)
-//
-// 		var f os.FileInfo
-// 		f, ep.Error = os.Stat(fn)
-// 		if ep.Error != nil {
-// 			if os.IsNotExist(ep.Error) {
-// 				ep.Error = nil
-// 			}
-// 			break
-// 		}
-//
-// 		if f.IsDir() {
-// 			ep.Error = errors.New("file is a directory")
-// 			break
-// 		}
-//
-// 		duration := ep.ApiRoot.GetCacheTimeout()
-// 		then := f.ModTime()
-// 		then = then.Add(duration)
-// 		now := time.Now()
-// 		if then.Before(now) {
-// 			break
-// 		}
-//
-// 		ok = true
-// 	}
-//
-// 	return ok
-// }
-//
-// // CacheRead Retrieves cache data from a local file.
-// func (ep *EndPointStruct) ApiReadCache(request interface{}, ref interface{}) error {
-// 	return output.FileRead(ep.ApiCacheFilePath(request), ref)
-// }
-//
-// // CacheWrite Saves cache data to a file path.
-// func (ep *EndPointStruct) ApiWriteCache(request interface{}, ref interface{}) error {
-// 	return output.FileWrite(ep.ApiCacheFilePath(request), ref, output.DefaultFileMode)
-//
-// 	// for range Only.Once {
-// 	// 	fn := ep.ApiCacheFilePath(request)
-// 	//
-// 	// 	var f *os.File
-// 	// 	f, ep.Error = os.OpenFile(fn, os.O_RDWR|os.O_CREATE|os.O_TRUNC, output.DefaultFileMode)
-// 	// 	if ep.Error != nil {
-// 	// 		ep.Error = errors.New(fmt.Sprintf("Unable to write to file %s - %v", fn, ep.Error))
-// 	// 		break
-// 	// 	}
-// 	//
-// 	// 	//goland:noinspection GoUnhandledErrorResult,GoDeferInLoop
-// 	// 	defer f.Close()
-// 	// 	ep.Error = json.NewEncoder(f).Encode(ref)
-// 	// }
-// 	//
-// 	// return ep.Error
-// }

@@ -29,7 +29,7 @@ type ResultData struct {
 		TemplateId   valueTypes.Integer  `json:"template_id"`
 		TemplateName valueTypes.String `json:"template_name"`
 		UpdateTime   valueTypes.DateTime `json:"update_time"`
-	} `json:"pageList" PointId:"page_list" PointNameFromChild:"TemplateId" PointNameAppend:"false" PointArrayFlatten:"false" DataTable:"true"`
+	} `json:"pageList" PointId:"page_list" PointIdFromChild:"TemplateId" PointIdReplace:"true" DataTable:"true"`
 	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 }
 
@@ -48,7 +48,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToDataMap(*e,  "system", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	}
 
 	return entries

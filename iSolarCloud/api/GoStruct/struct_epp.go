@@ -1,6 +1,9 @@
 package GoStruct
 
-import "strings"
+import (
+	"github.com/MickMake/GoUnify/Only"
+	"strings"
+)
 
 
 type EndPointPath struct {
@@ -17,6 +20,25 @@ func (e EndPointPath) String() string {
 	return strings.Join(e.path, ".")
 }
 
+// MarshalJSON - Convert value to JSON
+func (e EndPointPath) MarshalJSON() ([]byte, error) {
+	var data []byte
+	var err error
+	for range Only.Once {
+		// data, err = json.Marshal(e.path)
+		// if err!= nil {
+		// 	break
+		// }
+		data = []byte(`"` + e.String() +`"`)
+	}
+
+	return data, err
+}
+
+func (e *EndPointPath) Clear() {
+	e.path = []string{}
+}
+
 func (e *EndPointPath) Strings() []string {
 	return e.path
 }
@@ -26,6 +48,21 @@ func (e *EndPointPath) Index(index int) string {
 		return ""
 	}
 	return e.path[index]
+}
+
+func (e *EndPointPath) First() string {
+	if len(e.path) == 0 {
+		return ""
+	}
+	return e.path[0]
+}
+
+func (e *EndPointPath) Last() string {
+	l := len(e.path)
+	if l == 0 {
+		return ""
+	}
+	return e.path[l-1]
 }
 
 func (e *EndPointPath) IsZero() bool {

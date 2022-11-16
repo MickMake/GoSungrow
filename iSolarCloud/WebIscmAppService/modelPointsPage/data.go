@@ -26,12 +26,9 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	ModelList []struct {
-		DeviceModelId   valueTypes.Integer `json:"device_model_id"`
-		DeviceModel     valueTypes.String  `json:"device_model"`
-		DeviceModelCode valueTypes.String  `json:"device_model_code"`
-	} `json:"modelList" PointId:"model_list" DataTable:"true" DataTableSortOn:"DeviceModelId"`
 	PointList []struct {
+		GoStructParent            GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"PointId" PointIdFromChild:"PointId" PointIdReplace:"false"`
+
 		PointId             valueTypes.Integer `json:"point_id"`
 		PointName           valueTypes.String  `json:"point_name"`
 		CodeId              valueTypes.Integer `json:"code_id"`
@@ -39,7 +36,14 @@ type ResultData struct {
 		IsShow              valueTypes.Bool    `json:"is_show"`
 		IsSupportSecondData valueTypes.Bool    `json:"is_support_second_data"`
 		OrderNum            valueTypes.Integer `json:"order_num"`
-	} `json:"pointList" PointId:"point_list" DataTable:"true" DataTableSortOn:"PointId"`
+	} `json:"pointList" PointId:"point_list"`	// DataTable:"true" DataTableSortOn:"PointId" PointIdFromChild:"PointId" PointIdReplace:"false"`
+	ModelList []struct {
+		GoStruct        GoStruct.GoStructParent   `json:"GoStruct" DataTable:"true" DataTableSortOn:"DeviceModelId" PointIdFromChild:"DeviceModelId" PointIdReplace:"false"`
+
+		DeviceModelId   valueTypes.Integer `json:"device_model_id"`
+		DeviceModel     valueTypes.String  `json:"device_model"`
+		DeviceModelCode valueTypes.String  `json:"device_model_code"`
+	} `json:"modelList" PointId:"model_list"`	// DataTable:"true" DataTableSortOn:"DeviceModelId" PointIdFromChild:"DeviceModelId" PointIdReplace:"false"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -52,7 +56,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToDataMap(*e, "system", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	}
 
 	return entries

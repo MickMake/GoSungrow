@@ -6,6 +6,7 @@ import (
 	"fmt"
 	tabular "github.com/agrison/go-tablib"
 	"os"
+	"strings"
 )
 // "github.com/agrison/go-tablib"
 // "go.pennock.tech/tabular"
@@ -88,6 +89,14 @@ func (t *Table) SetTitle(title string, args ...interface{}) {
 	t.title = fmt.Sprintf(title, args...)
 }
 
+func (t *Table) GetTitle() string {
+	return t.title
+}
+
+func (t *Table) GetFilePrefix() string {
+	return t.filePrefix
+}
+
 func (t *Table) SetRaw(data []byte) {
 	t.raw = data
 }
@@ -149,11 +158,33 @@ func (t *Table) IsNotValid() bool {
 }
 
 func (t *Table) SetFilePrefix(prefix string, args ...interface{}) {
-	if len(args) == 0 {
-		t.filePrefix = prefix
-		return
+	for range Only.Once {
+		if prefix == "" {
+			break
+		}
+		if len(args) == 0 {
+			t.filePrefix = prefix
+			t.filePrefix = strings.ReplaceAll(t.filePrefix, "[", "")
+			t.filePrefix = strings.ReplaceAll(t.filePrefix, "]", "")
+			break
+		}
+		t.filePrefix = fmt.Sprintf(prefix, args...)
+		t.filePrefix = strings.ReplaceAll(t.filePrefix, "[", "")
+		t.filePrefix = strings.ReplaceAll(t.filePrefix, "]", "")
 	}
-	t.filePrefix = fmt.Sprintf(prefix, args...)
+}
+
+func (t *Table) AppendFilePrefix(prefix string, args ...interface{}) {
+	for range Only.Once {
+		if prefix == "" {
+			break
+		}
+		if len(args) == 0 {
+			t.filePrefix += "-" + prefix
+			break
+		}
+		t.filePrefix += "-" + fmt.Sprintf(prefix, args...)
+	}
 }
 
 func (t *Table) SetOutputType(outputType string) {
@@ -247,7 +278,7 @@ func (t *Table) WriteList() error {
 		}
 
 		if t.saveAsFile {
-			t.Error = t.writeFile(t.filePrefix+".txt", t.String(), DefaultFileMode)
+			t.Error = t.writeFile(t.filePrefix + ".txt", t.String(), DefaultFileMode)
 			break
 		}
 		fmt.Printf("# %s\n", t.title)

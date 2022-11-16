@@ -8,11 +8,11 @@ import (
 	"github.com/MickMake/GoUnify/Only"
 )
 
+
 const Url = "/v1/devService/getPowerDeviceTypeList"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -24,17 +24,18 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData []struct {
-	IsRemoteUpgrade valueTypes.Integer `json:"is_remote_upgrade"`
-	SysID           valueTypes.String  `json:"sys_id"`
-	SysName         valueTypes.String  `json:"sys_name"`
-	TypeCode        valueTypes.Integer `json:"type_code"`
-	TypeID          valueTypes.Integer `json:"type_id"`
-	TypeName        valueTypes.String  `json:"type_name"`
-	TypeNameEn      valueTypes.String  `json:"type_name_en"`
-	UpdateDate      valueTypes.String  `json:"update_date"`
-	ValidFlag       valueTypes.Integer `json:"valid_flag"`
+	GoStructParent        GoStruct.GoStructParent `json:"GoStruct" PointIdReplace:"true" DataTable:"true" DataTableSortOn:"UpdateDate"`
+
+	UpdateDate      valueTypes.DateTime     `json:"update_date"`
+	SysID           valueTypes.String       `json:"sys_id"`
+	SysName         valueTypes.String       `json:"sys_name"`
+	TypeID          valueTypes.Integer      `json:"type_id"`
+	TypeCode        valueTypes.Integer      `json:"type_code"`
+	TypeName        valueTypes.String       `json:"type_name"`
+	TypeNameEn      valueTypes.String       `json:"type_name_en"`
+	IsRemoteUpgrade valueTypes.Bool         `json:"is_remote_upgrade"`
+	ValidFlag       valueTypes.Bool         `json:"valid_flag"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -42,30 +43,11 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToDataMap(*e, "system", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	}
 
 	return entries

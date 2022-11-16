@@ -4,15 +4,14 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/faultService/queryFaultTypeByDevice"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -24,9 +23,15 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
+type ResultData []struct {
+	GoStructParent          GoStruct.GoStructParent   `json:"-" DataTable:"true"`
 
-type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+	DevFaultTypeCode  valueTypes.String    `json:"dev_fault_type_code"`
+	FaultTypeCode     valueTypes.Integer   `json:"fault_type_code"`
+	FaultTypeCodeList []valueTypes.Integer `json:"fault_type_code_list"`
+	FaultTypeCode2    valueTypes.Integer   `json:"faulttypecode" PointId:"fault_type_code2"`
+	FaultValue        valueTypes.String    `json:"faultvalue" PointId:"fault_value"`
+	IsAllowOwnerView  valueTypes.Bool      `json:"is_allow_owner_view"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -34,30 +39,11 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToDataMap(*e, "system", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	}
 
 	return entries

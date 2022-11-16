@@ -4,15 +4,16 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/powerStationService/getPsKpiForHoursByPsId"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
+	PsId valueTypes.PsId     `json:"ps_id" required:"true"`
+	Day  valueTypes.DateTime `json:"day" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -26,7 +27,15 @@ func (rd RequestData) Help() string {
 
 
 type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+	Hours map[string]Hour `json:"hours"`
+}
+type Hour struct {
+	CurrPower         float64            `json:"curr_power"`
+	CurrPowerUnit     valueTypes.String  `json:"curr_power_unit"`
+	CurrRadiation     valueTypes.Integer `json:"curr_radiation"`
+	CurrRadiationUnit valueTypes.String  `json:"curr_radiation_unit"`
+	TodayEnergy       valueTypes.Integer `json:"today_energy"`
+	TodayEnergyUnit   valueTypes.String  `json:"today_energy_unit"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -34,30 +43,11 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToDataMap(*e, "system", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	}
 
 	return entries

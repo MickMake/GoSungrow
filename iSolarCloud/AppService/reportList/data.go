@@ -31,18 +31,20 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	DataList []DataList `json:"dataList" PointId:"data_list" PointIgnoreIfNilFromChild:"UpdateTime" PointNameFromChild:"DateId" PointNameDateFormat:"20060102" PointNameAppend:"true"`
-	Info     Common.ReportInfo `json:"info" PointArrayFlatten:"false"`
+	Info      Common.ReportInfo `json:"info" PointArrayFlatten:"false"`
+	DataList  []DataList  `json:"dataList" PointId:"data_list" DataTable:"true" PointIgnoreChildIfFromNil:"UpdateTime" PointIdFromChild:"UpdateTime" PointNameDateFormat:"20060102" PointIdReplace:"false"`
 	MinDateId interface{} `json:"min_date_id"`
-	Total     []DataList  `json:"total" PointId:"total" PointIgnoreIfNilFromChild:"UpdateTime" PointNameFromChild:"UpdateTime" PointNameDateFormat:"20060102" PointNameAppend:"true" PointArrayFlatten:"false"`
+	Total     []DataList  `json:"total" PointId:"total" DataTable:"true" PointIgnoreChildIfFromNil:"UpdateTime" PointIdFromChild:"UpdateTime" PointNameDateFormat:"20060102" PointIdReplace:"false" PointArrayFlatten:"false"`
 }
 
 type DataList struct {
+	// GoStruct   GoStruct.GoStruct   `json:"GoStruct,omitempty"`
+
 	DateId     valueTypes.DateTime `json:"date_id"`
 	DeviceName interface{}         `json:"device_name"`
 	PsId       valueTypes.PsId     `json:"ps_id"`
 	TimeStamp  valueTypes.Integer  `json:"time_stamp"` // Sad that this alternates between string and valueTypes.Integer.
-	UpdateTime valueTypes.DateTime `json:"update_time"`
+	UpdateTime valueTypes.DateTime `json:"update_time" PointNameDateFormat:"20060102"`
 	UUID       interface{}         `json:"uuid"`
 	Co2Reduce  valueTypes.Float    `json:"co2_reduce"`
 

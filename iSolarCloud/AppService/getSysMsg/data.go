@@ -4,15 +4,14 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/otherService/getSysMsg"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -25,93 +24,74 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	AttachNames     interface{}  `json:"attach_names"`
-	AttachPath      interface{}  `json:"attach_path"`
+	GoStructParent        GoStruct.GoStructParent   `json:"-" DataTable:"true" DataTableSortOn:"CreateTime" PointIdReplace:"false"`
+
+	MsgId           valueTypes.Integer  `json:"msg_id"`
+	CreateTime      valueTypes.DateTime `json:"create_time"`
+	PublishTime     valueTypes.DateTime `json:"publish_time"`
+	StartTime       valueTypes.DateTime `json:"start_time"`
+	EndTime         valueTypes.DateTime `json:"end_time"`
+	Ispublish       valueTypes.Bool     `json:"ispublish" PointId:"is_publish"`
+	UserName        valueTypes.String   `json:"user_name"`
+	UserId          valueTypes.Integer  `json:"user_id"`
+	MsgUserIds      valueTypes.String   `json:"msg_user_ids"`
+	MsgLevel        valueTypes.Integer  `json:"msg_level"`
+	MsgTitleEnUs    valueTypes.String   `json:"msg_title_en_us"`
+	MsgContentsEnUs valueTypes.String   `json:"msg_contents_en_us"`
+
+	TypeId          valueTypes.Integer  `json:"type_id"`
 	BusinessId      valueTypes.Integer  `json:"business_id"`
 	ClickNum        valueTypes.Integer  `json:"click_num"`
-	CreateTime      valueTypes.DateTime `json:"create_time"`
-	EndTime         valueTypes.DateTime `json:"end_time"`
-	Ispublish       valueTypes.Bool     `json:"ispublish"`
-	MsgContents     valueTypes.String   `json:"msg_contents"`
-	MsgContentsDeDe valueTypes.String   `json:"msg_contents_de_de"`
-	MsgContentsEnUs valueTypes.String   `json:"msg_contents_en_us"`
-	MsgContentsEsEs valueTypes.String   `json:"msg_contents_es_es"`
-	MsgContentsFrFr valueTypes.String   `json:"msg_contents_fr_fr"`
-	MsgContentsIDID valueTypes.String   `json:"msg_contents_id_id"`
-	MsgContentsItIt valueTypes.String   `json:"msg_contents_it_it"`
-	MsgContentsJaJp valueTypes.String   `json:"msg_contents_ja_jp"`
-	MsgContentsKoKr valueTypes.String   `json:"msg_contents_ko_kr"`
-	MsgContentsNlNl valueTypes.String   `json:"msg_contents_nl_nl"`
-	MsgContentsPlPl valueTypes.String   `json:"msg_contents_pl_pl"`
-	MsgContentsPtBr valueTypes.String   `json:"msg_contents_pt_br"`
-	MsgContentsPtPt valueTypes.String   `json:"msg_contents_pt_pt"`
-	MsgContentsTrTr valueTypes.String   `json:"msg_contents_tr_tr"`
-	MsgContentsViVn valueTypes.String   `json:"msg_contents_vi_vn"`
-	MsgContentsZhTw valueTypes.String   `json:"msg_contents_zh_tw"`
-	MsgId           valueTypes.Integer  `json:"msg_id"`
-	MsgLevel        valueTypes.Integer  `json:"msg_level"`
-	MsgTitle        valueTypes.String   `json:"msg_title"`
-	MsgTitleDeDe    valueTypes.String   `json:"msg_title_de_de"`
-	MsgTitleEnUs    valueTypes.String   `json:"msg_title_en_us"`
-	MsgTitleEsEs    valueTypes.String   `json:"msg_title_es_es"`
-	MsgTitleFrFr    valueTypes.String   `json:"msg_title_fr_fr"`
-	MsgTitleIDID    valueTypes.String   `json:"msg_title_id_id"`
-	MsgTitleItIt    valueTypes.String   `json:"msg_title_it_it"`
-	MsgTitleJaJp    valueTypes.String   `json:"msg_title_ja_jp"`
-	MsgTitleKoKr    valueTypes.String   `json:"msg_title_ko_kr"`
-	MsgTitleNlNl    valueTypes.String   `json:"msg_title_nl_nl"`
-	MsgTitlePlPl    valueTypes.String   `json:"msg_title_pl_pl"`
-	MsgTitlePtBr    valueTypes.String   `json:"msg_title_pt_br"`
-	MsgTitlePtPt    valueTypes.String   `json:"msg_title_pt_pt"`
-	MsgTitleTrTr    valueTypes.String   `json:"msg_title_tr_tr"`
-	MsgTitleViVn    valueTypes.String   `json:"msg_title_vi_vn"`
-	MsgTitleZhTw    valueTypes.String   `json:"msg_title_zh_tw"`
-	MsgUserIds      valueTypes.String   `json:"msg_user_ids"`
+	RemindType      valueTypes.Integer  `json:"remind_type"`
 	OperateType     valueTypes.Integer  `json:"operate_type"`
 	OperateURL      valueTypes.String   `json:"operate_url"`
-	PublishTime     valueTypes.DateTime `json:"publish_time"`
-	RemindType      valueTypes.Integer  `json:"remind_type"`
-	StartTime       valueTypes.DateTime `json:"start_time"`
-	TypeId          valueTypes.Integer  `json:"type_id"`
-	UserId          valueTypes.Integer  `json:"user_id"`
-	UserName        valueTypes.String   `json:"user_name"`
+	AttachNames     interface{}         `json:"attach_names"`
+	AttachPath      interface{}         `json:"attach_path"`
+
+	MsgContents     valueTypes.String   `json:"msg_contents" PointIgnore:"true"`
+	MsgContentsDeDe valueTypes.String   `json:"msg_contents_de_de" PointIgnore:"true"`
+	MsgContentsEsEs valueTypes.String   `json:"msg_contents_es_es" PointIgnore:"true"`
+	MsgContentsFrFr valueTypes.String   `json:"msg_contents_fr_fr" PointIgnore:"true"`
+	MsgContentsIDID valueTypes.String   `json:"msg_contents_id_id" PointIgnore:"true"`
+	MsgContentsItIt valueTypes.String   `json:"msg_contents_it_it" PointIgnore:"true"`
+	MsgContentsJaJp valueTypes.String   `json:"msg_contents_ja_jp" PointIgnore:"true"`
+	MsgContentsKoKr valueTypes.String   `json:"msg_contents_ko_kr" PointIgnore:"true"`
+	MsgContentsNlNl valueTypes.String   `json:"msg_contents_nl_nl" PointIgnore:"true"`
+	MsgContentsPlPl valueTypes.String   `json:"msg_contents_pl_pl" PointIgnore:"true"`
+	MsgContentsPtBr valueTypes.String   `json:"msg_contents_pt_br" PointIgnore:"true"`
+	MsgContentsPtPt valueTypes.String   `json:"msg_contents_pt_pt" PointIgnore:"true"`
+	MsgContentsTrTr valueTypes.String   `json:"msg_contents_tr_tr" PointIgnore:"true"`
+	MsgContentsViVn valueTypes.String   `json:"msg_contents_vi_vn" PointIgnore:"true"`
+	MsgContentsZhTw valueTypes.String   `json:"msg_contents_zh_tw" PointIgnore:"true"`
+
+	MsgTitle        valueTypes.String   `json:"msg_title" PointIgnore:"true"`
+	MsgTitleDeDe    valueTypes.String   `json:"msg_title_de_de" PointIgnore:"true"`
+	MsgTitleEsEs    valueTypes.String   `json:"msg_title_es_es" PointIgnore:"true"`
+	MsgTitleFrFr    valueTypes.String   `json:"msg_title_fr_fr" PointIgnore:"true"`
+	MsgTitleIDID    valueTypes.String   `json:"msg_title_id_id" PointIgnore:"true"`
+	MsgTitleItIt    valueTypes.String   `json:"msg_title_it_it" PointIgnore:"true"`
+	MsgTitleJaJp    valueTypes.String   `json:"msg_title_ja_jp" PointIgnore:"true"`
+	MsgTitleKoKr    valueTypes.String   `json:"msg_title_ko_kr" PointIgnore:"true"`
+	MsgTitleNlNl    valueTypes.String   `json:"msg_title_nl_nl" PointIgnore:"true"`
+	MsgTitlePlPl    valueTypes.String   `json:"msg_title_pl_pl" PointIgnore:"true"`
+	MsgTitlePtBr    valueTypes.String   `json:"msg_title_pt_br" PointIgnore:"true"`
+	MsgTitlePtPt    valueTypes.String   `json:"msg_title_pt_pt" PointIgnore:"true"`
+	MsgTitleTrTr    valueTypes.String   `json:"msg_title_tr_tr" PointIgnore:"true"`
+	MsgTitleViVn    valueTypes.String   `json:"msg_title_vi_vn" PointIgnore:"true"`
+	MsgTitleZhTw    valueTypes.String   `json:"msg_title_zh_tw" PointIgnore:"true"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	// switch {
-	// case e.Dummy == "":
-	// 	break
-	// default:
-	// 	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	// }
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToDataMap(*e, "system", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	}
 
 	return entries

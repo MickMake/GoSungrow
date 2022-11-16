@@ -26,6 +26,8 @@ func (rd RequestData) Help() string {
 
 
 type ResultData []struct {
+	GoStructParent   GoStruct.GoStructParent   `json:"GoStruct" DataTable:"true" DataTableSortOn:"CreateTime"`
+
 	CreateTime valueTypes.DateTime `json:"create_time"`
 	Cycle      valueTypes.Integer  `json:"cycle"`
 	ID         valueTypes.Integer  `json:"id"`
@@ -55,7 +57,7 @@ func (e *EndPoint) GetData() api.DataMap {
 		// pkg := reflection.GetName("", *e)
 		// dt := valueTypes.NewDateTime(valueTypes.Now)
 		// name := pkg + "." + e.Request.DateId.Format(valueTypes.DateTimeLayoutDay)
-		entries.StructToDataMap(*e, "system", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	}
 
 	return entries

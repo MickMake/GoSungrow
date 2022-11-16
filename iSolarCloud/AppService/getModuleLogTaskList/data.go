@@ -50,7 +50,7 @@ type ResultData struct {
 		TaskId         valueTypes.Integer `json:"task_id"`
 		TaskName       valueTypes.Integer      `json:"task_name"`
 		UpdateTime     valueTypes.DateTime      `json:"update_time"`
-	} `json:"pageList" PointId:"page_list" PointNameFromChild:"TaskId" PointNameAppend:"false" PointArrayFlatten:"false" DataTable:"true"`
+	} `json:"pageList" PointId:"page_list" PointIdFromChild:"TaskId" PointIdReplace:"true" DataTable:"true"`
 	RowCount   valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 	Size       valueTypes.Integer `json:"size"`
 	StartIndex valueTypes.Integer `json:"startIndex" PointId:"start_index"`
@@ -91,7 +91,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToDataMap(*e, "system", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	}
 
 	return entries

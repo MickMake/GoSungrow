@@ -12,7 +12,7 @@ const Url = "/v1/faultService/queryNounList"
 const Disabled = false
 
 type RequestData struct {
-	FaultTypeCode valueTypes.String `json:"fault_type_code" required:"true"`
+	FaultTypeCode valueTypes.Integer `json:"fault_type_code" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -38,10 +38,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		// pkg := reflection.GetName("", *e)
-		// dt := valueTypes.NewDateTime(valueTypes.Now)
-		// name := pkg + "." + e.Request.PsId.String()
-		entries.StructToDataMap(*e, "system", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	}
 
 	return entries

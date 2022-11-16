@@ -38,7 +38,7 @@ type ResultData struct {
 		StationCount      valueTypes.Integer   `json:"station_count"`
 		TodayEnergy       valueTypes.UnitValue `json:"today_energy"`
 		TotalEnergy       valueTypes.UnitValue `json:"total_energy"`
-	} `json:"pageList" PointId:"page_list" PointNameFromChild:"OrgId" PointNameAppend:"false" PointArrayFlatten:"false" DataTable:"true"`
+	} `json:"pageList" PointId:"page_list" PointIdFromChild:"OrgId" PointIdReplace:"true" DataTable:"true"`
 	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count" PointIgnore:"true"`
 }
 
@@ -51,7 +51,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToDataMap(*e, "system", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	}
 
 	return entries

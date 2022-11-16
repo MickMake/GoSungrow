@@ -53,13 +53,13 @@ type ResultData struct {
 	Cycle        valueTypes.Integer  `json:"cycle"`
 	TemplateId   valueTypes.Integer  `json:"template_id"`
 	TemplateName valueTypes.String   `json:"template_name"`
-	PointsData   PointsData          `json:"points_data" PointNameAppend:"false"`	// PointNameFromChild:"Order"`
+	PointsData   PointsData          `json:"points_data" PointIdReplace:"true"`
 }
 
 
 type PointsData struct {
-	Devices map[string]DeviceData `json:"devices" PointNameAppend:"false"`	// PointNameFromChild:"DateId" PointNameAppend:"false"`
-	Order   valueTypes.String  `json:"order" PointSplitOn:","`
+	Devices map[string]DeviceData `json:"devices" PointIdReplace:"true"`	// PointIdFromChild:"DateId" PointIdReplace:"true"`
+	Order   valueTypes.String  `json:"order" PointSplitOn:"," PointValueReplace:"&" PointValueReplaceWith:".p"`
 }
 
 func (p *PointsData) UnmarshalJSON(data []byte) error {
@@ -106,7 +106,7 @@ type DeviceData struct {
 	DeviceName valueTypes.String  `json:"device_name"`
 	DeviceType valueTypes.Integer `json:"device_type"`
 	DeviceUUID valueTypes.Integer `json:"device_uuid"`
-	Points     Points             `json:"points" PointNameAppend:"false" DataTable:"true" DataTableSortOn:"PointId"`
+	Points     Points             `json:"points" DataTable:"true" DataTableMerge:"true" DataTableSortOn:"PointId"`	// PointIdReplace:"false" PointIdFromChild:"PsId.PsKey"
 }
 
 func (p *DeviceData) UnmarshalJSON(data []byte) error {

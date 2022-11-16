@@ -1,12 +1,14 @@
 package api
 
 import (
+	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
 
 type DataEntry struct {
+	Current    *GoStruct.Reflect    `json:"-"`
 	EndPoint   string               `json:"endpoint"`
 	Point      *Point               `json:"point"`
 	Parent     ParentDevice         `json:"parent"`
@@ -15,7 +17,7 @@ type DataEntry struct {
 
 	Valid      bool                 `json:"valid"`
 	Hide       bool                 `json:"hide"`
-	Index      int                  `json:"index"`
+	// Index      int                  `json:"index"`
 }
 
 func (de *DataEntry) IsValid() bool {

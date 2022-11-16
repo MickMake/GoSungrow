@@ -86,7 +86,7 @@ type DayData struct {
 		TimeStamp  valueTypes.DateTime `json:"time_stamp"`
 		Zfzy       valueTypes.Float    `json:"zfzy" PointName:"PV Power To Battery" PointUnitFrom:"ZfzyUnit" PointTimestampFrom:"TimeStamp"`
 		ZfzyUnit   valueTypes.String   `json:"zfzy_unit"  PointIgnore:"true"`
-	} `json:"point_data_15_list" PointNameFromChild:"TimeStamp" PointArrayFlatten:"false" DataTable:"true"`
+	} `json:"point_data_15_list" PointIdFromChild:"TimeStamp" PointArrayFlatten:"false" DataTable:"true"`
 	ZfzyMap       valueTypes.UnitValue `json:"zfzy_map"`
 	ZfzyMapVirgin valueTypes.UnitValue `json:"zfzy_map_virgin"  PointIgnore:"true"`
 	ZjzzMap       valueTypes.UnitValue `json:"zjzz_map"`
@@ -152,7 +152,7 @@ type MonthData struct {
 		SelfConsumptionYield     valueTypes.Float    `json:"self_consumption_yield" PointUnitFrom:"SelfConsumptionYieldUnit" PointTimestampFrom:"TimeStamp"`
 		SelfConsumptionYieldUnit valueTypes.String   `json:"self_consumption_yield_unit"  PointIgnore:"true"`
 		TimeStamp                valueTypes.DateTime `json:"time_stamp"`
-	} `json:"month_data_day_list" PointNameFromChild:"TimeStamp" PointNameDateFormat:"20060102" DataTable:"true"`
+	} `json:"month_data_day_list" PointIdFromChild:"TimeStamp" PointNameDateFormat:"20060102" DataTable:"true"`
 }
 
 type YearData struct {
@@ -214,7 +214,7 @@ type YearData struct {
 		SelfConsumptionYield     valueTypes.Float    `json:"self_consumption_yield" PointUnitFrom:"SelfConsumptionYieldUnit" PointTimestampFrom:"TimeStamp"`
 		SelfConsumptionYieldUnit valueTypes.String   `json:"self_consumption_yield_unit"  PointIgnore:"true"`
 		TimeStamp                valueTypes.DateTime `json:"time_stamp"`
-	} `json:"year_data_month_list" PointNameFromChild:"TimeStamp" PointNameDateFormat:"200601" DataTable:"true"`
+	} `json:"year_data_month_list" PointIdFromChild:"TimeStamp" PointNameDateFormat:"200601" DataTable:"true"`
 }
 
 type TotalData struct {
@@ -274,7 +274,7 @@ type TotalData struct {
 		SelfConsumptionYield     valueTypes.Float    `json:"self_consumption_yield" PointUnitFrom:"SelfConsumptionYieldUnit" PointTimestampFrom:"TimeStamp"`
 		SelfConsumptionYieldUnit valueTypes.String   `json:"self_consumption_yield_unit"  PointIgnore:"true"`
 		TimeStamp                valueTypes.DateTime `json:"time_stamp"`
-	} `json:"total_data_year_list" PointNameFromChild:"TimeStamp" PointNameDateFormat:"20060102" DataTable:"true"`
+	} `json:"total_data_year_list" PointIdFromChild:"TimeStamp" PointNameDateFormat:"20060102" DataTable:"true"`
 }
 
 type DecodeResultData ResultData

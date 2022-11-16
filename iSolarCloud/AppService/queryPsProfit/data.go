@@ -60,8 +60,8 @@ type ResultData struct {
 		ValleyNetPowerQuantity   interface{}         `json:"valley_net_power_quantity"`
 		ValleyPowerQuantity      interface{}         `json:"valley_power_quantity"`
 		ValleyUsePowerQuantity   interface{}         `json:"valley_use_power_quantity"`
-	} `json:"actual_list" PointId:"actual" PointNameFromChild:"DateId" PointNameDateFormat:"20060102" PointArrayFlatten:"false"`	// PointIgnoreIfNilFromChild:"UpdateTime" DataTable:"true"`
-	// Need to fix this output - PointNameFromChild:"DateId" isn't working.
+	} `json:"actual_list" PointId:"actual" PointIdFromChild:"DateId" PointNameDateFormat:"20060102" PointArrayFlatten:"false"`	// PointIgnoreChildIfFromNil:"UpdateTime" DataTable:"true"`
+	// Need to fix this output - PointIdFromChild:"DateId" isn't working.
 	PlanList []interface{} `json:"plan_list" PointArrayFlatten:"false"`
 }
 

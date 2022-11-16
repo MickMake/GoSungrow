@@ -35,30 +35,6 @@ const (
 	TypeArrayTime      = "[]Time"
 	TypeArrayUnitValue = "[]UnitValue"
 	TypeUnitValues     = "UnitValues"
-
-	// TypeArrayValueTypesBool      = "[]valueTypes.Bool"
-	// TypeArrayValueTypesCount     = "[]valueTypes.Count"
-	// TypeArrayValueTypesDateTime  = "[]valueTypes.DateTime"
-	// TypeArrayValueTypesFloat     = "[]valueTypes.Float"
-	// TypeArrayValueTypesInteger   = "[]valueTypes.Integer"
-	// TypeArrayValueTypesPointId   = "[]valueTypes.PointId"
-	// TypeArrayValueTypesPsKey     = "[]valueTypes.PsKey"
-	// TypeArrayValuePsId           = "[]valueTypes.PsId"
-	// TypeArrayValueTypesString    = "[]valueTypes.String"
-	// TypeArrayValueTypesTime      = "[]valueTypes.Time"
-	// TypeArrayValueTypesUnitValue = "[]valueTypes.UnitValue"
-	//
-	// TypeValueTypesBool      = "valueTypes.Bool"
-	// TypeValueTypesCount     = "valueTypes.Count"
-	// TypeValueTypesDateTime  = "valueTypes.DateTime"
-	// TypeValueTypesFloat     = "valueTypes.Float"
-	// TypeValueTypesInteger   = "valueTypes.Integer"
-	// TypeValueTypesPointId   = "valueTypes.PointId"
-	// TypeValueTypesPsKey     = "valueTypes.PsKey"
-	// TypeValueTypesPsId      = "valueTypes.PsId"
-	// TypeValueTypesString    = "valueTypes.String"
-	// TypeValueTypesTime      = "valueTypes.Time"
-	// TypeValueTypesUnitValue = "valueTypes.UnitValue"
 )
 
 
@@ -332,7 +308,7 @@ func AnyToUnitValue(ref interface{}, unit string, typeString string, dateFormat 
 			case TypeUnitValues:
 				fallthrough
 			case TypeArrayUnitValue:
-				for _, val := range ref.([]UnitValue) {
+				for _, val := range ref.(UnitValues) {
 					uv = append(uv, val)
 				}
 
@@ -490,7 +466,11 @@ func AnyToUnitValue(ref interface{}, unit string, typeString string, dateFormat 
 				}
 
 			default:
-				uv = append(uv, SetUnitValueString("", unit, typeString+ "(unknown)"))
+				j, err := json.Marshal(ref)
+				if err != nil {
+					j = []byte(typeString + "(unknown)")
+				}
+				uv = append(uv, SetUnitValueString(string(j), unit, typeString))
 				ok = false
 		}
 	}

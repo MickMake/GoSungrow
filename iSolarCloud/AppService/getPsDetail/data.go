@@ -26,7 +26,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	Images          Common.PowerStationImages `json:"images" PointArrayFlatten:"false"`
+	Images          Common.PowerStationImages `json:"images"`
 	RobotNumSweepCapacity struct {
 		Num           valueTypes.Integer `json:"num"`
 		SweepCapacity valueTypes.Float   `json:"sweep_capacity"`
@@ -42,36 +42,38 @@ type ResultData struct {
 		DeviceType              valueTypes.Integer   `json:"device_type"`
 		DrmStatus               valueTypes.Integer   `json:"drm_status"`
 		DrmStatusName           valueTypes.String    `json:"drm_status_name"`
-		EnergyFlow              []valueTypes.Integer `json:"energy_flow" PointName:"Energy Flow" PointIgnoreZero:"false" PointArrayFlatten:"true"`
 		HasAmmeter              valueTypes.Bool      `json:"has_ammeter"`
 		InstallerDevFaultStatus valueTypes.Integer   `json:"installer_dev_fault_status"`
 		InverterSn              valueTypes.String    `json:"inverter_sn"`
 		OwnerDevFaultStatus     valueTypes.Integer   `json:"owner_dev_fault_status"`
-		P13003Map               valueTypes.UnitValue `json:"p13003_map" PointId:"p13003" PointUpdateFreq:"UpdateFreqInstant"`
+		P13003Map               valueTypes.UnitValue `json:"p13003_map" PointId:"p13003" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreqInstant"`
 		P13003MapVirgin         valueTypes.UnitValue `json:"p13003_map_virgin"  PointIgnore:"true"`
-		P13011Map               valueTypes.UnitValue `json:"p13011_map" PointId:"p13011" PointUpdateFreq:"UpdateFreqInstant"`
+		P13011Map               valueTypes.UnitValue `json:"p13011_map" PointId:"p13011" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreqInstant"`
 		P13011MapVirgin         valueTypes.UnitValue `json:"p13011_map_virgin"  PointIgnore:"true"`
-		P13115Map               valueTypes.UnitValue `json:"p13115_map" PointId:"p13115" PointUpdateFreq:"UpdateFreqInstant"`
+		P13115Map               valueTypes.UnitValue `json:"p13115_map" PointId:"p13115" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreqInstant"`
 		P13115MapVirgin         valueTypes.UnitValue `json:"p13115_map_virgin"  PointIgnore:"true"`
-		P13119Map               valueTypes.UnitValue `json:"p13119_map" PointId:"p13119" PointUpdateFreq:"UpdateFreqInstant"`
+		P13119Map               valueTypes.UnitValue `json:"p13119_map" PointId:"p13119" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreqInstant"`
 		P13119MapVirgin         valueTypes.UnitValue `json:"p13119_map_virgin"  PointIgnore:"true"`
-		P13121Map               valueTypes.UnitValue `json:"p13121_map" PointId:"p13121" PointUpdateFreq:"UpdateFreqInstant"`
+		P13121Map               valueTypes.UnitValue `json:"p13121_map" PointId:"p13121" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreqInstant"`
 		P13121MapVirgin         valueTypes.UnitValue `json:"p13121_map_virgin"  PointIgnore:"true"`
-		P13126Map               valueTypes.UnitValue `json:"p13126_map" PointId:"p13126" PointUpdateFreq:"UpdateFreqInstant"`
+		P13126Map               valueTypes.UnitValue `json:"p13126_map" PointId:"p13126" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreqInstant"`
 		P13126MapVirgin         valueTypes.UnitValue `json:"p13126_map_virgin"  PointIgnore:"true"`
-		P13141                  valueTypes.Float     `json:"p13141" PointId:"p13141" PointUpdateFreq:"UpdateFreqInstant"`
-		P13142                  valueTypes.Float     `json:"p13142" PointId:"p13142" PointUpdateFreq:"UpdateFreqInstant"`
-		P13149Map               valueTypes.UnitValue `json:"p13149_map" PointId:"p13149" PointUpdateFreq:"UpdateFreqInstant"`
+		P13141                  valueTypes.Float     `json:"p13141" PointId:"p13141" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreqInstant"`
+		P13142                  valueTypes.Float     `json:"p13142" PointId:"p13142" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreqInstant"`
+		P13149Map               valueTypes.UnitValue `json:"p13149_map" PointId:"p13149" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreqInstant"`
 		P13149MapVirgin         valueTypes.UnitValue `json:"p13149_map_virgin"  PointIgnore:"true"`
-		P13150Map               valueTypes.UnitValue `json:"p13150_map" PointId:"p13150" PointUpdateFreq:"UpdateFreqInstant"`
+		P13150Map               valueTypes.UnitValue `json:"p13150_map" PointId:"p13150" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreqInstant"`
 		P13150MapVirgin         valueTypes.UnitValue `json:"p13150_map_virgin"  PointIgnore:"true"`
-		P13155                  valueTypes.Float     `json:"p13155" PointId:"p13155" PointUpdateFreq:"UpdateFreqInstant"`
+		P13155                  valueTypes.Float     `json:"p13155" PointId:"p13155" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreqInstant"`
 		PsKey                   valueTypes.PsKey     `json:"ps_key"`
 		UpdateTime              valueTypes.DateTime  `json:"update_time"`
 		UUID                    valueTypes.Integer   `json:"uuid"`
-	} `json:"storage_inverter_data" PointNameAppend:"false" PointNameFromChild:"PsKey" PointArrayFlatten:"false" DataTable:"true"`
+		EnergyFlow              []valueTypes.Integer `json:"energy_flow" PointName:"Energy Flow" PointIgnoreZero:"false" PointArrayFlatten:"true"`
+	} `json:"storage_inverter_data" PointIdReplace:"true" PointIdFromChild:"PsKey" DataTable:"false"`
 
-	ActualEnergy                  []valueTypes.Float   `json:"actual_energy" PointId:"actual_energy" PointName:"Actual Energy" PointUnitFrom:"ActualEnergyUnit" PointArrayFlatten:"true" DataTable:"true"`
+	ActualEnergy                  []valueTypes.Float   `json:"actual_energy" PointId:"actual_energy" PointName:"Actual Energy" PointUnitFrom:"ActualEnergyUnit" PointArrayFlatten:"true"`
+	PlanEnergy                    []valueTypes.Float   `json:"plan_energy" PointUnitFrom:"PlanEnergyUnit" PointArrayFlatten:"true"`
+
 	ActualEnergyUnit              valueTypes.String    `json:"actual_energy_unit" PointId:"actual_energy_unit"  PointIgnore:"true"`
 	AlarmCount                    valueTypes.Count     `json:"alarm_count"`
 	AreaId                        interface{}          `json:"area_id"`
@@ -122,83 +124,82 @@ type ResultData struct {
 	OperateYear                   valueTypes.String    `json:"operate_year"`
 	OperationBusName              valueTypes.String    `json:"operation_bus_name"`
 	OwnerPsFaultStatus            valueTypes.Integer   `json:"owner_ps_fault_status"`
-	P83012Value                   valueTypes.Float     `json:"p83012_value" PointId:"p83012" PointUnitFrom:"P83012Unit"`
+	P83012Value                   valueTypes.Float     `json:"p83012_value" PointId:"p83012" PointDeviceFrom:"" PointUnitFrom:"P83012Unit"`
 	P83012Unit                    valueTypes.String    `json:"p83012_unit" PointId:"p83012_unit"  PointIgnore:"true"`
-	P83013Value                   valueTypes.Float     `json:"p83013_value" PointId:"p83013" PointUnitFrom:"P83013Unit"`
+	P83013Value                   valueTypes.Float     `json:"p83013_value" PointId:"p83013" PointDeviceFrom:"" PointUnitFrom:"P83013Unit"`
 	P83013Unit                    valueTypes.String    `json:"p83013_unit" PointId:"p83013_unit"  PointIgnore:"true"`
-	P83036Value                   valueTypes.Float     `json:"p83036_value" PointId:"p83036" PointUnitFrom:"P83036Unit"`
+	P83036Value                   valueTypes.Float     `json:"p83036_value" PointId:"p83036" PointDeviceFrom:"" PointUnitFrom:"P83036Unit"`
 	P83036Unit                    valueTypes.String    `json:"p83036_unit" PointId:"p83036_unit"  PointIgnore:"true"`
-	P83016                        valueTypes.Float     `json:"p83016" PointId:"p83016" PointUnitFrom:"P83016Unit"`
+	P83016                        valueTypes.Float     `json:"p83016" PointId:"p83016" PointDeviceFrom:"" PointUnitFrom:"P83016Unit"`
 	P83016Unit                    valueTypes.String    `json:"p83016_unit" PointId:"p83016_unit"  PointIgnore:"true"`
-	P83017                        valueTypes.Float     `json:"p83017" PointId:"p83017" PointUnitFrom:"P83017Unit"`
+	P83017                        valueTypes.Float     `json:"p83017" PointId:"p83017" PointDeviceFrom:"" PointUnitFrom:"P83017Unit"`
 	P83017Unit                    valueTypes.String    `json:"p83017_unit" PointId:"p83017_unit"  PointIgnore:"true"`
-	P83023                        valueTypes.Float     `json:"p83023" PointId:"p83023"`
+	P83023                        valueTypes.Float     `json:"p83023" PointId:"p83023" PointDeviceFrom:""`
 	P83023y                       valueTypes.String    `json:"p83023y" PointId:"p83023y"`
 	P83023year                    valueTypes.String    `json:"p83023year" PointId:"p83023y"`
 	P83023ym                      valueTypes.String    `json:"p83023ym" PointId:"p83023ym"`
-	P83043                        valueTypes.Float     `json:"p83043" PointId:"p83043"`
-	P83044                        valueTypes.Float     `json:"p83044" PointId:"p83044"`
-	P83045                        valueTypes.Float     `json:"p83045" PointId:"p83045"`
-	P83072Map                     valueTypes.UnitValue `json:"p83072_map" PointId:"p83072"`
+	P83043                        valueTypes.Float     `json:"p83043" PointId:"p83043" PointDeviceFrom:""`
+	P83044                        valueTypes.Float     `json:"p83044" PointId:"p83044" PointDeviceFrom:""`
+	P83045                        valueTypes.Float     `json:"p83045" PointId:"p83045" PointDeviceFrom:""`
+	P83072Map                     valueTypes.UnitValue `json:"p83072_map" PointId:"p83072" PointDeviceFrom:""`
 	P83072MapVirgin               valueTypes.UnitValue `json:"p83072_map_virgin"  PointIgnore:"true"`
-	P83073Map                     valueTypes.UnitValue `json:"p83073_map" PointId:"p83073"`
+	P83073Map                     valueTypes.UnitValue `json:"p83073_map" PointId:"p83073" PointDeviceFrom:""`
 	P83073MapVirgin               valueTypes.UnitValue `json:"p83073_map_virgin"  PointIgnore:"true"`
-	P83074Map                     valueTypes.UnitValue `json:"p83074_map" PointId:"p83074"`
+	P83074Map                     valueTypes.UnitValue `json:"p83074_map" PointId:"p83074" PointDeviceFrom:""`
 	P83074MapVirgin               valueTypes.UnitValue `json:"p83074_map_virgin"  PointIgnore:"true"`
-	P83075Map                     valueTypes.UnitValue `json:"p83075_map" PointId:"p83075"`
+	P83075Map                     valueTypes.UnitValue `json:"p83075_map" PointId:"p83075" PointDeviceFrom:""`
 	P83075MapVirgin               valueTypes.UnitValue `json:"p83075_map_virgin"  PointIgnore:"true"`
-	P83076Map                     valueTypes.UnitValue `json:"p83076_map" PointName:"Pv Power" PointId:"p83076"` // Pv Power
+	P83076Map                     valueTypes.UnitValue `json:"p83076_map" PointName:"Pv Power" PointId:"p83076" PointDeviceFrom:""` // Pv Power
 	P83076MapVirgin               valueTypes.UnitValue `json:"p83076_map_virgin"  PointIgnore:"true"`
-	P83077Map                     valueTypes.UnitValue `json:"p83077_map" PointName:"Pv Energy" PointId:"p83077"` // Pv Energy
+	P83077Map                     valueTypes.UnitValue `json:"p83077_map" PointName:"Pv Energy" PointId:"p83077" PointDeviceFrom:""` // Pv Energy
 	P83077MapVirgin               valueTypes.UnitValue `json:"p83077_map_virgin"  PointIgnore:"true"`
-	P83078Map                     valueTypes.UnitValue `json:"p83078_map" PointId:"p83078"`
+	P83078Map                     valueTypes.UnitValue `json:"p83078_map" PointId:"p83078" PointDeviceFrom:""`
 	P83078MapVirgin               valueTypes.UnitValue `json:"p83078_map_virgin"  PointIgnore:"true"`
-	P83079Map                     valueTypes.UnitValue `json:"p83079_map" PointId:"p83079"`
+	P83079Map                     valueTypes.UnitValue `json:"p83079_map" PointId:"p83079" PointDeviceFrom:""`
 	P83079MapVirgin               valueTypes.UnitValue `json:"p83079_map_virgin"  PointIgnore:"true"`
-	P83080Map                     valueTypes.UnitValue `json:"p83080_map" PointId:"p83080"`
+	P83080Map                     valueTypes.UnitValue `json:"p83080_map" PointId:"p83080" PointDeviceFrom:""`
 	P83080MapVirgin               valueTypes.UnitValue `json:"p83080_map_virgin"  PointIgnore:"true"`
-	P83088Map                     valueTypes.UnitValue `json:"p83088_map" PointName:"ES Energy" PointId:"p83088"` // Es Energy
+	P83088Map                     valueTypes.UnitValue `json:"p83088_map" PointName:"ES Energy" PointId:"p83088" PointDeviceFrom:""` // Es Energy
 	P83088MapVirgin               valueTypes.UnitValue `json:"p83088_map_virgin"  PointIgnore:"true"`
-	P83089Map                     valueTypes.UnitValue `json:"p83089_map" PointName:"ES Discharge Energy" PointId:"p83089"` // Es Discharge Energy
+	P83089Map                     valueTypes.UnitValue `json:"p83089_map" PointName:"ES Discharge Energy" PointId:"p83089" PointDeviceFrom:""` // Es Discharge Energy
 	P83089MapVirgin               valueTypes.UnitValue `json:"p83089_map_virgin"  PointIgnore:"true"`
-	P83094Map                     valueTypes.UnitValue `json:"p83094_map" PointId:"p83094"`
+	P83094Map                     valueTypes.UnitValue `json:"p83094_map" PointId:"p83094" PointDeviceFrom:""`
 	P83094MapVirgin               valueTypes.UnitValue `json:"p83094_map_virgin"  PointIgnore:"true"`
-	P83095Map                     valueTypes.UnitValue `json:"p83095_map" PointId:"p83095" PointName:"ES Total Discharge Energy" PointUpdateFreq:"UpdateFreqTotal"` // Es Total Discharge Energy
+	P83095Map                     valueTypes.UnitValue `json:"p83095_map" PointId:"p83095" PointDeviceFrom:"" PointName:"ES Total Discharge Energy" PointUpdateFreq:"UpdateFreqTotal"` // Es Total Discharge Energy
 	P83095MapVirgin               valueTypes.UnitValue `json:"p83095_map_virgin"  PointIgnore:"true"`
-	P83097Map                     valueTypes.UnitValue `json:"p83097_map" PointId:"p83097"`
+	P83097Map                     valueTypes.UnitValue `json:"p83097_map" PointId:"p83097" PointDeviceFrom:""`
 	P83097MapVirgin               valueTypes.UnitValue `json:"p83097_map_virgin"  PointIgnore:"true"`
-	P83100Map                     valueTypes.UnitValue `json:"p83100_map" PointId:"p83100"`
+	P83100Map                     valueTypes.UnitValue `json:"p83100_map" PointId:"p83100" PointDeviceFrom:""`
 	P83100MapVirgin               valueTypes.UnitValue `json:"p83100_map_virgin"  PointIgnore:"true"`
-	P83101Map                     valueTypes.UnitValue `json:"p83101_map" PointId:"p83101"`
+	P83101Map                     valueTypes.UnitValue `json:"p83101_map" PointId:"p83101" PointDeviceFrom:""`
 	P83101MapVirgin               valueTypes.UnitValue `json:"p83101_map_virgin"  PointIgnore:"true"`
-	P83102Map                     valueTypes.UnitValue `json:"p83102_map" PointId:"p83102"`
+	P83102Map                     valueTypes.UnitValue `json:"p83102_map" PointId:"p83102" PointDeviceFrom:""`
 	P83102MapVirgin               valueTypes.UnitValue `json:"p83102_map_virgin"  PointIgnore:"true"`
-	P83102Percent                 valueTypes.Float     `json:"p83102_percent" PointId:"p83102"`
-	P83105Map                     valueTypes.UnitValue `json:"p83105_map" PointId:"p83105"`
+	P83102Percent                 valueTypes.Float     `json:"p83102_percent" PointId:"p83102" PointDeviceFrom:""`
+	P83105Map                     valueTypes.UnitValue `json:"p83105_map" PointId:"p83105" PointDeviceFrom:""`
 	P83105MapVirgin               valueTypes.UnitValue `json:"p83105_map_virgin"  PointIgnore:"true"`
-	P83106Map                     valueTypes.UnitValue `json:"p83106_map" PointId:"p83106"`
+	P83106Map                     valueTypes.UnitValue `json:"p83106_map" PointId:"p83106" PointDeviceFrom:""`
 	P83106MapVirgin               valueTypes.UnitValue `json:"p83106_map_virgin"  PointIgnore:"true"`
-	P83107Map                     valueTypes.UnitValue `json:"p83107_map" PointId:"p83107"`
+	P83107Map                     valueTypes.UnitValue `json:"p83107_map" PointId:"p83107" PointDeviceFrom:""`
 	P83107MapVirgin               valueTypes.UnitValue `json:"p83107_map_virgin"  PointIgnore:"true"`
-	P83118Map                     valueTypes.UnitValue `json:"p83118_map" PointId:"p83118"`
+	P83118Map                     valueTypes.UnitValue `json:"p83118_map" PointId:"p83118" PointDeviceFrom:""`
 	P83118MapVirgin               valueTypes.UnitValue `json:"p83118_map_virgin"  PointIgnore:"true"`
-	P83119Map                     valueTypes.UnitValue `json:"p83119_map" PointId:"p83119"`
+	P83119Map                     valueTypes.UnitValue `json:"p83119_map" PointId:"p83119" PointDeviceFrom:""`
 	P83119MapVirgin               valueTypes.UnitValue `json:"p83119_map_virgin"  PointIgnore:"true"`
-	P83120Map                     valueTypes.UnitValue `json:"p83120_map" PointId:"p83120"`
+	P83120Map                     valueTypes.UnitValue `json:"p83120_map" PointId:"p83120" PointDeviceFrom:""`
 	P83120MapVirgin               valueTypes.UnitValue `json:"p83120_map_virgin"  PointIgnore:"true"`
-	P83121                        valueTypes.Float     `json:"p83121" PointId:"p83121"`
-	P83122                        valueTypes.Float     `json:"p83122" PointId:"p83122"`
-	P83123Map                     valueTypes.UnitValue `json:"p83123_map" PointId:"p83123"`
+	P83121                        valueTypes.Float     `json:"p83121" PointId:"p83121" PointDeviceFrom:""`
+	P83122                        valueTypes.Float     `json:"p83122" PointId:"p83122" PointDeviceFrom:""`
+	P83123Map                     valueTypes.UnitValue `json:"p83123_map" PointId:"p83123" PointDeviceFrom:""`
 	P83123MapVirgin               valueTypes.UnitValue `json:"p83123_map_virgin"  PointIgnore:"true"`
-	P83124Map                     valueTypes.UnitValue `json:"p83124_map" PointId:"p83124"`
+	P83124Map                     valueTypes.UnitValue `json:"p83124_map" PointId:"p83124" PointDeviceFrom:""`
 	P83124MapVirgin               valueTypes.UnitValue `json:"p83124_map_virgin"  PointIgnore:"true"`
-	P83125                        valueTypes.Float     `json:"p83125" PointId:"p83125"`
-	P83126                        valueTypes.Float     `json:"p83126" PointId:"p83126"`
+	P83125                        valueTypes.Float     `json:"p83125" PointId:"p83125" PointDeviceFrom:""`
+	P83126                        valueTypes.Float     `json:"p83126" PointId:"p83126" PointDeviceFrom:""`
 	P83128MapVirgin               valueTypes.UnitValue `json:"p83128_map_virgin"  PointIgnore:"true"`
-	P83202Map                     valueTypes.UnitValue `json:"p83202_map" PointId:"p83202"`
+	P83202Map                     valueTypes.UnitValue `json:"p83202_map" PointId:"p83202" PointDeviceFrom:""`
 	P83202MapVirgin               valueTypes.UnitValue `json:"p83202_map_virgin"  PointIgnore:"true"`
 	PercentPlanYear               valueTypes.Float     `json:"percent_plan_year"`
-	PlanEnergy                    []valueTypes.Float   `json:"plan_energy" PointUnitFrom:"PlanEnergyUnit" PointArrayFlatten:"true" DataTable:"true"`
 	PlanEnergyUnit                valueTypes.String    `json:"plan_energy_unit" PointId:"plan_energy_unit"  PointIgnore:"true"`
 	PlanEnergyYear                valueTypes.UnitValue `json:"plan_energy_year"`
 	PowderReduce                  valueTypes.UnitValue `json:"powder_reduce"`
@@ -254,12 +255,6 @@ type ResultData struct {
 
 func (e *ResultData) IsValid() error {
 	var err error
-	// switch {
-	// case e.Dummy == "":
-	//	break
-	// default:
-	//	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	// }
 	return err
 }
 
@@ -268,51 +263,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		// pkg := reflection.GetName("", *e)
-		// dt := valueTypes.NewDateTime(valueTypes.Now)
-		// name := pkg + "." + e.Request.PsId.String()
 		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
-
-		// dstEndpoint := "virtual." + e.Request.PsId.String()
-		// srcEndpoint := fmt.Sprintf("%s.%s", pkg, e.Request.PsId.String())
-		//
-		// someting := entries.CopyPoint(srcEndpoint + ".p8301", dstEndpoint, "p8301", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83012", dstEndpoint, "p83012", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83013", dstEndpoint, "p83013", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83016", dstEndpoint, "p83016", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83017", dstEndpoint, "p83017", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p8302", dstEndpoint, "p8302", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83023", dstEndpoint, "p83023", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83036", dstEndpoint, "p83036", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p8304", dstEndpoint, "p8304", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83072", dstEndpoint, "p83072", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83073", dstEndpoint, "p83073", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83074", dstEndpoint, "p83074", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83075", dstEndpoint, "p83075", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83076", dstEndpoint, "p83076", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83077", dstEndpoint, "p83077", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83078", dstEndpoint, "p83078", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83079", dstEndpoint, "p83079", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83080", dstEndpoint, "p83080", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83088", dstEndpoint, "p83088", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83089", dstEndpoint, "p83089", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83094", dstEndpoint, "p83094", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83095", dstEndpoint, "p83095", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83097", dstEndpoint, "p83097", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83100", dstEndpoint, "p83100", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83101", dstEndpoint, "p83101", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83102", dstEndpoint, "p83102", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83105", dstEndpoint, "p83105", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83106", dstEndpoint, "p83106", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83107", dstEndpoint, "p83107", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83118", dstEndpoint, "p83118", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83119", dstEndpoint, "p83119", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p8312", dstEndpoint, "p8312", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83120", dstEndpoint, "p83120", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83123", dstEndpoint, "p83123", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83124", dstEndpoint, "p83124", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83128", dstEndpoint, "p83128", "")
-		// someting := entries.CopyPoint(srcEndpoint + ".p83202", dstEndpoint, "p83202", "")
 	}
 
 	return entries

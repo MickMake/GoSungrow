@@ -8,11 +8,13 @@ import (
 
 type DataEntries struct {
 	Entries []DataEntry
+	// Map *GoStruct.StructMap
 }
 
 func NewDataPointEntries() DataEntries {
 	return DataEntries{
 		Entries: []DataEntry{},
+		// Map: &GoStruct.StructMap{},
 	}
 }
 
@@ -46,6 +48,7 @@ func (de *DataEntries) GetEntry(index int) *DataEntry {
 		}
 	}
 	return &(de.Entries[index])
+	// return &(de.Entries[index])
 }
 
 func (de *DataEntries) GetEntryValue(index int) valueTypes.UnitValue {

@@ -27,7 +27,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	BatteryLevelPercent         valueTypes.Integer   `json:"battery_level_percent" PointId:"battery_level_percent" PointUnit:"%" PointUpdateFreq:"UpdateFreqInstant"`
+	BatteryLevelPercent         valueTypes.Float   `json:"battery_level_percent" PointId:"battery_level_percent" PointUnit:"%" PointUpdateFreq:"UpdateFreqInstant"`
 	ChargingDischargingPowerMap valueTypes.UnitValue `json:"charging_discharging_power_map" PointId:"charging_discharging_power_map" PointUpdateFreq:"UpdateFreqInstant"`	// Holds the battery charge/discharge amount
 	Co2ReduceTotal              valueTypes.UnitValue `json:"co2_reduce_total" PointId:"co2_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
 	CoalReduceTotal             valueTypes.UnitValue `json:"coal_reduce_total" PointId:"coal_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
@@ -123,7 +123,7 @@ type ResultData struct {
 		P13150MapVirgin         valueTypes.UnitValue `json:"p13150_map_virgin" PointIgnore:"true"`
 		PsKey                   valueTypes.PsKey     `json:"ps_key" PointId:"ps_key" PointUpdateFreq:"UpdateFreqBoot"`
 		UUID                    valueTypes.Integer   `json:"uuid" PointId:"uuid" PointUpdateFreq:"UpdateFreqBoot"`
-	} `json:"storage_inverter_data" PointNameFromChild:"PsKey" PointArrayFlatten:"false" DataTable:"true"`
+	} `json:"storage_inverter_data" PointIdFromChild:"PsKey" PointIdReplace:"true" DataTable:"false"`
 	TodayEnergy       valueTypes.UnitValue `json:"today_energy" PointId:"today_energy" PointUpdateFreq:"UpdateFreqDay"`
 	TodayEnergyVirgin valueTypes.UnitValue `json:"today_energy_virgin"  PointIgnore:"true"`
 	TodayIncome       valueTypes.UnitValue `json:"today_income" PointId:"today_income" PointUpdateFreq:"UpdateFreqDay"`
@@ -142,12 +142,6 @@ type ResultData struct {
 
 func (e *ResultData) IsValid() error {
 	var err error
-	//switch {
-	//case e.Dummy == "":
-	//	break
-	//default:
-	//	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	//}
 	return err
 }
 
@@ -157,7 +151,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	for range Only.Once {
 		pkg := reflection.GetName("", *e)
 		// name := api.JoinWithDots(0, valueTypes.DateTimeLayoutDay, pkg, e.Response.ResultData.PsPsKey)
-		entries.StructToDataMap(*e,  e.Response.ResultData.PsPsKey.Value(), GoStruct.NewEndPointPath(e.Response.ResultData.PsPsKey.Value()))
+		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
 
 		dstEndpoint := "virtual." + e.Request.PsId.String()
 		srcEndpoint := fmt.Sprintf("%s.%s", pkg, e.Response.ResultData.PsPsKey.Value())

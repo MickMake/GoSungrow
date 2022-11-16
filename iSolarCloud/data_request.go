@@ -411,36 +411,9 @@ func (sgd *SunGrowDataRequest) Help(endpoint api.EndPoint) {
 	}
 }
 
-func (sgd *SunGrowDataRequest) GetFilename(prefix string) string {
+func (sgd *SunGrowDataRequest) RequestAsFilePrefix() string {
 	var ret string
 	for range Only.Once {
-		// aret := []string{ prefix }
-		// if sgd.args.PsId != nil {
-		// 	a := sgd.args.PsId.String()
-		// 	if a != "" { aret = append(aret, a) }
-		// }
-		//
-		// if sgd.args.DateId != nil {
-		// 	a := sgd.args.DateId.Original()
-		// 	if a != "" { aret = append(aret, a) }
-		// }
-		//
-		// if sgd.args.ReportType != nil {
-		// 	a := sgd.args.ReportType.String()
-		// 	if a != "" { aret = append(aret, a) }
-		// }
-		//
-		// if sgd.args.FaultTypeCode != nil {
-		// 	a := sgd.args.FaultTypeCode.String()
-		// 	if a != "" { aret = append(aret, a) }
-		// }
-		//
-		// if sgd.args.Uuid != nil {
-		// 	a := sgd.args.Uuid.String()
-		// 	if a != "" { aret = append(aret, a) }
-		// }
-
-		ret += prefix
 		j, err := json.Marshal(*sgd)
 		if err != nil {
 			break
@@ -450,7 +423,6 @@ func (sgd *SunGrowDataRequest) GetFilename(prefix string) string {
 		ret = strings.TrimSuffix(ret, "}")
 		ret = strings.ReplaceAll(ret, `"`, ``)
 		ret = strings.ReplaceAll(ret, `,`, `-`)
-		// ret = strings.Join(aret, "-")
 	}
 	return ret
 }

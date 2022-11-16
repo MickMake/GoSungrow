@@ -26,7 +26,7 @@ func (rd RequestData) Help() string {
 type ResultData struct {
 	CurPage    valueTypes.Integer   `json:"curPage" PointId:"cur_page"`
 	IsMore     valueTypes.Bool      `json:"isMore" PointId:"is_more"`
-	PageList   []interface{} `json:"pageList" PointId:"page_list" PointNameAppend:"false" PointArrayFlatten:"false"`
+	PageList   []interface{} `json:"pageList" PointId:"page_list" PointIdReplace:"true" PointArrayFlatten:"false"`
 	RowCount   valueTypes.Integer   `json:"rowCount" PointId:"row_count"`
 	Size       valueTypes.Integer   `json:"size"`
 	StartIndex interface{}   `json:"startIndex" PointId:"start_index"`
@@ -67,7 +67,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToDataMap(*e, "system", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	}
 
 	return entries

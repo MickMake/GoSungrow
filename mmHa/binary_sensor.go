@@ -3,6 +3,7 @@ package mmHa
 import (
 	"GoSungrow/Only"
 	"encoding/json"
+	"strings"
 )
 
 
@@ -96,12 +97,21 @@ func (m *Mqtt) BinarySensorPublishValue(config EntityConfig) error {
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
 		// tagId := JoinStringsForId(m.Device.Name, config.ParentName, config.Name, config.UniqueId),
+		tag := JoinStringsForTopic(m.binarySensorPrefix, id, "state")
+
+		// @TODO - Real hack here. Need to properly check for JSON.
+		if strings.Contains(config.Value, `{`) || strings.Contains(config.Value, `":`) {
+			t := m.client.Publish(tag, 0, true, config.Value)
+			if !t.WaitTimeout(m.Timeout) {
+				m.err = t.Error()
+			}
+			break
+		}
 
 		payload := MqttState {
 			LastReset: m.GetLastReset(config.UniqueId),
 			Value:     config.Value,
 		}
-		tag := JoinStringsForTopic(m.binarySensorPrefix, id, "state")
 		t := m.client.Publish(tag, 0, true, payload.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()

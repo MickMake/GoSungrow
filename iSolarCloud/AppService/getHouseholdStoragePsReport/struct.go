@@ -36,7 +36,7 @@ type Request struct {
 // Response - Holds the api.ResponseCommon and endpoint specific ResultData structures. See data.go for response fields.
 type Response struct {
 	api.ResponseCommon
-	ResultData ResultData `json:"result_data" PointNameAppend:"false"`
+	ResultData ResultData `json:"result_data" PointIdReplace:"true"`
 }
 
 // Init - Used to initialize a new endpoint instance. Usually called from an area.
@@ -373,8 +373,8 @@ func (e EndPoint) GetEndPointResultTable() output.Table {
 
 // SetFilenamePrefix - Produce filename based on area and endpoint name.
 func (e EndPoint) SetFilenamePrefix(format string, args ...interface{}) string {
-	return e.ApiSetFilenamePrefix2(e.Request.RequestData, format, args...)
-	// return e.ApiSetFilenamePrefix(format, args...)
+	// return e.ApiSetFilenamePrefix2(e.Request.RequestData, format, args...)
+	return e.ApiSetFilenamePrefix(format, args...)
 }
 
 // GetRequestArgNames -

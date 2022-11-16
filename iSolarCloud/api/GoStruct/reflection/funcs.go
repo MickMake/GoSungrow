@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
+	"os"
 	"reflect"
 	"strings"
 	"time"
@@ -22,28 +23,28 @@ func GetPointNameFrom(ref interface{}, name string, intSize int, dateFormat stri
 
 		var ra []string
 		switch vo.Kind() {
-		case reflect.Struct:
-			for _, pnf := range strings.Split(name, ".") {
-				// Iterate over all available fields, looking for the field name.
-				for i := 0; i < vo.NumField(); i++ {
-					fn := vo.Type().Field(i).Name
-					if fn == pnf {
-						ra = append(ra, valueTypes.AnyToValueString(vo.Field(i).Interface(), intSize, dateFormat))
-						break
+			case reflect.Struct:
+				for _, pnf := range strings.Split(name, ".") {
+					// Iterate over all available fields, looking for the field name.
+					for i := 0; i < vo.NumField(); i++ {
+						fn := vo.Type().Field(i).Name
+						if fn == pnf {
+							ra = append(ra, valueTypes.AnyToValueString(vo.Field(i).Interface(), intSize, dateFormat))
+							break
+						}
 					}
 				}
-			}
 
-		case reflect.Map:
-			for _, pnf := range strings.Split(name, ".") {
-				// Iterate over all available keys, looking for the key name.
-				for _, key := range vo.MapKeys() {
-					if key.String() == pnf {
-						ra = append(ra, valueTypes.AnyToValueString(vo.MapIndex(key).Interface(), intSize, dateFormat))
-						break
+			case reflect.Map:
+				for _, pnf := range strings.Split(name, ".") {
+					// Iterate over all available keys, looking for the key name.
+					for _, key := range vo.MapKeys() {
+						if key.String() == pnf {
+							ra = append(ra, valueTypes.AnyToValueString(vo.MapIndex(key).Interface(), intSize, dateFormat))
+							break
+						}
 					}
 				}
-			}
 		}
 		ret = strings.Join(ra, ".")
 	}
@@ -51,23 +52,186 @@ func GetPointNameFrom(ref interface{}, name string, intSize int, dateFormat stri
 	return ret
 }
 
-func GetStringFrom(ref interface{}, name string) string {
+// func GetStringFrom(ref interface{}, name string) string {
+// 	var ret string
+// 	for range Only.Once {
+// 		vo := reflect.ValueOf(ref)
+//
+// 		switch vo.Kind() {
+// 		case reflect.Struct:
+// 			// Iterate over all available fields, looking for the field name.
+// 			for i := 0; i < vo.NumField(); i++ {
+// 				if vo.Type().Field(i).Name == name {
+// 					ret = valueTypes.AnyToValueString(vo.Field(i).Interface(), 0, "")
+// 					break
+// 				}
+// 			}
+//
+// 		case reflect.Array:
+// 			fallthrough
+// 		case reflect.Slice:
+// 			// Iterate over all available entities, looking for the field name under struct or map.
+// 			for i := 0; i < vo.Len(); i++ {
+// 				ivo := reflect.ValueOf(vo.Index(i).Interface())
+// 				foo := ivo.Interface()
+// 				fmt.Sprintf("%s", foo)
+// 				foo2 := vo.Index(i).Interface()
+// 				fmt.Sprintf("%s", foo2)
+// 				switch ivo.Kind() {
+// 				case reflect.Struct:
+// 					// Iterate over all available fields, looking for the field name.
+// 					for ii := 0; ii < ivo.NumField(); ii++ {
+// 						if ivo.Type().Field(ii).Name == name {
+// 							ret = valueTypes.AnyToValueString(ivo.Field(i).Interface(), 0, "")
+// 							break
+// 						}
+// 					}
+// 				case reflect.Map:
+// 					// Iterate over map, looking for the key name.
+// 					for _, key := range ivo.MapKeys() {
+// 						if key.String() == name {
+// 							ret = valueTypes.AnyToValueString(ivo.MapIndex(key).Interface(), 0, "")
+// 							break
+// 						}
+// 					}
+// 				}
+// 				// ret = GetStringFrom(vo.Index(i).Interface(), name)
+// 				// if ret != "" {
+// 				// 	break
+// 				// }
+// 			}
+//
+// 		case reflect.Map:
+// 			// Iterate over map, looking for the key name.
+// 			for _, key := range vo.MapKeys() {
+// 				if key.String() == name {
+// 					ret = valueTypes.AnyToValueString(vo.MapIndex(key).Interface(), 0, "")
+// 					break
+// 				}
+// 			}
+// 		}
+// 	}
+//
+// 	return ret
+// }
+
+const AnyIndex = -1
+
+func GetStringFrom(ref interface{}, index int, name string) string {
+	var ret string
+	for range Only.Once {
+		kind := reflect.ValueOf(ref).Kind()
+		if kind == reflect.Struct {
+			ret = GetStringFromStruct(ref, name)
+			break
+		}
+
+		if kind == reflect.Array {
+			ret = GetStringFromArray(ref, index, name)
+			break
+		}
+
+		if kind == reflect.Slice {
+			ret = GetStringFromArray(ref, index, name)
+			break
+		}
+
+		if kind == reflect.Map {
+			ret = GetStringFromMap(ref, name)
+			break
+		}
+	}
+
+	return ret
+}
+
+func GetStringFromArray(ref interface{}, index int, name string) string {
 	var ret string
 	for range Only.Once {
 		vo := reflect.ValueOf(ref)
+		if (vo.Kind() != reflect.Slice) && (vo.Kind() != reflect.Array) {
+			break
+		}
 
-		switch vo.Kind() {
-		case reflect.Struct:
-			// Iterate over all available fields, looking for the field name.
-			for i := 0; i < vo.NumField(); i++ {
-				if vo.Type().Field(i).Name == name {
-					ret = valueTypes.AnyToValueString(vo.Field(i).Interface(), 0, "")
+		if index == AnyIndex {
+			for i := 0; i < vo.Len(); i++ {
+				v := vo.Index(index).Interface()
+				ivo := reflect.ValueOf(v)
+				switch ivo.Kind() {
+					case reflect.Struct:
+						ret = GetStringFromStruct(v, name)
+					case reflect.Map:
+						ret = GetStringFromMap(v, name)
+					default:
+						// Don't descend anything else.
+				}
+				if ret != "" {
 					break
 				}
 			}
+			break
+		}
 
-		case reflect.Map:
-			// Iterate over all available fields, looking for the field name.
+		if index >= vo.Len() {
+			break
+		}
+
+		v := vo.Index(index).Interface()
+		ivo := reflect.ValueOf(v)
+		switch ivo.Kind() {
+			case reflect.Struct:
+				ret = GetStringFromStruct(v, name)
+			case reflect.Map:
+				ret = GetStringFromMap(v, name)
+			default:
+				// Don't descend anything else.
+		}
+	}
+
+	return ret
+}
+
+func GetStringFromStruct(ref interface{}, name string) string {
+	var ret string
+	for range Only.Once {
+		vo := reflect.ValueOf(ref)
+		if vo.Kind() != reflect.Struct {
+			break
+		}
+
+		// Iterate over all available fields, looking for the field name.
+		for i := 0; i < vo.NumField(); i++ {
+			if vo.Type().Field(i).Name == name {
+				ret = valueTypes.AnyToValueString(vo.Field(i).Interface(), 0, "")
+				break
+			}
+		}
+	}
+
+	return ret
+}
+
+func GetStringFromMap(ref interface{}, name string) string {
+	var ret string
+	for range Only.Once {
+		vo := reflect.ValueOf(ref)
+		if vo.Kind() != reflect.Map {
+			break
+		}
+
+		// If the interface has 1 element, then recurse into it - whether map or struct.
+		if len(vo.MapKeys()) == 1 {
+			key := vo.MapKeys()[0]
+			vo = reflect.ValueOf(vo.MapIndex(key).Interface())
+		}
+
+		if vo.Kind() == reflect.Struct {
+			ret = GetStringFromStruct(vo.Interface(), name)
+			break
+		}
+
+		if vo.Kind() == reflect.Map {
+			// Iterate over map, looking for the key name.
 			for _, key := range vo.MapKeys() {
 				if key.String() == name {
 					ret = valueTypes.AnyToValueString(vo.MapIndex(key).Interface(), 0, "")
@@ -79,6 +243,7 @@ func GetStringFrom(ref interface{}, name string) string {
 
 	return ret
 }
+
 
 func GetJsonTag(fieldTo reflect.StructField) string {
 	var ret string
@@ -101,25 +266,25 @@ func GetTimestampFrom(ref interface{}, name string, dateFormat string) time.Time
 		vo := reflect.ValueOf(ref)
 
 		switch vo.Kind() {
-		case reflect.Struct:
-			// Iterate over all available fields, looking for the field name.
-			for i := 0; i < vo.NumField(); i++ {
-				if vo.Type().Field(i).Name == name {
-					v := fmt.Sprintf("%v", vo.Field(i).Interface())
-					ret = valueTypes.SetDateTimeString(v).Time
-					break
+			case reflect.Struct:
+				// Iterate over all available fields, looking for the field name.
+				for i := 0; i < vo.NumField(); i++ {
+					if vo.Type().Field(i).Name == name {
+						v := fmt.Sprintf("%v", vo.Field(i).Interface())
+						ret = valueTypes.SetDateTimeString(v).Time
+						break
+					}
 				}
-			}
 
-		case reflect.Map:
-			// Iterate over all available fields, looking for the field name.
-			for _, key := range vo.MapKeys() {
-				if key.String() == name {
-					v := fmt.Sprintf("%v", vo.MapIndex(key).Interface())
-					ret = valueTypes.SetDateTimeString(v).Time
-					break
+			case reflect.Map:
+				// Iterate over all available fields, looking for the field name.
+				for _, key := range vo.MapKeys() {
+					if key.String() == name {
+						v := fmt.Sprintf("%v", vo.MapIndex(key).Interface())
+						ret = valueTypes.SetDateTimeString(v).Time
+						break
+					}
 				}
-			}
 		}
 	}
 
@@ -151,6 +316,73 @@ func GetRequestString(ref interface{}) string {
 	}
 
 	return ret
+}
+
+func IsRefZero(x interface{}) bool {
+	return reflect.DeepEqual(x, reflect.Zero(reflect.TypeOf(x)).Interface())
+}
+
+
+func SetFrom(to interface{}, from interface{}) error {
+	var err error
+	for range Only.Once {
+		break
+		// to has to be a pointer!
+		voSrc := reflect.ValueOf(to)
+		for index := 0; index < reflect.ValueOf(to).NumField(); index++ {
+			FieldVoFrom := voSrc.Field(index)
+			FieldToFrom := voSrc.Type().Field(index)
+
+			if FieldToFrom.IsExported() == false {
+				// err = errors.New(fmt.Sprintf("NOT Exported: FieldToSrc.%s\n", FieldToSrc.Name))
+				continue
+			}
+
+			if FieldVoFrom.IsZero() {
+				// if reflection.IsRefZero(FieldVoSrc.Interface()) {
+				err = errors.New(fmt.Sprintf("Is Zero: FieldToSrc.%s (%v)\n", FieldToFrom.Name, FieldVoFrom.Interface()))
+				continue
+			}
+
+			if !FieldVoFrom.IsValid() {
+				err = errors.New(fmt.Sprintf("Is NOT Valid: FieldToSrc.%s (%v)\n", FieldToFrom.Name, FieldVoFrom.Interface()))
+				continue
+			}
+
+			FieldVoTo := reflect.ValueOf(from).Elem().Field(index)
+			FieldToTo := reflect.TypeOf(from).Elem().Field(index)
+			if !FieldVoTo.CanSet() {
+				err = errors.New(fmt.Sprintf("Cannot set: FieldVoDst.%s (%v)\n", FieldToTo.Name, FieldVoTo.Interface()))
+				continue
+			}
+
+			switch FieldToFrom.Type.String() { // FieldVoSrc.Kind().String()
+				case "bool":
+					FieldVoTo.SetBool(FieldVoFrom.Bool())
+
+				case "string":
+					// if FieldVoSrc.String() == "" {
+					// 	break
+					// }
+					FieldVoTo.SetString(FieldVoFrom.String())
+
+				case "GoStruct.EndPointPath":
+					// We're not updating this field.
+
+				case "time.Time":
+					// We're not updating this field.
+
+				case "GoStruct.tagStrings":
+					// We're not updating this field.
+
+				default:
+					_, _ = fmt.Fprintf(os.Stderr,"SetFrom() Unknown type %s (%s) for field '%s' from '%v' to '%v'\n",
+						FieldToFrom.Type, FieldVoFrom.Kind().String(), FieldToFrom.Name, FieldVoTo.Interface(), FieldVoFrom.Interface())
+			}
+		}
+	}
+
+	return err
 }
 
 
@@ -190,6 +422,8 @@ func GetName(trim string, v interface{}) string {
 	for range Only.Once {
 		val := reflect.ValueOf(v)
 		ret1 := val.Type().PkgPath()
+		sp := strings.Split(ret1, "/")
+		ret1 = sp[len(sp)-1]
 		ret1 = strings.TrimPrefix(ret1, trim)
 		ret2 := val.Type().Name()
 

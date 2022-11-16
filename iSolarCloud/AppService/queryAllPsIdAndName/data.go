@@ -27,7 +27,7 @@ type ResultData struct {
 	PageList []struct {
 		PsId   valueTypes.PsId `json:"ps_id"`
 		PsName valueTypes.String  `json:"ps_name"`
-	} `json:"pageList" PointId:"page_list" PointNameFromChild:"PsId" PointNameAppend:"false" PointNameAppend:"false" DataTable:"true"`
+	} `json:"pageList" PointId:"page_list" PointIdFromChild:"PsId" PointIdReplace:"true" DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -48,7 +48,7 @@ func (e *EndPoint) GetData() api.DataMap {
 		// pkg := reflection.GetName("", *e)
 		// dt := valueTypes.NewDateTime(valueTypes.Now)
 		// name := pkg + "." + e.Request.PsId.String()
-		entries.StructToDataMap(*e, "system", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	}
 
 	return entries

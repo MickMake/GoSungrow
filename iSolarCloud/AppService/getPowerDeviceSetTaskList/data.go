@@ -27,6 +27,8 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
+		GoStruct                GoStruct.GoStruct   `json:"GoStruct" PointDeviceFrom:"PsId"`
+
 		CommandStatus        valueTypes.Integer  `json:"command_status"`
 		CommandType          valueTypes.Integer  `json:"command_type"`
 		CreateTime           valueTypes.DateTime `json:"create_time"`
@@ -48,7 +50,7 @@ type ResultData struct {
 		UserEnglishName      interface{}         `json:"user_english_name"`
 		UserName             valueTypes.String   `json:"user_name"`
 		UUID                 valueTypes.Integer  `json:"uuid"`
-	} `json:"pageList" PointId:"page_list" PointNameFromChild:"PsId.CreateTime" PointNameAppend:"false" PointArrayFlatten:"false" DataTable:"true"`
+	} `json:"pageList" PointId:"page_list" PointIdFromChild:"PsId.CreateTime" PointIdReplace:"true" DataTable:"true"`
 	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 }
 
@@ -70,7 +72,7 @@ func (e *EndPoint) GetData() api.DataMap {
 		// pkg := reflection.GetName("", *e)
 		// dt := valueTypes.NewDateTime(valueTypes.Now)
 		// name := pkg + "." + e.Request.PsId.String()
-		entries.StructToDataMap(*e, "system", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	}
 
 	return entries

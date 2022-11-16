@@ -4,6 +4,7 @@ import (
 	"GoSungrow/Only"
 	"encoding/json"
 	"fmt"
+	"strings"
 )
 
 
@@ -164,11 +165,21 @@ func (m *Mqtt) SensorPublishValue(config EntityConfig) error {
 		}
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
-		payload := MqttState {
+		tag := JoinStringsForTopic(m.sensorPrefix, id, "state")
+
+		// @TODO - Real hack here. Need to properly check for JSON.
+		if strings.Contains(config.Value, `{`) || strings.Contains(config.Value, `":`) {
+			t := m.client.Publish(tag, 0, true, config.Value)
+			if !t.WaitTimeout(m.Timeout) {
+				m.err = t.Error()
+			}
+			break
+		}
+
+		payload := MqttState{
 			LastReset: m.GetLastReset(config.FullId),
 			Value:     config.Value,
 		}
-		tag := JoinStringsForTopic(m.sensorPrefix, id, "state")
 		t := m.client.Publish(tag, 0, true, payload.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()

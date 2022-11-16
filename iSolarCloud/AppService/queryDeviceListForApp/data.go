@@ -26,6 +26,8 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
+		GoStruct                GoStruct.GoStruct   `json:"GoStruct" PointDeviceFrom:"PsKey"`
+
 		AttrId                  valueTypes.Integer  `json:"attr_id"`
 		ChannelId               valueTypes.Integer  `json:"chnnl_id" PointId:"channel_id"`
 		CommandStatus           valueTypes.Integer  `json:"command_status"`
@@ -64,14 +66,14 @@ type ResultData struct {
 		P24                     interface{}         `json:"p24"`
 		Posx                    interface{}         `json:"posx"`
 		Posy                    interface{}         `json:"posy"`
-		PsId                    valueTypes.PsId  `json:"ps_id"`
+		PsId                    valueTypes.PsId     `json:"ps_id"`
 		PsKey                   valueTypes.PsKey    `json:"ps_key"`
 		RelState                valueTypes.Integer  `json:"rel_state"`
 		Sn                      valueTypes.String   `json:"sn" PointName:"Serial Number"`
 		TypeName                valueTypes.String   `json:"type_name"`
 		UUID                    valueTypes.Integer  `json:"uuid"`
-	} `json:"pageList" PointId:"page_list" PointNameFromChild:"PsKey" PointNameAppend:"false" PointArrayFlatten:"false" DataTable:"true"`
-	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count" PointIgnore:"true"`
+	} `json:"pageList" PointId:"page_list" PointIdFromChild:"PsKey" PointIdReplace:"true"`
+	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 }
 
 func (e *ResultData) IsValid() error {

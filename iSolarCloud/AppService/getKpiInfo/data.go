@@ -58,7 +58,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	for range Only.Once {
 		pkg := reflection.GetName("", *e)
 		// dt := valueTypes.NewDateTime(valueTypes.Now)
-		entries.StructToDataMap(*e,  "system", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 
 		_ = entries.CopyPoint(pkg + ".p83024", "virtual.system", "p83024", "")
 	}
