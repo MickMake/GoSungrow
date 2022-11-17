@@ -25,6 +25,7 @@ func (rd RequestData) IsValid() error {
 
 func (rd RequestData) Help() string {
 	ret := fmt.Sprintln("ps_id: Can be fetched from getPsList.")
+	ret += api.HelpDateId()
 	ret += api.HelpDataType()
 	return ret
 }

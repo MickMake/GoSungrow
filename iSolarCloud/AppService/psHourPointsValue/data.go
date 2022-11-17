@@ -25,19 +25,21 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	P24001List []valueTypes.Float `json:"p24001List" PointId:"p24001" PointUnitFrom:"P24001Unit" PointArrayFlatten:"false" DataTable:"true" DataTableMerge:"true" DataTableShowIndex:"true"`
+	GoStructParent        GoStruct.GoStructParent `json:"-" PointIdReplace:"true" DataTable:"true" DataTableIndex:"true" DataTableIndexTitle:"Hour" DataTablePivot:"true"`
+
+	P24001List []valueTypes.Float `json:"p24001List" PointId:"p24001" PointUnitFrom:"P24001Unit"`
 	P24001Unit valueTypes.String  `json:"p24001_unit" PointIgnore:"true"`
-	P24004List []valueTypes.Float `json:"p24004List" PointId:"p24004" PointUnitFrom:"P24004Unit" PointArrayFlatten:"false" DataTable:"true" DataTableMerge:"true" DataTableShowIndex:"true"`
+	P24004List []valueTypes.Float `json:"p24004List" PointId:"p24004" PointUnitFrom:"P24004Unit"`
 	P24004Unit valueTypes.String  `json:"p24004_unit" PointIgnore:"true"`
-	P83002List []valueTypes.Float `json:"p83002List" PointId:"p83002" PointUnitFrom:"P83002Unit" PointArrayFlatten:"false" DataTable:"true" DataTableMerge:"true" DataTableShowIndex:"true"`
+	P83002List []valueTypes.Float `json:"p83002List" PointId:"p83002" PointUnitFrom:"P83002Unit"`
 	P83002Unit valueTypes.String  `json:"p83002_unit" PointIgnore:"true"`
-	P83012List []valueTypes.Float `json:"p83012List" PointId:"p83012" PointUnitFrom:"P83012Unit" PointArrayFlatten:"false" DataTable:"true" DataTableMerge:"true" DataTableShowIndex:"true"`
+	P83012List []valueTypes.Float `json:"p83012List" PointId:"p83012" PointUnitFrom:"P83012Unit"`
 	P83012Unit valueTypes.String  `json:"p83012_unit" PointIgnore:"true"`
-	P83022List []valueTypes.Float `json:"p83022List" PointId:"p83022" PointUnitFrom:"P83022Unit" PointArrayFlatten:"false" DataTable:"true" DataTableMerge:"true" DataTableShowIndex:"true"`
+	P83022List []valueTypes.Float `json:"p83022List" PointId:"p83022" PointUnitFrom:"P83022Unit"`
 	P83022Unit valueTypes.String  `json:"p83022_unit" PointIgnore:"true"`
-	P83033List []valueTypes.Float `json:"p83033List" PointId:"p83033" PointUnitFrom:"P83033Unit" PointArrayFlatten:"false" DataTable:"true" DataTableMerge:"true" DataTableShowIndex:"true"`
+	P83033List []valueTypes.Float `json:"p83033List" PointId:"p83033" PointUnitFrom:"P83033Unit"`
 	P83033Unit valueTypes.String  `json:"p83033_unit" PointIgnore:"true"`
-	P83039List []valueTypes.Float `json:"p83039List" PointId:"p83039" PointUnitFrom:"P83039Unit" PointArrayFlatten:"false" DataTable:"true" DataTableMerge:"true" DataTableShowIndex:"true"`
+	P83039List []valueTypes.Float `json:"p83039List" PointId:"p83039" PointUnitFrom:"P83039Unit"`
 	P83039Unit valueTypes.String  `json:"p83039_unit" PointIgnore:"true"`
 }
 

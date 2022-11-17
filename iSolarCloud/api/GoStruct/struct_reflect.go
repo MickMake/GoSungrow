@@ -1,3 +1,4 @@
+//goland:noinspection GoMixedReceiverTypes
 package GoStruct
 
 import (
@@ -63,12 +64,15 @@ type DataTags struct {
 
 	DataTable                 bool      `json:"data_table,omitempty"`
 	DataTableChild            bool      `json:"data_table_child,omitempty"`
+	DataTablePivot            bool      `json:"data_table_pivot,omitempty"`
 	DataTableId               string    `json:"data_table_id,omitempty"`
 	DataTableName             string    `json:"data_table_name,omitempty"`
 	DataTableTitle            string    `json:"data_table_title,omitempty"`
 	DataTableMerge            bool      `json:"data_table_merge,omitempty"`
-	DataTableShowIndex        bool      `json:"data_table_show_index,omitempty"`
+	DataTableIndex            bool      `json:"data_table_show_index,omitempty"`
 	DataTableSortOn           string    `json:"data_table_sort_on,omitempty"`
+	DataTableIndexTitle       string    `json:"data_table_sort_on,omitempty"`
+
 	ValueType                 string    `json:"value_type,omitempty"`
 	ValueKind                 string    `json:"value_kind,omitempty"`
 	// MqttFlatten               bool
@@ -83,10 +87,12 @@ type tagStrings struct {
 	PointArrayFlatten  string `json:"-"`
 	DataTable          string `json:"-"`
 	DataTableChild     string `json:"-"`
+	DataTablePivot     string `json:"-"`
 	DataTableMerge     string `json:"-"`
-	DataTableShowIndex string `json:"-"`
+	DataTableIndex     string `json:"-"`
 }
 
+//goland:noinspection GoMixedReceiverTypes
 func (ds DataTags) String() string {
 	var ret string
 	for range Only.Once {
@@ -100,10 +106,17 @@ func (ds DataTags) String() string {
 }
 
 // GetTags -
-func (ds *DataTags) GetTags(parent *Reflect, current *Reflect, fieldTo reflect.StructField, fieldVo reflect.Value) *DataTags {
+func (ds *DataTags) GetTags(fieldTo reflect.StructField, fieldVo reflect.Value) *DataTags {
+// func (ds *DataTags) GetTags(parent *Reflect, current *Reflect, child *Reflect, fieldTo reflect.StructField, fieldVo reflect.Value) *DataTags {
 	var ret *DataTags
+	// , fieldTo reflect.StructField, fieldVo reflect.Value
 	for range Only.Once {
 		var valueType string
+		// if child == nil {
+		// 	fieldTo = child.FieldTo
+		// 	fieldVo = child.FieldVo
+		// }
+
 		if fieldTo.Type != nil {
 			valueType = fieldTo.Type.String()
 		}
@@ -154,6 +167,7 @@ func (ds *DataTags) GetTags(parent *Reflect, current *Reflect, fieldTo reflect.S
 			DataTableName:         fieldTo.Tag.Get(DataTableName),
 			DataTableTitle:        fieldTo.Tag.Get(DataTableTitle),
 			DataTableSortOn:       fieldTo.Tag.Get(DataTableSortOn),
+			DataTableIndexTitle:   fieldTo.Tag.Get(DataTableIndexTitle),
 
 			StrBool:               tagStrings{
 				Required:           fieldTo.Tag.Get("required"),
@@ -163,8 +177,9 @@ func (ds *DataTags) GetTags(parent *Reflect, current *Reflect, fieldTo reflect.S
 				PointArrayFlatten:  fieldTo.Tag.Get(PointArrayFlatten),
 				DataTable:          fieldTo.Tag.Get(IsDataTable),
 				DataTableChild:     fieldTo.Tag.Get(DataTableChild),
+				DataTablePivot:     fieldTo.Tag.Get(DataTablePivot),
 				DataTableMerge:     fieldTo.Tag.Get(DataTableMerge),
-				DataTableShowIndex: fieldTo.Tag.Get(DataTableShowIndex),
+				DataTableIndex:     fieldTo.Tag.Get(DataTableIndex),
 			},
 		}
 		ret = ds
@@ -220,14 +235,19 @@ func (ds *DataTags) UpdateTags(parent *Reflect, current *Reflect) *DataTags {
 			ds.DataTableChild = true
 		}
 
+		ds.DataTablePivot = false
+		if ds.StrBool.DataTablePivot == "true" {
+			ds.DataTablePivot = true
+		}
+
 		ds.DataTableMerge = false
 		if ds.StrBool.DataTableMerge == "true" {
 			ds.DataTableMerge = true
 		}
 
-		ds.DataTableShowIndex = false
-		if ds.StrBool.DataTableShowIndex == "true" {
-			ds.DataTableShowIndex = true
+		ds.DataTableIndex = false
+		if ds.StrBool.DataTableIndex == "true" {
+			ds.DataTableIndex = true
 		}
 
 		if ds.PointId == "" {
@@ -235,10 +255,14 @@ func (ds *DataTags) UpdateTags(parent *Reflect, current *Reflect) *DataTags {
 		}
 
 		if ds.PointUnitFrom != "" {
-			ds.PointUnit = reflection.GetStringFrom(current.Interface, current.Index, ds.PointUnitFrom)
+			if ds.PointUnit == "" {
+				ds.PointUnit = reflection.GetStringFrom(current.Interface, current.Index, ds.PointUnitFrom)
+			}
 		}
 		if ds.PointUnitFromParent != "" {
-			ds.PointUnit = reflection.GetStringFrom(current.ParentReflect.Interface, current.ParentReflect.Index, ds.PointUnitFromParent)
+			if ds.PointUnit == "" {
+				ds.PointUnit = reflection.GetStringFrom(current.ParentReflect.Interface, current.ParentReflect.Index, ds.PointUnitFromParent)
+			}
 		}
 
 		if ds.PointGroupNameFrom != "" {
@@ -374,8 +398,9 @@ func (ds *DataTags) SetFrom(from *DataTags) error {
 		ds.StrBool.PointArrayFlatten = StrSet(from.StrBool.PointArrayFlatten, ds.StrBool.PointArrayFlatten)
 		ds.StrBool.DataTable = StrSet(from.StrBool.DataTable, ds.StrBool.DataTable)
 		ds.StrBool.DataTableChild = StrSet(from.StrBool.DataTableChild, ds.StrBool.DataTableChild)
+		ds.StrBool.DataTablePivot = StrSet(from.StrBool.DataTablePivot, ds.StrBool.DataTablePivot)
 		ds.StrBool.DataTableMerge = StrSet(from.StrBool.DataTableMerge, ds.StrBool.DataTableMerge)
-		ds.StrBool.DataTableShowIndex = StrSet(from.StrBool.DataTableShowIndex, ds.StrBool.DataTableShowIndex)
+		ds.StrBool.DataTableIndex = StrSet(from.StrBool.DataTableIndex, ds.StrBool.DataTableIndex)
 		// ds.Endpoint = src.Endpoint.Copy()
 	}
 
@@ -447,14 +472,14 @@ func (r Reflect) String() string {
 			r.Kind.String(),
 		)
 		switch r.Kind {
-		case reflect.Array:
-			fallthrough
-		case reflect.Map:
-			fallthrough
-		case reflect.Slice:
-			ret += fmt.Sprintf(" Length:%d",
-				r.Length,
-			)
+			case reflect.Array:
+				fallthrough
+			case reflect.Map:
+				fallthrough
+			case reflect.Slice:
+				ret += fmt.Sprintf(" Length:%d",
+					r.Length,
+				)
 		}
 		ret += "\t- "
 
@@ -465,6 +490,7 @@ func (r Reflect) String() string {
 
 		if r.DataStructure.DataTable { ret += "DataTable "}
 		if r.DataStructure.DataTableChild { ret += "DataTableChild "}
+		if r.DataStructure.DataTablePivot { ret += "DataTablePivot "}
 		if r.DataStructure.PointIdReplace { ret += "PointIdReplace "}
 		if r.DataStructure.PointArrayFlatten { ret += "PointArrayFlatten "}
 		if r.DataStructure.PointIgnore { ret += "PointIgnore "}
@@ -550,68 +576,66 @@ func (r *Reflect) Init(parent interface{}, current interface{}, name EndPointPat
 		r.Length = valueTypes.IgnoreLength
 
 		switch r.Kind {
-		case reflect.Struct:
-			r.Length = r.ValueOf.NumField()
-			// r.FieldTo = typeOf.Field(index)
-			r.IsExported = r.FieldTo.IsExported()
-			// r.FieldVo = current.ValueOf.Field(index)
-			r.FieldName = r.FieldTo.Name
+			case reflect.Struct:
+				r.Length = r.ValueOf.NumField()
+				r.FieldTo = reflect.StructField{}
+				r.FieldVo = reflect.Value{}
+				r.IsExported = r.FieldTo.IsExported()
+				r.FieldName = r.FieldTo.Name
 
-			r.DataStructure.GetTags(r.ParentReflect, r.CurrentReflect, r.FieldTo, r.FieldVo)
-			r.SetGoStructOptions()
-			r.DataStructure.UpdateTags(r.ParentReflect, r.CurrentReflect)
+				r.DataStructure.GetTags(reflect.StructField{}, reflect.Value{})	// , r.FieldTo, r.FieldVo)
+				r.SetGoStructOptions()
+				r.DataStructure.UpdateTags(r.ParentReflect, r.CurrentReflect)
 
-			r.InterfaceValue = current
-			r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
-				r.InterfaceValue, r.DataStructure.PointUnit,
-				r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
+				r.InterfaceValue = current
+				r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
+					r.InterfaceValue, r.DataStructure.PointUnit,
+					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
 
-		case reflect.Slice:
-			fallthrough
-		case reflect.Array:
-			r.Length = r.ValueOf.Len()
-			// pt = reflect.TypeOf(parent)
-			// r.FieldTo = current.TypeOf.Field(index)
-			// r.IsExported = r.FieldTo.IsExported()
-			r.FieldTo = reflect.StructField{}
-			r.IsExported = true
-			// r.FieldVo = current.ValueOf.Index(index)
-			// r.FieldName = current.FieldName		// r.FieldVo.String()
-			r.DataStructure.GetTags(r.ParentReflect, r.CurrentReflect, r.FieldTo, r.FieldVo)
-			r.SetGoStructOptions()
-			r.DataStructure.UpdateTags(r.ParentReflect, r.CurrentReflect)
+			case reflect.Slice:
+				fallthrough
+			case reflect.Array:
+				r.Length = r.ValueOf.Len()
+				r.FieldTo = reflect.StructField{}
+				r.FieldVo = reflect.Value{}
+				r.IsExported = true
+				r.FieldName = r.FieldTo.Name
+				r.DataStructure.GetTags(reflect.StructField{}, reflect.Value{})	// , r.FieldTo, r.FieldVo)
+				r.SetGoStructOptions()
+				r.DataStructure.UpdateTags(r.ParentReflect, r.CurrentReflect)
 
-			r.InterfaceValue = r.FieldVo.Interface()
-			r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
-				r.InterfaceValue, r.DataStructure.PointUnit,
-				r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
+				r.InterfaceValue = r.FieldVo.Interface()
+				r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
+					r.InterfaceValue, r.DataStructure.PointUnit,
+					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
 
-			if r.Length == 0 {
-				r.DataStructure.PointIdReplace = true
-			}
+				if r.Length == 0 {
+					r.DataStructure.PointIdReplace = true
+				}
 
-		case reflect.Map:
-			r.Length = len(r.ValueOf.MapKeys())
-			// pt = reflect.TypeOf(parent)
-			// r.FieldTo = current.TypeOf.Field(index)
-			// r.IsExported = r.FieldTo.IsExported()
-			r.FieldTo = reflect.StructField{}
-			r.IsExported = true
-			// mk := current.ValueOf.MapKeys()
-			// r.FieldVo = current.ValueOf.MapIndex(mk[index])
-			// r.FieldVo = current.ValueOf.MapIndex(indexName)
-			// r.FieldName = current.FieldName		// mk[index].String()
+			case reflect.Map:
+				r.Length = len(r.ValueOf.MapKeys())
+				r.FieldTo = reflect.StructField{}
+				r.FieldVo = reflect.Value{}
+				r.IsExported = true
+				r.FieldName = r.FieldTo.Name
+				// mk := current.ValueOf.MapKeys()
+				// r.FieldVo = current.ValueOf.MapIndex(mk[index])
+				// r.FieldVo = current.ValueOf.MapIndex(indexName)
+				// r.FieldName = current.FieldName		// mk[index].String()
 
-			r.DataStructure.GetTags(r.ParentReflect, r.CurrentReflect, r.FieldTo, r.FieldVo)
-			r.SetGoStructOptions()
-			r.DataStructure.UpdateTags(r.ParentReflect, r.CurrentReflect)
+				r.DataStructure.GetTags(reflect.StructField{}, reflect.Value{})	// , r.FieldTo, r.FieldVo)
+				r.SetGoStructOptions()
+				r.DataStructure.UpdateTags(r.ParentReflect, r.CurrentReflect)
 
-			r.InterfaceValue = r.FieldVo.Interface()
-			r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
-				r.InterfaceValue, r.DataStructure.PointUnit,
-				r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
+				r.InterfaceValue = r.FieldVo.Interface()
+				r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
+					r.InterfaceValue, r.DataStructure.PointUnit,
+					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
 		}
 
+		r.SetGoStructOptions()
+		r.DataStructure.UpdateTags(r.ParentReflect, r.CurrentReflect)
 		r.SetPointId()
 	}
 }
@@ -675,51 +699,57 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 				r.FieldPath = r.CurrentReflect.FieldPath.Copy()
 				r.FieldPath.Append(r.FieldName)
 
-				if strings.Contains(r.FieldPath.String(), "PageList") {
-					fmt.Printf("")}
-				r.DataStructure.GetTags(parent, current, r.FieldTo, r.FieldVo)
+				// DataStructure
+				r.DataStructure.GetTags(r.FieldTo, r.FieldVo)
 				r.SetGoStructOptions()
 				r.DataStructure.UpdateTags(parent, current)
 
+				// Value
 				r.InterfaceValue = r.FieldVo.Interface()
 				r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
 					r.InterfaceValue, r.DataStructure.PointUnit,
 					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
-				if r.Value.Unit() != "" {
-					r.DataStructure.PointUnit = r.Value.Unit()
+				switch {
+					case r.DataStructure.PointUnit == "":
+						r.DataStructure.PointUnit = r.Value.Unit()
+					case r.Value.Unit() == "":
+						r.Value.SetUnit(r.DataStructure.PointUnit)
 				}
 
 			case reflect.Slice:
 				fallthrough
 			case reflect.Array:
 				r.FieldTo = reflect.StructField{}
+				if current.Kind == reflect.Struct {
+					r.FieldTo = current.FieldTo	// Point to the parent if a struct.
+				}
 				r.IsExported = true
 				r.FieldVo = current.ValueOf.Index(index)
 				r.FieldName = current.FieldName		// r.FieldVo.String()
 				r.FieldPath = r.CurrentReflect.FieldPath.Copy()
 				r.FieldPath.Append("[" + strconv.Itoa(r.Index) + "]")
 
-				if strings.Contains(r.FieldPath.String(), "PageList") {
-					fmt.Printf("")}
-				r.DataStructure.GetTags(parent, current, r.FieldTo, r.FieldVo)
+				// DataStructure
+				r.DataStructure.GetTags(r.FieldTo, r.FieldVo)
+				if r.DataStructure.PointUnit == "" {
+					// Only on arrays and maps.
+					if current.DataStructure.PointUnit != "" {
+						r.DataStructure.PointUnit = current.DataStructure.PointUnit
+					}
+				}
+				if r.DataStructure.PointUnitFromParent == "" {
+					// Only on arrays and maps.
+					if current.DataStructure.PointUnitFrom != "" {
+						r.DataStructure.PointUnitFromParent = current.DataStructure.PointUnitFrom
+					}
+				}
 				r.SetGoStructOptions()
 				r.DataStructure.UpdateTags(parent, current)
-
-				r.InterfaceValue = r.FieldVo.Interface()
-				r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
-					r.InterfaceValue, r.DataStructure.PointUnit,
-					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
-				if r.Value.Unit() != "" {
-					r.DataStructure.PointUnit = r.Value.Unit()
-				}
-
 				if r.Length == 0 {
 					r.DataStructure.PointIdReplace = true
 				}
-
 				r.DataStructure.Json = current.DataStructure.PointId
 				r.DataStructure.PointId = current.DataStructure.PointId
-				r.DataStructure.PointUnit = current.DataStructure.PointUnit
 				if !r.isUnknown {
 					f := "%d"
 					if current.Length > 0 {
@@ -728,35 +758,63 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 					f = fmt.Sprintf(f, index)
 					r.DataStructure.Json = current.DataStructure.PointId + "_" + f
 					r.DataStructure.PointId = current.DataStructure.PointId + "_" + f
-					r.DataStructure.PointUnit = current.DataStructure.PointUnit
+				}
+
+				// Value
+				r.InterfaceValue = r.FieldVo.Interface()
+				r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
+					r.InterfaceValue, r.DataStructure.PointUnit,
+					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
+				switch {
+					case r.DataStructure.PointUnit == "":
+						r.DataStructure.PointUnit = r.Value.Unit()
+					case r.Value.Unit() == "":
+						r.Value.SetUnit(r.DataStructure.PointUnit)
 				}
 
 			case reflect.Map:
 				r.FieldTo = reflect.StructField{}
+				if current.Kind == reflect.Struct {
+					r.FieldTo = current.FieldTo	// Point to the parent if a struct.
+				}
 				r.IsExported = true
 				r.FieldVo = current.ValueOf.MapIndex(indexName)
 				r.FieldName = current.FieldName		// mk[index].String()
 				r.FieldPath = r.CurrentReflect.FieldPath.Copy()
 				r.FieldPath.Append("[" + indexName.String() + "]")
 
-				if strings.Contains(r.FieldPath.String(), "PageList") {
-					fmt.Printf("")}
-				r.DataStructure.GetTags(parent, current, r.FieldTo, r.FieldVo)
+				// DataStructure
+				r.DataStructure.GetTags(r.FieldTo, r.FieldVo)
+				if r.DataStructure.PointUnit == "" {
+					// Only on arrays and maps.
+					if current.DataStructure.PointUnit != "" {
+						r.DataStructure.PointUnit = current.DataStructure.PointUnit
+					}
+				}
+				if r.DataStructure.PointUnitFromParent == "" {
+					// Only on arrays and maps.
+					if current.DataStructure.PointUnitFrom != "" {
+						r.DataStructure.PointUnitFromParent = current.DataStructure.PointUnitFrom
+					}
+				}
 				r.SetGoStructOptions()
 				r.DataStructure.UpdateTags(parent, current)
+				r.DataStructure.Json = indexName.String()		// current.ValueOf.MapIndex(indexName).String() || r.FieldVo.String()
+				r.DataStructure.PointId = indexName.String()	// current.ValueOf.MapIndex(indexName).String() || r.FieldVo.String()
 
+				// Value
 				r.InterfaceValue = r.FieldVo.Interface()
 				r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
 					// map[string]interface{}{ indexName.String(): r.InterfaceValue }, r.DataStructure.PointUnit,
 					r.InterfaceValue, r.DataStructure.PointUnit,
 					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
-				if r.Value.Unit() != "" {
-					r.DataStructure.PointUnit = r.Value.Unit()
+				switch {
+					case r.DataStructure.PointUnit == "":
+						r.DataStructure.PointUnit = r.Value.Unit()
+					case r.Value.Unit() == "":
+						r.Value.SetUnit(r.DataStructure.PointUnit)
 				}
 				r.Value.First().SetKey(indexName.String())
-
-				r.DataStructure.Json = indexName.String()		// current.ValueOf.MapIndex(indexName).String() || r.FieldVo.String()
-				r.DataStructure.PointId = indexName.String()	// current.ValueOf.MapIndex(indexName).String() || r.FieldVo.String()
 
 			default:
 				r.Interface = current.Interface
@@ -812,9 +870,6 @@ func (r *Reflect) SetUnitValues(value valueTypes.UnitValues) {
 // SetPointId - Sets the EndPointPath based off struct tags?
 func (r *Reflect) SetPointId() EndPointPath {
 	for range Only.Once {
-		if strings.Contains(r.FieldPath.String(), "PageList") {
-			fmt.Printf("")}
-
 		r.DataStructure.Endpoint = r.CurrentReflect.CopyEndPointPath()
 		// fmt.Printf("[                 ]	EPP: %s	- FP: %s\n", r.DataStructure.Endpoint, r.FieldPath)
 		var pn string
@@ -1022,8 +1077,8 @@ func (r *Reflect) IsDataTableMerge() bool {
 	return r.DataStructure.DataTableMerge
 }
 
-func (r *Reflect) IsDataTableShowIndex() bool {
-	return r.DataStructure.DataTableShowIndex
+func (r *Reflect) IsDataTableIndex() bool {
+	return r.DataStructure.DataTableIndex
 }
 
 func (r *Reflect) CountChildren() (int, int) {
@@ -1066,9 +1121,6 @@ func (r *Reflect) SetGoStructOptions() bool {
 
 	// fmt.Printf("Current(enter): %s\n", r.DataStructure)
 	for range Only.Once {
-		if strings.Contains(r.FieldPath.String(), "PageList") {
-			fmt.Printf("")}
-
 		r.GoStructs.Parent, r.GoStructs.Current = GetChildGoStruct(r.Interface, 1)
 		if r.GoStructs.Current == nil {
 			r.GoStructs.Current = r.GetGoStruct()
@@ -1104,8 +1156,10 @@ func (r *Reflect) SetGoStructOptions() bool {
 					r.DataStructure.DataTableName = ""
 					r.DataStructure.DataTableTitle = ""
 					r.DataStructure.DataTableMerge = false
-					r.DataStructure.DataTableShowIndex = false
+					r.DataStructure.DataTablePivot = false
+					r.DataStructure.DataTableIndex = false
 					r.DataStructure.DataTableSortOn = ""
+					r.DataStructure.DataTableIndexTitle = ""
 				}
 				break
 			}
@@ -1116,6 +1170,18 @@ func (r *Reflect) SetGoStructOptions() bool {
 				r.GoStructs.Parent.UpdateTags(r.CurrentReflect, r)
 
 				err := r.DataStructure.SetFrom(r.GoStructs.Parent)
+				if err != nil {
+					_, _ = fmt.Fprintf(os.Stderr, "Error: %s\n", err)
+				}
+			}
+
+			if r.FieldName == "ResultData" {
+				yes = true
+				r.GoStructs.Parent.UpdateTags(r.CurrentReflect, r)
+
+				// fmt.Printf("SetFrom1: %s\n", r.DataStructure)
+				err := r.DataStructure.SetFrom(r.GoStructs.Parent)
+				// fmt.Printf("SetFrom2: %s\n", r.DataStructure)
 				if err != nil {
 					_, _ = fmt.Fprintf(os.Stderr, "Error: %s\n", err)
 				}
@@ -1198,7 +1264,7 @@ func GetChildGoStruct(ref interface{}, limit int) (*DataTags, *DataTags) {
 				}
 
 				var dt DataTags
-				dt.GetTags(nil, nil, fieldTo, fieldVo)	// &Reflect{Interface: ref}, &Reflect{Interface: fieldVo.Interface()}, fieldTo, fieldVo
+				dt.GetTags(fieldTo, fieldVo)	// &Reflect{Interface: ref}, &Reflect{Interface: fieldVo.Interface()}, fieldTo, fieldVo
 				parent = &dt
 				break
 			}
@@ -1221,7 +1287,7 @@ func GetChildGoStruct(ref interface{}, limit int) (*DataTags, *DataTags) {
 				}
 
 				var dt DataTags
-				dt.GetTags(nil, nil, fieldTo, fieldVo)	// &Reflect{Interface: ref}, &Reflect{Interface: fieldVo.Interface()}, fieldTo, fieldVo
+				dt.GetTags(fieldTo, fieldVo)	// &Reflect{Interface: ref}, &Reflect{Interface: fieldVo.Interface()}, fieldTo, fieldVo
 				current = &dt
 				break
 			}

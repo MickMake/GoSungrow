@@ -4,8 +4,8 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/getUpTimePoint"
@@ -31,40 +31,15 @@ type ResultData struct {
 		PointList []struct {
 			PointId  valueTypes.Integer `json:"point_id"`
 			TimeType valueTypes.Integer `json:"time_type"`
-		} `json:"point_list" PointArrayFlatten:"false" DataTable:"true"`
+		} `json:"point_list"`	// DataTable:"true" DataTablePivot:"true"`
 		UpTimePointId valueTypes.Integer `json:"up_time_point_id"`
-	} `json:"point_time_relation" PointArrayFlatten:"false"`
+	} `json:"point_time_relation" DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	// switch {
-	// case e.Dummy == "":
-	// 	break
-	// default:
-	// 	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	// }
 	return err
 }
-
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

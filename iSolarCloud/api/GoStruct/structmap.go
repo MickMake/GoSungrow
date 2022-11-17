@@ -57,7 +57,7 @@ func (sm *StructMap) InitScan(current interface{}, options StructMapOptions) {
 
 		sm.PrintDebug("InitScan() EndPoint: '%s' Current: %s\n", sm.StructMapOptions.Name, sm.Start)
 
-		sm.Scan(&Parent, &Parent)	// sm.Current)
+		sm.Scan(&Parent, &Parent)
 		// fmt.Printf("sm.Current size: %v\n", unsafe.Sizeof(sm.Current))
 		// fmt.Printf("sm.Map size: %v\n", unsafe.Sizeof(sm.Map))
 	}
@@ -145,9 +145,6 @@ func (sm *StructMap) ScanMap(Parent *Reflect, Current *Reflect) bool {
 		}
 
 		ok = true
-		if strings.Contains(Current.FieldPath.String(), "PageList") {
-			fmt.Printf("")}
-
 		for index, key := range Current.FieldVo.MapKeys() {
 			var Child Reflect
 			Child.SetByIndex(Parent, Current, index, key)
@@ -178,9 +175,6 @@ func (sm *StructMap) ScanSlice(Parent *Reflect, Current *Reflect) bool {
 		}
 
 		ok = true
-		if strings.Contains(Current.FieldPath.String(), "PageList") {
-			fmt.Printf("")}
-
 		for index := 0; index < Current.Length; index++ {
 			var Child Reflect
 			Child.SetByIndex(Parent, Current, index, reflect.Value{})
@@ -211,9 +205,6 @@ func (sm *StructMap) ScanStruct(Parent *Reflect, Current *Reflect) bool {
 		}
 
 		ok = true
-		if strings.Contains(Current.FieldPath.String(), "PageList") {
-			fmt.Printf("")}
-
 		for index := 0; index < Current.Length; index++ {
 			var Child Reflect
 			Child.SetByIndex(Parent, Current, index, reflect.Value{})
@@ -709,47 +700,68 @@ func (sm *StructMap) GetTableData(name string) StructTable {
 			break
 		}
 
+		if rows == 0 {
+			break
+		}
+
+		if ret.Current.DataStructure.DataTableIndex {
+			ret.ShowIndex = ret.Current.DataStructure.DataTableIndex
+		}
+
+		ret.IndexTitle = "Index"
+		if ret.Current.DataStructure.DataTableIndexTitle != "" {
+			ret.IndexTitle = ret.Current.DataStructure.DataTableIndexTitle
+		}
+
+		var refs ReflectArray
 		for row, Child := range ret.Current.ChildReflect {
-			// fmt.Printf("[%s]%s - Known:%t Current:%d / Child:%d\n", Child.FieldPath, ret.Current.Kind,
-			// 	Child.IsKnown(),
-			// 	len(ret.Current.ChildReflect),
-			// 	len(Child.ChildReflect))
 			sm.PrintDebug("GetTableData() row[%d]: %s\n", row, Child)
 			if Child.IsPointIgnore() {
 				continue
 			}
 
-			var refs []*Reflect
+			var refRow ReflectArrayRow
 
 			for col, ChildStruct := range Child.ChildReflect {
-				// fmt.Printf("[%s]%s - Known:%t Current:%d / Child:%d / ChildStruct:%d\n", ChildStruct.FieldPath, ret.Current.Kind,
-				// 	ChildStruct.IsKnown(),
-				// 	len(ret.Current.ChildReflect),
-				// 	len(Child.ChildReflect),
-				// 	len(ChildStruct.ChildReflect))
 				sm.PrintDebug("GetTableData() cell[%d][%d]: %s\n", row, col, Child)
 				if ChildStruct.IsPointIgnore() {
 					continue
 				}
 
 				// Make sure we have a valid sort column name.
-				if ret.Current.DataStructure.DataTableSortOn != "" {
-					if ret.Current.DataStructure.DataTableSortOn == ChildStruct.FieldName {
-						ret.SortOn = ChildStruct.DataStructure.PointName
-					}
+				if ret.Current.DataStructure.DataTableSortOn == ChildStruct.FieldName {
+					ret.SortOn = ChildStruct.DataStructure.PointName
 				}
 
 				if ChildStruct.IsKnown() {
-					refs = append(refs, ChildStruct)
+					refRow = append(refRow, ChildStruct)
 					continue
 				}
-				refs = append(refs, ChildStruct)
+				refRow = append(refRow, ChildStruct)
 			}
 
-			if len(refs) > 0 {
-				ret.AddRow(refs...)
+			if len(refRow) > 0 {
+				refs = refs.AddRow(refRow...)
 			}
 		}
+
+		if !ret.Current.DataStructure.DataTablePivot {
+			ret.Reflects = refs
+			ret.AddHeader(ret.Reflects[0]...)
+			break
+		}
+
+		// Handle table pivots here.
+		for row := 0; row < len(refs[0]); row++ {
+			var refRow ReflectArrayRow
+			for col := 0; col < len(refs); col++ {
+				refRow = append(refRow, refs[col][row])
+			}
+			if len(refRow) > 0 {
+				ret.Reflects = ret.Reflects.AddRow(refRow...)
+			}
+		}
+		ret.AddHeader(ret.Reflects[0]...)
 	}
 
 	return ret
@@ -836,19 +848,53 @@ func (sm *StructMap) GetResultTableData() StructTable {
 
 
 type StructTable struct {
-	Name     string
-	Current  *Reflect
-	Headers  []string
-	Reflects [][]*Reflect
-	SortOn   string
-	IsValid  bool
+	Name      string
+	Current   *Reflect
+	Headers   []string
+	Reflects  ReflectArray
+	SortOn    string
+	ShowIndex bool
+	IndexTitle string
+	IsValid   bool
 }
+
+
+type ReflectArray []ReflectArrayRow
+type ReflectArrayRow []*Reflect
+
+func (ta *ReflectArray) AddRow(refs ...*Reflect) ReflectArray {
+	for range Only.Once {
+		if ta == nil {
+			*ta = make(ReflectArray, 0)
+		}
+
+		var row ReflectArrayRow
+		row = append(row, refs...)
+		*ta = append(*ta, row)
+	}
+	return *ta
+}
+
+func (ta *ReflectArray) GetRow(row int) ReflectArrayRow {
+	if row >= len(*ta) {
+		return ReflectArrayRow{}
+	}
+	return (*ta)[row]
+}
+
+
 type StructTables []StructTable
 type StructValues [][]valueTypes.UnitValue
 
 func (ta *StructTable) AddHeader(headers ...*Reflect) {
 	for range Only.Once {
-		for _, header := range headers {
+		for index, header := range headers {
+			if header == nil {
+				name := fmt.Sprintf("Column %d", index)
+				ta.Headers = append(ta.Headers, name)
+				continue
+			}
+
 			name := valueTypes.PointToName(header.DataStructure.PointId)
 			switch header.Value.Unit() {	// header.DataStructure.PointUnit {
 				case "--":
@@ -868,30 +914,30 @@ func (ta *StructTable) AddHeader(headers ...*Reflect) {
 func (ta *StructTable) AddRow(refs ...*Reflect) {
 	for range Only.Once {
 		if ta.Reflects == nil {
-			ta.Reflects = make([][]*Reflect, 0)
-		}
-		if ta.Headers == nil {
-			ta.AddHeader(refs...)
+			ta.Reflects = make(ReflectArray, 0)
 		}
 
-		var row []*Reflect
-		row = append(row, refs...)
-		ta.Reflects = append(ta.Reflects, row)
+		// var row ReflectArrayRow
+		// row = append(row, refs...)
+		ta.Reflects = append(ta.Reflects, append(ReflectArrayRow{}, refs...))
 	}
 }
 
-func (ta *StructTable) GetRow(row int) []*Reflect {
-	if row >= len(ta.Reflects) {
-		return []*Reflect{}
-	}
-	return ta.Reflects[row]
+func (ta *StructTable) GetRow(row int) ReflectArrayRow {
+	return ta.Reflects.GetRow(row)
 }
 
 func (ta *StructTable) GetHeaders() []string {
+
+	if ta.ShowIndex {
+		ret := []string{ta.IndexTitle}
+		ret = append(ret, ta.Headers...)
+		return ret
+	}
 	return ta.Headers
 }
 
-func (ta *StructTable) Get() [][]*Reflect {
+func (ta *StructTable) Get() ReflectArray {
 	return ta.Reflects
 }
 
@@ -924,6 +970,11 @@ func (ta *StructTable) GetValues() StructValues {
 			// 	continue
 			// }
 
+			if ta.ShowIndex {
+				vi := valueTypes.SetUnitValueInteger(int64(rowIndex), ta.IndexTitle, "")
+				data = append(data, vi)
+			}
+
 			for colIndex, col := range ta.Reflects[rowIndex] {
 				value := ta.Reflects[rowIndex][colIndex].Value
 
@@ -932,21 +983,18 @@ func (ta *StructTable) GetValues() StructValues {
 					if dateFormat == "" {
 						dateFormat = valueTypes.DateTimeLayout
 					}
-					// fmt.Printf("\tCOL[%d][%d] - FieldPath:%s - Value(old):%v\n", rowIndex, colIndex,
-					// 	ta.Reflects[rowIndex][colIndex].FieldPath, value)
 					value, _, _ = valueTypes.AnyToUnitValue(col.Value, col.DataStructure.PointUnit,
 						col.DataStructure.PointValueType, dateFormat)
 				}
 
 				for _, v := range value {
-					// fmt.Printf("\tCOL[%d][%d] (+%d) - FieldPath:%s - Value:%v - IsKnown:%t\n", rowIndex, colIndex, i,
-					// 	ta.Reflects[rowIndex][colIndex].FieldPath, value, col.IsKnown())
 					data = append(data, v)
 				}
 			}
-			// fmt.Printf("\tROW[%d] data:%d\n", rowIndex, len(data))
 			ret = append(ret, data)
 		}
+
+		// @TODO - Add sorting capability here.
 	}
 
 	return ret

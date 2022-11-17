@@ -16,12 +16,12 @@ const Url = "/v1/commonService/queryMutiPointDataList"
 const Disabled = false
 
 type RequestData struct {
-	PsId           valueTypes.PsId  `json:"ps_id" required:"true"`
-	PsKey          valueTypes.PsKey `json:"ps_key" required:"true"`
-	Points         valueTypes.String `json:"points" required:"true"`
-	MinuteInterval valueTypes.String `json:"minute_interval" required:"true"`
-	StartTimeStamp valueTypes.String `json:"start_time_stamp" required:"true"`
-	EndTimeStamp   valueTypes.String `json:"end_time_stamp" required:"true"`
+	PsId           valueTypes.PsId    `json:"ps_id" required:"true"`
+	PsKey          valueTypes.PsKey   `json:"ps_key" required:"true"`
+	Points         valueTypes.String  `json:"points" required:"true"`
+	MinuteInterval valueTypes.Integer `json:"minute_interval" required:"true"`
+	StartTimeStamp valueTypes.String  `json:"start_time_stamp" required:"true"`
+	EndTimeStamp   valueTypes.String  `json:"end_time_stamp" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -55,12 +55,6 @@ type Time struct {
 
 func (e *ResultData) IsValid() error {
 	var err error
-	// switch {
-	// case e.Dummy == "":
-	//	break
-	// default:
-	//	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	// }
 	return err
 }
 
@@ -234,12 +228,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		// pkg := reflection.GetName("", *e)
-		// dt := valueTypes.NewDateTime(valueTypes.Now)
-		// name := pkg + "." + e.Request.PsId.String()
 		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
-
-		// entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	}
 
 	return entries

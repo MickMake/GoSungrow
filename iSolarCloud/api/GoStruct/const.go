@@ -120,10 +120,14 @@ const (
 	DataTableTitle = "DataTableTitle"
 	// DataTableMerge -  Merge rows together - useful for when we use, for EG: []valueTypes.Float
 	DataTableMerge = "DataTableMerge"
-	// DataTableShowIndex -  Show index on table.
-	DataTableShowIndex = "DataTableShowIndex"
+	// DataTableIndex -  Show index on table.
+	DataTableIndex = "DataTableIndex"
+	// DataTableIndexTitle -  Show index title on table.
+	DataTableIndexTitle = "DataTableIndexTitle"
 	// DataTableSortOn -  Sort table using this Field.
 	DataTableSortOn = "DataTableSortOn"
+	// DataTablePivot -  Pivot the table.
+	DataTablePivot = "DataTablePivot"
 )
 
 type GoStruct bool

@@ -4,6 +4,7 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"encoding/json"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
@@ -25,21 +26,31 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
-	Hours map[string]Hour `json:"hours"`
+	Hours map[string]Hour `json:"hours" DataTable:"true" DataTableIndex:"true"`	// DataTableSortOn:"Index"`
 }
+
 type Hour struct {
-	CurrPower         float64            `json:"curr_power"`
-	CurrPowerUnit     valueTypes.String  `json:"curr_power_unit"`
-	CurrRadiation     valueTypes.Integer `json:"curr_radiation"`
-	CurrRadiationUnit valueTypes.String  `json:"curr_radiation_unit"`
-	TodayEnergy       valueTypes.Integer `json:"today_energy"`
-	TodayEnergyUnit   valueTypes.String  `json:"today_energy_unit"`
+	CurrPower         valueTypes.Float  `json:"curr_power" PointUnitFrom:"CurrPowerUnit"`
+	CurrPowerUnit     valueTypes.String `json:"curr_power_unit" PointIgnore:"true"`
+	CurrRadiation     valueTypes.Float  `json:"curr_radiation" PointUnitFrom:"CurrRadiationUnit"`
+	CurrRadiationUnit valueTypes.String `json:"curr_radiation_unit" PointIgnore:"true"`
+	TodayEnergy       valueTypes.Float  `json:"today_energy" PointUnitFrom:"TodayEnergyUnit"`
+	TodayEnergyUnit   valueTypes.String `json:"today_energy_unit" PointIgnore:"true"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
+	return err
+}
+
+func (e *ResultData) UnmarshalJSON(data []byte) error {
+	var err error
+
+	for range Only.Once {
+		err = json.Unmarshal(data, &e.Hours)
+	}
+
 	return err
 }
 

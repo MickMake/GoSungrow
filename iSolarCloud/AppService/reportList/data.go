@@ -5,7 +5,6 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -22,11 +21,7 @@ func (rd RequestData) IsValid() error {
 }
 
 func (rd RequestData) Help() string {
-	ret := fmt.Sprintf("report_type is from 1-4\n")
-	ret += fmt.Sprintf("1: Day Report.\n")
-	ret += fmt.Sprintf("2: Month Report.\n")
-	ret += fmt.Sprintf("3: Year Report.\n")
-	ret += fmt.Sprintf("4: Total Report.\n")
+	ret := api.HelpReportType()
 	return ret
 }
 

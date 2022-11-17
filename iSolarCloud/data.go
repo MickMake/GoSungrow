@@ -90,7 +90,7 @@ type SunGrowData struct {
 	endPoints  []string
 	request    SunGrowDataRequest
 
-	results   SunGrowDataResults
+	results    SunGrowDataResults
 
 	sunGrow    *SunGrow
 	outputType output.OutputType
@@ -171,7 +171,7 @@ func (sgd *SunGrowData) SetEndpoints(endpoints ...string) {
 }
 
 func (sgd *SunGrowData) SetArgs(args ...string) {
-	sgd.request.Set(args...)
+	sgd.request.SetArgs(args...)
 }
 
 func (sgd *SunGrowData) SetPsIds(psids ...string) {
@@ -200,12 +200,13 @@ func (sgd *SunGrowData) GetData() error {
 		for _, endpoint := range sgd.endPoints {
 			// Lookup endpoint interface from string.
 			ep := sgd.sunGrow.GetEndpoint(endpoint)
-			sgd.sunGrow.Error = ep.GetError()
-			if sgd.sunGrow.Error != nil {
+			if ep.IsError() {
+				sgd.Error = ep.GetError()
 				break
 			}
-
 			sgd.request.SetRequired(ep.GetRequestArgNames())
+
+			// PsId not required.
 			if sgd.request.IsNotRequired(NamePsId) {
 				var result SunGrowDataResult
 
@@ -217,23 +218,32 @@ func (sgd *SunGrowData) GetData() error {
 				break
 			}
 
+			// PsId required and not set.
 			if len(sgd.request.aPsId) == 0 {
 				sgd.SetPsIds()
 			}
+
+			// PsId required.
 			for _, psId := range sgd.request.aPsId {
 				var result SunGrowDataResult
 
 				result.Request = sgd.request
-				if result.Request.IsRequired(NamePsId) {
-					result.Request.SetPsId(psId.String())
-				}
-				if result.Request.IsRequired(NamePsIds) {
-					result.Request.SetPsId(psId.String())
-				}
+				result.Request.SetIfRequired(NamePsId, psId.String())
+				result.Request.SetIfRequired(NamePsIds, psId.String())
+				// result.Request.SetIfRequired(NameDay, "")
+				// result.Request.SetIfRequired(NameDateId, "")
+
 				result.EndPointName = ep.GetName()
 				result.EndPoint = ep
 				result.Response = sgd.CallEndpoint(ep, result.Request)
+				if sgd.Error != nil {
+					break
+				}
 				sgd.results[result.EndPointName.String() + "/" + psId.String()] = result
+			}
+
+			if sgd.Error != nil {
+				break
 			}
 		}
 	}

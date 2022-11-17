@@ -24,11 +24,11 @@ const (
 )
 
 type SunGrow struct {
-	ApiRoot api.Web
-	Auth    login.EndPoint
-	Areas   api.Areas
-	Error   error
-	NeedLogin bool
+	ApiRoot    api.Web
+	Auth       login.EndPoint
+	Areas      api.Areas
+	Error      error
+	NeedLogin  bool
 
 	OutputType output.OutputType
 	SaveAsFile bool
@@ -67,15 +67,23 @@ func (sg *SunGrow) Init() error {
 	return sg.Error
 }
 
+func (sg *SunGrow) IsError() bool {
+	if sg.Error != nil {
+		return true
+	}
+	return false
+}
+
 func (sg *SunGrow) AppendUrl(endpoint string) api.EndPointUrl {
 	return sg.ApiRoot.AppendUrl(endpoint)
 }
 
 func (sg *SunGrow) GetEndpoint(ae string) api.EndPoint {
 	var ep api.EndPoint
+
 	for range Only.Once {
 		area, endpoint := sg.SplitEndPoint(ae)
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 
@@ -96,6 +104,7 @@ func (sg *SunGrow) GetEndpoint(ae string) api.EndPoint {
 			})
 		}
 	}
+
 	return ep
 }
 
@@ -103,15 +112,14 @@ func (sg *SunGrow) GetByJson(endpoint string, request string) api.EndPoint {
 	var ret api.EndPoint
 	for range Only.Once {
 		ret = sg.GetEndpoint(endpoint)
-		sg.Error = ret.GetError()
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 
 		if request != "" {
 			ret = ret.SetRequestByJson(output.Json(request))
 			sg.Error = ret.GetError()
-			if sg.Error != nil {
+			if sg.IsError() {
 				fmt.Println(ret.Help())
 				break
 			}
@@ -119,7 +127,7 @@ func (sg *SunGrow) GetByJson(endpoint string, request string) api.EndPoint {
 
 		ret = ret.Call()
 		sg.Error = ret.GetError()
-		if sg.Error != nil {
+		if sg.IsError() {
 			if strings.Contains(sg.Error.Error(), "er_token_login_invalid") {
 				sg.Logout()
 				break
@@ -128,7 +136,7 @@ func (sg *SunGrow) GetByJson(endpoint string, request string) api.EndPoint {
 
 		switch {
 			case sg.OutputType.IsNone():
-				if sg.Error != nil {
+				if sg.IsError() {
 					fmt.Println(ret.Help())
 					break
 				}
@@ -145,7 +153,7 @@ func (sg *SunGrow) GetByJson(endpoint string, request string) api.EndPoint {
 				fmt.Println(ret.GetJsonData(true))
 
 			case sg.OutputType.IsJson():
-				if sg.Error != nil {
+				if sg.IsError() {
 					fmt.Println(ret.Help())
 					break
 				}
@@ -156,7 +164,7 @@ func (sg *SunGrow) GetByJson(endpoint string, request string) api.EndPoint {
 				fmt.Println(ret.GetJsonData(false))
 
 			default:
-				if sg.Error != nil {
+				if sg.IsError() {
 					fmt.Println(ret.Help())
 					break
 				}
@@ -169,7 +177,7 @@ func (sg *SunGrow) GetByStruct(endpoint string, request interface{}, cache time.
 	var ret api.EndPoint
 	for range Only.Once {
 		ret = sg.GetEndpoint(endpoint)
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 		if ret.IsError() {
@@ -206,7 +214,7 @@ func (sg *SunGrow) RequestRequiresArgs(ae string) bool {
 	var yes bool
 	for range Only.Once {
 		area, endpoint := sg.SplitEndPoint(ae)
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 
@@ -220,7 +228,7 @@ func (sg *SunGrow) RequestArgs(ae string) map[string]string {
 	var ret map[string]string
 	for range Only.Once {
 		area, endpoint := sg.SplitEndPoint(ae)
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 
@@ -278,7 +286,7 @@ func (sg *SunGrow) Login(auth login.SunGrowAuth) error {
 		sg.Auth = login.Assert(a)
 
 		sg.Error = sg.Auth.Login(&auth)
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 	}

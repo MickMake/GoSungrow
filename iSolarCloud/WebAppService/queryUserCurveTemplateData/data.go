@@ -29,15 +29,7 @@ func (rd RequestData) IsValid() error {
 
 func (rd RequestData) Help() string {
 	ret := fmt.Sprintln("template_id: Use AppService.getTemplateList for ids.")
-	ret += fmt.Sprintln("date_type: Day = 1")
-	ret += fmt.Sprintln("\tstart_time_stamp: Format YYYYmmddHHMM00")
-	ret += fmt.Sprintln("\tend_time_stamp: Format YYYYmmddHHMM00")
-	ret += fmt.Sprintln("date_type: Month = 2")
-	ret += fmt.Sprintln("\tstart_time_stamp: Format YYYYmm")
-	ret += fmt.Sprintln("\tend_time_stamp: Format YYYYmm")
-	ret += fmt.Sprintln("date_type: Year = 3")
-	ret += fmt.Sprintln("\tstart_time_stamp: Format YYYY")
-	ret += fmt.Sprintln("\tend_time_stamp: Format YYYY")
+	ret += api.HelpDateId()
 	return ret
 }
 

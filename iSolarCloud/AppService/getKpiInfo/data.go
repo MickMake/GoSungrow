@@ -25,8 +25,8 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	ActualEnergy             []valueTypes.Float   `json:"actual_energy" PointUnitFrom:"ActualEnergyUnit" DataTable:"true" DataTableMerge:"true" DataTableShowIndex:"true"`
-	PlanEnergy               []valueTypes.Float   `json:"plan_energy" PointUnitFrom:"PlanEnergyUnit" DataTable:"true" DataTableMerge:"true" DataTableShowIndex:"true"`
+	ActualEnergy             []valueTypes.Float   `json:"actual_energy" PointUnitFrom:"ActualEnergyUnit" DataTable:"true" DataTableMerge:"true" DataTableIndex:"true"`
+	PlanEnergy               []valueTypes.Float   `json:"plan_energy" PointUnitFrom:"PlanEnergyUnit" DataTable:"true" DataTableMerge:"true" DataTableIndex:"true"`
 
 	ActualEnergyUnit         valueTypes.String    `json:"actual_energy_unit" PointIgnore:"true"`
 	ChargeTotalEnergy        valueTypes.Float     `json:"charge_total_energy" PointUnitFrom:"ChargeTotalEnergyUnit" PointUpdateFreq:"UpdateFreqTotal"`

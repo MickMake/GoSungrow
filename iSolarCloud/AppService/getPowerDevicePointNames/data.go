@@ -73,40 +73,17 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	PointCalType valueTypes.Integer  `json:"point_cal_type"`
-	PointId      valueTypes.Integer  `json:"point_id"`
-	PointName    valueTypes.String `json:"point_name"`
+	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true"`
+
+	PointId        valueTypes.Integer      `json:"point_id"`
+	PointName      valueTypes.String       `json:"point_name"`
+	PointCalType   valueTypes.Integer      `json:"point_cal_type"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	//switch {
-	//case e.Dummy == "":
-	//	break
-	//default:
-	//	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	//}
 	return err
 }
-
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetPointDataTable() output.Table {
 	var table output.Table

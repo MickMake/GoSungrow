@@ -4,8 +4,8 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/orgService/getInstallerInfoByDealerOrgCodeOrId"
@@ -25,52 +25,26 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
 	UserInfoList []struct {
-		DealerOrgCode     string      `json:"dealer_org_code"`
-		Email             string      `json:"email"`
-		Installer         string      `json:"installer"`
-		InstallerEmail    string      `json:"installer_email"`
-		InstallerPhone    string      `json:"installer_phone"`
-		MobleTel          interface{} `json:"moble_tel" PointId:"mobile_tel"`
+		DealerOrgCode     valueTypes.String  `json:"dealer_org_code"`
+		Email             valueTypes.String  `json:"email"`
+		Installer         valueTypes.String  `json:"installer"`
+		InstallerEmail    valueTypes.String  `json:"installer_email"`
+		InstallerPhone    valueTypes.String  `json:"installer_phone"`
+		MobleTel          interface{}        `json:"moble_tel" PointId:"mobile_tel"`
 		OrgId             valueTypes.Integer `json:"org_id"`
-		OrgName           string      `json:"org_name"`
+		OrgName           valueTypes.String  `json:"org_name"`
 		UserId            valueTypes.Integer `json:"user_id"`
-		UserName          string      `json:"user_name"`
-		UserTelNationCode interface{} `json:"user_tel_nation_code"`
-	} `json:"user_info_list" DataTable:"true"`
+		UserName          valueTypes.String  `json:"user_name"`
+		UserTelNationCode interface{}        `json:"user_tel_nation_code"`
+	} `json:"user_info_list" DataTable:"true" DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	// switch {
-	// case e.Dummy == "":
-	// 	break
-	// default:
-	// 	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	// }
 	return err
 }
-
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

@@ -608,6 +608,10 @@ func (t *UnitValues) Type() string {
 	return ret
 }
 
+func (t *UnitValues) SetUnit(unit string) *UnitValue {
+	return &(*t)[0]
+}
+
 func (t *UnitValues) First() *UnitValue {
 	if len(*t) == 0 {
 		return &UnitValue{}

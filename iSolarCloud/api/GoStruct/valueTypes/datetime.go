@@ -100,7 +100,8 @@ func (dt DateTime) MarshalJSON() ([]byte, error) {
 
 	for range Only.Once {
 		// data = []byte("\"" + dt.Time.Format(DateTimeLayout) + "\"")
-		data = []byte("\"" + dt.string + "\"")
+		// data = []byte("\"" + dt.string + "\"")
+		data = []byte("\"" + dt.Original() + "\"")
 	}
 
 	return data, dt.Error
@@ -230,6 +231,8 @@ func (dt DateTime) Original() string {
 			ret = dt.Time.Format(DateTimeLayoutMonth)
 		case "1":
 			ret = dt.Time.Format(DateTimeLayoutDay)
+		default:
+			ret = dt.Time.Format(DateTimeLayout)
 	}
 	return ret
 }

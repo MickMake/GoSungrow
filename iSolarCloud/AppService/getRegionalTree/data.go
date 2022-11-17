@@ -4,8 +4,8 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/orgService/getRegionalTree"
@@ -27,48 +27,23 @@ func (rd RequestData) Help() string {
 
 type ResultData   struct {
 	ResultList []struct {
-		Checked    valueTypes.Bool   `json:"checked"`
-		Id         valueTypes.String `json:"id"`
-		IsFirstOrg valueTypes.Bool   `json:"isFirstOrg" PointId:"is_first_org"`
-		IsParent   valueTypes.Bool `json:"isParent" PointId:"is_parent"`
-		Name       valueTypes.String `json:"name"`
-		Open       valueTypes.Bool   `json:"open"`
-		OrgId      valueTypes.Integer  `json:"org_id"`
+		PsId       valueTypes.PsId    `json:"ps_id"`
+		Id         valueTypes.String  `json:"id"`
+		Name       valueTypes.String  `json:"name"`
+		OrgId      valueTypes.Integer `json:"org_id"`
 		ParentId   valueTypes.Integer `json:"pId" PointId:"pid"`
-		PsId       valueTypes.PsId `json:"ps_id"`
-		ShareType  int64  `json:"share_type"`
-	} `json:"resultList" PointId:"resulte_list" DataTable:"true"`
+		Checked    valueTypes.Bool    `json:"checked"`
+		IsParent   valueTypes.Bool    `json:"isParent" PointId:"is_parent"`
+		IsFirstOrg valueTypes.Bool    `json:"isFirstOrg" PointId:"is_first_org"`
+		Open       valueTypes.Bool    `json:"open"`
+		ShareType  valueTypes.Integer `json:"share_type"`
+	} `json:"resultList" PointId:"results_list" DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	// switch {
-	// case e.Dummy == "":
-	// 	break
-	// default:
-	// 	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	// }
 	return err
 }
-
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

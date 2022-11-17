@@ -65,13 +65,16 @@ func (an *Areas) GetArea(area AreaName) *Area {
 
 func (an *Areas) GetEndPoint(area AreaName, endpoint EndPointName) EndPoint {
 	var ret EndPoint
+
 	for range Only.Once {
 		if area == "" {
+			ret = (*an)[NullAreaName].EndPoints[NullEndPointName]
 			ret = ret.SetError("empty endpoint area name")
 			break
 		}
 
 		if endpoint == "" {
+			ret = (*an)[NullAreaName].EndPoints[NullEndPointName]
 			ret = ret.SetError("empty endpoint name")
 			break
 		}
@@ -102,6 +105,7 @@ func (an *Areas) GetEndPoint(area AreaName, endpoint EndPointName) EndPoint {
 		}
 
 	}
+
 	return ret
 }
 
@@ -110,6 +114,7 @@ func (an *Areas) RequestArgs(area AreaName, endpoint EndPointName) map[string]st
 	for range Only.Once {
 		ep := an.GetEndPoint(area, endpoint)
 		if ep.IsError() {
+			fmt.Printf("RequestArgs(): %s\n", ep.GetError())
 			break
 		}
 
@@ -123,6 +128,7 @@ func (an *Areas) RequestRequiresArgs(area AreaName, endpoint EndPointName) bool 
 	for range Only.Once {
 		ep := an.GetEndPoint(area, endpoint)
 		if ep.IsError() {
+			fmt.Printf("RequestRequiresArgs(): %s\n", ep.GetError())
 			break
 		}
 
@@ -207,20 +213,23 @@ func (an *Areas) SetRequest(area AreaName, endpoint EndPointName, ref interface{
 			err = ep.GetError()
 			break
 		}
-
-		// point := (*an)[area].EndPoints[endpoint]
-		// point = point.SetRequest(ref)
-		// err = point.GetError()
 	}
 
 	return err
-	// return an.GetEndPoint(area, endpoint).SetRequest()
 }
 
 func (an *Areas) GetRequest(area AreaName, endpoint EndPointName) output.Json {
-	return an.GetEndPoint(area, endpoint).GetRequestJson()
+	ep := an.GetEndPoint(area, endpoint)
+	if ep.IsError() {
+		return output.Json(fmt.Sprintf(`{"error": "%s"}`, ep.GetError()))
+	}
+	return ep.GetRequestJson()
 }
 
 func (an *Areas) GetResponse(area AreaName, endpoint EndPointName) output.Json {
-	return an.GetEndPoint(area, endpoint).GetResponseJson()
+	ep := an.GetEndPoint(area, endpoint)
+	if ep.IsError() {
+		return output.Json(fmt.Sprintf(`{"error": "%s"}`, ep.GetError()))
+	}
+	return ep.GetResponseJson()
 }

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 	"strings"
+	"time"
 )
 
 
@@ -40,6 +41,7 @@ type RequestArgs struct {
 	PsKey          *valueTypes.PsKey    `json:"ps_key,omitempty"`
 
 	// UNVERIFIED
+	Day            *valueTypes.DateTime  `json:"day,omitempty"`
 	AppKey         *valueTypes.String    `json:"app_key,omitempty"`
 	BeginTime      *valueTypes.DateTime  `json:"beginTime,omitempty"`
 	DealerOrgCode  *valueTypes.String    `json:"dealer_org_code,omitempty"`
@@ -52,7 +54,7 @@ type RequestArgs struct {
 	OrderId        *valueTypes.String    `json:"order_id,omitempty"`
 	OrgId          *valueTypes.String    `json:"org_id,omitempty"`
 	PointId        *valueTypes.PointId   `json:"point_id,omitempty"`
-	Points         *valueTypes.Integer   `json:"points,omitempty"`
+	Points         *valueTypes.String    `json:"points,omitempty"`
 	Prefix         *valueTypes.String    `json:"prefix,omitempty"`
 	PrimaryKey     *valueTypes.String    `json:"primaryKey,omitempty"`
 	PsKeyList      *valueTypes.String    `json:"ps_key_list,omitempty"`
@@ -111,6 +113,7 @@ const (
 	NamePsKey          = "PsKey"
 
 	// UNVERIFIED
+	NameDay            = "Day"
 	NameAppKey         = "AppKey"
 	NameBeginTime      = "BeginTime"
 	NameDealerOrgCode  = "DealerOrgCode"
@@ -133,6 +136,50 @@ const (
 	NameTable          = "Table"
 	NameTaskId         = "TaskId"
 )
+
+var Help = map[string]string{
+	NamePsId:           "PsId - valid ps_id",
+	NamePsIds:          "PsIds - list of ps_id",
+	NameReportType:     "ReportType - ",
+	NameDateId:         "DateId - Date in format YYYYMMDD or YYYMM or YYYY",
+	NameDateType:       "DateType - ",
+	NameFaultTypeCode:  "FaultTypeCode - ",
+	NameSize:           "Size - ",
+	NameCurPage:        "CurPage - ",
+	NameDeviceType:     "DeviceType - ",
+	NameReportId:       "ReportId - ",
+	NameCodeType:       "CodeType - ",
+	NameOrgIds:         "OrgIds - ",
+	NamePsIdList:       "PsIdList - ",
+	NameUuid:           "Uuid - ",
+	NameTemplateId:     "TemplateId - ",
+	NameDeviceModelId:  "DeviceModelId - ",
+	NamePsKey:          "PsKey - ",
+	NameDay:            "Day - Date in format YYYYMMDD",
+
+	// UNVERIFIED
+	NameAppKey:         "AppKey - ",
+	NameBeginTime:      "BeginTime - ",
+	NameDealerOrgCode:  "DealerOrgCode - ",
+	NameDeviceSn:       "DeviceSn - ",
+	NameEndTimeStamp:   "EndTimeStamp - ",
+	NameFaultCode:      "FaultCode - ",
+	NameFaultName:      "FaultName - ",
+	NameId:             "Id - ",
+	NameMinuteInterval: "MinuteInterval - ",
+	NameOrderId:        "OrderId - ",
+	NameOrgId:          "OrgId - ",
+	NamePointId:        "PointId - ",
+	NamePoints:         "Points - ",
+	NamePrefix:         "Prefix - ",
+	NamePrimaryKey:     "PrimaryKey - ",
+	NamePsKeyList:      "PsKeyList - ",
+	NameQueryType:      "QueryType - ",
+	NameSn:             "Sn - ",
+	NameStartTimeStamp: "StartTimeStamp - ",
+	NameTable:          "Table - ",
+	NameTaskId:         "TaskId - ",
+}
 
 // MarshalJSON - Convert value to JSON
 func (sgd SunGrowDataRequest) MarshalJSON() ([]byte, error) {
@@ -167,6 +214,7 @@ func (sgd SunGrowDataRequest) MarshalJSON() ([]byte, error) {
 			PsKey:          sgd.args.PsKey,
 
 			// UNVERIFIED
+			Day:            sgd.args.Day,
 			AppKey:         sgd.args.AppKey,
 			BeginTime:      sgd.args.BeginTime,
 			DealerOrgCode:  sgd.args.DealerOrgCode,
@@ -197,7 +245,189 @@ func (sgd SunGrowDataRequest) MarshalJSON() ([]byte, error) {
 	return data, err
 }
 
-func (sgd *SunGrowDataRequest) Set(args ...string) {
+func (sgd *SunGrowDataRequest) Set(arg string, value string) {
+	for range Only.Once {
+		switch arg {
+			case NamePsId:
+				sgd.aPsId = valueTypes.SetPsIdStrings(SplitArg(value))	// strings.Split(a[1], ","))
+				sgd.SetPsId(value)
+				// v, err := strconv.ParseInt(value, 10, 64)
+				// if err != nil {
+				// 	fmt.Printf("Error: %s - %s\n", NamePsId, err)
+				// 	fmt.Printf("%s\n", Help[arg])
+				// }
+				// val := valueTypes.SetPsIdValue(v); sgd.args.PsId = &val
+			case NamePsIds:
+				sgd.aPsId = valueTypes.SetPsIdStrings(SplitArg(value))	// strings.Split(a[1], ","))
+				val := valueTypes.SetPsIdStrings(SplitArg(value)); sgd.args.PsIds = &val
+			case NameReportType:
+				val := valueTypes.SetStringValue(value); sgd.args.ReportType = &val
+			case NameDateId:
+				sgd.SetDateId(value)
+			case NameFaultTypeCode:
+				val := valueTypes.SetIntegerString(value); sgd.args.FaultTypeCode = &val
+			case NameSize:
+				val := valueTypes.SetIntegerString(value); sgd.args.Size = &val
+			case NameCurPage:
+				val := valueTypes.SetIntegerString(value); sgd.args.CurPage = &val
+			case NameDeviceType:
+				val := valueTypes.SetStringValue(value); sgd.args.DeviceType = &val
+			case NameReportId:
+				val := valueTypes.SetStringValue(value); sgd.args.ReportId = &val
+			case NameCodeType:
+				val := valueTypes.SetStringValue(value); sgd.args.CodeType = &val
+			case NameOrgIds:
+				val := valueTypes.SetStringValue(value); sgd.args.OrgIds = &val
+			case NamePsIdList:
+				val := valueTypes.SetStringValue(value); sgd.args.PsIdList = &val
+			case NameUuid:
+				val := valueTypes.SetStringValue(value); sgd.args.Uuid = &val
+			case NameTemplateId:
+				val := valueTypes.SetStringValue(value); sgd.args.TemplateId = &val
+			case NameDeviceModelId:
+				val := valueTypes.SetStringValue(value); sgd.args.DeviceModelId = &val
+			case NamePsKey:
+				val := valueTypes.SetPsKeyValue(value); sgd.args.PsKey = &val
+
+
+			// UNVERIFIED
+			case NameDay:
+				sgd.SetDay(value)
+			case NameAppKey:
+				val := valueTypes.SetStringValue(value); sgd.args.AppKey = &val
+			case NameBeginTime:
+				val := valueTypes.SetDateTimeString(value); sgd.args.BeginTime = &val
+			case NameDealerOrgCode:
+				val := valueTypes.SetStringValue(value); sgd.args.DealerOrgCode = &val
+			case NameDeviceSn:
+				val := valueTypes.SetStringValue(value); sgd.args.DeviceSn = &val
+			case NameEndTimeStamp:
+				val := valueTypes.SetDateTimeString(value); sgd.args.EndTimeStamp = &val
+			case NameFaultCode:
+				val := valueTypes.SetIntegerString(value); sgd.args.FaultCode = &val
+			case NameFaultName:
+				val := valueTypes.SetStringValue(value); sgd.args.FaultName = &val
+			case NameId:
+				val := valueTypes.SetIntegerString(value); sgd.args.Id = &val
+			case NameMinuteInterval:
+				val := valueTypes.SetIntegerString(value); sgd.args.MinuteInterval = &val
+			case NameOrderId:
+				val := valueTypes.SetStringValue(value); sgd.args.OrderId = &val
+			case NameOrgId:
+				val := valueTypes.SetStringValue(value); sgd.args.OrgId = &val
+			case NamePointId:
+				val := valueTypes.SetPointIdString(value); sgd.args.PointId = &val
+			case NamePoints:
+				val := valueTypes.SetStringValue(value); sgd.args.Points = &val
+			case NamePrefix:
+				val := valueTypes.SetStringValue(value); sgd.args.Prefix = &val
+			case NamePrimaryKey:
+				val := valueTypes.SetStringValue(value); sgd.args.PrimaryKey = &val
+			case NamePsKeyList:
+				val := valueTypes.SetStringValue(value); sgd.args.PsKeyList = &val
+			case NameQueryType:
+				val := valueTypes.SetStringValue(value); sgd.args.QueryType = &val
+			case NameSn:
+				val := valueTypes.SetStringValue(value); sgd.args.Sn = &val
+			case NameStartTimeStamp:
+				val := valueTypes.SetDateTimeString(value); sgd.args.StartTimeStamp = &val
+			case NameTable:
+				val := valueTypes.SetStringValue(value); sgd.args.Table = &val
+			case NameTaskId:
+				val := valueTypes.SetStringValue(value); sgd.args.TaskId = &val
+		}
+	}
+}
+
+func (sgd *SunGrowDataRequest) IsSet(arg string) bool {
+	var ok bool
+	for range Only.Once {
+		switch arg {
+			case NamePsId:
+				if sgd.args.PsId != nil { ok = true }
+			case NamePsIds:
+				if sgd.args.PsIds != nil { ok = true }
+			case NameReportType:
+				if sgd.args.ReportType != nil { ok = true }
+			case NameDateId:
+				if sgd.args.DateId != nil { ok = true }
+			case NameFaultTypeCode:
+				if sgd.args.FaultTypeCode != nil { ok = true }
+			case NameSize:
+				if sgd.args.Size != nil { ok = true }
+			case NameCurPage:
+				if sgd.args.CurPage != nil { ok = true }
+			case NameDeviceType:
+				if sgd.args.DeviceType != nil { ok = true }
+			case NameReportId:
+				if sgd.args.ReportId != nil { ok = true }
+			case NameCodeType:
+				if sgd.args.CodeType != nil { ok = true }
+			case NameOrgIds:
+				if sgd.args.OrgIds != nil { ok = true }
+			case NamePsIdList:
+				if sgd.args.PsIdList != nil { ok = true }
+			case NameUuid:
+				if sgd.args.Uuid != nil { ok = true }
+			case NameTemplateId:
+				if sgd.args.TemplateId != nil { ok = true }
+			case NameDeviceModelId:
+				if sgd.args.DeviceModelId != nil { ok = true }
+			case NamePsKey:
+				if sgd.args.PsKey != nil { ok = true }
+
+
+			// UNVERIFIED
+			case NameDay:
+				if sgd.args.Day != nil { ok = true }
+			case NameAppKey:
+				if sgd.args.AppKey != nil { ok = true }
+			case NameBeginTime:
+				if sgd.args.BeginTime != nil { ok = true }
+			case NameDealerOrgCode:
+				if sgd.args.DealerOrgCode != nil { ok = true }
+			case NameDeviceSn:
+				if sgd.args.DeviceSn != nil { ok = true }
+			case NameEndTimeStamp:
+				if sgd.args.EndTimeStamp != nil { ok = true }
+			case NameFaultCode:
+				if sgd.args.FaultCode != nil { ok = true }
+			case NameFaultName:
+				if sgd.args.FaultName != nil { ok = true }
+			case NameId:
+				if sgd.args.Id != nil { ok = true }
+			case NameMinuteInterval:
+				if sgd.args.MinuteInterval != nil { ok = true }
+			case NameOrderId:
+				if sgd.args.OrderId != nil { ok = true }
+			case NameOrgId:
+				if sgd.args.OrgId != nil { ok = true }
+			case NamePointId:
+				if sgd.args.PointId != nil { ok = true }
+			case NamePoints:
+				if sgd.args.Points != nil { ok = true }
+			case NamePrefix:
+				if sgd.args.Prefix != nil { ok = true }
+			case NamePrimaryKey:
+				if sgd.args.PrimaryKey != nil { ok = true }
+			case NamePsKeyList:
+				if sgd.args.PsKeyList != nil { ok = true }
+			case NameQueryType:
+				if sgd.args.QueryType != nil { ok = true }
+			case NameSn:
+				if sgd.args.Sn != nil { ok = true }
+			case NameStartTimeStamp:
+				if sgd.args.StartTimeStamp != nil { ok = true }
+			case NameTable:
+				if sgd.args.Table != nil { ok = true }
+			case NameTaskId:
+				if sgd.args.TaskId != nil { ok = true }
+		}
+	}
+	return ok
+}
+
+func (sgd *SunGrowDataRequest) SetArgs(args ...string) {
 	for range Only.Once {
 		for _, arg := range args {
 			a := strings.Split(arg, ":")
@@ -209,85 +439,7 @@ func (sgd *SunGrowDataRequest) Set(args ...string) {
 				a = append(a, "")
 			}
 
-			switch a[0] {
-				case NamePsId:
-					sgd.aPsId = valueTypes.SetPsIdStrings(SplitArg(a[1]))	// strings.Split(a[1], ","))
-				// case NamePsIds:
-				// 	sgd.aPsId = valueTypes.SetPsIdStrings(SplitArg(a[1]))	// strings.Split(a[1], ","))
-				case NameReportType:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.ReportType = &val
-				case NameDateId:
-					val := valueTypes.SetDateTimeString(a[1]); sgd.args.DateId = &val
-				case NameFaultTypeCode:
-					val := valueTypes.SetIntegerString(a[1]); sgd.args.FaultTypeCode = &val
-				case NameSize:
-					val := valueTypes.SetIntegerString(a[1]); sgd.args.Size = &val
-				case NameCurPage:
-					val := valueTypes.SetIntegerString(a[1]); sgd.args.CurPage = &val
-				case NameDeviceType:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.DeviceType = &val
-				case NameReportId:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.ReportId = &val
-				case NameCodeType:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.CodeType = &val
-				case NameOrgIds:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.OrgIds = &val
-				case NamePsIdList:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.PsIdList = &val
-				case NameUuid:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.Uuid = &val
-				case NameTemplateId:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.TemplateId = &val
-				case NameDeviceModelId:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.DeviceModelId = &val
-				case NamePsKey:
-					val := valueTypes.SetPsKeyValue(a[1]); sgd.args.PsKey = &val
-
-
-				// UNVERIFIED
-				case NameAppKey:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.AppKey = &val
-				case NameBeginTime:
-					val := valueTypes.SetDateTimeString(a[1]); sgd.args.BeginTime = &val
-				case NameDealerOrgCode:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.DealerOrgCode = &val
-				case NameDeviceSn:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.DeviceSn = &val
-				case NameEndTimeStamp:
-					val := valueTypes.SetDateTimeString(a[1]); sgd.args.EndTimeStamp = &val
-				case NameFaultCode:
-					val := valueTypes.SetIntegerString(a[1]); sgd.args.FaultCode = &val
-				case NameFaultName:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.FaultName = &val
-				case NameId:
-					val := valueTypes.SetIntegerString(a[1]); sgd.args.Id = &val
-				case NameMinuteInterval:
-					val := valueTypes.SetIntegerString(a[1]); sgd.args.MinuteInterval = &val
-				case NameOrderId:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.OrderId = &val
-				case NameOrgId:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.OrgId = &val
-				case NamePointId:
-					val := valueTypes.SetPointIdString(a[1]); sgd.args.PointId = &val
-				case NamePoints:
-					val := valueTypes.SetIntegerString(a[1]); sgd.args.Points = &val
-				case NamePrefix:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.Prefix = &val
-				case NamePrimaryKey:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.PrimaryKey = &val
-				case NamePsKeyList:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.PsKeyList = &val
-				case NameQueryType:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.QueryType = &val
-				case NameSn:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.Sn = &val
-				case NameStartTimeStamp:
-					val := valueTypes.SetDateTimeString(a[1]); sgd.args.StartTimeStamp = &val
-				case NameTable:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.Table = &val
-				case NameTaskId:
-					val := valueTypes.SetStringValue(a[1]); sgd.args.TaskId = &val
-			}
+			sgd.Set(a[0], a[1])
 		}
 	}
 }
@@ -297,90 +449,26 @@ func (sgd *SunGrowDataRequest) Validate(endpoint api.EndPoint) bool {
 	for range Only.Once {
 		args := endpoint.GetRequestArgNames()
 		for key, value := range args {
-			msg := fmt.Sprintf("%s is required\n", key)
-
 			if value != "true" {
 				continue
 			}
-			switch key {
-				case NamePsId:
-					// if sgd.args.PsId == nil { fmt.Printf(msg); ok = false }
-				case NamePsIds:
-					// if sgd.args.PsIds == nil { fmt.Printf(msg); ok = false }
-				case NameReportType:
-					if sgd.args.ReportType == nil { fmt.Printf(msg); ok = false }
-				case NameDateId:
-					if sgd.args.DateId == nil { fmt.Printf(msg); ok = false }
-				case NameFaultTypeCode:
-					if sgd.args.FaultTypeCode == nil { fmt.Printf(msg); ok = false }
-				case NameSize:
-					if sgd.args.Size == nil { fmt.Printf(msg); ok = false }
-				case NameCurPage:
-					if sgd.args.CurPage == nil { fmt.Printf(msg); ok = false }
-				case NameDeviceType:
-					if sgd.args.DeviceType == nil { fmt.Printf(msg); ok = false }
-				case NameReportId:
-					if sgd.args.ReportId == nil { fmt.Printf(msg); ok = false }
-				case NameCodeType:
-					if sgd.args.CodeType == nil { fmt.Printf(msg); ok = false }
-				case NameOrgIds:
-					if sgd.args.OrgIds == nil { fmt.Printf(msg); ok = false }
-				case NamePsIdList:
-					if sgd.args.PsIdList == nil { fmt.Printf(msg); ok = false }
-				case NameUuid:
-					if sgd.args.Uuid == nil { fmt.Printf(msg); ok = false }
-				case NameTemplateId:
-					if sgd.args.TemplateId == nil { fmt.Printf(msg); ok = false }
-				case NameDeviceModelId:
-					if sgd.args.DeviceModelId == nil { fmt.Printf(msg); ok = false }
-				case NamePsKey:
-					if sgd.args.PsKey == nil { fmt.Printf(msg); ok = false }
 
-
-				// UNVERIFIED
-				case NameAppKey:
-					if sgd.args.AppKey == nil { fmt.Printf(msg); ok = false }
-				case NameBeginTime:
-					if sgd.args.BeginTime == nil { fmt.Printf(msg); ok = false }
-				case NameDealerOrgCode:
-					if sgd.args.DealerOrgCode == nil { fmt.Printf(msg); ok = false }
-				case NameDeviceSn:
-					if sgd.args.DeviceSn == nil { fmt.Printf(msg); ok = false }
-				case NameEndTimeStamp:
-					if sgd.args.EndTimeStamp == nil { fmt.Printf(msg); ok = false }
-				case NameFaultCode:
-					if sgd.args.FaultCode == nil { fmt.Printf(msg); ok = false }
-				case NameFaultName:
-					if sgd.args.FaultName == nil { fmt.Printf(msg); ok = false }
-				case NameId:
-					if sgd.args.Id == nil { fmt.Printf(msg); ok = false }
-				case NameMinuteInterval:
-					if sgd.args.MinuteInterval == nil { fmt.Printf(msg); ok = false }
-				case NameOrderId:
-					if sgd.args.OrderId == nil { fmt.Printf(msg); ok = false }
-				case NameOrgId:
-					if sgd.args.OrgId == nil { fmt.Printf(msg); ok = false }
-				case NamePointId:
-					if sgd.args.PointId == nil { fmt.Printf(msg); ok = false }
-				case NamePoints:
-					if sgd.args.Points == nil { fmt.Printf(msg); ok = false }
-				case NamePrefix:
-					if sgd.args.Prefix == nil { fmt.Printf(msg); ok = false }
-				case NamePrimaryKey:
-					if sgd.args.PrimaryKey == nil { fmt.Printf(msg); ok = false }
-				case NamePsKeyList:
-					if sgd.args.PsKeyList == nil { fmt.Printf(msg); ok = false }
-				case NameQueryType:
-					if sgd.args.QueryType == nil { fmt.Printf(msg); ok = false }
-				case NameSn:
-					if sgd.args.Sn == nil { fmt.Printf(msg); ok = false }
-				case NameStartTimeStamp:
-					if sgd.args.StartTimeStamp == nil { fmt.Printf(msg); ok = false }
-				case NameTable:
-					if sgd.args.Table == nil { fmt.Printf(msg); ok = false }
-				case NameTaskId:
-					if sgd.args.TaskId == nil { fmt.Printf(msg); ok = false }
+			if key == NamePsId {
+				// Handled differently.
+				continue
 			}
+			if key == NamePsIds {
+				// Handled differently.
+				continue
+			}
+
+			if sgd.IsSet(key) {
+				continue
+			}
+
+			ok = false
+			fmt.Printf("%s is required\n", key)
+			fmt.Printf("%s\n", Help[key])
 		}
 	}
 	return ok
@@ -427,11 +515,11 @@ func (sgd *SunGrowDataRequest) RequestAsFilePrefix() string {
 	return ret
 }
 
-func (sgd *SunGrowDataRequest) SetDate(date string) {
+func (sgd *SunGrowDataRequest) SetDateId(date string) {
 	for range Only.Once {
-		if sgd.IsNotRequired(NameDateId) {
-			break
-		}
+		// if sgd.IsNotRequired(NameDateId) {
+		// 	break
+		// }
 		did := valueTypes.SetDateTimeString(date)
 		sgd.args.DateId = &did
 		if sgd.args.DateId.IsZero() {
@@ -441,11 +529,26 @@ func (sgd *SunGrowDataRequest) SetDate(date string) {
 	}
 }
 
+func (sgd *SunGrowDataRequest) SetDay(date string) {
+	for range Only.Once {
+		// if sgd.IsNotRequired(NameDay) {
+		// 	break
+		// }
+		did := valueTypes.SetDateTimeString(date)
+		sgd.args.Day = &did
+		if sgd.args.Day.IsZero() {
+			now := time.Now().Format(valueTypes.DateLayoutDay)
+			did = valueTypes.NewDateTime(now)
+			sgd.args.Day = &did
+		}
+	}
+}
+
 func (sgd *SunGrowDataRequest) SetFaultTypeCode(ftc string) {
 	for range Only.Once {
-		if sgd.IsNotRequired(NameFaultTypeCode) {
-			break
-		}
+		// if sgd.IsNotRequired(NameFaultTypeCode) {
+		// 	break
+		// }
 		aftc := valueTypes.SetIntegerString(ftc)
 		sgd.args.FaultTypeCode = &aftc
 	}
@@ -453,9 +556,9 @@ func (sgd *SunGrowDataRequest) SetFaultTypeCode(ftc string) {
 
 func (sgd *SunGrowDataRequest) SetReportType(rt string) {
 	for range Only.Once {
-		if sgd.IsNotRequired(NameReportType) {
-			break
-		}
+		// if sgd.IsNotRequired(NameReportType) {
+		// 	break
+		// }
 		art := valueTypes.SetStringValue(rt)
 		sgd.args.ReportType = &art
 	}
@@ -473,17 +576,60 @@ func (sgd *SunGrowDataRequest) SetRequired(req map[string]string) {
 	sgd.Required = req
 }
 
-func (sgd *SunGrowDataRequest) SetPsId(psId string) {
+func (sgd *SunGrowDataRequest) IsRequiredAndNotSet(arg string) bool {
+	var yes bool
 	for range Only.Once {
-		if sgd.IsNotRequired(NamePsId) {
+		if _, ok := sgd.Required[arg]; !ok {
 			break
 		}
+		if sgd.IsNotRequired(arg) {
+			break
+		}
+		if sgd.IsSet(arg) {
+			break
+		}
+		yes = true
+	}
+	return yes
+}
+
+func (sgd *SunGrowDataRequest) IsRequiredAndSet(arg string) bool {
+	return !sgd.IsRequiredAndNotSet(arg)
+}
+
+func (sgd *SunGrowDataRequest) SetIfRequired(arg string, value string) {
+	for range Only.Once {
+		if sgd.IsNotRequired(arg) {
+			break
+		}
+		if sgd.IsRequiredAndSet(arg) {
+			break
+		}
+		sgd.Set(arg, value)
+	}
+}
+
+func (sgd *SunGrowDataRequest) SetPsId(psId string) {
+	for range Only.Once {
+		// if sgd.IsNotRequired(NamePsId) {
+		// 	break
+		// }
 		if psId == "" {
 			sgd.args.PsId = nil
 			break
 		}
 
+		// v, err := strconv.ParseInt(value, 10, 64)
+		// if err != nil {
+		// 	fmt.Printf("Error: %s - %s\n", NamePsId, err)
+		// 	fmt.Printf("%s\n", Help[arg])
+		// }
+		// val := valueTypes.SetPsIdValue(v); sgd.args.PsId = &val
+
 		pid := valueTypes.SetPsIdString(psId)
+		if pid.Error != nil {
+			fmt.Printf("Error: %s - %s\n", NamePsId, pid.Error)
+		}
 		sgd.args.PsId = &pid
 	}
 }

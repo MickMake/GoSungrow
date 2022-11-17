@@ -43,7 +43,7 @@ func (sg *SunGrow) GetPointNamesFromTemplate(template string) api.TemplatePoints
 			queryUserCurveTemplateData.RequestData{TemplateId: valueTypes.SetStringValue(template)},
 			time.Hour,
 		)
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 
@@ -84,13 +84,13 @@ func (sg *SunGrow) GetTemplateData(template string, date string, filter string) 
 
 		var psIds []valueTypes.PsId
 		psIds, sg.Error = sg.StringToPids()
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 
 		for _, psId := range psIds {
 			pointNames := sg.GetPointNamesFromTemplate(template)
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 
@@ -102,13 +102,13 @@ func (sg *SunGrow) GetTemplateData(template string, date string, filter string) 
 					PsId:           psId,
 					PsKey:          pskeys,
 					Points:         valueTypes.SetStringValue(pointNames.PrintPoints()),	// @TODO - Fixup!
-					MinuteInterval: valueTypes.SetStringValue("5"),
+					MinuteInterval: valueTypes.SetIntegerValue(5),
 					StartTimeStamp: valueTypes.SetStringValue(when.GetDayStartTimestamp()), // @TODO - Fixup!
 					EndTimeStamp:   valueTypes.SetStringValue(when.GetDayEndTimestamp()),	// @TODO - Fixup!
 				},
 				DefaultCacheTimeout,
 			)
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 
@@ -127,7 +127,7 @@ func (sg *SunGrow) GetTemplateData(template string, date string, filter string) 
 			table.SetSaveFile(sg.SaveAsFile)
 			table.OutputType = sg.OutputType
 			sg.Error = table.Output()
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 		}
@@ -152,7 +152,7 @@ func (sg *SunGrow) GetTemplatePoints(template string) error {
 		// 	"Description",
 		// 	"Unit",
 		// 	)
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 
@@ -162,11 +162,11 @@ func (sg *SunGrow) GetTemplatePoints(template string) error {
 				s.Name,
 				s.Unit,
 			)
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 		}
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 
@@ -176,7 +176,7 @@ func (sg *SunGrow) GetTemplatePoints(template string) error {
 		table.SetSaveFile(sg.SaveAsFile)
 		table.OutputType = sg.OutputType
 		sg.Error = table.Output()
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 	}
@@ -308,7 +308,7 @@ func (sg *SunGrow) PrintCurrentStats() error {
 		table.SetSaveFile(sg.SaveAsFile)
 		table.OutputType = sg.OutputType
 		sg.Error = table.Output()
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 
@@ -319,7 +319,7 @@ func (sg *SunGrow) PrintCurrentStats() error {
 				queryDeviceList.RequestData{PsId: psId},
 				time.Second*60,
 			)
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 
@@ -337,7 +337,7 @@ func (sg *SunGrow) PrintCurrentStats() error {
 			table.SetSaveFile(sg.SaveAsFile)
 			table.OutputType = sg.OutputType
 			sg.Error = table.Output()
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 		}
@@ -357,7 +357,7 @@ func (sg *SunGrow) GetPointNames(devices ...string) error {
 				getPowerDevicePointNames.RequestData{DeviceType: valueTypes.SetStringValue(dt)},
 				DefaultCacheTimeout,
 			)
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 
@@ -374,7 +374,7 @@ func (sg *SunGrow) GetPointNames(devices ...string) error {
 			table.SetSaveFile(sg.SaveAsFile)
 			table.OutputType = sg.OutputType
 			sg.Error = table.Output()
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 		}
@@ -390,7 +390,7 @@ func (sg *SunGrow) GetTemplates() error {
 			getTemplateList.RequestData{},
 			DefaultCacheTimeout,
 		)
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 
@@ -407,7 +407,7 @@ func (sg *SunGrow) GetTemplates() error {
 		table.SetSaveFile(sg.SaveAsFile)
 		table.OutputType = sg.OutputType
 		sg.Error = table.Output()
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 	}
@@ -426,7 +426,7 @@ func (sg *SunGrow) GetIsolarcloudMqtt(appKey string) error {
 			getMqttConfigInfoByAppkey.RequestData{AppKey: valueTypes.SetStringValue(appKey)},
 			DefaultCacheTimeout,
 		)
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 
@@ -443,7 +443,7 @@ func (sg *SunGrow) GetIsolarcloudMqtt(appKey string) error {
 		table.SetSaveFile(sg.SaveAsFile)
 		table.OutputType = sg.OutputType
 		sg.Error = table.Output()
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 	}
@@ -456,7 +456,7 @@ func (sg *SunGrow) GetRealTimeData(psKey string) error {
 		if psKey == "" {
 			var psKeys []string
 			psKeys, sg.Error = sg.GetPsKeys()
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 			fmt.Printf("psKeys: %v\n", psKeys)
@@ -468,7 +468,7 @@ func (sg *SunGrow) GetRealTimeData(psKey string) error {
 			queryDeviceRealTimeDataByPsKeys.RequestData{PsKeyList: valueTypes.SetStringValue(psKey)},
 			DefaultCacheTimeout,
 		)
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 
@@ -485,7 +485,7 @@ func (sg *SunGrow) GetRealTimeData(psKey string) error {
 		table.SetSaveFile(sg.SaveAsFile)
 		table.OutputType = sg.OutputType
 		sg.Error = table.Output()
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 	}
@@ -500,12 +500,12 @@ func (sg *SunGrow) CmdDataPsDetail(psIds ...string) error {
 		data.SetEndpoints("getPsDetail", "getPsDetailWithPsType")
 
 		sg.Error = data.GetData()
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 
 		sg.Error = data.GetOutput()
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 	}
@@ -527,7 +527,7 @@ func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints, psId
 
 		if len(psIds) == 0 {
 			psIds, sg.Error = sg.StringToPids()
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 		}
@@ -539,13 +539,13 @@ func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints, psId
 					PsId:           psId,
 					PsKey:          valueTypes.SetPsKeyValue(pointNames.PrintKeys()),				// @TODO - Fixup!
 					Points:         valueTypes.SetStringValue(pointNames.PrintPoints()),			// @TODO - Fixup!
-					MinuteInterval: valueTypes.SetStringValue("5"),							// @TODO - Fixup!
+					MinuteInterval: valueTypes.SetIntegerValue(5),							// @TODO - Fixup!
 					StartTimeStamp: valueTypes.SetStringValue(when.GetDayStartTimestamp()),			// @TODO - Fixup!
 					EndTimeStamp:   valueTypes.SetStringValue(when.GetDayEndTimestamp()),			// @TODO - Fixup!
 				},
 				DefaultCacheTimeout,
 			)
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 
@@ -562,7 +562,7 @@ func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints, psId
 			table.SetSaveFile(sg.SaveAsFile)
 			table.OutputType = sg.OutputType
 			sg.Error = table.Output()
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 		}
@@ -604,7 +604,7 @@ func (sg *SunGrow) SearchPointNames(pns ...string) error {
 					getPowerDevicePointInfo.RequestData{PsId: valueTypes.SetPsIdValue(int64(pni)) },
 					DefaultCacheTimeout,
 				)
-				if sg.Error != nil {
+				if sg.IsError() {
 					break
 				}
 
@@ -624,7 +624,7 @@ func (sg *SunGrow) SearchPointNames(pns ...string) error {
 					getPowerDevicePointInfo.RequestData{PsId: valueTypes.SetPsIdString(pn)},
 					DefaultCacheTimeout,
 				)
-				if sg.Error != nil {
+				if sg.IsError() {
 					break
 				}
 
@@ -644,7 +644,7 @@ func (sg *SunGrow) SearchPointNames(pns ...string) error {
 		table.SetSaveFile(sg.SaveAsFile)
 		table.OutputType = sg.OutputType
 		sg.Error = table.Output()
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 	}
@@ -659,12 +659,12 @@ func (sg *SunGrow) GetDeviceList(psIds ...string) error {
 		data.SetEndpoints("getDeviceList")
 
 		sg.Error = data.GetData()
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 
 		sg.Error = data.GetOutput()
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 
@@ -706,7 +706,7 @@ func (sg *SunGrow) GetDeviceModelInfoList() error {
 			getDeviceModelInfoList.RequestData{},
 			DefaultCacheTimeout,
 		)
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 
@@ -723,7 +723,7 @@ func (sg *SunGrow) GetDeviceModelInfoList() error {
 		table.SetSaveFile(sg.SaveAsFile)
 		table.OutputType = sg.OutputType
 		sg.Error = table.Output()
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 	}
@@ -737,14 +737,14 @@ func (sg *SunGrow) GetDevicePoints(psIds ...valueTypes.PsId) error {
 
 		if len(psIds) == 0 {
 			psIds, sg.Error = sg.GetPsIds()
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 		}
 
 		// getPsList
 		ep := sg.GetByStruct("AppService.getPsList", getPsList.RequestData{}, DefaultCacheTimeout)
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 		PsList := getPsList.Assert(ep)
@@ -787,7 +787,7 @@ func (sg *SunGrow) GetDevicePoints(psIds ...valueTypes.PsId) error {
 			ep = sg.GetByStruct("AppService.getPowerStationData",
 				getPowerStationData.RequestData{ PsId: psId, DateType: valueTypes.SetStringValue("1"), DateId: valueTypes.SetDateTimeString("20221007")},
 				DefaultCacheTimeout)
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 			PowerStationData := getPowerStationData.Assert(ep)
@@ -802,7 +802,7 @@ func (sg *SunGrow) GetDevicePoints(psIds ...valueTypes.PsId) error {
 			ep = sg.GetByStruct("AppService.getPowerStationData",
 				getPowerStationData.RequestData{ PsId: psId, DateType: valueTypes.SetStringValue("2"), DateId: valueTypes.SetDateTimeString("202210")},
 				DefaultCacheTimeout)
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 			PowerStationData = getPowerStationData.Assert(ep)
@@ -817,7 +817,7 @@ func (sg *SunGrow) GetDevicePoints(psIds ...valueTypes.PsId) error {
 			ep = sg.GetByStruct("AppService.getPowerStationData",
 				getPowerStationData.RequestData{ PsId: psId, DateType: valueTypes.SetStringValue("3"), DateId: valueTypes.SetDateTimeString("2022")},
 			DefaultCacheTimeout)
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 			PowerStationData = getPowerStationData.Assert(ep)
@@ -832,7 +832,7 @@ func (sg *SunGrow) GetDevicePoints(psIds ...valueTypes.PsId) error {
 			// queryDeviceList
 			// api get AppService.queryDeviceList '{"ps_id":"1171348"}'
 			ep = sg.GetByStruct("AppService.queryDeviceList", queryDeviceList.RequestData{ PsId: psId }, DefaultCacheTimeout)
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 			DeviceList := queryDeviceList.Assert(ep)
@@ -851,7 +851,7 @@ func (sg *SunGrow) GetDevicePoints(psIds ...valueTypes.PsId) error {
 				getHouseholdStoragePsReport.RequestData{ DateId: valueTypes.SetDateTimeString("20221001"), DateType: valueTypes.SetStringValue("1"), PsId: psId },
 				DefaultCacheTimeout,
 				)
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 			HouseholdStoragePsReport := getHouseholdStoragePsReport.Assert(ep)
@@ -865,7 +865,7 @@ func (sg *SunGrow) GetDevicePoints(psIds ...valueTypes.PsId) error {
 
 			// getPsDetailWithPsType
 			ep = sg.GetByStruct("AppService.getPsDetailWithPsType", getPsDetailWithPsType.RequestData{ PsId: psId }, DefaultCacheTimeout)
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 			PsDetailWithPsType := getPsDetailWithPsType.Assert(ep)
@@ -879,7 +879,7 @@ func (sg *SunGrow) GetDevicePoints(psIds ...valueTypes.PsId) error {
 
 			// getPsDetail
 			ep = sg.GetByStruct("AppService.getPsDetail", getPsDetail.RequestData{ PsId: psId }, DefaultCacheTimeout)
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 			PsDetail := getPsDetail.Assert(ep)
@@ -893,7 +893,7 @@ func (sg *SunGrow) GetDevicePoints(psIds ...valueTypes.PsId) error {
 
 			// getKpiInfo
 			ep = sg.GetByStruct("AppService.getKpiInfo", getKpiInfo.RequestData{ }, DefaultCacheTimeout)
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 			KpiInfo := getKpiInfo.Assert(ep)
@@ -968,7 +968,7 @@ func (sg *SunGrow) GetPointName(psId valueTypes.PsId) error {
 			getPowerDevicePointInfo.RequestData{PsId: psId},
 			DefaultCacheTimeout,
 		)
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 
@@ -988,7 +988,7 @@ func (sg *SunGrow) GetPointName(psId valueTypes.PsId) error {
 		table.SetSaveFile(sg.SaveAsFile)
 		table.OutputType = sg.OutputType
 		sg.Error = table.Output()
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 	}
@@ -1049,7 +1049,7 @@ func (sg *SunGrow) StringToPids(pids ...string) ([]valueTypes.PsId, error) {
 		}
 		if len(psIds) == 0 {
 			psIds, sg.Error = sg.GetPsIds()
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 		}
@@ -1121,7 +1121,7 @@ func (sg *SunGrow) GetDevices(print bool) (getDeviceList.Devices, error) {
 				getDeviceList.RequestData{PsId: psId.PsId},
 				DefaultCacheTimeout,
 			)
-			if sg.Error != nil {
+			if sg.IsError() {
 				break
 			}
 
@@ -1140,7 +1140,7 @@ func (sg *SunGrow) GetDevices(print bool) (getDeviceList.Devices, error) {
 		table.SetSaveFile(sg.SaveAsFile)
 		table.OutputType = sg.OutputType
 		sg.Error = table.Output()
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 	}
@@ -1154,7 +1154,7 @@ func (sg *SunGrow) GetPsModels() ([]string, error) {
 	for range Only.Once {
 		var psIds []valueTypes.PsId
 		psIds, sg.Error = sg.StringToPids()
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 
@@ -1183,7 +1183,7 @@ func (sg *SunGrow) GetPsSerials() ([]string, error) {
 	for range Only.Once {
 		var psIds []valueTypes.PsId
 		psIds, sg.Error = sg.StringToPids()
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 
@@ -1212,7 +1212,7 @@ func (sg *SunGrow) GetPsKeys() ([]string, error) {
 	for range Only.Once {
 		var psIds []valueTypes.PsId
 		psIds, sg.Error = sg.StringToPids()
-		if sg.Error != nil {
+		if sg.IsError() {
 			break
 		}
 

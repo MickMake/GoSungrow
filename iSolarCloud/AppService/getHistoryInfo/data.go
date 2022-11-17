@@ -5,7 +5,6 @@ import (
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
-	"fmt"
 )
 
 const Url = "/v1/powerStationService/getHistoryInfo"
@@ -21,7 +20,7 @@ func (rd RequestData) IsValid() error {
 }
 
 func (rd RequestData) Help() string {
-	ret := fmt.Sprintf("")
+	ret := api.HelpDateId()
 	ret += api.HelpDataType()
 	return ret
 }
