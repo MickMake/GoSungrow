@@ -60,26 +60,44 @@ type SunGrowDataResponses map[string]SunGrowDataResponse
 
 func (sgd *SunGrowDataResponse) GetOutput(outputType output.OutputType, saveAsFile bool) error {
 	for range Only.Once {
-		if sgd.Data.Table.OutputType.IsTable() {
-			var ok bool
-			for _, t := range sgd.Data.DataTables {
-				ok = true
-				t.OutputType = outputType
-				t.SetSaveFile(saveAsFile)
-				sgd.Error = t.Output()
-				if sgd.Error != nil {
-					break
-				}
-			}
-			if !ok {
-				fmt.Printf("No data table results for '%s'\n", sgd.Title)
-			}
+		if sgd.Data.Table.OutputType.IsList() {
+			sgd.Data.List.OutputType = outputType
+			sgd.Data.List.SetSaveFile(saveAsFile)
+			sgd.Error = sgd.Data.List.Output()
+			break
+		}
+
+		if sgd.Data.Table.OutputType.IsRaw() {
+			sgd.Data.List.OutputType = outputType
+			sgd.Data.List.SetSaveFile(saveAsFile)
+			sgd.Error = sgd.Data.List.Output()
+			break
+		}
+
+		if !sgd.Data.Table.OutputType.IsTable() {
 			break
 		}
 
 		sgd.Data.Table.OutputType = outputType
 		sgd.Data.Table.SetSaveFile(saveAsFile)
 		sgd.Error = sgd.Data.Table.Output()
+		if sgd.Error != nil {
+			break
+		}
+
+		if len(sgd.Data.DataTables) == 0 {
+			fmt.Printf("No data table results for '%s'\n", sgd.Title)
+			break
+		}
+		for _, t := range sgd.Data.DataTables {
+			fmt.Println()
+			t.OutputType = outputType
+			t.SetSaveFile(saveAsFile)
+			sgd.Error = t.Output()
+			if sgd.Error != nil {
+				break
+			}
+		}
 	}
 
 	return sgd.Error

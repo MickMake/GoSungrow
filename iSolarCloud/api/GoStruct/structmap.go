@@ -8,6 +8,7 @@ import (
 	"os"
 	"reflect"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -949,67 +950,7 @@ func (ta *StructTable) GetRow(row int) ReflectArrayRow {
 }
 
 func (ta *StructTable) GetHeaders() []string {
-	var ret []string
-
-	for range Only.Once {
-		if !ta.IsValid {
-			break
-		}
-
-		for colIndex := range ta.Columns {
-			header := ta.Reflects[0][colIndex]
-			if header == nil {
-				name := fmt.Sprintf("Column %d", colIndex)
-				ret = append(ret, name)
-				continue
-			}
-
-			if len(header.ChildReflect) > 0 {
-				for _, sub := range header.ChildReflect {
-					name := header.DataStructure.PointName + " " + sub.DataStructure.PointName
-					switch header.Value.Unit() {
-						case "--":
-						case "":
-						default:
-							name += " (" + sub.Value.Unit() + ")"
-					}
-					// ret = append(ret, sub.Value.KeysSorted()...)
-					ret = append(ret, name)
-				}
-				continue
-			}
-
-			if header.IsKnown() {
-				name := header.DataStructure.PointName
-				unit := header.Value.Unit()
-				for _, n := range header.Value.KeysSorted() {
-					if unit == "" {
-						ret = append(ret, name + " " + n)
-						continue
-					}
-					ret = append(ret, name + " " + n + " (" + unit + ")")
-				}
-				continue
-			}
-
-			name := header.DataStructure.PointName
-			switch header.Value.Unit() {
-				case "--":
-				case "":
-				default:
-					name += " (" + header.Value.Unit() + ")"
-			}
-			ret = append(ret, name)
-		}
-	}
-	// if ta.ShowIndex {
-	// 	ret := []string{ta.IndexTitle}
-	// 	ret = append(ret, ta.Headers...)
-	// 	return ret
-	// }
-	// return ta.Headers
-
-	return ret
+	return ta.Columns
 }
 
 func (ta *StructTable) Get() ReflectArray {
@@ -1031,6 +972,24 @@ func (ta *StructTable) GetValues() StructValues {
 				colOrder[name] = colOrderIndex
 				colOrderIndex++
 			}
+		}
+
+		var colName = func(sub *Reflect, value *valueTypes.UnitValue, length int) string {
+			name := sub.DataStructure.PointName
+			if value.ValueKey() == "" {
+				if name == "" {
+					name = "Column " + strconv.Itoa(length)
+				}
+			} else {
+				name += " " + value.ValueKey()
+			}
+			switch value.Unit() {
+				case "--":
+				case "":
+				default:
+					name += " (" + sub.Value.Unit() + ")"
+			}
+			return name
 		}
 
 		for rowIndex := range ta.Reflects {
@@ -1061,17 +1020,13 @@ func (ta *StructTable) GetValues() StructValues {
 			}
 
 			for colIndex, col := range ta.Reflects[rowIndex] {
-
-
-
 				// It's important that the values are sorted by table header.
 				// This is so that the headers match with data.
 				if len(col.ChildReflect) > 0 {
 					// Handles
 					for _, sub := range col.ChildReflect {
-						// data = append(data, sub.Value.Range(valueTypes.SortOrder)...)
 						for _, val := range sub.Value.Range(valueTypes.LoadOrder) {
-							name := val.ValueKey()
+							name := colName(sub, &val, len(data))
 							data[name] = val
 							addCol(name)
 						}
@@ -1083,7 +1038,7 @@ func (ta *StructTable) GetValues() StructValues {
 					value := ta.Reflects[rowIndex][colIndex].Value
 					// data = append(data, value.Range(valueTypes.SortOrder)...)
 					for _, val := range value.Range(valueTypes.LoadOrder) {
-						name := val.ValueKey()
+						name := colName(col, &val, len(data))
 						data[name] = val
 						addCol(name)
 					}
@@ -1099,7 +1054,7 @@ func (ta *StructTable) GetValues() StructValues {
 
 				// data = append(data, value.Range(valueTypes.SortOrder)...)
 				for _, val := range value.Range(valueTypes.LoadOrder) {
-					name := val.ValueKey()
+					name := colName(col, &val, len(data))
 					data[name] = val
 					addCol(name)
 				}

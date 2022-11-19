@@ -295,12 +295,12 @@ func (t *UnitValue) ValueKey() string {
 	switch {
 		case t.key != "":
 			return t.key
-		case t.UnitValue != "":
-			return t.UnitValue
-		case t.TypeValue != "":
-			return t.TypeValue
+		// case t.UnitValue != "":
+		// 	return t.UnitValue
+		// case t.TypeValue != "":
+		// 	return t.TypeValue
 	}
-	return "nokey"
+	return ""
 }
 
 func (t UnitValue) String() string {

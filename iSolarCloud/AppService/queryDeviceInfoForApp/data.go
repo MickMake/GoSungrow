@@ -27,17 +27,17 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	DeviceModelList []struct {
+		ModelId         valueTypes.Integer `json:"model_id"`
 		DeviceModel     valueTypes.String  `json:"device_model"`
 		DeviceModelCode valueTypes.String  `json:"device_model_code"`
-		ModelId         valueTypes.Integer `json:"model_id"`
 	} `json:"deviceModelList" PointId:"device_model_list" PointIdFromChild:"ModelId" PointArrayFlatten:"false" DataTable:"true"`
 	DevicePropertyValueList []struct {
+		UUID           valueTypes.String  `json:"uuid"`
 		DeviceType     valueTypes.Integer `json:"device_type"`
 		PropertyCode   valueTypes.Integer `json:"property_code"`
-		PropertyDefVal valueTypes.String  `json:"property_def_val"`
 		PropertyName   valueTypes.String  `json:"property_name"`
 		PropertyValue  valueTypes.String  `json:"property_value"`
-		UUID           valueTypes.String  `json:"uuid"`
+		PropertyDefVal valueTypes.String  `json:"property_def_val"`
 	} `json:"devicePropertyValueList" PointId:"device_property_value_list" PointArrayFlatten:"false" DataTable:"true"`
 
 	ArmVersion              interface{}        `json:"arm_version"`

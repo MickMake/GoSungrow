@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 	datatable "go.pennock.tech/tabular/auto"
+	"os"
 	"sort"
 	"strings"
 	"time"
@@ -17,6 +18,7 @@ import (
 
 type DataMap struct {
 	Map        map[string]*DataEntries
+	List       output.Table
 	Table      output.Table
 	DataTables output.Tables
 	// Order      []string
@@ -71,7 +73,12 @@ func (dm *DataMap) StructToDataMap(endpoint EndPoint, parentDeviceId string, nam
 			dm.AddPointUnitValues(Child, pdi, when)
 		}
 
-		dm.Error = dm.CreateResultTable(endpoint, sm)
+		dm.List, dm.Error = dm.CreateResultTable(endpoint, sm, true)
+		if dm.Error != nil {
+			break
+		}
+
+		dm.Table, dm.Error = dm.CreateResultTable(endpoint, sm, false)
 		if dm.Error != nil {
 			break
 		}
@@ -142,9 +149,10 @@ func (dm *DataMap) CreateDataTables(sm GoStruct.StructMap) error {
 	return dm.Error
 }
 
-func (dm *DataMap) CreateResultTable(endpoint EndPoint, sm GoStruct.StructMap) error {
+func (dm *DataMap) CreateResultTable(endpoint EndPoint, sm GoStruct.StructMap, full bool) (output.Table, error) {
+	var ret output.Table
 	for range Only.Once {
-		dm.Table = output.NewTable(
+		ret = output.NewTable(
 			"Date",
 			"Point Id",
 			"Value",
@@ -159,25 +167,31 @@ func (dm *DataMap) CreateResultTable(endpoint EndPoint, sm GoStruct.StructMap) e
 		for _, p := range dm.Sort() {
 			entries := dm.Map[p].Entries
 			for _, de := range entries {
-				if de.Hide {
-					continue
+				if full {
+					if de.Current.DataStructure.DataTable {
+						continue	// We already have the children.
+					}
+				} else {
+					if de.Hide {
+						continue	// Ignore hidden entries.
+					}
+					if de.Current.DataStructure.DataTableChild {
+						continue	// Ignore data table children.
+					}
+					// child, i := de.Current.IsTableChild()
+					// fmt.Printf("%t[%d]\n", child, i)
+					// if child {
+					// 	if !de.Current.IsTable() {
+					// 		continue
+					// 	}
+					// }
 				}
-				if de.Current.DataStructure.DataTableChild {
-					continue
-				}
-				// child, i := de.Current.IsTableChild()
-				// fmt.Printf("%t[%d]\n", child, i)
-				// if child {
-				// 	if !de.Current.IsTable() {
-				// 		continue
-				// 	}
-				// }
 
 				v := de.Value.String()
 				if de.Current.IsTable() {
 					v = "See table: " + de.Current.Name()
 				}
-				dm.Error = dm.Table.AddRow(
+				dm.Error = ret.AddRow(
 					de.Date.Format(valueTypes.DateTimeLayout),
 					p,
 					v,
@@ -191,29 +205,6 @@ func (dm *DataMap) CreateResultTable(endpoint EndPoint, sm GoStruct.StructMap) e
 				if dm.Error != nil {
 					break
 				}
-
-				// values := de.Current.ValuesRange()
-				// for _, key := range de.Current.Value.KeysSorted() {
-				// 	value := values[key]
-				// 	v := value.String()
-				// 	if de.Current.IsTable() {
-				// 		v = "See table: " + de.Current.Name()
-				// 	}
-				// 	dm.Error = dm.Table.AddRow(
-				// 		de.Date.Format(valueTypes.DateTimeLayout),
-				// 		p,
-				// 		v,
-				// 		// de.Value.String(),
-				// 		de.Point.Unit,
-				// 		de.Point.ValueType,
-				// 		de.Point.GroupName,
-				// 		de.Point.Description,
-				// 		de.Point.UpdateFreq,
-				// 	)
-				// 	if dm.Error != nil {
-				// 		break
-				// 	}
-				// }
 			}
 		}
 
@@ -221,17 +212,19 @@ func (dm *DataMap) CreateResultTable(endpoint EndPoint, sm GoStruct.StructMap) e
 		// title = sm.Name.String()
 		// title = valueTypes.PointToName(sm.Start.DataStructure.DataTableId)
 
-		// dm.Table.SetTitle("EndPoint Data: %s.%s", endpoint.GetArea(), endpoint.GetName())
-		dm.Table.SetTitle("EndPoint Data %s - %s", sm.Name.String(), title)
-		// dm.Table.SetFilePrefix("%s_%s", endpoint.GetArea(), endpoint.GetName())
-		dm.Table.SetFilePrefix(sm.Name.String())
-		dm.Table.SetGraphFilter("")
-		dm.Table.Sort("Point Id")
-		dm.Table.SetJson([]byte(endpoint.GetJsonData(false)))
-		dm.Table.SetRaw([]byte(endpoint.GetJsonData(true)))
+		// ret.SetTitle("EndPoint Data: %s.%s", endpoint.GetArea(), endpoint.GetName())
+		ret.SetTitle("EndPoint Data %s - %s", sm.Name.String(), title)
+		// ret.SetFilePrefix("%s_%s", endpoint.GetArea(), endpoint.GetName())
+		ret.SetFilePrefix(sm.Name.String())
+		ret.SetGraphFilter("")
+		ret.Sort("Point Id")
+		if full {
+			ret.SetJson([]byte(endpoint.GetJsonData(false)))
+			ret.SetRaw([]byte(endpoint.GetJsonData(true)))
+		}
 	}
 
-	return dm.Error
+	return ret, dm.Error
 }
 
 func (dm *DataMap) AddPointUnitValues(Current *GoStruct.Reflect, parentDeviceId string, date valueTypes.DateTime) {
@@ -256,7 +249,8 @@ func (dm *DataMap) AddPointUnitValues(Current *GoStruct.Reflect, parentDeviceId 
 		point.SetName(Current.DataStructure.PointName)
 
 		if Current.Value.Unit() != point.Unit {
-			fmt.Printf("OOOPS: Unit mismatch - %s != %f %s\n", point.Unit, Current.Value.First().ValueFloat(), Current.Value.Unit())
+			_, _ = fmt.Fprintf(os.Stderr,"OOOPS FP['%s'] - Point/Value unit mismatch - Point:%s != Value:%s (%f)\n",
+				Current.FieldPath.String(), point.Unit, Current.Value.Unit(), Current.Value.First().ValueFloat())
 			point.Unit = Current.Value.Unit()
 		}
 
@@ -268,7 +262,7 @@ func (dm *DataMap) AddPointUnitValues(Current *GoStruct.Reflect, parentDeviceId 
 		}
 
 		if Current.Value.Length() == 0 {
-			fmt.Printf("OOOPS - UVS is nil for %s\n", Current.PointId())
+			_, _ = fmt.Fprintf(os.Stderr,"OOOPS FP['%s'] - UVS is nil\n", Current.FieldPath.String())
 			break
 		}
 
