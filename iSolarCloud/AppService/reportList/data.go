@@ -27,9 +27,9 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	Info      Common.ReportInfo `json:"info" PointArrayFlatten:"false"`
-	DataList  []DataList  `json:"dataList" PointId:"data_list" DataTable:"true" PointIgnoreChildIfFromNil:"UpdateTime" PointIdFromChild:"UpdateTime" PointNameDateFormat:"20060102" PointIdReplace:"false"`
+	DataList  []DataList  `json:"dataList" PointId:"data_list" DataTable:"true" PointIgnoreIfChildFromNil:"UpdateTime" PointIdFromChild:"UpdateTime" PointNameDateFormat:"20060102" PointIdReplace:"false"`
 	MinDateId interface{} `json:"min_date_id"`
-	Total     []DataList  `json:"total" PointId:"total" DataTable:"true" PointIgnoreChildIfFromNil:"UpdateTime" PointIdFromChild:"UpdateTime" PointNameDateFormat:"20060102" PointIdReplace:"false" PointArrayFlatten:"false"`
+	Total     []DataList  `json:"total" PointId:"total" DataTable:"true" PointIgnoreIfChildFromNil:"UpdateTime" PointIdFromChild:"UpdateTime" PointNameDateFormat:"20060102" PointIdReplace:"false" PointArrayFlatten:"false"`
 }
 
 type DataList struct {

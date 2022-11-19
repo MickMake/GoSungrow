@@ -7,6 +7,7 @@ import (
 	"github.com/MickMake/GoUnify/Only"
 	"os"
 	"reflect"
+	"sort"
 	"strings"
 	"time"
 )
@@ -144,6 +145,8 @@ func (sm *StructMap) ScanMap(Parent *Reflect, Current *Reflect) bool {
 			break
 		}
 
+		ok = Current.IsKnown()
+
 		ok = true
 		for index, key := range Current.FieldVo.MapKeys() {
 			var Child Reflect
@@ -261,8 +264,13 @@ func (sm *StructMap) Process(Child *Reflect) bool {
 			sm.Start = Child
 			sm.StructMapOptions.StartAt = ""
 			sm.PrintDebug("DEBUG: sm.Start.EndPointPath(): %s\n", sm.Start.EndPointPath())
+			if Child.Kind == reflect.Array || Child.Kind == reflect.Slice {
+				Child.SetGoStructOptions(2)
+				Child.DataStructure.UpdateTags(Child.CurrentReflect, Child)
+			}
 			// @TODO - FIX THIS UP - need to check if the point_id is not this...
 			if sm.Start.EndPointPath().Last() == "result_data" {
+				// if sm.Start.FieldPath.Last() == sm.StructMapOptions.StartAt {
 				sm.Start.EndPointPath().PopLast() // Remove "ResultData" from end.
 				sm.PrintDebug("DEBUG: sm.Start.EndPointPath().PopLast(): %s\n", sm.Start.EndPointPath())
 			}
@@ -271,6 +279,14 @@ func (sm *StructMap) Process(Child *Reflect) bool {
 			sm.StructMapOptions.Name = sm.Start.EndPointPath().Copy()
 			sm.PrintDebug("DEBUG: sm.StructMapOptions.Name2: %s\n", sm.StructMapOptions.Name)
 			break
+		}
+
+		if Child.DataStructure.PointTimestamp.IsZero() {
+			if sm._Timestamp.IsZero() {
+				Child.DataStructure.PointTimestamp = time.Now()
+			} else {
+				Child.DataStructure.PointTimestamp = sm.TimeStamp
+			}
 		}
 
 		if sm.Start == nil {
@@ -345,6 +361,10 @@ func (sm *StructMap) Add(Current *Reflect)  {
 			sm.Map = make(map[string]*Reflect)
 		}
 		name := Current.EndPointPath().String()
+		if _, ok := sm.Map[name]; ok {
+			sm.PrintDebug("\t- Add() Current: %s\n", Current)
+			break
+		}
 		sm.Map[name] = Current
 		sm.PrintDebug("\t- Add() Current: %s\n", Current)
 	}
@@ -365,6 +385,10 @@ func (sm *StructMap) AddTable(Current *Reflect)  {
 			sm.TableMap = make(map[string]*Reflect)
 		}
 		name := Current.Name()
+		if _, ok := sm.TableMap[name]; ok {
+			sm.PrintDebug("\t- Add() Current: %s\n", Current)
+			break
+		}
 		sm.TableMap[name] = Current
 		sm.PrintDebug("\t- Add() Current: %s\n", Current)
 	}
@@ -373,7 +397,7 @@ func (sm *StructMap) AddTable(Current *Reflect)  {
 func (sm *StructMap) IsNil(Current *Reflect) bool {
 	var yes bool
 	for range Only.Once {
-		yes = Current.PointIgnoreChildIfFromNil()	// true - Current is nil.
+		yes = Current.PointIgnoreIfChildFromNil()	// true - Current is nil.
 
 		if sm.AddNil {
 			sm.Add(Current)
@@ -477,13 +501,14 @@ func (sm *StructMap) IsTable(Current *Reflect) bool {
 			// We want to flatten a slice down to EG "[1, 2, 3]"
 			uv := valueTypes.AnyToValueString(Current.InterfaceValue, 0, Current.DataStructure.PointNameDateFormat)
 			// uv = Current.AsJson()
-			Current.Value.Set(valueTypes.SetUnitValueString(uv, Current.DataStructure.PointUnit, Current.DataStructure.PointValueType))
+			Current.Value.Set(uv, "", Current.DataStructure.PointUnit, Current.DataStructure.PointValueType)
 			sm.Add(Current)
 			break
 		}
 
 		// Check for a table child.
-		ok, iterate := Current.IsTableChild()
+		// ok, iterate := Current.IsTableChild()
+		ok, _ := Current.IsTableChild()
 		if !ok {
 			break
 		}
@@ -507,44 +532,47 @@ func (sm *StructMap) IsTable(Current *Reflect) bool {
 
 		// We want to flatten a slice down to EG "[1, 2, 3]"
 		yes = Current.IsKnown()
+		sm.Add(Current)
+
 		// First order types get flattened.
-		switch Current.Kind {
-			case reflect.Struct:
-				if yes {
-					break
-				}
-				if iterate == 1 {
-					sm.Add(Current)
-					break
-				}
-
-			case reflect.Array:
-				fallthrough
-			case reflect.Slice:
-				if yes {
-					break
-				}
-				if iterate == 1 {
-					if Current.Length <= 1 {
-						uv := valueTypes.AnyToValueString(Current.InterfaceValue, 0, Current.DataStructure.PointNameDateFormat)
-						Current.Value.Set(valueTypes.SetUnitValueString(uv, Current.DataStructure.PointUnit, Current.DataStructure.PointValueType))
-					}
-					sm.Add(Current)
-					break
-				}
-
-			case reflect.Map:
-				if yes {
-					break
-				}
-				if iterate == 1 {
-					if Current.Length <= 1 {
-						uv := valueTypes.AnyToValueString(Current.InterfaceValue, 0, Current.DataStructure.PointNameDateFormat)
-						Current.Value.Set(valueTypes.SetUnitValueString(uv, Current.DataStructure.PointUnit, Current.DataStructure.PointValueType)) }
-					sm.Add(Current)
-					break
-				}
-		}
+		// switch Current.Kind {
+		// 	case reflect.Struct:
+		// 		if yes {
+		// 			break
+		// 		}
+		// 		if iterate == 1 {
+		// 			sm.Add(Current)
+		// 			break
+		// 		}
+		//
+		// 	case reflect.Array:
+		// 		fallthrough
+		// 	case reflect.Slice:
+		// 		if yes {
+		// 			break
+		// 		}
+		// 		if iterate == 1 {
+		// 			if Current.Length <= 1 {
+		// 				uv := valueTypes.AnyToValueString(Current.InterfaceValue, 0, Current.DataStructure.PointNameDateFormat)
+		// 				Current.Value.AddString(uv, "", Current.DataStructure.PointUnit, Current.DataStructure.PointValueType)
+		// 			}
+		// 			sm.Add(Current)
+		// 			break
+		// 		}
+		//
+		// 	case reflect.Map:
+		// 		if yes {
+		// 			break
+		// 		}
+		// 		if iterate == 1 {
+		// 			if Current.Length <= 1 {
+		// 				uv := valueTypes.AnyToValueString(Current.InterfaceValue, 0, Current.DataStructure.PointNameDateFormat)
+		// 				Current.Value.AddString(uv, "", Current.DataStructure.PointUnit, Current.DataStructure.PointValueType)
+		// 			}
+		// 			sm.Add(Current)
+		// 			break
+		// 		}
+		// }
 	}
 	return yes
 }
@@ -600,7 +628,7 @@ func (sm *StructMap) IsPointArrayFlatten(Current *Reflect) bool {
 		// Current.InterfaceValue, Current.DataStructure.PointUnit,
 		// Current.DataStructure.PointValueType, Current.DataStructure.PointNameDateFormat)
 		uv := valueTypes.AnyToValueString(Current.InterfaceValue, 0, Current.DataStructure.PointNameDateFormat)
-		Current.Value.Set(valueTypes.SetUnitValueString(uv, Current.DataStructure.PointUnit, Current.DataStructure.PointValueType))
+		Current.Value.AddString(uv, "", Current.DataStructure.PointUnit, Current.DataStructure.PointValueType)
 		sm.Add(Current)
 	}
 	return yes
@@ -747,7 +775,7 @@ func (sm *StructMap) GetTableData(name string) StructTable {
 
 		if !ret.Current.DataStructure.DataTablePivot {
 			ret.Reflects = refs
-			ret.AddHeader(ret.Reflects[0]...)
+			// ret.AddHeader(ret.Reflects[0]...)
 			break
 		}
 
@@ -761,7 +789,7 @@ func (sm *StructMap) GetTableData(name string) StructTable {
 				ret.Reflects = ret.Reflects.AddRow(refRow...)
 			}
 		}
-		ret.AddHeader(ret.Reflects[0]...)
+		// ret.AddHeader(ret.Reflects[0]...)
 	}
 
 	return ret
@@ -770,92 +798,91 @@ func (sm *StructMap) GetTableData(name string) StructTable {
 func (sm *StructMap) GetResultTableData() StructTable {
 	var ret StructTable
 
-	for range Only.Once {
-		fmt.Printf("NOT IMPLEMENTED YET.\n")
-		break
-		var sorted []string
-		// @TODO - Add in other column sorting options here.
-		for name := range sm.Map {
-			sorted = append(sorted, name)
-		}
-
-		ret.Name = "Results"
-		ret.IsValid = true
-
-		for _, name := range sorted {
-			Current := sm.Map[name]
-
-			rows, cols := Current.CountChildren()
-			// fmt.Printf("GetTableData(%s) - path:%s type:%s rows:%d cols:%d\n", name, ret.Current.FieldPath, ret.Current.Kind, rows, cols)
-			sm.PrintDebug("GetResultTableData(%s) - path:%s type:%s rows:%d cols:%d\n", name, Current.FieldPath, Current.Kind, rows, cols)
-			if Current.IsPointIgnore() {
-				break
-			}
-
-			// if len(refs) > 0 {
-			// 	ret.AddRow(refs...)
-			// }
-
-			// for row, Child := range Current.ChildReflect {
-			// 	fmt.Printf("[%s]%s - Known:%t Current:%d / Child:%d\n", Child.FieldPath, ret.Current.Kind,
-			// 		Child.IsKnown(),
-			// 		len(ret.Current.ChildReflect),
-			// 		len(Child.ChildReflect))
-			// 	if sm.Debug {
-			// 		_, _ = fmt.Fprintf(os.Stderr, "GetResultTableData() row[%d]: %s\n", row, Child)
-			// 	}
-			// 	if Child.IsPointIgnore() {
-			// 		continue
-			// 	}
-			//
-			// 	var refs []*Reflect
-			//
-			// 	for col, ChildStruct := range Child.ChildReflect {
-			// 		// fmt.Printf("[%s]%s - Known:%t Current:%d / Child:%d / ChildStruct:%d\n", ChildStruct.FieldPath, ret.Current.Kind,
-			// 		// 	ChildStruct.IsKnown(),
-			// 		// 	len(ret.Current.ChildReflect),
-			// 		// 	len(Child.ChildReflect),
-			// 		// 	len(ChildStruct.ChildReflect))
-			// 		if sm.Debug {
-			// 			_, _ = fmt.Fprintf(os.Stderr, "GetResultTableData() cell[%d][%d]: %s\n", row, col, Child)
-			// 		}
-			// 		if ChildStruct.IsPointIgnore() {
-			// 			continue
-			// 		}
-			//
-			// 		// Make sure we have a valid sort column name.
-			// 		if Current.DataStructure.DataTableSortOn != "" {
-			// 			if Current.DataStructure.DataTableSortOn == ChildStruct.FieldName {
-			// 				ret.SortOn = ChildStruct.DataStructure.PointName
-			// 			}
-			// 		}
-			//
-			// 		if ChildStruct.IsKnown() {
-			// 			refs = append(refs, ChildStruct)
-			// 			continue
-			// 		}
-			// 		refs = append(refs, ChildStruct)
-			// 	}
-			//
-			// 	if len(refs) > 0 {
-			// 		ret.AddRow(refs...)
-			// 	}
-		}
-	}
+	fmt.Printf("NOT IMPLEMENTED YET.\n")
+	// for range Only.Once {
+	// 	var sorted []string
+	// 	// @TODO - Add in other column sorting options here.
+	// 	for name := range sm.Map {
+	// 		sorted = append(sorted, name)
+	// 	}
+	//
+	// 	ret.Name = "Results"
+	// 	ret.IsValid = true
+	//
+	// 	for _, name := range sorted {
+	// 		Current := sm.Map[name]
+	//
+	// 		rows, cols := Current.CountChildren()
+	// 		// fmt.Printf("GetTableData(%s) - path:%s type:%s rows:%d cols:%d\n", name, ret.Current.FieldPath, ret.Current.Kind, rows, cols)
+	// 		sm.PrintDebug("GetResultTableData(%s) - path:%s type:%s rows:%d cols:%d\n", name, Current.FieldPath, Current.Kind, rows, cols)
+	// 		if Current.IsPointIgnore() {
+	// 			break
+	// 		}
+	//
+	// 		// if len(refs) > 0 {
+	// 		// 	ret.AddRow(refs...)
+	// 		// }
+	//
+	// 		// for row, Child := range Current.ChildReflect {
+	// 		// 	fmt.Printf("[%s]%s - Known:%t Current:%d / Child:%d\n", Child.FieldPath, ret.Current.Kind,
+	// 		// 		Child.IsKnown(),
+	// 		// 		len(ret.Current.ChildReflect),
+	// 		// 		len(Child.ChildReflect))
+	// 		// 	if sm.Debug {
+	// 		// 		_, _ = fmt.Fprintf(os.Stderr, "GetResultTableData() row[%d]: %s\n", row, Child)
+	// 		// 	}
+	// 		// 	if Child.IsPointIgnore() {
+	// 		// 		continue
+	// 		// 	}
+	// 		//
+	// 		// 	var refs []*Reflect
+	// 		//
+	// 		// 	for col, ChildStruct := range Child.ChildReflect {
+	// 		// 		// fmt.Printf("[%s]%s - Known:%t Current:%d / Child:%d / ChildStruct:%d\n", ChildStruct.FieldPath, ret.Current.Kind,
+	// 		// 		// 	ChildStruct.IsKnown(),
+	// 		// 		// 	len(ret.Current.ChildReflect),
+	// 		// 		// 	len(Child.ChildReflect),
+	// 		// 		// 	len(ChildStruct.ChildReflect))
+	// 		// 		if sm.Debug {
+	// 		// 			_, _ = fmt.Fprintf(os.Stderr, "GetResultTableData() cell[%d][%d]: %s\n", row, col, Child)
+	// 		// 		}
+	// 		// 		if ChildStruct.IsPointIgnore() {
+	// 		// 			continue
+	// 		// 		}
+	// 		//
+	// 		// 		// Make sure we have a valid sort column name.
+	// 		// 		if Current.DataStructure.DataTableSortOn != "" {
+	// 		// 			if Current.DataStructure.DataTableSortOn == ChildStruct.FieldName {
+	// 		// 				ret.SortOn = ChildStruct.DataStructure.PointName
+	// 		// 			}
+	// 		// 		}
+	// 		//
+	// 		// 		if ChildStruct.IsKnown() {
+	// 		// 			refs = append(refs, ChildStruct)
+	// 		// 			continue
+	// 		// 		}
+	// 		// 		refs = append(refs, ChildStruct)
+	// 		// 	}
+	// 		//
+	// 		// 	if len(refs) > 0 {
+	// 		// 		ret.AddRow(refs...)
+	// 		// 	}
+	// 	}
+	// }
 
 	return ret
 }
 
 
 type StructTable struct {
-	Name      string
-	Current   *Reflect
-	Headers   []string
-	Reflects  ReflectArray
-	SortOn    string
-	ShowIndex bool
+	Name       string
+	Current    *Reflect
+	Reflects   ReflectArray
+	SortOn     string
+	ShowIndex  bool
 	IndexTitle string
-	IsValid   bool
+	IsValid    bool
+	Columns    []string
 }
 
 
@@ -884,31 +911,25 @@ func (ta *ReflectArray) GetRow(row int) ReflectArrayRow {
 
 
 type StructTables []StructTable
-type StructValues [][]valueTypes.UnitValue
+type StructValues []StructValue
+type StructValue map[string]valueTypes.UnitValue
 
-func (ta *StructTable) AddHeader(headers ...*Reflect) {
+func (ta *StructValues) GetCell(row int, col string) string {
+	var ret string
 	for range Only.Once {
-		for index, header := range headers {
-			if header == nil {
-				name := fmt.Sprintf("Column %d", index)
-				ta.Headers = append(ta.Headers, name)
-				continue
-			}
-
-			name := valueTypes.PointToName(header.DataStructure.PointId)
-			switch header.Value.Unit() {	// header.DataStructure.PointUnit {
-				case "--":
-					//
-				case "":
-					//
-
-				default:
-					// name += " (" + header.DataStructure.PointUnit + ")"
-					name += " (" + header.Value.Unit() + ")"
-			}
-			ta.Headers = append(ta.Headers, name)
+		if row >= len(*ta) {
+			ret = "row > size"
+			break
 		}
+
+		if _, ok := (*ta)[row][col]; !ok {
+			ret = ""
+			break
+		}
+
+		ret = (*ta)[row][col].String()
 	}
+	return ret
 }
 
 func (ta *StructTable) AddRow(refs ...*Reflect) {
@@ -928,13 +949,67 @@ func (ta *StructTable) GetRow(row int) ReflectArrayRow {
 }
 
 func (ta *StructTable) GetHeaders() []string {
+	var ret []string
 
-	if ta.ShowIndex {
-		ret := []string{ta.IndexTitle}
-		ret = append(ret, ta.Headers...)
-		return ret
+	for range Only.Once {
+		if !ta.IsValid {
+			break
+		}
+
+		for colIndex := range ta.Columns {
+			header := ta.Reflects[0][colIndex]
+			if header == nil {
+				name := fmt.Sprintf("Column %d", colIndex)
+				ret = append(ret, name)
+				continue
+			}
+
+			if len(header.ChildReflect) > 0 {
+				for _, sub := range header.ChildReflect {
+					name := header.DataStructure.PointName + " " + sub.DataStructure.PointName
+					switch header.Value.Unit() {
+						case "--":
+						case "":
+						default:
+							name += " (" + sub.Value.Unit() + ")"
+					}
+					// ret = append(ret, sub.Value.KeysSorted()...)
+					ret = append(ret, name)
+				}
+				continue
+			}
+
+			if header.IsKnown() {
+				name := header.DataStructure.PointName
+				unit := header.Value.Unit()
+				for _, n := range header.Value.KeysSorted() {
+					if unit == "" {
+						ret = append(ret, name + " " + n)
+						continue
+					}
+					ret = append(ret, name + " " + n + " (" + unit + ")")
+				}
+				continue
+			}
+
+			name := header.DataStructure.PointName
+			switch header.Value.Unit() {
+				case "--":
+				case "":
+				default:
+					name += " (" + header.Value.Unit() + ")"
+			}
+			ret = append(ret, name)
+		}
 	}
-	return ta.Headers
+	// if ta.ShowIndex {
+	// 	ret := []string{ta.IndexTitle}
+	// 	ret = append(ret, ta.Headers...)
+	// 	return ret
+	// }
+	// return ta.Headers
+
+	return ret
 }
 
 func (ta *StructTable) Get() ReflectArray {
@@ -949,9 +1024,18 @@ func (ta *StructTable) GetValues() StructValues {
 			break
 		}
 
+		colOrder := make(map[string]int)
+		var colOrderIndex int
+		var addCol = func(name string) {
+			if _, ok := colOrder[name]; !ok {
+				colOrder[name] = colOrderIndex
+				colOrderIndex++
+			}
+		}
+
 		for rowIndex := range ta.Reflects {
 			// fmt.Printf("ROW[%d] - size:%d\n", rowIndex, len(ta.Reflects[rowIndex]))
-			var data []valueTypes.UnitValue
+			data := make(StructValue)
 
 			// size := len(ta.Reflects[rowIndex])
 			// if size == 1 {
@@ -972,27 +1056,58 @@ func (ta *StructTable) GetValues() StructValues {
 
 			if ta.ShowIndex {
 				vi := valueTypes.SetUnitValueInteger(int64(rowIndex), ta.IndexTitle, "")
-				data = append(data, vi)
+				data[ta.IndexTitle] = vi
+				addCol(ta.IndexTitle)
 			}
 
 			for colIndex, col := range ta.Reflects[rowIndex] {
-				value := ta.Reflects[rowIndex][colIndex].Value
 
-				if col.IsUnknown() {
-					dateFormat := col.DataStructure.PointNameDateFormat
-					if dateFormat == "" {
-						dateFormat = valueTypes.DateTimeLayout
+
+
+				// It's important that the values are sorted by table header.
+				// This is so that the headers match with data.
+				if len(col.ChildReflect) > 0 {
+					// Handles
+					for _, sub := range col.ChildReflect {
+						// data = append(data, sub.Value.Range(valueTypes.SortOrder)...)
+						for _, val := range sub.Value.Range(valueTypes.LoadOrder) {
+							name := val.ValueKey()
+							data[name] = val
+							addCol(name)
+						}
 					}
-					value, _, _ = valueTypes.AnyToUnitValue(col.Value, col.DataStructure.PointUnit,
-						col.DataStructure.PointValueType, dateFormat)
+					continue
 				}
 
-				for _, v := range value {
-					data = append(data, v)
+				if col.IsKnown() {
+					value := ta.Reflects[rowIndex][colIndex].Value
+					// data = append(data, value.Range(valueTypes.SortOrder)...)
+					for _, val := range value.Range(valueTypes.LoadOrder) {
+						name := val.ValueKey()
+						data[name] = val
+						addCol(name)
+					}
+					continue
+				}
+
+				dateFormat := col.DataStructure.PointNameDateFormat
+				if dateFormat == "" {
+					dateFormat = valueTypes.DateTimeLayout
+				}
+				value, _, _ := valueTypes.AnyToUnitValue(col.Value, "", col.DataStructure.PointUnit,
+					col.DataStructure.PointValueType, dateFormat)
+
+				// data = append(data, value.Range(valueTypes.SortOrder)...)
+				for _, val := range value.Range(valueTypes.LoadOrder) {
+					name := val.ValueKey()
+					data[name] = val
+					addCol(name)
 				}
 			}
 			ret = append(ret, data)
 		}
+
+		ta.Columns = sortMapByValues(colOrder)
 
 		// @TODO - Add sorting capability here.
 	}
@@ -1000,161 +1115,23 @@ func (ta *StructTable) GetValues() StructValues {
 	return ret
 }
 
+func sortMapByValues(data map[string]int) []string {
+	var ret []string
+	keys := make([]string, 0, len(data))
 
-// func (sm *StructMap) GetMergedTableData(name string) StructTable {
-// 	var ret StructTable
-//
-// 	for range Only.Once {
-// 		var ok bool
-// 		if ret.Current, ok = sm.TableMap[name]; !ok {
-// 			break
-// 		}
-//
-// 		ret.Name = ret.Current.Name()
-// 		ret.IsValid = true
-//
-// 		if ret.Current.Kind == reflect.Struct {
-// 			if sm.Debug {
-// 				_, _ = fmt.Fprintf(os.Stderr,"GetTableArray(%s) - STRUCT\n", name)
-// 			}
-//
-// 			if ret.Current.IsPointIgnore() {
-// 				continue
-// 			}
-//
-// 			fmt.Printf("[%s]STRUCT - Current:%d\n", ret.Current.FieldPath,
-// 				len(ret.Current.ChildReflect),
-// 			)
-//
-// 			var refs []*Reflect
-// 			for _, Child := range ret.Current.ChildReflect {
-// 				if Child.IsPointIgnore() {
-// 					continue
-// 				}
-//
-// 				if ret.Current.DataStructure.DataTableSortOn != "" {
-// 					// fmt.Printf("\tChildStruct> %s / %s\n", ChildStruct.FieldName, dt.Reflect.DataStructure.DataTableSortOn)
-// 					if ret.Current.DataStructure.DataTableSortOn == Child.FieldName {
-// 						ret.SortOn = Child.DataStructure.PointName
-// 						// dt.Reflect.DataStructure.DataTableSortOn = ""
-// 					}
-// 				}
-//
-// 				fmt.Printf("[%s]STRUCT - Known:%t Current:%d / Child:%d\n", Child.FieldPath,
-// 					Child.IsKnown(),
-// 					len(ret.Current.ChildReflect),
-// 					len(Child.ChildReflect),
-// 				)
-// 				if Child.IsKnown() {
-// 					refs = append(refs, Child)
-// 					continue
-// 				}
-//
-// 				refs = append(refs, Child)
-// 			}
-//
-// 			if len(refs) > 0 {
-// 				ret.AddRow(refs...)
-// 			}
-// 			break
-// 		}
-//
-// 		if ret.Current.Kind == reflect.Map {
-// 			if sm.Debug {
-// 				_, _ = fmt.Fprintf(os.Stderr,"GetTableArray(%s) - MAP\n", name)
-// 			}
-//
-// 			if ret.Current.IsPointIgnore() {
-// 				continue
-// 			}
-//
-// 			fmt.Printf("[%s]STRUCT - Current:%d\n", ret.Current.FieldPath,
-// 				len(ret.Current.ChildReflect),
-// 			)
-//
-// 			var refs []*Reflect
-// 			for _, Child := range ret.Current.ChildReflect {
-// 				if Child.IsPointIgnore() {
-// 					continue
-// 				}
-//
-// 				if ret.Current.DataStructure.DataTableSortOn != "" {
-// 					// fmt.Printf("\tChildStruct> %s / %s\n", ChildStruct.FieldName, dt.Reflect.DataStructure.DataTableSortOn)
-// 					if ret.Current.DataStructure.DataTableSortOn == Child.FieldName {
-// 						ret.SortOn = Child.DataStructure.PointName
-// 						// dt.Reflect.DataStructure.DataTableSortOn = ""
-// 					}
-// 				}
-//
-// 				fmt.Printf("[%s]STRUCT - Known:%t Current:%d / Child:%d\n", Child.FieldPath,
-// 					Child.IsKnown(),
-// 					len(ret.Current.ChildReflect),
-// 					len(Child.ChildReflect),
-// 				)
-// 				if Child.IsKnown() {
-// 					refs = append(refs, Child)
-// 					continue
-// 				}
-// 				refs = append(refs, Child)
-// 			}
-//
-// 			if len(refs) > 0 {
-// 				ret.AddRow(refs...)
-// 			}
-// 			break
-// 		}
-//
-// 		_, _ = fmt.Fprintf(os.Stderr,"GetTableArray(%s) - ARRAY\n", name)
-// 		for row, Child := range ret.Current.ChildReflect {
-// 			if sm.Debug {
-// 				_, _ = fmt.Fprintf(os.Stderr,"GetTableArray() Child[%d]: %s\n", row, Child)
-// 			}
-// 			if Child.IsPointIgnore() {
-// 				continue
-// 			}
-//
-// 			fmt.Printf("[%s]SLICE - Current:%d / Child:%d\n", Child.FieldPath,
-// 				len(ret.Current.ChildReflect),
-// 				len(Child.ChildReflect),
-// 			)
-//
-// 			var refs []*Reflect
-// 			for _, ChildStruct := range Child.ChildReflect {
-// 				if ChildStruct.IsPointIgnore() {
-// 					continue
-// 				}
-//
-// 				if ret.Current.DataStructure.DataTableSortOn != "" {
-// 					// fmt.Printf("\tChildStruct> %s / %s\n", ChildStruct.FieldName, dt.Reflect.DataStructure.DataTableSortOn)
-// 					if ret.Current.DataStructure.DataTableSortOn == ChildStruct.FieldName {
-// 						ret.SortOn = ChildStruct.DataStructure.PointName
-// 						// dt.Reflect.DataStructure.DataTableSortOn = ""
-// 					}
-// 				}
-//
-// 				fmt.Printf("[%s]STRUCT - Known:%t Current:%d / Child:%d / ChildStruct:%d\n", Child.FieldPath,
-// 					Child.IsKnown(),
-// 					len(ret.Current.ChildReflect),
-// 					len(Child.ChildReflect),
-// 					len(ChildStruct.ChildReflect),
-// 				)
-// 				if ChildStruct.IsKnown() {
-// 					refs = append(refs, ChildStruct)
-// 					continue
-// 				}
-//
-// 				refs = append(refs, ChildStruct)
-// 			}
-//
-// 			if len(refs) > 0 {
-// 				ret.AddRow(refs...)
-// 			}
-// 			break
-// 		}
-// 	}
-//
-// 	return ret
-// }
+	for key := range data {
+		keys = append(keys, key)
+	}
+	sort.SliceStable(keys, func(i, j int) bool{
+		return data[keys[i]] < data[keys[j]]
+	})
+
+	for _, k := range keys{
+		ret = append(ret, k)
+	}
+	return ret
+}
+
 
 // func (sm *StructMap) SaveGoStructOptions(Child *Reflect) bool {
 // 	var yes bool

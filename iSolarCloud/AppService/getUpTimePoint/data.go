@@ -24,15 +24,14 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
 	PointTimeRelation []struct {
-		Is24Hour  valueTypes.Bool `json:"is_24_hour"`
+		UpTimePointId valueTypes.Integer `json:"up_time_point_id"`
 		PointList []struct {
 			PointId  valueTypes.Integer `json:"point_id"`
 			TimeType valueTypes.Integer `json:"time_type"`
 		} `json:"point_list"`	// DataTable:"true" DataTablePivot:"true"`
-		UpTimePointId valueTypes.Integer `json:"up_time_point_id"`
+		Is24Hour  valueTypes.Bool `json:"is_24_hour"`
 	} `json:"point_time_relation" DataTable:"true"`
 }
 

@@ -26,7 +26,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		GoStruct                GoStruct.GoStruct   `json:"GoStruct" PointDeviceFrom:"PsKey"`
+		GoStruct                GoStruct.GoStruct   `json:"-" PointDeviceFrom:"PsKey"`
 
 		AttrId                  valueTypes.Integer  `json:"attr_id"`
 		ChannelId               valueTypes.Integer  `json:"chnnl_id" PointId:"channel_id"`

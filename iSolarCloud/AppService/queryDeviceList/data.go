@@ -145,7 +145,7 @@ type ResultData struct {
 // } `json:"dev_type_definition"`
 
 type PointStruct struct {
-	GoStruct               GoStruct.GoStruct   `json:"GoStruct" PointDeviceFromParent:"PsKey"`
+	GoStruct               GoStruct.GoStruct   `json:"-" PointDeviceFromParent:"PsKey"`
 
 	PointId                valueTypes.PointId  `json:"point_id" PointIgnore:"true" PointUpdateFreq:"UpdateFreqBoot"`
 	PointGroupName         valueTypes.String   `json:"point_group_name" PointIgnore:"true" PointUpdateFreq:"UpdateFreqBoot"`

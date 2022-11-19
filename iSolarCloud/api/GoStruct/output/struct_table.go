@@ -6,6 +6,7 @@ import (
 	"fmt"
 	tabular "github.com/agrison/go-tablib"
 	"os"
+	"sort"
 	"strings"
 )
 // "github.com/agrison/go-tablib"
@@ -59,6 +60,18 @@ func (t *Table) String() string {
 
 func (t *Table) GetHeaders() []string {
 	return t.table.Headers()
+}
+
+func (t *Table) GetSortedHeaders() []string {
+	var sorted []string
+
+	for range Only.Once {
+		for _, h := range t.table.Headers() {
+			sorted = append(sorted, h)
+		}
+		sort.Strings(sorted)
+	}
+	return sorted
 }
 
 func (t *Table) RowLength() int {

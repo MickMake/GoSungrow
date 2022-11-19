@@ -27,7 +27,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PointList []struct {
-		GoStructParent            GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"PointId" PointIdFromChild:"PointId" PointIdReplace:"false"`
+		GoStructParent      GoStruct.GoStructParent  `json:"-" PointIdFromChild:"PointId" PointIdReplace:"false"`
 
 		PointId             valueTypes.Integer `json:"point_id"`
 		PointName           valueTypes.String  `json:"point_name"`
@@ -36,14 +36,14 @@ type ResultData struct {
 		IsShow              valueTypes.Bool    `json:"is_show"`
 		IsSupportSecondData valueTypes.Bool    `json:"is_support_second_data"`
 		OrderNum            valueTypes.Integer `json:"order_num"`
-	} `json:"pointList" PointId:"point_list"`	// DataTable:"true" DataTableSortOn:"PointId" PointIdFromChild:"PointId" PointIdReplace:"false"`
+	} `json:"pointList" PointId:"point_list" DataTable:"true" DataTableSortOn:"PointId"`
 	ModelList []struct {
-		GoStruct        GoStruct.GoStructParent   `json:"GoStruct" DataTable:"true" DataTableSortOn:"DeviceModelId" PointIdFromChild:"DeviceModelId" PointIdReplace:"false"`
+		GoStruct        GoStruct.GoStructParent   `json:"GoStruct" PointIdFromChild:"DeviceModelId" PointIdReplace:"false"`
 
 		DeviceModelId   valueTypes.Integer `json:"device_model_id"`
 		DeviceModel     valueTypes.String  `json:"device_model"`
 		DeviceModelCode valueTypes.String  `json:"device_model_code"`
-	} `json:"modelList" PointId:"model_list"`	// DataTable:"true" DataTableSortOn:"DeviceModelId" PointIdFromChild:"DeviceModelId" PointIdReplace:"false"`
+	} `json:"modelList" PointId:"model_list" DataTable:"true" DataTableSortOn:"DeviceModelId"`
 }
 
 func (e *ResultData) IsValid() error {

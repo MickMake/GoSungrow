@@ -96,12 +96,13 @@ func (dm *DataMap) CreateDataTables(sm GoStruct.StructMap) error {
 				continue
 			}
 
-			table := output.NewTable(td.GetHeaders()...)
 			values := td.GetValues()
+			headers := td.GetHeaders()
+			table := output.NewTable(headers...)
 			for row := range values {
 				var items []interface{}
-				for col := range values[row] {
-					items = append(items, values[row][col].String())
+				for _, col := range td.Columns {
+					items = append(items, values.GetCell(row, col))
 				}
 				dm.Error = table.AddRow(items...)
 				if dm.Error != nil {
@@ -161,27 +162,58 @@ func (dm *DataMap) CreateResultTable(endpoint EndPoint, sm GoStruct.StructMap) e
 				if de.Hide {
 					continue
 				}
-
-				for _, value := range de.Current.Value {
-					v := value.String()
-					if de.Current.IsTable() {
-						v = "See table: " + de.Current.Name()
-					}
-					dm.Error = dm.Table.AddRow(
-						de.Date.Format(valueTypes.DateTimeLayout),
-						p,
-						v,
-						// de.Value.String(),
-						de.Point.Unit,
-						de.Point.ValueType,
-						de.Point.GroupName,
-						de.Point.Description,
-						de.Point.UpdateFreq,
-					)
-					if dm.Error != nil {
-						break
-					}
+				if de.Current.DataStructure.DataTableChild {
+					continue
 				}
+				// child, i := de.Current.IsTableChild()
+				// fmt.Printf("%t[%d]\n", child, i)
+				// if child {
+				// 	if !de.Current.IsTable() {
+				// 		continue
+				// 	}
+				// }
+
+				v := de.Value.String()
+				if de.Current.IsTable() {
+					v = "See table: " + de.Current.Name()
+				}
+				dm.Error = dm.Table.AddRow(
+					de.Date.Format(valueTypes.DateTimeLayout),
+					p,
+					v,
+					// de.Value.String(),
+					de.Point.Unit,
+					de.Point.ValueType,
+					de.Point.GroupName,
+					de.Point.Description,
+					de.Point.UpdateFreq,
+				)
+				if dm.Error != nil {
+					break
+				}
+
+				// values := de.Current.ValuesRange()
+				// for _, key := range de.Current.Value.KeysSorted() {
+				// 	value := values[key]
+				// 	v := value.String()
+				// 	if de.Current.IsTable() {
+				// 		v = "See table: " + de.Current.Name()
+				// 	}
+				// 	dm.Error = dm.Table.AddRow(
+				// 		de.Date.Format(valueTypes.DateTimeLayout),
+				// 		p,
+				// 		v,
+				// 		// de.Value.String(),
+				// 		de.Point.Unit,
+				// 		de.Point.ValueType,
+				// 		de.Point.GroupName,
+				// 		de.Point.Description,
+				// 		de.Point.UpdateFreq,
+				// 	)
+				// 	if dm.Error != nil {
+				// 		break
+				// 	}
+				// }
 			}
 		}
 
@@ -224,17 +256,14 @@ func (dm *DataMap) AddPointUnitValues(Current *GoStruct.Reflect, parentDeviceId 
 		point.SetName(Current.DataStructure.PointName)
 
 		if Current.Value.Unit() != point.Unit {
-			fmt.Printf("OOOPS: Unit mismatch - %s %s != %f %s\n",
-				Current.Value.First().String(), point.Unit, Current.Value.First().ValueFloat(), Current.Value.Unit())
+			fmt.Printf("OOOPS: Unit mismatch - %s != %f %s\n", point.Unit, Current.Value.First().ValueFloat(), Current.Value.Unit())
 			point.Unit = Current.Value.Unit()
 		}
 
 		// Add arrays as multiple entries.
 		if Current.Value.Length() > 1 {
 			entries := CreatePointDataEntries(Current, parentDeviceId, point, date)
-			for _, de := range entries.Entries {
-				dm.Add(de)
-			}
+			dm.Add(entries.Entries...)
 			break
 		}
 
@@ -335,25 +364,27 @@ func (dm *DataMap) AppendMap(add DataMap) {
 	}
 }
 
-func (dm *DataMap) Add(de DataEntry) {
+func (dm *DataMap) Add(des ...DataEntry) {
 	for range Only.Once {
-		// fmt.Printf("DEBUG DataMap.Add() %s - Value(%s):'%s' Parent:'%s'\n", de.FullId(), de.Point.ValueType, de.Value, de.Parent)
-		endpoint := de.FullId()
-		// de.Index = len(dm.Order)
+		for _, de := range des {
+			// fmt.Printf("DEBUG DataMap.Add() %s - Value(%s):'%s' Parent:'%s'\n", de.FullId(), de.Point.ValueType, de.Value, de.Parent)
+			endpoint := de.FullId()
+			// de.Index = len(dm.Order)
 
-		if dm.Map[endpoint] == nil {
-			dm.Map[endpoint] = &DataEntries{ Entries: []DataEntry{} }
-		}
-		entries := dm.Map[endpoint]
-		if entries.Add(de) == nil {
-			break
-		}
-		// dm.Order = append(dm.Order, endpoint)
+			if dm.Map[endpoint] == nil {
+				dm.Map[endpoint] = &DataEntries{Entries: []DataEntry{}}
+			}
+			entries := dm.Map[endpoint]
+			if entries.Add(de) == nil {
+				continue
+			}
+			// dm.Order = append(dm.Order, endpoint)
 
-		if Points.Exists(endpoint) {
-			fmt.Printf("EXISTS: %s\n", endpoint)
+			if Points.Exists(endpoint) {
+				fmt.Printf("EXISTS: %s\n", endpoint)
+			}
+			Points.Add(*de.Point)
 		}
-		Points.Add(*de.Point)
 	}
 }
 
@@ -527,18 +558,21 @@ func CreatePointDataEntries(Current *GoStruct.Reflect, parentDeviceId string, po
 			break
 		}
 
-		res := valueTypes.SizeOfArrayLength(Current.Value.Length())
-		for i, uv := range Current.Value {
+		// res := valueTypes.SizeOfArrayLength(Current.Value.Length())
+		// res := Current.Value.Length()
+		sorted := Current.Value.Range(valueTypes.SortOrder)
+		res := len(sorted)
+		for i, uv := range sorted {
 			epn := JoinWithDots(res, valueTypes.DateTimeLayoutDay, Current.EndPointPath().String(), i)
-			ret.Entries = append(ret.Entries, DataEntry {
-				Current:    Current,
-				EndPoint:   epn,	// Current.EndPointPath().String(),
-				Point:      &point,
-				Parent:     NewParentDevice(parentDeviceId),
-				Date:       dateTime,
-				Value:      uv,
-				Valid:      true,
-				Hide:       false,
+			ret.Entries = append(ret.Entries, DataEntry{
+				Current:  Current,
+				EndPoint: epn, // Current.EndPointPath().String(),
+				Point:    &point,
+				Parent:   NewParentDevice(parentDeviceId),
+				Date:     dateTime,
+				Value:    uv,
+				Valid:    true,
+				Hide:     false,
 				// Index:      0,
 			})
 		}

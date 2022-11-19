@@ -1,3 +1,4 @@
+// Package GoStruct - A framework for type agnostic and recursive data.
 package GoStruct
 
 // These are tags that can be added to a Go structure that GoStruct uses to process the structure.
@@ -57,8 +58,8 @@ const (
 	PointIgnore = "PointIgnore"
 	// PointIgnoreIfNil -  Ignore this point if a child is nil or empty.
 	PointIgnoreIfNil = "PointIgnoreIfNil"
-	// PointIgnoreChildIfFromNil -  Ignore this point if a child is nil or empty.
-	PointIgnoreChildIfFromNil = "PointIgnoreChildIfFromNil"
+	// PointIgnoreIfChildFromNil -  Ignore this point if a child is nil or empty.
+	PointIgnoreIfChildFromNil = "PointIgnoreIfChildFromNil"
 	// PointIgnoreZero -  Ignore arrays with zero size, (default true).
 	PointIgnoreZero = "PointIgnoreZero"
 

@@ -292,15 +292,7 @@ func (t *UnitValue) ValueBool() bool {
 }
 
 func (t *UnitValue) ValueKey() string {
-	switch {
-		case t.key != "":
-			return t.key
-		case t.UnitValue != "":
-			return t.UnitValue
-		case t.TypeValue != "":
-			return t.TypeValue
-	}
-	return "nokey"
+	return t.key
 }
 
 func (t UnitValue) String() string {
@@ -580,7 +572,6 @@ func (u *UnitValueMap) Sort() []string {
 type UnitValues struct {
 	// array  []UnitValue	// We're just saving everything as a map.
 	values map[string]UnitValue
-	order  []*UnitValue
 
 	UnitValue   string `json:"unit"`
 	TypeValue   string `json:"type_value"`
@@ -589,8 +580,22 @@ type UnitValues struct {
 func (t UnitValues) String() string {
 	var ret string
 	for range Only.Once {
-		for k, v := range t.values {
-			ret += fmt.Sprintf("%s: %s\n", k, v.String())
+		if len(t.array) > 0 {
+			if len(t.array) == 1 {
+				ret = t.array[0].String()
+				break
+			}
+
+			for i, v := range t.array {
+				ret += fmt.Sprintf("%d: %s\n", i, v.String())
+			}
+			break
+		}
+
+		if len(t.values) > 0 {
+			for k, v := range t.values {
+				ret += fmt.Sprintf("%s: %s\n", k, v.String())
+			}
 		}
 	}
 	return ret
@@ -611,38 +616,47 @@ func (t UnitValues) firstKey() string {
 }
 
 func (t *UnitValues) Unit() string {
+	for _, v := range t.array {
+		return v.Unit()
+	}
 	for _, v := range t.values {
 		return v.Unit()
 	}
 	return ""
 }
 
-func (t *UnitValues) Map() map[string]UnitValue {
-	return t.values
+func (t *UnitValues) Range() map[string]UnitValue {
+	ret := make(map[string]UnitValue)
+
+	for i, v := range t.array {
+		key := strconv.Itoa(i)
+		if v.key != "" {
+			key = v.key
+		}
+		ret[key] = v
+	}
+
+	for key, v := range t.values {
+		if v.key != "" {
+			key = v.key
+		}
+		ret[key] = v
+	}
+
+	return ret
 }
 
-const SortOrder = false
-const LoadOrder = true
-func (t *UnitValues) Range(loadOrder bool) []UnitValue {
+func (t *UnitValues) RangeSorted() []UnitValue {
 	var ret []UnitValue
 
-	for range Only.Once {
-		var keys []string
-
-		if loadOrder {
-			for _, k := range t.order {
-				ret = append(ret, *k)
-			}
-			break
-		}
-
-		for k := range t.values {
-			keys = append(keys, k)
-		}
-		sort.Strings(keys)
-		for _, k := range keys {
-			ret = append(ret, t.values[k])
-		}
+	rm := t.Range()
+	var keys []string
+	for k := range rm {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	for _, k := range keys {
+		ret = append(ret, rm[k])
 	}
 
 	return ret
@@ -651,6 +665,14 @@ func (t *UnitValues) Range(loadOrder bool) []UnitValue {
 
 func (t *UnitValues) Keys() []string {
 	var ret []string
+
+	for i, v := range t.array {
+		key := strconv.Itoa(i)
+		if v.key != "" {
+			key = v.key
+		}
+		ret = append(ret, key)
+	}
 
 	for key, v := range t.values {
 		if v.key != "" {
@@ -668,163 +690,210 @@ func (t *UnitValues) KeysSorted() []string {
 	return ret
 }
 
+func (t *UnitValues) RangeArray() []UnitValue {
+	return t.array
+}
+
+func (t *UnitValues) RangeMap() map[string]UnitValue {
+	return t.values
+}
+
 func (t *UnitValues) Type() string {
+	for _, v := range t.array {
+		return v.Type()
+	}
 	for _, v := range t.values {
 		return v.Type()
 	}
 	return ""
 }
 
-// func (t *UnitValues) SetKey(key string) *UnitValues {
-// 	for i := range t.values {
-// 		t.values[i].SetKey(key)
-// 	}
-// 	return t
-// }
+func (t *UnitValues) SetKey(key string) *UnitValues {
+	for range Only.Once {
+		for i := range t.array {
+			t.array[i].SetKey(key)
+		}
+		for i := range t.values {
+			uv := t.values[i]
+			uv.SetKey(key)
+		}
+	}
+	return t
+}
 
 func (t *UnitValues) SetType(Type string) *UnitValues {
-	t.TypeValue = Type
-	for i := range t.values {
-		uv := t.values[i]
-		uv.SetType(Type)
+	for range Only.Once {
+		t.TypeValue = Type
+		for i := range t.array {
+			t.array[i].SetType(Type)
+		}
+		for i := range t.values {
+			uv := t.values[i]
+			uv.SetType(Type)
+		}
 	}
 	return t
 }
 
 func (t *UnitValues) SetUnit(unit string) *UnitValues {
-	t.UnitValue = unit
-	for i := range t.values {
-		uv := t.values[i]
-		uv.SetUnit(unit)
+	for range Only.Once {
+		t.UnitValue = unit
+		for i := range t.array {
+			t.array[i].SetUnit(unit)
+		}
+		for i := range t.values {
+			uv := t.values[i]
+			uv.SetUnit(unit)
+		}
 	}
 	return t
+}
+
+func (t *UnitValues) IsMap() bool {
+	if len(t.values) > 0 {
+		return true
+	}
+	return false
+}
+
+func (t *UnitValues) IsArray() bool {
+	if len(t.array) > 0 {
+		return true
+	}
+	return false
 }
 
 func (t *UnitValues) First() *UnitValue {
-	if len(t.order) == 0 {
-		return &UnitValue{}
+	ret := &UnitValue{}
+	for range Only.Once {
+		if t.IsArray() {
+			ret = &(t.array[0])
+			break
+		}
+		if t.IsMap() {
+			// key := t.firstKey()
+			// if key == "" {
+			// 	break
+			// }
+			// *ret, _ = t.mapmap[key]
+			for _, v := range t.values {
+				ret = &v
+				break
+			}
+		}
 	}
-
-	return t.order[0]
+	return ret
 }
 
 func (t *UnitValues) Last() *UnitValue {
-	if len(t.order) == 0 {
-		return &UnitValue{}
+	ret := &UnitValue{}
+	for range Only.Once {
+		if t.IsArray() {
+			ret = &(t.array)[len(t.array)-1]
+			break
+		}
+		if t.IsMap() {
+			for _, v := range t.values {
+				ret = &v
+			}
+		}
 	}
-
-	last := len(t.values) - 1
-	return t.order[last]
+	return ret
 }
 
-func (t *UnitValues) nextKey() string {
-	return strconv.Itoa(len(t.values))
-}
-
-// add - Simulate an array, but we're storing everything as a map.
-// Makes it easier to code, not having to deal with either array or map.
-func (t *UnitValues) add(value UnitValue) *UnitValues {
-	key := value.key
-	if key == "" {
-		key = t.nextKey()
-	}
-	t.order = append(t.order, &value)	// Keep track of the order.
-	if t.values == nil {
-		t.values = make(map[string]UnitValue)
-	}
-	t.values[key] = value
-	return t
-}
+// func (t *UnitValues) Set(uv UnitValue) *UnitValues {
+// 	*t = UnitValues{uv}
+// 	return t
+// }
 
 func (t *UnitValues) Append(uvs ...UnitValues) *UnitValues {
 	for _, uv := range uvs {
-		for key, v := range uv.values {
-			v.key = key
-			t.add(v)
-			// if key == "" {
-			// 	key = t.nextKey()
-			// }
-			// t.values[key] = v
+		t.array = append(t.array, uv.array...)
+	}
+	return t
+}
+
+func (t *UnitValues) MapAppend(uvs ...UnitValues) *UnitValues {
+	if t.values == nil {
+		t.values = make(map[string]UnitValue)
+	}
+	for _, uv := range uvs {
+		for k, v := range uv.values {
+			t.values[k] = v
+		}
+		for _, v := range uv.array {
+			t.values[v.key] = v
 		}
 	}
 	return t
 }
 
 func (t *UnitValues) AddUnitValue(value UnitValue) *UnitValues {
-	return t.add(value)
+	t.array = append(t.array, value)
+	return t
 }
 
-func (t *UnitValues) Set(value string, key string, unit string, Type string) *UnitValues {
-	uv := SetUnitValueString(value, unit, Type)
-	uv.SetKey(key)
-	t.values = make(map[string]UnitValue)
-	t.order = []*UnitValue{}
-	t.UnitValue = unit
-	t.TypeValue = Type
-	return t.add(uv)
+func (t *UnitValues) AddString(value string, unit string, Type string) *UnitValues {
+	t.array = append(t.array, SetUnitValueString(value, unit, Type))
+
+	return t
 }
 
-func (t *UnitValues) AddString(value string, key string, unit string, Type string) *UnitValues {
-	uv := SetUnitValueString(value, unit, Type)
-	uv.SetKey(key)
-	return t.add(uv)
+func (t *UnitValues) AddBool(value bool) *UnitValues {
+	t.array = append(t.array, SetUnitValueBool(value))
+	return t
 }
 
-func (t *UnitValues) AddBool(value bool, key string) *UnitValues {
-	uv := SetUnitValueBool(value)
-	uv.SetKey(key)
-	return t.add(uv)
+func (t *UnitValues) AddFloat(value float64, unit string, Type string) *UnitValues {
+	t.array = append(t.array, SetUnitValueFloat(value, unit, Type))
+	return t
 }
 
-func (t *UnitValues) AddFloat(value float64, key string, unit string, Type string) *UnitValues {
-	uv := SetUnitValueFloat(value, unit, Type)
-	uv.SetKey(key)
-	return t.add(uv)
-}
-
-func (t *UnitValues) AddInteger(value int64, key string, unit string, Type string) *UnitValues {
-	uv := SetUnitValueInteger(value, unit, Type)
-	uv.SetKey(key)
-	return t.add(uv)
+func (t *UnitValues) AddInteger(value int64, unit string, Type string) *UnitValues {
+	t.array = append(t.array, SetUnitValueInteger(value, unit, Type))
+	return t
 }
 
 
-func (t *UnitValues) AddStrings(value []string, key string, unit string, Type string) *UnitValues {
+func (t *UnitValues) AddStrings(value []string, unit string, Type string) *UnitValues {
 	for _, v := range value {
-		uv := SetUnitValueString(v, unit, Type)
-		uv.SetKey(key)
-		t.add(uv)
+		t.array = append(t.array, SetUnitValueString(v, unit, Type))
 	}
 	return t
 }
 
-func (t *UnitValues) AddBools(value []bool, key string) *UnitValues {
+func (t *UnitValues) AddBools(value []bool) *UnitValues {
 	for _, v := range value {
-		uv := SetUnitValueBool(v)
-		uv.SetKey(key)
-		t.add(uv)
+		t.array = append(t.array, SetUnitValueBool(v))
 	}
 	return t
 }
 
-func (t *UnitValues) AddFloats(value []float64, key string, unit string, Type string) *UnitValues {
+func (t *UnitValues) AddFloats(value []float64, unit string, Type string) *UnitValues {
 	for _, v := range value {
-		uv := SetUnitValueFloat(v, unit, Type)
-		uv.SetKey(key)
-		t.add(uv)
+		t.array = append(t.array, SetUnitValueFloat(v, unit, Type))
 	}
 	return t
 }
 
-func (t *UnitValues) AddIntegers(value []int64, key string, unit string, Type string) *UnitValues {
+func (t *UnitValues) AddIntegers(value []int64, unit string, Type string) *UnitValues {
 	for _, v := range value {
-		uv := SetUnitValueInteger(v, unit, Type)
-		uv.SetKey(key)
-		t.add(uv)
+		t.array = append(t.array, SetUnitValueInteger(v, unit, Type))
 	}
 	return t
 }
+
 
 func (t *UnitValues) Length() int {
-	return len(t.values)
+	var ret int
+	for range Only.Once {
+		if t.IsArray() {
+			ret = len(t.array)
+			break
+		}
+		if t.IsMap() {
+			ret = len(t.values)
+		}
+	}
+	return ret
 }

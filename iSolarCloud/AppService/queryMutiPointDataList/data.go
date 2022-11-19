@@ -37,33 +37,6 @@ type ResultData struct {
 	Devices Devices `json:"devices"`
 }
 
-type Devices map[string]Device
-type Device struct {
-	Points Points `json:"points"`
-}
-type Points map[valueTypes.PointId]Point
-type Point struct {
-	Name  valueTypes.String `json:"name"`
-	Units valueTypes.String `json:"units"`
-	Times Times  `json:"times"`
-}
-type Times []Time
-type Time struct {
-	Key   valueTypes.DateTime `json:"key"`
-	Value string       `json:"value"`
-}
-
-func (e *ResultData) IsValid() error {
-	var err error
-	return err
-}
-
-type dDevices map[string]dPoints
-type dPoints map[string]dTimes
-type dTimes map[string]string
-
-type DecodeResultData ResultData
-
 func (e *ResultData) UnmarshalJSON(data []byte) error {
 	var err error
 
@@ -108,6 +81,11 @@ func (e *ResultData) UnmarshalJSON(data []byte) error {
 		}
 	}
 
+	return err
+}
+
+func (e *ResultData) IsValid() error {
+	var err error
 	return err
 }
 
@@ -159,6 +137,29 @@ func (e *ResultData) String() string {
 
 	return ret
 }
+
+
+type Devices map[string]Device
+type Device struct {
+	Points Points `json:"points"`
+}
+type Points map[valueTypes.PointId]Point
+type Point struct {
+	Name  valueTypes.String `json:"name"`
+	Units valueTypes.String `json:"units"`
+	Times Times  `json:"times"`
+}
+type Times []Time
+type Time struct {
+	Key   valueTypes.DateTime `json:"key"`
+	Value string       `json:"value"`
+}
+
+type dDevices map[string]dPoints
+type dPoints map[string]dTimes
+type dTimes map[string]string
+
+type DecodeResultData ResultData
 
 func (e *EndPoint) GetPointDataTable(points api.TemplatePoints) output.Table {
 	var table output.Table

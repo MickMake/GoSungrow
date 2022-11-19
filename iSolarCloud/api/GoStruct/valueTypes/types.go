@@ -52,68 +52,85 @@ func IsUnknownStruct(ref interface{}) bool {
 		// fmt.Printf("fieldTo.Kind().String(): %s\n", fieldTo.Kind().String())
 
 		kindy := fieldVo.Kind()
-		// fmt.Printf("DEBUYg:    K:%s / T:%v\n", kindy.String(), fieldVo)
+		// fmt.Printf("DEBUG:    K:%s / T:%v\n", kindy.String(), fieldVo)
 		if kindy == reflect.Interface {
 			ok = false
 			break
 		}
 
 		if kindy == reflect.Slice {
-			// if fieldVo.Len() > 0 {
-			// 	ok = IsUnknownStruct(fieldVo.Index(0).Interface())
-			// }
-			ok = true
+			if fieldVo.Len() > 0 {
+				fieldVo = reflect.ValueOf(fieldVo.Index(0).Interface())
+				ok = IsTypeUnknown(fieldVo)
+			}
+			// ok = true
 			break
 		}
 
 		if kindy == reflect.Array {
-			// if fieldVo.Len() > 0 {
-			// 	ok = IsUnknownStruct(fieldVo.Index(0).Interface())
-			// }
-			ok = true
+			if fieldVo.Len() > 0 {
+				fieldVo = reflect.ValueOf(fieldVo.Index(0).Interface())
+				ok = IsTypeUnknown(fieldVo)
+			}
+			// ok = true
 			break
 		}
 
 		if kindy == reflect.Map {
-			// mk := fieldVo.MapKeys()
-			// if len(mk) > 0 {
-			// 	ok = IsUnknownStruct(fieldVo.MapIndex(mk[0]).Interface())
-			// }
-			ok = true
+			mk := fieldVo.MapKeys()
+			if len(mk) > 0 {
+				// ok = IsUnknownStruct(fieldVo.MapIndex(mk[0]).Interface())
+				fieldVo = reflect.ValueOf(fieldVo.MapIndex(mk[0]).Interface())
+				ok = IsTypeUnknown(fieldVo)
+			}
 			break
 		}
 
 		if kindy == reflect.Struct {
-			Type := fieldVo.Type().String()
-			Type = strings.ReplaceAll(Type, "valueTypes.", "")
-			switch Type {
-				case TypeBool:
-				case TypeCount:
-				case TypeDateTime:
-				case TypeFloat:
-				case TypeInteger:
-				case TypePointId:
-				case TypePsId:
-				case TypePsKey:
-				case TypeString:
-				case TypeTime:
-				case TypeUnitValue:
-				case TypeArrayBool:
-				case TypeArrayCount:
-				case TypeArrayDateTime:
-				case TypeArrayFloat:
-				case TypeArrayInteger:
-				case TypeArrayPointId:
-				case TypeArrayPsId:
-				case TypeArrayPsKey:
-				case TypeArrayString:
-				case TypeArrayTime:
-				case TypeArrayUnitValue:
-				case TypeUnitValues:
+			ok = IsTypeUnknown(fieldVo)
+		}
+	}
 
-				default:
-					ok = true
-			}
+	return ok
+}
+
+func IsKnownStruct(ref interface{}) bool {
+	return !IsUnknownStruct(ref)
+}
+
+func IsTypeUnknown(fieldVo reflect.Value) bool {
+	var ok bool
+
+	for range Only.Once {
+		Type := fieldVo.Type().String()
+		Type = strings.ReplaceAll(Type, "valueTypes.", "")
+		switch Type {
+			case TypeBool:
+			case TypeCount:
+			case TypeDateTime:
+			case TypeFloat:
+			case TypeInteger:
+			case TypePointId:
+			case TypePsId:
+			case TypePsKey:
+			case TypeString:
+			case TypeTime:
+			case TypeUnitValue:
+			case TypeArrayBool:
+			case TypeArrayCount:
+			case TypeArrayDateTime:
+			case TypeArrayFloat:
+			case TypeArrayInteger:
+			case TypeArrayPointId:
+			case TypeArrayPsId:
+			case TypeArrayPsKey:
+			case TypeArrayString:
+			case TypeArrayTime:
+			case TypeArrayUnitValue:
+			case TypeUnitValues:
+
+			default:
+				ok = true
 		}
 	}
 
@@ -229,18 +246,20 @@ func ArrayLength(i interface{}) int {
 	return reflect.ValueOf(i).Len()
 }
 
-func SizeOfArrayLength(i interface{}) int {
-	return SizeOfInt(reflect.ValueOf(i).Len())
+func SizeOfArrayLength(ref interface{}) int {
+	ValueOf := reflect.ValueOf(ref)
+	Len := ValueOf.Len()
+	return SizeOfInt(Len)
 }
 
-func AnyToUnitValue(ref interface{}, unit string, typeString string, dateFormat string) (UnitValues, bool, bool) {
-	var uv UnitValues
+func AnyToUnitValue(ref interface{}, key string, unit string, typeString string, dateFormat string) (UnitValues, bool, bool) {
+	var uvs UnitValues
 	ok := true
 	isNil := false
 	for range Only.Once {
 		if IsNil(ref) {
 			// fmt.Println("DEBUG: AnyToUnitValue(): NIL")
-			uv = append(uv, SetUnitValueString("", unit, typeString + "(unknown)"))
+			uvs.AddString("", key, unit, typeString + "(unknown)")
 			isNil = true
 			break
 		}
@@ -250,231 +269,186 @@ func AnyToUnitValue(ref interface{}, unit string, typeString string, dateFormat 
 			dateFormat = DateTimeAltLayout
 		}
 
+		ValueOf := reflect.ValueOf(ref)
+		Kind := ValueOf.Kind()
+		if IsKnownStruct(ref) {
+			if Kind == reflect.Map {
+				for _, mk := range ValueOf.MapKeys() {
+					var uv UnitValues
+					// fmt.Printf("Map[%s]\n", key)
+					val := ValueOf.MapIndex(mk).Interface()
+					uv, isNil, ok = AnyToUnitValue(val, mk.String(), unit, typeString, dateFormat) // uvs.AddUnitValue(ref.(UnitValue))
+					uvs.Append(uv)
+				}
+				break
+			}
+
+			if Kind == reflect.Slice || Kind == reflect.Array {
+				for index := 0; index < ValueOf.Len(); index++ {
+					var uv UnitValues
+					// fmt.Printf("Slice[%d]\n", index)
+					val := ValueOf.Index(index).Interface()
+					uv, isNil, ok = AnyToUnitValue(val, key, unit, typeString, dateFormat)
+					uvs.Append(uv)
+				}
+				break
+			}
+		}
+
 		Type := reflect.TypeOf(ref).String()
 		Type = strings.ReplaceAll(Type, "valueTypes.", "")
+		if typeString == "" {
+			typeString = Type
+		}
+
 		switch Type {
 			case "int":
-				if typeString == "" {
-					typeString = "--"
-				}
-				uv = append(uv, SetUnitValueInteger(int64(ref.(int)), unit, typeString))
+				uvs.AddInteger(int64(ref.(int)), key, unit, typeString)
 			case "int32":
-				if typeString == "" {
-					typeString = "--"
-				}
-				uv = append(uv, SetUnitValueInteger(int64(ref.(int32)), unit, typeString))
+				uvs.AddInteger(int64(ref.(int32)), key, unit, typeString)
 			case "int64":
-				if typeString == "" {
-					typeString = "--"
-				}
-				uv = append(uv, SetUnitValueInteger(ref.(int64), unit, typeString))
+				uvs.AddInteger(ref.(int64), key, unit, typeString)
 			case "float32":
-				if typeString == "" {
-					typeString = "--"
-				}
-				uv = append(uv, SetUnitValueFloat(float64(ref.(float32)), unit, typeString))
+				uvs.AddFloat(float64(ref.(float32)), key, unit, typeString)
 			case "float64":
-				if typeString == "" {
-					typeString = "--"
-				}
-				uv = append(uv, SetUnitValueFloat(ref.(float64), unit, typeString))
+				uvs.AddFloat(ref.(float64), key, unit, typeString)
 			case "string":
-				if typeString == "" {
-					typeString = "--"
-				}
-				uv = append(uv, SetUnitValueString(ref.(string), unit, typeString))
+				uvs.AddString(ref.(string), key, unit, typeString)
 			case "[]string":
-				// v := strings.Join(e.([]string), ",")
-				if typeString == "" {
-					typeString = "--"
-				}
-				j, err := json.Marshal(ref.([]string))
-				if err != nil {
-					j = []byte(fmt.Sprintf("%v", ref.([]string)))
-				}
-				uv = append(uv, SetUnitValueString(string(j), unit, typeString))
+				// j, err := json.Marshal(ref.([]string))
+				// if err != nil {
+				// 	j = []byte(fmt.Sprintf("%v", ref.([]string)))
+				// }
+				uvs.AddStrings(ref.([]string), key, unit, typeString)
 			case "bool":
-				if typeString == "" {
-					typeString = "--"
-				}
-				uv = append(uv, SetUnitValueBool(ref.(bool)))
+				uvs.AddBool(ref.(bool), key)
 
 			case TypeUnitValue:
-				if typeString == "" {
-					typeString = "--"
-				}
-				uv = append(uv, ref.(UnitValue))
-				// uv = uv.UnitValueFix()
+				val := ref.(UnitValue)
+				val.SetKey(key)
+				uvs.AddUnitValue(val)
+
 			case TypeUnitValues:
 				fallthrough
 			case TypeArrayUnitValue:
-				for _, val := range ref.(UnitValues) {
-					uv = append(uv, val)
+				vals := ref.(UnitValues)
+				for _, val := range vals.values {
+					val.SetKey(key)
 				}
+				uvs.Append(vals)
 
 			case TypeFloat:
-				if typeString == "" {
-					typeString = TypeFloat
-				}
 				v := ref.(Float)
-				uv = append(uv, SetUnitValueFloat(v.Value(), unit, typeString))
+				uvs.AddFloat(v.Value(), key, unit, typeString)
+
 			case TypeArrayFloat:
-				if typeString == "" {
-					typeString = TypeFloat
-				}
 				v := ref.([]Float)
 				for _, val := range v {
-					uv = append(uv, SetUnitValueFloat(val.Value(), unit, typeString))
+					uvs.AddFloat(val.Value(), key, unit, typeString)
 				}
 
 			case TypeInteger:
-				if typeString == "" {
-					typeString = TypeInteger
-				}
 				v := ref.(Integer)
-				uv = append(uv, SetUnitValueInteger(v.Value(), unit, typeString))
+				uvs.AddInteger(v.Value(), key, unit, typeString)
+
 			case TypeArrayInteger:
-				if typeString == "" {
-					typeString = TypeInteger
-				}
 				v := ref.([]Integer)
 				for _, val := range v {
-					uv = append(uv, SetUnitValueInteger(val.Value(), unit, typeString))
+					uvs.AddInteger(val.Value(), key, unit, typeString)
 				}
 				// HERE IS THE PROBLEM - need to return SOMETHING, even if it's null!
 
 			case TypeCount:
-				if typeString == "" {
-					typeString = TypeCount
-				}
 				v := ref.(Count)
-				uv = append(uv, SetUnitValueInteger(v.Value(), unit, typeString))
+				uvs.AddInteger(v.Value(), key, unit, typeString)
+
 			case TypeArrayCount:
-				if typeString == "" {
-					typeString = TypeCount
-				}
 				v := ref.([]Count)
 				for _, val := range v {
-					uv = append(uv, SetUnitValueInteger(val.Value(), unit, typeString))
+					uvs.AddInteger(val.Value(), key, unit, typeString)
 				}
 
 			case TypeBool:
-				if typeString == "" {
-					typeString = TypeBool
-				}
 				v := ref.(Bool)
-				uv = append(uv, SetUnitValueBool(v.Value()))
+				uvs.AddBool(v.Value(), key)
+
 			case TypeArrayBool:
-				if typeString == "" {
-					typeString = TypeBool
-				}
 				v := ref.([]Bool)
 				for _, val := range v {
-					uv = append(uv, SetUnitValueBool(val.Value()))
+					uvs.AddBool(val.Value(), key)
 				}
 
 			case TypeString:
-				if typeString == "" {
-					typeString = TypeString
-				}
 				v := ref.(String)
-				uv = append(uv, SetUnitValueString(v.String(), unit, typeString))
+				uvs.AddString(v.String(), key, unit, typeString)
+
 			case TypeArrayString:
-				if typeString == "" {
-					typeString = TypeString
-				}
 				v := ref.([]String)
 				for _, val := range v {
-					uv = append(uv, SetUnitValueString(val.Value(), unit, typeString))
+					uvs.AddString(val.String(), key, unit, typeString)
 				}
 
 			case TypePsId:
-				if typeString == "" {
-					typeString = TypePsId
-				}
 				v := ref.(PsId)
-				uv = append(uv, SetUnitValueString(v.String(), unit, typeString))
+				uvs.AddString(v.String(), key, unit, typeString)
 
 			case TypeArrayPsId:
-				if typeString == "" {
-					typeString = TypePsId
-				}
 				v := ref.([]PsId)
 				for _, val := range v {
-					uv = append(uv, SetUnitValueString(val.String(), unit, typeString))
+					uvs.AddString(val.String(), key, unit, typeString)
 				}
 
 			case TypePsKey:
-				if typeString == "" {
-					typeString = TypePsKey
-				}
 				v := ref.(PsKey)
-				uv = append(uv, SetUnitValueString(v.Value(), unit, typeString))
+				uvs.AddString(v.String(), key, unit, typeString)
 
 			case TypeArrayPsKey:
-				if typeString == "" {
-					typeString = TypePsKey
-				}
 				v := ref.([]PsKey)
 				for _, val := range v {
-					uv = append(uv, SetUnitValueString(val.Value(), unit, typeString))
+					uvs.AddString(val.String(), key, unit, typeString)
 				}
 
 			case TypePointId:
-				if typeString == "" {
-					typeString = TypePointId
-				}
 				v := ref.(PointId)
-				uv = append(uv, SetUnitValueString(v.String(), unit, typeString))
+				uvs.AddString(v.String(), key, unit, typeString)
+
 			case TypeArrayPointId:
-				if typeString == "" {
-					typeString = TypePointId
-				}
 				v := ref.([]PointId)
 				for _, val := range v {
-					uv = append(uv, SetUnitValueString(val.String(), unit, typeString))
+					uvs.AddString(val.String(), key, unit, typeString)
 				}
 
 			case TypeDateTime:
-				if typeString == "" {
-					typeString = TypeDateTime
-				}
 				v := ref.(DateTime)
-				uv = append(uv, SetUnitValueString(v.Format(dateFormat), unit, typeString))
+				uvs.AddString(v.Format(dateFormat), key, unit, typeString)
+
 			case TypeArrayDateTime:
-				if typeString == "" {
-					typeString = TypeDateTime
-				}
 				v := ref.([]DateTime)
 				for _, val := range v {
-					uv = append(uv, SetUnitValueString(val.Format(dateFormat), unit, typeString))
+					uvs.AddString(val.Format(dateFormat), key, unit, typeString)
 				}
 
 			case TypeTime:
-				if typeString == "" {
-					typeString = TypeTime
-				}
 				v := ref.(Time)
-				uv = append(uv, SetUnitValueString(v.Format(TimeLayout), unit, typeString))
+				uvs.AddString(v.Format(TimeLayout), key, unit, typeString)
+
 			case TypeArrayTime:
-				if typeString == "" {
-					typeString = TypeTime
-				}
 				v := ref.([]Time)
 				for _, val := range v {
-					uv = append(uv, SetUnitValueString(val.Format(TimeLayout), unit, typeString))
+					uvs.AddString(val.Format(TimeLayout), key, unit, typeString)
 				}
 
 			default:
+				typeString = ""
 				j, err := json.Marshal(ref)
 				if err != nil {
-					j = []byte(typeString + "(unknown)")
+					j = []byte(Type + "(unknown)")
 				}
-				uv = append(uv, SetUnitValueString(string(j), unit, typeString))
+				uvs.AddString(string(j), key, unit, typeString)
 				ok = false
 		}
 	}
-	return uv, isNil, ok
+	return uvs, isNil, ok
 }
 
 func AnyToValueString(ref interface{}, intSize int, dateFormat string) string {

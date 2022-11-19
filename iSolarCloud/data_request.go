@@ -544,6 +544,38 @@ func (sgd *SunGrowDataRequest) SetDay(date string) {
 	}
 }
 
+func (sgd *SunGrowDataRequest) SetStartTimeStamp(date string) {
+	for range Only.Once {
+		// if sgd.IsNotRequired(NameDay) {
+		// 	break
+		// }
+		did := valueTypes.SetDateTimeString(date)
+		sgd.args.StartTimeStamp = &did
+		if sgd.args.StartTimeStamp.IsZero() {
+			now := time.Now().Format(valueTypes.DateTimeLayoutSecond)
+			did = valueTypes.NewDateTime(now)
+			sgd.args.StartTimeStamp = &did
+			// Use valueTypes.GetDayStartTimestamp
+		}
+	}
+}
+
+func (sgd *SunGrowDataRequest) SetEndTimeStamp(date string) {
+	for range Only.Once {
+		// if sgd.IsNotRequired(NameDay) {
+		// 	break
+		// }
+		did := valueTypes.SetDateTimeString(date)
+		sgd.args.EndTimeStamp = &did
+		if sgd.args.EndTimeStamp.IsZero() {
+			now := time.Now().Format(valueTypes.DateTimeLayoutSecond)
+			did = valueTypes.NewDateTime(now)
+			sgd.args.EndTimeStamp = &did
+			// Use valueTypes.GetDayEndTimestamp
+		}
+	}
+}
+
 func (sgd *SunGrowDataRequest) SetFaultTypeCode(ftc string) {
 	for range Only.Once {
 		// if sgd.IsNotRequired(NameFaultTypeCode) {

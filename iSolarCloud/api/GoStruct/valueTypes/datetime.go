@@ -53,6 +53,7 @@ type DateTime struct {
 	string    `json:"string,omitempty"`
 	time.Time `json:"time,omitempty"`
 	DateType  string
+	format    string
 	Error     error `json:"-"`
 }
 
@@ -80,6 +81,7 @@ func (dt *DateTime) UnmarshalJSON(data []byte) error {
 		for _, f := range inputDateLayout {
 			dt.Time, dt.Error = time.Parse(f, string(data))
 			if dt.Error == nil {
+				dt.format = f
 				dt.string = dt.Time.Format(DateTimeLayout)
 				dt.SetDateType(string(data))
 				break
@@ -101,7 +103,8 @@ func (dt DateTime) MarshalJSON() ([]byte, error) {
 	for range Only.Once {
 		// data = []byte("\"" + dt.Time.Format(DateTimeLayout) + "\"")
 		// data = []byte("\"" + dt.string + "\"")
-		data = []byte("\"" + dt.Original() + "\"")
+		// data = []byte("\"" + dt.Original() + "\"")
+		data = []byte("\"" + dt.Time.Format(dt.format) + "\"")
 	}
 
 	return data, dt.Error
@@ -143,6 +146,7 @@ func (dt *DateTime) SetString(value string) DateTime {
 		for _, f := range inputDateLayout {
 			dt.Time, dt.Error = time.Parse(f, value)
 			if dt.Error == nil {
+				dt.format = f
 				dt.string = dt.Time.Format(f)
 				dt.SetDateType(value)
 				break
@@ -167,6 +171,7 @@ func (dt *DateTime) SetValue(value time.Time) DateTime {
 		}
 
 		dt.string = value.Format(DateTimeLayout)
+		dt.format = DateTimeLayout
 		dt.DateType = "3"
 	}
 
@@ -251,6 +256,7 @@ func NewDateTime(value string) DateTime {
 		for _, f := range inputDateLayout {
 			ret.Time, ret.Error = time.Parse(f, value)
 			if ret.Error == nil {
+				ret.format = f
 				ret.SetValue(ret.Time)
 				ret.SetDateType(value)
 				break

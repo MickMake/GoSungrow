@@ -24,7 +24,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent      GoStruct.GoStructParent  `json:"GoStruct" DataTable:"true" DataTableSortOn:"UnitConvertId"`
+	GoStructParent      GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"UnitConvertId"`
 
 	UnitConvertId valueTypes.Integer `json:"unit_conver_id" PointId:"unit_convert_id"`
 	UnitName      valueTypes.String  `json:"unit_name"`
