@@ -700,6 +700,14 @@ func (t *UnitValues) SetUnit(unit string) *UnitValues {
 	return t
 }
 
+func (t *UnitValues) Get(index int) *UnitValue {
+	if len(t.order) == 0 {
+		return &UnitValue{}
+	}
+
+	return t.order[0]
+}
+
 func (t *UnitValues) First() *UnitValue {
 	if len(t.order) == 0 {
 		return &UnitValue{}
@@ -717,17 +725,31 @@ func (t *UnitValues) Last() *UnitValue {
 	return t.order[last]
 }
 
-func (t *UnitValues) nextKey() string {
-	return strconv.Itoa(len(t.values))
+// nextKey - Generates the next key in the sequence. If we're given one, use it OR use an index.
+func (t *UnitValues) nextKey(key string) string {
+	for range Only.Once {
+		if key == "" {
+			// Empty - assume the next index as the key.
+			key = strconv.Itoa(len(t.values))
+			break
+		}
+
+		val, err := strconv.Atoi(strings.TrimPrefix(key, "INDEX:"))
+		if err != nil {
+			// Probs not an integer.
+			break
+		}
+
+		// @TODO - Could be potentially dangerous.
+		key = "INDEX:" + strconv.Itoa(len(t.values) + val)
+	}
+	return key
 }
 
 // add - Simulate an array, but we're storing everything as a map.
 // Makes it easier to code, not having to deal with either array or map.
 func (t *UnitValues) add(value UnitValue) *UnitValues {
-	key := value.key
-	if key == "" {
-		key = t.nextKey()
-	}
+	key := t.nextKey(value.key)
 	t.order = append(t.order, &value)	// Keep track of the order.
 	if t.values == nil {
 		t.values = make(map[string]UnitValue)
@@ -741,10 +763,6 @@ func (t *UnitValues) Append(uvs ...UnitValues) *UnitValues {
 		for key, v := range uv.values {
 			v.key = key
 			t.add(v)
-			// if key == "" {
-			// 	key = t.nextKey()
-			// }
-			// t.values[key] = v
 		}
 	}
 	return t

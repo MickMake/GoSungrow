@@ -291,7 +291,7 @@ func (t *Table) WriteList() error {
 		}
 
 		if t.saveAsFile {
-			t.Error = t.writeFile(t.filePrefix + ".txt", t.String(), DefaultFileMode)
+			t.Error = t.writeFile(t.filePrefix + "-list.txt", t.String(), DefaultFileMode)
 			break
 		}
 		fmt.Printf("# %s\n", t.title)

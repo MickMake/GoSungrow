@@ -38,7 +38,7 @@ type ResultData struct {
 		UserId            valueTypes.Integer `json:"user_id"`
 		UserName          valueTypes.String  `json:"user_name"`
 		UserTelNationCode interface{}        `json:"user_tel_nation_code"`
-	} `json:"user_info_list" DataTable:"true" DataTable:"true"`
+	} `json:"user_info_list" DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {

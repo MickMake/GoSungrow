@@ -771,7 +771,15 @@ func (sm *StructMap) GetTableData(name string) StructTable {
 
 			if len(refRow) > 0 {
 				refs = refs.AddRow(refRow...)
+				continue
 			}
+
+			// Single column.
+			ret.ShowIndex = true
+			if Child.IsPointIgnore() {
+				continue
+			}
+			refs = refs.AddRow(Child)
 		}
 
 		if !ret.Current.DataStructure.DataTablePivot {
@@ -790,7 +798,6 @@ func (sm *StructMap) GetTableData(name string) StructTable {
 				ret.Reflects = ret.Reflects.AddRow(refRow...)
 			}
 		}
-		// ret.AddHeader(ret.Reflects[0]...)
 	}
 
 	return ret
@@ -967,6 +974,7 @@ func (ta *StructTable) GetValues() StructValues {
 
 		colOrder := make(map[string]int)
 		var colOrderIndex int
+
 		var addCol = func(name string) {
 			if _, ok := colOrder[name]; !ok {
 				colOrder[name] = colOrderIndex
@@ -990,6 +998,58 @@ func (ta *StructTable) GetValues() StructValues {
 					name += " (" + sub.Value.Unit() + ")"
 			}
 			return name
+		}
+
+
+		if len(ta.Reflects) == 1 {
+			// Probs an array of values.
+			cm := make(map[string][]valueTypes.UnitValue)
+			var length int
+
+			if ta.ShowIndex {
+				addCol(ta.IndexTitle)
+			}
+			for _, sub := range ta.Reflects[0] {
+				name := sub.DataStructure.PointName
+				switch sub.Value.Unit() {
+					case "--":
+					case "":
+					default:
+						name += " (" + sub.Value.Unit() + ")"
+				}
+
+				addCol(name)
+				cm[name] = sub.Value.Range(valueTypes.LoadOrder)
+				l := sub.Value.Length()
+				if l > length {
+					length = l
+				}
+			}
+
+			for index := 0; index < length; index++ {
+				data := make(StructValue)
+
+				if ta.ShowIndex {
+					vi := valueTypes.SetUnitValueInteger(int64(index), ta.IndexTitle, "")
+					data[ta.IndexTitle] = vi
+				}
+
+				for name, value := range cm {
+					if index >= len(value) {
+						data[name] = valueTypes.UnitValue{}
+					}
+					data[name] = value[index]
+				}
+				ret = append(ret, data)
+			}
+
+			ta.Columns = sortMapByValues(colOrder)
+			break
+		}
+
+
+		if ta.ShowIndex {
+			addCol(ta.IndexTitle)
 		}
 
 		for rowIndex := range ta.Reflects {
@@ -1016,7 +1076,6 @@ func (ta *StructTable) GetValues() StructValues {
 			if ta.ShowIndex {
 				vi := valueTypes.SetUnitValueInteger(int64(rowIndex), ta.IndexTitle, "")
 				data[ta.IndexTitle] = vi
-				addCol(ta.IndexTitle)
 			}
 
 			for colIndex, col := range ta.Reflects[rowIndex] {

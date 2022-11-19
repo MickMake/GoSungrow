@@ -208,13 +208,16 @@ func (dm *DataMap) CreateResultTable(endpoint EndPoint, sm GoStruct.StructMap, f
 			}
 		}
 
-		var title string
+		// var title string
 		// title = sm.Name.String()
-		// title = valueTypes.PointToName(sm.Start.DataStructure.DataTableId)
+		// title = valueTypes.PointToName(sm.Start.DataStructure.DataTableName)
 
 		// ret.SetTitle("EndPoint Data: %s.%s", endpoint.GetArea(), endpoint.GetName())
-		ret.SetTitle("EndPoint Data %s - %s", sm.Name.String(), title)
 		// ret.SetFilePrefix("%s_%s", endpoint.GetArea(), endpoint.GetName())
+		ret.SetTitle("EndPoint Data %s", sm.Name.String())
+		if sm.Start.DataStructure.DataTableName != "" {
+			ret.SetTitle("EndPoint Data %s - %s", sm.Name.String(), sm.Start.DataStructure.DataTableName)
+		}
 		ret.SetFilePrefix(sm.Name.String())
 		ret.SetGraphFilter("")
 		ret.Sort("Point Id")
@@ -555,7 +558,7 @@ func CreatePointDataEntries(Current *GoStruct.Reflect, parentDeviceId string, po
 		// res := valueTypes.SizeOfArrayLength(Current.Value.Length())
 		// res := Current.Value.Length()
 		sorted := Current.Value.Range(valueTypes.SortOrder)
-		res := len(sorted)
+		res := valueTypes.SizeOfInt(sorted)
 		for i, uv := range sorted {
 			epn := JoinWithDots(res, valueTypes.DateTimeLayoutDay, Current.EndPointPath().String(), i)
 			ret.Entries = append(ret.Entries, DataEntry{
