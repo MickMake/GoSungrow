@@ -12,8 +12,7 @@ const Url = "/v1/powerStationService/getPowerPlanList"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
-}
+	}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -25,20 +24,22 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	Eight         valueTypes.Integer `json:"eight"`
-	Eleven        valueTypes.Integer `json:"eleven"`
-	Five          valueTypes.Integer `json:"five"`
-	Four          valueTypes.Integer `json:"four"`
-	Nine          valueTypes.Integer `json:"nine"`
-	One           valueTypes.Integer `json:"one"`
-	PsID          valueTypes.Integer `json:"ps_id"`
-	Seven         valueTypes.Integer `json:"seven"`
-	Six           valueTypes.Integer `json:"six"`
-	Ten           valueTypes.Integer `json:"ten"`
-	Three         valueTypes.Integer `json:"three"`
-	Twelve        valueTypes.Integer `json:"twelve"`
-	Two           valueTypes.Integer `json:"two"`
-	YearPlanPower valueTypes.Integer `json:"year_plan_power"`
+	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"CodeId"`
+
+	Eight         valueTypes.Float `json:"eight"`
+	Eleven        valueTypes.Float `json:"eleven"`
+	Five          valueTypes.Float `json:"five"`
+	Four          valueTypes.Float `json:"four"`
+	Nine          valueTypes.Float `json:"nine"`
+	One           valueTypes.Float `json:"one"`
+	PsID          valueTypes.Float `json:"ps_id"`
+	Seven         valueTypes.Float `json:"seven"`
+	Six           valueTypes.Float `json:"six"`
+	Ten           valueTypes.Float `json:"ten"`
+	Three         valueTypes.Float `json:"three"`
+	Twelve        valueTypes.Float `json:"twelve"`
+	Two           valueTypes.Float `json:"two"`
+	YearPlanPower valueTypes.Float `json:"year_plan_power"`
 }
 
 func (e *ResultData) IsValid() error {

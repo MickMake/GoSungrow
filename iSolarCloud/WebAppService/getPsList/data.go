@@ -4,15 +4,14 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/powerStationService/getPsListForWeb"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -24,34 +23,30 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
+type ResultData []struct {
+	GoStructParent     GoStruct.GoStructParent  `json:"-" PointIdFromChild:"PsId" PointIdReplace:"true" DataTable:"true" DataTableSortOn:"PsId"`
+	GoStruct           GoStruct.GoStruct        `json:"-" PointDeviceFrom:"PsId"`
 
-type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+	PsId               valueTypes.Integer  `json:"psid" PointId:"ps_id"`
+	PsName             valueTypes.String   `json:"psname" PointId:"ps_name"`
+	ArrearsStatus      valueTypes.Integer  `json:"arrears_status"`
+	DesignCapacity     valueTypes.Float    `json:"design_capacity" PointUnitFrom:"DesignCapacityUnit"`
+	DesignCapacityUnit valueTypes.String   `json:"design_capacity_unit" PointIgnore:"true"`
+	InstallDate        valueTypes.DateTime `json:"install_date"`
+	PsCode             valueTypes.String   `json:"ps_code"`
+	PsCountryID        valueTypes.Integer  `json:"ps_country_id"`
+	PsLocation         valueTypes.String   `json:"ps_location"`
+	PsOrgName          valueTypes.String   `json:"ps_org_name"`
+	PsType             valueTypes.Integer  `json:"ps_type"`
+	ShareType          valueTypes.String   `json:"share_type"`
+
+	RowCount           valueTypes.Integer  `json:"rowCount"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

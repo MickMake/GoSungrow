@@ -12,8 +12,7 @@ const Url = "/v1/devService/getPowerDevice"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
-}
+	}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -25,47 +24,28 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	ChannelID        valueTypes.Integer `json:"channelId"`
-	ClassCode        valueTypes.Integer `json:"classCode"`
-	DeviceCode       valueTypes.Integer `json:"deviceCode"`
-	DeviceID         valueTypes.Integer `json:"deviceId"`
-	DeviceName       valueTypes.String  `json:"deviceName"`
-	DeviceStatus     interface{}        `json:"deviceStatus"`
-	IsDisplay        valueTypes.Integer `json:"isDisplay"`
-	IsUse            valueTypes.Integer `json:"isUse"`
-	ParentDeviceCode interface{}        `json:"parentDeviceCode"`
-	ParentGateWay    interface{}        `json:"parentGateWay"`
-	Producer         interface{}        `json:"producer"`
-	PsGUID           valueTypes.String  `json:"psGuid"`
-	SnCode           interface{}        `json:"snCode"`
-	SyncDate         interface{}        `json:"syncDate"`
-	UpdateDate       valueTypes.String  `json:"updateDate"`
-	UpdateUserCode   interface{}        `json:"updateUserCode"`
+	ChannelId        valueTypes.Integer  `json:"channelId" PointId:"channel_id"`
+	ClassCode        valueTypes.Integer  `json:"classCode" PointId:"class_code"`
+	DeviceCode       valueTypes.Integer  `json:"deviceCode" PointId:"device_code"`
+	DeviceId         valueTypes.Integer  `json:"deviceId" PointId:"device_id"`
+	DeviceName       valueTypes.String   `json:"deviceName" PointId:"device_name"`
+	DeviceStatus     interface{}         `json:"deviceStatus" PointId:"device_status"`
+	IsDisplay        valueTypes.Bool     `json:"isDisplay" PointId:"is_display"`
+	IsUse            valueTypes.Bool     `json:"isUse" PointId:"is_use"`
+	ParentDeviceCode interface{}         `json:"parentDeviceCode" PointId:"parent_device_code"`
+	ParentGateWay    interface{}         `json:"parentGateWay" PointId:"parent_gate_way"`
+	Producer         interface{}         `json:"producer"`
+	PsGUID           valueTypes.String   `json:"psGuid" PointId:"ps_guid"`
+	SnCode           interface{}         `json:"snCode" PointId:"sn_code"`
+	SyncDate         interface{}         `json:"syncDate" PointId:"sync_date"`
+	UpdateDate       valueTypes.DateTime `json:"updateDate" PointId:"update_date"`
+	UpdateUserCode   interface{}         `json:"updateUserCode" PointId:"update_user_code"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

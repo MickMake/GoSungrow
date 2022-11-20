@@ -12,7 +12,6 @@ const Url = "/v1/commonService/getMoneyUnitList"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -24,9 +23,10 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData []struct {
-	CodeID valueTypes.String `json:"code_id"`
+	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"CodeId"`
+
+	CodeId   valueTypes.String `json:"code_id"`
 	CodeName valueTypes.String `json:"code_name"`
 }
 

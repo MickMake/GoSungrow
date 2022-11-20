@@ -13,7 +13,8 @@ const Disabled = false
 
 type RequestData struct {
 	// ws.missing-parameter:user_id or ps_id
-	PsId valueTypes.PsId    `json:"ps_id" required:"true"`
+	PsId   valueTypes.PsId    `json:"ps_id" required:"true"`
+	UserId valueTypes.Integer `json:"user_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -39,7 +40,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
 	}
 
 	return entries

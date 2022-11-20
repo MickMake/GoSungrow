@@ -12,7 +12,6 @@ const Url = "/v1/faultService/getDeploymentList"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -25,9 +24,11 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	DeploymentTime valueTypes.String `json:"deploymentTime"`
-	ID             valueTypes.String `json:"id"`
-	Name           valueTypes.String `json:"name"`
+	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"Id"`
+
+	Id             valueTypes.String   `json:"id"`
+	Name           valueTypes.String   `json:"name"`
+	DeploymentTime valueTypes.DateTime `json:"deploymentTime" PointId:"deployment_time"`
 }
 
 func (e *ResultData) IsValid() error {

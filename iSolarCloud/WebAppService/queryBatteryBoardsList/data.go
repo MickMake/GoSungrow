@@ -12,7 +12,10 @@ const Url = "/v1/devService/queryBatteryBoardsList"
 const Disabled = false
 
 type RequestData struct {
-	PsId       valueTypes.PsId    `json:"ps_id"`
+	PsId       valueTypes.PsId   `json:"ps_id" required:"true"`
+	DeviceType valueTypes.String `json:"device_type" required:"true"`
+	DeviceSn   valueTypes.String `json:"device_sn,omitempty"`
+	Uuid       valueTypes.String `json:"uuid,omitempty"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -25,7 +28,7 @@ func (rd RequestData) Help() string {
 }
 
 
-type ResultData struct {
+type ResultData []struct {
 	Dummy valueTypes.String `json:"dummy"`
 }
 
@@ -38,9 +41,6 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		// pkg := reflection.GetName("", *e)
-		// dt := valueTypes.NewDateTime(valueTypes.Now)
-		// name := pkg + "." + e.Request.PsId.String()
 		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
 	}
 

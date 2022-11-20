@@ -25,9 +25,20 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
+type ResultData []struct {
+	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"PsKey"`
 
-type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+	PsId          valueTypes.Integer `json:"ps_id"`
+	PsKey         valueTypes.String  `json:"ps_key"`
+	DeviceType    valueTypes.Integer `json:"device_type"`
+	PsName        valueTypes.String  `json:"ps_name"`
+	Id            valueTypes.Integer `json:"id"`
+	Pid           valueTypes.Integer `json:"pid"`
+	Name          valueTypes.String  `json:"name"`
+	DeviceName    valueTypes.String  `json:"device_name"`
+	IsParent      valueTypes.Bool    `json:"isparent" PointId:"is_parent"`
+	UUIDIndexCode valueTypes.String  `json:"uuid_index_code"`
+	RowCount      valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -39,10 +50,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		// pkg := reflection.GetName("", *e)
-		// dt := valueTypes.NewDateTime(valueTypes.Now)
-		// name := pkg + "." + e.Request.DateId.Format(valueTypes.DateTimeLayoutDay)
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
 	}
 
 	return entries

@@ -12,7 +12,6 @@ const Url = "/v1/devService/getCustomerList"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -26,9 +25,11 @@ func (rd RequestData) Help() string {
 
 
 type ResultData []struct {
+	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"CustomerCode"`
+
 	CustomerCode valueTypes.String `json:"customer_code"`
 	CustomerName valueTypes.String `json:"customer_name"`
-	FactoryID valueTypes.Integer `json:"factory_id"`
+	FactoryId valueTypes.Integer `json:"factory_id"`
 }
 
 func (e *ResultData) IsValid() error {

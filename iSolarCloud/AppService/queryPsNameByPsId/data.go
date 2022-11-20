@@ -41,7 +41,7 @@ func (e *EndPoint) GetData() api.DataMap {
 		// pkg := reflection.GetName("", *e)
 		// dt := valueTypes.NewDateTime(valueTypes.Now)
 		// name := pkg + "." + e.Request.PsId.String()
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
 	}
 
 	return entries

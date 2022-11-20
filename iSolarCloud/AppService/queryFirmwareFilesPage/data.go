@@ -4,15 +4,14 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/commonService/queryFirmwareFilesPage"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -24,34 +23,28 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+	PageList []struct {
+		FileId        valueTypes.Integer  `json:"file_id"`
+		FileName      valueTypes.String   `json:"file_name"`
+		FileSize      valueTypes.Integer  `json:"file_size"`
+		FileType      valueTypes.Integer  `json:"file_type"`
+		UploadTime    valueTypes.DateTime `json:"upload_time"`
+		URL           valueTypes.String   `json:"url"`
+		Operation     valueTypes.Integer  `json:"operation"`
+		OperationTime valueTypes.DateTime `json:"operation_time"`
+		OperatorId    valueTypes.String   `json:"operator_id"`
+		OperatorName  valueTypes.String   `json:"operator_name"`
+		System        valueTypes.String   `json:"system"`
+	} `json:"pageList" PointId:"page_list" DataTable:"true"`
+	Code     valueTypes.String  `json:"code"`
+	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

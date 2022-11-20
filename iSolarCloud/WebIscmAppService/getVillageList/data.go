@@ -11,8 +11,7 @@ const Url = "/v1/commonService/getVillageList"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
-}
+	}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -25,8 +24,10 @@ func (rd RequestData) Help() string {
 
 
 type ResultData []struct {
-	Village     string `json:"village"`
+	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"VillageCode"`
+
 	VillageCode string `json:"village_code"`
+	Village     string `json:"village"`
 }
 
 func (e *ResultData) IsValid() error {

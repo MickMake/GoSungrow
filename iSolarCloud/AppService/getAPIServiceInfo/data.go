@@ -12,7 +12,6 @@ const Url = "/v1/commonService/getAPIServiceInfo"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

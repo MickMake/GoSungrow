@@ -34,7 +34,7 @@ type ResultData struct {
 		PsTimezoneInfo          struct {
 			IsDst    valueTypes.Bool   `json:"is_dst" PointUpdateFreq:"UpdateFreqInstant"`
 			TimeZone valueTypes.String `json:"time_zone" PointUpdateFreq:"UpdateFreqInstant"`
-		}       `json:"psTimezoneInfo"`
+		}       `json:"psTimezoneInfo" PointId:"ps_timezone_info"`
 
 		AlarmCount              valueTypes.Count   `json:"alarm_count" PointId:"alarm_count" PointUpdateFreq:"UpdateFreqTotal"`
 		ChannelId               valueTypes.Integer `json:"chnnl_id" PointId:"channel_id" PointUpdateFreq:"UpdateFreqBoot"`
@@ -52,7 +52,7 @@ type ResultData struct {
 		DeviceStatus            valueTypes.Bool    `json:"device_status" PointId:"device_status" PointUpdateFreq:"UpdateFreqInstant"`
 		DeviceType              valueTypes.Integer `json:"device_type" PointId:"device_type" PointUpdateFreq:"UpdateFreqBoot"`
 		FaultCount              valueTypes.Count   `json:"fault_count" PointId:"fault_count" PointUpdateFreq:"UpdateFreqTotal"`
-		FaultStatus             string             `json:"fault_status" PointId:"fault_status" PointUpdateFreq:"UpdateFreqInstant"`
+		FaultStatus             valueTypes.String  `json:"fault_status" PointId:"fault_status" PointUpdateFreq:"UpdateFreqInstant"`
 		FunctionEnum            valueTypes.String  `json:"function_enum" PointId:"function_enum" PointUpdateFreq:"UpdateFreqInstant"`
 		InstallerAlarmCount     valueTypes.Count   `json:"installer_alarm_count" PointId:"installer_alarm_count" PointUpdateFreq:"UpdateFreqTotal"`
 		InstallerDevFaultStatus valueTypes.Integer `json:"installer_dev_fault_status" PointId:"installer_dev_fault_status" PointUpdateFreq:"UpdateFreqInstant"`

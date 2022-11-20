@@ -12,8 +12,8 @@ const Url = "/v1/reportService/showTjReport"
 const Disabled = false
 
 type RequestData struct {
-	PsId      valueTypes.PsId   `json:"ps_id" required:"true"`
-	MonthDate valueTypes.String `json:"month_date" required:"true"`
+	PsId      valueTypes.PsId     `json:"ps_id" required:"true"`
+	MonthDate valueTypes.DateTime `json:"month_date" required:"true"`
 }
 // ./goraw.sh WebAppService.showTjReport '{"ps_id":1171348,"month_date":"202210"}'
 
@@ -28,7 +28,6 @@ func (rd RequestData) Help() string {
 
 
 type ResultData []struct {
-	Dummy valueTypes.String `json:"dummy"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -40,7 +39,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
 	}
 
 	return entries

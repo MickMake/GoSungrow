@@ -12,7 +12,6 @@ const Url = "/v1/devService/getPointInfoPage"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -26,13 +25,13 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	DeviceTypeList []struct {
-		DeviceName valueTypes.String  `json:"device_name"`
 		DeviceType valueTypes.Integer `json:"device_type"`
-	} `json:"deviceTypeList"`
+		DeviceName valueTypes.String  `json:"device_name"`
+	} `json:"deviceTypeList" PointId:"device_type_list" DataTable:"true"`
 	PointTypeList []struct {
-		CodeName  valueTypes.String `json:"code_name"`
 		PointType valueTypes.String `json:"point_type"`
-	} `json:"pointTypeList"`
+		CodeName  valueTypes.String `json:"code_name"`
+	} `json:"pointTypeList" PointId:"point_type_list" DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {

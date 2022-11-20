@@ -1,4 +1,4 @@
-package queryDeviceList
+package queryDeviceListForBackSys
 
 import (
 	"GoSungrow/iSolarCloud/api"
@@ -12,7 +12,7 @@ const Url = "/v1/devService/queryDeviceListForBackSys"
 const Disabled = false
 
 type RequestData struct {
-	PsID       valueTypes.PsId     `json:"ps_id" require:"true"`
+	PsId       valueTypes.PsId     `json:"ps_id" require:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -25,16 +25,18 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	ChnnlID    valueTypes.Integer `json:"chnnl_id" PointId:"channel_id"`
-	DeviceCode valueTypes.Integer `json:"device_code"`
-	DeviceID   valueTypes.Integer `json:"device_id"`
-	DeviceName valueTypes.String  `json:"device_name"`
-	DeviceType valueTypes.Integer `json:"device_type"`
-	IsPublic   valueTypes.Integer `json:"is_public"`
-	RelState   valueTypes.Integer `json:"rel_state"`
-	TypeName   valueTypes.String  `json:"type_name"`
-	UpUUID     valueTypes.Integer `json:"up_uuid"`
+	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"UUID"`
+
 	UUID       valueTypes.Integer `json:"uuid"`
+	DeviceCode valueTypes.Integer `json:"device_code"`
+	DeviceType valueTypes.Integer `json:"device_type"`
+	ChannelId  valueTypes.Integer `json:"chnnl_id" PointId:"channel_id"`
+	DeviceId   valueTypes.Integer `json:"device_id"`
+	TypeName   valueTypes.String  `json:"type_name"`
+	DeviceName valueTypes.String  `json:"device_name"`
+	IsPublic   valueTypes.Bool    `json:"is_public"`
+	RelState   valueTypes.Integer `json:"rel_state"`
+	UpUUID     valueTypes.Integer `json:"up_uuid"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -42,30 +44,11 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
 	}
 
 	return entries

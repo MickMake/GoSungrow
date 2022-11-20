@@ -4,15 +4,16 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/powerStationService/getPowerTrendDayData"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
+	BeginTime valueTypes.String `json:"beginTime" required:"true"`
+	EndTime   valueTypes.String `json:"endTime" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -25,7 +26,7 @@ func (rd RequestData) Help() string {
 }
 
 
-type ResultData struct {
+type ResultData []struct {
 	Dummy valueTypes.String `json:"dummy"`
 }
 
@@ -33,25 +34,6 @@ func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

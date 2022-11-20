@@ -26,14 +26,16 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	DeviceModelCode   valueTypes.String  `json:"device_model_code"`
+	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"ModelId"`
+
+	ModelId           valueTypes.Integer `json:"model_id"`
 	InverterModelType valueTypes.Integer `json:"inverter_model_type"`
-	IsCountryCheck    valueTypes.Integer `json:"is_country_check"`
-	IsReadSet         valueTypes.Integer `json:"is_read_set"`
-	IsReset           valueTypes.Integer `json:"is_reset"`
-	IsThirdParty      valueTypes.Integer `json:"is_third_party"`
-	ModelID           valueTypes.Integer `json:"model_id"`
+	DeviceModelCode   valueTypes.String  `json:"device_model_code"`
 	ModelName         valueTypes.String  `json:"model_name"`
+	IsCountryCheck    valueTypes.Bool    `json:"is_country_check"`
+	IsReadSet         valueTypes.Bool    `json:"is_read_set"`
+	IsReset           valueTypes.Bool    `json:"is_reset"`
+	IsThirdParty      valueTypes.Bool    `json:"is_third_party"`
 }
 
 func (e *ResultData) IsValid() error {

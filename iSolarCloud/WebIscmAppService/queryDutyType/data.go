@@ -4,15 +4,14 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/otherService/queryDutyType"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -24,9 +23,14 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
+type ResultData []struct {
+	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"CodeId"`
 
-type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+	CodeId     valueTypes.Integer `json:"code_id"`
+	CodeName   valueTypes.String  `json:"code_name"`
+	CodeType   valueTypes.Integer `json:"code_type"`
+	CodeValue  valueTypes.String  `json:"code_value"`
+	CodeValue2 interface{}        `json:"code_value2"`
 }
 
 func (e *ResultData) IsValid() error {

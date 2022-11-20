@@ -12,7 +12,6 @@ const Url = "/v1/commonService/getNationList"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -26,8 +25,10 @@ func (rd RequestData) Help() string {
 
 
 type ResultData []struct {
-	Nation valueTypes.String `json:"nation"`
+	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"NationCode"`
+
 	NationCode valueTypes.String `json:"nation_code"`
+	Nation     valueTypes.String `json:"nation"`
 }
 
 func (e *ResultData) IsValid() error {

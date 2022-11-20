@@ -13,7 +13,7 @@ const Disabled = false
 // ./goraw.sh AppService.getPListinfoFromMysql '{"psIds":1171348}'
 
 type RequestData struct {
-	PsIds      valueTypes.PsId   `json:"psIds" required:"true"`
+	PsIds      valueTypes.PsIds   `json:"psIds" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -27,22 +27,22 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	NowCapacity struct {
-		Unit  valueTypes.String `json:"unit"`
-		Value valueTypes.String `json:"value"`
-	} `json:"nowCapacity"`
+		Unit  valueTypes.String `json:"unit" PointIgnore:"true"`
+		Value valueTypes.Float  `json:"value" PointUnitFrom:"Unit"`
+	} `json:"nowCapacity" PointId:"now_capacity"`
 	TodayPower struct {
-		Unit  valueTypes.String `json:"unit"`
-		Value valueTypes.String `json:"value"`
-	} `json:"todayPower"`
+		Unit  valueTypes.String `json:"unit" PointIgnore:"true"`
+		Value valueTypes.Float  `json:"value" PointUnitFrom:"Unit"`
+	} `json:"todayPower" PointId:"today_power"`
 	TotalCapacity struct {
-		Unit  valueTypes.String `json:"unit"`
-		Value valueTypes.String `json:"value"`
-	} `json:"totalCapacity"`
+		Unit  valueTypes.String `json:"unit" PointIgnore:"true"`
+		Value valueTypes.Float  `json:"value" PointUnitFrom:"Unit"`
+	} `json:"totalCapacity" PointId:"total_capacity"`
 	TotalPower struct {
-		Unit  valueTypes.String `json:"unit"`
-		Value valueTypes.String `json:"value"`
-	} `json:"totalPower"`
-	TotalStation valueTypes.Integer `json:"totalStation"`
+		Unit  valueTypes.String `json:"unit" PointIgnore:"true"`
+		Value valueTypes.Float  `json:"value" PointUnitFrom:"Unit"`
+	} `json:"totalPower" PointId:"total_power"`
+	TotalStation valueTypes.Integer `json:"totalStation" PointId:"total_station"`
 }
 
 func (e *ResultData) IsValid() error {

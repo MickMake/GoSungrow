@@ -12,8 +12,7 @@ const Url = "/v1/devService/getAllDevTypeList"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
-}
+	}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -26,8 +25,10 @@ func (rd RequestData) Help() string {
 
 
 type ResultData []struct {
-	Devtypecode valueTypes.Integer `json:"devtypecode"`
-	Devtypename valueTypes.String `json:"devtypename"`
+	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"DevTypeCode"`
+
+	DevTypeCode valueTypes.Integer `json:"devtypecode" PointId:"dev_type_code"`
+	DevTypeName valueTypes.String `json:"devtypename" PointId:"dev_type_name"`
 }
 
 func (e *ResultData) IsValid() error {

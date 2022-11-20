@@ -13,8 +13,7 @@ const Url = "/v1/devService/getDeviceModelInfoList"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
-}
+	}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

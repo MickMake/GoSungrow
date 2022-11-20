@@ -25,14 +25,17 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
+	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"PsKey"`
+	GoStruct       GoStruct.GoStruct        `json:"-" PointDeviceFrom:"PsId"`
+
+	PsId          valueTypes.Integer `json:"ps_id"`
+	PsName        valueTypes.String  `json:"ps_name"`
+	PsKey         valueTypes.String  `json:"ps_key"`
 	DeviceName    valueTypes.String  `json:"device_name"`
 	DeviceType    valueTypes.Integer `json:"device_type"`
 	IsVirtualUnit valueTypes.Integer `json:"is_virtual_unit"`
-	PsID          valueTypes.Integer `json:"ps_id"`
-	PsKey         valueTypes.String  `json:"ps_key"`
-	PsName        valueTypes.String  `json:"ps_name"`
-	UpUUID        valueTypes.Integer `json:"up_uuid"`
 	UUID          valueTypes.Integer `json:"uuid"`
+	UpUUID        valueTypes.Integer `json:"up_uuid"`
 	UUIDIndexCode valueTypes.String  `json:"uuid_index_code"`
 }
 
@@ -46,7 +49,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
+		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
 	}
 
 	return entries

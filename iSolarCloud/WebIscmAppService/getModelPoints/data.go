@@ -25,10 +25,12 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	CodeID        valueTypes.Integer `json:"code_id"`
-	DeviceModelID valueTypes.Integer `json:"device_model_id"`
+	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"PointId"`
+
+	DeviceModelId valueTypes.Integer `json:"device_model_id"`
+	PointId       valueTypes.Integer `json:"point_id"`
+	CodeId        valueTypes.Integer `json:"code_id"`
 	OrderNum      valueTypes.Integer `json:"order_num"`
-	PointID       valueTypes.Integer `json:"point_id"`
 }
 
 func (e *ResultData) IsValid() error {

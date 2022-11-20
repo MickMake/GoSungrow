@@ -11,8 +11,7 @@ const Url = "/v1/powerStationService/energyEquivalentHoursRanking"
 const Disabled = false
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
-}
+	}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

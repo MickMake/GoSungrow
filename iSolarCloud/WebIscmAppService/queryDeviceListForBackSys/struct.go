@@ -2,7 +2,7 @@
 // - This file is auto-generated from the update_all.sh script.
 // Do not modify anything here. Any changes to this EndPoint should be made in the data.go file.
 // The only exception is the AppService.login package.
-package queryDeviceList
+package queryDeviceListForBackSys
 
 import (
 	"GoSungrow/iSolarCloud/api"
