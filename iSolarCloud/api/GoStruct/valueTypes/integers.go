@@ -114,7 +114,7 @@ func (t *Integer) SetValue(value int64) Integer {
 }
 
 func (t *Integer) ToUnitValue() UnitValue {
-	return SetUnitValueInteger(t.int64, "", "")
+	return SetUnitValueInteger("", "", t.int64)
 }
 
 func SetIntegerString(value string) Integer {
@@ -234,7 +234,7 @@ func (t *Count) SetValue(value int64) Count {
 }
 
 func (t *Count) ToUnitValue() UnitValue {
-	return SetUnitValueInteger(t.int64, "--", "Count")
+	return SetUnitValueInteger("--", "Count", t.int64)
 }
 
 func SetCountString(value string) Count {

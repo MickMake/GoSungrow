@@ -11,6 +11,7 @@ type EndPoint interface {
 	GetUrl() EndPointUrl
 	IsDisabled() bool
 	Help() string
+	IsDebug() bool
 
 	Call() EndPoint
 	SetError(string, ...interface{}) EndPoint

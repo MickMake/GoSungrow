@@ -166,14 +166,14 @@ func (e *EndPoint) GetData() api.DataMap {
 
 
 type Device struct {
-	PsFaultStatus          valueTypes.Integer
-	PsHealthStatus         valueTypes.Integer
-	PsHolder               valueTypes.String
 	PsId                   valueTypes.PsId
+	PsType                 valueTypes.Integer
 	PsName                 valueTypes.String
 	PsShortName            valueTypes.String
+	PsHolder               valueTypes.String
 	PsStatus               valueTypes.Integer
-	PsType                 valueTypes.Integer
+	PsFaultStatus          valueTypes.Integer
+	PsHealthStatus         valueTypes.Integer
 }
 type Devices []Device
 

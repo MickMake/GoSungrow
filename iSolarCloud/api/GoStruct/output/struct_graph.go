@@ -1,7 +1,7 @@
 package output
 
 import (
-	"GoSungrow/Only"
+	"github.com/MickMake/GoUnify/Only"
 	"encoding/json"
 	"errors"
 	"fmt"

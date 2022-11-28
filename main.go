@@ -1,9 +1,9 @@
 package main
 
 import (
-	"GoSungrow/Only"
 	"GoSungrow/cmd"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 	"os"
 )
 

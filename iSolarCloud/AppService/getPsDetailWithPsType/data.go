@@ -3,7 +3,6 @@ package getPsDetailWithPsType
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/reflection"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 
@@ -27,7 +26,9 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	BatteryLevelPercent         valueTypes.Float   `json:"battery_level_percent" PointId:"battery_level_percent" PointUnit:"%" PointUpdateFreq:"UpdateFreqInstant"`
+	// GoStruct                    GoStruct.GoStruct    `json:"-" PointIdFrom:"PsKey" PointIdReplace:"true"`
+
+	BatteryLevelPercent         valueTypes.Float     `json:"battery_level_percent" PointId:"battery_level_percent" PointUnit:"%" PointUpdateFreq:"UpdateFreqInstant"`
 	ChargingDischargingPowerMap valueTypes.UnitValue `json:"charging_discharging_power_map" PointId:"charging_discharging_power_map" PointUpdateFreq:"UpdateFreqInstant"`	// Holds the battery charge/discharge amount
 	Co2ReduceTotal              valueTypes.UnitValue `json:"co2_reduce_total" PointId:"co2_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
 	CoalReduceTotal             valueTypes.UnitValue `json:"coal_reduce_total" PointId:"coal_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
@@ -56,6 +57,7 @@ type ResultData struct {
 	MonthIncome                 valueTypes.UnitValue `json:"month_income" PointId:"month_income" PointUpdateFreq:"UpdateFreqMonth"`
 	NegativeLoadMsg             interface{}          `json:"negative_load_msg" PointId:"negative_load_msg"`
 	OwnerPsFaultStatus          valueTypes.Integer   `json:"owner_ps_fault_status" PointId:"owner_ps_fault_status" PointUpdateFreq:"UpdateFreqInstant"`
+
 	P83081Map                   valueTypes.UnitValue `json:"p83081_map" PointId:"p83081" PointName:"Load Power" PointUpdateFreq:"UpdateFreq5Mins"`
 	P83081MapVirgin             valueTypes.UnitValue `json:"p83081_map_virgin"  PointIgnore:"true"`
 	P83102Map                   valueTypes.UnitValue `json:"p83102_map" PointId:"p83102" PointName:"Energy Purchased" PointUpdateFreq:"UpdateFreq5Mins"`
@@ -73,27 +75,41 @@ type ResultData struct {
 	P83202Map                   valueTypes.UnitValue `json:"p83202_map" PointId:"p83202" PointName:"Installed Power" PointUpdateFreq:"UpdateFreq5Mins"`
 	P83202MapVirgin             valueTypes.UnitValue `json:"p83202_map_virgin" PointIgnore:"true"`
 	P83532MapVirgin             valueTypes.UnitValue `json:"p83532_map_virgin"  PointIgnore:"true"`
-	PowerChargeSetted           valueTypes.Bool      `json:"power_charge_setted" PointId:"power_charge_set" PointUpdateFreq:"UpdateFreqBoot"`
-	PowerGridPowerMap           valueTypes.UnitValue `json:"power_grid_power_map" PointId:"power_grid_power_map" PointUpdateFreq:"UpdateFreq5Mins"`
-	PowerGridPowerMapVirgin     valueTypes.UnitValue `json:"power_grid_power_map_virgin"  PointIgnore:"true"`
-	PsCountryId                 valueTypes.Integer   `json:"ps_country_id" PointId:"ps_country_id" PointUpdateFreq:"UpdateFreqBoot"`
-	PsDeviceType                valueTypes.Integer   `json:"ps_device_type" PointId:"ps_device_type" PointUpdateFreq:"UpdateFreqBoot"`
-	PsFaultStatus               valueTypes.Integer   `json:"ps_fault_status" PointId:"ps_fault_status" PointUpdateFreq:"UpdateFreqInstant"`
-	PsHealthStatus              valueTypes.Integer   `json:"ps_health_status" PointId:"ps_health_status" PointUpdateFreq:"UpdateFreqInstant"`
-	PsLocation                  valueTypes.String    `json:"ps_location" PointId:"ps_location" PointUpdateFreq:"UpdateFreqBoot"`
-	PsName                      valueTypes.String    `json:"ps_name" PointId:"ps_name" PointUpdateFreq:"UpdateFreqBoot"`
-	PsPsKey                     valueTypes.PsKey     `json:"ps_ps_key" PointId:"ps_key" PointUpdateFreq:"UpdateFreqBoot"`
-	PsState                     valueTypes.Bool      `json:"ps_state" PointId:"ps_state" PointUpdateFreq:"UpdateFreqInstant"`
-	PsType                      valueTypes.Integer   `json:"ps_type" PointId:"ps_type" PointUpdateFreq:"UpdateFreqBoot"`
-	PvPowerMap                  valueTypes.UnitValue `json:"pv_power_map" PointId:"pv_power_map" PointUpdateFreq:"UpdateFreq5Mins"`
-	PvPowerMapVirgin            valueTypes.UnitValue `json:"pv_power_map_virgin"  PointIgnore:"true"`
-	RobotNumSweepCapacity       struct {
-		Num           valueTypes.Integer `json:"num" PointId:"num" PointUpdateFreq:"UpdateFreqBoot"`
-		SweepCapacity valueTypes.Float   `json:"sweep_capacity" PointId:"sweep_capacity" PointUpdateFreq:"UpdateFreqBoot"`
-	} `json:"robot_num_sweep_capacity" PointId:"robot"`
+
+	PowerChargeSetted             valueTypes.Bool      `json:"power_charge_setted" PointId:"power_charge_set" PointUpdateFreq:"UpdateFreqBoot"`
+	PowerGridPowerMap             valueTypes.UnitValue `json:"power_grid_power_map" PointId:"power_grid_power_map" PointUpdateFreq:"UpdateFreq5Mins"`
+	PowerGridPowerMapVirgin       valueTypes.UnitValue `json:"power_grid_power_map_virgin"  PointIgnore:"true"`
+	PsCountryId                   valueTypes.Integer   `json:"ps_country_id" PointId:"ps_country_id" PointUpdateFreq:"UpdateFreqBoot"`
+	PsDeviceType                  valueTypes.Integer   `json:"ps_device_type" PointId:"ps_device_type" PointUpdateFreq:"UpdateFreqBoot"`
+	PsFaultStatus                 valueTypes.Integer   `json:"ps_fault_status" PointId:"ps_fault_status" PointUpdateFreq:"UpdateFreqInstant"`
+	PsHealthStatus                valueTypes.Integer   `json:"ps_health_status" PointId:"ps_health_status" PointUpdateFreq:"UpdateFreqInstant"`
+	PsLocation                    valueTypes.String    `json:"ps_location" PointId:"ps_location" PointUpdateFreq:"UpdateFreqBoot"`
+	PsName                        valueTypes.String    `json:"ps_name" PointId:"ps_name" PointUpdateFreq:"UpdateFreqBoot"`
+	PsKey                         valueTypes.PsKey     `json:"ps_ps_key" PointId:"ps_key" PointUpdateFreq:"UpdateFreqBoot"`
+	PsState                       valueTypes.Bool      `json:"ps_state" PointId:"ps_state" PointUpdateFreq:"UpdateFreqInstant"`
+	PsType                        valueTypes.Integer   `json:"ps_type" PointId:"ps_type" PointUpdateFreq:"UpdateFreqBoot"`
+	PvPowerMap                    valueTypes.UnitValue `json:"pv_power_map" PointId:"pv_power_map" PointUpdateFreq:"UpdateFreq5Mins"`
+	PvPowerMapVirgin              valueTypes.UnitValue `json:"pv_power_map_virgin"  PointIgnore:"true"`
 	SelfConsumptionOffsetReminder valueTypes.Integer   `json:"self_consumption_offset_reminder" PointId:"self_consumption_offset_reminder" PointUpdateFreq:"UpdateFreqBoot"`
 	So2ReduceTotal                valueTypes.UnitValue `json:"so2_reduce_total" PointId:"so2_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
+	TodayEnergy                   valueTypes.UnitValue `json:"today_energy" PointId:"today_energy" PointUpdateFreq:"UpdateFreqDay"`
+	TodayEnergyVirgin             valueTypes.UnitValue `json:"today_energy_virgin"  PointIgnore:"true"`
+	TodayIncome                   valueTypes.UnitValue `json:"today_income" PointId:"today_income" PointUpdateFreq:"UpdateFreqDay"`
+	TotalEnergy                   valueTypes.UnitValue `json:"total_energy" PointId:"total_energy" PointUpdateFreq:"UpdateFreqTotal"`
+	TotalEnergyVirgin             valueTypes.UnitValue `json:"total_energy_virgin"  PointIgnore:"true"`
+	TotalIncome                   valueTypes.UnitValue `json:"total_income" PointId:"total_income" PointUpdateFreq:"UpdateFreqTotal"`
+	TreeReduceTotal               valueTypes.UnitValue `json:"tree_reduce_total" PointId:"tree_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
+	ValidFlag                     valueTypes.Bool      `json:"valid_flag" PointId:"valid_flag" PointUpdateFreq:"UpdateFreqBoot"`
+	WgsLatitude                   valueTypes.Float     `json:"wgs_latitude" PointId:"wgs_latitude" PointUpdateFreq:"UpdateFreqBoot"`
+	WgsLongitude                  valueTypes.Float     `json:"wgs_longitude" PointId:"wgs_longitude" PointUpdateFreq:"UpdateFreqBoot"`
+	ZfzyMap                       valueTypes.UnitValue `json:"zfzy_map" PointId:"zfzy_map" PointName:"Self Consumption Of PV" PointUpdateFreq:"UpdateFreq5Mins"`
+	ZfzyMapVirgin                 valueTypes.UnitValue `json:"zfzy_map_virgin"  PointIgnore:"true"`
+	ZjzzMap                       valueTypes.UnitValue `json:"zjzz_map" PointId:"zjzz_map" PointName:"Self Sufficiency" PointUpdateFreq:"UpdateFreq5Mins"`
+	ZjzzMapVirgin                 valueTypes.UnitValue `json:"zjzz_map_virgin"  PointIgnore:"true"`
+
 	StorageInverterData           []struct {
+		GoStruct                GoStruct.GoStruct    `json:"-" PointIdFrom:"PsKey" PointIdReplace:"true"`
+
 		CommunicationDevSn      valueTypes.String    `json:"communication_dev_sn" PointId:"communication_dev_sn" PointName:"Serial No" PointUpdateFreq:"UpdateFreqBoot"`
 		DevStatus               valueTypes.Integer   `json:"dev_status" PointId:"dev_status" PointUpdateFreq:"UpdateFreqInstant"`
 		DeviceCode              valueTypes.Integer   `json:"device_code" PointId:"device_code" PointUpdateFreq:"UpdateFreqBoot"`
@@ -123,21 +139,11 @@ type ResultData struct {
 		P13150MapVirgin         valueTypes.UnitValue `json:"p13150_map_virgin" PointIgnore:"true"`
 		PsKey                   valueTypes.PsKey     `json:"ps_key" PointId:"ps_key" PointUpdateFreq:"UpdateFreqBoot"`
 		UUID                    valueTypes.Integer   `json:"uuid" PointId:"uuid" PointUpdateFreq:"UpdateFreqBoot"`
-	} `json:"storage_inverter_data" PointIdFromChild:"PsKey" PointIdReplace:"true" DataTable:"false"`
-	TodayEnergy       valueTypes.UnitValue `json:"today_energy" PointId:"today_energy" PointUpdateFreq:"UpdateFreqDay"`
-	TodayEnergyVirgin valueTypes.UnitValue `json:"today_energy_virgin"  PointIgnore:"true"`
-	TodayIncome       valueTypes.UnitValue `json:"today_income" PointId:"today_income" PointUpdateFreq:"UpdateFreqDay"`
-	TotalEnergy       valueTypes.UnitValue `json:"total_energy" PointId:"total_energy" PointUpdateFreq:"UpdateFreqTotal"`
-	TotalEnergyVirgin valueTypes.UnitValue `json:"total_energy_virgin"  PointIgnore:"true"`
-	TotalIncome       valueTypes.UnitValue `json:"total_income" PointId:"total_income" PointUpdateFreq:"UpdateFreqTotal"`
-	TreeReduceTotal   valueTypes.UnitValue `json:"tree_reduce_total" PointId:"tree_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
-	ValidFlag         valueTypes.Bool      `json:"valid_flag" PointId:"valid_flag" PointUpdateFreq:"UpdateFreqBoot"`
-	WgsLatitude       valueTypes.Float     `json:"wgs_latitude" PointId:"wgs_latitude" PointUpdateFreq:"UpdateFreqBoot"`
-	WgsLongitude      valueTypes.Float     `json:"wgs_longitude" PointId:"wgs_longitude" PointUpdateFreq:"UpdateFreqBoot"`
-	ZfzyMap           valueTypes.UnitValue `json:"zfzy_map" PointId:"zfzy_map" PointName:"Self Consumption Of PV" PointUpdateFreq:"UpdateFreq5Mins"`
-	ZfzyMapVirgin     valueTypes.UnitValue `json:"zfzy_map_virgin"  PointIgnore:"true"`
-	ZjzzMap           valueTypes.UnitValue `json:"zjzz_map" PointId:"zjzz_map" PointName:"Self Sufficiency" PointUpdateFreq:"UpdateFreq5Mins"`
-	ZjzzMapVirgin     valueTypes.UnitValue `json:"zjzz_map_virgin"  PointIgnore:"true"`
+	} `json:"storage_inverter_data" PointId:"inverter" PointIdReplace:"true"`	// PointIdFromChild:"PsKey" PointIdReplace:"true"`
+	RobotNumSweepCapacity       struct {
+		Num           valueTypes.Integer `json:"num" PointId:"num" PointUpdateFreq:"UpdateFreqBoot"`
+		SweepCapacity valueTypes.Float   `json:"sweep_capacity" PointId:"sweep_capacity" PointUpdateFreq:"UpdateFreqBoot"`
+	} `json:"robot_num_sweep_capacity" PointId:"robot"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -149,73 +155,59 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
 	for range Only.Once {
-		pkg := reflection.GetName("", *e)
+		// pkg := reflection.GetName("", *e)
 		// name := api.JoinWithDots(0, valueTypes.DateTimeLayoutDay, pkg, e.Response.ResultData.PsPsKey)
-		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
+		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))	// , e.Response.ResultData.PsKey.String()
 
-		dstEndpoint := "virtual." + e.Request.PsId.String()
-		srcEndpoint := fmt.Sprintf("%s.%s", pkg, e.Response.ResultData.PsPsKey.Value())
-
-		var devices []string
-		for _, device := range e.Response.ResultData.StorageInverterData {
-			if !device.DeviceType.Match(api.DeviceNameEnergyStorageSystem) {
-				// Only looking for a Battery.
-				continue
-			}
-			devices = append(devices, device.PsKey.String())
-		}
-
+		// dstEndpoint := "virtual." + e.Request.PsId.String()
+		// srcEndpoint := fmt.Sprintf("%s.%s", pkg, e.Response.ResultData.PsPsKey.Value())
 
 		for pn, device := range e.Response.ResultData.StorageInverterData {
 			fmt.Println(pn)
 			fmt.Println(device.PsKey)
 		}
 
-		for _, device := range devices {
-			dstEndpoint = "virtual." + device
-			_ = entries.CopyPoint(api.JoinWithDots(0, "", srcEndpoint, device, "p13003"), dstEndpoint, "p13003", "") // PV Power To Load
-			_ = entries.CopyPoint(api.JoinWithDots(0, "", srcEndpoint, device, "p13119"), dstEndpoint, "p13119", "") // Load Power
-			_ = entries.CopyPoint(api.JoinWithDots(0, "", srcEndpoint, device, "p13121"), dstEndpoint, "p13121", "") // PV Power To Grid
-			_ = entries.CopyPoint(api.JoinWithDots(0, "", srcEndpoint, device, "p13126"), dstEndpoint, "p13126", "") // PV Power To Battery
-			_ = entries.CopyPoint(api.JoinWithDots(0, "", srcEndpoint, device, "p13141"), dstEndpoint, "p13141", "") // Battery Charge Percent
-			_ = entries.CopyPoint(api.JoinWithDots(0, "", srcEndpoint, device, "p13149"), dstEndpoint, "p13149", "") // ?? Grid Power To Load
-			_ = entries.CopyPoint(api.JoinWithDots(0, "", srcEndpoint, device, "p13150"), dstEndpoint, "p13150", "") //
+		// var devices []string
+		for _, device := range e.Response.ResultData.StorageInverterData {
+			if !device.DeviceType.Match(api.DeviceNameEnergyStorageSystem) {
+				// Only looking for a Battery.
+				continue
+			}
+		// 	devices = append(devices, device.PsKey.String())
+		// }
+		//
+		// for _, device := range devices {
+			// dstEndpoint = "virtual." + device
+			entries.CopyPointFromName("P13003Map", GoStruct.NewEndPointPath("virtual", device.PsKey.String()), "p13003", "PV Power To Load")
+			entries.CopyPointFromName("P13119Map", GoStruct.NewEndPointPath("virtual", device.PsKey.String()), "p13119", "Load Power")
+			entries.CopyPointFromName("P13121Map", GoStruct.NewEndPointPath("virtual", device.PsKey.String()), "p13121", "PV Power To Grid")
+			entries.CopyPointFromName("P13126Map", GoStruct.NewEndPointPath("virtual", device.PsKey.String()), "p13126", "PV Power To Battery")
+			entries.CopyPointFromName("P13141", GoStruct.NewEndPointPath("virtual", device.PsKey.String()), "p13141", "Battery Charge Percent")
+			entries.CopyPointFromName("P13149Map", GoStruct.NewEndPointPath("virtual", device.PsKey.String()), "p13149", "Grid Power To Load") // ??
+			entries.CopyPointFromName("P13150Map", GoStruct.NewEndPointPath("virtual", device.PsKey.String()), "p13150", "")
 		}
 
-		dstEndpoint = "virtual." + e.Response.ResultData.PsPsKey.Value()
-		_ = entries.CopyPoint(srcEndpoint + ".p83081", dstEndpoint, "p83081", "")	// ?? Load Power - also getPsDetailWithPsType.1171348_11_0_0.curr_power
-		_ = entries.CopyPoint(srcEndpoint + ".p83102", dstEndpoint, "p83102", "")	// Energy Purchased
-		_ = entries.CopyPoint(srcEndpoint + ".p83102_percent", dstEndpoint + ".p83102", "percent", "")	// Energy Purchased Percent
-		_ = entries.CopyPoint(srcEndpoint + ".p83118", dstEndpoint, "p83118", "")	// Energy Used
-		_ = entries.CopyPoint(srcEndpoint + ".p83119", dstEndpoint, "p83119", "")	// Energy Feed-In
-		_ = entries.CopyPoint(srcEndpoint + ".p83120", dstEndpoint, "p83120", "")	// Energy Battery Charge
-		_ = entries.CopyPoint(srcEndpoint + ".p83122", dstEndpoint, "p83122", "")	// Self Sufficiency Percent
-		_ = entries.CopyPoint(srcEndpoint + ".p83124", dstEndpoint, "p83124", "")
-		_ = entries.CopyPoint(srcEndpoint + ".p83202", dstEndpoint, "p83202", "")	// Installed Power
+		// dstEndpoint = "virtual." + e.Response.ResultData.PsPsKey.Value()
+		pskey := e.Response.ResultData.PsKey.Value()
+		entries.CopyPointFromName("P83081Map", GoStruct.NewEndPointPath("virtual", pskey), "p83081", "Load Power")	// ?? - also getPsDetailWithPsType.1171348_11_0_0.curr_power
+		entries.CopyPointFromName("P83102Map", GoStruct.NewEndPointPath("virtual", pskey), "p83102", "Energy Purchased")
+		entries.CopyPointFromName("P83102Percent", GoStruct.NewEndPointPath("virtual", pskey, "p83102"), "percent", "Energy Purchased Percent")
+		entries.CopyPointFromName("P83118Map", GoStruct.NewEndPointPath("virtual", pskey), "p83118", "Energy Used")
+		entries.CopyPointFromName("P83119Map", GoStruct.NewEndPointPath("virtual", pskey), "p83119", "Energy Feed-In")
+		entries.CopyPointFromName("P83120Map", GoStruct.NewEndPointPath("virtual", pskey), "p83120", "Energy Battery Charge")
+		entries.CopyPointFromName("P83122", GoStruct.NewEndPointPath("virtual", pskey), "p83122", "Self Sufficiency Percent")
+		entries.CopyPointFromName("P83124Map", GoStruct.NewEndPointPath("virtual", pskey), "p83124", "")
+		entries.CopyPointFromName("P83202Map", GoStruct.NewEndPointPath("virtual", pskey), "p83202", "Installed Power")
 
-		_ = entries.CopyPoint(srcEndpoint + ".zjzz_map", dstEndpoint, "zjzz", "")	// Self Sufficiency
-		_ = entries.CopyPoint(srcEndpoint + ".zfzy_map", dstEndpoint, "zfzy", "")	// Self Consumption Of PV
-
-		// for _, sid := range e.Response.ResultData.StorageInverterData {
-		// 	name = api.JoinWithDots(0, valueTypes.DateTimeLayoutDay, pkg, sid.PsKey)
-		// 	entries.StructToPointsHHHHH(sid, name, sid.PsKey.Value(), valueTypes.NewDateTime(""))
-		//
-		// 	// EnergyFlow
-		// 	for _, ef := range sid.EnergyFlow {
-		// 		name = api.JoinWithDots(0, valueTypes.DateTimeLayoutDay, pkg, sid.PsKey)
-		// 		entries.StructToPointsHHHHH(ef, name, sid.PsKey.Value(), valueTypes.NewDateTime(""))
-		//
-		// 		// EnergyFlow
-		// 	}
-		// }
+		entries.CopyPointFromName("ZjzzMap", GoStruct.NewEndPointPath("virtual", pskey), "zjzz_map", "Self Sufficiency")
+		entries.CopyPointFromName("ZfzyMap", GoStruct.NewEndPointPath("virtual", pskey), "zfzy_map", "Self Consumption Of PV")
 	}
 
-	// api.Points.Print()
 	return entries
 }
 
 func (e *EndPoint) GetPsKeys() []string {
-	ret := []string{e.Response.ResultData.PsPsKey.Value()}
+	ret := []string{e.Response.ResultData.PsKey.Value()}
 	for _, l := range e.Response.ResultData.StorageInverterData {
 		ret = append(ret, l.PsKey.Value())
 	}
@@ -231,11 +223,11 @@ func (e *EndPoint) GetPsState() string {
 }
 
 func (e *EndPoint) GetPsKey() string {
-	return e.Response.ResultData.PsPsKey.Value()
+	return e.Response.ResultData.PsKey.Value()
 }
 
 func (e *EndPoint) GetDeviceModelCode() string {
-	ret := e.Response.ResultData.PsPsKey.Value()
+	ret := e.Response.ResultData.PsKey.Value()
 	for _, l := range e.Response.ResultData.StorageInverterData {
 		ret = l.DeviceModelCode.Value()
 		break
@@ -244,7 +236,7 @@ func (e *EndPoint) GetDeviceModelCode() string {
 }
 
 func (e *EndPoint) GetDeviceName() string {
-	ret := e.Response.ResultData.PsPsKey.Value()
+	ret := e.Response.ResultData.PsKey.Value()
 	for _, l := range e.Response.ResultData.StorageInverterData {
 		ret = l.DeviceName.Value()
 		break
@@ -253,7 +245,7 @@ func (e *EndPoint) GetDeviceName() string {
 }
 
 func (e *EndPoint) GetDeviceSerial() string {
-	ret := e.Response.ResultData.PsPsKey.Value()
+	ret := e.Response.ResultData.PsKey.Value()
 	for _, l := range e.Response.ResultData.StorageInverterData {
 		ret = l.InverterSn.Value()
 		break

@@ -5,7 +5,7 @@
 package NullEndpoint
 
 import (
-	"GoSungrow/Only"
+	"github.com/MickMake/GoUnify/Only"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"GoSungrow/iSolarCloud/api/GoStruct/reflection"
@@ -388,5 +388,10 @@ func (e EndPoint) GetEndPointDataTables() output.Tables {
 // ResultDataRef - Return the locally scoped ResultData structure.
 func (e EndPoint) ResultDataRef() ResultData {
 	return e.Response.ResultData
+}
+
+// IsDebug - Are we in debug mode?
+func (e EndPoint) IsDebug() bool {
+	return e.ApiIsDebug()
 }
 

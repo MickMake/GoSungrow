@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud"
 	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdConfig"
 	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/spf13/cobra"
@@ -218,6 +218,32 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		}
 		c.SelfCmd.AddCommand(cmdDataGraph)
 		cmdDataGraph.Example = cmdHelp.PrintExamples(cmdDataGraph, "queryDeviceList", "WebAppService.showPSView", "stats")
+
+		// ******************************************************************************** //
+		var cmdApiStruct = &cobra.Command{
+			Use:                   output.StringTypeStruct + " <[area.]endpoint> [endpoint args ...]",
+			Aliases:               []string{},
+			Annotations:           map[string]string{"group": "Data"},
+			Short:                 fmt.Sprintf("Show response as Go structure (debug)"),
+			Long:                  fmt.Sprintf("Show response as Go structure (debug)"),
+			DisableFlagParsing:    false,
+			DisableFlagsInUseLine: false,
+			PreRunE:               func(cmd *cobra.Command, args []string) error {
+				cmds.Error = cmds.ProcessArgs(cmd, args)
+				if cmds.Error != nil {
+					return cmds.Error
+				}
+				cmds.Error = cmds.SunGrowArgs(cmd, args)
+				if cmds.Error != nil {
+					return cmds.Error
+				}
+				return nil
+			},
+			RunE:                  c.GetEndpoints,
+			Args:                  cobra.MinimumNArgs(0),
+		}
+		c.SelfCmd.AddCommand(cmdApiStruct)
+		cmdApiStruct.Example = cmdHelp.PrintExamples(cmdApiStruct, "queryDeviceList", "WebAppService.showPSView")
 	}
 	return c.SelfCmd
 }

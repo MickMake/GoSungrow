@@ -1,7 +1,7 @@
 package api
 
 import (
-	"GoSungrow/Only"
+	"github.com/MickMake/GoUnify/Only"
 	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"GoSungrow/iSolarCloud/api/GoStruct/reflection"
 	"errors"

@@ -1,7 +1,7 @@
 package api
 
 import (
-	"GoSungrow/Only"
+	"github.com/MickMake/GoUnify/Only"
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"github.com/MickMake/GoUnify/cmdPath"
@@ -124,7 +124,11 @@ func (w *Web) getApi(endpoint EndPoint) ([]byte, error) {
 		}
 
 		postUrl := w.Url.AppendPath(u.String()).String()
-		j, _ := json.Marshal(request)
+		var j []byte
+		j, w.Error = json.Marshal(request)
+		if w.Error != nil {
+			break
+		}
 
 		w.httpResponse, w.Error = http.Post(postUrl, "application/json", bytes.NewBuffer(j))
 		if w.Error != nil {

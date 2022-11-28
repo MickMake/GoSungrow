@@ -1,7 +1,6 @@
 package iSolarCloud
 
 import (
-	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/AliSmsService"
 	"GoSungrow/iSolarCloud/AppService"
 	"GoSungrow/iSolarCloud/AppService/login"
@@ -14,6 +13,8 @@ import (
 	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
+	"os"
 	"strings"
 	"time"
 )
@@ -29,6 +30,7 @@ type SunGrow struct {
 	Areas      api.Areas
 	Error      error
 	NeedLogin  bool
+	AuthDetails *login.SunGrowAuth
 
 	OutputType output.OutputType
 	SaveAsFile bool
@@ -74,6 +76,13 @@ func (sg *SunGrow) IsError() bool {
 	return false
 }
 
+func (sg *SunGrow) IsNotError() bool {
+	if sg.Error == nil {
+		return true
+	}
+	return false
+}
+
 func (sg *SunGrow) AppendUrl(endpoint string) api.EndPointUrl {
 	return sg.ApiRoot.AppendUrl(endpoint)
 }
@@ -99,7 +108,7 @@ func (sg *SunGrow) GetEndpoint(ae string) api.EndPoint {
 				Lang:      "_en_US",
 				SysCode:   "200",
 				Token:     sg.GetToken(),
-				UserID:    sg.GetUserId(),
+				UserId:    sg.GetUserId(),
 				ValidFlag: "1,3",
 			})
 		}
@@ -111,6 +120,11 @@ func (sg *SunGrow) GetEndpoint(ae string) api.EndPoint {
 func (sg *SunGrow) GetByJson(endpoint string, request string) api.EndPoint {
 	var ret api.EndPoint
 	for range Only.Once {
+		if sg.NeedLogin {
+			sg.Error = errors.New("currently logged out")
+			break
+		}
+
 		ret = sg.GetEndpoint(endpoint)
 		if sg.IsError() {
 			break
@@ -127,11 +141,8 @@ func (sg *SunGrow) GetByJson(endpoint string, request string) api.EndPoint {
 
 		ret = ret.Call()
 		sg.Error = ret.GetError()
-		if sg.IsError() {
-			if strings.Contains(sg.Error.Error(), "er_token_login_invalid") {
-				sg.Logout()
-				break
-			}
+		if sg.IsLoggedOut() {
+			break
 		}
 
 		switch {
@@ -176,6 +187,11 @@ func (sg *SunGrow) GetByJson(endpoint string, request string) api.EndPoint {
 func (sg *SunGrow) GetByStruct(endpoint string, request interface{}, cache time.Duration) api.EndPoint {
 	var ret api.EndPoint
 	for range Only.Once {
+		if sg.NeedLogin {
+			sg.Error = errors.New("currently logged out")
+			break
+		}
+
 		ret = sg.GetEndpoint(endpoint)
 		if sg.IsError() {
 			break
@@ -201,8 +217,7 @@ func (sg *SunGrow) GetByStruct(endpoint string, request interface{}, cache time.
 		}
 
 		sg.Error = ret.GetError()
-		if strings.Contains(sg.Error.Error(), "er_token_login_invalid") {
-			sg.Logout()
+		if sg.IsLoggedOut() {
 			break
 		}
 	}
@@ -280,18 +295,77 @@ func (sg *SunGrow) AreaNotExists(area string) bool {
 	return sg.Areas.NotExists(area)
 }
 
-func (sg *SunGrow) Login(auth login.SunGrowAuth) error {
+func (sg *SunGrow) login() error {
 	for range Only.Once {
+		if sg.AuthDetails == nil {
+			break
+		}
 		a := sg.GetEndpoint(AppService.GetAreaName() + ".login")
 		sg.Auth = login.Assert(a)
 
-		sg.Error = sg.Auth.Login(&auth)
+		sg.Error = sg.Auth.Login(sg.AuthDetails)
+		if sg.IsLoggedOut() {
+			break
+		}
 		if sg.IsError() {
+			break
+		}
+	}
+	return sg.Error
+}
+
+func (sg *SunGrow) Login(auth login.SunGrowAuth) error {
+	for range Only.Once {
+		sg.AuthDetails = &auth
+
+		// Fetch a simple request.
+		for range Only.Twice {
+			sg.Error = nil	// Needed for looping twice.
+			sg.Error = sg.login()
+			if sg.Error == nil {
+				// - DO NOT BREAK
+				// We want to test a simple request first.
+			}
+
+			_ = sg.GetByStruct("AppService.getUserList", nil, DefaultCacheTimeout)
+			if !sg.IsLoggedOut() {
+				break
+			}
+
+			if sg.Error == nil {
+				sg.NeedLogin = false
+				break
+			}
+
+			_, _ = fmt.Fprintf(os.Stderr,"Logging in again\n")
+			// fmt.Printf("DEBUG: AppService.getUserList - error - %s\n", sg.Error)
+		}
+
+		if sg.NeedLogin {
+			sg.Error = errors.New("cannot login")
+			break
+		}
+		if sg.Error != nil {
 			break
 		}
 	}
 
 	return sg.Error
+}
+
+func (sg *SunGrow) IsLoggedOut() bool {
+	for range Only.Once {
+		if sg.IsNotError() {
+			sg.NeedLogin = false
+			break
+		}
+		if strings.Contains(sg.Error.Error(), "er_token_login_invalid") {
+			// sg.Error = nil
+			sg.NeedLogin = true
+			sg.Logout()
+		}
+	}
+	return sg.NeedLogin
 }
 
 func (sg *SunGrow) Logout() {

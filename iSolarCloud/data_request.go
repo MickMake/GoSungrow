@@ -20,7 +20,7 @@ type SunGrowDataRequest struct {
 type SunGrowDataRequests map[string]SunGrowDataRequest
 
 type RequestArgs struct {
-	// Be careful with types. If you see a general "error' response,
+	// Be careful with types. If you see a general 'error' response,
 	// then it's more likely a type mismatch.
 	PsId           *valueTypes.PsId     `json:"ps_id,omitempty"`
 	PsId2          *valueTypes.PsId     `json:"psId,omitempty"`		// Specifically for WebIscmAppService.getPowerStationInfo
@@ -28,9 +28,6 @@ type RequestArgs struct {
 	PsIds          *valueTypes.PsIds    `json:"psIds,omitempty"`
 	PsIdList       *valueTypes.String   `json:"ps_id_list,omitempty"`
 	ReportType     *valueTypes.String   `json:"report_type,omitempty"`
-	DateId         *valueTypes.DateTime `json:"date_id,omitempty"`
-	DateType       *string              `json:"date_type,omitempty"`
-	MonthDate      *valueTypes.DateTime `json:"month_date,omitempty"`
 	FaultTypeCode  *valueTypes.Integer  `json:"fault_type_code,omitempty"`
 	Size           *valueTypes.Integer  `json:"size,omitempty"`
 	CurPage        *valueTypes.Integer  `json:"curPage,omitempty"`
@@ -43,14 +40,20 @@ type RequestArgs struct {
 	DeviceModelId  *valueTypes.String   `json:"device_model_id,omitempty"`
 	PsKey          *valueTypes.PsKey    `json:"ps_key,omitempty"`
 
-	// UNVERIFIED
+	// DateTime
+	DateId         *valueTypes.DateTime  `json:"date_id,omitempty"`
+	DateType       *string               `json:"date_type,omitempty"`
+	MonthDate      *valueTypes.DateTime  `json:"month_date,omitempty"`
 	Day            *valueTypes.DateTime  `json:"day,omitempty"`
-	AppKey         *valueTypes.String    `json:"app_key,omitempty"`
 	BeginTime      *valueTypes.DateTime  `json:"beginTime,omitempty"`	// valueTypes.Time
 	EndTime        *valueTypes.DateTime  `json:"endTime,omitempty"`		// valueTypes.Time
+	StartTimeStamp *valueTypes.DateTime  `json:"start_time_stamp,omitempty"`
+	EndTimeStamp   *valueTypes.DateTime  `json:"end_time_stamp,omitempty"`
+
+	// UNVERIFIED
+	AppKey         *valueTypes.String    `json:"app_key,omitempty"`
 	DealerOrgCode  *valueTypes.String    `json:"dealer_org_code,omitempty"`
 	DeviceSn       *valueTypes.String    `json:"device_sn,omitempty"`
-	EndTimeStamp   *valueTypes.DateTime  `json:"end_time_stamp,omitempty"`
 	FaultCode      *valueTypes.Integer   `json:"fault_code,omitempty"`
 	FaultName      *valueTypes.String    `json:"fault_name,omitempty"`
 	Id             *valueTypes.Integer   `json:"id,omitempty"`
@@ -64,9 +67,9 @@ type RequestArgs struct {
 	PsKeyList      *valueTypes.String    `json:"ps_key_list,omitempty"`
 	QueryType      *valueTypes.String    `json:"query_type,omitempty"`
 	Sn             *valueTypes.String    `json:"sn,omitempty"`
-	StartTimeStamp *valueTypes.DateTime  `json:"start_time_stamp,omitempty"`
 	Table          *valueTypes.String    `json:"table,omitempty"`
 	TaskId         *valueTypes.String    `json:"task_id,omitempty"`
+	UserId         *valueTypes.String    `json:"user_id,omitempty"`
 
 	// PsId valueTypes.PsId `json:"id"`
 	// PsId valueTypes.PsId `json:"ps_id"`
@@ -97,14 +100,14 @@ type RequestArgs struct {
 	// TaskId valueTypes.String `json:"task_id"`
 }
 
+//goland:noinspection GoCommentStart
 const (
 	NamePsId           = "PsId"
+	NamePsId2          = "PsId2"
+	NamePsId3          = "PsId3"
 	NamePsIds          = "PsIds"
 	NamePsIdList       = "PsIdList"
 	NameReportType     = "ReportType"
-	NameDateId         = "DateId"
-	NameDateType       = "DateType"
-	NameMonthDate      = "MonthDate"
 	NameFaultTypeCode  = "FaultTypeCode"
 	NameSize           = "Size"
 	NameCurPage        = "CurPage"
@@ -117,14 +120,20 @@ const (
 	NameDeviceModelId  = "DeviceModelId"
 	NamePsKey          = "PsKey"
 
-	// UNVERIFIED
+	// DateTime
+	NameDateId         = "DateId"
+	NameDateType       = "DateType"
+	NameMonthDate      = "MonthDate"
 	NameDay            = "Day"
-	NameAppKey         = "AppKey"
 	NameBeginTime      = "BeginTime"
 	NameEndTime        = "EndTime"
+	NameStartTimeStamp = "StartTimeStamp"
+	NameEndTimeStamp   = "EndTimeStamp"
+
+	// UNVERIFIED
+	NameAppKey         = "AppKey"
 	NameDealerOrgCode  = "DealerOrgCode"
 	NameDeviceSn       = "DeviceSn"
-	NameEndTimeStamp   = "EndTimeStamp"
 	NameFaultCode      = "FaultCode"
 	NameFaultName      = "FaultName"
 	NameId             = "Id"
@@ -138,19 +147,18 @@ const (
 	NamePsKeyList      = "PsKeyList"
 	NameQueryType      = "QueryType"
 	NameSn             = "Sn"
-	NameStartTimeStamp = "StartTimeStamp"
 	NameTable          = "Table"
 	NameTaskId         = "TaskId"
+	NameUserId         = "UserId"
 )
 
 var Help = map[string]string{
 	NamePsId:           "PsId - valid ps_id",
+	NamePsId2:          "PsId - valid ps_id",
+	NamePsId3:          "PsId - valid ps_id",
 	NamePsIds:          "PsIds - list of ps_id",
 	NamePsIdList:       "PsIdList - ",
 	NameReportType:     "ReportType - ",
-	NameDateId:         "DateId - Date in format YYYYMMDD or YYYYMM or YYYY",
-	NameDateType:       "DateType - ",
-	NameMonthDate:      "MonthDate - Date in format YYYYMM",
 	NameFaultTypeCode:  "FaultTypeCode - ",
 	NameSize:           "Size - ",
 	NameCurPage:        "CurPage - ",
@@ -162,15 +170,21 @@ var Help = map[string]string{
 	NameTemplateId:     "TemplateId - ",
 	NameDeviceModelId:  "DeviceModelId - ",
 	NamePsKey:          "PsKey - ",
+
+	// DateTime
+	NameDateId:         "DateId - Date in format YYYYMMDD or YYYYMM or YYYY",
+	NameDateType:       "DateType - ",
+	NameMonthDate:      "MonthDate - Date in format YYYYMM",
 	NameDay:            "Day - Date in format YYYYMMDD",
+	NameBeginTime:      "BeginTime - ",
+	NameEndTime:        "EndTime - ",
+	NameStartTimeStamp: "StartTimeStamp - ",
+	NameEndTimeStamp:   "EndTimeStamp - ",
 
 	// UNVERIFIED
 	NameAppKey:         "AppKey - ",
-	NameBeginTime:      "BeginTime - ",
-	NameEndTime:        "EndTime - ",
 	NameDealerOrgCode:  "DealerOrgCode - ",
 	NameDeviceSn:       "DeviceSn - ",
-	NameEndTimeStamp:   "EndTimeStamp - ",
 	NameFaultCode:      "FaultCode - ",
 	NameFaultName:      "FaultName - ",
 	NameId:             "Id - ",
@@ -184,9 +198,9 @@ var Help = map[string]string{
 	NamePsKeyList:      "PsKeyList - ",
 	NameQueryType:      "QueryType - ",
 	NameSn:             "Sn - ",
-	NameStartTimeStamp: "StartTimeStamp - ",
 	NameTable:          "Table - ",
 	NameTaskId:         "TaskId - ",
+	NameUserId:         "UserId - ",
 }
 
 // MarshalJSON - Convert value to JSON
@@ -209,9 +223,6 @@ func (sgd SunGrowDataRequest) MarshalJSON() ([]byte, error) {
 			PsIds:          sgd.args.PsIds,
 			PsIdList:       sgd.args.PsIdList,
 			ReportType:     sgd.args.ReportType,
-			DateId:         sgd.args.DateId,
-			DateType:       dt,
-			MonthDate:      sgd.args.MonthDate,
 			FaultTypeCode:  sgd.args.FaultTypeCode,
 			Size:           sgd.args.Size,
 			CurPage:        sgd.args.CurPage,
@@ -224,14 +235,20 @@ func (sgd SunGrowDataRequest) MarshalJSON() ([]byte, error) {
 			DeviceModelId:  sgd.args.DeviceModelId,
 			PsKey:          sgd.args.PsKey,
 
+			// DateTime
+			DateId:         sgd.args.DateId,
+			DateType:       dt,
+			MonthDate:      sgd.args.MonthDate,
+			BeginTime:      sgd.args.BeginTime,
+			EndTime:        sgd.args.EndTime,
+			StartTimeStamp: sgd.args.StartTimeStamp,
+			EndTimeStamp:   sgd.args.EndTimeStamp,
+
 			// UNVERIFIED
 			Day:            sgd.args.Day,
 			AppKey:         sgd.args.AppKey,
-			BeginTime:      sgd.args.BeginTime,
-			EndTime:        sgd.args.EndTime,
 			DealerOrgCode:  sgd.args.DealerOrgCode,
 			DeviceSn:       sgd.args.DeviceSn,
-			EndTimeStamp:   sgd.args.EndTimeStamp,
 			FaultCode:      sgd.args.FaultCode,
 			FaultName:      sgd.args.FaultName,
 			Id:             sgd.args.Id,
@@ -245,9 +262,9 @@ func (sgd SunGrowDataRequest) MarshalJSON() ([]byte, error) {
 			PsKeyList:      sgd.args.PsKeyList,
 			QueryType:      sgd.args.QueryType,
 			Sn:             sgd.args.Sn,
-			StartTimeStamp: sgd.args.StartTimeStamp,
 			Table:          sgd.args.Table,
 			TaskId:         sgd.args.TaskId,
+			UserId:         sgd.args.UserId,
 		})
 		if err == nil {
 			break
@@ -261,25 +278,19 @@ func (sgd *SunGrowDataRequest) Set(arg string, value string) {
 	for range Only.Once {
 		switch arg {
 			case NamePsId:
+				fallthrough
+			case NamePsId2:
+				fallthrough
+			case NamePsId3:
 				sgd.aPsId = valueTypes.SetPsIdStrings(SplitArg(value))	// strings.Split(a[1], ","))
 				sgd.SetPsId(value)
-				// v, err := strconv.ParseInt(value, 10, 64)
-				// if err != nil {
-				// 	fmt.Printf("Error: %s - %s\n", NamePsId, err)
-				// 	fmt.Printf("%s\n", Help[arg])
-				// }
-				// val := valueTypes.SetPsIdValue(v); sgd.args.PsId = &val
 			case NamePsIds:
 				sgd.aPsId = valueTypes.SetPsIdStrings(SplitArg(value))	// strings.Split(a[1], ","))
 				val := valueTypes.SetPsIdStrings(SplitArg(value)); sgd.args.PsIds = &val
 			case NameReportType:
 				val := valueTypes.SetStringValue(value); sgd.args.ReportType = &val
-			case NameDateId:
-				sgd.SetDateId(value)
 			case NameFaultTypeCode:
 				val := valueTypes.SetIntegerString(value); sgd.args.FaultTypeCode = &val
-			case NameMonthDate:
-				sgd.SetMonthDate(value)
 			case NameSize:
 				val := valueTypes.SetIntegerString(value); sgd.args.Size = &val
 			case NameCurPage:
@@ -303,22 +314,29 @@ func (sgd *SunGrowDataRequest) Set(arg string, value string) {
 			case NamePsKey:
 				val := valueTypes.SetPsKeyValue(value); sgd.args.PsKey = &val
 
-
-			// UNVERIFIED
+			// DateTime
+			case NameDateId:
+				sgd.SetDateId(value)
+			case NameMonthDate:
+				sgd.SetMonthDate(value)
 			case NameDay:
 				sgd.SetDay(value)
-			case NameAppKey:
-				val := valueTypes.SetStringValue(value); sgd.args.AppKey = &val
 			case NameBeginTime:
 				val := valueTypes.SetDateTimeString(value); sgd.args.BeginTime = &val
 			case NameEndTime:
 				val := valueTypes.SetDateTimeString(value); sgd.args.EndTime = &val
+			case NameStartTimeStamp:
+				val := valueTypes.SetDateTimeString(value); sgd.args.StartTimeStamp = &val
+			case NameEndTimeStamp:
+				val := valueTypes.SetDateTimeString(value); sgd.args.EndTimeStamp = &val
+
+			// UNVERIFIED
+			case NameAppKey:
+				val := valueTypes.SetStringValue(value); sgd.args.AppKey = &val
 			case NameDealerOrgCode:
 				val := valueTypes.SetStringValue(value); sgd.args.DealerOrgCode = &val
 			case NameDeviceSn:
 				val := valueTypes.SetStringValue(value); sgd.args.DeviceSn = &val
-			case NameEndTimeStamp:
-				val := valueTypes.SetDateTimeString(value); sgd.args.EndTimeStamp = &val
 			case NameFaultCode:
 				val := valueTypes.SetIntegerString(value); sgd.args.FaultCode = &val
 			case NameFaultName:
@@ -345,14 +363,114 @@ func (sgd *SunGrowDataRequest) Set(arg string, value string) {
 				val := valueTypes.SetStringValue(value); sgd.args.QueryType = &val
 			case NameSn:
 				val := valueTypes.SetStringValue(value); sgd.args.Sn = &val
-			case NameStartTimeStamp:
-				val := valueTypes.SetDateTimeString(value); sgd.args.StartTimeStamp = &val
 			case NameTable:
 				val := valueTypes.SetStringValue(value); sgd.args.Table = &val
 			case NameTaskId:
 				val := valueTypes.SetStringValue(value); sgd.args.TaskId = &val
+			case NameUserId:
+				val := valueTypes.SetStringValue(value); sgd.args.UserId = &val
 		}
 	}
+}
+
+func (sgd *SunGrowDataRequest) Get(arg string) string {
+	var value string
+	for range Only.Once {
+		switch arg {
+			case NamePsId:
+				value = sgd.args.PsId.String()
+			case NamePsId2:
+				value = sgd.args.PsId2.String()
+			case NamePsId3:
+				value = sgd.args.PsId3.String()
+			case NamePsIds:
+				value = strings.Join(sgd.args.PsIds.Strings(), ",")
+			case NameReportType:
+				value = sgd.args.ReportType.String()
+			case NameFaultTypeCode:
+				value = sgd.args.FaultTypeCode.String()
+			case NameSize:
+				value = sgd.args.Size.String()
+			case NameCurPage:
+				value = sgd.args.CurPage.String()
+			case NameDeviceType:
+				value = sgd.args.DeviceType.String()
+			case NameReportId:
+				value = sgd.args.ReportId.String()
+			case NameCodeType:
+				value = sgd.args.CodeType.String()
+			case NameOrgIds:
+				value = sgd.args.OrgIds.String()
+			case NamePsIdList:
+				value = sgd.args.PsIdList.String()
+			case NameUuid:
+				value = sgd.args.Uuid.String()
+			case NameTemplateId:
+				value = sgd.args.TemplateId.String()
+			case NameDeviceModelId:
+				value = sgd.args.DeviceModelId.String()
+			case NamePsKey:
+				value = sgd.args.PsKey.String()
+
+
+			// DateTime
+			case NameMonthDate:
+				value = sgd.args.MonthDate.Original()
+			case NameDateId:
+				value = sgd.args.DateId.Original()
+			case NameDay:
+				value = sgd.args.Day.Original()
+			case NameBeginTime:
+				value = sgd.args.BeginTime.Original()
+			case NameEndTime:
+				value = sgd.args.EndTime.Original()
+			case NameStartTimeStamp:
+				value = sgd.args.StartTimeStamp.Original()
+			case NameEndTimeStamp:
+				value = sgd.args.EndTimeStamp.Original()
+
+			// UNVERIFIED
+			case NameAppKey:
+				value = sgd.args.AppKey.String()
+			case NameDealerOrgCode:
+				value = sgd.args.DealerOrgCode.String()
+			case NameDeviceSn:
+				value = sgd.args.DeviceSn.String()
+			case NameFaultCode:
+				value = sgd.args.FaultCode.String()
+			case NameFaultName:
+				value = sgd.args.FaultName.String()
+			case NameId:
+				value = sgd.args.Id.String()
+			case NameMinuteInterval:
+				value = sgd.args.MinuteInterval.String()
+			case NameOrderId:
+				value = sgd.args.OrderId.String()
+			case NameOrgId:
+				value = sgd.args.OrgId.String()
+			case NamePointId:
+				value = sgd.args.PointId.String()
+			case NamePoints:
+				value = sgd.args.Points.String()
+			case NamePrefix:
+				value = sgd.args.Prefix.String()
+			case NamePrimaryKey:
+				value = sgd.args.PrimaryKey.String()
+			case NamePsKeyList:
+				value = sgd.args.PsKeyList.String()
+			case NameQueryType:
+				value = sgd.args.QueryType.String()
+			case NameSn:
+				value = sgd.args.Sn.String()
+			case NameTable:
+				value = sgd.args.Table.String()
+			case NameTaskId:
+				value = sgd.args.TaskId.String()
+			case NameUserId:
+				value = sgd.args.UserId.String()
+		}
+	}
+	return value
 }
 
 func (sgd *SunGrowDataRequest) IsSet(arg string) bool {
@@ -361,6 +479,10 @@ func (sgd *SunGrowDataRequest) IsSet(arg string) bool {
 		switch arg {
 			case NamePsId:
 				if sgd.args.PsId != nil { ok = true }
+			case NamePsId2:
+				if sgd.args.PsId2 != nil { ok = true }
+			case NamePsId3:
+				if sgd.args.PsId3 != nil { ok = true }
 			case NamePsIds:
 				if sgd.args.PsIds != nil { ok = true }
 			case NameReportType:
@@ -442,9 +564,15 @@ func (sgd *SunGrowDataRequest) IsSet(arg string) bool {
 				if sgd.args.Table != nil { ok = true }
 			case NameTaskId:
 				if sgd.args.TaskId != nil { ok = true }
+			case NameUserId:
+				if sgd.args.UserId != nil { ok = true }
 		}
 	}
 	return ok
+}
+
+func (sgd *SunGrowDataRequest) IsNotSet(arg string) bool {
+	return !sgd.IsSet(arg)
 }
 
 func (sgd *SunGrowDataRequest) SetArgs(args ...string) {
@@ -477,8 +605,20 @@ func (sgd *SunGrowDataRequest) Validate(endpoint api.EndPoint) bool {
 				// Handled differently.
 				continue
 			}
+			if key == NamePsId2 {
+				// Handled differently.
+				continue
+			}
+			if key == NamePsId3 {
+				// Handled differently.
+				continue
+			}
 			if key == NamePsIds {
 				// Handled differently.
+				continue
+			}
+
+			if key == NameDateType {
 				continue
 			}
 
@@ -492,6 +632,29 @@ func (sgd *SunGrowDataRequest) Validate(endpoint api.EndPoint) bool {
 		}
 	}
 	return ok
+}
+
+func (sgd *SunGrowDataRequest) GetArgs(endpoint api.EndPoint) string {
+	var ret string
+	for range Only.Once {
+		args := endpoint.GetRequestArgNames()
+		for key, value := range args {
+			if value != "true" {
+				continue
+			}
+
+			if key == NameDateType {
+				continue	// Handled differently.
+			}
+
+			if sgd.IsNotSet(key) {
+				continue
+			}
+
+			ret += fmt.Sprintf("%s:%s ", key, sgd.Get(key))
+		}
+	}
+	return ret
 }
 
 func (sgd *SunGrowDataRequest) Help(endpoint api.EndPoint) {
@@ -540,12 +703,20 @@ func (sgd *SunGrowDataRequest) SetDateId(date string) {
 		// if sgd.IsNotRequired(NameDateId) {
 		// 	break
 		// }
-		did := valueTypes.SetDateTimeString(date)
+		var did valueTypes.DateTime
+		if date == "total" {
+			did = valueTypes.NewDateTime(valueTypes.Now)
+			did.DateType = "4"
+		} else {
+			did = valueTypes.SetDateTimeString(date)
+		}
 		sgd.args.DateId = &did
 		if sgd.args.DateId.IsZero() {
 			did = valueTypes.NewDateTime(valueTypes.Now)
 			sgd.args.DateId = &did
 		}
+
+		sgd.args.DateType = &did.DateType
 	}
 }
 
@@ -685,10 +856,26 @@ func (sgd *SunGrowDataRequest) SetPsId(psId string) {
 		pid := valueTypes.SetPsIdString(psId)
 		if pid.Error != nil {
 			fmt.Printf("Error: %s - %s\n", NamePsId, pid.Error)
+			break
 		}
-		sgd.args.PsId = &pid
-		sgd.args.PsId2 = &pid	// Specifically for WebIscmAppService.getPowerStationInfo
-		sgd.args.PsId3 = &pid	// Specifically for WebAppService.getPsTree
+
+		if sgd.IsRequired(NamePsId) {
+			sgd.args.PsId = &pid
+		}
+		if sgd.IsRequired(NamePsId2) {
+			sgd.args.PsId2 = &pid		// Specifically for WebIscmAppService.getPowerStationInfo
+		}
+		if sgd.IsRequired(NamePsId3) {
+			sgd.args.PsId3 = &pid		// Specifically for WebAppService.getPsTree
+		}
+		if sgd.IsRequired(NamePsIds) {
+			// sgd.args.PsIds = &pid
+		}
+
+		sgd.SetIfRequired(NamePsId, psId)
+		// sgd.SetIfRequired(NamePsId2, psId)
+		// sgd.SetIfRequired(NamePsId3, psId)
+		// sgd.SetIfRequired(NamePsIds, psId)
 	}
 }
 
@@ -702,4 +889,21 @@ func (sgd *SunGrowDataRequest) IsRequired(req string) bool {
 
 func (sgd *SunGrowDataRequest) IsNotRequired(req string) bool {
 	return !sgd.IsRequired(req)
+}
+
+func (sgd *SunGrowDataRequest) IsPsIdRequired() bool {
+	if sgd.IsRequired(NamePsId) {
+		return true
+	}
+	if sgd.IsRequired(NamePsId2) {
+		return true
+	}
+	if sgd.IsRequired(NamePsId3) {
+		return true
+	}
+	return false
+}
+
+func (sgd *SunGrowDataRequest) IsPsIdNotRequired() bool {
+	return !sgd.IsPsIdRequired()
 }

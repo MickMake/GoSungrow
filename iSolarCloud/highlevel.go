@@ -1,7 +1,7 @@
 package iSolarCloud
 
 import (
-	"GoSungrow/Only"
+	"github.com/MickMake/GoUnify/Only"
 	"GoSungrow/iSolarCloud/AppService/getDeviceList"
 	"GoSungrow/iSolarCloud/AppService/getDeviceModelInfoList"
 	"GoSungrow/iSolarCloud/AppService/getHouseholdStoragePsReport"
@@ -188,14 +188,12 @@ func (sg *SunGrow) AllCritical() error {
 	var ep api.EndPoint
 	for range Only.Once {
 		ep = sg.GetByJson("AppService.powerDevicePointList", "")
-		if ep.IsError() {
-			sg.Error = ep.GetError()
+		if sg.IsError() {
 			break
 		}
 
 		ep = sg.GetByJson("AppService.getPsList", "")
-		if ep.IsError() {
-			sg.Error = ep.GetError()
+		if sg.IsError() {
 			break
 		}
 
@@ -203,80 +201,67 @@ func (sg *SunGrow) AllCritical() error {
 
 		for _, psId := range _getPsList.GetPsIds() {
 			ep = sg.GetByJson("AppService.queryDeviceList", fmt.Sprintf(`{"ps_id":"%d"}`, psId.Value()))
-			if ep.IsError() {
-				sg.Error = ep.GetError()
+			if sg.IsError() {
 				break
 			}
 
 			ep = sg.GetByJson("AppService.queryDeviceListForApp", fmt.Sprintf(`{"ps_id":"%d"}`, psId.Value()))
-			if ep.IsError() {
-				sg.Error = ep.GetError()
+			if sg.IsError() {
 				break
 			}
 
 			ep = sg.GetByJson("WebAppService.showPSView", fmt.Sprintf(`{"ps_id":"%d"}`, psId.Value()))
-			if ep.IsError() {
-				sg.Error = ep.GetError()
+			if sg.IsError() {
 				break
 			}
 
 			// ep = sg.GetByJson("AppService.findPsType", fmt.Sprintf(`{"ps_id":"%d"}`, psId.Value()))
-			// if ep.IsError() {
-			// sg.Error = ep.GetError()
+			// if sg.IsError() {
 			// break
 			// }
 
 			ep = sg.GetByJson("AppService.getPowerStatistics", fmt.Sprintf(`{"ps_id":"%d"}`, psId.Value()))
-			if ep.IsError() {
-				sg.Error = ep.GetError()
+			if sg.IsError() {
 				break
 			}
 
 			ep = sg.GetByJson("AppService.getPsDetail", fmt.Sprintf(`{"ps_id":"%d"}`, psId.Value()))
-			if ep.IsError() {
-				sg.Error = ep.GetError()
+			if sg.IsError() {
 				break
 			}
 
 			ep = sg.GetByJson("AppService.getPsDetailWithPsType", fmt.Sprintf(`{"ps_id":"%d"}`, psId.Value()))
-			if ep.IsError() {
-				sg.Error = ep.GetError()
+			if sg.IsError() {
 				break
 			}
 
 			ep = sg.GetByJson("AppService.getPsHealthState", fmt.Sprintf(`{"ps_id":"%d"}`, psId.Value()))
-			if ep.IsError() {
-				sg.Error = ep.GetError()
+			if sg.IsError() {
 				break
 			}
 
 			ep = sg.GetByJson("AppService.getPsListStaticData", fmt.Sprintf(`{"ps_id":"%d"}`, psId.Value()))
-			if ep.IsError() {
-				sg.Error = ep.GetError()
+			if sg.IsError() {
 				break
 			}
 
 			ep = sg.GetByJson("AppService.getPsWeatherList", fmt.Sprintf(`{"ps_id":"%d"}`, psId.Value()))
-			if ep.IsError() {
-				sg.Error = ep.GetError()
+			if sg.IsError() {
 				break
 			}
 
 			// ep = sg.GetByJson("AppService.queryAllPsIdAndName", fmt.Sprintf(`{"ps_id":"%d"}`, psId.Value()))
-			// if ep.IsError() {
-			// sg.Error = ep.GetError()
+			// if sg.IsError() {
 			// break
 			// }
 
 			// ep = sg.GetByJson("AppService.queryDeviceListByUserId", fmt.Sprintf(`{"ps_id":"%d"}`, psId.Value()))
-			// if ep.IsError() {
-			// sg.Error = ep.GetError()
+			// if sg.IsError() {
 			// break
 			// }
 
 			ep = sg.GetByJson("AppService.queryDeviceListForApp", fmt.Sprintf(`{"ps_id":"%d"}`, psId.Value()))
-			if ep.IsError() {
-				sg.Error = ep.GetError()
+			if sg.IsError() {
 				break
 			}
 		}
@@ -290,8 +275,7 @@ func (sg *SunGrow) PrintCurrentStats() error {
 	var ep api.EndPoint
 	for range Only.Once {
 		ep = sg.GetByStruct("AppService.getPsList", nil, DefaultCacheTimeout)
-		if ep.IsError() {
-			sg.Error = ep.GetError()
+		if sg.IsError() {
 			break
 		}
 
@@ -1002,8 +986,7 @@ func (sg *SunGrow) GetPsIds() ([]valueTypes.PsId, error) {
 
 	for range Only.Once {
 		ep := sg.GetByStruct("AppService.getPsList", nil, DefaultCacheTimeout)
-		if ep.IsError() {
-			sg.Error = ep.GetError()
+		if sg.IsError() {
 			break
 		}
 
@@ -1020,8 +1003,7 @@ func (sg *SunGrow) GetPsId() (valueTypes.PsId, error) {
 	for range Only.Once {
 
 		ep := sg.GetByStruct("AppService.getPsList", nil, DefaultCacheTimeout)
-		if ep.IsError() {
-			sg.Error = ep.GetError()
+		if sg.IsError() {
 			break
 		}
 
@@ -1063,8 +1045,7 @@ func (sg *SunGrow) GetPsNames() ([]string, error) {
 
 	for range Only.Once {
 		ep := sg.GetByStruct("AppService.getPsList", nil, DefaultCacheTimeout)
-		if ep.IsError() {
-			sg.Error = ep.GetError()
+		if sg.IsError() {
 			break
 		}
 
@@ -1080,8 +1061,7 @@ func (sg *SunGrow) GetDevices(print bool) (getDeviceList.Devices, error) {
 
 	for range Only.Once {
 		ep := sg.GetByStruct("AppService.getPsList", nil, DefaultCacheTimeout)
-		if ep.IsError() {
-			sg.Error = ep.GetError()
+		if sg.IsError() {
 			break
 		}
 
@@ -1164,8 +1144,7 @@ func (sg *SunGrow) GetPsModels() ([]string, error) {
 				// getPsDetailWithPsType.RequestData{PsId: strconv.FormatInt(psId, 10)},
 				getPsDetailWithPsType.RequestData{PsId: psId},
 				DefaultCacheTimeout)
-			if ep.IsError() {
-				sg.Error = ep.GetError()
+			if sg.IsError() {
 				break
 			}
 
@@ -1193,8 +1172,7 @@ func (sg *SunGrow) GetPsSerials() ([]string, error) {
 				// getPsDetailWithPsType.RequestData{PsId: strconv.FormatInt(psId, 10)},
 				getPsDetailWithPsType.RequestData{PsId: psId},
 				DefaultCacheTimeout)
-			if ep.IsError() {
-				sg.Error = ep.GetError()
+			if sg.IsError() {
 				break
 			}
 
@@ -1222,8 +1200,7 @@ func (sg *SunGrow) GetPsKeys() ([]string, error) {
 				// getPsDetailWithPsType.RequestData{PsId: strconv.FormatInt(psId, 10)},
 				getPsDetailWithPsType.RequestData{PsId: psId},
 				DefaultCacheTimeout)
-			if ep.IsError() {
-				sg.Error = ep.GetError()
+			if sg.IsError() {
 				break
 			}
 

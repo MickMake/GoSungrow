@@ -1,9 +1,9 @@
 package api
 
 import (
-	"GoSungrow/Only"
 	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 	"strings"
 )
 
@@ -17,7 +17,7 @@ type RequestCommon struct {
 	Lang       string `json:"lang"`
 	SysCode    string `json:"sys_code" required:"true"`
 	Token      string `json:"token"`
-	UserID     string `json:"user_id"`
+	UserId     string `json:"user_id"`
 	ValidFlag  string `json:"valid_flag"`
 	// DeviceType string `json:"device_type"`
 }
@@ -42,7 +42,7 @@ func (req RequestCommon) IsValid() error {
 		if err != nil {
 			break
 		}
-		err = CheckString("UserID", req.UserID)
+		err = CheckString("UserID", req.UserId)
 		if err != nil {
 			break
 		}
@@ -56,7 +56,7 @@ func (req RequestCommon) IsValid() error {
 
 func (req RequestCommon) String() string {
 	ret := "Request Data (Common)"
-	ret += fmt.Sprintf("UserID:\t%s\n", req.UserID)
+	ret += fmt.Sprintf("UserID:\t%s\n", req.UserId)
 	ret += fmt.Sprintf("Appkey:\t%s\n", req.Appkey)
 	ret += fmt.Sprintf("Token:\t%s\n", req.Token)
 	ret += fmt.Sprintf("Lang:\t%s\n", req.Lang)

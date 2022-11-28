@@ -1,7 +1,7 @@
 package api
 
 import (
-	"GoSungrow/Only"
+	"github.com/MickMake/GoUnify/Only"
 	"errors"
 	"fmt"
 	"strings"

@@ -179,21 +179,23 @@ func (dt *DateTime) SetValue(value time.Time) DateTime {
 }
 
 func (dt *DateTime) SetDateType(value string) {
-	switch len(value) {
-		case len(DateTimeLayout):
+	switch  {
+		case len(value) == len(DateTimeLayout):
 			dt.DateType = "1"
-		case len(DateTimeLayoutYear):
+		case len(value) == len(DateTimeLayoutYear):
 			dt.DateType = "3"
-		case len(DateTimeLayoutMonth):
+		case len(value) == len(DateTimeLayoutMonth):
 			dt.DateType = "2"
-		case len(DateTimeLayoutDay):
+		case len(value) == len(DateTimeLayoutDay):
 			dt.DateType = "1"
-		case len(DateTimeLayoutHour):
+		case len(value) == len(DateTimeLayoutHour):
 			dt.DateType = "1"
-		case len(DateTimeLayoutMinute):
+		case len(value) == len(DateTimeLayoutMinute):
 			dt.DateType = "1"
-		case len(DateTimeLayoutSecond):
+		case len(value) == len(DateTimeLayoutSecond):
 			dt.DateType = "1"
+		case value == "total":
+			dt.DateType = "4"
 	}
 }
 

@@ -1,11 +1,12 @@
 package cmd
 
 import (
-	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud"
 	"GoSungrow/iSolarCloud/AppService/login"
 	"GoSungrow/iSolarCloud/api/GoStruct/output"
+	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdConfig"
 	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/spf13/cobra"
@@ -137,7 +138,15 @@ func (c *CmdApi) AttachCommand(cmd *cobra.Command) *cobra.Command {
 				}
 				return nil
 			},
-			Run:                   c.CmdApiLogin,
+			RunE:                  func(cmd *cobra.Command, args []string) error {
+				c.Error = c.ApiLogin(true)
+				if c.Error != nil {
+					return c.Error
+				}
+
+				c.SunGrow.Auth.Print()
+				return nil
+			},
 			Args:                  cobra.MinimumNArgs(0),
 		}
 		cmdApi.AddCommand(cmdApiLogin)
@@ -231,6 +240,35 @@ func (c *CmdApi) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		cmdApiSave.Example = cmdHelp.PrintExamples(cmdApiSave, "[area].<endpoint>")
 
 		// ******************************************************************************** //
+		var cmdApiStruct = &cobra.Command{
+			Use:                   output.StringTypeStruct,
+			Aliases:               []string{},
+			Short:                 fmt.Sprintf("Show response as Go structure (debug)"),
+			Long:                  fmt.Sprintf("Show response as Go structure (debug)"),
+			DisableFlagParsing:    false,
+			DisableFlagsInUseLine: false,
+			PreRunE:               func(cmd *cobra.Command, args []string) error {
+				cmds.Error = cmds.ProcessArgs(cmd, args)
+				if cmds.Error != nil {
+					return cmds.Error
+				}
+				cmds.Error = cmds.SunGrowArgs(cmd, args)
+				if cmds.Error != nil {
+					return cmds.Error
+				}
+				return nil
+			},
+			RunE:                  func(cmd *cobra.Command, args []string) error {
+				// c.SunGrow.SaveAsFile = true
+				c.SunGrow.OutputType.SetStruct()
+				return c.CmdApiGet(cmd, args)
+			},
+			Args:                  cobra.MinimumNArgs(1),
+		}
+		cmdApi.AddCommand(cmdApiStruct)
+		cmdApiStruct.Example = cmdHelp.PrintExamples(cmdApiStruct, "[area].<endpoint>")
+
+		// ******************************************************************************** //
 		var cmdApiPut = &cobra.Command{
 			Use:                   "put",
 			Aliases:               []string{"write"},
@@ -303,13 +341,7 @@ func (ca *Cmds) SunGrowArgs(_ *cobra.Command, _ []string) error {
 			ca.Api.AppKey = defaultApiAppKey
 		}
 
-		ca.Error = ca.Api.SunGrow.Login(login.SunGrowAuth{
-			AppKey:       ca.Api.AppKey,
-			UserAccount:  ca.Api.Username,
-			UserPassword: ca.Api.Password,
-			TokenFile:    ca.Api.ApiTokenFile,
-			Force:        false,
-		})
+		ca.Error = ca.Api.ApiLogin(false)
 		if ca.Error != nil {
 			break
 		}
@@ -317,23 +349,6 @@ func (ca *Cmds) SunGrowArgs(_ *cobra.Command, _ []string) error {
 		if ca.Debug {
 			ca.Api.SunGrow.Auth.Print()
 		}
-
-		if ca.Api.SunGrow.HasTokenChanged() {
-			ca.Api.LastLogin = ca.Api.SunGrow.GetLastLogin()
-			ca.Api.ApiToken = ca.Api.SunGrow.GetToken()
-			ca.Error = cmds.Unify.WriteConfig()
-		}
-
-		// if Cmd.GoogleSheetUpdate {
-		// 	SunGrow.OutputType = iSolarCloud.TypeGoogle
-		// }
-
-		// Git.Error = Cmd.GitSet()
-		// if Cmd.Error != nil {
-		//	break
-		// }
-		//
-		// ca.Valid = true
 	}
 
 	return ca.Error
@@ -378,29 +393,6 @@ func (c *CmdApi) CmdApiList(cmd *cobra.Command, args []string) {
 	}
 }
 
-func (c *CmdApi) CmdApiLogin(_ *cobra.Command, _ []string) {
-	for range Only.Once {
-		c.Error = c.SunGrow.Login(login.SunGrowAuth{
-			AppKey:       c.AppKey,
-			UserAccount:  c.Username,
-			UserPassword: c.Password,
-			TokenFile:    c.ApiTokenFile,
-			Force:        true,
-		})
-		if c.Error != nil {
-			break
-		}
-
-		c.SunGrow.Auth.Print()
-
-		if c.SunGrow.HasTokenChanged() {
-			c.LastLogin = c.SunGrow.GetLastLogin()
-			c.ApiToken = c.SunGrow.GetToken()
-			c.Error = cmds.Unify.WriteConfig()
-		}
-	}
-}
-
 func (c *CmdApi) CmdApiGet(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		args = cmdConfig.FillArray(2, args)
@@ -437,4 +429,37 @@ func (c *CmdApi) CmdApiPut(_ *cobra.Command, _ []string) {
 		// 	break
 		// }
 	}
+}
+
+
+func (c *CmdApi) ApiLogin(force bool)	error {
+	for range Only.Once {
+		if c.SunGrow == nil {
+			c.Error = errors.New("sungrow instance not configured")
+			break
+		}
+
+		auth := login.SunGrowAuth {
+			AppKey:       c.AppKey,
+			UserAccount:  c.Username,
+			UserPassword: c.Password,
+			TokenFile:    c.ApiTokenFile,
+			Force:        force,
+		}
+		c.Error = c.SunGrow.Login(auth)
+		if c.Error != nil {
+			break
+		}
+
+		if c.SunGrow.HasTokenChanged() {
+			c.LastLogin = c.SunGrow.GetLastLogin()
+			c.ApiToken = c.SunGrow.GetToken()
+
+			sf := cmds.Api.SaveFile
+			cmds.Api.SaveFile = false	// We don't want to lock this in the config.
+			c.Error = cmds.Unify.WriteConfig()
+			cmds.Api.SaveFile = sf
+		}
+	}
+	return c.Error
 }

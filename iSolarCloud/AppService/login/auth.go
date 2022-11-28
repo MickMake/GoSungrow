@@ -1,12 +1,12 @@
 package login
 
 import (
-	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 	"time"
 )
 

@@ -1,11 +1,11 @@
 package cmd
 
 import (
-	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/mmHa"
 	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/MickMake/GoUnify/cmdLog"
 	"github.com/go-co-op/gocron"
@@ -34,7 +34,7 @@ type CmdMqtt struct {
 	MqttHost       string
 	MqttPort       string
 
-	Mqtt *mmHa.Mqtt
+	Client         *mmHa.Mqtt
 	// SunGrow *iSolarCloud.SunGrow
 }
 
@@ -150,10 +150,10 @@ func (c *CmdMqtt) AttachFlags(cmd *cobra.Command, viper *viper.Viper) {
 	}
 }
 
-func (ca *Cmds) MqttArgs(cmd *cobra.Command, args []string) error {
+func (ca *Cmds) MqttArgs(_ *cobra.Command, _ []string) error {
 	for range Only.Once {
 		cmdLog.LogPrintDate("Connecting to MQTT HASSIO Service...\n")
-		ca.Mqtt.Mqtt = mmHa.New(mmHa.Mqtt {
+		ca.Mqtt.Client = mmHa.New(mmHa.Mqtt {
 			ClientId: "GoSungrow",
 			EntityPrefix: "GoSungrow",
 			Username: ca.Mqtt.MqttUsername,
@@ -161,22 +161,22 @@ func (ca *Cmds) MqttArgs(cmd *cobra.Command, args []string) error {
 			Host:     ca.Mqtt.MqttHost,
 			Port:     ca.Mqtt.MqttPort,
 		})
-		ca.Error = ca.Mqtt.Mqtt.GetError()
+		ca.Error = ca.Mqtt.Client.GetError()
 		if ca.Error != nil {
 			break
 		}
 
 		cmdLog.LogPrintDate("Connecting to SunGrow...\n")
-		ca.Mqtt.Mqtt.SungrowDevices, ca.Error = ca.Api.SunGrow.GetDevices(true)
+		ca.Mqtt.Client.SungrowDevices, ca.Error = ca.Api.SunGrow.GetDevices(true)
 		if ca.Error != nil {
 			break
 		}
-		cmdLog.LogPrintDate("Found SunGrow %d devices\n", len(ca.Mqtt.Mqtt.SungrowDevices))
+		cmdLog.LogPrintDate("Found SunGrow %d devices\n", len(ca.Mqtt.Client.SungrowDevices))
 
-		ca.Mqtt.Mqtt.DeviceName = "GoSungrow"
-		ca.Error = ca.Mqtt.Mqtt.SetDeviceConfig(
-			ca.Mqtt.Mqtt.DeviceName,
-			ca.Mqtt.Mqtt.DeviceName,
+		ca.Mqtt.Client.DeviceName = "GoSungrow"
+		ca.Error = ca.Mqtt.Client.SetDeviceConfig(
+			ca.Mqtt.Client.DeviceName,
+			ca.Mqtt.Client.DeviceName,
 			"virtual",
 			"virtual",
 			"",
@@ -187,9 +187,9 @@ func (ca *Cmds) MqttArgs(cmd *cobra.Command, args []string) error {
 			break
 		}
 
-		ca.Error = ca.Mqtt.Mqtt.SetDeviceConfig(
-			ca.Mqtt.Mqtt.DeviceName,
-			ca.Mqtt.Mqtt.DeviceName,
+		ca.Error = ca.Mqtt.Client.SetDeviceConfig(
+			ca.Mqtt.Client.DeviceName,
+			ca.Mqtt.Client.DeviceName,
 			"system",
 			"system",
 			"",
@@ -200,13 +200,13 @@ func (ca *Cmds) MqttArgs(cmd *cobra.Command, args []string) error {
 			break
 		}
 
-		for _, psId := range ca.Mqtt.Mqtt.SungrowDevices {
+		for _, psId := range ca.Mqtt.Client.SungrowDevices {
 			// ca.Error = ca.Mqtt.Mqtt.SetDeviceConfig("GoSungrow", strconv.FormatInt(id, 10), "GoSungrow", model[0], "Sungrow", "Roof")
 			parent := psId.PsId.String()
 			if parent == psId.PsKey.Value() {
-				parent = ca.Mqtt.Mqtt.DeviceName
+				parent = ca.Mqtt.Client.DeviceName
 			}
-			ca.Error = ca.Mqtt.Mqtt.SetDeviceConfig(
+			ca.Error = ca.Mqtt.Client.SetDeviceConfig(
 				"GoSungrow",
 				parent,
 				psId.PsKey.Value(),
@@ -218,10 +218,10 @@ func (ca *Cmds) MqttArgs(cmd *cobra.Command, args []string) error {
 			if ca.Error != nil {
 				break
 			}
-			ca.Mqtt.Mqtt.SungrowPsIds[psId.PsId] = true
+			ca.Mqtt.Client.SungrowPsIds[psId.PsId] = true
 		}
 
-		ca.Error = ca.Mqtt.Mqtt.Connect()
+		ca.Error = ca.Mqtt.Client.Connect()
 		if ca.Error != nil {
 			break
 		}
@@ -343,36 +343,48 @@ func (ca *Cmds) MqttCron() error {
 			break
 		}
 
-		if ca.Mqtt.Mqtt.IsFirstRun() {
-			ca.Mqtt.Mqtt.UnsetFirstRun()
+		if ca.Mqtt.Client.IsFirstRun() {
+			ca.Mqtt.Client.UnsetFirstRun()
 		} else {
 			time.Sleep(time.Second * 40)	// Takes up to 40 seconds for data to come in.
 		}
 
 		newDay := false
-		if ca.Mqtt.Mqtt.IsNewDay() {
+		if ca.Mqtt.Client.IsNewDay() {
 			newDay = true
 		}
 
 		data := ca.Api.SunGrow.NewSunGrowData()
 		data.SetPsIds()
+		if data.Error != nil {
+			ca.Error = data.Error
+			break
+		}
 
 		// All := []string{ "queryDeviceList", "getPsList", "getPsDetailWithPsType", "getPsDetail" }
-		All := []string{ "queryDeviceList" }
+		// All := []string{ "queryDeviceList", "WebIscmAppService.queryDeviceListForBackSys", "WebIscmAppService.getDeviceModel" }
+		All := []string{ "WebIscmAppService.getDeviceModel" }
 		data.SetEndpoints(All...)
 		ca.Error = data.GetData()
 		if ca.Error != nil {
 			break
 		}
 
+		// results := data.GetResults()
+
 		for _, result := range data.GetResults() {
+			ca.Error = result.ProcessMapForMqtt()
+			if ca.Error != nil {
+				continue
+			}
+
 			ca.Error = ca.Update(string(result.EndPointName), result.Response.Data, newDay)
 			if ca.Error != nil {
 				break
 			}
 		}
 
-		ca.Mqtt.Mqtt.LastRefresh = time.Now()
+		ca.Mqtt.Client.LastRefresh = time.Now()
 	}
 
 	if ca.Error != nil {
@@ -389,12 +401,12 @@ func (ca *Cmds) Update(endpoint string, data api.DataMap, newDay bool) error {
 		for o := range data.Map {
 			entries := data.Map[o]
 			r := entries.GetEntry(api.LastEntry) // Gets the last entry
-			if !r.Point.Valid {
-				fmt.Printf("\nInvalid: %v\n", r)
-				continue
+
+			if strings.Contains(r.Current.FieldPath.String(), "AllFactoryList") {
+				fmt.Printf("")
 			}
 
-			fullId := r.FullId()
+			fullId := r.EndPoint
 			if r.Point.GroupName == "alias" {
 				fullId = mmHa.JoinStringsForId(r.Parent.Key, r.Point.Parents.Index[0], r.Point.Id.String())
 			}
@@ -421,29 +433,38 @@ func (ca *Cmds) Update(endpoint string, data api.DataMap, newDay bool) error {
 				// LastResetValueTemplate: "",
 			}
 
-			if strings.Contains(fullId, "device_type_count") {
-				fmt.Printf("")
+			if !r.Point.Valid {
+				cmdLog.LogPrintDate("[%s] - invalid value - %s ...\n", r.Current.FieldPath.String(), r.Value.String()[:80])
+				// re.Value = r.Value.String()
+				// // var mapIt map[string]string
+				// // ca.Error = json.Unmarshal([]byte(r.Value.String()), &mapIt)
+				// // if ca.Error != nil {
+				// // 	continue
+				// // }
+				// re.ValueTemplate = ""
+				continue
 			}
+
 			if newDay {
 				fmt.Printf("C")
-				ca.Error = ca.Mqtt.Mqtt.BinarySensorPublishConfig(re)
+				ca.Error = ca.Mqtt.Client.BinarySensorPublishConfig(re)
 				if ca.Error != nil {
 					break
 				}
 
-				ca.Error = ca.Mqtt.Mqtt.SensorPublishConfig(re)
+				ca.Error = ca.Mqtt.Client.SensorPublishConfig(re)
 				if ca.Error != nil {
 					break
 				}
 			}
 
 			fmt.Printf("U")
-			ca.Error = ca.Mqtt.Mqtt.BinarySensorPublishValue(re)
+			ca.Error = ca.Mqtt.Client.BinarySensorPublishValue(re)
 			if ca.Error != nil {
 				break
 			}
 
-			ca.Error = ca.Mqtt.Mqtt.SensorPublishValue(re)
+			ca.Error = ca.Mqtt.Client.SensorPublishValue(re)
 			if ca.Error != nil {
 				break
 			}

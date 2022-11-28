@@ -5,7 +5,7 @@ import (
 )
 
 
-func (e *Web) ApiGetEndPointResultTable(endpoint EndPoint) output.Table {
+func (w *Web) ApiGetEndPointResultTable(endpoint EndPoint) output.Table {
 	var table output.Table
 	// for range Only.Once {
 	// 	// table = output.NewTable()
@@ -31,7 +31,7 @@ func (e *Web) ApiGetEndPointResultTable(endpoint EndPoint) output.Table {
 	return table
 }
 
-func (e *Web) ApiGetEndPointDataTables(endpoint EndPoint) output.Tables {
+func (w *Web) ApiGetEndPointDataTables(endpoint EndPoint) output.Tables {
 	table := output.NewTables()
 	// for range Only.Once {
 	//

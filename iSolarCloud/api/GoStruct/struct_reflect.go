@@ -2,12 +2,12 @@
 package GoStruct
 
 import (
-	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api/GoStruct/reflection"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 	"os"
 	"reflect"
 	"strconv"
@@ -39,6 +39,7 @@ type DataTags struct {
 	PointUnit                 string    `json:"point_unit,omitempty"`
 	PointUnitFrom             string    `json:"point_unit_from,omitempty"`
 	PointUnitFromParent       string    `json:"point_unit_from_parent,omitempty"`
+	PointVariableUnit         bool      `json:"point_variable_unit,omitempty"`
 
 	PointName                 string    `json:"point_name,omitempty"`
 	PointIdReplace            bool      `json:"point_name_append,omitempty"`
@@ -55,6 +56,7 @@ type DataTags struct {
 	PointGroupName            string    `json:"point_group_name,omitempty"`
 	PointGroupNameFrom        string    `json:"point_group_name_from,omitempty"`
 	PointArrayFlatten         bool      `json:"point_array_flatten,omitempty"`
+	PointListFlatten          bool      `json:"point_list_flatten,omitempty"`
 
 	PointSplitOn              string    `json:"point_split_on,omitempty"`
 	PointSplitOnType          string    `json:"point_split_on_type,omitempty"`
@@ -71,7 +73,7 @@ type DataTags struct {
 	DataTableMerge            bool      `json:"data_table_merge,omitempty"`
 	DataTableIndex            bool      `json:"data_table_show_index,omitempty"`
 	DataTableSortOn           string    `json:"data_table_sort_on,omitempty"`
-	DataTableIndexTitle       string    `json:"data_table_sort_on,omitempty"`
+	DataTableIndexTitle       string    `json:"data_table_index_title,omitempty"`
 
 	ValueType                 string    `json:"value_type,omitempty"`
 	ValueKind                 string    `json:"value_kind,omitempty"`
@@ -85,6 +87,8 @@ type tagStrings struct {
 	PointIgnore        string `json:"-"`
 	PointIgnoreZero    string `json:"-"`
 	PointArrayFlatten  string `json:"-"`
+	PointListFlatten   string `json:"-"`
+	PointVariableUnit  string `json:"-"`
 	DataTable          string `json:"-"`
 	DataTableChild     string `json:"-"`
 	DataTablePivot     string `json:"-"`
@@ -175,6 +179,8 @@ func (ds *DataTags) GetTags(fieldTo reflect.StructField, fieldVo reflect.Value) 
 				PointIgnore:        fieldTo.Tag.Get(PointIgnore),
 				PointIgnoreZero:    fieldTo.Tag.Get(PointIgnoreZero),
 				PointArrayFlatten:  fieldTo.Tag.Get(PointArrayFlatten),
+				PointListFlatten:   fieldTo.Tag.Get(PointListFlatten),
+				PointVariableUnit:  fieldTo.Tag.Get(PointVariableUnit),
 				DataTable:          fieldTo.Tag.Get(IsDataTable),
 				DataTableChild:     fieldTo.Tag.Get(DataTableChild),
 				DataTablePivot:     fieldTo.Tag.Get(DataTablePivot),
@@ -195,7 +201,7 @@ func (ds *DataTags) UpdateTags(parent *Reflect, current *Reflect) *DataTags {
 		}
 
 		if ds.PointIgnoreIfNil != "" {
-			ret := reflection.GetStringFrom(current.Interface, current.Index, ds.PointIgnoreIfNil)
+			ret := reflection.GetStringFrom(current.Interface, current.Index, ds.PointIgnoreIfNil, valueTypes.IgnoreLength, ds.PointNameDateFormat)
 			if (ret == "") || (ret == "--") {
 				ds.PointIgnore = true
 			}
@@ -223,6 +229,16 @@ func (ds *DataTags) UpdateTags(parent *Reflect, current *Reflect) *DataTags {
 		ds.PointArrayFlatten = false
 		if ds.StrBool.PointArrayFlatten == "true" {
 			ds.PointArrayFlatten = true
+		}
+
+		ds.PointListFlatten = false
+		if ds.StrBool.PointListFlatten == "true" {
+			ds.PointListFlatten = true
+		}
+
+		ds.PointVariableUnit = false
+		if ds.StrBool.PointVariableUnit == "true" {
+			ds.PointVariableUnit = true
 		}
 
 		ds.DataTable = false
@@ -256,17 +272,17 @@ func (ds *DataTags) UpdateTags(parent *Reflect, current *Reflect) *DataTags {
 
 		if ds.PointUnitFrom != "" {
 			if ds.PointUnit == "" {
-				ds.PointUnit = reflection.GetStringFrom(current.Interface, current.Index, ds.PointUnitFrom)
+				ds.PointUnit = reflection.GetStringFrom(current.Interface, current.Index, ds.PointUnitFrom, valueTypes.IgnoreLength, ds.PointNameDateFormat)
 			}
 		}
 		if ds.PointUnitFromParent != "" {
 			if ds.PointUnit == "" {
-				ds.PointUnit = reflection.GetStringFrom(current.ParentReflect.Interface, current.ParentReflect.Index, ds.PointUnitFromParent)
+				ds.PointUnit = reflection.GetStringFrom(current.ParentReflect.Interface, current.ParentReflect.Index, ds.PointUnitFromParent, valueTypes.IgnoreLength, ds.PointNameDateFormat)
 			}
 		}
 
 		if ds.PointGroupNameFrom != "" {
-			ds.PointGroupName = reflection.GetStringFrom(current.Interface, current.Index, ds.PointGroupNameFrom)
+			ds.PointGroupName = reflection.GetStringFrom(current.Interface, current.Index, ds.PointGroupNameFrom, valueTypes.IgnoreLength, ds.PointNameDateFormat)
 		}
 
 		// if ds.PointTimestamp.IsZero() {
@@ -277,10 +293,10 @@ func (ds *DataTags) UpdateTags(parent *Reflect, current *Reflect) *DataTags {
 		}
 
 		if ds.PointDeviceFrom != "" {
-			ds.PointDevice = reflection.GetStringFrom(current.Interface, current.Index, ds.PointDeviceFrom)
+			ds.PointDevice = reflection.GetStringFrom(current.Interface, current.Index, ds.PointDeviceFrom, valueTypes.IgnoreLength, ds.PointNameDateFormat)
 		}
 		if ds.PointDeviceFromParent != "" {
-			ds.PointDevice = reflection.GetStringFrom(current.ParentReflect.Interface, current.ParentReflect.Index, ds.PointDeviceFromParent)
+			ds.PointDevice = reflection.GetStringFrom(current.ParentReflect.Interface, current.ParentReflect.Index, ds.PointDeviceFromParent, valueTypes.IgnoreLength, ds.PointNameDateFormat)
 		}
 
 		if ds.PointName == "" {
@@ -289,14 +305,14 @@ func (ds *DataTags) UpdateTags(parent *Reflect, current *Reflect) *DataTags {
 
 		if parent.DataStructure.PointIgnoreIfChildFromNil != "" {
 			// Ignore a child if it has a zero/empty value.
-			ret := reflection.GetStringFrom(current.Interface, current.Index, parent.DataStructure.PointIgnoreIfChildFromNil)
+			ret := reflection.GetStringFrom(current.Interface, current.Index, parent.DataStructure.PointIgnoreIfChildFromNil, valueTypes.IgnoreLength, ds.PointNameDateFormat)
 			if ret != "" {
 				ds.PointIgnore = true
 			}
 		}
 
 		if ds.PointNameDateFormat == "" {
-			ds.PointNameDateFormat = valueTypes.DateTimeLayout
+			// ds.PointNameDateFormat = valueTypes.DateTimeLayout
 		}
 
 		switch ds.PointUpdateFreq {
@@ -398,6 +414,8 @@ func (ds *DataTags) SetFrom(from *DataTags) error {
 		ds.StrBool.PointIgnore = StrSet(from.StrBool.PointIgnore, ds.StrBool.PointIgnore)
 		ds.StrBool.PointIgnoreZero = StrSet(from.StrBool.PointIgnoreZero, ds.StrBool.PointIgnoreZero)
 		ds.StrBool.PointArrayFlatten = StrSet(from.StrBool.PointArrayFlatten, ds.StrBool.PointArrayFlatten)
+		ds.StrBool.PointListFlatten = StrSet(from.StrBool.PointListFlatten, ds.StrBool.PointListFlatten)
+		ds.StrBool.PointVariableUnit = StrSet(from.StrBool.PointVariableUnit, ds.StrBool.PointVariableUnit)
 		ds.StrBool.DataTable = StrSet(from.StrBool.DataTable, ds.StrBool.DataTable)
 		ds.StrBool.DataTableChild = StrSet(from.StrBool.DataTableChild, ds.StrBool.DataTableChild)
 		ds.StrBool.DataTablePivot = StrSet(from.StrBool.DataTablePivot, ds.StrBool.DataTablePivot)
@@ -424,6 +442,7 @@ type Reflect struct {
 	ParentReflect   *Reflect
 	CurrentReflect  *Reflect
 	ChildReflect    []*Reflect
+	ChildReflectMap map[string]*Reflect
 
 	Valid           bool
 	DataStructure   DataTags
@@ -495,6 +514,8 @@ func (r Reflect) String() string {
 		if r.DataStructure.DataTablePivot { ret += "DataTablePivot "}
 		if r.DataStructure.PointIdReplace { ret += "PointIdReplace "}
 		if r.DataStructure.PointArrayFlatten { ret += "PointArrayFlatten "}
+		if r.DataStructure.PointListFlatten { ret += "PointListFlatten "}
+		if r.DataStructure.PointVariableUnit { ret += "PointVariableUnit "}
 		if r.DataStructure.PointIgnore { ret += "PointIgnore "}
 		if r.DataStructure.PointIgnoreZero { ret += "PointIgnoreZero "}
 	}
@@ -538,6 +559,7 @@ func (r *Reflect) Init(parent interface{}, current interface{}, name EndPointPat
 			ParentReflect:  nil,
 			CurrentReflect: r,
 			ChildReflect:   nil,
+			ChildReflectMap: make(map[string]*Reflect, 0),
 			Valid:          false,
 			DataStructure:  DataTags{},
 			Interface:      parent,
@@ -561,7 +583,7 @@ func (r *Reflect) Init(parent interface{}, current interface{}, name EndPointPat
 		r.Valid = true
 		r.Interface = current
 		r.IsNil = valueTypes.IsNil(r.Interface)
-		r.isUnknown = valueTypes.IsUnknownStruct(r.Interface)
+		r.isUnknown = valueTypes.IsUnknownStruct(r.Interface, true)
 		r.TypeOf = reflect.TypeOf(r.Interface)
 		r.ValueOf = reflect.ValueOf(r.Interface)
 		if r.IsNil {
@@ -645,7 +667,12 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 	for range Only.Once {
 		r.ParentReflect = parent
 		r.CurrentReflect = current
-		current.ChildReflect = append(current.ChildReflect, r)
+		if current.ChildReflect == nil {
+			current.ChildReflect = make([]*Reflect, 0)
+		}
+		if current.ChildReflectMap == nil {
+			current.ChildReflectMap = make(map[string]*Reflect, 0)
+		}
 
 		switch current.TypeOf.Kind() {
 			case reflect.Struct:
@@ -663,7 +690,7 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 				r.Interface = current.ValueOf.MapIndex(indexName).Interface()
 		}
 
-		r.isUnknown = valueTypes.IsUnknownStruct(r.Interface)
+		r.isUnknown = valueTypes.IsUnknownStruct(r.Interface, true)
 		r.TypeOf = reflect.TypeOf(r.Interface)
 		r.ValueOf = reflect.ValueOf(r.Interface)
 		r.IsNil = valueTypes.IsNil(r.Interface)
@@ -673,6 +700,28 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 			r.Kind = r.TypeOf.Kind()
 		}
 		r.Index = index
+
+		if r.Kind == reflect.Pointer {
+			// Special case:
+			// We're going to change the pointer to a proper object reference.
+			if !r.IsNil {
+				r.Interface = r.ValueOf.Elem().Interface()
+				if valueTypes.IsNil(r.Interface) {
+					break
+				}
+				r.isUnknown = valueTypes.IsUnknownStruct(r.Interface, true)
+				r.TypeOf = reflect.TypeOf(r.Interface)
+				r.ValueOf = reflect.ValueOf(r.Interface)
+				r.IsNil = valueTypes.IsNil(r.Interface)
+				if r.IsNil {
+					r.Kind = reflect.Invalid
+				} else {
+					r.Kind = r.TypeOf.Kind()
+				}
+			}
+			// DO NOT BREAK!
+			// KEEP FIRST!
+		}
 
 		switch r.Kind {
 			case reflect.Struct:
@@ -699,6 +748,8 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 				r.FieldName = r.FieldTo.Name
 				r.FieldPath = r.CurrentReflect.FieldPath.Copy()
 				r.FieldPath.Append(r.FieldName)
+				current.ChildReflect = append(current.ChildReflect, r)
+				current.ChildReflectMap[r.FieldName] = r
 
 				// DataStructure
 				r.DataStructure.GetTags(r.FieldTo, r.FieldVo)
@@ -711,10 +762,12 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 					r.InterfaceValue, "", r.DataStructure.PointUnit,
 					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
 				switch {
-					case r.DataStructure.PointUnit == "":
-						r.DataStructure.PointUnit = r.Value.Unit()
-					case r.Value.Unit() == "":
+					// case r.DataStructure.PointUnit == "":
+					// 	r.DataStructure.PointUnit = r.Value.GetUnit()
+					case r.Value.GetUnit() == "":
 						r.Value.SetUnit(r.DataStructure.PointUnit)
+					default:
+						r.DataStructure.PointUnit = r.Value.GetUnit()
 				}
 
 			case reflect.Slice:
@@ -726,9 +779,11 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 				}
 				r.IsExported = true
 				r.FieldVo = current.ValueOf.Index(index)
-				r.FieldName = current.FieldName		// r.FieldVo.String()
+				r.FieldName = current.FieldName + ":" + strconv.Itoa(index)		// r.FieldVo.String()
 				r.FieldPath = r.CurrentReflect.FieldPath.Copy()
 				r.FieldPath.Append("[" + strconv.Itoa(r.Index) + "]")
+				current.ChildReflect = append(current.ChildReflect, r)
+				current.ChildReflectMap[r.FieldName] = r
 
 				// DataStructure
 				r.DataStructure.GetTags(r.FieldTo, r.FieldVo)
@@ -767,10 +822,12 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 					r.InterfaceValue, "", r.DataStructure.PointUnit,
 					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
 				switch {
-					case r.DataStructure.PointUnit == "":
-						r.DataStructure.PointUnit = r.Value.Unit()
-					case r.Value.Unit() == "":
+					// case r.DataStructure.PointUnit == "":
+					// 	r.DataStructure.PointUnit = r.Value.GetUnit()
+					case r.Value.GetUnit() == "":
 						r.Value.SetUnit(r.DataStructure.PointUnit)
+					default:
+						r.DataStructure.PointUnit = r.Value.GetUnit()
 				}
 
 			case reflect.Map:
@@ -780,9 +837,11 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 				}
 				r.IsExported = true
 				r.FieldVo = current.ValueOf.MapIndex(indexName)
-				r.FieldName = current.FieldName		// mk[index].String()
+				r.FieldName = current.FieldName + ":" + indexName.String()		// mk[index].String()
 				r.FieldPath = r.CurrentReflect.FieldPath.Copy()
 				r.FieldPath.Append("[" + indexName.String() + "]")
+				current.ChildReflect = append(current.ChildReflect, r)
+				current.ChildReflectMap[r.FieldName] = r
 
 				// DataStructure
 				r.DataStructure.GetTags(r.FieldTo, r.FieldVo)
@@ -810,12 +869,14 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 					r.InterfaceValue, "", r.DataStructure.PointUnit,
 					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
 				switch {
-					case r.DataStructure.PointUnit == "":
-						r.DataStructure.PointUnit = r.Value.Unit()
-					case r.Value.Unit() == "":
+					// case r.DataStructure.PointUnit == "":
+					// 	r.DataStructure.PointUnit = r.Value.GetUnit()
+					case r.Value.GetUnit() == "":
 						r.Value.SetUnit(r.DataStructure.PointUnit)
+					default:
+						r.DataStructure.PointUnit = r.Value.GetUnit()
 				}
-				// r.Value.First().SetKey(indexName.String())
+
 
 			default:
 				r.Interface = current.Interface
@@ -829,44 +890,65 @@ func (r *Reflect) SetValue(value interface{}) {
 	for range Only.Once {
 		r.InterfaceValue = value
 		r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
-			value, "", r.DataStructure.PointUnit,
+			value, "", r.Value.GetUnit(),
 			r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
 	}
 }
+
+// func (r *Reflect) ConvertToState() {
+// 	for range Only.Once {
+// 		var ok bool
+//
+// 		switch {
+// 			case r.Value.First().ValueFloat() > 0:
+// 				ok = true
+// 			case r.Value.First().ValueFloat() < 0:
+// 				ok = true
+// 			case r.Value.First().ValueInt() > 0:
+// 				ok = true
+// 			case r.Value.First().ValueInt() < 0:
+// 				ok = true
+// 		}
+// 		r.Value = valueTypes.SetUnitValueBool(ok)
+// 	}
+// }
 
 func (r *Reflect) ValuesRange() []valueTypes.UnitValue {
 	return r.Value.Range(valueTypes.SortOrder)
 }
 
-func (r *Reflect) SetValues(values ...interface{}) {
-	for range Only.Once {
-		r.InterfaceValue = values
-		var uvs valueTypes.UnitValues
-		for _, value := range values {
-			var uvs2 valueTypes.UnitValues
-			uvs2, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
-				value, "", r.DataStructure.PointUnit,
-				r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
-			uvs.Append(uvs2)
-		}
-	}
-}
+// func (r *Reflect) SetValues(values ...interface{}) {
+// 	for range Only.Once {
+// 		r.InterfaceValue = values
+// 		var uvs valueTypes.UnitValues
+// 		for _, value := range values {
+// 			var uvs2 valueTypes.UnitValues
+// 			uvs2, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
+// 				value, "", r.DataStructure.PointUnit,
+// 				r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
+// 			uvs.AddUnitValues(uvs2)
+// 		}
+// 	}
+// }
 
 func (r *Reflect) SetUnitValue(value valueTypes.UnitValue) {
 	for range Only.Once {
 		r.InterfaceValue = value
-		r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
-			value, "", r.DataStructure.PointUnit,
-			r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
+		r.Value.Reset()
+		r.Value.AddUnitValue(value.ValueKey(), value)
+		// r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
+		// 	value, "", r.DataStructure.PointUnit,
+		// 	r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
 	}
 }
 
 func (r *Reflect) SetUnitValues(value valueTypes.UnitValues) {
 	for range Only.Once {
 		r.InterfaceValue = value
-		r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
-			value, "", r.DataStructure.PointUnit,
-			r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
+		r.Value = value
+		// r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
+		// 	value, "", r.DataStructure.PointUnit,
+		// 	r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
 	}
 }
 
@@ -880,11 +962,16 @@ func (r *Reflect) SetPointId() EndPointPath {
 
 		switch {
 			case r.DataStructure.PointIdFromChild != "":
+				// if r.DataStructure.PointIdFromChild == "PsKey" {
+				// 	fmt.Sprintf("")
+				// }
+
 				// PointIdFromChild - In this case points to a field within a CHILD struct.
+				// @TODO - This needs fixing for arrays! Will always return the first entry found instead of the correct one.
 				// fmt.Printf("[PointIdFromChild1]	EPP: %s	- FP: %s\n", r.DataStructure.Endpoint, r.FieldPath)
 				var pns []string
 				for _, pid := range strings.Split(r.DataStructure.PointIdFromChild, ".") {
-					p := reflection.GetStringFrom(r.Interface, r.Index, pid)	// Look forward into structure.
+					p := reflection.GetStringFrom(r.Interface, r.Index, pid, valueTypes.IgnoreLength, r.DataStructure.PointNameDateFormat)	// Look forward into structure.
 					if p == "" {
 						continue
 					}
@@ -907,21 +994,36 @@ func (r *Reflect) SetPointId() EndPointPath {
 				// fmt.Printf("[PointIdFrom1     ]	EPP: %s	- FP: %s\n", r.DataStructure.Endpoint, r.FieldPath)
 				var pns []string
 				for _, pid := range strings.Split(r.DataStructure.PointIdFrom, ".") {
-					p := reflection.GetStringFromStruct(r.Interface, pid)	// Look forward into structure.
+					p := reflection.GetStringFromStruct(r.Interface, pid, valueTypes.IgnoreLength, r.DataStructure.PointNameDateFormat)	// Look forward into structure.
+					if p == "" {
+						p = reflection.GetStringFromStruct(r.CurrentReflect.Interface, pid, valueTypes.IgnoreLength, r.DataStructure.PointNameDateFormat)
+					}
 					if p == "" {
 						continue
 					}
+					// if r.DataStructure.PointNameDateFormat != "" {
+					// 	pn2 := valueTypes.AnyToValueString(p, valueTypes.IgnoreLength, r.DataStructure.PointNameDateFormat)
+					// 	if pn2 != "" {
+					// 		p = pn2
+					// 	}
+					// }
 					pns = append(pns, p)
 				}
-				if len(pns) == 0 {
-					for _, pid := range strings.Split(r.DataStructure.PointIdFrom, ".") {
-						p := reflection.GetStringFromStruct(r.CurrentReflect.Interface, pid)
-						if p == "" {
-							continue
-						}
-						pns = append(pns, p)
-					}
-				}
+				// if len(pns) == 0 {
+				// 	for _, pid := range strings.Split(r.DataStructure.PointIdFrom, ".") {
+				// 		p := reflection.GetStringFromStruct(r.CurrentReflect.Interface, pid)
+				// 		if p == "" {
+				// 			continue
+				// 		}
+				// 		if r.DataStructure.PointNameDateFormat != "" {
+				// 			pn2 := valueTypes.AnyToValueString(p, valueTypes.IgnoreLength, r.DataStructure.PointNameDateFormat)
+				// 			if pn2 != "" {
+				// 				p = pn2
+				// 			}
+				// 		}
+				// 		pns = append(pns, p)
+				// 	}
+				// }
 
 				if r.DataStructure.PointId != "" {
 					if !r.DataStructure.PointIdReplace {
@@ -1062,6 +1164,14 @@ func (r *Reflect) isTableChild(safeIterate *int) bool {
 
 func (r *Reflect) IsPointArrayFlatten() bool {
 	return r.DataStructure.PointArrayFlatten
+}
+
+func (r *Reflect) IsPointListFlatten() bool {
+	return r.DataStructure.PointListFlatten
+}
+
+func (r *Reflect) IsPointVariableUnit() bool {
+	return r.DataStructure.PointVariableUnit
 }
 
 func (r *Reflect) IsPointIdReplace() bool {
@@ -1252,6 +1362,20 @@ func GetChildGoStruct(ref interface{}, limit int) (*DataTags, *DataTags) {
 		limit--
 
 		vo := reflect.ValueOf(ref)
+
+		if vo.Kind() == reflect.Pointer {
+			if valueTypes.IsNil(ref) {
+				break
+			}
+			ref2 := vo.Elem().Interface()
+			if valueTypes.IsNil(ref2) {
+				break
+			}
+			limit++
+			parent, current = GetChildGoStruct(ref2, limit)
+			break
+		}
+
 		if vo.Kind() == reflect.Struct {
 			// Iterate over all available fields, looking for the parent GoStruct.
 			for i := 0; i < vo.NumField(); i++ {
@@ -1405,7 +1529,7 @@ func (r *Reflect) PointIgnoreIfChildFromNil() bool {
 			break
 		}
 
-		ret := reflection.GetStringFrom(r.Interface, r.Index, r.ParentReflect.DataStructure.PointIgnoreIfChildFromNil)
+		ret := reflection.GetStringFrom(r.Interface, r.Index, r.ParentReflect.DataStructure.PointIgnoreIfChildFromNil, valueTypes.IgnoreLength, r.DataStructure.PointNameDateFormat)
 		if ret == "" {
 			yes = false
 			break
@@ -1529,6 +1653,26 @@ func GetStructValuesAsArray(ref *Reflect) []string {
 		}
 	}
 
+	return ret
+}
+
+func AddFloatValues(refs ...*Reflect) float64 {
+	var ret float64
+	for _, ref := range refs {
+		for _, value := range ref.Value.Range(true) {
+			ret += value.ValueFloat()
+		}
+	}
+	return ret
+}
+
+func AddIntegerValues(refs ...*Reflect) int64 {
+	var ret int64
+	for _, ref := range refs {
+		for _, value := range ref.Value.Range(true) {
+			ret += value.ValueInt()
+		}
+	}
 	return ret
 }
 

@@ -391,3 +391,8 @@ func (e EndPoint) ResultDataRef() ResultData {
 	return e.Response.ResultData
 }
 
+// IsDebug - Are we in debug mode?
+func (e EndPoint) IsDebug() bool {
+	return e.ApiIsDebug()
+}
+

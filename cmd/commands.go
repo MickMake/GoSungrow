@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"GoSungrow/Only"
+	"github.com/MickMake/GoUnify/Only"
 	"GoSungrow/defaults"
 	"github.com/MickMake/GoUnify/Unify"
 	"github.com/spf13/cobra"

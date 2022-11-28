@@ -13,8 +13,9 @@ const Disabled = false
 
 type RequestData struct {
 	// ws.missing-parameter:user_id or ps_id
-	PsId   valueTypes.PsId    `json:"ps_id" required:"true"`
-	UserId valueTypes.Integer `json:"user_id" required:"true"`
+	// @TODO - Figure out why duplicate UserId entries in the structure causes json.Marshall to bork in iSolarCloud/api/web.go:128
+	PsId   valueTypes.PsId   `json:"ps_id" required:"true"`
+	UserId valueTypes.String `json:"user_id"`	// required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -28,7 +29,7 @@ func (rd RequestData) Help() string {
 
 
 type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+	// Dummy valueTypes.String `json:"dummy"`
 }
 
 func (e *ResultData) IsValid() error {

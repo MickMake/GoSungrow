@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
-	"os"
 	"reflect"
 	"strings"
 	"time"
@@ -117,27 +116,27 @@ func GetPointNameFrom(ref interface{}, name string, intSize int, dateFormat stri
 
 const AnyIndex = -1
 
-func GetStringFrom(ref interface{}, index int, name string) string {
+func GetStringFrom(ref interface{}, index int, name string, intSize int, dateFormat string) string {
 	var ret string
 	for range Only.Once {
 		kind := reflect.ValueOf(ref).Kind()
 		if kind == reflect.Struct {
-			ret = GetStringFromStruct(ref, name)
+			ret = GetStringFromStruct(ref, name, intSize, dateFormat)
 			break
 		}
 
 		if kind == reflect.Array {
-			ret = GetStringFromArray(ref, index, name)
+			ret = GetStringFromArray(ref, index, name, intSize, dateFormat)
 			break
 		}
 
 		if kind == reflect.Slice {
-			ret = GetStringFromArray(ref, index, name)
+			ret = GetStringFromArray(ref, index, name, intSize, dateFormat)
 			break
 		}
 
 		if kind == reflect.Map {
-			ret = GetStringFromMap(ref, name)
+			ret = GetStringFromMap(ref, name, intSize, dateFormat)
 			break
 		}
 	}
@@ -145,7 +144,7 @@ func GetStringFrom(ref interface{}, index int, name string) string {
 	return ret
 }
 
-func GetStringFromArray(ref interface{}, index int, name string) string {
+func GetStringFromArray(ref interface{}, index int, name string, intSize int, dateFormat string) string {
 	var ret string
 	for range Only.Once {
 		vo := reflect.ValueOf(ref)
@@ -155,13 +154,13 @@ func GetStringFromArray(ref interface{}, index int, name string) string {
 
 		if index == AnyIndex {
 			for i := 0; i < vo.Len(); i++ {
-				v := vo.Index(index).Interface()
+				v := vo.Index(i).Interface()
 				ivo := reflect.ValueOf(v)
 				switch ivo.Kind() {
 					case reflect.Struct:
-						ret = GetStringFromStruct(v, name)
+						ret = GetStringFromStruct(v, name, intSize, dateFormat)
 					case reflect.Map:
-						ret = GetStringFromMap(v, name)
+						ret = GetStringFromMap(v, name, intSize, dateFormat)
 					default:
 						// Don't descend anything else.
 				}
@@ -172,17 +171,21 @@ func GetStringFromArray(ref interface{}, index int, name string) string {
 			break
 		}
 
-		if index >= vo.Len() {
-			break
+		l := vo.Len()
+		if index >= l {
+			if vo.Len() > 1 {
+				break
+			}
+			index = l - 1	// @TODO - Hack fixup!
 		}
 
 		v := vo.Index(index).Interface()
 		ivo := reflect.ValueOf(v)
 		switch ivo.Kind() {
 			case reflect.Struct:
-				ret = GetStringFromStruct(v, name)
+				ret = GetStringFromStruct(v, name, intSize, dateFormat)
 			case reflect.Map:
-				ret = GetStringFromMap(v, name)
+				ret = GetStringFromMap(v, name, intSize, dateFormat)
 			default:
 				// Don't descend anything else.
 		}
@@ -191,7 +194,7 @@ func GetStringFromArray(ref interface{}, index int, name string) string {
 	return ret
 }
 
-func GetStringFromStruct(ref interface{}, name string) string {
+func GetStringFromStruct(ref interface{}, name string, intSize int, dateFormat string) string {
 	var ret string
 	for range Only.Once {
 		vo := reflect.ValueOf(ref)
@@ -202,7 +205,7 @@ func GetStringFromStruct(ref interface{}, name string) string {
 		// Iterate over all available fields, looking for the field name.
 		for i := 0; i < vo.NumField(); i++ {
 			if vo.Type().Field(i).Name == name {
-				ret = valueTypes.AnyToValueString(vo.Field(i).Interface(), 0, "")
+				ret = valueTypes.AnyToValueString(vo.Field(i).Interface(), intSize, dateFormat)
 				break
 			}
 		}
@@ -211,7 +214,7 @@ func GetStringFromStruct(ref interface{}, name string) string {
 	return ret
 }
 
-func GetStringFromMap(ref interface{}, name string) string {
+func GetStringFromMap(ref interface{}, name string, intSize int, dateFormat string) string {
 	var ret string
 	for range Only.Once {
 		vo := reflect.ValueOf(ref)
@@ -226,7 +229,7 @@ func GetStringFromMap(ref interface{}, name string) string {
 		}
 
 		if vo.Kind() == reflect.Struct {
-			ret = GetStringFromStruct(vo.Interface(), name)
+			ret = GetStringFromStruct(vo.Interface(), name, intSize, dateFormat)
 			break
 		}
 
@@ -325,62 +328,61 @@ func IsRefZero(x interface{}) bool {
 
 func SetFrom(to interface{}, from interface{}) error {
 	var err error
-	for range Only.Once {
-		break
-		// to has to be a pointer!
-		voSrc := reflect.ValueOf(to)
-		for index := 0; index < reflect.ValueOf(to).NumField(); index++ {
-			FieldVoFrom := voSrc.Field(index)
-			FieldToFrom := voSrc.Type().Field(index)
-
-			if FieldToFrom.IsExported() == false {
-				// err = errors.New(fmt.Sprintf("NOT Exported: FieldToSrc.%s\n", FieldToSrc.Name))
-				continue
-			}
-
-			if FieldVoFrom.IsZero() {
-				// if reflection.IsRefZero(FieldVoSrc.Interface()) {
-				err = errors.New(fmt.Sprintf("Is Zero: FieldToSrc.%s (%v)\n", FieldToFrom.Name, FieldVoFrom.Interface()))
-				continue
-			}
-
-			if !FieldVoFrom.IsValid() {
-				err = errors.New(fmt.Sprintf("Is NOT Valid: FieldToSrc.%s (%v)\n", FieldToFrom.Name, FieldVoFrom.Interface()))
-				continue
-			}
-
-			FieldVoTo := reflect.ValueOf(from).Elem().Field(index)
-			FieldToTo := reflect.TypeOf(from).Elem().Field(index)
-			if !FieldVoTo.CanSet() {
-				err = errors.New(fmt.Sprintf("Cannot set: FieldVoDst.%s (%v)\n", FieldToTo.Name, FieldVoTo.Interface()))
-				continue
-			}
-
-			switch FieldToFrom.Type.String() { // FieldVoSrc.Kind().String()
-				case "bool":
-					FieldVoTo.SetBool(FieldVoFrom.Bool())
-
-				case "string":
-					// if FieldVoSrc.String() == "" {
-					// 	break
-					// }
-					FieldVoTo.SetString(FieldVoFrom.String())
-
-				case "GoStruct.EndPointPath":
-					// We're not updating this field.
-
-				case "time.Time":
-					// We're not updating this field.
-
-				case "GoStruct.tagStrings":
-					// We're not updating this field.
-
-				default:
-					_, _ = fmt.Fprintf(os.Stderr,"SetFrom() Unknown type %s (%s) for field '%s' from '%v' to '%v'\n",
-						FieldToFrom.Type, FieldVoFrom.Kind().String(), FieldToFrom.Name, FieldVoTo.Interface(), FieldVoFrom.Interface())
-			}
-		}
-	}
+	// for range Only.Once {
+	// 	// to has to be a pointer!
+	// 	voSrc := reflect.ValueOf(to)
+	// 	for index := 0; index < reflect.ValueOf(to).NumField(); index++ {
+	// 		FieldVoFrom := voSrc.Field(index)
+	// 		FieldToFrom := voSrc.Type().Field(index)
+	//
+	// 		if FieldToFrom.IsExported() == false {
+	// 			// err = errors.New(fmt.Sprintf("NOT Exported: FieldToSrc.%s\n", FieldToSrc.Name))
+	// 			continue
+	// 		}
+	//
+	// 		if FieldVoFrom.IsZero() {
+	// 			// if reflection.IsRefZero(FieldVoSrc.Interface()) {
+	// 			err = errors.New(fmt.Sprintf("Is Zero: FieldToSrc.%s (%v)\n", FieldToFrom.Name, FieldVoFrom.Interface()))
+	// 			continue
+	// 		}
+	//
+	// 		if !FieldVoFrom.IsValid() {
+	// 			err = errors.New(fmt.Sprintf("Is NOT Valid: FieldToSrc.%s (%v)\n", FieldToFrom.Name, FieldVoFrom.Interface()))
+	// 			continue
+	// 		}
+	//
+	// 		FieldVoTo := reflect.ValueOf(from).Elem().Field(index)
+	// 		FieldToTo := reflect.TypeOf(from).Elem().Field(index)
+	// 		if !FieldVoTo.CanSet() {
+	// 			err = errors.New(fmt.Sprintf("Cannot set: FieldVoDst.%s (%v)\n", FieldToTo.Name, FieldVoTo.Interface()))
+	// 			continue
+	// 		}
+	//
+	// 		switch FieldToFrom.Type.String() { // FieldVoSrc.Kind().String()
+	// 			case "bool":
+	// 				FieldVoTo.SetBool(FieldVoFrom.Bool())
+	//
+	// 			case "string":
+	// 				// if FieldVoSrc.String() == "" {
+	// 				// 	break
+	// 				// }
+	// 				FieldVoTo.SetString(FieldVoFrom.String())
+	//
+	// 			case "GoStruct.EndPointPath":
+	// 				// We're not updating this field.
+	//
+	// 			case "time.Time":
+	// 				// We're not updating this field.
+	//
+	// 			case "GoStruct.tagStrings":
+	// 				// We're not updating this field.
+	//
+	// 			default:
+	// 				_, _ = fmt.Fprintf(os.Stderr,"SetFrom() Unknown type %s (%s) for field '%s' from '%v' to '%v'\n",
+	// 					FieldToFrom.Type, FieldVoFrom.Kind().String(), FieldToFrom.Name, FieldVoTo.Interface(), FieldVoFrom.Interface())
+	// 		}
+	// 	}
+	// }
 
 	return err
 }

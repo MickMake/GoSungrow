@@ -1,9 +1,10 @@
 package output
 
 import (
-	"GoSungrow/Only"
+	"GoSungrow/iSolarCloud/api/GoStruct/gojson"
 	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 	tabular "github.com/agrison/go-tablib"
 	"os"
 	"sort"
@@ -14,7 +15,30 @@ import (
 // "github.com/jbub/tabular"
 
 
+// type DataSet []DataRow
+// type DataRow map[string]string
+
+
+type Tables map[string]Table
+
+func NewTables() Tables {
+	return make(Tables)
+}
+
+func (t *Tables) Sort() []string {
+	var sorted []string
+	for range Only.Once {
+		for p := range *t {
+			sorted = append(sorted, p)
+		}
+		sort.Strings(sorted)
+	}
+	return sorted
+}
+
+
 type Table struct {
+	name       string
 	filePrefix string
 	title      string
 	table      *tabular.Dataset
@@ -26,8 +50,6 @@ type Table struct {
 	graphFilter string
 	Error      error
 }
-type Tables map[string]Table
-
 
 func NewTable(headers ...string) Table {
 	return Table {
@@ -36,10 +58,6 @@ func NewTable(headers ...string) Table {
 		table:      tabular.NewDataset(headers),
 		Error: nil,
 	}
-}
-
-func NewTables() Tables {
-	return make(Tables)
 }
 
 func (t *Table) String() string {
@@ -58,6 +76,30 @@ func (t *Table) String() string {
 	return ret
 }
 
+func (t *Table) IsValid() bool {
+	var yes bool
+	for range Only.Once {
+		if t.table == nil {
+			break
+		}
+		if !t.table.Valid() {
+			break
+		}
+		if t.table.Height() == 0 {
+			break
+		}
+		if t.table.Width() == 0 {
+			break
+		}
+		yes = true
+	}
+	return yes
+}
+
+func (t *Table) IsNotValid() bool {
+	return !t.IsValid()
+}
+
 func (t *Table) GetHeaders() []string {
 	return t.table.Headers()
 }
@@ -72,6 +114,22 @@ func (t *Table) GetSortedHeaders() []string {
 		sort.Strings(sorted)
 	}
 	return sorted
+}
+
+func (t *Table) Sort(sort string) {
+	for range Only.Once {
+		if t.IsNotValid() {
+			break
+		}
+
+		// Make sure we have a header.
+		for _, header := range t.table.Headers() {
+			if header == sort {
+				t.table = t.table.Sort(sort)
+				break
+			}
+		}
+	}
 }
 
 func (t *Table) RowLength() int {
@@ -91,12 +149,27 @@ func (t *Table) GetCell(row int, colName string) (interface{}, error) {
 	return ret, t.Error
 }
 
+func (t *Table) AddRow(row ...interface{}) error {
+	t.Error = t.table.Append(row)
+	return t.Error
+}
+
+func (t *Table) writeFile(data string, perm os.FileMode) error {
+	for range Only.Once {
+		fmt.Printf("Writing file '%s'\n", t.filePrefix)
+		t.Error = os.WriteFile(t.filePrefix, []byte(data), perm)
+		if t.Error != nil {
+			t.Error = errors.New(fmt.Sprintf("Unable to write to file %s - %v", t.filePrefix, t.Error))
+			break
+		}
+	}
+
+	return t.Error
+}
+
 // func (t *Table) AllRows() []*tabular.Row {
 // 	return t.table.AllRows()
 // }
-
-type DataSet []DataRow
-type DataRow map[string]string
 
 func (t *Table) SetTitle(title string, args ...interface{}) {
 	t.title = fmt.Sprintf(title, args...)
@@ -128,46 +201,6 @@ func (t *Table) SetSaveFile(ok bool) {
 
 func (t *Table) SetGraphFilter(filter string) {
 	t.graphFilter = filter
-}
-
-func (t *Table) Sort(sort string) {
-	for range Only.Once {
-		if t.IsNotValid() {
-			break
-		}
-
-		// Make sure we have a header.
-		for _, header := range t.table.Headers() {
-			if header == sort {
-				t.table = t.table.Sort(sort)
-				break
-			}
-		}
-	}
-}
-
-func (t *Table) IsValid() bool {
-	var yes bool
-	for range Only.Once {
-		if t.table == nil {
-			break
-		}
-		if !t.table.Valid() {
-			break
-		}
-		if t.table.Height() == 0 {
-			break
-		}
-		if t.table.Width() == 0 {
-			break
-		}
-		yes = true
-	}
-	return yes
-}
-
-func (t *Table) IsNotValid() bool {
-	return !t.IsValid()
 }
 
 func (t *Table) SetFilePrefix(prefix string, args ...interface{}) {
@@ -204,22 +237,12 @@ func (t *Table) SetOutputType(outputType string) {
 	t.OutputType.Set(outputType)
 }
 
-func (t *Table) AddRow(row ...interface{}) error {
-	t.Error = t.table.Append(row)
-	return t.Error
+func (t *Table) SetName(name string) {
+	t.name = name
 }
 
-func (t *Table) writeFile(fn string, data string, perm os.FileMode) error {
-	for range Only.Once {
-		fmt.Printf("Writing file '%s'\n", fn)
-		t.Error = os.WriteFile(fn, []byte(data), perm)
-		if t.Error != nil {
-			t.Error = errors.New(fmt.Sprintf("Unable to write to file %s - %v", fn, t.Error))
-			break
-		}
-	}
-
-	return t.Error
+func (t *Table) GetName() string {
+	return t.name
 }
 
 
@@ -257,6 +280,9 @@ func (t *Table) Output() error {
 					break
 				}
 
+			case t.OutputType.IsStruct():
+				t.Error = t.WriteStruct()
+
 			default:
 		}
 	}
@@ -275,7 +301,8 @@ func (t *Table) WriteTable() error {
 		}
 
 		if t.saveAsFile {
-			t.Error = t.writeFile(t.filePrefix+"-table.txt", t.String(), DefaultFileMode)
+			t.filePrefix += "-table.txt"
+			t.Error = t.writeFile(t.String(), DefaultFileMode)
 			break
 		}
 		fmt.Printf("# %s\n", t.title)
@@ -291,7 +318,8 @@ func (t *Table) WriteList() error {
 		}
 
 		if t.saveAsFile {
-			t.Error = t.writeFile(t.filePrefix + "-list.txt", t.String(), DefaultFileMode)
+			t.filePrefix += "-list.txt"
+			t.Error = t.writeFile(t.String(), DefaultFileMode)
 			break
 		}
 		fmt.Printf("# %s\n", t.title)
@@ -325,7 +353,8 @@ func (t *Table) WriteCsv() error {
 		}
 
 		if t.saveAsFile {
-			t.Error = t.writeFile(t.filePrefix+".csv", t.GetCsv(), DefaultFileMode)
+			t.filePrefix += ".csv"
+			t.Error = t.writeFile(t.GetCsv(), DefaultFileMode)
 			break
 		}
 		fmt.Print(t.GetCsv())
@@ -358,7 +387,8 @@ func (t *Table) WriteXml() error {
 		}
 
 		if t.saveAsFile {
-			t.Error = t.writeFile(t.filePrefix+".xml", t.GetXml(), DefaultFileMode)
+			t.filePrefix += ".xml"
+			t.Error = t.writeFile(t.GetXml(), DefaultFileMode)
 			break
 		}
 		fmt.Print(t.GetXml())
@@ -378,7 +408,8 @@ func (t *Table) WriteJson() error {
 		}
 
 		if t.saveAsFile {
-			t.Error = t.writeFile(t.filePrefix + ".json", string(t.json), DefaultFileMode)
+			t.filePrefix += ".json"
+			t.Error = t.writeFile(string(t.json), DefaultFileMode)
 			break
 		}
 		fmt.Printf("%s", t.json)
@@ -402,10 +433,38 @@ func (t *Table) WriteRaw() error {
 		// }
 
 		if t.saveAsFile {
-			t.Error = t.writeFile(t.filePrefix+".raw", string(t.raw), DefaultFileMode)
+			t.filePrefix += ".raw"
+			t.Error = t.writeFile(string(t.raw), DefaultFileMode)
 			break
 		}
 		fmt.Printf("%s", t.raw)
+	}
+	return t.Error
+}
+
+
+func (t *Table) GetStruct() string {
+	return string(t.json)
+}
+
+func (t *Table) WriteStruct() error {
+	for range Only.Once {
+		if t.IsNotValid() {
+			break
+		}
+
+		var data string
+		var options gojson.Options
+		options.StructureName("ResultData")
+		options.PackageName(t.name)
+		data, t.Error = gojson.Parse(options, t.json)
+
+		if t.saveAsFile {
+			t.filePrefix += ".go"
+			t.Error = t.writeFile(data, DefaultFileMode)
+			break
+		}
+		fmt.Printf("%s", data)
 	}
 	return t.Error
 }

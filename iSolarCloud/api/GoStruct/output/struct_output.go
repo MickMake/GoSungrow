@@ -5,24 +5,28 @@ import (
 	"strings"
 )
 
-const (
-	TypeNone  = iota
-	TypeJson  = iota
-	TypeCsv   = iota
-	TypeList  = iota
-	TypeTable = iota
-	TypeRaw   = iota
-	TypeGraph = iota
 
-	StringTypeNone  = ""
-	StringTypeJson  = "json"
-	StringTypeCsv   = "csv"
-	StringTypeList  = "list"
-	StringTypeTable = "table"
-	StringTypeRaw   = "raw"
-	StringTypeGraph = "graph"
+const (
+	TypeNone   = iota
+	TypeJson   = iota
+	TypeCsv    = iota
+	TypeList   = iota
+	TypeTable  = iota
+	TypeRaw    = iota
+	TypeGraph  = iota
+	TypeStruct = iota
+
+	StringTypeNone   = ""
+	StringTypeJson   = "json"
+	StringTypeCsv    = "csv"
+	StringTypeList   = "list"
+	StringTypeTable  = "table"
+	StringTypeRaw    = "raw"
+	StringTypeGraph  = "graph"
+	StringTypeStruct = "struct"
 )
 
+//goland:noinspection GoNameStartsWithPackageName
 type OutputType int
 
 
@@ -47,6 +51,10 @@ func (out *OutputType) SetRaw() {
 func (out *OutputType) SetGraph() {
 	*out = TypeGraph
 }
+func (out *OutputType) SetStruct() {
+	*out = TypeStruct
+}
+
 
 func (out *OutputType) IsNone() bool {
 	if *out == TypeNone {
@@ -90,6 +98,13 @@ func (out *OutputType) IsGraph() bool {
 	}
 	return false
 }
+func (out *OutputType) IsStruct() bool {
+	if *out == TypeStruct {
+		return true
+	}
+	return false
+}
+
 
 func (out *OutputType) IsStrNone(t string) bool {
 	if t == StringTypeNone {
@@ -133,6 +148,12 @@ func (out *OutputType) IsStrGraph(t string) bool {
 	}
 	return false
 }
+func (out *OutputType) IsStrStruct(t string) bool {
+	if t == StringTypeStruct {
+		return true
+	}
+	return false
+}
 
 
 func (out *OutputType) Set(outputType string) {
@@ -149,12 +170,14 @@ func (out *OutputType) Set(outputType string) {
 				out.SetJson()
 			case StringTypeCsv:
 				out.SetCsv()
+			case StringTypeTable:
+				out.SetTable()
 			case StringTypeRaw:
 				out.SetRaw()
 			case StringTypeGraph:
 				out.SetGraph()
-			case StringTypeTable:
-				out.SetTable()
+			case StringTypeStruct:
+				out.SetStruct()
 			case StringTypeList:
 				fallthrough
 			default:

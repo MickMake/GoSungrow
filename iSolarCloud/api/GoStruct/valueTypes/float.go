@@ -115,7 +115,7 @@ func (t *Float) SetValue(value float64) Float {
 }
 
 func (t *Float) ToUnitValue() UnitValue {
-	return SetUnitValueFloat(t.float64, "", "")
+	return SetUnitValueFloat("", "", t.float64)
 }
 
 func SetFloatString(value string) Float {

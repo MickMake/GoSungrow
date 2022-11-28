@@ -394,3 +394,8 @@ func (e EndPoint) ResultDataRef() ResultData {
 // func (e EndPoint) GetFilename(Type string) string {
 // 	return e.ApiSetFilenamePrefix(format, args...)
 // }
+// IsDebug - Are we in debug mode?
+func (e EndPoint) IsDebug() bool {
+	return e.ApiIsDebug()
+}
+

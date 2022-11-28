@@ -1,7 +1,7 @@
 package api
 
 import (
-	"GoSungrow/Only"
+	"github.com/MickMake/GoUnify/Only"
 	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"errors"
 	"fmt"
@@ -24,6 +24,10 @@ func (an *Areas) Exists(area string) bool {
 
 func (an *Areas) NotExists(area string) bool {
 	return !an.Exists(area)
+}
+
+func (an AreaName) String() string {
+	return string(an)
 }
 
 func (an *Areas) EndpointExists(area AreaName, name EndPointName) error {

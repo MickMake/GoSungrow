@@ -1,9 +1,9 @@
 package valueTypes
 
 import (
-	"GoSungrow/Only"
 	"encoding/json"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 	"reflect"
 	"strconv"
 	"strings"
@@ -38,7 +38,7 @@ const (
 )
 
 
-func IsUnknownStruct(ref interface{}) bool {
+func IsUnknownStruct(ref interface{}, checkDepth bool) bool {
 	var ok bool
 
 	for range Only.Once {
@@ -58,7 +58,22 @@ func IsUnknownStruct(ref interface{}) bool {
 			break
 		}
 
+		if kindy == reflect.Pointer {
+			if IsNil(ref) {
+				break
+			}
+			ref2 := fieldVo.Elem()
+			if IsNil(ref2) {
+				break
+			}
+			ok = IsTypeUnknown(ref2)
+			break
+		}
+
 		if kindy == reflect.Slice {
+			if checkDepth == false {
+				break
+			}
 			if fieldVo.Len() > 0 {
 				fieldVo = reflect.ValueOf(fieldVo.Index(0).Interface())
 				ok = IsTypeUnknown(fieldVo)
@@ -68,6 +83,9 @@ func IsUnknownStruct(ref interface{}) bool {
 		}
 
 		if kindy == reflect.Array {
+			if checkDepth == false {
+				break
+			}
 			if fieldVo.Len() > 0 {
 				fieldVo = reflect.ValueOf(fieldVo.Index(0).Interface())
 				ok = IsTypeUnknown(fieldVo)
@@ -77,6 +95,9 @@ func IsUnknownStruct(ref interface{}) bool {
 		}
 
 		if kindy == reflect.Map {
+			if checkDepth == false {
+				break
+			}
 			mk := fieldVo.MapKeys()
 			if len(mk) > 0 {
 				// ok = IsUnknownStruct(fieldVo.MapIndex(mk[0]).Interface())
@@ -94,8 +115,8 @@ func IsUnknownStruct(ref interface{}) bool {
 	return ok
 }
 
-func IsKnownStruct(ref interface{}) bool {
-	return !IsUnknownStruct(ref)
+func IsKnownStruct(ref interface{}, checkDepth bool) bool {
+	return !IsUnknownStruct(ref, checkDepth)
 }
 
 func IsTypeUnknown(fieldVo reflect.Value) bool {
@@ -259,26 +280,31 @@ func AnyToUnitValue(ref interface{}, key string, unit string, typeString string,
 	for range Only.Once {
 		if IsNil(ref) {
 			// fmt.Println("DEBUG: AnyToUnitValue(): NIL")
-			uvs.AddString("", key, unit, typeString + "(unknown)")
+			if key == "" {
+				uvs.AddString(key, unit, typeString + "(unknown)", "")
+			} else {
+				uvs.AppendString(unit, typeString + "(unknown)", "")
+			}
 			isNil = true
 			break
 		}
 		// fmt.Printf("DEBUG: AnyToUnitValue(): %s\n", reflect.TypeOf(e).String())
 
 		if dateFormat == "" {
+			// dateFormat = DateTimeLayout
 			dateFormat = DateTimeAltLayout
 		}
 
 		ValueOf := reflect.ValueOf(ref)
 		Kind := ValueOf.Kind()
-		if IsKnownStruct(ref) {
+		if IsKnownStruct(ref, true) {
 			if Kind == reflect.Map {
 				for _, mk := range ValueOf.MapKeys() {
 					var uv UnitValues
-					// fmt.Printf("Map[%s]\n", key)
 					val := ValueOf.MapIndex(mk).Interface()
-					uv, isNil, ok = AnyToUnitValue(val, mk.String(), unit, typeString, dateFormat) // uvs.AddUnitValue(ref.(UnitValue))
-					uvs.Append(uv)
+					key = mk.String()
+					uv, isNil, ok = AnyToUnitValue(val, key, unit, typeString, dateFormat) // uvs.AddUnitValue(ref.(UnitValue))
+					uvs.AddUnitValues(key, uv)
 				}
 				break
 			}
@@ -289,7 +315,7 @@ func AnyToUnitValue(ref interface{}, key string, unit string, typeString string,
 					// fmt.Printf("Slice[%d]\n", index)
 					val := ValueOf.Index(index).Interface()
 					uv, isNil, ok = AnyToUnitValue(val, key, unit, typeString, dateFormat)
-					uvs.Append(uv)
+					uvs.AppendUnitValues(uv)
 				}
 				break
 			}
@@ -303,148 +329,149 @@ func AnyToUnitValue(ref interface{}, key string, unit string, typeString string,
 
 		switch Type {
 			case "int":
-				uvs.AddInteger(int64(ref.(int)), key, unit, typeString)
+				uvs.AddInteger(key, unit, typeString, int64(ref.(int)))
 			case "int32":
-				uvs.AddInteger(int64(ref.(int32)), key, unit, typeString)
+				uvs.AddInteger(key, unit, typeString, int64(ref.(int32)))
 			case "int64":
-				uvs.AddInteger(ref.(int64), key, unit, typeString)
+				uvs.AddInteger(key, unit, typeString, ref.(int64))
 			case "float32":
-				uvs.AddFloat(float64(ref.(float32)), key, unit, typeString)
+				uvs.AddFloat(key, unit, typeString, float64(ref.(float32)))
 			case "float64":
-				uvs.AddFloat(ref.(float64), key, unit, typeString)
+				uvs.AddFloat(key, unit, typeString, ref.(float64))
 			case "string":
-				uvs.AddString(ref.(string), key, unit, typeString)
+				uvs.AddString(key, unit, typeString, ref.(string))
 			case "[]string":
 				// j, err := json.Marshal(ref.([]string))
 				// if err != nil {
 				// 	j = []byte(fmt.Sprintf("%v", ref.([]string)))
 				// }
-				uvs.AddStrings(ref.([]string), key, unit, typeString)
+				uvs.AddString(key, unit, typeString, ref.([]string)...)
 			case "bool":
-				uvs.AddBool(ref.(bool), key)
+				uvs.AddBool(key, ref.(bool))
 
 			case TypeUnitValue:
 				val := ref.(UnitValue)
-				val.SetKey(key)
-				uvs.AddUnitValue(val)
+				uvs.AddUnitValue(key, val)
 
 			case TypeUnitValues:
 				fallthrough
 			case TypeArrayUnitValue:
 				vals := ref.(UnitValues)
-				for _, val := range vals.values {
-					val.SetKey(key)
-				}
-				uvs.Append(vals)
+				// for _, val := range vals.values {
+				// 	val.SetKey(key)
+				// }
+				// uvs.Append(vals)
+				uvs.AddUnitValues(key, vals)
 
 			case TypeFloat:
 				v := ref.(Float)
-				uvs.AddFloat(v.Value(), key, unit, typeString)
+				uvs.AddFloat(key, unit, typeString, v.Value())
 
 			case TypeArrayFloat:
 				v := ref.([]Float)
 				for _, val := range v {
-					uvs.AddFloat(val.Value(), key, unit, typeString)
+					uvs.AddFloat(key, unit, typeString, val.Value())
 				}
 
 			case TypeInteger:
 				v := ref.(Integer)
-				uvs.AddInteger(v.Value(), key, unit, typeString)
+				uvs.AddInteger(key, unit, typeString, v.Value())
 
 			case TypeArrayInteger:
 				v := ref.([]Integer)
 				for _, val := range v {
-					uvs.AddInteger(val.Value(), key, unit, typeString)
+					uvs.AddInteger(key, unit, typeString, val.Value())
 				}
 				// HERE IS THE PROBLEM - need to return SOMETHING, even if it's null!
 
 			case TypeCount:
 				v := ref.(Count)
-				uvs.AddInteger(v.Value(), key, unit, typeString)
+				uvs.AddInteger(key, unit, typeString, v.Value())
 
 			case TypeArrayCount:
 				v := ref.([]Count)
 				for _, val := range v {
-					uvs.AddInteger(val.Value(), key, unit, typeString)
+					uvs.AddInteger(key, unit, typeString, val.Value())
 				}
 
 			case TypeBool:
 				v := ref.(Bool)
-				uvs.AddBool(v.Value(), key)
+				uvs.AddBool(key, v.Value())
 
 			case TypeArrayBool:
 				v := ref.([]Bool)
 				for _, val := range v {
-					uvs.AddBool(val.Value(), key)
+					uvs.AddBool(key, val.Value())
 				}
 
 			case TypeString:
 				v := ref.(String)
-				uvs.AddString(v.String(), key, unit, typeString)
+				uvs.AddString(key, unit, typeString, v.String())
 
 			case TypeArrayString:
 				v := ref.([]String)
 				for _, val := range v {
-					uvs.AddString(val.String(), key, unit, typeString)
+					uvs.AddString(key, unit, typeString, val.String())
 				}
 
 			case TypePsId:
 				v := ref.(PsId)
-				uvs.AddString(v.String(), key, unit, typeString)
+				uvs.AddString(key, unit, typeString, v.String())
 
 			case TypeArrayPsId:
 				v := ref.([]PsId)
 				for _, val := range v {
-					uvs.AddString(val.String(), key, unit, typeString)
+					uvs.AddString(key, unit, typeString, val.String())
 				}
 
 			case TypePsKey:
 				v := ref.(PsKey)
-				uvs.AddString(v.String(), key, unit, typeString)
+				uvs.AddString(key, unit, typeString, v.String())
 
 			case TypeArrayPsKey:
 				v := ref.([]PsKey)
 				for _, val := range v {
-					uvs.AddString(val.String(), key, unit, typeString)
+					uvs.AddString(key, unit, typeString, val.String())
 				}
 
 			case TypePointId:
 				v := ref.(PointId)
-				uvs.AddString(v.String(), key, unit, typeString)
+				uvs.AddString(key, unit, typeString, v.String())
 
 			case TypeArrayPointId:
 				v := ref.([]PointId)
 				for _, val := range v {
-					uvs.AddString(val.String(), key, unit, typeString)
+					uvs.AddString(key, unit, typeString, val.String())
 				}
 
 			case TypeDateTime:
 				v := ref.(DateTime)
-				uvs.AddString(v.Format(dateFormat), key, unit, typeString)
+				uvs.AddString(key, unit, typeString, v.Format(dateFormat))
 
 			case TypeArrayDateTime:
 				v := ref.([]DateTime)
 				for _, val := range v {
-					uvs.AddString(val.Format(dateFormat), key, unit, typeString)
+					uvs.AddString(key, unit, typeString, val.Format(dateFormat))
 				}
 
 			case TypeTime:
 				v := ref.(Time)
-				uvs.AddString(v.Format(TimeLayout), key, unit, typeString)
+				uvs.AddString(key, unit, typeString, v.Format(TimeLayout))
 
 			case TypeArrayTime:
 				v := ref.([]Time)
 				for _, val := range v {
-					uvs.AddString(val.Format(TimeLayout), key, unit, typeString)
+					uvs.AddString(key, unit, typeString, val.Format(TimeLayout))
 				}
 
 			default:
 				typeString = ""
-				j, err := json.Marshal(ref)
-				if err != nil {
-					j = []byte(Type + "(unknown)")
-				}
-				uvs.AddString(string(j), key, unit, typeString)
+				// j, err := json.Marshal(ref)
+				// if err != nil {
+				// 	j = []byte(Type + "(unknown)")
+				// }
+				// uvs.AddString(key, unit, typeString, string(j))
+				uvs.AddString(key, unit, typeString, "default: " + Type)
 				ok = false
 		}
 	}
@@ -640,14 +667,3 @@ func AnyToValueString(ref interface{}, intSize int, dateFormat string) string {
 	}
 	return ret
 }
-
-
-// func Float32ToString(num float64) string {
-// 	s := fmt.Sprintf("%.6f", num)
-// 	return strings.TrimRight(strings.TrimRight(s, "0"), ".")
-// }
-
-// func Float64ToString(num float64) string {
-// 	s := fmt.Sprintf("%.6f", num)
-// 	return strings.TrimRight(strings.TrimRight(s, "0"), ".")
-// }

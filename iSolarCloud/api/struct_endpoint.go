@@ -1,12 +1,12 @@
 package api
 
 import (
-	"GoSungrow/Only"
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 
@@ -27,6 +27,11 @@ type EndPointStruct struct {
 	Request        interface{} `json:"-"`
 	Response       interface{} `json:"-"`
 	Error          error       `json:"-"`
+	Debug          bool        `json:"-"`
+}
+
+func (ep *EndPointStruct) ApiIsDebug() bool {
+	return ep.Debug
 }
 
 func (ep *EndPointStruct) GetArea() AreaName {

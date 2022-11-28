@@ -1,7 +1,7 @@
 package mmHa
 
 import (
-	"GoSungrow/Only"
+	"github.com/MickMake/GoUnify/Only"
 	"encoding/json"
 	"strings"
 )

@@ -52,6 +52,8 @@ const (
 	PointUnitFrom = "PointUnitFrom"
 	// PointUnitFromParent -  Get PointUnit from another parent field structure.
 	PointUnitFromParent = "PointUnitFromParent"
+	// PointVariableUnit -  Will be any number of units - used mainly in table display.
+	PointVariableUnit = "PointVariableUnit"
 
 
 	// PointIgnore -  Ignore this point.
@@ -85,6 +87,9 @@ const (
 
 	// PointArrayFlatten -  Flatten an array into a string. EG: ["one", "two", "three"]
 	PointArrayFlatten = "PointArrayFlatten"
+
+	// PointSplitForce -  Force a point to split.
+	PointSplitForce = "PointSplitForce"
 
 	// PointSplitOn -  Split a point into an array separating by defined string.
 	PointSplitOn = "PointSplitOn"
@@ -129,6 +134,9 @@ const (
 	DataTableSortOn = "DataTableSortOn"
 	// DataTablePivot -  Pivot the table.
 	DataTablePivot = "DataTablePivot"
+
+	// PointListFlatten -  Flatten a point into a string - only for list display.
+	PointListFlatten = "PointListFlatten"
 )
 
 type GoStruct bool

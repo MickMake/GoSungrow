@@ -1,7 +1,7 @@
 package mmHa
 
 import (
-	"GoSungrow/Only"
+	"github.com/MickMake/GoUnify/Only"
 	"GoSungrow/iSolarCloud/AppService/getDeviceList"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"

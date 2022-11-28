@@ -24,15 +24,6 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	AllFactoryList []struct {
-		Id             valueTypes.Integer `json:"id"`
-		FactoryName    valueTypes.String  `json:"factory_name"`
-		FactoryAddress valueTypes.String  `json:"factory_address"`
-		FactoryDesc    valueTypes.String  `json:"factory_desc"`
-		FactoryLogo    valueTypes.String  `json:"factory_logo"`
-		LinkMan        valueTypes.String  `json:"link_man"`
-		Remark         valueTypes.String  `json:"remark"`
-	} `json:"all_factory_list" DataTable:"true" DataTableSortOn:"Id"`
 	DeviceFactoryList []struct {
 		Id              valueTypes.Integer `json:"id"`
 		CustomerCode    valueTypes.String  `json:"customer_code"`
@@ -51,17 +42,6 @@ type ResultData struct {
 		OweRemind       interface{}        `json:"owe_remind"`
 		Remark          valueTypes.String  `json:"remark"`
 	} `json:"deviceFactoryList" PointId:"device_factory_list" DataTable:"true" DataTableSortOn:"Id"`
-	DeviceTypeList []struct {
-		TypeId          valueTypes.Integer  `json:"type_id"`
-		TypeCode        valueTypes.Integer  `json:"type_code"`
-		TypeName        valueTypes.String   `json:"type_name"`
-		TypeNameEn      valueTypes.String   `json:"type_name_en"`
-		SysId           valueTypes.String   `json:"sys_id"`
-		SysName         valueTypes.String   `json:"sys_name"`
-		IsRemoteUpgrade valueTypes.Bool     `json:"is_remote_upgrade"`
-		UpdateDate      valueTypes.DateTime `json:"update_date"`
-		ValidFlag       valueTypes.Bool     `json:"valid_flag"`
-	} `json:"deviceTypeList" PointId:"device_type_list" DataTable:"true" DataTableSortOn:"TypeId"`
 	PowerDeviceModel struct {
 		Id                        valueTypes.Integer  `json:"id"`
 		SysId                     valueTypes.String   `json:"sys_id"`
@@ -98,6 +78,31 @@ type ResultData struct {
 		CodeName   valueTypes.String `json:"code_name"`
 		CodeValue2 interface{}       `json:"code_value2"`
 	} `json:"sysTypeList" PointId:"sys_type_list" DataTable:"true" DataTableSortOn:"CodeValue"`
+
+	AllFactoryList []struct {
+		GoStruct       GoStruct.GoStruct  `json:"-" PointListFlatten:"true"`
+
+		Id             valueTypes.Integer `json:"id"`
+		FactoryName    valueTypes.String  `json:"factory_name"`
+		FactoryAddress valueTypes.String  `json:"factory_address"`
+		FactoryDesc    valueTypes.String  `json:"factory_desc"`
+		FactoryLogo    valueTypes.String  `json:"factory_logo"`
+		LinkMan        valueTypes.String  `json:"link_man"`
+		Remark         valueTypes.String  `json:"remark"`
+	} `json:"all_factory_list" DataTable:"true" DataTableSortOn:"Id"`
+	DeviceTypeList []struct {
+		GoStruct        GoStruct.GoStruct   `json:"-" PointListFlatten:"true"`
+
+		TypeId          valueTypes.Integer  `json:"type_id"`
+		TypeCode        valueTypes.Integer  `json:"type_code"`
+		TypeName        valueTypes.String   `json:"type_name"`
+		TypeNameEn      valueTypes.String   `json:"type_name_en"`
+		SysId           valueTypes.String   `json:"sys_id"`
+		SysName         valueTypes.String   `json:"sys_name"`
+		IsRemoteUpgrade valueTypes.Bool     `json:"is_remote_upgrade"`
+		UpdateDate      valueTypes.DateTime `json:"update_date"`
+		ValidFlag       valueTypes.Bool     `json:"valid_flag"`
+	} `json:"deviceTypeList" PointId:"device_type_list" DataTable:"true" DataTableSortOn:"TypeId"`
 }
 
 func (e *ResultData) IsValid() error {
