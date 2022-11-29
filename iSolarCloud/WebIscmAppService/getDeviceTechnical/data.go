@@ -4,7 +4,7 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
+
 	"fmt"
 )
 
@@ -12,7 +12,7 @@ const Url = "/v1/devService/getDeviceTechnical"
 const Disabled = false
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -23,9 +23,29 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+	DeviceTypeList []struct {
+		TypeId   valueTypes.Integer `json:"type_id"`
+		TypeName valueTypes.String  `json:"type_name"`
+	} `json:"deviceTypeList" PointId:"device_type_list" PointIdReplace:"true" DataTable:"true" DataTableSortOn:"TypeCode"`
+	PowerDeviceTechnicalMap struct {
+		ComType            valueTypes.String   `json:"com_type"`
+		DeviceModel        valueTypes.String   `json:"device_model"`
+		DeviceModelCode    valueTypes.String   `json:"device_model_code"`
+		ModelId            valueTypes.Integer  `json:"model_id"`
+		TechCode           valueTypes.String   `json:"tech_code"`
+		TechContent        valueTypes.String   `json:"tech_content"`
+		TechContentTransId valueTypes.Integer  `json:"tech_content_trans_id"`
+		TechCreateTime     valueTypes.DateTime `json:"tech_createtime" PointId:"tech_create_time"`
+		TechCreator        valueTypes.String   `json:"tech_creator"`
+		TechDescription    interface{}         `json:"tech_description"`
+		TechId             valueTypes.Integer  `json:"tech_id"`
+		TechModifier       interface{}         `json:"tech_modifier"`
+		TechModifyTime     valueTypes.DateTime `json:"tech_modifytime" PointId:"tech_modify_time"`
+		TechName           valueTypes.String   `json:"tech_name"`
+		TypeId             valueTypes.Integer  `json:"type_id"`
+		TypeName           valueTypes.String   `json:"type_name"`
+	} `json:"powerDeviceTechnicalMap" PointId:"power_device_technical_map"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -33,31 +53,8 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
-	}
-
+	entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	return entries
 }

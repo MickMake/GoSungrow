@@ -1,6 +1,7 @@
 package Common
 
 import (
+	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
@@ -61,10 +62,8 @@ type SnDetailList []struct {
 
 // ReportInfo - `json:"info" PointArrayFlatten:"false"`
 type ReportInfo []struct {
-	DesignCapacity         valueTypes.Float   `json:"design_capacity" PointUnit:"W"`
-	InstallerPsFaultStatus valueTypes.Integer `json:"installer_ps_fault_status"`
-	OwnerPsFaultStatus     valueTypes.Integer `json:"owner_ps_fault_status"`
-	PsFaultStatus          valueTypes.Integer `json:"ps_fault_status"`
+	GoStruct               GoStruct.GoStruct  `json:"-" PointIdFrom:"PsId" PointIdReplace:"true" PointDeviceFrom:"PsId"`
+
 	PsId                   valueTypes.PsId    `json:"ps_id"`
 	PsName                 valueTypes.String  `json:"ps_name"`
 	PsStatus               valueTypes.Integer `json:"ps_status"`
@@ -72,6 +71,10 @@ type ReportInfo []struct {
 	PsTypeName             valueTypes.String  `json:"ps_type_name"`
 	SysScheme              valueTypes.Integer `json:"sys_scheme"`
 	SysSchemeName          valueTypes.String  `json:"sys_scheme_name"`
+	DesignCapacity         valueTypes.Float   `json:"design_capacity" PointUnit:"W"`
+	InstallerPsFaultStatus valueTypes.Integer `json:"installer_ps_fault_status"`
+	OwnerPsFaultStatus     valueTypes.Integer `json:"owner_ps_fault_status"`
+	PsFaultStatus          valueTypes.Integer `json:"ps_fault_status"`
 	ValidFlag              valueTypes.Bool    `json:"valid_flag"`
 }
 

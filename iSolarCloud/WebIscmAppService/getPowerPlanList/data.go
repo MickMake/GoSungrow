@@ -5,14 +5,13 @@ import (
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/powerStationService/getPowerPlanList"
 const Disabled = false
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -26,19 +25,21 @@ func (rd RequestData) Help() string {
 type ResultData []struct {
 	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"CodeId"`
 
-	Eight         valueTypes.Float `json:"eight"`
-	Eleven        valueTypes.Float `json:"eleven"`
-	Five          valueTypes.Float `json:"five"`
-	Four          valueTypes.Float `json:"four"`
-	Nine          valueTypes.Float `json:"nine"`
-	One           valueTypes.Float `json:"one"`
-	PsID          valueTypes.Float `json:"ps_id"`
-	Seven         valueTypes.Float `json:"seven"`
-	Six           valueTypes.Float `json:"six"`
-	Ten           valueTypes.Float `json:"ten"`
-	Three         valueTypes.Float `json:"three"`
-	Twelve        valueTypes.Float `json:"twelve"`
-	Two           valueTypes.Float `json:"two"`
+	PsId      valueTypes.Float `json:"ps_id"`
+
+	January   valueTypes.Float `json:"one" PointId:"january"`
+	February  valueTypes.Float `json:"two" PointId:"february"`
+	March     valueTypes.Float `json:"three" PointId:"march"`
+	April     valueTypes.Float `json:"four" PointId:"april"`
+	May       valueTypes.Float `json:"five" PointId:"may"`
+	June      valueTypes.Float `json:"six" PointId:"june"`
+	July      valueTypes.Float `json:"seven" PointId:"july"`
+	August    valueTypes.Float `json:"eight" PointId:"august"`
+	September valueTypes.Float `json:"nine" PointId:"september"`
+	October   valueTypes.Float `json:"ten" PointId:"october"`
+	November  valueTypes.Float `json:"eleven" PointId:"november"`
+	December  valueTypes.Float `json:"twelve" PointId:"december"`
+
 	YearPlanPower valueTypes.Float `json:"year_plan_power"`
 }
 
@@ -49,10 +50,6 @@ func (e *ResultData) IsValid() error {
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
-	}
-
+	entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	return entries
 }

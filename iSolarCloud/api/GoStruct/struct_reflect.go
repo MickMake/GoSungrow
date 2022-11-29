@@ -761,14 +761,7 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 				r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
 					r.InterfaceValue, "", r.DataStructure.PointUnit,
 					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
-				switch {
-					// case r.DataStructure.PointUnit == "":
-					// 	r.DataStructure.PointUnit = r.Value.GetUnit()
-					case r.Value.GetUnit() == "":
-						r.Value.SetUnit(r.DataStructure.PointUnit)
-					default:
-						r.DataStructure.PointUnit = r.Value.GetUnit()
-				}
+				r.SetUnit()
 
 			case reflect.Slice:
 				fallthrough
@@ -811,7 +804,7 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 					if current.Length > 0 {
 						f = fmt.Sprintf("%%.%dd", valueTypes.SizeOfInt(current.Length))
 					}
-					f = fmt.Sprintf(f, index)
+					// f = fmt.Sprintf(f, index)
 					r.DataStructure.Json = current.DataStructure.PointId + "_" + f
 					r.DataStructure.PointId = current.DataStructure.PointId + "_" + f
 				}
@@ -821,14 +814,7 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 				r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
 					r.InterfaceValue, "", r.DataStructure.PointUnit,
 					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
-				switch {
-					// case r.DataStructure.PointUnit == "":
-					// 	r.DataStructure.PointUnit = r.Value.GetUnit()
-					case r.Value.GetUnit() == "":
-						r.Value.SetUnit(r.DataStructure.PointUnit)
-					default:
-						r.DataStructure.PointUnit = r.Value.GetUnit()
-				}
+				r.SetUnit()
 
 			case reflect.Map:
 				r.FieldTo = reflect.StructField{}
@@ -868,14 +854,7 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 					// map[string]interface{}{ indexName.String(): r.InterfaceValue }, r.DataStructure.PointUnit,
 					r.InterfaceValue, "", r.DataStructure.PointUnit,
 					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
-				switch {
-					// case r.DataStructure.PointUnit == "":
-					// 	r.DataStructure.PointUnit = r.Value.GetUnit()
-					case r.Value.GetUnit() == "":
-						r.Value.SetUnit(r.DataStructure.PointUnit)
-					default:
-						r.DataStructure.PointUnit = r.Value.GetUnit()
-				}
+				r.SetUnit()
 
 
 			default:
@@ -892,6 +871,19 @@ func (r *Reflect) SetValue(value interface{}) {
 		r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
 			value, "", r.Value.GetUnit(),
 			r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
+	}
+}
+
+func (r *Reflect) SetUnit() {
+	for range Only.Once {
+		switch {
+			case r.Value.GetUnit() == "":
+				r.Value.SetUnit(r.DataStructure.PointUnit)
+			default:
+				r.DataStructure.PointUnit = r.Value.GetUnit()
+				r.DataStructure.PointUnitFrom = ""
+				r.DataStructure.PointUnitFromParent = ""
+		}
 	}
 }
 
@@ -962,10 +954,6 @@ func (r *Reflect) SetPointId() EndPointPath {
 
 		switch {
 			case r.DataStructure.PointIdFromChild != "":
-				// if r.DataStructure.PointIdFromChild == "PsKey" {
-				// 	fmt.Sprintf("")
-				// }
-
 				// PointIdFromChild - In this case points to a field within a CHILD struct.
 				// @TODO - This needs fixing for arrays! Will always return the first entry found instead of the correct one.
 				// fmt.Printf("[PointIdFromChild1]	EPP: %s	- FP: %s\n", r.DataStructure.Endpoint, r.FieldPath)
@@ -993,7 +981,9 @@ func (r *Reflect) SetPointId() EndPointPath {
 				// PointIdFromChild - In this case points to a field within a CHILD struct.
 				// fmt.Printf("[PointIdFrom1     ]	EPP: %s	- FP: %s\n", r.DataStructure.Endpoint, r.FieldPath)
 				var pns []string
+				// al := valueTypes.SizeOfInt(r.Length)
 				for _, pid := range strings.Split(r.DataStructure.PointIdFrom, ".") {
+					// p := reflection.GetStringFromStruct(r.Interface, pid, valueTypes.IgnoreLength, r.DataStructure.PointNameDateFormat)	// Look forward into structure.
 					p := reflection.GetStringFromStruct(r.Interface, pid, valueTypes.IgnoreLength, r.DataStructure.PointNameDateFormat)	// Look forward into structure.
 					if p == "" {
 						p = reflection.GetStringFromStruct(r.CurrentReflect.Interface, pid, valueTypes.IgnoreLength, r.DataStructure.PointNameDateFormat)
@@ -1001,29 +991,8 @@ func (r *Reflect) SetPointId() EndPointPath {
 					if p == "" {
 						continue
 					}
-					// if r.DataStructure.PointNameDateFormat != "" {
-					// 	pn2 := valueTypes.AnyToValueString(p, valueTypes.IgnoreLength, r.DataStructure.PointNameDateFormat)
-					// 	if pn2 != "" {
-					// 		p = pn2
-					// 	}
-					// }
 					pns = append(pns, p)
 				}
-				// if len(pns) == 0 {
-				// 	for _, pid := range strings.Split(r.DataStructure.PointIdFrom, ".") {
-				// 		p := reflection.GetStringFromStruct(r.CurrentReflect.Interface, pid)
-				// 		if p == "" {
-				// 			continue
-				// 		}
-				// 		if r.DataStructure.PointNameDateFormat != "" {
-				// 			pn2 := valueTypes.AnyToValueString(p, valueTypes.IgnoreLength, r.DataStructure.PointNameDateFormat)
-				// 			if pn2 != "" {
-				// 				p = pn2
-				// 			}
-				// 		}
-				// 		pns = append(pns, p)
-				// 	}
-				// }
 
 				if r.DataStructure.PointId != "" {
 					if !r.DataStructure.PointIdReplace {
@@ -1065,15 +1034,6 @@ func (r *Reflect) SetPointId() EndPointPath {
 					case reflect.Array:
 						fallthrough
 					case reflect.Slice:
-						// ds, _ := GetChildGoStruct(r.CurrentReflect.Interface, 1)
-						// if ds != nil {
-						// 	// fmt.Printf("DT:%v\n", ds)
-						// 	if ds.PointIdFrom != "" {
-						// 		pn = ""
-						// 		break
-						// 	}
-						// }
-						// PointIdFrom
 						// var pns []string
 						// for _, pid := range strings.Split(ds.PointIdFrom, ".") {
 						// 	pns = append(pns, reflection.GetStringFromStruct(r.CurrentReflect.Interface, pid))

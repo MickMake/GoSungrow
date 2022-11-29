@@ -5,7 +5,6 @@ import (
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/getPointInfo"
@@ -25,26 +24,26 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	DeviceTypeList []struct {
-		DeviceName valueTypes.String  `json:"device_name"`
 		DeviceType valueTypes.Integer `json:"device_type"`
-	} `json:"deviceTypeList" PointId:"device_type_list" DataTable:"true"`
+		DeviceName valueTypes.String  `json:"device_name"`
+	} `json:"deviceTypeList" PointId:"device_type_list" DataTable:"true" DataTableSortOn:"DeviceType"`
 	DisplayModeList []struct {
+		PointType valueTypes.String `json:"point_type" DataTableSortOn:"PointType"`
 		CodeName  valueTypes.String `json:"code_name"`
-		PointType valueTypes.String `json:"point_type"`
 	} `json:"displayModeList" PointId:"display_mode_list" DataTable:"true"`
 	PointCalTypeList []struct {
-		CodeName   valueTypes.String `json:"code_name"`
 		CodeValue  valueTypes.String `json:"code_value"`
+		CodeName   valueTypes.String `json:"code_name"`
 		CodeValue2 interface{}       `json:"code_value2"`
-	} `json:"pointCalTypeList" PointId:"point_cal_type_list" DataTable:"true"`
+	} `json:"pointCalTypeList" PointId:"point_cal_type_list" DataTable:"true" DataTableSortOn:"CodeValue"`
 	PointTypeList []struct {
-		CodeName  valueTypes.String `json:"code_name"`
 		PointType valueTypes.String `json:"point_type"`
-	} `json:"pointTypeList" PointId:"point_type_list" DataTable:"true"`
+		CodeName  valueTypes.String `json:"code_name"`
+	} `json:"pointTypeList" PointId:"point_type_list" DataTable:"true" DataTableSortOn:"PointType"`
 	PolymerizationModeList []struct {
-		CodeName  valueTypes.String `json:"code_name"`
 		PointType valueTypes.String `json:"point_type"`
-	} `json:"polymerizationModeList" PointId:"polymerization_mode_list" DataTable:"true"`
+		CodeName  valueTypes.String `json:"code_name"`
+	} `json:"polymerizationModeList" PointId:"polymerization_mode_list" DataTable:"true" DataTableSortOn:"PointType"`
 	PowerPointManage interface{} `json:"powerPointManage"`
 }
 
@@ -55,13 +54,6 @@ func (e *ResultData) IsValid() error {
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		// pkg := reflection.GetName("", *e)
-		// dt := valueTypes.NewDateTime(valueTypes.Now)
-		// name := pkg	// + "." + e.Request.PsId.String()
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
-	}
-
+	entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	return entries
 }

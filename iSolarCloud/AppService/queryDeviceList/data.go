@@ -27,7 +27,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		GoStruct                GoStruct.GoStruct         `json:"-" PointIdFrom:"PsKey" PointIdReplace:"true" PointDeviceFrom:"PsKey"`
+		GoStruct                GoStruct.GoStruct  `json:"-" PointIdFrom:"PsKey" PointIdReplace:"true" PointDeviceFrom:"PsKey"`
 
 		PointData               []PointStruct      `json:"point_data" PointId:"data" PointIdReplace:"true" DataTable:"true"`	// PointIdFromChild:"PointId" PointIdReplace:"true" PointId:"data" DataTable:"true"`
 		PsTimezoneInfo          struct {

@@ -4,7 +4,7 @@ import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
+
 	"fmt"
 )
 
@@ -12,8 +12,8 @@ const Url = "/v1/userService/getUserMenuLs"
 const Disabled = false
 
 type RequestData struct {
-	}
-
+	UserId valueTypes.String `json:"userId" required:"true"`
+}
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
 }
@@ -23,9 +23,21 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
+type ResultData []struct {
+	GoStructParent   GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"MenuId"`
+	// GoStruct         GoStruct.GoStruct        `json:"-" PointIdFrom:"MenuId" PointIdReplace:"false"`
 
-type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+	MenuId        valueTypes.Integer `json:"menuid" PointId:"menu_id"`
+	MenuLevel     valueTypes.Integer `json:"menulevel" PointId:"menu_level"`
+	MenuName      valueTypes.String  `json:"menuname" PointId:"menu_name"`
+	MenuOrder     valueTypes.Integer `json:"menuorder" PointId:"menu_order"`
+	MenuCode      valueTypes.String  `json:"menucode" PointId:"menu_code"`
+	MenuType      valueTypes.String  `json:"menutype" PointId:"menu_type"`
+	MenuUrl       valueTypes.String  `json:"menuurl" PointId:"menu_url"`
+	OpenType      valueTypes.String  `json:"opentype"`
+	ParMenuId     valueTypes.Integer `json:"parmenuid" PointId:"par_menu_id"`
+	PrivilegeCode valueTypes.String  `json:"privilegecode" PointId:"privilege_code"`
+	UrlTarget     valueTypes.String  `json:"urltarget" PointId:"url_target"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -33,31 +45,8 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
-	}
-
+	entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	return entries
 }

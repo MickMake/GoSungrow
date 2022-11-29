@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 	"reflect"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -22,6 +23,7 @@ const (
 	TypeString    = "String"
 	TypeTime      = "Time"
 	TypeUnitValue = "UnitValue"
+	TypeGeneric   = "Generic"	// Used for values that can flip-flop between strings, ints and floats.
 
 	TypeArrayBool      = "[]Bool"
 	TypeArrayCount     = "[]Count"
@@ -35,6 +37,7 @@ const (
 	TypeArrayTime      = "[]Time"
 	TypeArrayUnitValue = "[]UnitValue"
 	TypeUnitValues     = "UnitValues"
+	TypeArrayGeneric   = "[]Generic"
 )
 
 
@@ -137,6 +140,8 @@ func IsTypeUnknown(fieldVo reflect.Value) bool {
 			case TypeString:
 			case TypeTime:
 			case TypeUnitValue:
+			case TypeGeneric:
+
 			case TypeArrayBool:
 			case TypeArrayCount:
 			case TypeArrayDateTime:
@@ -149,6 +154,7 @@ func IsTypeUnknown(fieldVo reflect.Value) bool {
 			case TypeArrayTime:
 			case TypeArrayUnitValue:
 			case TypeUnitValues:
+			case TypeArrayGeneric:
 
 			default:
 				ok = true
@@ -204,7 +210,7 @@ func PrintInt(s int, i interface{}) string {
 				val = i.(Count).Value()
 		}
 
-		if s == 0 {
+		if s <= 0 {
 			ret = fmt.Sprintf("%d", val)
 			break
 		}
@@ -464,6 +470,16 @@ func AnyToUnitValue(ref interface{}, key string, unit string, typeString string,
 					uvs.AddString(key, unit, typeString, val.Format(TimeLayout))
 				}
 
+			case TypeGeneric:
+				v := ref.(Generic)
+				uvs.AddFloat(key, unit, typeString, v.Value())
+
+			case TypeArrayGeneric:
+				v := ref.([]Generic)
+				for _, val := range v {
+					uvs.AddFloat(key, unit, typeString, val.Value())
+				}
+
 			default:
 				typeString = ""
 				// j, err := json.Marshal(ref)
@@ -471,6 +487,13 @@ func AnyToUnitValue(ref interface{}, key string, unit string, typeString string,
 				// 	j = []byte(Type + "(unknown)")
 				// }
 				// uvs.AddString(key, unit, typeString, string(j))
+				if strings.HasPrefix(Type, "[]struct") || strings.HasPrefix(Type, "struct") {
+					re := regexp.MustCompile(`(\w+) (\w+|\w+\.\w+) .*?(;\s+|\s+})`)	// `(\w+) (\w+) ".*?";* `)
+					if re.Match([]byte(Type)) {
+						Type = re.ReplaceAllString(Type, "$2($1), ") + "}"
+					}
+				}
+				// fmt.Println(Type)
 				uvs.AddString(key, unit, typeString, "default: " + Type)
 				ok = false
 		}
@@ -651,6 +674,16 @@ func AnyToValueString(ref interface{}, intSize int, dateFormat string) string {
 				ret = v.Format(dateFormat)
 			case TypeArrayTime:
 				// ret = s.([]Time)
+				v , err := json.Marshal(ref)
+				if err != nil {
+					break
+				}
+				ret = string(v)
+
+			case TypeGeneric:
+				ret = ref.(Generic).String()
+			case TypeArrayGeneric:
+				// ret = s.([]Generic)
 				v , err := json.Marshal(ref)
 				if err != nil {
 					break

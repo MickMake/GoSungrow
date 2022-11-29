@@ -24,11 +24,11 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"Id"`
+	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"DeploymentTime"`
 
+	DeploymentTime valueTypes.DateTime `json:"deploymentTime" PointId:"deployment_time"`
 	Id             valueTypes.String   `json:"id"`
 	Name           valueTypes.String   `json:"name"`
-	DeploymentTime valueTypes.DateTime `json:"deploymentTime" PointId:"deployment_time"`
 }
 
 func (e *ResultData) IsValid() error {

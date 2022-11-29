@@ -3,7 +3,7 @@ package NullEndpoint
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
@@ -29,7 +29,7 @@ func (rd RequestData) Help() string {
 
 // ResultData holds data returned from the API.
 type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+	// Dummy valueTypes.String `json:"dummy"`
 }
 
 // IsValid Checks for validity of results data.

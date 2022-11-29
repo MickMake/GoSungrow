@@ -156,7 +156,9 @@ func (sm *StructMap) ScanMap(Parent *Reflect, Current *Reflect) bool {
 				for index2, key2 := range Child.FieldVo.MapKeys() {
 					var Child2 Reflect
 					Child2.SetByIndex(Current, &Child, index2, key2)
+					sm.Add(&Child2)
 				}
+				fmt.Println("")
 			}
 
 			if sm.Process(&Child) {
@@ -193,7 +195,9 @@ func (sm *StructMap) ScanSlice(Parent *Reflect, Current *Reflect) bool {
 				for index2, key2 := range Child.FieldVo.MapKeys() {
 					var Child2 Reflect
 					Child2.SetByIndex(Current, &Child, index2, key2)
+					sm.Add(&Child2)
 				}
+				fmt.Println("")
 			}
 
 			if sm.Process(&Child) {
@@ -226,14 +230,14 @@ func (sm *StructMap) ScanStruct(Parent *Reflect, Current *Reflect) bool {
 			Child.SetByIndex(Parent, Current, index, reflect.Value{})
 			sm.PrintDebug("# ScanStruct().SetByIndex() Child: %s\n", Child)
 
-			// if strings.Contains(Child.FieldPath.String(), "DevTypeDefinition") {
-			// 	for index2, key2 := range Child.FieldVo.MapKeys() {
-			// 		var Child2 Reflect
-			// 		Child2.SetByIndex(Current, &Child, index2, key2)
-			// 		sm.Add(&Child2)
-			// 	}
-			// 	fmt.Println("")
-			// }
+			if strings.Contains(Child.FieldPath.String(), "DevTypeDefinition") {
+				for index2, key2 := range Child.FieldVo.MapKeys() {
+					var Child2 Reflect
+					Child2.SetByIndex(Current, &Child, index2, key2)
+					sm.Add(&Child2)
+				}
+				fmt.Println("")
+			}
 
 			if sm.Process(&Child) {
 				continue
@@ -250,14 +254,10 @@ func (sm *StructMap) Process(Child *Reflect) bool {
 	var ok bool
 
 	for range Only.Once {
+		// fmt.Printf("[%s]\n", Child.FieldPath.String())
 		sm.PrintDebug("Check() Child: %s\n", Child)
 		if Child.Kind == reflect.Invalid {
 			ok = true
-			break
-		}
-
-		if Child.IsGoStruct() {
-			// 	sm.SaveGoStructOptions(Child)
 			break
 		}
 
@@ -285,6 +285,16 @@ func (sm *StructMap) Process(Child *Reflect) bool {
 			break
 		}
 
+		if sm.Start == nil {
+			ok = Child.IsKnown()
+			break	// Wait until we've started.
+		}
+
+		if Child.IsGoStruct() {
+			// 	sm.SaveGoStructOptions(Child)
+			break
+		}
+
 		if Child.DataStructure.PointTimestamp.IsZero() {
 			if sm._Timestamp.IsZero() {
 				Child.DataStructure.PointTimestamp = time.Now()
@@ -293,9 +303,11 @@ func (sm *StructMap) Process(Child *Reflect) bool {
 			}
 		}
 
-		if sm.Start == nil {
-			ok = Child.IsKnown()
-			break	// Wait until we've started.
+
+		// Start processing the Child here on...
+		if sm.Exists(Child) {
+			// Already processed.
+			break
 		}
 
 		// IsUnexported - will add to map only if sm.AddEmpty == true
@@ -350,6 +362,30 @@ func (sm *StructMap) Process(Child *Reflect) bool {
 	return ok
 }
 
+func (sm *StructMap) Exists(Current *Reflect) bool {
+	var yes bool
+	for range Only.Once {
+		if Current.IsGoStruct() {
+			break
+		}
+
+		if sm.Start == nil {
+			break
+		}
+
+		if sm.Map == nil {
+			break
+		}
+
+		name := Current.EndPointPath().String()
+		if _, yes = sm.Map[name]; yes {
+			sm.PrintDebug("\t- Exists() Current EXISTS: %s\n", Current)
+			break
+		}
+	}
+	return yes
+}
+
 func (sm *StructMap) Add(Current *Reflect)  {
 	for range Only.Once {
 		if Current.IsGoStruct() {
@@ -374,7 +410,7 @@ func (sm *StructMap) Add(Current *Reflect)  {
 		}
 		name := Current.EndPointPath().String()
 		if _, ok := sm.Map[name]; ok {
-			sm.PrintDebug("\t- Add() Current: %s\n", Current)
+			sm.PrintDebug("\t- Add() Current EXISTS: %s\n", Current)
 			break
 		}
 		sm.Map[name] = Current
@@ -743,7 +779,15 @@ func (sm *StructMap) GetTableData(name string) StructTable {
 		}
 
 
-		rows, cols := ret.Current.CountChildren()
+		ret.Rows, ret.Cols = ret.Current.CountChildren()
+		var isPivot bool
+		if ret.Current.DataStructure.DataTablePivot {
+			isPivot = true
+		}
+		if ret.Cols <= 1 {
+			isPivot = true
+		}
+
 		// if rows == 0 {
 		// 	// var refs ReflectArray
 		// 	for row, Child := range ret.Current.Value.Range(true) {
@@ -764,7 +808,7 @@ func (sm *StructMap) GetTableData(name string) StructTable {
 		// 	break
 		// }
 
-		sm.PrintDebug("GetTableData(%s) - path:%s type:%s rows:%d cols:%d\n", name, ret.Current.FieldPath, ret.Current.Kind, rows, cols)
+		sm.PrintDebug("GetTableData(%s) - path:%s type:%s rows:%d cols:%d\n", name, ret.Current.FieldPath, ret.Current.Kind, ret.Rows, ret.Cols)
 		if ret.Current.IsPointIgnore() {
 			break
 		}
@@ -797,6 +841,9 @@ func (sm *StructMap) GetTableData(name string) StructTable {
 			}
 
 			if len(refRow) > 0 {
+				if ret.ActualCols < len(refRow) {
+					ret.ActualCols = len(refRow)
+				}
 				refs = refs.AddRow(refRow...)
 				continue
 			}
@@ -806,10 +853,13 @@ func (sm *StructMap) GetTableData(name string) StructTable {
 			if Child.IsPointIgnore() {
 				continue
 			}
+			if ret.ActualCols < len(refRow) {
+				ret.ActualCols = len(refRow)
+			}
 			refs = refs.AddRow(Child)
 		}
 
-		if !ret.Current.DataStructure.DataTablePivot {
+		if !isPivot {
 			ret.Reflects = refs
 			// ret.AddHeader(ret.Reflects[0]...)
 			break
@@ -918,6 +968,10 @@ type StructTable struct {
 	IndexTitle string
 	IsValid    bool
 	Columns    []string
+	Rows       int
+	Cols       int
+	ActualRows int
+	ActualCols int
 }
 
 
@@ -1029,8 +1083,12 @@ func (ta *StructTable) GetValues() StructValues {
 			return name
 		}
 
+		// ta.Reflects - contains the rows.
+		// ta.Reflects == 0 - something wrong.
+		// ta.Reflects == 1 - Single row, .
 
 		if len(ta.Reflects) == 0 {
+			fmt.Println("len(ta.Reflects) == 0")
 			// Probs an array of values.
 			// cm := make(map[string][]valueTypes.UnitValue)
 			// var length int
@@ -1076,28 +1134,27 @@ func (ta *StructTable) GetValues() StructValues {
 			//
 			// ta.Columns = sortMapByValues(colOrder)
 
-			cm := make(map[string][]valueTypes.UnitValue)
-			cm[ta.Current.DataStructure.PointName] = ta.Current.Value.Range(valueTypes.LoadOrder)
-			length := ta.Current.Value.Length()
-			addCol("Key")
-			addCol("Value")
-			// data := make(StructValue)
-			// data["Key"] = value[name]
-			// ret = append(ret, data)
-			for index := 0; index < length; index++ {
-				data := make(StructValue)
-
-				if ta.ShowIndex {
-					vi := valueTypes.SetUnitValueInteger(ta.IndexTitle, "", int64(index))
-					data[ta.IndexTitle] = vi
-				}
-
-				for name, value := range cm {
-					data[name] = value[index]
-				}
-				ret = append(ret, data)
-			}
-
+			// cm := make(map[string][]valueTypes.UnitValue)
+			// cm[ta.Current.DataStructure.PointName] = ta.Current.Value.Range(valueTypes.LoadOrder)
+			// length := ta.Current.Value.Length()
+			// addCol("Key")
+			// addCol("Value")
+			// // data := make(StructValue)
+			// // data["Key"] = value[name]
+			// // ret = append(ret, data)
+			// for index := 0; index < length; index++ {
+			// 	data := make(StructValue)
+			//
+			// 	if ta.ShowIndex {
+			// 		vi := valueTypes.SetUnitValueInteger(ta.IndexTitle, "", int64(index))
+			// 		data[ta.IndexTitle] = vi
+			// 	}
+			//
+			// 	for name, value := range cm {
+			// 		data[name] = value[index]
+			// 	}
+			// 	ret = append(ret, data)
+			// }
 			break
 		}
 

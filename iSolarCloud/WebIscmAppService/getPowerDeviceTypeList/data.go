@@ -28,9 +28,9 @@ type ResultData []struct {
 	GoStructParent        GoStruct.GoStructParent `json:"GoStruct" PointIdReplace:"true" DataTable:"true" DataTableSortOn:"UpdateDate"`
 
 	UpdateDate      valueTypes.DateTime     `json:"update_date"`
-	SysID           valueTypes.String       `json:"sys_id"`
+	SysId           valueTypes.String       `json:"sys_id"`
 	SysName         valueTypes.String       `json:"sys_name"`
-	TypeID          valueTypes.Integer      `json:"type_id"`
+	TypeId          valueTypes.Integer      `json:"type_id"`
 	TypeCode        valueTypes.Integer      `json:"type_code"`
 	TypeName        valueTypes.String       `json:"type_name"`
 	TypeNameEn      valueTypes.String       `json:"type_name_en"`

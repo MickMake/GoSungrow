@@ -3,9 +3,9 @@ package getOrgStationList
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
+
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/orgService/getOrgStationList"
@@ -25,7 +25,7 @@ func (rd RequestData) Help() string {
 
 
 type ResultData struct {
-	Dummy valueTypes.String `json:"dummy"`
+	// Dummy valueTypes.String `json:"dummy"`
 }
 
 func (e *ResultData) IsValid() error {

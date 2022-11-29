@@ -172,8 +172,11 @@ func GetStringFromArray(ref interface{}, index int, name string, intSize int, da
 		}
 
 		l := vo.Len()
+		if l == 0 {
+			break
+		}
 		if index >= l {
-			if vo.Len() > 1 {
+			if l > 1 {
 				break
 			}
 			index = l - 1	// @TODO - Hack fixup!
@@ -202,6 +205,9 @@ func GetStringFromStruct(ref interface{}, name string, intSize int, dateFormat s
 			break
 		}
 
+		// if intSize == valueTypes.IgnoreLength {
+		// 	intSize = valueTypes.SizeOfInt(vo.NumField())
+		// }
 		// Iterate over all available fields, looking for the field name.
 		for i := 0; i < vo.NumField(); i++ {
 			if vo.Type().Field(i).Name == name {

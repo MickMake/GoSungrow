@@ -122,6 +122,20 @@ func Parse(options Options, data []byte) (string, error) {
 			options.format = "json"
 		}
 
+		if options.packageName == nil {
+			*options.packageName = "Package"
+		}
+		if *options.packageName == "" {
+			*options.packageName = "Package"
+		}
+
+		if options.structureName == nil {
+			*options.structureName = "Response"
+		}
+		if *options.structureName == "" {
+			*options.structureName = "Response"
+		}
+
 		if options.format != "json" && options.format != "yaml" {
 			err = errors.New("fmt must be json or yaml")
 			break

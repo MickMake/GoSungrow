@@ -66,12 +66,12 @@ type ResultData struct {
 		IsSupportParamSet         valueTypes.Bool     `json:"is_support_paramset" PointId:"is_support_param_set"`
 		IsThirdParty              valueTypes.Bool     `json:"is_third_party"`
 		IsValid                   valueTypes.Bool     `json:"isvalid" PointId:"is_valid"`
-		ModelIsSupportFaultRecord valueTypes.Integer  `json:"model_is_support_fault_record"`
+		ModelIsSupportFaultRecord valueTypes.Bool     `json:"model_is_support_fault_record"`
 		Phone                     valueTypes.String   `json:"phone"`
 		Protocol                  valueTypes.String   `json:"protocol"`
 		Remark                    valueTypes.String   `json:"remark"`
 		UpdateDate                valueTypes.DateTime `json:"updatedate" PointId:"update_date"`
-		UpdateUserCode            valueTypes.String   `json:"updateusercode" PointId:"update_user_code"`
+		UpdateUserCode            valueTypes.Bool     `json:"updateusercode" PointId:"update_user_code"`
 	} `json:"powerDeviceModel"`
 	SysTypeList []struct {
 		CodeValue  valueTypes.String `json:"code_value"`

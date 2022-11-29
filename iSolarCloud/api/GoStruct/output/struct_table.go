@@ -449,15 +449,24 @@ func (t *Table) GetStruct() string {
 
 func (t *Table) WriteStruct() error {
 	for range Only.Once {
-		if t.IsNotValid() {
-			break
-		}
+		// if t.IsNotValid() {
+		// 	break
+		// }
 
 		var data string
 		var options gojson.Options
-		options.StructureName("ResultData")
+		if t.name == "" {
+			t.name = "Package"
+		}
 		options.PackageName(t.name)
-		data, t.Error = gojson.Parse(options, t.json)
+
+		if string(t.json) == "{}" {
+			options.StructureName("Response")
+			data, t.Error = gojson.Parse(options, t.raw)
+		} else {
+			options.StructureName("ResultData")
+			data, t.Error = gojson.Parse(options, t.json)
+		}
 
 		if t.saveAsFile {
 			t.filePrefix += ".go"

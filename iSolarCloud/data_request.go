@@ -69,7 +69,9 @@ type RequestArgs struct {
 	Sn             *valueTypes.String    `json:"sn,omitempty"`
 	Table          *valueTypes.String    `json:"table,omitempty"`
 	TaskId         *valueTypes.String    `json:"task_id,omitempty"`
-	UserId         *valueTypes.String    `json:"user_id,omitempty"`
+	UserId         *valueTypes.String    `json:"userId,omitempty"`
+	MenuId         *valueTypes.Integer   `json:"menuId,omitempty"`
+	// UserId2        *valueTypes.String    `json:"userId,omitempty"`
 
 	// PsId valueTypes.PsId `json:"id"`
 	// PsId valueTypes.PsId `json:"ps_id"`
@@ -150,6 +152,7 @@ const (
 	NameTable          = "Table"
 	NameTaskId         = "TaskId"
 	NameUserId         = "UserId"
+	NameMenuId         = "MenuId"
 )
 
 var Help = map[string]string{
@@ -201,6 +204,7 @@ var Help = map[string]string{
 	NameTable:          "Table - ",
 	NameTaskId:         "TaskId - ",
 	NameUserId:         "UserId - ",
+	NameMenuId:         "MenuId - ",
 }
 
 // MarshalJSON - Convert value to JSON
@@ -265,6 +269,7 @@ func (sgd SunGrowDataRequest) MarshalJSON() ([]byte, error) {
 			Table:          sgd.args.Table,
 			TaskId:         sgd.args.TaskId,
 			UserId:         sgd.args.UserId,
+			MenuId:         sgd.args.MenuId,
 		})
 		if err == nil {
 			break
@@ -369,6 +374,8 @@ func (sgd *SunGrowDataRequest) Set(arg string, value string) {
 				val := valueTypes.SetStringValue(value); sgd.args.TaskId = &val
 			case NameUserId:
 				val := valueTypes.SetStringValue(value); sgd.args.UserId = &val
+			case NameMenuId:
+				val := valueTypes.SetIntegerString(value); sgd.args.MenuId = &val
 		}
 	}
 }
@@ -468,6 +475,8 @@ func (sgd *SunGrowDataRequest) Get(arg string) string {
 				value = sgd.args.TaskId.String()
 			case NameUserId:
 				value = sgd.args.UserId.String()
+			case NameMenuId:
+				value = sgd.args.MenuId.String()
 		}
 	}
 	return value
@@ -566,6 +575,8 @@ func (sgd *SunGrowDataRequest) IsSet(arg string) bool {
 				if sgd.args.TaskId != nil { ok = true }
 			case NameUserId:
 				if sgd.args.UserId != nil { ok = true }
+			case NameMenuId:
+				if sgd.args.MenuId != nil { ok = true }
 		}
 	}
 	return ok

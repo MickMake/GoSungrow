@@ -5,7 +5,6 @@ import (
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/getPointInfoPage"
@@ -27,11 +26,11 @@ type ResultData struct {
 	DeviceTypeList []struct {
 		DeviceType valueTypes.Integer `json:"device_type"`
 		DeviceName valueTypes.String  `json:"device_name"`
-	} `json:"deviceTypeList" PointId:"device_type_list" DataTable:"true"`
+	} `json:"deviceTypeList" PointId:"device_type_list" DataTable:"true" DataTableSortOn:"DeviceType"`
 	PointTypeList []struct {
 		PointType valueTypes.String `json:"point_type"`
 		CodeName  valueTypes.String `json:"code_name"`
-	} `json:"pointTypeList" PointId:"point_type_list" DataTable:"true"`
+	} `json:"pointTypeList" PointId:"point_type_list" DataTable:"true" DataTableSortOn:"DeviceType"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -41,10 +40,6 @@ func (e *ResultData) IsValid() error {
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
-	}
-
+	entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	return entries
 }

@@ -29,6 +29,8 @@ type ResultData struct {
 	RemindType Common.Unknown `json:"remindType" PointId:"remind_type"`
 
 	PsList []struct {
+		// GoStruct              GoStruct.GoStruct  `json:"-" PointIdFrom:"PsId" PointIdReplace:"true" PointDeviceFrom:"PsId"`
+
 		PsId                  valueTypes.PsId    `json:"ps_id"`
 		PsType                valueTypes.Integer `json:"ps_type"`
 
@@ -70,10 +72,10 @@ type ResultData struct {
 		UserAccount           valueTypes.String  `json:"user_account"`
 		UserEmail             valueTypes.String  `json:"user_email"`
 		UserName              valueTypes.String  `json:"user_name"`
-	} `json:"psList" PointId:"ps_list" PointIdFromChild:"PsId" PointIdReplace:"true"`
+	} `json:"psList" PointId:"ps_list"`
 
 	PsMap struct {
-		PsId              valueTypes.Integer  `json:"psid" PointId:"ps_id"`
+		PsId              valueTypes.PsId     `json:"psid" PointId:"ps_id"`
 		PsType            valueTypes.Integer  `json:"pstype" PointId:"ps_type"`
 
 		AccessType        Common.Unknown      `json:"access_type"`
@@ -142,7 +144,7 @@ type ResultData struct {
 		VillageCode       Common.Unknown      `json:"village_code"`
 		WgsLatitude       valueTypes.Float    `json:"wgs_latitude"`
 		WgsLongitude      valueTypes.Float    `json:"wgs_longitude"`
-	} `json:"psMap" PointId:"ps_map" PointIdFromChild:"PsId" PointIdReplace:"true"`
+	} `json:"psMap" PointId:"ps_map"`
 
 	SnInfoList []struct {
 		PsId         valueTypes.PsId     `json:"ps_id"`
@@ -162,7 +164,7 @@ type ResultData struct {
 		Secret       valueTypes.String   `json:"secrit" PointId:"secret"`
 		TcpMode      Common.Unknown      `json:"tcp_mode"`
 		TcpPort      Common.Unknown      `json:"tcp_port"`
-	} `json:"snInfoList" PointId:"sn_info_list" PointIdFromChild:"PsId" PointIdReplace:"true"`
+	} `json:"snInfoList" PointId:"sn_info"`
 }
 
 func (e *ResultData) IsValid() error {
