@@ -15,10 +15,6 @@ import (
 // "github.com/jbub/tabular"
 
 
-// type DataSet []DataRow
-// type DataRow map[string]string
-
-
 type Tables map[string]Table
 
 func NewTables() Tables {
@@ -167,10 +163,6 @@ func (t *Table) writeFile(data string, perm os.FileMode) error {
 	return t.Error
 }
 
-// func (t *Table) AllRows() []*tabular.Row {
-// 	return t.table.AllRows()
-// }
-
 func (t *Table) SetTitle(title string, args ...interface{}) {
 	t.title = fmt.Sprintf(title, args...)
 }
@@ -245,7 +237,6 @@ func (t *Table) GetName() string {
 	return t.name
 }
 
-
 func (t *Table) Output() error {
 	for range Only.Once {
 		if t == nil {
@@ -263,6 +254,12 @@ func (t *Table) Output() error {
 
 			case t.OutputType.IsCsv():
 				t.Error = t.WriteCsv()
+
+			case t.OutputType.IsXML():
+				t.Error = t.WriteXml()
+
+			case t.OutputType.IsXLSX():
+				t.Error = t.WriteXLSX()
 
 			case t.OutputType.IsRaw():
 				t.Error = t.WriteRaw()
@@ -290,6 +287,7 @@ func (t *Table) Output() error {
 	return t.Error
 }
 
+
 func (t *Table) GetTable() string {
 	return t.String()
 }
@@ -301,7 +299,7 @@ func (t *Table) WriteTable() error {
 		}
 
 		if t.saveAsFile {
-			t.filePrefix += "-table.txt"
+			t.filePrefix += "." + StringTypeTable
 			t.Error = t.writeFile(t.String(), DefaultFileMode)
 			break
 		}
@@ -318,7 +316,7 @@ func (t *Table) WriteList() error {
 		}
 
 		if t.saveAsFile {
-			t.filePrefix += "-list.txt"
+			t.filePrefix += "." + StringTypeList
 			t.Error = t.writeFile(t.String(), DefaultFileMode)
 			break
 		}
@@ -353,7 +351,7 @@ func (t *Table) WriteCsv() error {
 		}
 
 		if t.saveAsFile {
-			t.filePrefix += ".csv"
+			t.filePrefix += "." + StringTypeCsv
 			t.Error = t.writeFile(t.GetCsv(), DefaultFileMode)
 			break
 		}
@@ -371,7 +369,7 @@ func (t *Table) GetXml() string {
 		}
 
 		var result *tabular.Exportable
-		result, t.Error = t.table.CSV()
+		result, t.Error = t.table.XML()
 		if t.Error != nil {
 			break
 		}
@@ -387,11 +385,45 @@ func (t *Table) WriteXml() error {
 		}
 
 		if t.saveAsFile {
-			t.filePrefix += ".xml"
+			t.filePrefix += "." + StringTypeXML
 			t.Error = t.writeFile(t.GetXml(), DefaultFileMode)
 			break
 		}
 		fmt.Print(t.GetXml())
+	}
+	return t.Error
+}
+
+
+func (t *Table) GetXLSX() string {
+	var ret string
+	for range Only.Once {
+		if t.IsNotValid() {
+			break
+		}
+
+		var result *tabular.Exportable
+		result, t.Error = t.table.XLSX()
+		if t.Error != nil {
+			break
+		}
+		ret = result.String()
+	}
+	return ret
+}
+
+func (t *Table) WriteXLSX() error {
+	for range Only.Once {
+		if t.IsNotValid() {
+			break
+		}
+
+		// if t.saveAsFile {
+			t.filePrefix += "." + StringTypeXLSX
+			t.Error = t.writeFile(t.GetXLSX(), DefaultFileMode)
+		// 	break
+		// }
+		// fmt.Print(t.GetXml())
 	}
 	return t.Error
 }
@@ -408,7 +440,7 @@ func (t *Table) WriteJson() error {
 		}
 
 		if t.saveAsFile {
-			t.filePrefix += ".json"
+			t.filePrefix += "." + StringTypeJson
 			t.Error = t.writeFile(string(t.json), DefaultFileMode)
 			break
 		}
@@ -433,7 +465,7 @@ func (t *Table) WriteRaw() error {
 		// }
 
 		if t.saveAsFile {
-			t.filePrefix += ".raw"
+			t.filePrefix += "." + StringTypeRaw
 			t.Error = t.writeFile(string(t.raw), DefaultFileMode)
 			break
 		}

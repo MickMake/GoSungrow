@@ -36,11 +36,11 @@ func (rd RequestData) Help() string {
 
 // ResultData -> PointsData -> []dDevices -> []Points
 type ResultData struct {
-	CreateTime   valueTypes.DateTime `json:"create_time"`
-	OpenTime     valueTypes.DateTime `json:"open_time"`
-	UpdateTime   valueTypes.DateTime `json:"update_time"`
-	StartTime    valueTypes.DateTime `json:"start_time"`
-	EndTime      valueTypes.DateTime `json:"end_time"`
+	CreateTime   valueTypes.DateTime `json:"create_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+	OpenTime     valueTypes.DateTime `json:"open_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+	UpdateTime   valueTypes.DateTime `json:"update_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+	StartTime    valueTypes.DateTime `json:"start_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+	EndTime      valueTypes.DateTime `json:"end_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 	DateType     valueTypes.Integer  `json:"date_type"`
 	Cycle        valueTypes.Integer  `json:"cycle"`
 	TemplateId   valueTypes.Integer  `json:"template_id"`

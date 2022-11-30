@@ -152,14 +152,14 @@ func (sm *StructMap) ScanMap(Parent *Reflect, Current *Reflect) bool {
 			Child.SetByIndex(Parent, Current, index, key)
 			sm.PrintDebug("# ScanMap().SetByIndex() Child: %s\n", Child)
 
-			if strings.Contains(Child.FieldPath.String(), "DevTypeDefinition") {
-				for index2, key2 := range Child.FieldVo.MapKeys() {
-					var Child2 Reflect
-					Child2.SetByIndex(Current, &Child, index2, key2)
-					sm.Add(&Child2)
-				}
-				fmt.Println("")
-			}
+			// if strings.Contains(Child.FieldPath.String(), "DevTypeDefinition") {
+			// 	for index2, key2 := range Child.FieldVo.MapKeys() {
+			// 		var Child2 Reflect
+			// 		Child2.SetByIndex(Current, &Child, index2, key2)
+			// 		sm.Add(&Child2)
+			// 	}
+			// 	fmt.Println("")
+			// }
 
 			if sm.Process(&Child) {
 				continue
@@ -191,14 +191,14 @@ func (sm *StructMap) ScanSlice(Parent *Reflect, Current *Reflect) bool {
 			Child.SetByIndex(Parent, Current, index, reflect.Value{})
 			sm.PrintDebug("# ScanSlice().SetByIndex() Child: %s\n", Child)
 
-			if strings.Contains(Child.FieldPath.String(), "DevTypeDefinition") {
-				for index2, key2 := range Child.FieldVo.MapKeys() {
-					var Child2 Reflect
-					Child2.SetByIndex(Current, &Child, index2, key2)
-					sm.Add(&Child2)
-				}
-				fmt.Println("")
-			}
+			// if strings.Contains(Child.FieldPath.String(), "DevTypeDefinition") {
+			// 	for index2, key2 := range Child.FieldVo.MapKeys() {
+			// 		var Child2 Reflect
+			// 		Child2.SetByIndex(Current, &Child, index2, key2)
+			// 		sm.Add(&Child2)
+			// 	}
+			// 	fmt.Println("")
+			// }
 
 			if sm.Process(&Child) {
 				continue
@@ -230,14 +230,14 @@ func (sm *StructMap) ScanStruct(Parent *Reflect, Current *Reflect) bool {
 			Child.SetByIndex(Parent, Current, index, reflect.Value{})
 			sm.PrintDebug("# ScanStruct().SetByIndex() Child: %s\n", Child)
 
-			if strings.Contains(Child.FieldPath.String(), "DevTypeDefinition") {
-				for index2, key2 := range Child.FieldVo.MapKeys() {
-					var Child2 Reflect
-					Child2.SetByIndex(Current, &Child, index2, key2)
-					sm.Add(&Child2)
-				}
-				fmt.Println("")
-			}
+			// if strings.Contains(Child.FieldPath.String(), "DevTypeDefinition") {
+			// 	for index2, key2 := range Child.FieldVo.MapKeys() {
+			// 		var Child2 Reflect
+			// 		Child2.SetByIndex(Current, &Child, index2, key2)
+			// 		sm.Add(&Child2)
+			// 	}
+			// 	fmt.Println("")
+			// }
 
 			if sm.Process(&Child) {
 				continue
@@ -859,6 +859,10 @@ func (sm *StructMap) GetTableData(name string) StructTable {
 			refs = refs.AddRow(Child)
 		}
 
+		if refs == nil {
+			break
+		}
+
 		if !isPivot {
 			ret.Reflects = refs
 			// ret.AddHeader(ret.Reflects[0]...)
@@ -1108,7 +1112,7 @@ func (ta *StructTable) GetValues() StructValues {
 			// 		addCol(name)
 			// 	}
 			//
-			// 	cm[name] = sub.Range(valueTypes.LoadOrder)
+			// 	cm[name] = sub.Range(valueTypes.SortOrder)
 			// 	l := sub.Value.Length()
 			// 	if l > length {
 			// 		length = l
@@ -1135,7 +1139,7 @@ func (ta *StructTable) GetValues() StructValues {
 			// ta.Columns = sortMapByValues(colOrder)
 
 			// cm := make(map[string][]valueTypes.UnitValue)
-			// cm[ta.Current.DataStructure.PointName] = ta.Current.Value.Range(valueTypes.LoadOrder)
+			// cm[ta.Current.DataStructure.PointName] = ta.Current.Value.Range(valueTypes.SortOrder)
 			// length := ta.Current.Value.Length()
 			// addCol("Key")
 			// addCol("Value")
@@ -1180,10 +1184,10 @@ func (ta *StructTable) GetValues() StructValues {
 				} else {
 					// addCol(name)
 					// addCol("Units")
-					// cm[name] = sub.Value.Range(valueTypes.LoadOrder)
+					// cm[name] = sub.Value.Range(valueTypes.SortOrder)
 				}
 
-				cm[name] = sub.Value.Range(valueTypes.LoadOrder)
+				cm[name] = sub.Value.Range(valueTypes.SortOrder)
 				l := sub.Value.Length()
 				if l > length {
 					length = l
@@ -1251,7 +1255,7 @@ func (ta *StructTable) GetValues() StructValues {
 				if len(col.ChildReflect) > 0 {
 					// Handles
 					for _, sub := range col.ChildReflect {
-						for _, val := range sub.Value.Range(valueTypes.LoadOrder) {
+						for _, val := range sub.Value.Range(valueTypes.SortOrder) {
 							name := colName(sub, &val, len(data))
 							data[name] = val
 							addCol(name)
@@ -1263,7 +1267,7 @@ func (ta *StructTable) GetValues() StructValues {
 				if col.IsKnown() {
 					value := ta.Reflects[rowIndex][colIndex].Value
 					// data = append(data, value.Range(valueTypes.SortOrder)...)
-					for _, val := range value.Range(valueTypes.LoadOrder) {
+					for _, val := range value.Range(valueTypes.SortOrder) {
 						name := colName(col, &val, len(data))
 						data[name] = val
 						addCol(name)
@@ -1279,7 +1283,7 @@ func (ta *StructTable) GetValues() StructValues {
 					col.DataStructure.PointValueType, dateFormat)
 
 				// data = append(data, value.Range(valueTypes.SortOrder)...)
-				for _, val := range value.Range(valueTypes.LoadOrder) {
+				for _, val := range value.Range(valueTypes.SortOrder) {
 					name := colName(col, &val, len(data))
 					data[name] = val
 					addCol(name)

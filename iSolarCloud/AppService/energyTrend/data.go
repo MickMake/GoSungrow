@@ -25,13 +25,13 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	Echartunit valueTypes.String   `json:"echartunit" PointId:"echart_unit"`
-	EndTime    valueTypes.DateTime `json:"endTime" PointId:"end_time"`
+	EndTime    valueTypes.DateTime `json:"endTime" PointId:"end_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 	EnergyMap  struct {
 		ValStr valueTypes.String `json:"valStr" PointId:"val_str"`
 	} `json:"energyMap" PointId:"energy_map"`
 	Energyunit valueTypes.String `json:"energyunit" PointId:"energy_unit"`
 	PowerMap   struct {
-		Dates  []valueTypes.DateTime `json:"dates"`
+		Dates  []valueTypes.DateTime `json:"dates" PointNameDateFormat:"2006/01/02 15:04:05"`
 		Units  valueTypes.String     `json:"units"`
 		ValStr valueTypes.String     `json:"valStr" PointId:"val_str"`
 	} `json:"powerMap" PointId:"power_map"`

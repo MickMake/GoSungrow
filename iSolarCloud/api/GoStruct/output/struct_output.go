@@ -15,6 +15,8 @@ const (
 	TypeRaw    = iota
 	TypeGraph  = iota
 	TypeStruct = iota
+	TypeXML    = iota
+	TypeXLSX   = iota
 
 	StringTypeNone   = ""
 	StringTypeJson   = "json"
@@ -24,6 +26,8 @@ const (
 	StringTypeRaw    = "raw"
 	StringTypeGraph  = "graph"
 	StringTypeStruct = "struct"
+	StringTypeXML    = "xml"
+	StringTypeXLSX   = "xlsx"
 )
 
 //goland:noinspection GoNameStartsWithPackageName
@@ -53,6 +57,12 @@ func (out *OutputType) SetGraph() {
 }
 func (out *OutputType) SetStruct() {
 	*out = TypeStruct
+}
+func (out *OutputType) SetXML() {
+	*out = TypeXML
+}
+func (out *OutputType) SetXLSX() {
+	*out = TypeXLSX
 }
 
 
@@ -104,6 +114,18 @@ func (out *OutputType) IsStruct() bool {
 	}
 	return false
 }
+func (out *OutputType) IsXML() bool {
+	if *out == TypeXML {
+		return true
+	}
+	return false
+}
+func (out *OutputType) IsXLSX() bool {
+	if *out == TypeXLSX {
+		return true
+	}
+	return false
+}
 
 
 func (out *OutputType) IsStrNone(t string) bool {
@@ -148,8 +170,14 @@ func (out *OutputType) IsStrGraph(t string) bool {
 	}
 	return false
 }
-func (out *OutputType) IsStrStruct(t string) bool {
-	if t == StringTypeStruct {
+func (out *OutputType) IsStrXML(t string) bool {
+	if t == StringTypeXML {
+		return true
+	}
+	return false
+}
+func (out *OutputType) IsStrXLSX(t string) bool {
+	if t == StringTypeXLSX {
 		return true
 	}
 	return false
@@ -178,6 +206,10 @@ func (out *OutputType) Set(outputType string) {
 				out.SetGraph()
 			case StringTypeStruct:
 				out.SetStruct()
+			case StringTypeXML:
+				out.SetXML()
+			case StringTypeXLSX:
+				out.SetXLSX()
 			case StringTypeList:
 				fallthrough
 			default:

@@ -12,7 +12,7 @@ const Url = "/v1/faultService/getGroupManSettings"
 const Disabled = false
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

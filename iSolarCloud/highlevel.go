@@ -1,7 +1,6 @@
 package iSolarCloud
 
 import (
-	"github.com/MickMake/GoUnify/Only"
 	"GoSungrow/iSolarCloud/AppService/getDeviceList"
 	"GoSungrow/iSolarCloud/AppService/getDeviceModelInfoList"
 	"GoSungrow/iSolarCloud/AppService/getHouseholdStoragePsReport"
@@ -23,6 +22,7 @@ import (
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 	"math"
 	"strings"
 	"time"
@@ -94,14 +94,14 @@ func (sg *SunGrow) GetTemplateData(template string, date string, filter string) 
 				break
 			}
 
-			pskeys := valueTypes.SetPsKeyValue(pointNames.PrintKeys())
+			pskeys := valueTypes.SetPsKeyString(pointNames.PrintKeys())
 			ep := sg.GetByStruct(
 				"AppService.queryMutiPointDataList",
 				queryMutiPointDataList.RequestData {
 					// PsId:           api.SetIntegerValue(psId),
 					PsId:           psId,
-					PsKey:          pskeys,
-					Points:         valueTypes.SetStringValue(pointNames.PrintPoints()),	// @TODO - Fixup!
+					PsKeys:         pskeys,
+					Points:         valueTypes.SetPointIdsString(pointNames.PrintPoints()),	// @TODO - Fixup!
 					MinuteInterval: valueTypes.SetIntegerValue(5),
 					StartTimeStamp: valueTypes.SetStringValue(when.GetDayStartTimestamp()), // @TODO - Fixup!
 					EndTimeStamp:   valueTypes.SetStringValue(when.GetDayEndTimestamp()),	// @TODO - Fixup!
@@ -111,25 +111,28 @@ func (sg *SunGrow) GetTemplateData(template string, date string, filter string) 
 			if sg.IsError() {
 				break
 			}
+			if ep == nil {
+				break
+			}
 
 			// data := queryMutiPointDataList.AssertResultData(ep)
-			data := queryMutiPointDataList.Assert(ep)
-			data.GetData()
-			table := data.GetPointDataTable(pointNames)
-			if table.Error != nil {
-				sg.Error = table.Error
-				break
-			}
-
-			table.SetTitle("Template %s on %s for %d", template, when.String(), psId)
-			table.SetFilePrefix(data.SetFilenamePrefix("%s-%s-%d", when.String(), template, psId))
-			table.SetGraphFilter(filter)
-			table.SetSaveFile(sg.SaveAsFile)
-			table.OutputType = sg.OutputType
-			sg.Error = table.Output()
-			if sg.IsError() {
-				break
-			}
+			// data := queryMutiPointDataList.Assert(ep)
+			// data.GetData()
+			// table := data.GetPointDataTable(pointNames)
+			// if table.Error != nil {
+			// 	sg.Error = table.Error
+			// 	break
+			// }
+			//
+			// table.SetTitle("Template %s on %s for %d", template, when.String(), psId)
+			// table.SetFilePrefix(data.SetFilenamePrefix("%s-%s-%d", when.String(), template, psId))
+			// table.SetGraphFilter(filter)
+			// table.SetSaveFile(sg.SaveAsFile)
+			// table.OutputType = sg.OutputType
+			// sg.Error = table.Output()
+			// if sg.IsError() {
+			// 	break
+			// }
 		}
 	}
 
@@ -521,34 +524,37 @@ func (sg *SunGrow) GetPointData(date string, pointNames api.TemplatePoints, psId
 				"AppService.queryMutiPointDataList",
 				queryMutiPointDataList.RequestData{
 					PsId:           psId,
-					PsKey:          valueTypes.SetPsKeyValue(pointNames.PrintKeys()),				// @TODO - Fixup!
-					Points:         valueTypes.SetStringValue(pointNames.PrintPoints()),			// @TODO - Fixup!
-					MinuteInterval: valueTypes.SetIntegerValue(5),							// @TODO - Fixup!
-					StartTimeStamp: valueTypes.SetStringValue(when.GetDayStartTimestamp()),			// @TODO - Fixup!
-					EndTimeStamp:   valueTypes.SetStringValue(when.GetDayEndTimestamp()),			// @TODO - Fixup!
+					PsKeys:         valueTypes.SetPsKeyString(pointNames.PrintKeys()),      // @TODO - Fixup!
+					Points:         valueTypes.SetPointIdsString(pointNames.PrintPoints()), // @TODO - Fixup!
+					MinuteInterval: valueTypes.SetIntegerValue(5),                          // @TODO - Fixup!
+					StartTimeStamp: valueTypes.SetStringValue(when.GetDayStartTimestamp()), // @TODO - Fixup!
+					EndTimeStamp:   valueTypes.SetStringValue(when.GetDayEndTimestamp()),   // @TODO - Fixup!
 				},
 				DefaultCacheTimeout,
 			)
 			if sg.IsError() {
 				break
 			}
-
-			data := queryMutiPointDataList.Assert(ep)
-			table := data.GetPointDataTable(pointNames)
-			if table.Error != nil {
-				sg.Error = table.Error
+			if ep == nil {
 				break
 			}
 
-			table.SetTitle("Point Data %s", psId)
-			table.SetFilePrefix(data.SetFilenamePrefix("%d", psId))
-			table.SetGraphFilter("")
-			table.SetSaveFile(sg.SaveAsFile)
-			table.OutputType = sg.OutputType
-			sg.Error = table.Output()
-			if sg.IsError() {
-				break
-			}
+			// data := queryMutiPointDataList.Assert(ep)
+			// table := data.GetPointDataTable(pointNames)
+			// if table.Error != nil {
+			// 	sg.Error = table.Error
+			// 	break
+			// }
+			//
+			// table.SetTitle("Point Data %s", psId)
+			// table.SetFilePrefix(data.SetFilenamePrefix("%d", psId))
+			// table.SetGraphFilter("")
+			// table.SetSaveFile(sg.SaveAsFile)
+			// table.OutputType = sg.OutputType
+			// sg.Error = table.Output()
+			// if sg.IsError() {
+			// 	break
+			// }
 		}
 	}
 
@@ -1072,7 +1078,7 @@ func (sg *SunGrow) GetDevices(print bool) (getDeviceList.Devices, error) {
 			ret = append(ret, getDeviceList.Device{
 				Vendor:        valueTypes.SetStringValue(""),
 				PsId:          psId.PsId,
-				PsKey:         valueTypes.SetPsKeyValue(psId.PsId.String()),
+				PsKey:         valueTypes.SetPsKeyString(psId.PsId.String()),
 				DeviceName:    psId.PsName,
 				DeviceProSn:   psId.PsShortName,
 				DeviceModel:   valueTypes.SetStringValue(""),

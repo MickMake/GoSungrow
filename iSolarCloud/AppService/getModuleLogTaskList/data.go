@@ -30,9 +30,9 @@ type ResultData struct {
 		BatchId        valueTypes.String   `json:"batch_id"`
 		CommandStatus  valueTypes.Integer  `json:"command_status"`
 		CommandType    valueTypes.Integer  `json:"command_type"`
-		CreateTime     valueTypes.DateTime `json:"create_time"`
-		OverTime       valueTypes.DateTime `json:"over_time"`
-		UpdateTime     valueTypes.DateTime `json:"update_time"`
+		CreateTime     valueTypes.DateTime `json:"create_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+		OverTime       valueTypes.DateTime `json:"over_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+		UpdateTime     valueTypes.DateTime `json:"update_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 		ExpireSecond   valueTypes.Integer  `json:"expire_second"`
 		DeviceCode     valueTypes.Integer  `json:"device_code"`
 		DeviceModel    valueTypes.String   `json:"device_model"`

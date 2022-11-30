@@ -3,25 +3,23 @@ package queryMutiPointDataList
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 
 	"encoding/json"
 	"fmt"
-	"sort"
 )
 
 const Url = "/v1/commonService/queryMutiPointDataList"
 const Disabled = false
 
 type RequestData struct {
-	PsId           valueTypes.PsId    `json:"ps_id" required:"true"`
-	PsKey          valueTypes.PsKey   `json:"ps_key" required:"true"`
-	Points         valueTypes.String  `json:"points" required:"true"`
-	MinuteInterval valueTypes.Integer `json:"minute_interval" required:"true"`
-	StartTimeStamp valueTypes.String  `json:"start_time_stamp" required:"true"`
-	EndTimeStamp   valueTypes.String  `json:"end_time_stamp" required:"true"`
+	PsKeys         valueTypes.PsKey    `json:"ps_key" required:"true"`
+	PsId           valueTypes.PsId     `json:"ps_id" required:"true"`
+	Points         valueTypes.PointIds `json:"points" required:"true"`
+	MinuteInterval valueTypes.Integer  `json:"minute_interval" required:"true"`
+	StartTimeStamp valueTypes.String   `json:"start_time_stamp" required:"true"`
+	EndTimeStamp   valueTypes.String   `json:"end_time_stamp" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -33,56 +31,21 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
+
 type ResultData struct {
-	Devices Devices `json:"devices"`
+	Data Data `json:"data" DataTable:"true" DataTableSortOn:"Timestamp"`
 }
 
-func (e *ResultData) UnmarshalJSON(data []byte) error {
-	var err error
+type Data map[valueTypes.DateTime]Value
+type Value struct {
+	GoStructParent  GoStruct.GoStructParent   `json:"-" PointIdFrom:"PsKey.Timestamp" PointIdReplace:"true"`
+	// GoStruct  GoStruct.GoStruct   `json:"-" PointIdFrom:"PsKey" PointIdReplace:"false" PointDeviceFrom:"PsKey"`
 
-	for range Only.Once {
-		if len(data) == 0 {
-			break
-		}
-
-		d := make(dDevices)
-
-		// Store DeviceData.Points.
-		err = json.Unmarshal(data, &d)
-		if err != nil {
-			break
-		}
-
-		e.Devices = make(Devices)
-		for deviceName, deviceRef := range d {
-			points := Points{}
-			for pointName, pointRef := range deviceRef {
-				times := Times{}
-				for time, value := range pointRef {
-					times = append(times, Time{
-						Key:   valueTypes.NewDateTime(time),
-						Value: value,
-					})
-				}
-
-				sort.Slice(times, func(i, j int) bool {
-					return times[i].Key.Before(times[j].Key.Time)
-				})
-				points[valueTypes.SetPointIdString(pointName)] = Point{
-					Name:  valueTypes.SetStringValue(""),
-					Units: valueTypes.SetStringValue(""),
-					Times: times,
-				}
-			}
-
-			e.Devices[deviceName] = Device{
-				Points: points,
-			}
-		}
-	}
-
-	return err
+	Timestamp valueTypes.DateTime `json:"timestamp" PointNameDateFormat:"2006/01/02 15:04:05"`
+	PsKey     valueTypes.PsKey    `json:"ps_key"`
+	Points    map[string]valueTypes.Generic	`json:"points" PointDeviceFrom:"PsKey"`
 }
+
 
 func (e *ResultData) IsValid() error {
 	var err error
@@ -138,99 +101,204 @@ func (e *ResultData) String() string {
 	return ret
 }
 
-
-type Devices map[string]Device
-type Device struct {
-	Points Points `json:"points"`
-}
-type Points map[valueTypes.PointId]Point
-type Point struct {
-	Name  valueTypes.String `json:"name"`
-	Units valueTypes.String `json:"units"`
-	Times Times  `json:"times"`
-}
-type Times []Time
-type Time struct {
-	Key   valueTypes.DateTime `json:"key"`
-	Value string       `json:"value"`
-}
-
-type dDevices map[string]dPoints
-type dPoints map[string]dTimes
-type dTimes map[string]string
-
-type DecodeResultData ResultData
-
-func (e *EndPoint) GetPointDataTable(points api.TemplatePoints) output.Table {
-	var table output.Table
+func (e *ResultData) UnmarshalJSON(data []byte) error {
+	var err error
 
 	for range Only.Once {
-		table = output.NewTable(
-			"Date/Time",
-			"Point Id",
-			"Point Name",
-			"Value",
-			"Units",
-		)
-		table.SetTitle("")
-		table.SetJson([]byte(e.GetJsonData(false)))
-		table.SetRaw([]byte(e.GetJsonData(true)))
-
-		// e.Error = table.SetHeader(
-		// 	"Date/Time",
-		// 	"Point Id",
-		// 	"Point Name",
-		// 	"Value",
-		// 	"Units",
-		// )
-		if e.Error != nil {
+		if len(data) == 0 {
 			break
 		}
 
-		t := e.Request.RequestData.StartTimeStamp
-		e.SetFilenamePrefix(t.String())
-		table.SetFilePrefix(t.String())
+		type scan scanDevices
+		d := make(scan, 0)
+		err = json.Unmarshal(data, &d)
+		if err != nil {
+			break
+		}
 
-		for deviceName, deviceRef := range e.Response.ResultData.Devices {
-			for pointId, pointRef := range deviceRef.Points {
-				for _, tim := range pointRef.Times {
-					gp := points.GetPoint(deviceName, pointId)
-					_ = table.AddRow(tim.Key.PrintFull(),
-						fmt.Sprintf("%s.%s", deviceName, pointId),
-						gp.Name,
-						tim.Value,
-						gp.Unit,
-					)
-					if table.Error != nil {
+		e.Data = make(Data, 0)
+		for device := range d {
+			for point := range d[device] {
+				for value := range d[device][point] {
+					d[device][point][value].PointId = valueTypes.SetPointIdString(point)
+					ts := d[device][point][value].Timestamp
+
+					if _, ok := e.Data[ts]; !ok {
+						rdv := Value {
+							Timestamp: ts,
+							PsKey:     valueTypes.SetPsKeyString(device),
+							Points:    make(map[string]valueTypes.Generic),
+						}
+						rdv.Points[point] = d[device][point][value].Value
+						e.Data[ts] = rdv
 						continue
 					}
+
+					e.Data[ts].Points[point] = d[device][point][value].Value
 				}
 			}
 		}
-
-		table.InitGraph(output.GraphRequest {
-			Title:        "",
-			TimeColumn:   output.SetString("Date/Time"),
-			SearchColumn: output.SetString("Point Id"),
-			NameColumn:   output.SetString("Point Name"),
-			ValueColumn:  output.SetString("Value"),
-			UnitsColumn:  output.SetString("Units"),
-			SearchString: output.SetString(""),
-			MinLeftAxis:  output.SetFloat(0),
-			MaxLeftAxis:  output.SetFloat(0),
-		})
-
 	}
 
-	return table
+	return err
 }
+
+
+// Scan incoming JSON.
+
+type scanDevices map[string]scanPoints
+func (e *scanDevices) UnmarshalJSON(data []byte) error {
+	var err error
+
+	for range Only.Once {
+		if len(data) == 0 {
+			break
+		}
+
+		type scan scanDevices
+		d := make(scan, 0)
+		err = json.Unmarshal(data, &d)
+		if err != nil {
+			break
+		}
+
+		*e = scanDevices(d)
+	}
+
+	return err
+}
+
+type scanPoints map[string]scanValues
+func (e *scanPoints) UnmarshalJSON(data []byte) error {
+	var err error
+
+	for range Only.Once {
+		if len(data) == 0 {
+			break
+		}
+
+		type scan scanPoints
+		d := make(scan, 0)
+		err = json.Unmarshal(data, &d)
+		if err != nil {
+			break
+		}
+
+		for point := range d {
+			for value := range d[point] {
+				d[point][value].PointId = valueTypes.SetPointIdString(point)
+			}
+		}
+		*e = scanPoints(d)
+	}
+
+	return err
+}
+
+type scanValues []scanValue
+func (e *scanValues) UnmarshalJSON(data []byte) error {
+	var err error
+
+	for range Only.Once {
+		if len(data) == 0 {
+			break
+		}
+
+		type scan map[string]string
+		d := make(scan, 0)
+
+		err = json.Unmarshal(data, &d)
+		if err != nil {
+			break
+		}
+
+		*e = make(scanValues, 0)
+		for k, v := range d {
+			*e = append(*e, scanValue {
+				Timestamp: valueTypes.SetDateTimeString(k),
+				// PointId:   valueTypes.SetPointIdString(v),
+				Value:     valueTypes.SetGenericString(v),
+			})
+		}
+	}
+
+	return err
+}
+
+type scanValue struct {
+	Timestamp valueTypes.DateTime `json:"timestamp"`
+	PointId   valueTypes.PointId  `json:"point_id"`
+	Value     valueTypes.Generic    `json:"value"`
+}
+
+
+// func (e *EndPoint) GetPointDataTable(points api.TemplatePoints) output.Table {
+// 	var table output.Table
+//
+// 	// for range Only.Once {
+// 	// 	table = output.NewTable(
+// 	// 		"Date/Time",
+// 	// 		"Point Id",
+// 	// 		"Point Name",
+// 	// 		"Value",
+// 	// 		"Units",
+// 	// 	)
+// 	// 	table.SetTitle("")
+// 	// 	table.SetJson([]byte(e.GetJsonData(false)))
+// 	// 	table.SetRaw([]byte(e.GetJsonData(true)))
+// 	//
+// 	// 	// e.Error = table.SetHeader(
+// 	// 	// 	"Date/Time",
+// 	// 	// 	"Point Id",
+// 	// 	// 	"Point Name",
+// 	// 	// 	"Value",
+// 	// 	// 	"Units",
+// 	// 	// )
+// 	// 	if e.Error != nil {
+// 	// 		break
+// 	// 	}
+// 	//
+// 	// 	t := e.Request.RequestData.StartTimeStamp
+// 	// 	e.SetFilenamePrefix(t.String())
+// 	// 	table.SetFilePrefix(t.String())
+// 	//
+// 	// 	for deviceName, deviceRef := range e.Response.ResultData.Devices {
+// 	// 		for pointId, pointRef := range deviceRef.Points {
+// 	// 			for _, tim := range pointRef.Times {
+// 	// 				gp := points.GetPoint(deviceName, pointId)
+// 	// 				_ = table.AddRow(tim.Key.PrintFull(),
+// 	// 					fmt.Sprintf("%s.%s", deviceName, pointId),
+// 	// 					gp.Name,
+// 	// 					tim.Value,
+// 	// 					gp.Unit,
+// 	// 				)
+// 	// 				if table.Error != nil {
+// 	// 					continue
+// 	// 				}
+// 	// 			}
+// 	// 		}
+// 	// 	}
+// 	//
+// 	// 	table.InitGraph(output.GraphRequest {
+// 	// 		Title:        "",
+// 	// 		TimeColumn:   output.SetString("Date/Time"),
+// 	// 		SearchColumn: output.SetString("Point Id"),
+// 	// 		NameColumn:   output.SetString("Point Name"),
+// 	// 		ValueColumn:  output.SetString("Value"),
+// 	// 		UnitsColumn:  output.SetString("Units"),
+// 	// 		SearchString: output.SetString(""),
+// 	// 		MinLeftAxis:  output.SetFloat(0),
+// 	// 		MaxLeftAxis:  output.SetFloat(0),
+// 	// 	})
+// 	//
+// 	// }
+//
+// 	return table
+// }
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
-	}
-
+	// entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
+	entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.EndPointPath{})
 	return entries
 }

@@ -361,9 +361,9 @@ func (ca *Cmds) MqttCron() error {
 			break
 		}
 
-		// All := []string{ "queryDeviceList", "getPsList", "getPsDetailWithPsType", "getPsDetail" }
+		All := []string{ "queryDeviceList", "getPsList", "getPsDetailWithPsType", "getPsDetail"}	//, queryMutiPointDataList, getDevicePointMinuteDataList }
 		// All := []string{ "queryDeviceList", "WebIscmAppService.queryDeviceListForBackSys", "WebIscmAppService.getDeviceModel" }
-		All := []string{ "WebIscmAppService.getDeviceModel" }
+		// All := []string{ "WebIscmAppService.getDeviceModel" }
 		data.SetEndpoints(All...)
 		ca.Error = data.GetData()
 		if ca.Error != nil {

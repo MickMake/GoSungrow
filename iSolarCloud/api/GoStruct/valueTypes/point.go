@@ -2,6 +2,7 @@ package valueTypes
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 	"regexp"
 	"strconv"
@@ -78,7 +79,12 @@ func (t *PsKey) Value() string {
 }
 
 func (t PsKey) String() string {
-	return t.string
+	// PsKey can only handle one. So strip the others out.
+	a := strings.Split(t.string, ",")
+	if len(a) == 0 {
+		return t.string
+	}
+	return a[0]
 }
 
 func (t *PsKey) Match(comp string) bool {
@@ -101,11 +107,11 @@ func (t *PsKey) SetValue(value string) PsKey {
 
 		s := strings.Split(value, "_")
 		switch {
-		case len(s) == 1:
-			t.psId = s[0]
-		case len(s) >= 2:
-			t.psId = s[0]
-			t.deviceType = s[1]
+			case len(s) == 1:
+				t.psId = s[0]
+			case len(s) >= 2:
+				t.psId = s[0]
+				t.deviceType = s[1]
 		}
 	}
 
@@ -120,7 +126,7 @@ func (t *PsKey) GetPsId() string {
 	return t.psId
 }
 
-func SetPsKeyValue(value string) PsKey {
+func SetPsKeyString(value string) PsKey {
 	var t PsKey
 	return t.SetValue(value)
 }
@@ -287,13 +293,12 @@ func (t *PsIds) Strings() []string {
 
 
 type PointId struct {
-	string `json:"string,omitempty"`
-	int64  `json:"integer,omitempty"`
-	isInt  bool
+	// string `json:"string,omitempty"`
+	// int64  `json:"integer,omitempty"`
+	// isInt  bool
 
-	// PointName String `json:"point_name"`
-	// PsId      String `json:"ps_id"`
-	// PsKey     String `json:"ps_key"`
+	Point     string `json:"point"`
+	PsKey     PsKey `json:"ps_key"`
 
 	Valid  bool `json:"valid"`
 	Error  error `json:"-"`
@@ -308,21 +313,14 @@ func (t *PointId) UnmarshalJSON(data []byte) error {
 			break
 		}
 
-		// Store result from int
-		t.Error = json.Unmarshal(data, &t.int64)
-		if t.Error == nil {
-			t.SetValue(t.int64)
+		// pid := strings.TrimPrefix(string(data), "p")
+		var d string
+		t.Error = json.Unmarshal(data, &d)
+		if t.Error != nil {
 			break
 		}
 
-		// Store result from string
-		t.Error = json.Unmarshal(data, &t.string)
-		if t.Error == nil {
-			t.SetString(t.string)
-			break
-		}
-
-		t.SetString(string(data))
+		t.Set(d)
 	}
 
 	return t.Error
@@ -333,39 +331,38 @@ func (t PointId) MarshalJSON() ([]byte, error) {
 	var data []byte
 
 	for range Only.Once {
-		if t.isInt {
-			data, t.Error = json.Marshal(t.int64)
+		t.Error = nil
+		if t.PsKey.String() != "" {
+			d := fmt.Sprintf(`"%s.%s"`, t.PsKey.String(), t.Point)
+			data = []byte(d)
 			break
 		}
-
-		data, t.Error = json.Marshal(t.string)
+		data = []byte(t.Point)
 	}
 
 	return data, t.Error
 }
 
-func (t PointId) Value() int64 {
-	return t.int64
-}
-
 func (t PointId) String() string {
-	if t.isInt {
-		return "p" + t.string
-	}
-	return t.string
+	return t.Point
 }
 
-func (t PointId) Match(comp int64) bool {
-	if t.int64 == comp {
-		return true
-	}
-	return false
-}
-
-func (t *PointId) SetString(value string) PointId {
+func (t *PointId) Full() string {
+	var ret string
 	for range Only.Once {
-		t.string = value
-		t.int64 = 0
+		if t.PsKey.String() != "" {
+			ret = fmt.Sprintf(`"%s.%s"`, t.PsKey.String(), t.Point)
+			break
+		}
+		ret = t.Point
+	}
+	return ret
+}
+
+func (t *PointId) Set(value string) PointId {
+	for range Only.Once {
+		t.PsKey = PsKey{}
+		t.Point = ""
 		t.Valid = false
 
 		if value == "" {
@@ -376,44 +373,47 @@ func (t *PointId) SetString(value string) PointId {
 			// value = ""
 			break
 		}
-		t.Valid = true
 
-		var v int
-		v, t.Error = strconv.Atoi(t.string)
-		if t.Error != nil {
-			break
-		}
-		t.int64 = int64(v)
-		t.isInt = true
-	}
-
-	return *t
-}
-
-func (t *PointId) SetValue(value int64) PointId {
-	for range Only.Once {
-		t.string = ""
-		t.int64 = value
-		t.Valid = true
-		t.isInt = true
-		t.string = strconv.FormatInt(t.int64, 10)
-	}
-
-	return *t
-}
-
-
-func (t *PointId) Fix() PointId {
-	for range Only.Once {
-		p := strings.TrimPrefix(t.string, "p")
-		_, t.Error = strconv.ParseInt(p, 10, 64)
-		if t.Error != nil {
-			t.Valid = false
-			break
+		a := strings.Split(value, ".")
+		switch {
+			case len(a) == 0:
+			case len(a) == 1:
+				t.Point = a[0]
+				t.Valid = true
+			case len(a) >= 2:
+				t.PsKey.SetValue(a[0])
+				t.Point = a[1]
+				t.Valid = true
 		}
 	}
+
 	return *t
 }
+
+// func (t *PointId) SetValue(value int64) PointId {
+// 	for range Only.Once {
+// 		t.string = ""
+// 		t.int64 = value
+// 		t.Valid = true
+// 		t.isInt = true
+// 		t.string = strconv.FormatInt(t.int64, 10)
+// 	}
+//
+// 	return *t
+// }
+
+
+// func (t *PointId) Fix() PointId {
+// 	for range Only.Once {
+// 		p := strings.TrimPrefix(t.string, "p")
+// 		_, t.Error = strconv.ParseInt(p, 10, 64)
+// 		if t.Error != nil {
+// 			t.Valid = false
+// 			break
+// 		}
+// 	}
+// 	return *t
+// }
 
 func (t *PointId) PointToName() string {
 	return PointToName(t.String())
@@ -459,10 +459,147 @@ func PointToName(ret string) string {
 
 func SetPointIdString(value string) PointId {
 	var t PointId
-	return t.SetString(value)
+	return t.Set(value)
 }
 
-func SetPointIdValue(value int64) PointId {
-	var t PointId
-	return t.SetValue(value)
+// func SetPointIdValue(value int64) PointId {
+// 	var t PointId
+// 	return t.SetValue(value)
+// }
+
+
+type PsKeys struct {
+	PsKeys []PsKey `json:"ps_keys,omitempty"`
+
+	Valid  bool `json:"valid"`
+	Error  error `json:"-"`
+}
+
+// UnmarshalJSON - Convert JSON to value
+func (t *PsKeys) UnmarshalJSON(data []byte) error {
+	for range Only.Once {
+		t.Valid = false
+
+		if len(data) == 0 {
+			break
+		}
+
+		var pid string
+		t.Error = json.Unmarshal(data, &pid)
+		if t.Error != nil {
+			break
+		}
+
+		t.Set(strings.Split(pid, ",")...)
+		t.Valid = true
+	}
+	return t.Error
+}
+
+// MarshalJSON - Convert value to JSON
+func (t PsKeys) MarshalJSON() ([]byte, error) {
+	var a []string
+	for _, pid := range t.PsKeys {
+		a = append(a, pid.String())
+	}
+	ret := `"` + strings.Join(a, ",") + `"`
+
+	return []byte(ret), nil
+}
+
+func (t PsKeys) String() string {
+	var ret string
+	for index := range t.PsKeys {
+		ret += t.PsKeys[index].String() + ","
+	}
+	ret = strings.TrimSuffix(ret, ",")
+	return ret
+}
+
+func (t *PsKeys) Set(values ...string) PsKeys {
+	for _, value := range values {
+		for _, v := range strings.Split(value, ",") {
+			var pid PsKey
+			pid.SetValue(v)
+			t.PsKeys = append(t.PsKeys, pid)
+		}
+	}
+
+	return *t
+}
+
+func SetPsKeysString(values string) PsKeys {
+	var t PsKeys
+	t.Set(strings.Split(values, ",")...)
+	return t
+}
+
+
+type PointIds struct {
+	PointIds []PointId `json:"points,omitempty"`
+
+	Valid  bool `json:"valid"`
+	Error  error `json:"-"`
+}
+
+// UnmarshalJSON - Convert JSON to value
+func (t *PointIds) UnmarshalJSON(data []byte) error {
+	for range Only.Once {
+		t.Valid = false
+
+		if len(data) == 0 {
+			break
+		}
+
+		var pid string
+		t.Error = json.Unmarshal(data, &pid)
+		if t.Error != nil {
+			break
+		}
+
+		t.Set(strings.Split(pid, ",")...)
+		t.Valid = true
+	}
+	return t.Error
+}
+
+// MarshalJSON - Convert value to JSON
+func (t PointIds) MarshalJSON() ([]byte, error) {
+	var a []string
+	// Some endpoints can't handle the pskey, so we need to strip it out.
+	for _, pid := range t.PointIds {
+		a = append(a, pid.String())
+	}
+	ret := `"` + strings.Join(a, ",") + `"`
+
+	// Can't use this method as some endpoints can't handle the pskey.
+	// data, err := json.Marshal(t.PointIds)
+	return []byte(ret), nil
+}
+
+func (t PointIds) String() string {
+	var ret string
+	for index := range t.PointIds {
+		ret += t.PointIds[index].String() + ","
+	}
+	ret = strings.TrimSuffix(ret, ",")
+	return ret
+}
+
+func (t *PointIds) Set(values ...string) PointIds {
+	for _, value := range values {
+		for _, v := range strings.Split(value, ",") {
+			var pid PointId
+			pid.Set(v)
+			t.PointIds = append(t.PointIds, pid)
+		}
+	}
+
+	return *t
+}
+
+func SetPointIdsString(values string) PointIds {
+	var t PointIds
+	t.Set(strings.Split(values, ",")...)
+	return t
 }

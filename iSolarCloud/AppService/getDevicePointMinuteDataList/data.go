@@ -52,12 +52,12 @@ func (e *ResultData) UnmarshalJSON(data []byte) error {
 
 
 type DataPoint struct {
-	GoStruct              GoStruct.GoStruct           `json:"-" PointIdReplace:"true" PointIdFrom:"TimeStamp" PointNameDateFormat:"20060102-150405" PointTimestampFrom:"TimeStamp"`
+	GoStruct              GoStruct.GoStruct               `json:"-" PointIdReplace:"true" PointIdFrom:"TimeStamp" PointNameDateFormat:"20060102-150405" PointTimestampFrom:"TimeStamp"`
 
-	TimeStamp             valueTypes.DateTime         `json:"time_stamp"`
+	TimeStamp             valueTypes.DateTime             `json:"time_stamp" PointNameDateFormat:"2006/01/02 15:04:05"`
 	Points                map[string]valueTypes.UnitValue `json:"points"`
 	// P13148                valueTypes.Integer          `json:"p13148"`
-	IsPlatformDefaultUnit valueTypes.Bool             `json:"is_platform_default_unit"`
+	IsPlatformDefaultUnit valueTypes.Bool                `json:"is_platform_default_unit"`
 }
 
 func (e *DataPoint) UnmarshalJSON(data []byte) error {
@@ -116,10 +116,6 @@ func (e *ResultData) IsValid() error {
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		entries.StructToDataMap(*e, e.Request.PsKey.String(), GoStruct.NewEndPointPath(e.Request.PsKey.String()))
-	}
-
+	entries.StructToDataMap(*e, e.Request.PsKey.String(), GoStruct.NewEndPointPath(e.Request.PsKey.String()))
 	return entries
 }

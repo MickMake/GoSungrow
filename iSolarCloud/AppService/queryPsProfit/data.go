@@ -33,7 +33,7 @@ type ResultData struct {
 		CuspNetPowerQuantity     interface{}         `json:"cusp_net_power_quantity"`
 		CuspPowerQuantity        interface{}         `json:"cusp_power_quantity"`
 		CuspUsePowerQuantity     interface{}         `json:"cusp_use_power_quantity"`
-		DateId                   valueTypes.DateTime `json:"date_id"`
+		DateId                   valueTypes.DateTime `json:"date_id" PointNameDateFormat:"2006/01/02 15:04:05"`
 		FlatNetPowerQuantity     valueTypes.Float    `json:"flat_net_power_quantity"`
 		FlatPowerQuantity        valueTypes.Float    `json:"flat_power_quantity"`
 		FlatUsePowerQuantity     valueTypes.Float    `json:"flat_use_power_quantity"`
@@ -45,7 +45,7 @@ type ResultData struct {
 		PowerQuantityTotal       valueTypes.Float    `json:"power_quantity_total"`
 		SubsidyProfit            interface{}         `json:"subsidy_profit"`
 		TotalProfit              valueTypes.Float    `json:"total_profit"`
-		UpdateTime               valueTypes.DateTime `json:"update_time"`
+		UpdateTime               valueTypes.DateTime `json:"update_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 		UsePowerByDiscountProfit valueTypes.Float    `json:"use_power_by_discount_profit"`
 		UsePowerProfit           valueTypes.Float    `json:"use_power_profit"`
 		UsePowerQuantityTotal    valueTypes.Float    `json:"use_power_quantity_total"`

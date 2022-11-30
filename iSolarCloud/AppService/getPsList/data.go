@@ -36,7 +36,7 @@ type ResultData struct {
 		AreaId                    interface{}          `json:"area_id" PointId:"area_id"`
 		AreaType                  valueTypes.Integer   `json:"area_type" PointId:"area_type"`
 		ArrearsStatus             valueTypes.Integer   `json:"arrears_status" PointId:"arrears_status"`
-		BuildDate                 valueTypes.DateTime  `json:"build_date" PointId:"build_date" PointUpdateFreq:"UpdateFreqBoot"`
+		BuildDate                 valueTypes.DateTime  `json:"build_date" PointId:"build_date" PointUpdateFreq:"UpdateFreqBoot" PointNameDateFormat:"2006/01/02 15:04:05"`
 		BuildStatus               valueTypes.Integer   `json:"build_status" PointId:"build_status" PointUpdateFreq:"UpdateFreqBoot"`
 		Co2Reduce                 valueTypes.UnitValue `json:"co2_reduce" PointId:"co2_reduce"`
 		Co2ReduceTotal            valueTypes.UnitValue `json:"co2_reduce_total" PointId:"co2_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
@@ -47,7 +47,7 @@ type ResultData struct {
 		DesignCapacityUnit        valueTypes.String    `json:"design_capacity_unit" PointId:"design_capacity_unit"`
 		DesignCapacityVirgin      valueTypes.Float     `json:"design_capacity_virgin" PointIgnore:"true"`
 		EquivalentHour            valueTypes.UnitValue `json:"equivalent_hour" PointId:"equivalent_hour" PointUpdateFreq:"UpdateFreqDay"`
-		ExpectInstallDate         valueTypes.DateTime  `json:"expect_install_date" PointId:"expect_install_date"`
+		ExpectInstallDate         valueTypes.DateTime  `json:"expect_install_date" PointId:"expect_install_date" PointNameDateFormat:"2006/01/02 15:04:05"`
 		FaultAlarmOfflineDevCount valueTypes.Count     `json:"fault_alarm_offline_dev_count" PointId:"fault_alarm_offline_dev_count"`
 		FaultCount                valueTypes.Count     `json:"fault_count" PointId:"fault_count"`
 		FaultDevCount             valueTypes.Count     `json:"fault_dev_count" PointId:"fault_dev_count"`
@@ -55,7 +55,7 @@ type ResultData struct {
 		GcjLongitude              valueTypes.Float     `json:"gcj_longitude" PointId:"gcj_longitude"`
 		GprsLatitude              valueTypes.Float     `json:"gprs_latitude" PointId:"gprs_latitude"`
 		GprsLongitude             valueTypes.Float     `json:"gprs_longitude" PointId:"gprs_longitude"`
-		InstallDate               valueTypes.DateTime  `json:"install_date" PointId:"install_date"`
+		InstallDate               valueTypes.DateTime  `json:"install_date" PointId:"install_date" PointNameDateFormat:"2006/01/02 15:04:05"`
 		InstalledPowerMap         valueTypes.UnitValue `json:"installed_power_map" PointId:"installed_power_map"`
 		InstalledPowerVirgin      valueTypes.Float     `json:"installed_power_virgin" PointIgnore:"true"`
 		InstallerAlarmCount       valueTypes.Count     `json:"installer_alarm_count" PointId:"installer_alarm_count"`
@@ -129,8 +129,8 @@ type ResultData struct {
 		PsType                 valueTypes.Integer   `json:"ps_type" PointId:"ps_type"`
 		Radiation              valueTypes.UnitValue `json:"radiation" PointId:"radiation"`
 		RadiationVirgin        valueTypes.Float     `json:"radiation_virgin" PointIgnore:"true"`
-		RecordCreateTime       valueTypes.DateTime  `json:"recore_create_time" PointId:"record_create_time"`
-		SafeStartDate          valueTypes.DateTime  `json:"safe_start_date" PointId:"safe_start_date"`
+		RecordCreateTime       valueTypes.DateTime  `json:"recore_create_time" PointId:"record_create_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+		SafeStartDate          valueTypes.DateTime  `json:"safe_start_date" PointId:"safe_start_date" PointNameDateFormat:"2006/01/02 15:04:05"`
 		ShareType              valueTypes.Integer   `json:"share_type" PointId:"share_type"`
 		ShippingAddress        valueTypes.String    `json:"shipping_address" PointId:"shipping_address"`
 		ShippingZipCode        valueTypes.String    `json:"shipping_zip_code" PointId:"shipping_zip_code"`

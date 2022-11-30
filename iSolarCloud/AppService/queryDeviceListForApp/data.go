@@ -38,7 +38,7 @@ type ResultData struct {
 		DevStatus               valueTypes.Bool     `json:"dev_status"`
 		DeviceArea              valueTypes.String   `json:"device_area"`
 		DeviceCode              valueTypes.Integer  `json:"device_code"`
-		DeviceFactoryDate       valueTypes.DateTime `json:"device_factory_date"`
+		DeviceFactoryDate       valueTypes.DateTime `json:"device_factory_date" PointNameDateFormat:"2006/01/02 15:04:05"`
 		DeviceId                valueTypes.Integer  `json:"device_id"`
 		DeviceModel             valueTypes.String   `json:"device_model"`
 		DeviceModelCode         valueTypes.String   `json:"device_model_code"`

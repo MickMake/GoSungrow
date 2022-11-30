@@ -740,7 +740,13 @@ func CreatePointDataEntries(Current *GoStruct.Reflect, parentDeviceId string, po
 		sorted := Current.Value.Range(valueTypes.SortOrder)
 		res := valueTypes.SizeOfInt(sorted)
 		for i, uv := range sorted {
-			epn := JoinWithDots(res, valueTypes.DateTimeLayoutDay, Current.EndPointPath().String(), i)
+			var epn string
+			if uv.ValueKey() == "" {
+				epn = JoinWithDots(res, valueTypes.DateTimeLayoutDay, Current.EndPointPath().String(), i)
+			} else {
+				epn = JoinWithDots(res, valueTypes.DateTimeLayoutDay, Current.EndPointPath().String(), uv.ValueKey())
+			}
+
 			ret.Entries = append(ret.Entries, DataEntry{
 				Current:  Current,
 				EndPoint: epn, // Current.EndPointPath().String(),

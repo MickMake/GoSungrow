@@ -472,12 +472,12 @@ func AnyToUnitValue(ref interface{}, key string, unit string, typeString string,
 
 			case TypeGeneric:
 				v := ref.(Generic)
-				uvs.AddFloat(key, unit, typeString, v.Value())
+				uvs.AddString(key, unit, typeString, v.String())
 
 			case TypeArrayGeneric:
 				v := ref.([]Generic)
 				for _, val := range v {
-					uvs.AddFloat(key, unit, typeString, val.Value())
+					uvs.AddString(key, unit, typeString, val.String())
 				}
 
 			default:

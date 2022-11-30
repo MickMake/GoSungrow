@@ -27,10 +27,10 @@ type ResultData []struct {
 	GoStructParent        GoStruct.GoStructParent   `json:"-" DataTable:"true" DataTableSortOn:"CreateTime" PointIdReplace:"false"`
 
 	MsgId           valueTypes.Integer  `json:"msg_id"`
-	CreateTime      valueTypes.DateTime `json:"create_time"`
-	PublishTime     valueTypes.DateTime `json:"publish_time"`
-	StartTime       valueTypes.DateTime `json:"start_time"`
-	EndTime         valueTypes.DateTime `json:"end_time"`
+	CreateTime      valueTypes.DateTime `json:"create_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+	PublishTime     valueTypes.DateTime `json:"publish_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+	StartTime       valueTypes.DateTime `json:"start_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+	EndTime         valueTypes.DateTime `json:"end_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 	Ispublish       valueTypes.Bool     `json:"ispublish" PointId:"is_publish"`
 	UserName        valueTypes.String   `json:"user_name"`
 	UserId          valueTypes.Integer  `json:"user_id"`

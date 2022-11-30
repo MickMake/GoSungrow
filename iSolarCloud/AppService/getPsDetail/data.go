@@ -66,7 +66,7 @@ type ResultData struct {
 		P13150MapVirgin         valueTypes.UnitValue `json:"p13150_map_virgin"  PointIgnore:"true"`
 		P13155                  valueTypes.Float     `json:"p13155" PointId:"p13155" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreqInstant"`
 		PsKey                   valueTypes.PsKey     `json:"ps_key"`
-		UpdateTime              valueTypes.DateTime  `json:"update_time"`
+		UpdateTime              valueTypes.DateTime  `json:"update_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 		UUID                    valueTypes.Integer   `json:"uuid"`
 		EnergyFlow              []valueTypes.Integer `json:"energy_flow" PointName:"Energy Flow" PointIgnoreZero:"false" PointArrayFlatten:"true"`
 	} `json:"storage_inverter_data" PointIdReplace:"true" PointIdFromChild:"PsKey" DataTable:"false"`
@@ -78,7 +78,7 @@ type ResultData struct {
 	AlarmCount                    valueTypes.Count     `json:"alarm_count"`
 	AreaId                        interface{}          `json:"area_id"`
 	AreaType                      valueTypes.Integer   `json:"area_type"`
-	BuildDate                     valueTypes.DateTime  `json:"build_date"`
+	BuildDate                     valueTypes.DateTime  `json:"build_date" PointNameDateFormat:"2006/01/02 15:04:05"`
 	Co2Reduce                     valueTypes.UnitValue `json:"co2_reduce"`
 	Co2ReduceTotal                valueTypes.UnitValue `json:"co2_reduce_total" PointId:"co2_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
 	CoalReduce                    valueTypes.UnitValue `json:"coal_reduce"`
@@ -87,14 +87,14 @@ type ResultData struct {
 	ConnectType                   valueTypes.Integer   `json:"connect_type"`
 	ContactPerson                 valueTypes.String    `json:"contact_person"`
 	CurrPower                     valueTypes.UnitValue `json:"curr_power"` // Pv Power
-	DataLastUpdateTime            valueTypes.DateTime  `json:"data_last_update_time"`
+	DataLastUpdateTime            valueTypes.DateTime  `json:"data_last_update_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 	DayEqHours                    valueTypes.Float     `json:"day_eq_hours" PointUnit:"h" PointUpdateFreq:"UpdateFreqDay"`
 	Description                   interface{}          `json:"description"`
 	DesignCapacity                valueTypes.UnitValue `json:"design_capacity"`
 	DesignCapacityBattery         valueTypes.UnitValue `json:"design_capacity_battery"`
 	DiagramURL                    valueTypes.String    `json:"diagram_url"`
 	EnergyScheme                  interface{}          `json:"energy_scheme"`
-	ExpectInstallDate             valueTypes.DateTime  `json:"expect_install_date"`
+	ExpectInstallDate             valueTypes.DateTime  `json:"expect_install_date" PointNameDateFormat:"2006/01/02 15:04:05"`
 	FaultCount                    valueTypes.Count     `json:"fault_count"`
 	FaultSendType                 valueTypes.String    `json:"fault_send_type"`
 	GcjLatitude                   valueTypes.Float     `json:"gcj_latitude"`
@@ -102,7 +102,7 @@ type ResultData struct {
 	GprsLatitude                  valueTypes.Float     `json:"gprs_latitude"`
 	GprsLongitude                 valueTypes.Float     `json:"gprs_longitude"`
 	HasAmmeter                    valueTypes.Bool      `json:"has_ammeter"`
-	InstallDate                   valueTypes.DateTime  `json:"install_date"`
+	InstallDate                   valueTypes.DateTime  `json:"install_date" PointNameDateFormat:"2006/01/02 15:04:05"`
 	InstallerPsFaultStatus        valueTypes.Integer   `json:"installer_ps_fault_status"`
 	IsHaveEsInverter              valueTypes.Bool      `json:"is_have_es_inverter"`
 	IsTransformSystem             valueTypes.Bool      `json:"is_transform_system"`
@@ -218,9 +218,9 @@ type ResultData struct {
 	PsTypeName                    valueTypes.String    `json:"ps_type_name"`
 	PsWindLevel                   valueTypes.String    `json:"ps_wind_level"`
 	PsWindPos                     valueTypes.String    `json:"ps_wind_pos"`
-	RecordCreateTime              valueTypes.DateTime  `json:"recore_create_time" PointId:"record_create_time"`
+	RecordCreateTime              valueTypes.DateTime  `json:"recore_create_time" PointId:"record_create_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 	ReportType                    valueTypes.String    `json:"report_type"`
-	SafeStartDate                 valueTypes.DateTime  `json:"safe_start_date"`
+	SafeStartDate                 valueTypes.DateTime  `json:"safe_start_date" PointNameDateFormat:"2006/01/02 15:04:05"`
 	SelfConsumptionOffsetReminder valueTypes.Integer   `json:"self_consumption_offset_reminder"`
 	ShippingAddress               valueTypes.String    `json:"shipping_address"`
 	ShippingZipCode               valueTypes.String    `json:"shipping_zip_code"`

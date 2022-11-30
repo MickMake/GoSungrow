@@ -28,7 +28,7 @@ type ResultData struct {
 	PageList []struct {
 		TemplateId   valueTypes.Integer  `json:"template_id"`
 		TemplateName valueTypes.String `json:"template_name"`
-		UpdateTime   valueTypes.DateTime `json:"update_time"`
+		UpdateTime   valueTypes.DateTime `json:"update_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 	} `json:"pageList" PointId:"page_list" PointIdFromChild:"TemplateId" PointIdReplace:"true" DataTable:"true"`
 	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 }

@@ -38,7 +38,13 @@ type RequestArgs struct {
 	Uuid           *valueTypes.String   `json:"uuid,omitempty"`
 	TemplateId     *valueTypes.String   `json:"template_id,omitempty"`
 	DeviceModelId  *valueTypes.String   `json:"device_model_id,omitempty"`
-	PsKey          *valueTypes.PsKey    `json:"ps_key,omitempty"`
+
+	// Points
+	PsKeyList      *valueTypes.String    `json:"ps_key_list,omitempty"`
+	PsKeys         *valueTypes.PsKeys    `json:"-,omitempty"`		// Used by queryMutiPointDataList
+	PsKey          *valueTypes.PsKey     `json:"ps_key,omitempty"`
+	Point          *valueTypes.PointId   `json:"point_id,omitempty"`
+	Points         *valueTypes.PointIds  `json:"points,omitempty"`
 
 	// DateTime
 	DateId         *valueTypes.DateTime  `json:"date_id,omitempty"`
@@ -60,11 +66,8 @@ type RequestArgs struct {
 	MinuteInterval *valueTypes.Integer   `json:"minute_interval,omitempty"`
 	OrderId        *valueTypes.String    `json:"order_id,omitempty"`
 	OrgId          *valueTypes.String    `json:"org_id,omitempty"`
-	PointId        *valueTypes.PointId   `json:"point_id,omitempty"`
-	Points         *valueTypes.String    `json:"points,omitempty"`
 	Prefix         *valueTypes.String    `json:"prefix,omitempty"`
 	PrimaryKey     *valueTypes.String    `json:"primaryKey,omitempty"`
-	PsKeyList      *valueTypes.String    `json:"ps_key_list,omitempty"`
 	QueryType      *valueTypes.String    `json:"query_type,omitempty"`
 	Sn             *valueTypes.String    `json:"sn,omitempty"`
 	Table          *valueTypes.String    `json:"table,omitempty"`
@@ -120,7 +123,12 @@ const (
 	NameUuid           = "Uuid"
 	NameTemplateId     = "TemplateId"
 	NameDeviceModelId  = "DeviceModelId"
+
+	NamePsKeyList      = "PsKeyList"
+	NamePsKeys         = "PsKeys"
 	NamePsKey          = "PsKey"
+	NamePointId        = "PointId"
+	NamePoints         = "Points"
 
 	// DateTime
 	NameDateId         = "DateId"
@@ -142,11 +150,8 @@ const (
 	NameMinuteInterval = "MinuteInterval"
 	NameOrderId        = "OrderId"
 	NameOrgId          = "OrgId"
-	NamePointId        = "PointId"
-	NamePoints         = "Points"
 	NamePrefix         = "Prefix"
 	NamePrimaryKey     = "PrimaryKey"
-	NamePsKeyList      = "PsKeyList"
 	NameQueryType      = "QueryType"
 	NameSn             = "Sn"
 	NameTable          = "Table"
@@ -172,7 +177,11 @@ var Help = map[string]string{
 	NameUuid:           "Uuid - ",
 	NameTemplateId:     "TemplateId - ",
 	NameDeviceModelId:  "DeviceModelId - ",
+
+	NamePsKeyList:      "PsKeyList - ",
 	NamePsKey:          "PsKey - ",
+	NamePointId:        "PointId - ",
+	NamePoints:         "Points - ",
 
 	// DateTime
 	NameDateId:         "DateId - Date in format YYYYMMDD or YYYYMM or YYYY",
@@ -194,11 +203,8 @@ var Help = map[string]string{
 	NameMinuteInterval: "MinuteInterval - ",
 	NameOrderId:        "OrderId - ",
 	NameOrgId:          "OrgId - ",
-	NamePointId:        "PointId - ",
-	NamePoints:         "Points - ",
 	NamePrefix:         "Prefix - ",
 	NamePrimaryKey:     "PrimaryKey - ",
-	NamePsKeyList:      "PsKeyList - ",
 	NameQueryType:      "QueryType - ",
 	NameSn:             "Sn - ",
 	NameTable:          "Table - ",
@@ -216,6 +222,14 @@ func (sgd SunGrowDataRequest) MarshalJSON() ([]byte, error) {
 		var dt *string
 		if sgd.args.DateId != nil {
 			dt = &sgd.args.DateId.DateType
+		}
+
+		if sgd.IsRequired(NamePsKeys) {
+			// queryMutiPointDataList - expects multiple pskeys separated by comma.
+			// getDevicePointMinuteDataList - expects a single pskey.
+			pskey := valueTypes.SetPsKeyString(sgd.args.PsKeys.String())
+			sgd.args.PsKey = &pskey
+			sgd.args.PsKeys = nil
 		}
 
 		type Parse RequestArgs
@@ -237,7 +251,13 @@ func (sgd SunGrowDataRequest) MarshalJSON() ([]byte, error) {
 			Uuid:           sgd.args.Uuid,
 			TemplateId:     sgd.args.TemplateId,
 			DeviceModelId:  sgd.args.DeviceModelId,
+
+			// Points
+			PsKeyList:      sgd.args.PsKeyList,
 			PsKey:          sgd.args.PsKey,
+			PsKeys:         sgd.args.PsKeys,
+			Point:          sgd.args.Point,
+			Points:         sgd.args.Points,
 
 			// DateTime
 			DateId:         sgd.args.DateId,
@@ -259,11 +279,8 @@ func (sgd SunGrowDataRequest) MarshalJSON() ([]byte, error) {
 			MinuteInterval: sgd.args.MinuteInterval,
 			OrderId:        sgd.args.OrderId,
 			OrgId:          sgd.args.OrgId,
-			PointId:        sgd.args.PointId,
-			Points:         sgd.args.Points,
 			Prefix:         sgd.args.Prefix,
 			PrimaryKey:     sgd.args.PrimaryKey,
-			PsKeyList:      sgd.args.PsKeyList,
 			QueryType:      sgd.args.QueryType,
 			Sn:             sgd.args.Sn,
 			Table:          sgd.args.Table,
@@ -316,8 +333,19 @@ func (sgd *SunGrowDataRequest) Set(arg string, value string) {
 				val := valueTypes.SetStringValue(value); sgd.args.TemplateId = &val
 			case NameDeviceModelId:
 				val := valueTypes.SetStringValue(value); sgd.args.DeviceModelId = &val
+
+			// Points
+			case NamePsKeyList:
+				val := valueTypes.SetStringValue(value); sgd.args.PsKeyList = &val
+			case NamePsKeys:
+				val := valueTypes.SetPsKeysString(value); sgd.args.PsKeys = &val
 			case NamePsKey:
-				val := valueTypes.SetPsKeyValue(value); sgd.args.PsKey = &val
+				val := valueTypes.SetPsKeyString(value); sgd.args.PsKey = &val
+			case NamePointId:
+				val := valueTypes.SetPointIdString(value); sgd.args.Point = &val
+			case NamePoints:
+				sgd.SetPoints(value)
+				// val := valueTypes.SetPointIdsString(value); sgd.args.Points = &val
 
 			// DateTime
 			case NameDateId:
@@ -354,16 +382,10 @@ func (sgd *SunGrowDataRequest) Set(arg string, value string) {
 				val := valueTypes.SetStringValue(value); sgd.args.OrderId = &val
 			case NameOrgId:
 				val := valueTypes.SetStringValue(value); sgd.args.OrgId = &val
-			case NamePointId:
-				val := valueTypes.SetPointIdString(value); sgd.args.PointId = &val
-			case NamePoints:
-				val := valueTypes.SetStringValue(value); sgd.args.Points = &val
 			case NamePrefix:
 				val := valueTypes.SetStringValue(value); sgd.args.Prefix = &val
 			case NamePrimaryKey:
 				val := valueTypes.SetStringValue(value); sgd.args.PrimaryKey = &val
-			case NamePsKeyList:
-				val := valueTypes.SetStringValue(value); sgd.args.PsKeyList = &val
 			case NameQueryType:
 				val := valueTypes.SetStringValue(value); sgd.args.QueryType = &val
 			case NameSn:
@@ -416,8 +438,18 @@ func (sgd *SunGrowDataRequest) Get(arg string) string {
 				value = sgd.args.TemplateId.String()
 			case NameDeviceModelId:
 				value = sgd.args.DeviceModelId.String()
+
+			// Points
+			case NamePsKeyList:
+				value = sgd.args.PsKeyList.String()
+			case NamePsKeys:
+				value = sgd.args.PsKeys.String()
 			case NamePsKey:
 				value = sgd.args.PsKey.String()
+			case NamePointId:
+				value = sgd.args.Point.String()
+			case NamePoints:
+				value = sgd.args.Points.String()
 
 
 			// DateTime
@@ -455,16 +487,10 @@ func (sgd *SunGrowDataRequest) Get(arg string) string {
 				value = sgd.args.OrderId.String()
 			case NameOrgId:
 				value = sgd.args.OrgId.String()
-			case NamePointId:
-				value = sgd.args.PointId.String()
-			case NamePoints:
-				value = sgd.args.Points.String()
 			case NamePrefix:
 				value = sgd.args.Prefix.String()
 			case NamePrimaryKey:
 				value = sgd.args.PrimaryKey.String()
-			case NamePsKeyList:
-				value = sgd.args.PsKeyList.String()
 			case NameQueryType:
 				value = sgd.args.QueryType.String()
 			case NameSn:
@@ -522,8 +548,19 @@ func (sgd *SunGrowDataRequest) IsSet(arg string) bool {
 				if sgd.args.TemplateId != nil { ok = true }
 			case NameDeviceModelId:
 				if sgd.args.DeviceModelId != nil { ok = true }
+
+
+			// Points
+			case NamePsKeyList:
+				if sgd.args.PsKeyList != nil { ok = true }
+			case NamePsKeys:
+				if sgd.args.PsKeys != nil { ok = true }
 			case NamePsKey:
 				if sgd.args.PsKey != nil { ok = true }
+			case NamePointId:
+				if sgd.args.Point != nil { ok = true }
+			case NamePoints:
+				if sgd.args.Points != nil { ok = true }
 
 
 			// UNVERIFIED
@@ -553,16 +590,10 @@ func (sgd *SunGrowDataRequest) IsSet(arg string) bool {
 				if sgd.args.OrderId != nil { ok = true }
 			case NameOrgId:
 				if sgd.args.OrgId != nil { ok = true }
-			case NamePointId:
-				if sgd.args.PointId != nil { ok = true }
-			case NamePoints:
-				if sgd.args.Points != nil { ok = true }
 			case NamePrefix:
 				if sgd.args.Prefix != nil { ok = true }
 			case NamePrimaryKey:
 				if sgd.args.PrimaryKey != nil { ok = true }
-			case NamePsKeyList:
-				if sgd.args.PsKeyList != nil { ok = true }
 			case NameQueryType:
 				if sgd.args.QueryType != nil { ok = true }
 			case NameSn:
@@ -887,6 +918,29 @@ func (sgd *SunGrowDataRequest) SetPsId(psId string) {
 		// sgd.SetIfRequired(NamePsId2, psId)
 		// sgd.SetIfRequired(NamePsId3, psId)
 		// sgd.SetIfRequired(NamePsIds, psId)
+	}
+}
+
+func (sgd *SunGrowDataRequest) SetPoints(points string) {
+	for range Only.Once {
+		pids := valueTypes.SetPointIdsString(points)
+		if pids.Error != nil {
+			fmt.Printf("Error: %s - %s\n", NamePsId, sgd.args.Points.Error)
+			break
+		}
+
+		var pskeys []string
+		for _, pskey := range pids.PointIds {
+			pskeys = append(pskeys, pskey.PsKey.String())
+		}
+		sgd.args.Points = &pids
+		psk := valueTypes.SetPsKeysString(strings.Join(pskeys, ","))
+		if sgd.IsRequired(NamePsKey) {
+			sgd.args.PsKey = &psk.PsKeys[0]
+		}
+		if sgd.IsRequired(NamePsKeys) {
+			sgd.args.PsKeys = &psk
+		}
 	}
 }
 

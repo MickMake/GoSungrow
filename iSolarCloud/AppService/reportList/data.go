@@ -38,7 +38,7 @@ type DataList struct {
 	DateId     valueTypes.DateTime `json:"date_id" PointTimestampFrom:"UpdateTime" PointNameDateFormat:"20060102"`
 	PsId       valueTypes.PsId     `json:"ps_id" PointTimestampFrom:"UpdateTime"`
 	TimeStamp  valueTypes.Generic  `json:"time_stamp" PointTimestampFrom:"UpdateTime"` // Sad that this alternates between string and valueTypes.Integer.
-	UpdateTime valueTypes.DateTime `json:"update_time" PointTimestampFrom:"UpdateTime"`
+	UpdateTime valueTypes.DateTime `json:"update_time" PointTimestampFrom:"UpdateTime" PointNameDateFormat:"2006/01/02 15:04:05"`
 	DeviceName interface{}         `json:"device_name" PointTimestampFrom:"UpdateTime"`
 	UUID       interface{}         `json:"uuid" PointTimestampFrom:"UpdateTime"`
 	Co2Reduce  valueTypes.Float    `json:"co2_reduce" PointTimestampFrom:"UpdateTime"`

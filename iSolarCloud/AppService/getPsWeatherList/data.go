@@ -29,7 +29,7 @@ type ResultData struct {
 		Chill      valueTypes.Float    `json:"chill"`
 		Code       valueTypes.Float    `json:"code"`
 		CodeName   valueTypes.String   `json:"code_name"`
-		DateTime   valueTypes.DateTime `json:"date_time" PointIgnore:"true"`
+		DateTime   valueTypes.DateTime `json:"date_time" PointIgnore:"true" PointNameDateFormat:"2006/01/02 15:04:05"`
 		Direction  valueTypes.Float    `json:"direction"`
 		High       valueTypes.Float    `json:"high" PointUnit:"F"`
 		Highc      valueTypes.Float    `json:"highc" PointUnit:"C"`

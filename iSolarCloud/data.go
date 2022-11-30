@@ -101,19 +101,56 @@ func (sgd *SunGrowDataResponse) GetOutput(outputType output.OutputType, saveAsFi
 			break
 		}
 
-		if !outputType.IsTable() {
+		if outputType.IsXLSX() {
+			table := sgd.Data.CreateResultTable(false)
+			table.OutputType = outputType
+			table.SetSaveFile(saveAsFile)
+			table.AppendFilePrefix(sgd.Filename)
+			table.SetTitle(table.GetName() + " - " + sgd.Title)
+			sgd.Error = table.Output()
 			break
 		}
 
-		table := sgd.Data.CreateResultTable(false)
-		table.OutputType = outputType
-		table.SetSaveFile(saveAsFile)
-		table.AppendFilePrefix(sgd.Filename)
-		table.SetTitle(table.GetName() + " - " + sgd.Title)
-		sgd.Error = table.Output()
-		if sgd.Error != nil {
-			break
+
+		if outputType.IsCsv() {
+			table := sgd.Data.CreateResultTable(false)
+			table.OutputType = outputType
+			table.SetSaveFile(saveAsFile)
+			table.AppendFilePrefix(sgd.Filename)
+			table.SetTitle(table.GetName() + " - " + sgd.Title)
+			sgd.Error = table.Output()
+			if sgd.Error != nil {
+				break
+			}
+			// break
 		}
+
+		if outputType.IsXML() {
+			table := sgd.Data.CreateResultTable(false)
+			table.OutputType = outputType
+			table.SetSaveFile(saveAsFile)
+			table.AppendFilePrefix(sgd.Filename)
+			table.SetTitle(table.GetName() + " - " + sgd.Title)
+			sgd.Error = table.Output()
+			if sgd.Error != nil {
+				break
+			}
+			// break
+		}
+
+		if outputType.IsTable() {
+			table := sgd.Data.CreateResultTable(false)
+			table.OutputType = outputType
+			table.SetSaveFile(saveAsFile)
+			table.AppendFilePrefix(sgd.Filename)
+			table.SetTitle(table.GetName() + " - " + sgd.Title)
+			sgd.Error = table.Output()
+			if sgd.Error != nil {
+				break
+			}
+			// break
+		}
+
 
 		tables := sgd.Data.CreateDataTables()
 		if len(tables) == 0 {
@@ -235,7 +272,7 @@ func (sgd *SunGrowData) SetPsIds(psids ...string) {
 	}
 }
 
-func (sgd *SunGrowData) GetData() error {
+func (sgd *SunGrowData) GetData(args ...string) error {
 	for range Only.Once {
 		if len(sgd.endPoints) == 0 {
 			sgd.Error = errors.New("need an endpoint")
@@ -250,6 +287,8 @@ func (sgd *SunGrowData) GetData() error {
 				break
 			}
 			sgd.request.SetRequired(ep.GetRequestArgNames())
+
+			sgd.SetArgs(args...)
 
 			// PsId not required.
 			if sgd.request.IsPsIdNotRequired() {
@@ -277,9 +316,6 @@ func (sgd *SunGrowData) GetData() error {
 
 				result.Request = sgd.request
 				result.Request.SetPsId(psId.String())
-				// result.Request.SetIfRequired(NamePsIds, psId.String())
-				// result.Request.SetIfRequired(NameDay, "")
-				// result.Request.SetIfRequired(NameDateId, "")
 
 				result.EndPointName = ep.GetName()
 				result.EndPoint = ep

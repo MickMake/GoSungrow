@@ -38,7 +38,7 @@ type ResultData struct {
 		DesignCapacity    valueTypes.Float    `json:"design_capacity" PointUnit:"W"`
 		Email             valueTypes.String   `json:"email"`
 		EnergyScheme      Common.Unknown      `json:"energy_scheme"`
-		ExpectInstallDate valueTypes.DateTime `json:"expect_install_date"`
+		ExpectInstallDate valueTypes.DateTime `json:"expect_install_date" PointNameDateFormat:"2006/01/02 15:04:05"`
 		FaultSendType     Common.Unknown      `json:"fault_send_type"`
 		GcjLatitude       valueTypes.Float    `json:"gcj_latitude"`
 		GcjLongitude      valueTypes.Float    `json:"gcj_longitude"`
@@ -51,7 +51,7 @@ type ResultData struct {
 		ParamIncome       valueTypes.Float    `json:"param_income"`
 		Prov              Common.Unknown      `json:"prov"`
 		ProvCode          Common.Unknown      `json:"prov_code"`
-		PsBuildDate       valueTypes.DateTime `json:"ps_build_date"`
+		PsBuildDate       valueTypes.DateTime `json:"ps_build_date" PointNameDateFormat:"2006/01/02 15:04:05"`
 		PsCountryId       valueTypes.Integer  `json:"ps_country_id"`
 		PsDesc            Common.Unknown      `json:"ps_desc"`
 		PsHolder          valueTypes.String   `json:"ps_holder"`
@@ -59,7 +59,7 @@ type ResultData struct {
 		PsLocation        valueTypes.String   `json:"ps_location"`
 		PsName            valueTypes.String   `json:"ps_name"`
 		PsType            valueTypes.Integer  `json:"ps_type"`
-		RecordCreateTime  valueTypes.DateTime `json:"recore_create_time" PointId:"record_create_time"`
+		RecordCreateTime  valueTypes.DateTime `json:"recore_create_time" PointId:"record_create_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 		ReportType        Common.Unknown      `json:"report_type"`
 		ShippingAddress   valueTypes.String   `json:"shipping_address"`
 		ShippingZipCode   valueTypes.String   `json:"shipping_zip_code"`
@@ -84,10 +84,10 @@ type ResultData struct {
 		CodeType            valueTypes.Integer  `json:"code_type"`
 		DefaultCharge       valueTypes.Float    `json:"default_charge"`
 		ElectricChargeId    valueTypes.Integer  `json:"electric_charge_id"`
-		EndTime             valueTypes.DateTime `json:"end_time"`
+		EndTime             valueTypes.DateTime `json:"end_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 		IntervalTimeCharge  Common.Unknown      `json:"interval_time_charge"`
 		ParamIncomeUnitName valueTypes.String   `json:"param_income_unit_name"`
-		StartTime           valueTypes.DateTime `json:"start_time"`
+		StartTime           valueTypes.DateTime `json:"start_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 	} `json:"powerChargeDataMap" PointId:"power_charge_data_map"`
 
 	SysTimeZones []struct {

@@ -26,7 +26,7 @@ func (rd RequestData) Help() string {
 type ResultData struct {
 	CurrentPage  valueTypes.Integer `json:"currentPage" PointIgnore:"true"`
 	PageDataList []struct {
-		CreateTime   valueTypes.DateTime `json:"create_time" PointIgnore:"true"`
+		CreateTime   valueTypes.DateTime `json:"create_time" PointIgnore:"true" PointNameDateFormat:"2006/01/02 15:04:05"`
 		DeviceType   valueTypes.Integer  `json:"device_type"`
 		Id           valueTypes.Integer  `json:"id"`
 		Period       valueTypes.Integer  `json:"period"`		// 0, 1, 2, 3, 4

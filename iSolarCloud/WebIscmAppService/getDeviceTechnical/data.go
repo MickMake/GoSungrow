@@ -36,12 +36,12 @@ type ResultData struct {
 		TechCode           valueTypes.String   `json:"tech_code"`
 		TechContent        valueTypes.String   `json:"tech_content"`
 		TechContentTransId valueTypes.Integer  `json:"tech_content_trans_id"`
-		TechCreateTime     valueTypes.DateTime `json:"tech_createtime" PointId:"tech_create_time"`
+		TechCreateTime     valueTypes.DateTime `json:"tech_createtime" PointId:"tech_create_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 		TechCreator        valueTypes.String   `json:"tech_creator"`
 		TechDescription    interface{}         `json:"tech_description"`
 		TechId             valueTypes.Integer  `json:"tech_id"`
 		TechModifier       interface{}         `json:"tech_modifier"`
-		TechModifyTime     valueTypes.DateTime `json:"tech_modifytime" PointId:"tech_modify_time"`
+		TechModifyTime     valueTypes.DateTime `json:"tech_modifytime" PointId:"tech_modify_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 		TechName           valueTypes.String   `json:"tech_name"`
 		TypeId             valueTypes.Integer  `json:"type_id"`
 		TypeName           valueTypes.String   `json:"type_name"`

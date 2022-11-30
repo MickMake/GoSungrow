@@ -26,7 +26,7 @@ func (rd RequestData) Help() string {
 
 type ResultData   struct {
 	PowerDeviceTypeMap struct {
-		UpdateDate      valueTypes.DateTime  `json:"update_date"`
+		UpdateDate      valueTypes.DateTime  `json:"update_date" PointNameDateFormat:"2006/01/02 15:04:05"`
 		SysId           valueTypes.String  `json:"sys_id"`
 		SysName         valueTypes.String  `json:"sys_name"`
 		TypeCode        valueTypes.Integer `json:"type_code"`

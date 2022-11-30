@@ -28,7 +28,7 @@ type ResultData struct {
 	BloodType                    valueTypes.String   `json:"blood_type"`
 	CountryId                    valueTypes.Integer  `json:"country_id"`
 	CountryName                  valueTypes.String   `json:"country_name"`
-	CreateDate                   valueTypes.DateTime `json:"create_date"`
+	CreateDate                   valueTypes.DateTime `json:"create_date" PointNameDateFormat:"2006/01/02 15:04:05"`
 	CreateUserId                 valueTypes.Integer  `json:"create_user_id"`
 	DiseaseHis                   valueTypes.String   `json:"disease_his"`
 	Email                        valueTypes.String   `json:"email"`

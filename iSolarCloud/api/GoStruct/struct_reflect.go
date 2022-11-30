@@ -740,6 +740,10 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 		}
 		r.Valid = true
 
+
+
+
+
 		switch current.TypeOf.Kind() {
 			case reflect.Struct:
 				r.FieldTo = current.TypeOf.Field(index)
@@ -823,9 +827,15 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 				}
 				r.IsExported = true
 				r.FieldVo = current.ValueOf.MapIndex(indexName)
-				r.FieldName = current.FieldName + ":" + indexName.String()		// mk[index].String()
+				name := valueTypes.AnyToValueString(indexName.Interface(), valueTypes.IgnoreLength, "")	// map key could be anything.
+				r.FieldName = name		// current.FieldName + ":" + indexName.String()
+
+
+
+
+
 				r.FieldPath = r.CurrentReflect.FieldPath.Copy()
-				r.FieldPath.Append("[" + indexName.String() + "]")
+				r.FieldPath.Append("[" + name + "]")		// indexName.String()
 				current.ChildReflect = append(current.ChildReflect, r)
 				current.ChildReflectMap[r.FieldName] = r
 
@@ -844,8 +854,8 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 					}
 				}
 				r.SetGoStructOptions(1)
-				r.DataStructure.Json = indexName.String()		// current.ValueOf.MapIndex(indexName).String() || r.FieldVo.String()
-				r.DataStructure.PointId = indexName.String()	// current.ValueOf.MapIndex(indexName).String() || r.FieldVo.String()
+				r.DataStructure.Json = name	// indexName.String()		// current.ValueOf.MapIndex(indexName).String() || r.FieldVo.String()
+				r.DataStructure.PointId = name	// indexName.String()	// current.ValueOf.MapIndex(indexName).String() || r.FieldVo.String()
 				r.DataStructure.UpdateTags(parent, current)
 
 				// Value
@@ -951,6 +961,9 @@ func (r *Reflect) SetPointId() EndPointPath {
 		// fmt.Printf("EPP(BEFORE): %s\n", r.DataStructure.Endpoint.String())
 		// fmt.Printf("[                 ]	EPP: %s	- FP: %s\n", r.DataStructure.Endpoint, r.FieldPath)
 		var pn string
+		if strings.Contains(r.EndPointPath().String(), "Points") || strings.Contains(r.DataStructure.Endpoint.String(), "values") {
+			fmt.Printf("")
+		}
 
 		switch {
 			case r.DataStructure.PointIdFromChild != "":

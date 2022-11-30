@@ -35,7 +35,7 @@ type ResultData []struct {
 	PsStatus      valueTypes.Integer  `json:"ps_status"`
 	PsType        valueTypes.Integer  `json:"ps_type"`
 	State         valueTypes.Bool     `json:"state"`
-	UpdateTime    valueTypes.DateTime `json:"update_time"`
+	UpdateTime    valueTypes.DateTime `json:"update_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 	PsFaultStatus valueTypes.Integer  `json:"ps_fault_status"`
 
 	ArrearsStatus  valueTypes.Integer `json:"arrears_status"`
@@ -44,7 +44,7 @@ type ResultData []struct {
 		Value valueTypes.Float  `json:"value" PointUnitFrom:"Unit"`
 	} `json:"design_capacity"`
 	DesignCapacityOriginal valueTypes.Float    `json:"design_capacity_original"`
-	DeviceStatusUpdateTime valueTypes.DateTime `json:"device_status_update_time"`
+	DeviceStatusUpdateTime valueTypes.DateTime `json:"device_status_update_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 	EquivalentHour         valueTypes.Integer  `json:"equivalent_hour"`
 	GcjLatitude            valueTypes.Float    `json:"gcj_latitude"`
 	GcjLongitude           valueTypes.Float    `json:"gcj_longitude"`
