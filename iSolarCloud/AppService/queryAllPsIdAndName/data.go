@@ -5,7 +5,6 @@ import (
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/powerStationService/queryAllPsIdAndName"
@@ -25,31 +24,20 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		PsId   valueTypes.PsId `json:"ps_id"`
-		PsName valueTypes.String  `json:"ps_name"`
-	} `json:"pageList" PointId:"page_list" PointIdFromChild:"PsId" PointIdReplace:"true" DataTable:"true"`
+		GoStruct GoStruct.GoStruct `json:"-" PointIdReplace:"true" PointIdFrom:"PsId"`
+
+		PsId     valueTypes.PsId   `json:"ps_id"`
+		PsName   valueTypes.String `json:"ps_name"`
+	} `json:"pageList" PointId:"page_list" DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	//switch {
-	//case e.Dummy == "":
-	//	break
-	//default:
-	//	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	//}
 	return err
 }
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		// pkg := reflection.GetName("", *e)
-		// dt := valueTypes.NewDateTime(valueTypes.Now)
-		// name := pkg + "." + e.Request.PsId.String()
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
-	}
-
+	entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	return entries
 }

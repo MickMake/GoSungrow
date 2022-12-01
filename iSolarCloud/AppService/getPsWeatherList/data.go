@@ -5,7 +5,6 @@ import (
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/powerStationService/getPsWeatherList"
@@ -26,46 +25,39 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	WeatherList []struct {
+		GoStruct   GoStruct.GoStruct   `json:"-" PointIdReplace:"true" PointIdFrom:"DateTime" PointNameDateFormat:"20060102" PointTimestampFrom:"DateTime"`
+
+		DateTime   valueTypes.DateTime `json:"date_time" PointNameDateFormat:"2006/01/02"`
+		PsId       valueTypes.PsId     `json:"ps_id"`
+
 		Chill      valueTypes.Float    `json:"chill"`
 		Code       valueTypes.Float    `json:"code"`
 		CodeName   valueTypes.String   `json:"code_name"`
-		DateTime   valueTypes.DateTime `json:"date_time" PointIgnore:"true" PointNameDateFormat:"2006/01/02 15:04:05"`
 		Direction  valueTypes.Float    `json:"direction"`
-		High       valueTypes.Float    `json:"high" PointUnit:"F"`
-		Highc      valueTypes.Float    `json:"highc" PointUnit:"C"`
+		HighF      valueTypes.Float    `json:"high" PointUnit:"F"`
+		HighC      valueTypes.Float    `json:"highc" PointUnit:"C"`
 		Humidity   valueTypes.Float    `json:"humidity"`
-		Low        valueTypes.Float    `json:"low" PointUnit:"F"`
-		Lowc       valueTypes.Float    `json:"lowc" PointUnit:"C"`
+		LowF       valueTypes.Float    `json:"low" PointUnit:"F"`
+		LowC       valueTypes.Float    `json:"lowc" PointUnit:"C"`
 		Pressure   valueTypes.Float    `json:"pressure" PointUnit:"hPa"`
-		PsId       valueTypes.PsId     `json:"ps_id"`
 		Rising     valueTypes.Float    `json:"rising"`
+
 		Speed      valueTypes.Float    `json:"speed"`
+
 		Sunrise    valueTypes.Time     `json:"sunrise"`
 		Sunset     valueTypes.Time     `json:"sunset"`
+
 		Visibility valueTypes.Float    `json:"visibility"`
 	} `json:"weather_list" PointIdFromChild:"DateTime" PointNameDateFormat:"20060102" DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	//switch {
-	//case e.Dummy == "":
-	//	break
-	//default:
-	//	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	//}
 	return err
 }
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		// pkg := reflection.GetName("", *e)
-		// dt := valueTypes.NewDateTime(valueTypes.Now)
-		// name := pkg + "." + e.Request.PsId.String()
-		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
-	}
-
+	entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
 	return entries
 }

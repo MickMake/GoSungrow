@@ -32,6 +32,8 @@ type DataTags struct {
 	PointValueType            string    `json:"point_value_type,omitempty"`
 
 	PointAliasTo              string    `json:"point_alias_to,omitempty"`
+	PointVirtual              bool      `json:"point_virtual,omitempty"`
+	PointVirtualShift         int64     `json:"point_virtual_shift,omitempty"`
 
 	PointTimestamp            time.Time `json:"point_timestamp,omitempty"`
 	PointTimestampFrom        string    `json:"point_timestamp_from,omitempty"`
@@ -72,6 +74,7 @@ type DataTags struct {
 	DataTableTitle            string    `json:"data_table_title,omitempty"`
 	DataTableMerge            bool      `json:"data_table_merge,omitempty"`
 	DataTableIndex            bool      `json:"data_table_show_index,omitempty"`
+	DataTableIndexNames       []string  `json:"data_table_index_names,omitempty"`
 	DataTableSortOn           string    `json:"data_table_sort_on,omitempty"`
 	DataTableIndexTitle       string    `json:"data_table_index_title,omitempty"`
 
@@ -89,11 +92,14 @@ type tagStrings struct {
 	PointArrayFlatten  string `json:"-"`
 	PointListFlatten   string `json:"-"`
 	PointVariableUnit  string `json:"-"`
+	PointVirtual       string `json:"-"`
+	PointVirtualShift  string `json:"-"`
 	DataTable          string `json:"-"`
 	DataTableChild     string `json:"-"`
 	DataTablePivot     string `json:"-"`
 	DataTableMerge     string `json:"-"`
 	DataTableIndex     string `json:"-"`
+	DataTableIndexNames     string `json:"-"`
 }
 
 //goland:noinspection GoMixedReceiverTypes
@@ -160,6 +166,7 @@ func (ds *DataTags) GetTags(fieldTo reflect.StructField, fieldVo reflect.Value) 
 			PointUnitFromParent:   fieldTo.Tag.Get(PointUnitFromParent),
 
 			PointAliasTo:          fieldTo.Tag.Get(PointAliasTo),
+			// PointVirtual:          fieldTo.Tag.Get(PointVirtual),
 
 			PointIgnoreIfNil:          fieldTo.Tag.Get(PointIgnoreIfNil),
 			PointIgnoreIfChildFromNil: fieldTo.Tag.Get(PointIgnoreIfChildFromNil),
@@ -172,6 +179,7 @@ func (ds *DataTags) GetTags(fieldTo reflect.StructField, fieldVo reflect.Value) 
 			DataTableTitle:        fieldTo.Tag.Get(DataTableTitle),
 			DataTableSortOn:       fieldTo.Tag.Get(DataTableSortOn),
 			DataTableIndexTitle:   fieldTo.Tag.Get(DataTableIndexTitle),
+			// DataTableIndexNames:   fieldTo.Tag.Get(DataTableIndexNames),
 
 			StrBool:               tagStrings{
 				Required:           fieldTo.Tag.Get("required"),
@@ -181,11 +189,14 @@ func (ds *DataTags) GetTags(fieldTo reflect.StructField, fieldVo reflect.Value) 
 				PointArrayFlatten:  fieldTo.Tag.Get(PointArrayFlatten),
 				PointListFlatten:   fieldTo.Tag.Get(PointListFlatten),
 				PointVariableUnit:  fieldTo.Tag.Get(PointVariableUnit),
+				PointVirtual:       fieldTo.Tag.Get(PointVirtual),
+				PointVirtualShift:  fieldTo.Tag.Get(PointVirtualShift),
 				DataTable:          fieldTo.Tag.Get(IsDataTable),
 				DataTableChild:     fieldTo.Tag.Get(DataTableChild),
 				DataTablePivot:     fieldTo.Tag.Get(DataTablePivot),
 				DataTableMerge:     fieldTo.Tag.Get(DataTableMerge),
 				DataTableIndex:     fieldTo.Tag.Get(DataTableIndex),
+				DataTableIndexNames: fieldTo.Tag.Get(DataTableIndexNames),
 			},
 		}
 		ret = ds
@@ -226,6 +237,20 @@ func (ds *DataTags) UpdateTags(parent *Reflect, current *Reflect) *DataTags {
 			ds.PointIdReplace = true
 		}
 
+		ds.PointVirtual = false
+		if ds.StrBool.PointVirtual == "true" {
+			ds.PointVirtual = true
+		}
+
+		ds.PointVirtualShift = 0
+		if ds.StrBool.PointVirtualShift != "" {
+			var err error
+			ds.PointVirtualShift, err = strconv.ParseInt(ds.StrBool.PointVirtualShift, 10, 64)
+			if err != nil {
+				_, _ = fmt.Fprintf(os.Stderr, "Invalid number for PointVirtualShift: %s - %s\n", ds.StrBool.PointVirtualShift, err)
+			}
+		}
+
 		ds.PointArrayFlatten = false
 		if ds.StrBool.PointArrayFlatten == "true" {
 			ds.PointArrayFlatten = true
@@ -264,6 +289,11 @@ func (ds *DataTags) UpdateTags(parent *Reflect, current *Reflect) *DataTags {
 		ds.DataTableIndex = false
 		if ds.StrBool.DataTableIndex == "true" {
 			ds.DataTableIndex = true
+		}
+
+		ds.DataTableIndexNames = []string{}
+		if ds.StrBool.DataTableIndexNames != "" {
+			ds.DataTableIndexNames = strings.Split(ds.StrBool.DataTableIndexNames, ",")
 		}
 
 		if ds.PointId == "" {
@@ -396,6 +426,9 @@ func (ds *DataTags) SetFrom(from *DataTags) error {
 				case "GoStruct.tagStrings":
 					// We're not updating this field.
 
+				case "[]string":
+					// We're not updating this field.
+
 				default:
 					_, _ = fmt.Fprintf(os.Stderr,"DataTags.SetFrom() Unknown type %s (%s) for field '%s' from '%v' to '%v'\n",
 					FieldToFrom.Type, FieldVoFrom.Kind().String(),
@@ -416,11 +449,13 @@ func (ds *DataTags) SetFrom(from *DataTags) error {
 		ds.StrBool.PointArrayFlatten = StrSet(from.StrBool.PointArrayFlatten, ds.StrBool.PointArrayFlatten)
 		ds.StrBool.PointListFlatten = StrSet(from.StrBool.PointListFlatten, ds.StrBool.PointListFlatten)
 		ds.StrBool.PointVariableUnit = StrSet(from.StrBool.PointVariableUnit, ds.StrBool.PointVariableUnit)
+		ds.StrBool.PointVirtual = StrSet(from.StrBool.PointVirtual, ds.StrBool.PointVirtual)
 		ds.StrBool.DataTable = StrSet(from.StrBool.DataTable, ds.StrBool.DataTable)
 		ds.StrBool.DataTableChild = StrSet(from.StrBool.DataTableChild, ds.StrBool.DataTableChild)
 		ds.StrBool.DataTablePivot = StrSet(from.StrBool.DataTablePivot, ds.StrBool.DataTablePivot)
 		ds.StrBool.DataTableMerge = StrSet(from.StrBool.DataTableMerge, ds.StrBool.DataTableMerge)
 		ds.StrBool.DataTableIndex = StrSet(from.StrBool.DataTableIndex, ds.StrBool.DataTableIndex)
+		ds.StrBool.DataTableIndexNames = StrSet(from.StrBool.DataTableIndexNames, ds.StrBool.DataTableIndexNames)
 		// ds.Endpoint = src.Endpoint.Copy()
 	}
 
@@ -516,6 +551,7 @@ func (r Reflect) String() string {
 		if r.DataStructure.PointArrayFlatten { ret += "PointArrayFlatten "}
 		if r.DataStructure.PointListFlatten { ret += "PointListFlatten "}
 		if r.DataStructure.PointVariableUnit { ret += "PointVariableUnit "}
+		if r.DataStructure.PointVirtual { ret += "PointVirtual "}
 		if r.DataStructure.PointIgnore { ret += "PointIgnore "}
 		if r.DataStructure.PointIgnoreZero { ret += "PointIgnoreZero "}
 	}
@@ -1163,12 +1199,28 @@ func (r *Reflect) IsPointIgnoreZero() bool {
 	return r.DataStructure.PointIgnoreZero
 }
 
+func (r *Reflect) IsPointVirtual() bool {
+	return r.DataStructure.PointVirtual
+}
+
 func (r *Reflect) IsDataTableMerge() bool {
 	return r.DataStructure.DataTableMerge
 }
 
 func (r *Reflect) IsDataTableIndex() bool {
 	return r.DataStructure.DataTableIndex
+}
+
+func (r *Reflect) GetDataTableIndexNames() []string {
+	return r.DataStructure.DataTableIndexNames
+}
+
+func (r *Reflect) SetDataTableIndexNames(args ...string) {
+	r.DataStructure.DataTableIndexNames = args
+}
+
+func (r *Reflect) SetDataTableIndexTitle(args string) {
+	r.DataStructure.DataTableIndexTitle = args
 }
 
 func (r *Reflect) CountChildren() (int, int) {
@@ -1238,16 +1290,26 @@ func (r *Reflect) SetGoStructOptions(limit int) bool {
 
 				if r.GoStructs.Parent.DataTable {
 					r.DataStructure.DataTable = false
-					r.DataStructure.DataTableChild = true
 					r.DataStructure.StrBool.DataTable = "false"
+
+					r.DataStructure.DataTableChild = true
 					r.DataStructure.StrBool.DataTableChild = "true"
+
+					r.DataStructure.DataTableMerge = false
+					r.DataStructure.StrBool.DataTableMerge = "false"
+
+					r.DataStructure.DataTablePivot = false
+					r.DataStructure.StrBool.DataTablePivot = "false"
+
+					r.DataStructure.DataTableIndex = false
+					r.DataStructure.StrBool.DataTableIndex = "false"
+
+					r.DataStructure.DataTableIndexNames = []string{}
+					r.DataStructure.StrBool.DataTableIndexNames = ""
 
 					r.DataStructure.DataTableId = ""
 					r.DataStructure.DataTableName = ""
 					r.DataStructure.DataTableTitle = ""
-					r.DataStructure.DataTableMerge = false
-					r.DataStructure.DataTablePivot = false
-					r.DataStructure.DataTableIndex = false
 					r.DataStructure.DataTableSortOn = ""
 					r.DataStructure.DataTableIndexTitle = ""
 				}
@@ -1532,6 +1594,41 @@ func (r *Reflect) SetEndPointPath(epp EndPointPath) *EndPointPath {
 
 func (r *Reflect) PointId() string {
 	return r.DataStructure.PointId
+}
+
+func (r *Reflect) PointName() string {
+	if r.DataStructure.PointName == "" {
+		return valueTypes.PointToName(r.DataStructure.PointId)
+	}
+	return r.DataStructure.PointName
+}
+
+func (r *Reflect) PointGroupName() string {
+	return r.DataStructure.PointGroupName
+}
+
+func (r *Reflect) PointUpdateFreq() string {
+	return r.DataStructure.PointUpdateFreq
+}
+
+func (r *Reflect) ValueUnit() string {
+	return r.Value.GetUnit()
+}
+
+func (r *Reflect) ValueType() string {
+	return r.Value.Type()
+}
+
+func (r *Reflect) ValueFirst() *valueTypes.UnitValue {
+	return r.Value.First()
+}
+
+func (r *Reflect) ValueLast() *valueTypes.UnitValue {
+	return r.Value.Last()
+}
+
+func (r *Reflect) ValueLength() int {
+	return r.Value.Length()
 }
 
 

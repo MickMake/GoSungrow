@@ -61,7 +61,8 @@ type SunGrowDataResponses map[string]SunGrowDataResponse
 
 func (sgd *SunGrowDataResponse) GetOutput(outputType output.OutputType, saveAsFile bool) error {
 	for range Only.Once {
-		if outputType.IsStruct() {
+		// Outputs that don't drop through.
+		if outputType.IsStruct() || outputType.IsList() || outputType.IsRaw() || outputType.IsJson() {
 			table := sgd.Data.CreateResultTable(true)
 			table.OutputType = outputType
 			table.SetSaveFile(saveAsFile)
@@ -71,48 +72,9 @@ func (sgd *SunGrowDataResponse) GetOutput(outputType output.OutputType, saveAsFi
 			break
 		}
 
-		if outputType.IsList() {
-			table := sgd.Data.CreateResultTable(true)
-			table.OutputType = outputType
-			table.SetSaveFile(saveAsFile)
-			table.AppendFilePrefix(sgd.Filename)
-			table.SetTitle(table.GetName() + " - " + sgd.Title)
-			sgd.Error = table.Output()
-			break
-		}
 
-		if outputType.IsRaw() {
-			table := sgd.Data.CreateResultTable(true)
-			table.OutputType = outputType
-			table.SetSaveFile(saveAsFile)
-			table.AppendFilePrefix(sgd.Filename)
-			table.SetTitle(table.GetName() + " - " + sgd.Title)
-			sgd.Error = table.Output()
-			break
-		}
-
-		if outputType.IsJson() {
-			table := sgd.Data.CreateResultTable(true)
-			table.OutputType = outputType
-			table.SetSaveFile(saveAsFile)
-			table.AppendFilePrefix(sgd.Filename)
-			table.SetTitle(table.GetName() + " - " + sgd.Title)
-			sgd.Error = table.Output()
-			break
-		}
-
-		if outputType.IsXLSX() {
-			table := sgd.Data.CreateResultTable(false)
-			table.OutputType = outputType
-			table.SetSaveFile(saveAsFile)
-			table.AppendFilePrefix(sgd.Filename)
-			table.SetTitle(table.GetName() + " - " + sgd.Title)
-			sgd.Error = table.Output()
-			break
-		}
-
-
-		if outputType.IsCsv() {
+		// Outputs that can drop through to DataTables.
+		if outputType.IsTable() || outputType.IsXLSX() || outputType.IsCsv() || outputType.IsXML() {
 			table := sgd.Data.CreateResultTable(false)
 			table.OutputType = outputType
 			table.SetSaveFile(saveAsFile)
@@ -124,47 +86,19 @@ func (sgd *SunGrowDataResponse) GetOutput(outputType output.OutputType, saveAsFi
 			}
 			// break
 		}
-
-		if outputType.IsXML() {
-			table := sgd.Data.CreateResultTable(false)
-			table.OutputType = outputType
-			table.SetSaveFile(saveAsFile)
-			table.AppendFilePrefix(sgd.Filename)
-			table.SetTitle(table.GetName() + " - " + sgd.Title)
-			sgd.Error = table.Output()
-			if sgd.Error != nil {
-				break
-			}
-			// break
-		}
-
-		if outputType.IsTable() {
-			table := sgd.Data.CreateResultTable(false)
-			table.OutputType = outputType
-			table.SetSaveFile(saveAsFile)
-			table.AppendFilePrefix(sgd.Filename)
-			table.SetTitle(table.GetName() + " - " + sgd.Title)
-			sgd.Error = table.Output()
-			if sgd.Error != nil {
-				break
-			}
-			// break
-		}
-
 
 		tables := sgd.Data.CreateDataTables()
 		if len(tables) == 0 {
-			fmt.Printf("No data table results for '%s'\n", sgd.Title)
 			break
 		}
 
-		for _, table2 := range tables {
+		for _, table := range tables {
 			fmt.Println()
-			table2.OutputType = outputType
-			table2.SetSaveFile(saveAsFile)
-			table2.AppendFilePrefix(sgd.Filename)
-			table2.SetTitle(table2.GetName() + " - " + sgd.Title)
-			sgd.Error = table2.Output()
+			table.OutputType = outputType
+			table.SetSaveFile(saveAsFile)
+			table.AppendFilePrefix(sgd.Filename)
+			table.SetTitle(table.GetName() + " - " + sgd.Title)
+			sgd.Error = table.Output()
 			if sgd.Error != nil {
 				break
 			}

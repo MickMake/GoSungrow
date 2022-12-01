@@ -5,7 +5,6 @@ import (
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/powerStationService/psHourPointsValue"
@@ -25,7 +24,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	GoStructParent        GoStruct.GoStructParent `json:"-" PointIdReplace:"true" DataTable:"true" DataTableIndex:"true" DataTableIndexTitle:"Hour" DataTablePivot:"true"`
+	GoStructParent        GoStruct.GoStructParent `json:"-" PointIdReplace:"true" DataTable:"true" DataTableIndex:"true" DataTableIndexTitle:"Hour"`	// DataTablePivot:"true"`
 
 	P24001List []valueTypes.Float `json:"p24001List" PointId:"p24001" PointUnitFrom:"P24001Unit"`
 	P24001Unit valueTypes.String  `json:"p24001_unit" PointIgnore:"true"`
@@ -50,13 +49,6 @@ func (e *ResultData) IsValid() error {
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		// pkg := reflection.GetName("", *e)
-		// dt := valueTypes.NewDateTime(valueTypes.Now)
-		// name := pkg + "." + e.Request.PsId.String()
-		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
-	}
-
+	entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
 	return entries
 }

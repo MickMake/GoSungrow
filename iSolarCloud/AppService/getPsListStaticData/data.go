@@ -25,7 +25,13 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		GoStruct                GoStruct.GoStruct   `json:"GoStruct" PointDeviceFrom:"PsId"`
+		GoStruct                GoStruct.GoStruct   `json:"GoStruct" PointIdFrom:"PsId" PointIdReplace:"true" PointDeviceFrom:"PsId"`
+
+		PsId                   valueTypes.PsId     `json:"ps_id"`
+		PsName                 valueTypes.String   `json:"ps_name"`
+		PsShortName            valueTypes.String   `json:"ps_short_name"`
+		PsStatus               valueTypes.Bool     `json:"ps_status"`
+		PsType                 valueTypes.Integer  `json:"ps_type"`
 
 		AreaId                 interface{}         `json:"area_id"`
 		DesignCapacity         valueTypes.Float    `json:"design_capacity" PointUnit:"W"`
@@ -40,14 +46,9 @@ type ResultData struct {
 		MapLongitude           valueTypes.Float    `json:"map_longitude"`
 		OwnerPsFaultStatus     valueTypes.Integer  `json:"owner_ps_fault_status"`
 		PsFaultStatus          valueTypes.Integer  `json:"ps_fault_status"`
-		PsId                   valueTypes.PsId     `json:"ps_id"`
-		PsName                 valueTypes.String   `json:"ps_name"`
-		PsShortName            valueTypes.String   `json:"ps_short_name"`
-		PsStatus               valueTypes.Integer  `json:"ps_status"`
-		PsType                 valueTypes.Integer  `json:"ps_type"`
 		ValidFlag              valueTypes.Bool     `json:"valid_flag"`
 		WaitAssignOrderCount   valueTypes.Integer  `json:"wait_assign_order_count"`
-	} `json:"pageList" PointId:"page_list" PointIdFromChild:"PsId" PointIdReplace:"true" DataTable:"true"`
+	} `json:"pageList" PointId:"page_list" DataTable:"true"`
 	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 }
 

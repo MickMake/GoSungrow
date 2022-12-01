@@ -46,6 +46,11 @@ const (
 	TimeLayoutSecond      = "150405"
 	TimeLayoutMinute      = "1504"
 	TimeLayoutHour        = "15"
+
+	DateTypeDay   = "1"
+	DateTypeMonth = "2"
+	DateTypeYear  = "3"
+	DateTypeTotal = "4"
 )
 
 
@@ -240,6 +245,21 @@ func (dt DateTime) Original() string {
 			ret = dt.Time.Format(DateTimeLayoutDay)
 		default:
 			ret = dt.Time.Format(DateTimeLayout)
+	}
+	return ret
+}
+
+func (dt *DateTime) GetRanges(count int, dur time.Duration, format string) []string {
+	var ret []string
+	for range Only.Once {
+		if format == "" {
+			format = DateTimeLayout
+		}
+		next := dt.Time
+		for i := 0; i < count; i++ {
+			ret = append(ret, next.Format(format))
+			next = next.Add(dur)
+		}
 	}
 	return ret
 }

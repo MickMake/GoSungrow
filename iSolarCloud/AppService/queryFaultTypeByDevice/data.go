@@ -24,12 +24,12 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent          GoStruct.GoStructParent   `json:"-" DataTable:"true"`
+	GoStructParent          GoStruct.GoStructParent   `json:"-" DataTable:"true" DataTableSortOn:"FaultTypeCode"`
 
-	DevFaultTypeCode  valueTypes.String    `json:"dev_fault_type_code"`
 	FaultTypeCode     valueTypes.Integer   `json:"fault_type_code"`
 	FaultTypeCodeList []valueTypes.Integer `json:"fault_type_code_list"`
 	FaultTypeCode2    valueTypes.Integer   `json:"faulttypecode" PointId:"fault_type_code2"`
+	DevFaultTypeCode  valueTypes.String    `json:"dev_fault_type_code"`
 	FaultValue        valueTypes.String    `json:"faultvalue" PointId:"fault_value"`
 	IsAllowOwnerView  valueTypes.Bool      `json:"is_allow_owner_view"`
 }

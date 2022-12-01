@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 	"strings"
 )
 
@@ -99,16 +99,16 @@ func (pm *PointsMap) Add(point Point) bool {
 	for range Only.Once {
 		point.Parents = ParentDevices{}
 
-		if !pm.Exists(point.Id.String()) {
-			pm.Map[point.Id.String()] = &point
+		if !pm.Exists(point.Id) {
+			pm.Map[point.Id] = &point
 			break
 		}
 
 		var ep Point
-		ep = *pm.Map[point.Id.String()]
+		ep = *pm.Map[point.Id]
 		ep.Parents = ParentDevices{}
 
-		if strings.ToLower(ep.Description) == ep.Id.String() {
+		if strings.ToLower(ep.Description) == ep.Id {
 			ep.Description = point.Description
 		}
 		if ep.Description == "" {
@@ -129,7 +129,7 @@ func (pm *PointsMap) Add(point Point) bool {
 		ep.FixUnitType()
 
 		var ep1 Point
-		ep1 = *pm.Map[point.Id.String()]
+		ep1 = *pm.Map[point.Id]
 		ep1.Parents = ParentDevices{}
 		if ep.HasNotChanged(ep1) {
 			break
@@ -141,7 +141,7 @@ func (pm *PointsMap) Add(point Point) bool {
 		// fmt.Printf("CURRENT: '%s'\n", jep)
 		// fmt.Printf("NOW:     '%s'\n", jep2)
 
-		pm.Map[ep.Id.String()] = &ep
+		pm.Map[ep.Id] = &ep
 	}
 	return ok
 }

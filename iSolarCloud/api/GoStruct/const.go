@@ -70,6 +70,10 @@ const (
 	PointAliasTo = "PointAliasTo"
 	// PointAliasFrom -  Alias this point from another point.
 	PointAliasFrom = "PointAliasFrom"
+	// PointVirtual -  Create a Virtual point alias.
+	PointVirtual = "PointVirtual"
+	// PointVirtualShift -  Create a Virtual point alias.
+	PointVirtualShift = "PointVirtualShift"
 
 
 	// PointGroupName -  Point group name.
@@ -130,6 +134,8 @@ const (
 	DataTableIndex = "DataTableIndex"
 	// DataTableIndexTitle -  Show index title on table.
 	DataTableIndexTitle = "DataTableIndexTitle"
+	// DataTableIndexNames -  Use this comma separated list of names to replace index numbers.
+	DataTableIndexNames = "DataTableIndexNames"
 	// DataTableSortOn -  Sort table using this Field.
 	DataTableSortOn = "DataTableSortOn"
 	// DataTablePivot -  Pivot the table.

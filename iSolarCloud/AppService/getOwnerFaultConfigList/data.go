@@ -3,9 +3,10 @@ package getOwnerFaultConfigList
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/faultService/getOwnerFaultConfigList"
@@ -23,34 +24,32 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
-	// Dummy valueTypes.String `json:"dummy"`
+	PageList []struct {
+		GoStruct          GoStruct.GoStruct  `json:"-" PointIdFrom:"FaultTypeId" PointIdReplace:"true"`
+
+		FaultTypeId       valueTypes.Integer `json:"fault_type_id"`
+		FaultTypeCode     valueTypes.Integer `json:"fault_type_code"`
+		FaultTypeCodeName valueTypes.String  `json:"fault_type_code_name"`
+		FaultLevel        valueTypes.Integer `json:"fault_level"`
+		FaultType         valueTypes.Integer `json:"fault_type"`
+
+		DeviceType        valueTypes.Integer `json:"device_type"`
+		DeviceTypeName    valueTypes.String  `json:"device_type_name"`
+		DevFaultTypeCode  valueTypes.String  `json:"dev_fault_type_code"`
+		NewFaultTypeCode  valueTypes.Integer `json:"new_fault_type_code"`
+
+		IsAllowOwnerView     valueTypes.Bool `json:"is_allow_owner_view"`
+		IsAllowUserAdd       valueTypes.Bool `json:"is_allow_user_add"`
+		IsSupportFaultRecord valueTypes.Bool `json:"is_support_fault_record"`
+	} `json:"pageList" PointId:"faults" DataTable:"true" DataTableSortOn:"FaultTypeId"`
+	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

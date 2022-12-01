@@ -27,30 +27,33 @@ type ResultData struct {
 	CurPage  valueTypes.Integer `json:"curPage" PointId:"cur_page"`
 	IsMore   valueTypes.Bool    `json:"isMore" PointId:"is_more"`
 	PageList []struct {
-		BatchId        valueTypes.String   `json:"batch_id"`
-		CommandStatus  valueTypes.Integer  `json:"command_status"`
-		CommandType    valueTypes.Integer  `json:"command_type"`
+		// PointIdFromChild:"TaskId" PointIdReplace:"true"
+		GoStruct       GoStruct.GoStruct   `json:"-" PointIdReplace:"true" PointIdFrom:"TaskId" PointNameDateFormat:"20060102-150405" PointTimestampFrom:"CreateTime"`
+
+		TaskId         valueTypes.Integer  `json:"task_id"`
 		CreateTime     valueTypes.DateTime `json:"create_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 		OverTime       valueTypes.DateTime `json:"over_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 		UpdateTime     valueTypes.DateTime `json:"update_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 		ExpireSecond   valueTypes.Integer  `json:"expire_second"`
+		TaskName       valueTypes.String   `json:"task_name"`
+		CommandStatus  valueTypes.Integer  `json:"command_status"`
+		CommandType    valueTypes.Integer  `json:"command_type"`
+		BatchId        valueTypes.String   `json:"batch_id"`
+		Sn             valueTypes.String   `json:"sn"`
 		DeviceCode     valueTypes.Integer  `json:"device_code"`
 		DeviceModel    valueTypes.String   `json:"device_model"`
 		DeviceModelId  valueTypes.String   `json:"device_model_id"`
 		LogType        valueTypes.Integer  `json:"log_type"`
 		LoggerCode     valueTypes.Integer  `json:"logger_code"`
 		OperateUserId  valueTypes.Integer  `json:"operate_user_id"`
-		Remark         valueTypes.String   `json:"remark"`
 		SetCancelNum   valueTypes.Bool     `json:"set_cancel_num"`
 		SetFailNum     valueTypes.Bool     `json:"set_fail_num"`
 		SetFinishNum   valueTypes.Bool     `json:"set_finish_num"`
 		SetOvertimeNum valueTypes.Bool     `json:"set_overtime_num"`
 		SetSuccessNum  valueTypes.Bool     `json:"set_success_num"`
 		SetTotalNum    valueTypes.Bool     `json:"set_total_num"`
-		Sn             valueTypes.String   `json:"sn"`
-		TaskId         valueTypes.Integer  `json:"task_id"`
-		TaskName       valueTypes.String   `json:"task_name"`
-	} `json:"pageList" PointId:"page_list" PointIdFromChild:"TaskId" PointIdReplace:"true" DataTable:"true"`
+		Remark         valueTypes.String   `json:"remark"`
+	} `json:"pageList" PointId:"page_list" DataTable:"true"`
 	RowCount   valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 	Size       valueTypes.Integer `json:"size"`
 	StartIndex valueTypes.Integer `json:"startIndex" PointId:"start_index"`

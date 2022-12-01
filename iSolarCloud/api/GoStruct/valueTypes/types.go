@@ -488,7 +488,7 @@ func AnyToUnitValue(ref interface{}, key string, unit string, typeString string,
 				// }
 				// uvs.AddString(key, unit, typeString, string(j))
 				if strings.HasPrefix(Type, "[]struct") || strings.HasPrefix(Type, "struct") {
-					re := regexp.MustCompile(`(\w+) (\w+|\w+\.\w+) .*?(;\s+|\s+})`)	// `(\w+) (\w+) ".*?";* `)
+					re := regexp.MustCompile(`(\w+) (\w+|\w+\.\w+|\[\]\w+|\[\]\w+\.\w+) .*?(;\s+|\s+})`)	// `(\w+) (\w+) ".*?";* `)
 					if re.Match([]byte(Type)) {
 						Type = re.ReplaceAllString(Type, "$2($1), ") + "}"
 					}

@@ -70,7 +70,7 @@ type ResultData struct {
 		WgsLatitude       valueTypes.Float    `json:"wgs_latitude"`
 		WgsLongitude      valueTypes.Float    `json:"wgs_longitude"`
 		ZipCode           valueTypes.String   `json:"zip_code"`
-	} `json:"powerStationMap" PointId:"power_station_map" PointIdFromChild:"PsId" PointIdReplace:"true"`
+	} `json:"powerStationMap" PointId:"power_station_map"`
 
 	InstallProviderInfo struct {
 		Installer      valueTypes.String  `json:"installer"`

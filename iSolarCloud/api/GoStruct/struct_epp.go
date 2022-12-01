@@ -65,6 +65,24 @@ func (e *EndPointPath) Last() string {
 	return e.path[l-1]
 }
 
+func (e *EndPointPath) ReplaceFirst(s string) {
+	if len(e.path) > 0 {
+		e.path[0] = s
+	}
+}
+
+func (e *EndPointPath) InsertFirst(s string) {
+	p := []string{s}
+	p = append(p, e.path...)
+	e.path = p
+}
+
+func (e *EndPointPath) ShiftLeft(s int64) {
+	if s < int64(len(e.path)) {
+		e.path = e.path[s:]
+	}
+}
+
 func (e *EndPointPath) IsZero() bool {
 	if len(e.path) == 0 {
 		return true

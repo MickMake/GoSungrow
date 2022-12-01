@@ -5,7 +5,6 @@ import (
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/powerStationService/getKpiInfo"
@@ -34,7 +33,7 @@ type ResultData struct {
 	TotalCapacity            valueTypes.UnitValue `json:"total_capcity" PointId:"total_capacity" PointUpdateFreq:"UpdateFreqTotal"`
 	TotalDesignCapacity      valueTypes.UnitValue `json:"total_design_capacity" PointUpdateFreq:"UpdateFreqTotal"`
 
-	P83024                   valueTypes.Float     `json:"p83024" PointUnit:"Wh"`
+	P83024                   valueTypes.Float     `json:"p83024" PointUnit:"Wh" PointVirtual:"true"`
 	TodayEnergy              valueTypes.UnitValue `json:"today_energy" PointUpdateFreq:"UpdateFreqTotal"`
 	MonthEnergy              valueTypes.UnitValue `json:"month_energy" PointUpdateFreq:"UpdateFreqMonth"`
 	YearEnergy               valueTypes.UnitValue `json:"year_energy" PointUpdateFreq:"UpdateFreqYear"`
@@ -55,13 +54,6 @@ func (e *ResultData) IsValid() error {
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		// pkg := reflection.GetName("", *e)
-
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
-		entries.CopyPointFromName("P83024", GoStruct.NewEndPointPath("virtual", "system"), "p83024", "")
-	}
-
+	entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	return entries
 }

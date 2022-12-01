@@ -66,7 +66,7 @@ type ReportInfo []struct {
 
 	PsId                   valueTypes.PsId    `json:"ps_id"`
 	PsName                 valueTypes.String  `json:"ps_name"`
-	PsStatus               valueTypes.Integer `json:"ps_status"`
+	PsStatus               valueTypes.Bool    `json:"ps_status"`
 	PsType                 valueTypes.Integer `json:"ps_type"`
 	PsTypeName             valueTypes.String  `json:"ps_type_name"`
 	SysScheme              valueTypes.Integer `json:"sys_scheme"`

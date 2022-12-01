@@ -36,7 +36,7 @@ func NewDataMap() DataMap {
 
 func (dm *DataMap) ProcessMap() {
 	for range Only.Once {
-		// Convert StructMap to DataMap
+		// Convert Struct.Map to DataMap
 		for _, Child := range dm.StructMap.Map {
 			if Child.IsPointIgnore() {
 				continue
@@ -54,6 +54,33 @@ func (dm *DataMap) ProcessMap() {
 				pdi = Child.DataStructure.PointDevice
 			}
 
+			dm.AddPointUnitValues(Child, pdi, when)
+		}
+
+		// Convert Struct.VirtualMap to DataMap
+		for _, Child := range dm.StructMap.VirtualMap {
+			if Child.IsPointIgnore() {
+				continue
+			}
+
+			var when valueTypes.DateTime
+			if Child.IsPointTimestampNotZero() {
+				when = valueTypes.SetDateTimeValue(Child.DataStructure.PointTimestamp)
+			} else {
+				when = valueTypes.SetDateTimeValue(dm.TimeStamp)
+			}
+
+			pdi := dm.parentDeviceId
+			if Child.DataStructure.PointDevice != "" {
+				pdi = Child.DataStructure.PointDevice
+			}
+
+			if Child.DataStructure.PointVirtualShift > 0 {
+				Child.DataStructure.Endpoint.ShiftLeft(Child.DataStructure.PointVirtualShift)
+				Child.DataStructure.Endpoint.InsertFirst("virtual")
+			} else {
+				Child.DataStructure.Endpoint.ReplaceFirst("virtual")
+			}
 			dm.AddPointUnitValues(Child, pdi, when)
 		}
 	}
@@ -116,6 +143,11 @@ func (dm *DataMap) CreateDataTables() output.Tables {
 			}
 
 			values := td.GetValues()
+			if (values == nil) || (len(values) == 0) {
+				fmt.Printf("No data table results for '%s'\n", name)
+				break
+			}
+
 			headers := td.GetHeaders()
 			table := output.NewTable(headers...)
 			for row := range values {
@@ -334,45 +366,6 @@ func (dm *DataMap) StructToDataMap(endpoint EndPoint, parentDeviceId string, nam
 			AddNil:         false,
 			AddEmpty:       false,
 		})
-
-		// // Convert to DataMap
-		// for _, Child := range dm.StructMap.Map {
-		// 	if Child.FieldName == "AllFactoryList" {
-		// 		fmt.Printf("DEBUG\n")
-		// 	}
-		// 	if Child.IsPointIgnore() {
-		// 		continue
-		// 	}
-		//
-		// 	var when valueTypes.DateTime
-		// 	if Child.IsPointTimestampNotZero() {
-		// 		when = valueTypes.SetDateTimeValue(Child.DataStructure.PointTimestamp)
-		// 	} else {
-		// 		when = valueTypes.SetDateTimeValue(timestamp)
-		// 	}
-		//
-		// 	pdi := parentDeviceId
-		// 	if Child.DataStructure.PointDevice != "" {
-		// 		pdi = Child.DataStructure.PointDevice
-		// 	}
-		//
-		// 	dm.AddPointUnitValues(Child, pdi, when)
-		// }
-		//
-		// dm.List, dm.Error = dm.CreateResultTable(endpoint, sm, true)
-		// if dm.Error != nil {
-		// 	break
-		// }
-		//
-		// dm.Table, dm.Error = dm.CreateResultTable(endpoint, sm, false)
-		// if dm.Error != nil {
-		// 	break
-		// }
-		//
-		// dm.Error = dm.CreateDataTables(sm)
-		// if dm.Error != nil {
-		// 	break
-		// }
 	}
 	return *dm
 }
@@ -478,51 +471,28 @@ func (dm *DataMap) CopyPointFromName(refEndpoint string, endpoint GoStruct.EndPo
 		}
 	}
 
-	// for range Only.Once {
-	// 	var ref *GoStruct.Reflect
-	// 	var ok bool
-	// 	for range Only.Once {
-	// 		if ref, ok = dm.StructMap.Map[refEndpoint]; ok {
-	// 			Current = *ref
-	// 			break
-	// 		}
-	//
-	// 		for key := range dm.StructMap.Map {
-	// 			if strings.HasSuffix(dm.StructMap.Map[key].FieldPath.String(), refEndpoint) {
-	// 				Current = *(dm.StructMap.Map)[key]
-	// 				ok = true
-	// 				break
-	// 			}
-	// 			if strings.HasSuffix(key, refEndpoint) {
-	// 				Current = *(dm.StructMap.Map)[key]
-	// 				ok = true
-	// 				break
-	// 			}
-	// 		}
-	// 		if ok {
-	// 			break
-	// 		}
-	//
-	// 		fmt.Printf("ERROR: Can't find point '%s'\n", refEndpoint)
-	// 	}
-	// 	if !ok {
-	// 		break
-	// 	}
-	//
-	// 	if pointId != "" {
-	// 		Current.DataStructure.PointId = pointId
-	// 	}
-	// 	if pointName != "" {
-	// 		Current.DataStructure.PointName = pointName
-	// 	}
-	// 	if !endpoint.IsZero() {
-	// 		Current.DataStructure.Endpoint.Clear()
-	// 		Current.DataStructure.Endpoint = endpoint
-	// 		Current.DataStructure.Endpoint.Append(Current.DataStructure.PointId)
-	// 	}
-	//
-	// 	dm.StructMap.Add(&Current)
-	// }
+	return Current
+}
+
+func (dm *DataMap) GetReflect(refEndpoint string) *GoStruct.Reflect {
+	var Current *GoStruct.Reflect
+	for range Only.Once {
+		if ref, ok := dm.StructMap.Map[refEndpoint]; ok {
+			Current = ref
+			break
+		}
+
+		for key := range dm.StructMap.Map {
+			if strings.HasSuffix(dm.StructMap.Map[key].FieldPath.String(), refEndpoint) {
+				Current = dm.StructMap.Map[key]
+				break
+			}
+			if strings.HasSuffix(key, refEndpoint) {
+				Current = dm.StructMap.Map[key]
+				break
+			}
+		}
+	}
 
 	return Current
 }
@@ -775,11 +745,11 @@ func CreatePoint(Current *GoStruct.Reflect, parentDeviceId string) Point {
 
 	var point Point
 	for range Only.Once {
-		pid := valueTypes.SetPointIdString(Current.PointId())
-		name := Current.DataStructure.PointName
-		if name == "" {
-			name = pid.PointToName()
-		}
+		// pid := valueTypes.SetPointIdString(parentDeviceId, Current.PointId())
+		// name := Current.DataStructure.PointName
+		// if name == "" {
+		// 	name = valueTypes.PointToName(Current.PointId())
+		// }
 
 		var parent ParentDevice
 		parent.Set(parentDeviceId)
@@ -788,12 +758,12 @@ func CreatePoint(Current *GoStruct.Reflect, parentDeviceId string) Point {
 
 		point = Point {
 			Parents:     parents,
-			Id:          pid,
-			GroupName:   Current.DataStructure.PointGroupName,
-			Description: name,
-			Unit:        Current.Value.GetUnit(),
-			UpdateFreq:  Current.DataStructure.PointUpdateFreq,
-			ValueType:   Current.Value.Type(),
+			Id:          Current.PointId(),
+			GroupName:   Current.PointGroupName(),
+			Description: Current.PointName(),
+			Unit:        Current.ValueUnit(),
+			UpdateFreq:  Current.PointUpdateFreq(),
+			ValueType:   Current.ValueType(),
 			Valid:       Current.IsOk,
 			States:      nil,
 		}

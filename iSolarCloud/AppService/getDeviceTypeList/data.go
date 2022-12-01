@@ -25,10 +25,10 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	DeviceTypeList []struct {
-		DevListOrderId valueTypes.Integer  `json:"dev_list_order_id"`
 		DeviceType     valueTypes.Integer  `json:"device_type"`
+		DevListOrderId valueTypes.Integer  `json:"dev_list_order_id"`
 		TypeName       valueTypes.String   `json:"type_name"`
-	} `json:"deviceTypeList" DataTable:"true"`
+	} `json:"deviceTypeList" DataTable:"true" DataTableSortOn:"DeviceType"`
 }
 
 func (e *ResultData) IsValid() error {

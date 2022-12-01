@@ -408,7 +408,7 @@ func (ca *Cmds) Update(endpoint string, data api.DataMap, newDay bool) error {
 
 			fullId := r.EndPoint
 			if r.Point.GroupName == "alias" {
-				fullId = mmHa.JoinStringsForId(r.Parent.Key, r.Point.Parents.Index[0], r.Point.Id.String())
+				fullId = mmHa.JoinStringsForId(r.Parent.Key, r.Point.Parents.Index[0], r.Point.Id)
 			}
 
 			re := mmHa.EntityConfig {
@@ -416,7 +416,7 @@ func (ca *Cmds) Update(endpoint string, data api.DataMap, newDay bool) error {
 				SubName:     "",
 				ParentId:    r.EndPoint,
 				ParentName:  r.Parent.Key,
-				UniqueId:    r.Point.Id.String(),
+				UniqueId:    r.Point.Id,
 				// UniqueId:    r.Id,
 				FullId:      fullId,	// string(r.FullId),	// WAS r.Point.FullId
 				// FullName:    r.Point.Name,

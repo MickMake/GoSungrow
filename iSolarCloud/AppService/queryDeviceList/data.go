@@ -76,7 +76,7 @@ type ResultData struct {
 		UnitName                valueTypes.String  `json:"unit_name" PointId:"unit_name" PointUpdateFreq:"UpdateFreqBoot"`
 		UUID                    valueTypes.Integer `json:"uuid" PointId:"uuid" PointUpdateFreq:"UpdateFreqBoot"`                       // Referenced by DeviceArea
 		UUIDIndexCode           valueTypes.String  `json:"uuid_index_code" PointId:"uuid_index_code" PointUpdateFreq:"UpdateFreqBoot"` // Referenced by DeviceArea
-	} `json:"pageList" PointId:"devices" PointIdReplace:"true"`	// PointIdFromChild:"PsKey" PointIdReplace:"true"`
+	} `json:"pageList" PointId:"devices"`
 
 	DevCountByStatusMap struct {
 		FaultCount   valueTypes.Count `json:"fault_count" PointId:"fault_count" PointUpdateFreq:"UpdateFreqTotal"`
@@ -203,39 +203,27 @@ func (e *EndPoint) GetData() api.DataMap {
 		// // Used for virtual entries.
 		// // 0 - sungrow_battery_charging_power
 		// var PVPowerToBattery
-		//
 		// // sensor.sungrow_battery_discharging_power
 		// var BatteryPowerToLoad
-		//
 		// // 0 - sensor.sungrow_total_export_active_power
 		// var PVPowerToGrid
-		//
 		// // sensor.sungrow_purchased_power
 		// var GridPowerToLoad
-		//
 		// // 0 - sensor.sungrow_daily_battery_charging_energy_from_pv
 		// var YieldBatteryCharge
 		// // var DailyBatteryChargingEnergy
-		//
 		// // sensor.sungrow_daily_battery_discharging_energy
 		// var DailyBatteryDischargingEnergy
-		//
 		// // 0 - sensor.sungrow_daily_feed_in_energy_pv
 		// var YieldFeedIn
-		//
 		// // sensor.sungrow_daily_purchased_energy
 		// var DailyPurchasedEnergy
-		//
 		// var PVPower
-		//
 		// var LoadPower
-		//
 		// var YieldSelfConsumption
 		// // var DailyFeedInEnergy
 		// var TotalPvYield
-		//
 		// var DailyTotalLoad
-		//
 		// var TotalEnergyConsumption
 
 		e.GetEnergyStorageSystem(entries)
@@ -273,8 +261,7 @@ func (e *EndPoint) GetEnergyStorageSystem(entries api.DataMap) {
 				continue
 			}
 			epp := GoStruct.NewEndPointPath("virtual", device.PsId.String(), device.PsKey.String())
-
-			// Points are in an array. So manually add virtuals instead of using the structure.
+			// Points are embedded within []PointStruct. So manually add virtuals instead of using the structure.
 
 			// BatteryChargingPower
 			batteryChargePower := entries.CopyPointFromName("p13126.value", epp, "battery_charge_power", "")
@@ -395,8 +382,8 @@ func (e *EndPoint) GetCommunicationModule(entries api.DataMap) {
 				// Only looking for a Communication Module.
 				continue
 			}
-			
 			epp := GoStruct.NewEndPointPath("virtual", device.PsId.String(), device.PsKey.String())
+			// Points are embedded within []PointStruct. So manually add virtuals instead of using the structure.
 
 			// WLAN Signal Strength
 			_ = entries.CopyPointFromName("p23014.value", epp, "wlan_signal_strength", "")
@@ -411,8 +398,8 @@ func (e *EndPoint) GetBattery(entries api.DataMap) {
 				// Only looking for a Battery.
 				continue
 			}
-
 			epp := GoStruct.NewEndPointPath("virtual", device.PsId.String(), device.PsKey.String())
+			// Points are embedded within []PointStruct. So manually add virtuals instead of using the structure.
 
 			// Battery Voltage
 			_ = entries.CopyPointFromName("p58601.value", epp, "battery_voltage", "")

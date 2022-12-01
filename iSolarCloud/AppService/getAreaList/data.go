@@ -25,20 +25,22 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
+		GoStruct          GoStruct.GoStruct    `json:"-" PointIdFrom:"OrgId" PointIdReplace:"true"`
+
+		OrgId             valueTypes.Integer   `json:"org_id"`
+		OrgName           valueTypes.String    `json:"org_name"`
+		StationCount      valueTypes.Integer   `json:"station_count"`
 		FaultStationCount valueTypes.Integer   `json:"fault_station_count"`
 		IsHaveEsPs        valueTypes.Bool      `json:"is_have_es_ps"`
 		IsLeaf            valueTypes.Bool      `json:"is_leaf"`
-		OrgId             valueTypes.Integer   `json:"org_id"`
-		OrgName           valueTypes.String    `json:"org_name"`
-		P83048            valueTypes.UnitValue `json:"p83048"`
-		P83049            valueTypes.UnitValue `json:"p83049"`
-		P83050            valueTypes.UnitValue `json:"p83050"`
-		P83051            valueTypes.UnitValue `json:"p83051"`
+		P83048            valueTypes.UnitValue `json:"p83048" PointVirtual:"true"`
+		P83049            valueTypes.UnitValue `json:"p83049" PointVirtual:"true"`
+		P83050            valueTypes.UnitValue `json:"p83050" PointVirtual:"true"`
+		P83051            valueTypes.UnitValue `json:"p83051" PointVirtual:"true"`
 		PlanMonth         valueTypes.String    `json:"plan_month"`
-		StationCount      valueTypes.Integer   `json:"station_count"`
 		TodayEnergy       valueTypes.UnitValue `json:"today_energy"`
 		TotalEnergy       valueTypes.UnitValue `json:"total_energy"`
-	} `json:"pageList" PointId:"page_list" PointIdFromChild:"OrgId" PointIdReplace:"true" DataTable:"true"`
+	} `json:"pageList" PointId:"areas" DataTable:"true"`
 	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count" PointIgnore:"true"`
 }
 

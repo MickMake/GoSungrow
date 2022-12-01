@@ -26,11 +26,18 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	PsDateRangeTotalData TotalData `json:"ps_date_range_total_data"`
-	PsTotalData          TotalData `json:"ps_total_data"`
+	PsDateRangeTotalData TotalData `json:"ps_range_totals"`
+	PsTotalData          TotalData `json:"ps_totals"`
 	ReportListData       struct {
+		Co2ReduceUnit          valueTypes.String  `json:"co2_reduce_unit" PointIgnore:"true"`
+		PowerQuantityTotalUnit valueTypes.String  `json:"power_quantity_total_unit" PointIgnore:"true"`
+		PsInstalledPowerUnit   valueTypes.String  `json:"ps_installed_power_unit" PointIgnore:"true"`
+		PsTotalCo2ReduceUnit   valueTypes.String  `json:"ps_total_co2_reduce_unit" PointIgnore:"true"`
+		PsTotalPowerUnit       valueTypes.String  `json:"ps_total_power_unit" PointIgnore:"true"`
+		RowCount               valueTypes.Count   `json:"rowCount" PointId:"row_count"`
+
 		PageList      []struct {
-			GoStruct           GoStruct.GoStruct  `json:"-" PointDeviceFrom:"PsId"`
+			GoStruct           GoStruct.GoStruct  `json:"-" PointIdFrom:"PsId" PointIdReplace:"true" PointDeviceFrom:"PsId"`
 
 			PsId               valueTypes.PsId    `json:"ps_id"`
 			PsName             valueTypes.String  `json:"ps_name"`
@@ -43,15 +50,9 @@ type ResultData struct {
 			PsTotalPower       valueTypes.Float   `json:"ps_total_power" PointUnitFromParent:"PsTotalPowerUnit" PointUpdateFreq:"UpdateFreqTotal"`
 			TotalProfit        valueTypes.Float   `json:"total_profit" PointUnitFrom:"IncomeUnitName"`
 			IncomeUnitName     valueTypes.String  `json:"income_unit_name" PointIgnore:"true"`
-			ProfitList         []Profit           `json:"profit_list" PointIdReplace:"true"`
-		} `json:"pageList" PointId:"page_list" PointIdFromChild:"PsId" PointIdReplace:"true"`
-		Co2ReduceUnit          valueTypes.String  `json:"co2_reduce_unit" PointIgnore:"true"`
-		PowerQuantityTotalUnit valueTypes.String  `json:"power_quantity_total_unit" PointIgnore:"true"`
-		PsInstalledPowerUnit   valueTypes.String  `json:"ps_installed_power_unit" PointIgnore:"true"`
-		PsTotalCo2ReduceUnit   valueTypes.String  `json:"ps_total_co2_reduce_unit" PointIgnore:"true"`
-		PsTotalPowerUnit       valueTypes.String  `json:"ps_total_power_unit" PointIgnore:"true"`
-		RowCount               valueTypes.Count   `json:"rowCount" PointId:"row_count"`
-	} `json:"report_list_data" PointId:"total_by_ps" PointIdReplace:"true"`
+			ProfitList         []Profit           `json:"profit_list" PointIdReplace:"false"`
+		} `json:"pageList" PointId:"page_list" PointIdReplace:"true"`
+	} `json:"report_list_data" PointId:"total_by_ps" PointIdReplace:"false"`
 }
 
 type TotalData struct {
@@ -66,7 +67,7 @@ type TotalData struct {
 	PowerQuantityTotalOriginalUnit valueTypes.String    `json:"power_quantity_total_original_unit" PointIgnore:"true"`
 
 	TotalProfit                    valueTypes.Float     `json:"total_profit" PointUnitFrom:"IncomeUnitName"`
-	ProfitList                     []Profit             `json:"profit_list" PointIdReplace:"true"`
+	ProfitList                     []Profit             `json:"profit_list" PointIdReplace:"false"`
 }
 
 type Profit struct {

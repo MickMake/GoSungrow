@@ -33,6 +33,7 @@ type StructMap struct {
 	Start                 *Reflect
 	Map                   map[string]*Reflect
 	TableMap              map[string]*Reflect
+	VirtualMap            map[string]*Reflect
 	_Timestamp            valueTypes.DateTime
 }
 
@@ -396,14 +397,8 @@ func (sm *StructMap) Add(Current *Reflect)  {
 			sm.PrintDebug("# Add(STILL SEARCHING): %s\n", Current)
 			break
 		}
-		// if strings.Contains(Current.FieldPath.String(), "DevTypeDefinition") {
-		// 	fmt.Sprintf("")
-		// 	sm.ScanMap(Current.CurrentReflect, Current)
-		// 	// for index, key := range Current.FieldVo.MapKeys() {
-		// 	// 	var Child Reflect
-		// 	// 	Child.SetByIndex(Current.CurrentReflect, Current, index, key)
-		// 	// }
-		// }
+
+		sm.AddVirtual(Current)
 
 		if sm.Map == nil {
 			sm.Map = make(map[string]*Reflect)
@@ -425,7 +420,7 @@ func (sm *StructMap) AddTable(Current *Reflect)  {
 		}
 
 		if sm.StructMapOptions.StartAt != "" {
-			sm.PrintDebug("# Add(STILL SEARCHING): %s\n", Current)
+			sm.PrintDebug("# AddTable(STILL SEARCHING): %s\n", Current)
 			break
 		}
 
@@ -434,11 +429,39 @@ func (sm *StructMap) AddTable(Current *Reflect)  {
 		}
 		name := Current.Name()
 		if _, ok := sm.TableMap[name]; ok {
-			sm.PrintDebug("\t- Add() Current: %s\n", Current)
+			sm.PrintDebug("\t- AddTable() Current: %s\n", Current)
 			break
 		}
 		sm.TableMap[name] = Current
-		sm.PrintDebug("\t- Add() Current: %s\n", Current)
+		sm.PrintDebug("\t- AddTable() Current: %s\n", Current)
+	}
+}
+
+func (sm *StructMap) AddVirtual(Current *Reflect)  {
+	for range Only.Once {
+		if Current.IsGoStruct() {
+			break
+		}
+
+		if sm.StructMapOptions.StartAt != "" {
+			sm.PrintDebug("# AddVirtual(STILL SEARCHING): %s\n", Current)
+			break
+		}
+
+		if !Current.DataStructure.PointVirtual {
+			break
+		}
+
+		if sm.VirtualMap == nil {
+			sm.VirtualMap = make(map[string]*Reflect)
+		}
+		name := Current.Name()
+		if _, ok := sm.VirtualMap[name]; ok {
+			sm.PrintDebug("\t- AddVirtual() Current: %s\n", Current)
+			break
+		}
+		sm.VirtualMap[name] = Current
+		sm.PrintDebug("\t- AddVirtual() Current: %s\n", Current)
 	}
 }
 
@@ -1092,7 +1115,7 @@ func (ta *StructTable) GetValues() StructValues {
 		// ta.Reflects == 1 - Single row, .
 
 		if len(ta.Reflects) == 0 {
-			fmt.Println("len(ta.Reflects) == 0")
+			// fmt.Println("len(ta.Reflects) == 0")
 			// Probs an array of values.
 			// cm := make(map[string][]valueTypes.UnitValue)
 			// var length int
@@ -1164,7 +1187,7 @@ func (ta *StructTable) GetValues() StructValues {
 
 
 		if len(ta.Reflects) == 1 {
-			// Probs an array of values.
+			// Probs an array of values - sw we want to pivot the data.
 			cm := make(map[string][]valueTypes.UnitValue)
 			var length int
 
@@ -1194,11 +1217,17 @@ func (ta *StructTable) GetValues() StructValues {
 				}
 			}
 
+			tin := ta.Current.GetDataTableIndexNames()
 			for index := 0; index < length; index++ {
 				data := make(StructValue)
 
 				if ta.ShowIndex {
-					vi := valueTypes.SetUnitValueInteger(ta.IndexTitle, "", int64(index))
+					var vi valueTypes.UnitValue
+					if len(tin) > 0 {
+						vi = valueTypes.SetUnitValueString(ta.IndexTitle, "", tin[index])
+					} else {
+						vi = valueTypes.SetUnitValueInteger(ta.IndexTitle, "", int64(index))
+					}
 					data[ta.IndexTitle] = vi
 				}
 
@@ -1245,7 +1274,8 @@ func (ta *StructTable) GetValues() StructValues {
 			// }
 
 			if ta.ShowIndex {
-				vi := valueTypes.SetUnitValueInteger(ta.IndexTitle, "", int64(rowIndex))
+				var vi valueTypes.UnitValue
+				vi = valueTypes.SetUnitValueInteger(ta.IndexTitle, "", int64(rowIndex))
 				data[ta.IndexTitle] = vi
 			}
 

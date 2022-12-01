@@ -1,8 +1,207 @@
 package api
 
 
-// From struct_data.go
+// -------------------------------------------------------------------------------- //
+// From struct_de.go
+//
+// func (de *DataEntry) FullId() string {
+// 	return de.EndPoint	// + "." + de.Point.Id.String()
+// }
+//
+// func (de *DataEntry) SetEndpoint(endpoint string, pointId string) {
+// 	de.EndPoint = endpoint + "." + pointId
+// 	de.Point.Id.SetString(pointId)
+// }
+//
+// func (de *DataEntry) SetPointId(pointId string) {
+// 	de.Point.Id.SetString(pointId)
+// }
+//
+// func (de *DataEntry) SetPointName(name string) {
+// 	if name != "" {
+// 		de.Point.SetName(name)
+// 	}
+// }
+//
+// func (de *DataEntry) MakeState(state bool) DataEntry {
+// 	var ret DataEntry
+// 	for range Only.Once {
+// 		// uv := valueTypes.SetUnitValueBool(state)
+// 		// de.Value = uv.String()
+// 		// de.ValueFloat = uv.Value()
+// 		de.Value = valueTypes.SetUnitValueBool(state)
+// 		de.Point.Unit = ""
+// 		de.Point.ValueType = "Bool"
+// 		de.Point.Valid = true
+// 		de.Valid = true
+// 		// de.EndPoint += ".state"
+// 		de.Hide = false
+// 	}
+//
+// 	return ret
+// }
+//
+// func (de *DataEntry) MakeFloat(value float64, unit string, Type string) {
+// 	for range Only.Once {
+// 		if unit == "" {
+// 			unit = de.Point.Unit
+// 		}
+// 		if Type == "" {
+// 			Type = de.Point.ValueType
+// 		}
+// 		// uv := valueTypes.SetUnitValueFloat(value, unit, Type)
+// 		// de.Value = uv.String()
+// 		// de.ValueFloat = uv.Value()
+// 		de.Value = valueTypes.SetUnitValueFloat(value, unit, Type)
+// 		de.Valid = true
+// 		de.Hide = false
+// 	}
+// }
+//
+// func (de *DataEntry) Copy() DataEntry {
+// 	var ret DataEntry
+// 	ret = *de
+// 	var point Point
+// 	point = *de.Point
+// 	ret.Point = &point
+// 	return ret
+// }
 
+
+// -------------------------------------------------------------------------------- //
+// From struct_dpe.go
+//
+// func NewDataPointEntries() DataEntries {
+// 	return DataEntries{
+// 		Entries: []DataEntry{},
+// 		// Map: &GoStruct.StructMap{},
+// 	}
+// }
+//
+// func (de *DataEntries) Hide() {
+// 	for range Only.Once {
+// 		for i := range de.Entries {
+// 			de.Entries[i].Hide = true
+// 		}
+// 	}
+// }
+//
+// func (de *DataEntries) GetEntryValue(index int) valueTypes.UnitValue {
+// 	var ret valueTypes.UnitValue
+// 	for range Only.Once {
+// 		ref := de.GetEntry(index)
+// 		if ref == nil {
+// 			break
+// 		}
+// 		ret = ref.Value
+// 	}
+// 	return ret
+// }
+//
+// func (de *DataEntries) GetFloat() float64 {
+// 	var ret float64
+// 	for range Only.Once {
+// 		ref := de.GetEntry(0)
+// 		if ref == nil {
+// 			break
+// 		}
+// 		ret = ref.Value.Value()
+// 	}
+// 	return ret
+// }
+//
+// func (de *DataEntries) MatchPointId(pointId string) bool {
+// 	var yes bool
+// 	for range Only.Once {
+// 		for _, v := range de.Entries {
+// 			if v.Point.Id.String() == pointId {
+// 				yes = true
+// 				break
+// 			}
+// 		}
+// 	}
+// 	return yes
+// }
+//
+// func (de *DataEntries) GetUnits() string {
+// 	var unit string
+// 	for range Only.Once {
+// 		for _, v := range de.Entries {
+// 			unit = v.Point.Unit
+// 			break
+// 		}
+// 	}
+// 	return unit
+// }
+//
+// func (de *DataEntries) SetUnits(units string) *DataEntries {
+// 	for range Only.Once {
+// 		for i := range de.Entries {
+// 			de.Entries[i].Point.Unit = units
+// 		}
+// 	}
+// 	return de
+// }
+//
+// func (de *DataEntries) SetGroupName(groupName string) *DataEntries {
+// 	for range Only.Once {
+// 		for i := range de.Entries {
+// 			de.Entries[i].Point.GroupName = groupName
+// 		}
+// 	}
+// 	return de
+// }
+//
+// func (de *DataEntries) SetTimestamp(timeStamp valueTypes.DateTime) *DataEntries {
+// 	for range Only.Once {
+// 		for i := range de.Entries {
+// 			// dt := valueTypes.SetDateTimeString(timeStamp)
+// 			de.Entries[i].Date = timeStamp
+// 		}
+// 	}
+// 	return de
+// }
+//
+// func (de *DataEntries) Copy() DataEntries {
+// 	var ret DataEntries
+// 	for _, d := range de.Entries {
+// 		// var point Point
+// 		// point = *d.Point
+// 		// d.Point = &point
+// 		ret.Entries = append(ret.Entries, d.Copy())
+// 	}
+// 	return ret
+// }
+//
+// func (de *DataEntries) MakeState(state bool) *DataEntries {
+// 	for i := range de.Entries {
+// 		de.Entries[i].MakeState(state)
+// 	}
+// 	return de
+// }
+//
+// func (de *DataEntries) SetFloat(value float64, unit string, Type string) *DataEntries {
+// 	for i := range de.Entries {
+// 		de.Entries[i].MakeFloat(value, unit, Type)
+// 	}
+// 	return de
+// }
+//
+// func (de *DataEntries) FloatToState(value float64) *DataEntries {
+// 	for i := range de.Entries {
+// 		if value == 0 {
+// 			de.Entries[i].MakeState(false)
+// 			break
+// 		}
+// 		de.Entries[i].MakeState(true)
+// 	}
+// 	return de
+// }
+
+
+// -------------------------------------------------------------------------------- //
+// From struct_data.go
+//
 // func (dm *DataMap) GetEntry(entry string, index int) *DataEntry {
 // 	var ret *DataEntry
 // 	for range Only.Once {

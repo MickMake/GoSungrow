@@ -5,7 +5,6 @@ import (
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/getChnnlListByPsId"
@@ -26,6 +25,8 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
+		GoStruct       GoStruct.GoStruct   `json:"-" PointIdFrom:"PsId" PointIdReplace:"true" PointIdReplace:"true"`
+
 		PsId           valueTypes.Integer  `json:"ps_id"`
 		Sn             valueTypes.String   `json:"sn"`
 		ChannelId      valueTypes.Integer  `json:"chnnl_id" PointId:"channel_id"`
@@ -39,7 +40,7 @@ type ResultData struct {
 		IsEnable       valueTypes.Bool     `json:"is_enable"`
 		IsSure         valueTypes.Bool     `json:"is_sure"`
 		ProtocolType   interface{}         `json:"protocol_type"`
-	} `json:"pageList" PointId:"page_list" PointIdFromChild:"PsId" PointIdReplace:"true" DataTable:"true"`
+	} `json:"pageList" PointId:"devices" DataTable:"true"`
 	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 }
 
@@ -50,13 +51,6 @@ func (e *ResultData) IsValid() error {
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		// pkg := reflection.GetName("", *e)
-		// dt := valueTypes.NewDateTime(valueTypes.Now)
-		// name := pkg + "." + e.Request.PsId.String()
-		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
-	}
-
+	entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.EndPointPath{})
 	return entries
 }

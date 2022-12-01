@@ -1,10 +1,10 @@
 package api
 
 import (
-	"github.com/MickMake/GoUnify/Only"
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 	"strings"
 	"time"
 )
@@ -12,7 +12,7 @@ import (
 
 type Point struct {
 	Parents     ParentDevices      `json:"parents,omitempty"`
-	Id          valueTypes.PointId `json:"id,omitempty"`
+	Id          string             `json:"id,omitempty"`
 	GroupName   string             `json:"group_name,omitempty"`
 	Description string             `json:"description,omitempty"`
 	Unit        string             `json:"unit,omitempty"`
@@ -115,7 +115,7 @@ func (p Point) IsTotal() bool {
 
 func (p *Point) SetName(name string) {
 	if name == "" {
-		name = p.Id.PointToName()
+		name = valueTypes.PointToName(p.Id)
 	}
 	p.Description = name
 }

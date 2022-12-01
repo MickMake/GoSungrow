@@ -3,8 +3,7 @@ package getCommunicationDeviceConfigInfo
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
-
-	"github.com/MickMake/GoUnify/Only"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
 )
 
@@ -12,7 +11,7 @@ const Url = "/v1/devService/getCommunicationDeviceConfigInfo"
 const Disabled = false
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -24,8 +23,19 @@ func (rd RequestData) Help() string {
 }
 
 
-type ResultData struct {
-	// Dummy valueTypes.String `json:"dummy"`
+type ResultData []struct {
+	GoStructParent         GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"TypeId"`
+	GoStruct               GoStruct.GoStruct        `json:"-" PointIdFrom:"TypeId" PointIdReplace:"false"`
+
+	TypeId                 valueTypes.Integer `json:"type_id"`
+	DeviceName             valueTypes.String  `json:"device_name"`
+	CustomTopic            valueTypes.String  `json:"custom_topic"`
+	Remark                 valueTypes.String  `json:"remark"`
+	IsNeedModbus           valueTypes.Bool    `json:"is_need_modbus"`
+	IsSupportParamSet      valueTypes.Bool    `json:"is_support_param_set"`
+	IsSupportRemoteUpgrade valueTypes.Bool    `json:"is_support_remote_upgrade"`
+	IsSupportTimezoneSet   valueTypes.Bool    `json:"is_support_timezone_set"`
+	IsThirdParty           valueTypes.Bool    `json:"is_third_party"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -33,31 +43,8 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
-	}
-
+	entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	return entries
 }

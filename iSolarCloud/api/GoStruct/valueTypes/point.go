@@ -27,13 +27,15 @@ import (
 
 
 type PsKey struct {
-	string `json:"string,omitempty"`
+	string     `json:"string,omitempty"`
 
-	deviceType string `json:"device_type,omitempty"`
-	psId       string `json:"ps_id,omitempty"`
+	PsId       string `json:"ps_id"`
+	DeviceType string `json:"device_type"`
+	DeviceCode string `json:"device_code"`
+	ChannelId  string `json:"channel_id"`
 
-	Valid   bool `json:"valid"`
-	Error  error `json:"-"`
+	Valid      bool   `json:"-"`
+	Error      error  `json:"-"`
 }
 
 // UnmarshalJSON - Convert JSON to value
@@ -101,29 +103,52 @@ func (t *PsKey) PsKey() string {
 func (t *PsKey) SetValue(value string) PsKey {
 	for range Only.Once {
 		t.string = value
-		t.deviceType = ""
-		t.psId = ""
-		t.Valid = true
+		t.DeviceType = ""
+		t.DeviceCode = ""
+		t.PsId = ""
+		t.ChannelId = ""
+		t.Valid = false
 
 		s := strings.Split(value, "_")
 		switch {
-			case len(s) == 1:
-				t.psId = s[0]
-			case len(s) >= 2:
-				t.psId = s[0]
-				t.deviceType = s[1]
+			case len(s) <= 1:
+				t.PsId = s[0]
+				t.Valid = true
+			case len(s) == 2:
+				t.PsId = s[0]
+				t.DeviceType = s[1]
+				t.Valid = true
+			case len(s) >= 3:
+				t.PsId = s[0]
+				t.DeviceType = s[1]
+				t.DeviceCode = s[2]
+				t.Valid = true
+			case len(s) >= 4:
+				t.PsId = s[0]
+				t.DeviceType = s[1]
+				t.DeviceCode = s[2]
+				t.ChannelId = s[3]
+				t.Valid = true
 		}
 	}
 
 	return *t
 }
 
-func (t *PsKey) GetDeviceType() string {
-	return t.deviceType
+func (t *PsKey) GetPsId() string {
+	return t.PsId
 }
 
-func (t *PsKey) GetPsId() string {
-	return t.psId
+func (t *PsKey) GetDeviceType() string {
+	return t.DeviceType
+}
+
+func (t *PsKey) GetDeviceCode() string {
+	return t.DeviceCode
+}
+
+func (t *PsKey) GetChannelId() string {
+	return t.ChannelId
 }
 
 func SetPsKeyString(value string) PsKey {
@@ -252,12 +277,12 @@ func SetPsIdValue(value int64) PsId {
 func SetPsIdStrings(values []string) PsIds {
 	var t PsIds
 	for range Only.Once {
-		// sgd.PsId = valueTypes.SetPsIdString(psId)
-		for _, psId := range values {
-			if psId == "" {
+		// sgd.PsId = valueTypes.SetPsIdString(PsId)
+		for _, PsId := range values {
+			if PsId == "" {
 				continue
 			}
-			t = append(t, SetPsIdString(psId))
+			t = append(t, SetPsIdString(PsId))
 		}
 	}
 	return t
@@ -266,12 +291,12 @@ func SetPsIdStrings(values []string) PsIds {
 func SetPsIdValues(values []int64) PsIds {
 	var t PsIds
 	for range Only.Once {
-		// sgd.PsId = valueTypes.SetPsIdString(psId)
-		for _, psId := range values {
-			if psId == 0 {
+		// sgd.PsId = valueTypes.SetPsIdString(PsId)
+		for _, PsId := range values {
+			if PsId == 0 {
 				continue
 			}
-			t = append(t, SetPsIdValue(psId))
+			t = append(t, SetPsIdValue(PsId))
 		}
 	}
 	return t
@@ -283,9 +308,9 @@ type PsIds []PsId
 func (t *PsIds) Strings() []string {
 	var ret []string
 	for range Only.Once {
-		// sgd.PsId = valueTypes.SetPsIdString(psId)
-		for _, psId := range *t {
-			ret = append(ret, psId.String())
+		// sgd.PsId = valueTypes.SetPsIdString(PsId)
+		for _, PsId := range *t {
+			ret = append(ret, PsId.String())
 		}
 	}
 	return ret
@@ -313,14 +338,23 @@ func (t *PointId) UnmarshalJSON(data []byte) error {
 			break
 		}
 
-		// pid := strings.TrimPrefix(string(data), "p")
-		var d string
-		t.Error = json.Unmarshal(data, &d)
-		if t.Error != nil {
+		pid := strings.TrimPrefix(string(data), "p")
+		var di int64
+		t.Error = json.Unmarshal([]byte(pid), &di)
+		if t.Error == nil {
+			ds := strconv.FormatInt(di, 10)
+			t.Set("p" + ds)
 			break
 		}
 
-		t.Set(d)
+		var ds string
+		t.Error = json.Unmarshal([]byte(pid), &ds)
+		if t.Error == nil {
+			t.Set(ds)
+			break
+		}
+
+		t.Set(string(data))
 	}
 
 	return t.Error
@@ -359,11 +393,17 @@ func (t *PointId) Full() string {
 	return ret
 }
 
-func (t *PointId) Set(value string) PointId {
+func (t *PointId) Set(values ...string) PointId {
 	for range Only.Once {
 		t.PsKey = PsKey{}
 		t.Point = ""
 		t.Valid = false
+
+		if len(values) == 0 {
+			break
+		}
+
+		value := strings.Join(values, ".")
 
 		if value == "" {
 			break
@@ -401,7 +441,6 @@ func (t *PointId) Set(value string) PointId {
 //
 // 	return *t
 // }
-
 
 // func (t *PointId) Fix() PointId {
 // 	for range Only.Once {
@@ -457,9 +496,9 @@ func PointToName(ret string) string {
 }
 
 
-func SetPointIdString(value string) PointId {
+func SetPointIdString(value ...string) PointId {
 	var t PointId
-	return t.Set(value)
+	return t.Set(value...)
 }
 
 // func SetPointIdValue(value int64) PointId {

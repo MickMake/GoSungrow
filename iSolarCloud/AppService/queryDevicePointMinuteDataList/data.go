@@ -12,6 +12,7 @@ import (
 const Url = "/v1/commonService/queryDevicePointMinuteDataList"
 const Disabled = false
 
+// ../bin/GoSungrow api raw AppService.queryDevicePointMinuteDataList '{"data_point":"p13148","data_type":"1","points":"'$(perl -e 'foreach(10000 .. 20999){print"p$_,"}')'","query_type":"1","ps_key":"1171348_14_1_2","start_time_stamp":"20221201223000","end_time_stamp":"20221201223000"}'
 type RequestData struct {
 	PsKey     valueTypes.PsKey    `json:"ps_key" required:"true"`
 	DataPoint valueTypes.String   `json:"data_point" required:"true"`

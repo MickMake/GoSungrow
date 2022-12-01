@@ -29,37 +29,36 @@ type ResultData struct {
 	Info      Common.ReportInfo `json:"info" PointArrayFlatten:"false"`
 	DataList  []DataList        `json:"dataList" PointId:"data_list" PointIdReplace:"true" DataTable:"true"`
 	Total     []DataList        `json:"total" PointId:"total" PointIdReplace:"true" DataTable:"true"`
-	// `PointIgnoreIfChildFromNil:"UpdateTime" PointIdFromChild:"DateId" PointNameDateFormat:"20060102" PointIdReplace:"false" DataTable:"true"`
 }
 
 type DataList struct {
-	GoStruct GoStruct.GoStruct `json:"-" PointIgnoreIfNil:"UpdateTime" PointIdFromChild:"DateId" PointNameDateFormat:"20060102" PointIdReplace:"false"`
+	GoStruct GoStruct.GoStruct `json:"-" PointIgnoreIfNil:"UpdateTime" PointIdFrom:"DateId" PointIdReplace:"true" PointNameDateFormat:"20060102"`
 
-	DateId     valueTypes.DateTime `json:"date_id" PointTimestampFrom:"UpdateTime" PointNameDateFormat:"20060102"`
-	PsId       valueTypes.PsId     `json:"ps_id" PointTimestampFrom:"UpdateTime"`
-	TimeStamp  valueTypes.Generic  `json:"time_stamp" PointTimestampFrom:"UpdateTime"` // Sad that this alternates between string and valueTypes.Integer.
+	DateId     valueTypes.DateTime `json:"date_id"     PointTimestampFrom:"UpdateTime" PointNameDateFormat:"20060102"`
+	PsId       valueTypes.PsId     `json:"ps_id"       PointTimestampFrom:"UpdateTime"`
+	TimeStamp  valueTypes.Generic  `json:"time_stamp"  PointTimestampFrom:"UpdateTime"` // Sad that this alternates between string and valueTypes.Integer.
 	UpdateTime valueTypes.DateTime `json:"update_time" PointTimestampFrom:"UpdateTime" PointNameDateFormat:"2006/01/02 15:04:05"`
 	DeviceName interface{}         `json:"device_name" PointTimestampFrom:"UpdateTime"`
-	UUID       interface{}         `json:"uuid" PointTimestampFrom:"UpdateTime"`
-	Co2Reduce  valueTypes.Float    `json:"co2_reduce" PointTimestampFrom:"UpdateTime"`
+	UUID       interface{}         `json:"uuid"        PointTimestampFrom:"UpdateTime"`
+	Co2Reduce  valueTypes.Float    `json:"co2_reduce"  PointTimestampFrom:"UpdateTime"`
 
-	CitySubsidyCharge                 valueTypes.Float  `json:"city_subsidy_charge" PointTimestampFrom:"UpdateTime" PointUnitFrom:"CitySubsidyChargeOriginalUnit"`
-	CitySubsidyChargeOriginalUnit     valueTypes.String `json:"city_subsidy_charge_original_unit" PointIgnore:"true"`
-	CitySubsidyChargeTran             valueTypes.Float  `json:"city_subsidy_charge_tran" PointTimestampFrom:"UpdateTime" PointUnitFrom:"CitySubsidyChargeUnit" PointIgnore:"true"`
-	CitySubsidyChargeUnit             valueTypes.String `json:"city_subsidy_charge_unit" PointIgnore:"true"`
-	CountrySubsidyCharge              valueTypes.Float  `json:"country_subsidy_charge" PointTimestampFrom:"UpdateTime" PointUnitFrom:"CountrySubsidyChargeOriginalUnit"`
+	CitySubsidyCharge                 valueTypes.Float  `json:"city_subsidy_charge"                  PointTimestampFrom:"UpdateTime" PointUnitFrom:"CitySubsidyChargeOriginalUnit"`
+	CitySubsidyChargeOriginalUnit     valueTypes.String `json:"city_subsidy_charge_original_unit"    PointIgnore:"true"`
+	CitySubsidyChargeTran             valueTypes.Float  `json:"city_subsidy_charge_tran"             PointTimestampFrom:"UpdateTime" PointUnitFrom:"CitySubsidyChargeUnit" PointIgnore:"true"`
+	CitySubsidyChargeUnit             valueTypes.String `json:"city_subsidy_charge_unit"             PointIgnore:"true"`
+	CountrySubsidyCharge              valueTypes.Float  `json:"country_subsidy_charge"               PointTimestampFrom:"UpdateTime" PointUnitFrom:"CountrySubsidyChargeOriginalUnit"`
 	CountrySubsidyChargeOriginalUnit  valueTypes.String `json:"country_subsidy_charge_original_unit" PointIgnore:"true"`
-	CountrySubsidyChargeTran          valueTypes.Float  `json:"country_subsidy_charge_tran" PointTimestampFrom:"UpdateTime" PointUnitFrom:"CountrySubsidyChargeUnit" PointIgnore:"true"`
-	CountrySubsidyChargeUnit          valueTypes.String `json:"country_subsidy_charge_unit" PointIgnore:"true"`
-	CountySubsidyCharge               valueTypes.Float  `json:"county_subsidy_charge" PointTimestampFrom:"UpdateTime" PointUnitFrom:"CountySubsidyChargeOriginalUnit"`
-	CountySubsidyChargeOriginalUnit   valueTypes.String `json:"county_subsidy_charge_original_unit" PointIgnore:"true"`
-	CountySubsidyChargeTran           valueTypes.Float  `json:"county_subsidy_charge_tran" PointTimestampFrom:"UpdateTime" PointUnitFrom:"CountySubsidyChargeUnit" PointIgnore:"true"`
-	CountySubsidyChargeUnit           valueTypes.String `json:"county_subsidy_charge_unit" PointIgnore:"true"`
-	CuspCharge                        valueTypes.Float  `json:"cusp_charge" PointTimestampFrom:"UpdateTime" PointUnitFrom:"CuspChargeOriginalUnit"`
-	CuspChargeOriginalUnit            valueTypes.String `json:"cusp_charge_original_unit" PointIgnore:"true"`
-	CuspChargeTran                    valueTypes.Float  `json:"cusp_charge_tran" PointTimestampFrom:"UpdateTime" PointUnitFrom:"CuspChargeUnit" PointIgnore:"true"`
-	CuspChargeUnit                    valueTypes.String `json:"cusp_charge_unit" PointIgnore:"true"`
-	FlatCharge                        valueTypes.Float  `json:"flat_charge" PointTimestampFrom:"UpdateTime" PointUnitFrom:"FlatChargeOriginalUnit"`
+	CountrySubsidyChargeTran          valueTypes.Float  `json:"country_subsidy_charge_tran"          PointTimestampFrom:"UpdateTime" PointUnitFrom:"CountrySubsidyChargeUnit" PointIgnore:"true"`
+	CountrySubsidyChargeUnit          valueTypes.String `json:"country_subsidy_charge_unit"          PointIgnore:"true"`
+	CountySubsidyCharge               valueTypes.Float  `json:"county_subsidy_charge"                PointTimestampFrom:"UpdateTime" PointUnitFrom:"CountySubsidyChargeOriginalUnit"`
+	CountySubsidyChargeOriginalUnit   valueTypes.String `json:"county_subsidy_charge_original_unit"  PointIgnore:"true"`
+	CountySubsidyChargeTran           valueTypes.Float  `json:"county_subsidy_charge_tran"           PointTimestampFrom:"UpdateTime" PointUnitFrom:"CountySubsidyChargeUnit" PointIgnore:"true"`
+	CountySubsidyChargeUnit           valueTypes.String `json:"county_subsidy_charge_unit"           PointIgnore:"true"`
+	CuspCharge                        valueTypes.Float  `json:"cusp_charge"                          PointTimestampFrom:"UpdateTime" PointUnitFrom:"CuspChargeOriginalUnit"`
+	CuspChargeOriginalUnit            valueTypes.String `json:"cusp_charge_original_unit"            PointIgnore:"true"`
+	CuspChargeTran                    valueTypes.Float  `json:"cusp_charge_tran"                     PointTimestampFrom:"UpdateTime" PointUnitFrom:"CuspChargeUnit" PointIgnore:"true"`
+	CuspChargeUnit                    valueTypes.String `json:"cusp_charge_unit"                     PointIgnore:"true"`
+	FlatCharge                        valueTypes.Float  `json:"flat_charge"         PointTimestampFrom:"UpdateTime" PointUnitFrom:"FlatChargeOriginalUnit"`
 	FlatChargeOriginalUnit            valueTypes.String `json:"flat_charge_original_unit" PointIgnore:"true"`
 	FlatChargeTran                    valueTypes.Float  `json:"flat_charge_tran" PointTimestampFrom:"UpdateTime" PointUnitFrom:"FlatChargeUnit"`
 	FlatChargeUnit                    valueTypes.String `json:"flat_charge_unit" PointIgnore:"true"`

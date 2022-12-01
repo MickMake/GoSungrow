@@ -5,7 +5,6 @@ import (
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 )
 
 
@@ -27,20 +26,22 @@ func (rd RequestData) Help() string {
 
 
 type ResultData struct {
-	AreaForcastList []struct {
-		Chill             valueTypes.Float   `json:"chill"`
+	AreaForecastList []struct {
+		GoStruct          GoStruct.GoStruct   `json:"-" PointIdReplace:"true" PointIdFrom:"DateTime" PointNameDateFormat:"20060102" PointTimestampFrom:"DateTime"`
+
+		DateTime          valueTypes.DateTime `json:"date_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+
 		City              valueTypes.String   `json:"city"`
+		Chill             valueTypes.Float    `json:"chill"`
 		Code              valueTypes.Integer  `json:"code"`
 		CodeName          valueTypes.String   `json:"code_name"`
-		DateTime          valueTypes.DateTime `json:"date_time" PointIgnore:"true" PointNameDateFormat:"2006/01/02 15:04:05"`
 		Direction         valueTypes.Float    `json:"direction"`
-		High              valueTypes.Float    `json:"high" PointUnit:"F"`
-		Highc             valueTypes.Float    `json:"highc" PointUnit:"C"`
+		HighF             valueTypes.Float    `json:"high" PointUnit:"F"`
+		HighC             valueTypes.Float    `json:"highc" PointUnit:"C"`
 		Humidity          valueTypes.Float    `json:"humidity"`
-		Low               valueTypes.Float    `json:"low PointUnit:"F""`
-		Lowc              valueTypes.Float    `json:"lowc" PointUnit:"C"`
+		LowF              valueTypes.Float    `json:"low" PointUnit:"F"`
+		LowC              valueTypes.Float    `json:"lowc" PointUnit:"C"`
 		Pressure          valueTypes.Float    `json:"pressure" PointUnit:"hPa"`
-		PsKnowledge       valueTypes.String   `json:"ps_knowledge"`
 		Rising            valueTypes.Bool     `json:"rising"`
 
 		Speed             valueTypes.Float    `json:"speed" PointUnitFrom:"SpeedUnit"`
@@ -54,36 +55,22 @@ type ResultData struct {
 		Visibility        valueTypes.Float    `json:"visibility"`
 		WeatherDesc       valueTypes.String   `json:"weather_desc"`
 		WeatherURL        valueTypes.String   `json:"weather_url"`
-	} `json:"areaForcastList" PointIdFromChild:"DateTime" PointNameDateFormat:"20060102" DataTable:"true"`
+		PsKnowledge       valueTypes.String   `json:"ps_knowledge"`
+	} `json:"areaForcastList" PointId:"area_forcast_list" DataTable:"true"`
 	StationsCityCode []struct {
-		City   valueTypes.String  `json:"city"`
 		PsId   valueTypes.PsId `json:"ps_id"`
 		PsName valueTypes.String  `json:"ps_name"`
-	} `json:"stationsCityCode" DataTable:"true"`
+		City   valueTypes.String  `json:"city"`
+	} `json:"stationsCityCode" PointId:"stations_city_code" DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	// switch {
-	// case e.Dummy == "":
-	// 	break
-	// default:
-	// 	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	// }
 	return err
 }
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		// pkg := reflection.GetName("", *e)
-		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
-
-		// for _, v := range e.Response.ResultData.AreaForcastList {
-		// 	entries.StructToDataMap(v, api.JoinWithDots(0, valueTypes.DateTimeLayoutDay, pkg, v.DateTime), e.Request.PsId.String(), valueTypes.NewDateTime(""))
-		// }
-	}
-
+	entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
 	return entries
 }
