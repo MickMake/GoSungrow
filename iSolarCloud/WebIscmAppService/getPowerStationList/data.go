@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/powerStationService/getPowerStationList"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getPowerStationList"
 
 type RequestData struct {
 }

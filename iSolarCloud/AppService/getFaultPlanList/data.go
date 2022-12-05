@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/getFaultPlanList"
 const Disabled = false
+const EndPointName = "AppService.getFaultPlanList"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

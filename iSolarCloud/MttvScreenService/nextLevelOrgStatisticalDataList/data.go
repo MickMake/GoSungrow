@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/orgService/nextLevelOrgStatisticalDataList"
 const Disabled = false
+const EndPointName = "MttvScreenService.nextLevelOrgStatisticalDataList"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

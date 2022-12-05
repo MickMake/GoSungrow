@@ -9,9 +9,10 @@ import (
 
 const Url = "/v1/commonService/getEncryptPublicKey"
 const Disabled = false
+const EndPointName = "AppService.getEncryptPublicKey"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

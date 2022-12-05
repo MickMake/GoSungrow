@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/queryPsCompensationRecordList"
 const Disabled = false
+const EndPointName = "AppService.queryPsCompensationRecordList"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

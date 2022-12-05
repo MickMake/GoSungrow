@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getDeviceFactoryListByIds"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getDeviceFactoryListByIds"
 
 type RequestData struct {
 }

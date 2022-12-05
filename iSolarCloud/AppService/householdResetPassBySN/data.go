@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/householdResetPassBySN"
 const Disabled = false
+const EndPointName = "AppService.householdResetPassBySN"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

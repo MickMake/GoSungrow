@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/commonService/deleteRegularlyConnectionInfo"
 const Disabled = false
+const EndPointName = "AppService.deleteRegularlyConnectionInfo"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

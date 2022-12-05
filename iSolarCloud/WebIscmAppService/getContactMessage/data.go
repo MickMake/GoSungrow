@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/powerStationService/getContactMessage"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getContactMessage"
 
 type RequestData struct {
 	PsId2       valueTypes.PsId     `json:"psId" require:"true"`

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/updateDataCurveTemplate"
 const Disabled = false
+const EndPointName = "AppService.updateTemplate"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

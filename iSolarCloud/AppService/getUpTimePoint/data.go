@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/getUpTimePoint"
 const Disabled = false
+const EndPointName = "AppService.getUpTimePoint"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

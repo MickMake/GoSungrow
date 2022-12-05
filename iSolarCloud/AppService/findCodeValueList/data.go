@@ -11,6 +11,7 @@ import (
 
 const Url = "/v1/commonService/findCodeValueList"
 const Disabled = false
+const EndPointName = "AppService.findCodeValueList"
 
 type RequestData struct {
 	CodeType valueTypes.String `json:"code_type" required:"true"`

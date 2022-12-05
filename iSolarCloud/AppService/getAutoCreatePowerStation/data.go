@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/getAutoCreatePowerStation"
 const Disabled = false
+const EndPointName = "AppService.getAutoCreatePowerStation"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

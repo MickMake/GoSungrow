@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/powerStationService/queryBatchCreatePsTaskList"
 const Disabled = false
+const EndPointName = "AppService.queryBatchCreatePsTaskList"
 
 type RequestData struct {
 }

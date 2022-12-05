@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/commonService/getNeedOpAsynOpRecordList"
 const Disabled = false
+const EndPointName = "AppService.getNeedOpAsynOpRecordList"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

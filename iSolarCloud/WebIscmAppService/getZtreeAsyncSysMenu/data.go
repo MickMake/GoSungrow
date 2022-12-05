@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/getZtreeAsyncSysMenu"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getZtreeAsyncSysMenu"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/devService/getPowerDeviceSetTaskList"
 const Disabled = false
+const EndPointName = "AppService.getPowerDeviceSetTaskList"
 
 type RequestData struct {
 	Size    valueTypes.Integer `json:"size" required:"true"`

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/getOperateBillFileId"
 const Disabled = false
+const EndPointName = "AppService.getOperateBillFileId"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

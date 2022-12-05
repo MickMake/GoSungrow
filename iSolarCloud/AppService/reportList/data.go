@@ -9,10 +9,18 @@ import (
 
 const Url = "/v1/powerStationService/reportList"
 const Disabled = false
+const EndPointName = "AppService.reportList"
+
+const (
+	Day = 1
+	Month = 2
+	Year = 3
+	Total = 4
+)
 
 type RequestData struct {
-	PsId       valueTypes.PsId   `json:"ps_id" required:"true"`
-	ReportType valueTypes.String `json:"report_type" required:"true"`
+	PsId       valueTypes.PsId    `json:"ps_id" required:"true"`
+	ReportType valueTypes.Integer `json:"report_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

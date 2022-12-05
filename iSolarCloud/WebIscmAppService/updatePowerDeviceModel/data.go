@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/updatePowerDeviceModel"
 const Disabled = false
+const EndPointName = "WebIscmAppService.updatePowerDeviceModel"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

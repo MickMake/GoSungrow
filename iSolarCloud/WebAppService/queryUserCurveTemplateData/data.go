@@ -12,6 +12,7 @@ import (
 
 const Url = "/v1/devService/queryUserCurveTemplateData"
 const Disabled = false
+const EndPointName = "WebAppService.queryUserCurveTemplateData"
 
 
 // {"template_id":"","date_type":"","start_time":"","end_time":""}
@@ -34,7 +35,7 @@ func (rd RequestData) Help() string {
 }
 
 
-// ResultData -> PointsData -> []dDevices -> []Points
+// ResultData (struct) -> PointsData(struct) -> Devices(map[string]DeviceData) -> Points(map[string]Point)
 type ResultData struct {
 	CreateTime   valueTypes.DateTime `json:"create_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 	OpenTime     valueTypes.DateTime `json:"open_time" PointNameDateFormat:"2006/01/02 15:04:05"`
@@ -53,6 +54,8 @@ type PointsData struct {
 	Devices map[string]DeviceData `json:"devices" PointIdReplace:"true"`	// PointIdFromChild:"DateId" PointIdReplace:"true"`
 	Order   valueTypes.String  `json:"order" PointSplitOn:"," PointValueReplace:"&" PointValueReplaceWith:".p"`
 }
+
+type Devices map[string]DeviceData
 
 func (p *PointsData) UnmarshalJSON(data []byte) error {
 	var err error
@@ -186,6 +189,32 @@ type Point struct {
 	} `json:"data_list" PointArrayFlatten:"false"`
 }
 
+func (p *Point) UnmarshalJSON(data []byte) error {
+	var err error
+
+	for range Only.Once {
+		if len(data) == 0 {
+			break
+		}
+		type decode Point
+		var dd decode
+
+		// Store DeviceData.Points
+		_ = json.Unmarshal(data, &dd)
+		if err != nil {
+			fmt.Printf("queryUserCurveTemplateData[Point] - err:%s data: %s\n", err, data)
+			// break
+		}
+
+		dd.PointId.PsKey = dd.PsKey
+
+		*p = Point(dd)
+		err = nil
+	}
+
+	return err
+}
+
 func (e *ResultData) IsValid() error {
 	var err error
 	return err
@@ -193,10 +222,6 @@ func (e *ResultData) IsValid() error {
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		entries.StructToDataMap(*e, e.Request.TemplateId.String(), GoStruct.NewEndPointPath(e.Request.TemplateId.String()))
-	}
-
+	entries.StructToDataMap(*e, e.Request.TemplateId.String(), GoStruct.NewEndPointPath(e.Request.TemplateId.String()))
 	return entries
 }

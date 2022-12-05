@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/getAllPsFaultCountByUserId"
 const Disabled = false
+const EndPointName = "WebAppService.getAllPsFaultCountByUserId"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

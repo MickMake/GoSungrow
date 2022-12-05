@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/powerStationService/getReportData"
 const Disabled = false
+const EndPointName = "AppService.getReportData"
 
 type RequestData struct {
 	PsId       valueTypes.PsId    `json:"ps_id" required:"true"`

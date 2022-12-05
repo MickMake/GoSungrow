@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getDeviceUuid"
 const Disabled = false
+const EndPointName = "WebAppService.getDeviceUuid"
 
 type RequestData struct {
 	PsKey valueTypes.PsKey `json:"ps_key" required:"true"`

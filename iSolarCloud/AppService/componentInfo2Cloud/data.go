@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/componentInfo2Cloud"
 const Disabled = false
+const EndPointName = "AppService.componentInfo2Cloud"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

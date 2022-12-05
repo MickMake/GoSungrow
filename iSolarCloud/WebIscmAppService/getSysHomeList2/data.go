@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/userService/getSysHomeList2"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getSysHomeList2"
 
 type RequestData struct {
 	UserId valueTypes.String `json:"userId" required:"true"`

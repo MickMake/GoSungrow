@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/userService/getUserMenuLs"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getUserMenuLs"
 
 type RequestData struct {
 	UserId valueTypes.String `json:"userId" required:"true"`

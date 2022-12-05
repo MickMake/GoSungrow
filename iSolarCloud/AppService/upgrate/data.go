@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/upgrade"
 const Disabled = false
+const EndPointName = "AppService.upgrate"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

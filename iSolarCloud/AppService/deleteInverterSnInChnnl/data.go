@@ -10,9 +10,10 @@ import (
 
 const Url = "/devDataHandleService/deleteInverterSnInChnnl"
 const Disabled = false
+const EndPointName = "AppService.deleteInverterSnInChnnl"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

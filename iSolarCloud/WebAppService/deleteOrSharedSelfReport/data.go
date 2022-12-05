@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/reportService/deleteOrSharedSelfReport"
 const Disabled = false
+const EndPointName = "WebAppService.deleteOrSharedSelfReport"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/orgService/changeHouseholdUser2Installer"
 const Disabled = false
+const EndPointName = "AppService.changeHouseholdUser2Installer"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

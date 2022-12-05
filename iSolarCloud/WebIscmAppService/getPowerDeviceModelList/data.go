@@ -10,10 +10,11 @@ import (
 
 const Url = "/v1/devService/getPowerDeviceModelList"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getPowerDeviceModelList"
 // ./gojson.sh WebIscmAppService.getPowerDeviceModelList '{"device_type":"44"}'
 
 type RequestData struct {
-	DeviceType valueTypes.String `json:"device_type" required:"true"`
+	DeviceType valueTypes.Integer `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

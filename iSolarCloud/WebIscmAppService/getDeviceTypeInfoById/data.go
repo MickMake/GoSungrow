@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getDeviceTypeInfoById"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getDeviceTypeInfoById"
 
 type RequestData struct {
 	CodeType       valueTypes.String `json:"code_type" required:"true"`

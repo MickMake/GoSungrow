@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getPowerDeviceFactoryListCount"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getPowerDeviceFactoryListCount"
 
 type RequestData struct {
 }

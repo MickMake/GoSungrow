@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/otherService/addSysOrgNew"
 const Disabled = false
+const EndPointName = "AppService.addSysOrgNew"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

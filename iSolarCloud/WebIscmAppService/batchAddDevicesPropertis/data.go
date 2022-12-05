@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/batchAddDevicesPropertis"
 const Disabled = false
+const EndPointName = "WebIscmAppService.batchAddDevicesPropertis"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

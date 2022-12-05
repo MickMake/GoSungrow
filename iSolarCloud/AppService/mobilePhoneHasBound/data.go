@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/mobilePhoneHasBound"
 const Disabled = false
+const EndPointName = "AppService.mobilePhoneHasBound"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

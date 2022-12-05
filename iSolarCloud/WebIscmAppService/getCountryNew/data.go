@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/commonService/getCountryNew"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getCountryNew"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

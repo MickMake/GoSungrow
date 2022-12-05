@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/checkIsIvScan"
 const Disabled = false
+const EndPointName = "AppService.checkIsIvScan"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

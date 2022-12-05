@@ -776,10 +776,6 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 		}
 		r.Valid = true
 
-
-
-
-
 		switch current.TypeOf.Kind() {
 			case reflect.Struct:
 				r.FieldTo = current.TypeOf.Field(index)

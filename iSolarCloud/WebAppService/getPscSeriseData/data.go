@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/getPscSeriseData"
 const Disabled = false
+const EndPointName = "WebAppService.getPscSeriseData"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

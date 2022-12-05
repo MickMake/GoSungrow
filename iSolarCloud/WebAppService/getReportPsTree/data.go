@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/reportService/getReportPsTree"
 const Disabled = false
+const EndPointName = "WebAppService.getReportPsTree"
 
 type RequestData struct {
-	DeviceType valueTypes.String `json:"device_type" required:"true"`
+	DeviceType valueTypes.Integer `json:"device_type" required:"true"`
 	PsId       valueTypes.PsId   `json:"ps_id" required:"true"`
 }
 

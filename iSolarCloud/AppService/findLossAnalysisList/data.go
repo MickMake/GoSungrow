@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/findLossAnalysisList"
 const Disabled = false
+const EndPointName = "AppService.findLossAnalysisList"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -12,6 +12,7 @@ import (
 
 const Url = "/v1/powerStationService/getHouseholdStoragePsReport"
 const Disabled = false
+const EndPointName = "AppService.getHouseholdStoragePsReport"
 
 type RequestData struct {
 	DateId   valueTypes.DateTime `json:"date_id" required:"true"`

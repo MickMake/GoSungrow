@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/reportService/queryReportListForManagementPage"
 const Disabled = false
+const EndPointName = "AppService.queryReportListForManagementPage"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

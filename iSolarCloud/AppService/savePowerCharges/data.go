@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/savePowerCharges"
 const Disabled = false
+const EndPointName = "AppService.savePowerCharges"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/messageService/cancelDeliverMail"
 const Disabled = false
+const EndPointName = "AppService.cancelDeliverMail"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

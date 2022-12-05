@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/secondTypeTicketFlowImplementStep"
 const Disabled = false
+const EndPointName = "WebAppService.secondTypeTicketFlowImplementStep"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

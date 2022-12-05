@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/getInverteTableListCount"
 const Disabled = false
+const EndPointName = "WebAppService.getInverteTableListCount"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

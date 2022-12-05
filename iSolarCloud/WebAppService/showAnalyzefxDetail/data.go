@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/reportService/showAnalyzefxDetail"
 const Disabled = false
+const EndPointName = "WebAppService.showAnalyzefxDetail"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

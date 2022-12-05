@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/otherService/deleteOnDutyInfo"
 const Disabled = false
+const EndPointName = "AppService.deleteOnDutyInfo"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

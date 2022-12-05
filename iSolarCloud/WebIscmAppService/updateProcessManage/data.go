@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/updateProcessManage"
 const Disabled = false
+const EndPointName = "WebIscmAppService.updateProcessManage"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

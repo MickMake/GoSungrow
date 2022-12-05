@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/reportService/getPsReport"
 const Disabled = false
+const EndPointName = "AppService.getPsReport"
 
 type RequestData struct {
 	ReportType valueTypes.Integer `json:"report_type" required:"true"`
@@ -37,7 +38,8 @@ type ResultData struct {
 		RowCount               valueTypes.Count   `json:"rowCount" PointId:"row_count"`
 
 		PageList      []struct {
-			GoStruct           GoStruct.GoStruct  `json:"-" PointIdFrom:"PsId" PointIdReplace:"true" PointDeviceFrom:"PsId"`
+			GoStruct.GoStructParent  `json:"-" PointIdFromChild:"PsId" PointIdReplace:"true" PointDeviceFrom:"PsId"`
+			// GoStruct           GoStruct.GoStruct  `json:"-" PointIdFrom:"PsId" PointIdReplace:"true" PointDeviceFrom:"PsId"`
 
 			PsId               valueTypes.PsId    `json:"ps_id"`
 			PsName             valueTypes.String  `json:"ps_name"`

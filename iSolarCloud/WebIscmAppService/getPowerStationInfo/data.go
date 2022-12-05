@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/powerStationService/getPowerStationInfoForBackSys"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getPowerStationInfo"
 
 type RequestData struct {
 	// @TODO - Fixup this up for iSolarCloud/data_request.go

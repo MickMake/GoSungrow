@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/userService/getSystemRoleInfo"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getSystemRoleInfo"
 
 type RequestData struct {
 }

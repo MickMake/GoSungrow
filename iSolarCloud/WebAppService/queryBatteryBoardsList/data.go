@@ -11,12 +11,13 @@ import (
 
 const Url = "/v1/devService/queryBatteryBoardsList"
 const Disabled = false
+const EndPointName = "WebAppService.queryBatteryBoardsList"
 
 type RequestData struct {
 	PsId       valueTypes.PsId   `json:"ps_id" required:"true"`
-	DeviceType valueTypes.String `json:"device_type" required:"true"`
+	DeviceType valueTypes.Integer `json:"device_type" required:"true"`
 	DeviceSn   valueTypes.String `json:"device_sn,omitempty"`
-	Uuid       valueTypes.String `json:"uuid,omitempty"`
+	Uuid       valueTypes.Integer `json:"uuid,omitempty"`
 }
 
 func (rd RequestData) IsValid() error {

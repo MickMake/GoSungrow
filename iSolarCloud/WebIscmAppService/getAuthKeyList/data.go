@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getAuthKeyList"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getAuthKeyList"
 
 type RequestData struct {
 	PsId valueTypes.PsId `json:"ps_id" required:"true"`

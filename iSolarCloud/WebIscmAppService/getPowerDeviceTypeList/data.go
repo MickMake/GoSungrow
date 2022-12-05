@@ -11,6 +11,7 @@ import (
 
 const Url = "/v1/devService/getPowerDeviceTypeList"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getPowerDeviceTypeList"
 
 type RequestData struct {
 }

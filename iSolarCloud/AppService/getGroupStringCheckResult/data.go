@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/getGroupStringCheckResult"
 const Disabled = false
+const EndPointName = "AppService.getGroupStringCheckResult"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

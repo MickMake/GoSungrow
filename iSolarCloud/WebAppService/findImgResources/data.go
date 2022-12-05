@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/findImgResources"
 const Disabled = false
+const EndPointName = "WebAppService.findImgResources"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

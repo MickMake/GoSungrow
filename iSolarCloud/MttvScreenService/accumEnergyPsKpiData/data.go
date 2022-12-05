@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/accumEnergyPsKpiData"
 const Disabled = false
+const EndPointName = "MttvScreenService.accumEnergyPsKpiData"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

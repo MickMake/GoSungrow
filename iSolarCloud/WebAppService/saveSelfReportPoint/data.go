@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/reportService/saveSelfReportPoint"
 const Disabled = false
+const EndPointName = "WebAppService.saveSelfReportPoint"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/copeOperateTicket"
 const Disabled = false
+const EndPointName = "WebAppService.copeOperateTicket"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

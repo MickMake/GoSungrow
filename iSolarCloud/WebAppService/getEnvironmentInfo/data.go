@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/getEnvironmentInfo"
 const Disabled = false
+const EndPointName = "WebAppService.getEnvironmentInfo"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

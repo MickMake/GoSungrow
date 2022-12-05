@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/userInfoUniqueCheck"
 const Disabled = false
+const EndPointName = "AppService.userInfoUniqueCheck"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

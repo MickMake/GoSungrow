@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/cancelPsSharing"
 const Disabled = false
+const EndPointName = "AppService.cancelPsSharing"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/orgService/getOrgList"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getOrgList"
 
 type RequestData struct {
 }

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/deleteProcessDefinition"
 const Disabled = false
+const EndPointName = "WebIscmAppService.deleteProcessDefinition"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

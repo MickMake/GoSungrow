@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/commonService/getValFromHBase"
 const Disabled = false
+const EndPointName = "AppService.getValFromHBase"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

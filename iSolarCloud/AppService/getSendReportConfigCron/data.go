@@ -11,6 +11,7 @@ import (
 
 const Url = "/v1/reportService/getSendReportConfigCron"
 const Disabled = false
+const EndPointName = "AppService.getSendReportConfigCron"
 
 type RequestData struct {
 }

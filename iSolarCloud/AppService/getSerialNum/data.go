@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/getSerialNum"
 const Disabled = false
+const EndPointName = "AppService.getSerialNum"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

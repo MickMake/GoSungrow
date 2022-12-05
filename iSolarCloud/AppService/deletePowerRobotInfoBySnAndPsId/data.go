@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/deletePowerRobotInfoBySnAndPsId"
 const Disabled = false
+const EndPointName = "AppService.deletePowerRobotInfoBySnAndPsId"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

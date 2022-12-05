@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/deviceInputDiscreteDeleteTime"
 const Disabled = false
+const EndPointName = "AppService.deviceInputDiscreteDeleteTime"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -40,21 +40,11 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Use:                   "data",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
-			Short:                 fmt.Sprintf("High-level iSolarCloud data fetching."),
-			Long:                  fmt.Sprintf("High-level iSolarCloud data fetching."),
+			Short:                 fmt.Sprintf("Mid-level access to the Sungrow api."),
+			Long:                  fmt.Sprintf("Mid-level access to the Sungrow api."),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
-			PreRunE:               func(cmd *cobra.Command, args []string) error {
-				cmds.Error = cmds.ProcessArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
-				cmds.Error = cmds.SunGrowArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
-				return nil
-			},
+			PreRunE:               cmds.SunGrowArgs,
 			RunE:                  func(cmd *cobra.Command, args []string) error {
 				return cmd.Help()
 			},
@@ -68,21 +58,11 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Use:                   output.StringTypeList + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{"get"},
 			Annotations:           map[string]string{"group": "Data"},
-			Short:                 fmt.Sprintf("Get data from iSolarCloud (list)"),
-			Long:                  fmt.Sprintf("Get data from iSolarCloud (list)"),
+			Short:                 fmt.Sprintf("Get data from the Sungrow api (list)"),
+			Long:                  fmt.Sprintf("Get data from the Sungrow api (list)"),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
-			PreRunE:               func(cmd *cobra.Command, args []string) error {
-				cmds.Error = cmds.ProcessArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
-				cmds.Error = cmds.SunGrowArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
-				return nil
-			},
+			PreRunE:               cmds.SunGrowArgs,
 			RunE:                  c.GetEndpoints,
 			Args:                  cobra.MinimumNArgs(0),
 		}
@@ -94,21 +74,11 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Use:                   output.StringTypeTable + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
-			Short:                 fmt.Sprintf("Get data from iSolarCloud (table)"),
-			Long:                  fmt.Sprintf("Get data from iSolarCloud (table)"),
+			Short:                 fmt.Sprintf("Get data from the Sungrow api (table)"),
+			Long:                  fmt.Sprintf("Get data from the Sungrow api (table)"),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
-			PreRunE:               func(cmd *cobra.Command, args []string) error {
-				cmds.Error = cmds.ProcessArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
-				cmds.Error = cmds.SunGrowArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
-				return nil
-			},
+			PreRunE:               cmds.SunGrowArgs,
 			RunE:                  c.GetEndpoints,
 			Args:                  cobra.MinimumNArgs(0),
 		}
@@ -120,21 +90,11 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Use:                   output.StringTypeRaw + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
-			Short:                 fmt.Sprintf("Get data from iSolarCloud (raw)"),
-			Long:                  fmt.Sprintf("Get data from iSolarCloud (raw)"),
+			Short:                 fmt.Sprintf("Get data from the Sungrow api (raw)"),
+			Long:                  fmt.Sprintf("Get data from the Sungrow api (raw)"),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
-			PreRunE:               func(cmd *cobra.Command, args []string) error {
-				cmds.Error = cmds.ProcessArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
-				cmds.Error = cmds.SunGrowArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
-				return nil
-			},
+			PreRunE:               cmds.SunGrowArgs,
 			RunE:                  c.GetEndpoints,
 			Args:                  cobra.MinimumNArgs(0),
 		}
@@ -146,21 +106,11 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Use:                   output.StringTypeJson + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
-			Short:                 fmt.Sprintf("Get data from iSolarCloud (json)"),
-			Long:                  fmt.Sprintf("Get data from iSolarCloud (json)"),
+			Short:                 fmt.Sprintf("Get data from the Sungrow api (json)"),
+			Long:                  fmt.Sprintf("Get data from the Sungrow api (json)"),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
-			PreRunE:               func(cmd *cobra.Command, args []string) error {
-				cmds.Error = cmds.ProcessArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
-				cmds.Error = cmds.SunGrowArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
-				return nil
-			},
+			PreRunE:               cmds.SunGrowArgs,
 			RunE:                  c.GetEndpoints,
 			Args:                  cobra.MinimumNArgs(0),
 		}
@@ -172,21 +122,11 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Use:                   output.StringTypeCsv + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
-			Short:                 fmt.Sprintf("Get data from iSolarCloud (csv)"),
-			Long:                  fmt.Sprintf("Get data from iSolarCloud (csv)"),
+			Short:                 fmt.Sprintf("Get data from the Sungrow api (csv)"),
+			Long:                  fmt.Sprintf("Get data from the Sungrow api (csv)"),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
-			PreRunE:               func(cmd *cobra.Command, args []string) error {
-				cmds.Error = cmds.ProcessArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
-				cmds.Error = cmds.SunGrowArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
-				return nil
-			},
+			PreRunE:               cmds.SunGrowArgs,
 			RunE:                  c.GetEndpoints,
 			Args:                  cobra.MinimumNArgs(0),
 		}
@@ -198,21 +138,11 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Use:                   output.StringTypeGraph + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
-			Short:                 fmt.Sprintf("Get data from iSolarCloud (graph)"),
-			Long:                  fmt.Sprintf("Get data from iSolarCloud (graph)"),
+			Short:                 fmt.Sprintf("Get data from the Sungrow api (graph)"),
+			Long:                  fmt.Sprintf("Get data from the Sungrow api (graph)"),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
-			PreRunE:               func(cmd *cobra.Command, args []string) error {
-				cmds.Error = cmds.ProcessArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
-				cmds.Error = cmds.SunGrowArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
-				return nil
-			},
+			PreRunE:               cmds.SunGrowArgs,
 			RunE:                  c.GetEndpoints,
 			Args:                  cobra.MinimumNArgs(0),
 		}
@@ -224,21 +154,11 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Use:                   output.StringTypeXML + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
-			Short:                 fmt.Sprintf("Get data from iSolarCloud (xml)"),
-			Long:                  fmt.Sprintf("Get data from iSolarCloud (xml)"),
+			Short:                 fmt.Sprintf("Get data from the Sungrow api (xml)"),
+			Long:                  fmt.Sprintf("Get data from the Sungrow api (xml)"),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
-			PreRunE:               func(cmd *cobra.Command, args []string) error {
-				cmds.Error = cmds.ProcessArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
-				cmds.Error = cmds.SunGrowArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
-				return nil
-			},
+			PreRunE:               cmds.SunGrowArgs,
 			RunE:                  c.GetEndpoints,
 			Args:                  cobra.MinimumNArgs(0),
 		}
@@ -250,21 +170,11 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Use:                   output.StringTypeXLSX + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
-			Short:                 fmt.Sprintf("Get data from iSolarCloud (XLSX)"),
-			Long:                  fmt.Sprintf("Get data from iSolarCloud (XLSX)"),
+			Short:                 fmt.Sprintf("Get data from the Sungrow api (XLSX)"),
+			Long:                  fmt.Sprintf("Get data from the Sungrow api (XLSX)"),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
-			PreRunE:               func(cmd *cobra.Command, args []string) error {
-				cmds.Error = cmds.ProcessArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
-				cmds.Error = cmds.SunGrowArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
-				return nil
-			},
+			PreRunE:               cmds.SunGrowArgs,
 			RunE:                  c.GetEndpoints,
 			Args:                  cobra.MinimumNArgs(0),
 		}
@@ -280,17 +190,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Long:                  fmt.Sprintf("Show response as Go structure (debug)"),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
-			PreRunE:               func(cmd *cobra.Command, args []string) error {
-				cmds.Error = cmds.ProcessArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
-				cmds.Error = cmds.SunGrowArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
-				return nil
-			},
+			PreRunE:               cmds.SunGrowArgs,
 			RunE:                  c.GetEndpoints,
 			Args:                  cobra.MinimumNArgs(0),
 		}
@@ -316,13 +216,14 @@ func (c *CmdData) GetEndpoints(cmd *cobra.Command, args []string) error {
 		data.SetOutput(cmd.Name())
 		data.SetSaveAsFile(cmds.Api.SaveFile)
 		data.SetEndpoints(eps...)
+		data.SetArgs(args[1:]...)
 
-		c.Error = data.GetData(args[1:]...)
+		c.Error = data.GetData()
 		if c.Error != nil {
 			break
 		}
 
-		c.Error = data.GetOutput()
+		c.Error = data.Output()
 		if c.Error != nil {
 			break
 		}

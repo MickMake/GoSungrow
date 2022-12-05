@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/otherService/modifyEmgOrgStruc"
 const Disabled = false
+const EndPointName = "AppService.modifyEmgOrgStruc"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/orgService/getOrgAndChildBasicInfoOptions"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getOrgAndChildBasicInfoOptions"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

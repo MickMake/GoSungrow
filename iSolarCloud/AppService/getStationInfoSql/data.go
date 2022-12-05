@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/getStationInfoSql"
 const Disabled = false
+const EndPointName = "AppService.getStationInfoSql"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -12,6 +12,7 @@ import (
 
 const Url = "/v1/commonService/getMqttConfigInfoByAppkey"
 const Disabled = false
+const EndPointName = "WebAppService.getMqttConfigInfoByAppkey"
 
 const (
 	WebAppKey = "B0455FBE7AA0328DB57B59AA729F05D8"

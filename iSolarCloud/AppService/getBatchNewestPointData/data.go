@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getBatchNewestPointData"
 const Disabled = false
+const EndPointName = "AppService.getBatchNewestPointData"
 
 type RequestData struct {
 	PointIds valueTypes.String `json:"ps_key_points" required:"true"`

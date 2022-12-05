@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/modifySystemMenu"
 const Disabled = false
+const EndPointName = "WebIscmAppService.modifySystemMenu"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

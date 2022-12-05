@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/otherService/getWorkInfo"
 const Disabled = false
+const EndPointName = "AppService.getWorkInfo"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/reportService/getDeviceDataList"
 const Disabled = false
+const EndPointName = "WebAppService.getDeviceDataList"
 
 type RequestData struct {
 }

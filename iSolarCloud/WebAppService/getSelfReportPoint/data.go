@@ -3,16 +3,17 @@ package getSelfReportPoint
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
 
 const Url = "/v1/reportService/getSelfReportPoint"
 const Disabled = false
+const EndPointName = "WebAppService.getSelfReportPoint"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -23,9 +24,14 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
+type ResultData []struct {
+	GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"PointId"`
 
-type ResultData struct {
-	// Dummy valueTypes.String `json:"dummy"`
+	PointId           valueTypes.PointId `json:"point_id" PointDevice:""`
+	PointName         valueTypes.String  `json:"point_name"`
+	Id                valueTypes.Integer `json:"id"`
+	DeviceType        valueTypes.Integer `json:"device_type"`
+	Period            valueTypes.Integer `json:"period"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -33,31 +39,8 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
-	}
-
+	entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	return entries
 }

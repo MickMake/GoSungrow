@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/devService/getCommunicationDeviceConfigInfo"
 const Disabled = false
+const EndPointName = "AppService.getCommunicationDeviceConfigInfo"
 
 type RequestData struct {
 }

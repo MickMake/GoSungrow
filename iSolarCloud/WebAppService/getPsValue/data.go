@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/powerStationService/getPsValue"
 const Disabled = false
+const EndPointName = "WebAppService.getPsValue"
 
 type RequestData struct {
 	Size    valueTypes.Integer `json:"size" required:"true"`

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/sweepDevStrategyIssue"
 const Disabled = false
+const EndPointName = "AppService.sweepDevStrategyIssue"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

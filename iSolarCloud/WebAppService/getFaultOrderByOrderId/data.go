@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/getFaultOrderByOrderId"
 const Disabled = false
+const EndPointName = "WebAppService.getFaultOrderByOrderId"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/commonService/cloudDeploymentRecord"
 const Disabled = false
+const EndPointName = "AppService.cloudDeploymentRecord"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

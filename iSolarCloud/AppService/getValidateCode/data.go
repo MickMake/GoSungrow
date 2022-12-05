@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/getValidateCode"
 const Disabled = false
+const EndPointName = "AppService.getValidateCode"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

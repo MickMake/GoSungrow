@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getAllPowerDeviceSetName"
 const Disabled = false
+const EndPointName = "AppService.getAllPowerDeviceSetName"
 
 type RequestData struct {
 }

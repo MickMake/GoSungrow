@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/getParamSetTemplate4NewProtocol"
 const Disabled = false
+const EndPointName = "AppService.getParamSetTemplate4NewProtocol"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

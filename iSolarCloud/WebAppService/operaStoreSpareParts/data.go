@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/otherService/operaStoreSpareParts"
 const Disabled = false
+const EndPointName = "WebAppService.operaStoreSpareParts"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

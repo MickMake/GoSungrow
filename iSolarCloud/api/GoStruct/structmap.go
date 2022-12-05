@@ -192,15 +192,6 @@ func (sm *StructMap) ScanSlice(Parent *Reflect, Current *Reflect) bool {
 			Child.SetByIndex(Parent, Current, index, reflect.Value{})
 			sm.PrintDebug("# ScanSlice().SetByIndex() Child: %s\n", Child)
 
-			// if strings.Contains(Child.FieldPath.String(), "DevTypeDefinition") {
-			// 	for index2, key2 := range Child.FieldVo.MapKeys() {
-			// 		var Child2 Reflect
-			// 		Child2.SetByIndex(Current, &Child, index2, key2)
-			// 		sm.Add(&Child2)
-			// 	}
-			// 	fmt.Println("")
-			// }
-
 			if sm.Process(&Child) {
 				continue
 			}
@@ -230,15 +221,6 @@ func (sm *StructMap) ScanStruct(Parent *Reflect, Current *Reflect) bool {
 			var Child Reflect
 			Child.SetByIndex(Parent, Current, index, reflect.Value{})
 			sm.PrintDebug("# ScanStruct().SetByIndex() Child: %s\n", Child)
-
-			// if strings.Contains(Child.FieldPath.String(), "DevTypeDefinition") {
-			// 	for index2, key2 := range Child.FieldVo.MapKeys() {
-			// 		var Child2 Reflect
-			// 		Child2.SetByIndex(Current, &Child, index2, key2)
-			// 		sm.Add(&Child2)
-			// 	}
-			// 	fmt.Println("")
-			// }
 
 			if sm.Process(&Child) {
 				continue

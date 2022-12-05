@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/commonService/deleteOssObject"
 const Disabled = false
+const EndPointName = "AppService.deleteOssObject"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

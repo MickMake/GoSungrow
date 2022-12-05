@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/powerStationService/getPowerPictureList"
 const Disabled = false
+const EndPointName = "AppService.getPowerPictureList"
 
 type RequestData struct {
 }

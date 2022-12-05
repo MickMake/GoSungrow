@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/powerStationService/psForcastInfo"
 const Disabled = false
+const EndPointName = "AppService.psForcastInfo"
 
 type RequestData struct {
 	PsId valueTypes.PsId `json:"ps_id" required:"true"`

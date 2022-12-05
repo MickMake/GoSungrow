@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/powerStationService/getKpiInfo"
 const Disabled = false
+const EndPointName = "AppService.getKpiInfo"
 
 type RequestData struct {
 }

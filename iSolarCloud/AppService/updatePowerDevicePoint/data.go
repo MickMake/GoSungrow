@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/reportService/updatePowerDevicePoint"
 const Disabled = false
+const EndPointName = "AppService.updatePowerDevicePoint"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

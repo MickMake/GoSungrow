@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/queryParamSettingTask"
 const Disabled = false
+const EndPointName = "AppService.queryParamSettingTask"
 
 type RequestData struct {
 	TaskId valueTypes.String `json:"task_id" required:"true"`

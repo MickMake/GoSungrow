@@ -10,6 +10,7 @@ import (
 
 const Url = "/devDataHandleService/addDeviceToStructureForHouseholdByPsIdS"
 const Disabled = false
+const EndPointName = "AppService.addDeviceToStructureForHouseholdByPsIdS"
 
 type RequestData struct {
 }

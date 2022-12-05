@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/commonService/queryCodeByType"
 const Disabled = false
+const EndPointName = "WebAppService.queryCodeByType"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

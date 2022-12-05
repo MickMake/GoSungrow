@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/reportService/updateReportConfigByEmailAddr"
 const Disabled = false
+const EndPointName = "AppService.updateReportConfigByEmailAddr"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

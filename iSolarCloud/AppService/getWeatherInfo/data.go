@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/getWeatherInfo"
 const Disabled = false
+const EndPointName = "AppService.getWeatherInfo"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/otherService/queryDutyType"
 const Disabled = false
+const EndPointName = "WebIscmAppService.queryDutyType"
 
 type RequestData struct {
 }

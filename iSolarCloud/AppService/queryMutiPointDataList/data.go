@@ -12,14 +12,15 @@ import (
 
 const Url = "/v1/commonService/queryMutiPointDataList"
 const Disabled = false
+const EndPointName = "AppService.queryMutiPointDataList"
 
 type RequestData struct {
-	PsKeys         valueTypes.PsKey    `json:"ps_key" required:"true"`
 	PsId           valueTypes.PsId     `json:"ps_id" required:"true"`
-	Points         valueTypes.PointIds `json:"points" required:"true"`
+	StartTimeStamp valueTypes.DateTime `json:"start_time_stamp" required:"true"`
+	EndTimeStamp   valueTypes.DateTime `json:"end_time_stamp" required:"true"`
 	MinuteInterval valueTypes.Integer  `json:"minute_interval" required:"true"`
-	StartTimeStamp valueTypes.String   `json:"start_time_stamp" required:"true"`
-	EndTimeStamp   valueTypes.String   `json:"end_time_stamp" required:"true"`
+	PsKeys         valueTypes.PsKey    `json:"ps_key" required:"true"`
+	Points         valueTypes.PointIds `json:"points" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -52,54 +53,54 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-func (e *ResultData) String() string {
-	var ret string
-
-	// for range Only.Once {
-	// 	if len(data) == 0 {
-	// 		break
-	// 	}
-	//
-	// 	e.Points = make(Points)
-	//
-	// 	var du dDevices
-	// 	// Store DeviceData.Points
-	// 	_ = json.Unmarshal(data, &du)
-	// 	for deviceName, deviceRef := range du {
-	// 		fmt.Printf("%s =>\n", deviceName)
-	//
-	// 		for pointName, pointRef := range deviceRef {
-	//
-	// 			for time, value := range pointRef {
-	// 				e.Points[pointName].List = append(e.Points[pointName].List)
-	// 				fmt.Printf("%s, %s, %s, %s\n", deviceName, pointName, time, value)
-	// 				// if k == "" {
-	// 				// 	delete(du, i)
-	// 				// 	continue
-	// 				// }
-	// 			}
-	// 		}
-	// 	}
-	//
-	// 	// var dp DecodePoints
-	// 	// // Store DeviceData.Points
-	// 	// _ = json.Unmarshal(data, &dp)
-	// 	// for i, k := range dp {
-	// 	// 	if k == nil {
-	// 	// 		delete(dp, i)
-	// 	// 		continue
-	// 	// 	}
-	// 	// 	i = strings.TrimSuffix(i, "List")
-	// 	// 	u := du[i+"_unit"]
-	// 	// 	e.Points[i] = Point{
-	// 	// 		List: k,
-	// 	// 		Unit: u,
-	// 	// 	}
-	// 	// }
-	// }
-
-	return ret
-}
+// func (e *ResultData) String() string {
+// 	var ret string
+//
+// 	// for range Only.Once {
+// 	// 	if len(data) == 0 {
+// 	// 		break
+// 	// 	}
+// 	//
+// 	// 	e.Points = make(Points)
+// 	//
+// 	// 	var du dDevices
+// 	// 	// Store DeviceData.Points
+// 	// 	_ = json.Unmarshal(data, &du)
+// 	// 	for deviceName, deviceRef := range du {
+// 	// 		fmt.Printf("%s =>\n", deviceName)
+// 	//
+// 	// 		for pointName, pointRef := range deviceRef {
+// 	//
+// 	// 			for time, value := range pointRef {
+// 	// 				e.Points[pointName].List = append(e.Points[pointName].List)
+// 	// 				fmt.Printf("%s, %s, %s, %s\n", deviceName, pointName, time, value)
+// 	// 				// if k == "" {
+// 	// 				// 	delete(du, i)
+// 	// 				// 	continue
+// 	// 				// }
+// 	// 			}
+// 	// 		}
+// 	// 	}
+// 	//
+// 	// 	// var dp DecodePoints
+// 	// 	// // Store DeviceData.Points
+// 	// 	// _ = json.Unmarshal(data, &dp)
+// 	// 	// for i, k := range dp {
+// 	// 	// 	if k == nil {
+// 	// 	// 		delete(dp, i)
+// 	// 	// 		continue
+// 	// 	// 	}
+// 	// 	// 	i = strings.TrimSuffix(i, "List")
+// 	// 	// 	u := du[i+"_unit"]
+// 	// 	// 	e.Points[i] = Point{
+// 	// 	// 		List: k,
+// 	// 	// 		Unit: u,
+// 	// 	// 	}
+// 	// 	// }
+// 	// }
+//
+// 	return ret
+// }
 
 func (e *ResultData) UnmarshalJSON(data []byte) error {
 	var err error

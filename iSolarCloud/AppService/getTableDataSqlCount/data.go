@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/getTableDataSqlCount"
 const Disabled = false
+const EndPointName = "AppService.getTableDataSqlCount"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

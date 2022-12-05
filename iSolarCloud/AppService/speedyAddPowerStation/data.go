@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/speedyAddPowerStation"
 const Disabled = false
+const EndPointName = "AppService.speedyAddPowerStation"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

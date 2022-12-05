@@ -85,10 +85,6 @@ func (c *CmdMqtt) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               func(cmd *cobra.Command, args []string) error {
-				cmds.Error = cmds.ProcessArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
 				cmds.Error = cmds.SunGrowArgs(cmd, args)
 				if cmds.Error != nil {
 					return cmds.Error
@@ -114,10 +110,6 @@ func (c *CmdMqtt) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               func(cmd *cobra.Command, args []string) error {
-				cmds.Error = cmds.ProcessArgs(cmd, args)
-				if cmds.Error != nil {
-					return cmds.Error
-				}
 				cmds.Error = cmds.SunGrowArgs(cmd, args)
 				if cmds.Error != nil {
 					return cmds.Error
@@ -167,7 +159,16 @@ func (ca *Cmds) MqttArgs(_ *cobra.Command, _ []string) error {
 		}
 
 		cmdLog.LogPrintDate("Connecting to SunGrow...\n")
-		ca.Mqtt.Client.SungrowDevices, ca.Error = ca.Api.SunGrow.GetDevices(true)
+		// ca.Mqtt.Client.SungrowDevices, ca.Error = ca.Api.SunGrow.GetDevices()
+		fmt.Println("FIX THIS UP")
+		fmt.Println("FIX THIS UP")
+		fmt.Println("FIX THIS UP")
+		fmt.Println("FIX THIS UP")
+		fmt.Println("FIX THIS UP")
+		fmt.Println("FIX THIS UP")
+		fmt.Println("FIX THIS UP")
+		fmt.Println("FIX THIS UP")
+		time.Sleep(time.Hour * 24)
 		if ca.Error != nil {
 			break
 		}
@@ -212,7 +213,7 @@ func (ca *Cmds) MqttArgs(_ *cobra.Command, _ []string) error {
 				psId.PsKey.Value(),
 				psId.DeviceName.Value(),
 				psId.DeviceModel.Value(),
-				psId.Vendor.Value(),
+				psId.FactoryName.Value(),
 				"Roof",
 				)
 			if ca.Error != nil {
@@ -372,7 +373,7 @@ func (ca *Cmds) MqttCron() error {
 
 		// results := data.GetResults()
 
-		for _, result := range data.GetResults() {
+		for _, result := range data.Results {
 			ca.Error = result.ProcessMapForMqtt()
 			if ca.Error != nil {
 				continue

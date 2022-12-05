@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/rechargeOrderSetMeal"
 const Disabled = false
+const EndPointName = "AppService.rechargeOrderSetMeal"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/insightSynDeviceStructure2Cloud"
 const Disabled = false
+const EndPointName = "AppService.insightSynDeviceStructure2Cloud"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

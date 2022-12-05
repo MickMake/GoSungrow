@@ -104,6 +104,9 @@ func IsUnknownStruct(ref interface{}, checkDepth bool) bool {
 			mk := fieldVo.MapKeys()
 			if len(mk) > 0 {
 				// ok = IsUnknownStruct(fieldVo.MapIndex(mk[0]).Interface())
+				if IsNil(fieldVo.MapIndex(mk[0]).Interface()) {
+					break
+				}
 				fieldVo = reflect.ValueOf(fieldVo.MapIndex(mk[0]).Interface())
 				ok = IsTypeUnknown(fieldVo)
 			}
@@ -481,20 +484,18 @@ func AnyToUnitValue(ref interface{}, key string, unit string, typeString string,
 				}
 
 			default:
+				// Show basic structure of type.
 				typeString = ""
-				// j, err := json.Marshal(ref)
-				// if err != nil {
-				// 	j = []byte(Type + "(unknown)")
-				// }
-				// uvs.AddString(key, unit, typeString, string(j))
 				if strings.HasPrefix(Type, "[]struct") || strings.HasPrefix(Type, "struct") {
-					re := regexp.MustCompile(`(\w+) (\w+|\w+\.\w+|\[\]\w+|\[\]\w+\.\w+) .*?(;\s+|\s+})`)	// `(\w+) (\w+) ".*?";* `)
+					re := regexp.MustCompile(`(\w*) (\w+|\w+\.\w+|\[\]\w+|\[\]\w+\.\w+) .*?(;\s+|\s+})`)	// `(\w+) (\w+) ".*?";* `)
 					if re.Match([]byte(Type)) {
-						Type = re.ReplaceAllString(Type, "$2($1), ") + "}"
+						Type = re.ReplaceAllString(Type, "$2($1), ")
+						Type = strings.TrimSuffix(Type, ", ") + "}"
+						Type = strings.ReplaceAll(Type, "GoStruct.GoStructParent(),", "")
+						Type = strings.ReplaceAll(Type, "GoStruct.GoStruct(),", "")
 					}
 				}
-				// fmt.Println(Type)
-				uvs.AddString(key, unit, typeString, "default: " + Type)
+				uvs.AddString(key, unit, typeString, Type)
 				ok = false
 		}
 	}

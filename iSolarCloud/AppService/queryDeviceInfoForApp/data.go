@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/devService/queryDeviceInfoForApp"
 const Disabled = false
+const EndPointName = "AppService.queryDeviceInfoForApp"
 
 type RequestData struct {
 	DeviceSn valueTypes.String `json:"device_sn,omitempty"`

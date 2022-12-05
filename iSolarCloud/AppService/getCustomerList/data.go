@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getCustomerList"
 const Disabled = false
+const EndPointName = "AppService.getCustomerList"
 
 type RequestData struct {
 }

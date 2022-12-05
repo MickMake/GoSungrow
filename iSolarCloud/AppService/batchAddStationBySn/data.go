@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/batchAddStationBySn"
 const Disabled = false
+const EndPointName = "AppService.batchAddStationBySn"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

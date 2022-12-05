@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/messageService/getTemplateByInfoType"
 const Disabled = false
+const EndPointName = "AppService.getTemplateByInfoType"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/MickMake/GoUnify/Only"
 	"GoSungrow/defaults"
+	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/Unify"
 	"github.com/spf13/cobra"
 	"time"
@@ -22,6 +22,7 @@ type Cmds struct {
 	Api    *CmdApi
 	Data   *CmdData
 	Info   *CmdInfo
+	Show   *CmdShow
 	Mqtt   *CmdMqtt
 
 	ConfigDir   string
@@ -75,6 +76,9 @@ func init() {
 
 		cmds.Info = NewCmdInfo()
 		cmds.Info.AttachCommand(cmdRoot)
+
+		cmds.Show = NewCmdShow()
+		cmds.Show.AttachCommand(cmdRoot)
 
 		cmds.Mqtt = NewCmdMqtt()
 		cmds.Mqtt.AttachCommand(cmdRoot)

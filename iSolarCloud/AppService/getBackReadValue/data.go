@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/getBackReadValue"
 const Disabled = false
+const EndPointName = "AppService.getBackReadValue"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

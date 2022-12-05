@@ -10,9 +10,10 @@ import (
 
 const Url = "/devDataHandleService/addDeviceToStructureForHousehold"
 const Disabled = false
+const EndPointName = "AppService.addDeviceToStructureForHousehold"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

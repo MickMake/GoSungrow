@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getPsCBoxDetail"
 const Disabled = false
+const EndPointName = "WebAppService.getPsCBoxDetail"
 
 type RequestData struct {
 	PsId   valueTypes.PsId    `json:"ps_id" required:"true"`

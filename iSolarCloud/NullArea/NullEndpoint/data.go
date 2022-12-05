@@ -11,9 +11,10 @@ import (
 
 const Url = "%URL%"
 const Disabled = false
+const EndPointName = "NullArea.NullEndpoint"
 
 type RequestData struct {
-	// DeviceType valueTypes.String `json:"device_type" required:"true"`
+	// DeviceType valueTypes.Integer `json:"device_type" required:"true"`
 }
 
 // IsValid Checks for validity of results data.

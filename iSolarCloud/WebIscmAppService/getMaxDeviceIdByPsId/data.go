@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getMaxDeviceIdByPsId"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getMaxDeviceIdByPsId"
 
 type RequestData struct {
 	PsId     valueTypes.PsId `json:"ps_id" required:"true"`

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/planPower"
 const Disabled = false
+const EndPointName = "AppService.planPower"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

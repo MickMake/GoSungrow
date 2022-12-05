@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/batchUpdateUserIsAgreeGdpr"
 const Disabled = false
+const EndPointName = "AppService.batchUpdateUserIsAgreeGdpr"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

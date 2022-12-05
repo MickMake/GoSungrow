@@ -11,6 +11,7 @@ import (
 
 const Url = "/v1/devService/queryDeviceRealTimeDataByPsKeys"
 const Disabled = false
+const EndPointName = "AppService.queryDeviceRealTimeDataByPsKeys"
 
 type RequestData struct {
 	PsKeyList valueTypes.String `json:"ps_key_list" required:"true"`

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/otherService/saveSysUserMsg"
 const Disabled = false
+const EndPointName = "AppService.saveSysUserMsg"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

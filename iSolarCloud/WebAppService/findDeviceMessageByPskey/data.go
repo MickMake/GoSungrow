@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/findDeviceMessageByPskey"
 const Disabled = false
+const EndPointName = "WebAppService.findDeviceMessageByPskey"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

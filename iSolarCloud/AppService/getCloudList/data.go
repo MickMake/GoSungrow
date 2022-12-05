@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/commonService/getCloudList"
 const Disabled = false
+const EndPointName = "AppService.getCloudList"
 
 type RequestData struct {
 }

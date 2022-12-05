@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/reportService/deleteReport"
 const Disabled = false
+const EndPointName = "WebIscmAppService.deleteReport"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

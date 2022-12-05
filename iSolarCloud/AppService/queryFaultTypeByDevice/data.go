@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/faultService/queryFaultTypeByDevice"
 const Disabled = false
+const EndPointName = "AppService.queryFaultTypeByDevice"
 
 type RequestData struct {
 }

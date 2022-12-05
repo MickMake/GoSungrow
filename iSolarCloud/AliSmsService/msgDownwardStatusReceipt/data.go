@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/messageService/msgDownwardStatusReceipt"
 const Disabled = false
+const EndPointName = "AliSmsService.msgDownwardStatusReceipt"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

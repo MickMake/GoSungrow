@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/queryComponent"
 const Disabled = false
+const EndPointName = "AppService.queryComponent"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

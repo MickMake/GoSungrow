@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/deleteMenu"
 const Disabled = false
+const EndPointName = "WebIscmAppService.deleteMenu"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

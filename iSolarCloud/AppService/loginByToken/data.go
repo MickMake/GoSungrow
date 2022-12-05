@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/loginByToken"
 const Disabled = false
+const EndPointName = "AppService.loginByToken"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

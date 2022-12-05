@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/judgeIsSettingMan"
 const Disabled = false
+const EndPointName = "AppService.judgeIsSettingMan"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

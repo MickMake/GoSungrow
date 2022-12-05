@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/otherService/getSysMsg"
 const Disabled = false
+const EndPointName = "AppService.getSysMsg"
 
 type RequestData struct {
 }

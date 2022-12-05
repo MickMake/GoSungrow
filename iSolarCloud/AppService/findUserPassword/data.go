@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/findUserPassword"
 const Disabled = false
+const EndPointName = "AppService.findUserPassword"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/devService/getPowerDeviceChannl"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getPowerDeviceChannl"
 
 type RequestData struct {
 	Id valueTypes.Integer `json:"id" required:"true"`

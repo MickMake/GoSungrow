@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/getSysUserList"
 const Disabled = false
+const EndPointName = "WebAppService.getSysUserList"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

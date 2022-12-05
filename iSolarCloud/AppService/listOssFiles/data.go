@@ -11,6 +11,7 @@ import (
 
 const Url = "/v1/commonService/listOssFiles"
 const Disabled = false
+const EndPointName = "AppService.listOssFiles"
 
 type RequestData struct {
 	Prefix valueTypes.String `json:"prefix" required:"true"`

@@ -10,6 +10,7 @@ import (
 
 const Url = "/integrationService/getModuleLogTaskList"
 const Disabled = false
+const EndPointName = "AppService.getModuleLogTaskList"
 
 type RequestData struct {
 }

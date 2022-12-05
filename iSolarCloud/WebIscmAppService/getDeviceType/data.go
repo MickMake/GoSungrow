@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getDeviceType"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getDeviceType"
 
 type RequestData struct {
 }

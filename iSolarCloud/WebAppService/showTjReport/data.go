@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/reportService/showTjReport"
 const Disabled = false
+const EndPointName = "WebAppService.showTjReport"
 
 type RequestData struct {
 	PsId      valueTypes.PsId     `json:"ps_id" required:"true"`

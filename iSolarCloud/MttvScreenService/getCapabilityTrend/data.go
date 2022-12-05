@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/getCapabilityTrend"
 const Disabled = false
+const EndPointName = "MttvScreenService.getCapabilityTrend"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

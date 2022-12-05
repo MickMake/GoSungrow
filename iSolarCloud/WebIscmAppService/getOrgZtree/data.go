@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/orgService/getOrgZtree"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getOrgZtree"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

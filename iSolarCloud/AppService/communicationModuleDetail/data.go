@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/communicationModuleDetail"
 const Disabled = false
+const EndPointName = "AppService.communicationModuleDetail"
 
 type RequestData struct {
 	Sn valueTypes.String `json:"sn" required:"true"`

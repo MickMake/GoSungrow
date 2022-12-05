@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/powerStationService/getPsDetailWithPsType"
 const Disabled = false
+const EndPointName = "AppService.getPsDetailWithPsType"
 
 type RequestData struct {
 	PsId valueTypes.PsId `json:"ps_id" required:"true"`

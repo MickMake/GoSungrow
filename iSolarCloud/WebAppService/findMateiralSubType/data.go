@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/otherService/findMateiralSubType"
 const Disabled = false
+const EndPointName = "WebAppService.findMateiralSubType"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

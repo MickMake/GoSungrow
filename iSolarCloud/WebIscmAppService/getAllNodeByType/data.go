@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/faultService/getAllNodeByType"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getAllNodeByType"
 
 type RequestData struct {
 }

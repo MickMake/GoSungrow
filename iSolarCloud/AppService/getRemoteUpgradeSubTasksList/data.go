@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getRemoteUpgradeSubTasksList"
 const Disabled = false
+const EndPointName = "AppService.getRemoteUpgradeSubTasksList"
 
 type RequestData struct {
 	QueryType valueTypes.String `json:"query_type" required:"true"`

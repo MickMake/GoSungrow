@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/commonService/getPrivateCloudValidityPeriod"
 const Disabled = false
+const EndPointName = "AppService.getPrivateCloudValidityPeriod"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

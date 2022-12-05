@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/orgService/getInstallerInfoByDealerOrgCodeOrId"
 const Disabled = false
+const EndPointName = "AppService.getInstallerInfoByDealerOrgCodeOrId"
 
 type RequestData struct {
 	DealerOrgCode valueTypes.String `json:"dealer_org_code"` // required:"true"`

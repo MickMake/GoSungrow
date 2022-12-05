@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/devService/queryDeviceInfo"
 const Disabled = false
+const EndPointName = "AppService.queryDeviceInfo"
 
 type RequestData struct {
 	DeviceSn valueTypes.String `json:"device_sn,omitempty"`
@@ -26,14 +27,14 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	DeviceModelList []struct {
-		GoStruct GoStruct.GoStruct `json:"-" PointIdFrom:"ModelId" PointIdReplace:"false"`
+		GoStruct.GoStruct `json:"-" PointIdFrom:"ModelId" PointIdReplace:"false"`
 
 		DeviceModel     valueTypes.String  `json:"device_model"`
 		DeviceModelCode valueTypes.String  `json:"device_model_code"`
 		ModelId         valueTypes.Integer `json:"model_id"`
 	} `json:"deviceModelList" PointId:"device_model_list" DataTable:"true"`
 	DevicePropertyValueList []struct {
-		GoStruct GoStruct.GoStruct `json:"-" PointIdFrom:"UUID" PointIdReplace:"false"`
+		GoStruct.GoStruct `json:"-" PointIdFrom:"UUID" PointIdReplace:"false"`
 
 		DeviceType     valueTypes.Integer `json:"device_type"`
 		PropertyCode   valueTypes.Integer `json:"property_code"`

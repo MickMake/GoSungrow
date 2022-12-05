@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/otherService/deletePowerStore"
 const Disabled = false
+const EndPointName = "WebIscmAppService.deletePowerStore"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/queryPsStructureList"
 const Disabled = false
+const EndPointName = "AppService.queryPsStructureList"
 
 type RequestData struct {
 	PsId      valueTypes.PsId   `json:"ps_id" required:"true"`

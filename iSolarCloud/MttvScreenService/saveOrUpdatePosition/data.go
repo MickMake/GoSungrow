@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/saveOrUpdatePosition"
 const Disabled = false
+const EndPointName = "MttvScreenService.saveOrUpdatePosition"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

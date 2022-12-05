@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/isHave2GSn"
 const Disabled = false
+const EndPointName = "AppService.isHave2GSn"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

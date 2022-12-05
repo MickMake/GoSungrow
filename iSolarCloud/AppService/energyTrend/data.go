@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/energyTrend"
 const Disabled = false
+const EndPointName = "AppService.energyTrend"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

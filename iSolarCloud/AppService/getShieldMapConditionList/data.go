@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/commonService/getShieldMapConditionList"
 const Disabled = false
+const EndPointName = "AppService.getShieldMapConditionList"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/reportService/powerDevicePointList"
 const Disabled = false
+const EndPointName = "AppService.powerDevicePointList"
 
 type RequestData struct {
 }

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/searchM2MMonthFlowCMCC"
 const Disabled = false
+const EndPointName = "AppService.searchM2MMonthFlowCMCC"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/powerStationService/getTheoryAndActualPower"
 const Disabled = false
+const EndPointName = "MttvScreenService.getTheoryAndActualPower"
 
 type RequestData struct {
 	// ws.missing-parameter:user_id or ps_id

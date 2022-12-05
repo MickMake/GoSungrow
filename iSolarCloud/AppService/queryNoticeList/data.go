@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/otherService/queryNoticeList"
 const Disabled = false
+const EndPointName = "AppService.queryNoticeList"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

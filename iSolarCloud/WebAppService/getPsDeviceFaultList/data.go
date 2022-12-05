@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/getPsDeviceFaultList"
 const Disabled = false
+const EndPointName = "WebAppService.getPsDeviceFaultList"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

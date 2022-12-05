@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/getFatherPrivileges"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getFatherPrivileges"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

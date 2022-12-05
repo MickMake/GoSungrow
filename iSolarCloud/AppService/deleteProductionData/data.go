@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/deleteProductionData"
 const Disabled = false
+const EndPointName = "AppService.deleteProductionData"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

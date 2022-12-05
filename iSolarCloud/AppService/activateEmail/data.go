@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/activateEmail"
 const Disabled = false
+const EndPointName = "AppService.activateEmail"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

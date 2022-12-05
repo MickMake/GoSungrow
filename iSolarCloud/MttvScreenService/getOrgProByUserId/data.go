@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/orgService/getOrgProByUserId"
 const Disabled = false
+const EndPointName = "MttvScreenService.getOrgProByUserId"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

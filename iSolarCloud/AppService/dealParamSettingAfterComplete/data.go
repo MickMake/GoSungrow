@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/dealParamSettingAfterComplete"
 const Disabled = false
+const EndPointName = "AppService.dealParamSettingAfterComplete"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

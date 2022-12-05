@@ -11,6 +11,7 @@ import (
 
 const Url = "/v1/faultService/getFaultMsgByFaultCode"
 const Disabled = false
+const EndPointName = "AppService.getFaultMsgByFaultCode"
 
 type RequestData struct {
 	FaultCode valueTypes.String `json:"fault_code" required:"true"`

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/orgService/queryNearlyTwoYearsGenAndPrft"
 const Disabled = false
+const EndPointName = "MttvScreenService.queryNearlyTwoYearsGenAndPrft"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/commonService/getAPIServiceInfo"
 const Disabled = false
+const EndPointName = "AppService.getAPIServiceInfo"
 
 type RequestData struct {
 }

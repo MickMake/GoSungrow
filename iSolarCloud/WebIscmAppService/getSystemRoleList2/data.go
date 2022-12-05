@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/getSystemRoleList2"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getSystemRoleList2"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/addOrderStep"
 const Disabled = false
+const EndPointName = "AppService.addOrderStep"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/reportService/saveReportExportColumns"
 const Disabled = false
+const EndPointName = "AppService.saveReportExportColumns"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

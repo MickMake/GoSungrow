@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/saveSetParam"
 const Disabled = false
+const EndPointName = "AppService.saveSetParam"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

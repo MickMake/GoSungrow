@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/queryCardStatusCTCC"
 const Disabled = false
+const EndPointName = "AppService.queryCardStatusCTCC"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

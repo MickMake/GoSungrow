@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/orgService/getSysOrgPro"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getSysOrgPro"
 
 type RequestData struct {
 }

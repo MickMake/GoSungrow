@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/faultService/getUserPsOrderList"
 const Disabled = false
+const EndPointName = "AppService.getUserPsOrderList"
 
 type RequestData struct {
 }

@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/powerStationService/getHistoryInfo"
 const Disabled = false
+const EndPointName = "AppService.getHistoryInfo"
 
 type RequestData struct {
 	DateType valueTypes.String `json:"date_type" required:"true"`

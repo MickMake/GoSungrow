@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/deletePicture"
 const Disabled = false
+const EndPointName = "WebIscmAppService.deletePicture"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

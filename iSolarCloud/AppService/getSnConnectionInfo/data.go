@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/commonService/getSnConnectionInfo"
 const Disabled = false
+const EndPointName = "AppService.getSnConnectionInfo"
 
 type RequestData struct {
 	Size    valueTypes.Integer `json:"size" required:"true"`

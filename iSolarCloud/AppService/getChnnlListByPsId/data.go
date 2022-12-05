@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/devService/getChnnlListByPsId"
 const Disabled = false
+const EndPointName = "AppService.getChnnlListByPsId"
 
 type RequestData struct {
 	PsId valueTypes.PsId `json:"ps_id" required:"true"`

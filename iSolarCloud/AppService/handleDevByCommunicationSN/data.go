@@ -10,9 +10,10 @@ import (
 
 const Url = "/devDataHandleService/handleDevByCommunicationSN"
 const Disabled = false
+const EndPointName = "AppService.handleDevByCommunicationSN"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -12,9 +12,10 @@ import (
 
 const Url = "/v1/reportService/getPowerDevicePointInfo"
 const Disabled = false
+const EndPointName = "AppService.getPowerDevicePointInfo"
 
 type RequestData struct {
-	PsId valueTypes.PsId `json:"id" required:"true"`
+	Id valueTypes.Integer `json:"id" required:"true"`
 	// Id valueTypes.String `json:"id"`
 }
 
@@ -29,6 +30,8 @@ func (rd RequestData) Help() string {
 
 
 type ResultData struct {
+	GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"Id"`
+
 	DeviceType    valueTypes.Integer  `json:"device_type" PointId:"device_type" PointValueType:"" PointUpdateFreq:""`
 	Id            valueTypes.Integer  `json:"id" PointId:"id" PointValueType:"" PointUpdateFreq:""`
 	Period        valueTypes.Integer  `json:"period" PointId:"period" PointValueType:"" PointUpdateFreq:""`
@@ -40,31 +43,8 @@ type ResultData struct {
 
 func (e *ResultData) IsValid() error {
 	var err error
-		// switch {
-		// 	case e.Dummy == "":
-		// 		break
-		// 	default:
-		// 		err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-		// }
 	return err
 }
-
-func (e *EndPoint) GetData2() ResultData {
-	return e.Response.ResultData
-}
-
-// func (e *EndPoint) GetData() api.DataMap {
-// 	return e.Response.ResultData.GetData()
-// }
-//
-// func (e *ResultData) GetData() api.DataMap {
-// 	entries := api.NewDataMap()
-//
-// 	for range Only.Once {
-// 		entries.StructToPointsHHHHH("", *e)
-// 	}
-// 	return entries
-// }
 
 func (e *EndPoint) AddDataTable(table output.Table) output.Table {
 
@@ -127,10 +107,6 @@ func (e *EndPoint) GetPointDataTable() output.Table {
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
-	}
-
+	entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	return entries
 }

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/isHasPlan"
 const Disabled = false
+const EndPointName = "WebIscmAppService.isHasPlan"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

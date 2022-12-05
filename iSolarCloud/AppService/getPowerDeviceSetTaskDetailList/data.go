@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getPowerDeviceSetTaskDetailList"
 const Disabled = false
+const EndPointName = "AppService.getPowerDeviceSetTaskDetailList"
 
 type RequestData struct {
 	QueryType valueTypes.String `json:"query_type" required:"true"`

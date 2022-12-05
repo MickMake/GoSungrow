@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/addPowerPointManage"
 const Disabled = false
+const EndPointName = "WebIscmAppService.addPowerPointManage"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

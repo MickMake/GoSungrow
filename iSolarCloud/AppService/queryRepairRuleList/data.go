@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/queryRepairRuleList"
 const Disabled = false
+const EndPointName = "AppService.queryRepairRuleList"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

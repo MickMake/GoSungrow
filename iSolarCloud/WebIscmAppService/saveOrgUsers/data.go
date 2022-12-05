@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/saveOrgUsers"
 const Disabled = false
+const EndPointName = "WebIscmAppService.saveOrgUsers"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

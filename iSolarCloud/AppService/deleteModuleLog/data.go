@@ -10,9 +10,10 @@ import (
 
 const Url = "/integrationService/deleteModuleLog"
 const Disabled = false
+const EndPointName = "AppService.deleteModuleLog"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/reportService/handleValue"
 const Disabled = false
+const EndPointName = "WebAppService.handleValue"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

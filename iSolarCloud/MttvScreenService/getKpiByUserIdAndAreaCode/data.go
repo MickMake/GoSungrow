@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/getKpiByUserIdAndAreaCode"
 const Disabled = false
+const EndPointName = "MttvScreenService.getKpiByUserIdAndAreaCode"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

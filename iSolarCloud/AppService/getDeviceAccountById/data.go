@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/getDeviceAccountById"
 const Disabled = false
+const EndPointName = "AppService.getDeviceAccountById"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

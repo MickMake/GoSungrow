@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/powerStationService/getPListinfoFromMysql"
 const Disabled = false
+const EndPointName = "AppService.getPListinfoFromMysql"
 // ./goraw.sh AppService.getPListinfoFromMysql '{"psIds":1171348}'
 
 type RequestData struct {

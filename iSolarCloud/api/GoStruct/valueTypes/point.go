@@ -2,6 +2,7 @@ package valueTypes
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 	"regexp"
@@ -129,6 +130,8 @@ func (t *PsKey) SetValue(value string) PsKey {
 				t.DeviceCode = s[2]
 				t.ChannelId = s[3]
 				t.Valid = true
+			default:
+				t.Error = errors.New("invalid ps_key")
 		}
 	}
 
@@ -278,11 +281,11 @@ func SetPsIdStrings(values []string) PsIds {
 	var t PsIds
 	for range Only.Once {
 		// sgd.PsId = valueTypes.SetPsIdString(PsId)
-		for _, PsId := range values {
-			if PsId == "" {
+		for _, pids := range values {
+			if pids == "" {
 				continue
 			}
-			t = append(t, SetPsIdString(PsId))
+			t = append(t, SetPsIdString(pids))
 		}
 	}
 	return t
@@ -292,11 +295,11 @@ func SetPsIdValues(values []int64) PsIds {
 	var t PsIds
 	for range Only.Once {
 		// sgd.PsId = valueTypes.SetPsIdString(PsId)
-		for _, PsId := range values {
-			if PsId == 0 {
+		for _, pids := range values {
+			if pids == 0 {
 				continue
 			}
-			t = append(t, SetPsIdValue(PsId))
+			t = append(t, SetPsIdValue(pids))
 		}
 	}
 	return t
@@ -305,13 +308,18 @@ func SetPsIdValues(values []int64) PsIds {
 
 type PsIds []PsId
 
+func (t PsIds) String() string {
+	var ret string
+	for _, pid := range t {
+		ret += pid.String() +"\n"
+	}
+	return ret
+}
+
 func (t *PsIds) Strings() []string {
 	var ret []string
-	for range Only.Once {
-		// sgd.PsId = valueTypes.SetPsIdString(PsId)
-		for _, PsId := range *t {
-			ret = append(ret, PsId.String())
-		}
+	for _, pid := range *t {
+		ret = append(ret, pid.String())
 	}
 	return ret
 }
@@ -338,7 +346,9 @@ func (t *PointId) UnmarshalJSON(data []byte) error {
 			break
 		}
 
-		pid := strings.TrimPrefix(string(data), "p")
+		pid := strings.TrimPrefix(string(data), `"`)
+		pid = strings.TrimSuffix(pid, `"`)
+		pid = strings.TrimPrefix(pid, "p")
 		var di int64
 		t.Error = json.Unmarshal([]byte(pid), &di)
 		if t.Error == nil {
@@ -348,7 +358,7 @@ func (t *PointId) UnmarshalJSON(data []byte) error {
 		}
 
 		var ds string
-		t.Error = json.Unmarshal([]byte(pid), &ds)
+		t.Error = json.Unmarshal([]byte(`"` + pid + `"`), &ds)
 		if t.Error == nil {
 			t.Set(ds)
 			break
@@ -368,10 +378,10 @@ func (t PointId) MarshalJSON() ([]byte, error) {
 		t.Error = nil
 		if t.PsKey.String() != "" {
 			d := fmt.Sprintf(`"%s.%s"`, t.PsKey.String(), t.Point)
-			data = []byte(d)
+			data = []byte("\"" + d + "\"")
 			break
 		}
-		data = []byte(t.Point)
+		data = []byte("\"" + t.Point + "\"")
 	}
 
 	return data, t.Error
@@ -385,7 +395,7 @@ func (t *PointId) Full() string {
 	var ret string
 	for range Only.Once {
 		if t.PsKey.String() != "" {
-			ret = fmt.Sprintf(`"%s.%s"`, t.PsKey.String(), t.Point)
+			ret = fmt.Sprintf(`%s.%s`, t.PsKey.String(), t.Point)
 			break
 		}
 		ret = t.Point
@@ -626,6 +636,10 @@ func (t PointIds) String() string {
 }
 
 func (t *PointIds) Set(values ...string) PointIds {
+	if len(values) == 0 {
+		t.Error = errors.New("no points defined")
+		return *t
+	}
 	for _, value := range values {
 		for _, v := range strings.Split(value, ",") {
 			var pid PointId
@@ -635,6 +649,26 @@ func (t *PointIds) Set(values ...string) PointIds {
 	}
 
 	return *t
+}
+
+func (t *PointIds) PsKeys() PsKeys {
+	var ret PsKeys
+	var psks []string
+	for _, pskey := range t.PointIds {
+		psks = append(psks, pskey.PsKey.String())
+	}
+	ret = SetPsKeysString(strings.Join(psks, ","))
+	return ret
+}
+
+func (t *PointIds) PsIds() PsIds {
+	var ret PsIds
+	var psids []string
+	for _, psid := range t.PointIds {
+		psids = append(psids, psid.PsKey.PsId)
+	}
+	ret = SetPsIdStrings(psids)
+	return ret
 }
 
 func SetPointIdsString(values string) PointIds {

@@ -9,10 +9,11 @@ import (
 
 const Url = "/v1/devService/modelPointsPage"
 const Disabled = false
+const EndPointName = "WebIscmAppService.modelPointsPage"
 
 type RequestData struct {
 	DeviceModelId valueTypes.String `json:"device_model_id" required:"true"`
-	DeviceType    valueTypes.String `json:"device_type"     required:"true"`
+	DeviceType    valueTypes.Integer `json:"device_type"     required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

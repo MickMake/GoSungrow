@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/reportService/saveOrUpdateReport"
 const Disabled = false
+const EndPointName = "WebIscmAppService.saveOrUpdateReport"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

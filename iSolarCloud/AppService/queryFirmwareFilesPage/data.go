@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/commonService/queryFirmwareFilesPage"
 const Disabled = false
+const EndPointName = "AppService.queryFirmwareFilesPage"
 
 type RequestData struct {
 }

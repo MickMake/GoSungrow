@@ -12,26 +12,27 @@ import (
 
 const Url = "/v1/reportService/getPowerDevicePointNames"
 const Disabled = false
+const EndPointName = "AppService.getPowerDevicePointNames"
 
 const (
-	DeviceType1  = "1"
-	DeviceType3  = "3"
-	DeviceType4  = "4"
-	DeviceType5  = "5"
-	DeviceType7  = "7"
-	DeviceType11 = "11"
-	DeviceType14 = "14"
-	DeviceType17 = "17"
-	DeviceType22 = "22"
-	DeviceType23 = "23"
-	DeviceType26 = "26"
-	DeviceType37 = "37"
-	DeviceType41 = "41"
-	DeviceType43 = "43"
-	DeviceType47 = "47"
+	DeviceType1  = 1
+	DeviceType3  = 3
+	DeviceType4  = 4
+	DeviceType5  = 5
+	DeviceType7  = 7
+	DeviceType11 = 11
+	DeviceType14 = 14
+	DeviceType17 = 17
+	DeviceType22 = 22
+	DeviceType23 = 23
+	DeviceType26 = 26
+	DeviceType37 = 37
+	DeviceType41 = 41
+	DeviceType43 = 43
+	DeviceType47 = 47
 )
 
-var DeviceTypes = []string{
+var DeviceTypes = []int{
 	DeviceType1,
 	DeviceType3,
 	DeviceType4,
@@ -50,7 +51,7 @@ var DeviceTypes = []string{
 }
 
 type RequestData struct {
-	DeviceType valueTypes.String `json:"device_type" required:"true"`
+	DeviceType valueTypes.Integer `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -59,7 +60,7 @@ func (rd RequestData) IsValid() error {
 
 func (rd RequestData) Help() string {
 	ret := fmt.Sprintf("device_type can be one of:\n")
-	ret += fmt.Sprintf("%s, %s, %s, %s, %s, %s, %s, %s\n",
+	ret += fmt.Sprintf("%d, %d, %d, %d, %d, %d, %d, %d\n",
 		DeviceType1,
 		DeviceType3,
 		DeviceType4,
@@ -72,7 +73,9 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-type ResultData []struct {
+type ResultData []Point
+
+type Point struct {
 	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true"`
 
 	PointId        valueTypes.Integer      `json:"point_id"`
@@ -99,12 +102,6 @@ func (e *EndPoint) GetPointDataTable() output.Table {
 		table.SetJson([]byte(e.GetJsonData(false)))
 		table.SetRaw([]byte(e.GetJsonData(true)))
 
-		// e.Error = table.SetHeader(
-		// 	"Device Type",
-		// 	"Point Type",
-		// 	"Point Id",
-		// 	"Point Name",
-		// )
 		if e.Error != nil {
 			break
 		}
@@ -140,10 +137,6 @@ func (e *EndPoint) GetPointDataTable() output.Table {
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
-	}
-
+	entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	return entries
 }

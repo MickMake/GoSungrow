@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/commonService/getCounty"
 const Disabled = false
+const EndPointName = "AppService.getCounty"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

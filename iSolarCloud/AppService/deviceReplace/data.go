@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/deviceReplace"
 const Disabled = false
+const EndPointName = "AppService.deviceReplace"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

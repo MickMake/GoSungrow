@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/operateBillTransferToUser"
 const Disabled = false
+const EndPointName = "WebAppService.operateBillTransferToUser"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/commonService/getAccessedPermission"
 const Disabled = false
+const EndPointName = "AppService.getAccessedPermission"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

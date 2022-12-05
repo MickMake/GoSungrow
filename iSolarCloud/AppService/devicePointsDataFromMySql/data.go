@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/devicePointsDataFromMySql"
 const Disabled = false
+const EndPointName = "AppService.devicePointsDataFromMySql"
 
 type RequestData struct {
 	PsKey          valueTypes.PsKey `json:"ps_key" required:"true"`

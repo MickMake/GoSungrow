@@ -10,9 +10,10 @@ import (
 
 const Url = "/devDataHandleService/updateInverterSn2ModuleSn"
 const Disabled = false
+const EndPointName = "AppService.updateInverterSn2ModuleSn"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

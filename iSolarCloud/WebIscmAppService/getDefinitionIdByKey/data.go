@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/faultService/getDefinitionIdByKey"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getDefinitionIdByKey"
 
 type RequestData struct {
 }

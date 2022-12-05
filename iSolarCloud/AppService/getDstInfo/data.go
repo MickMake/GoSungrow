@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/getDstInfo"
 const Disabled = false
+const EndPointName = "AppService.getDstInfo"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

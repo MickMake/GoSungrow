@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/isCanAddUser"
 const Disabled = false
+const EndPointName = "WebIscmAppService.isCanAddUser"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/getPsListStaticData"
 const Disabled = false
+const EndPointName = "AppService.getPsListStaticData"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -25,7 +26,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		GoStruct                GoStruct.GoStruct   `json:"GoStruct" PointIdFrom:"PsId" PointIdReplace:"true" PointDeviceFrom:"PsId"`
+		GoStruct               GoStruct.GoStruct   `json:"GoStruct" PointIdFrom:"PsId" PointIdReplace:"true" PointDeviceFrom:"PsId"`
 
 		PsId                   valueTypes.PsId     `json:"ps_id"`
 		PsName                 valueTypes.String   `json:"ps_name"`

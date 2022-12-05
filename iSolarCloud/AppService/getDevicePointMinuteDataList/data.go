@@ -11,6 +11,7 @@ import (
 
 const Url = "/v1/commonService/getDevicePointMinuteDataList"
 const Disabled = false
+const EndPointName = "AppService.getDevicePointMinuteDataList"
 
 type RequestData struct {
 	PsKey          valueTypes.PsKey  `json:"ps_key" required:"true"`
@@ -52,7 +53,7 @@ func (e *ResultData) UnmarshalJSON(data []byte) error {
 
 
 type DataPoint struct {
-	GoStruct              GoStruct.GoStruct               `json:"-" PointIdReplace:"true" PointIdFrom:"TimeStamp" PointNameDateFormat:"20060102-150405" PointTimestampFrom:"TimeStamp"`
+	GoStruct.GoStruct     `json:"-" PointIdReplace:"true" PointIdFrom:"TimeStamp" PointNameDateFormat:"20060102-150405" PointTimestampFrom:"TimeStamp"`
 
 	TimeStamp             valueTypes.DateTime             `json:"time_stamp" PointNameDateFormat:"2006/01/02 15:04:05"`
 	Points                map[string]valueTypes.UnitValue `json:"points"`

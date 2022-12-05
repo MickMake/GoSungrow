@@ -9,9 +9,10 @@ import (
 
 const Url = "/v1/devService/getPsTreeChild"
 const Disabled = false
+const EndPointName = "WebAppService.getPsTreeChild"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

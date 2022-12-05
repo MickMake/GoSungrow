@@ -9,9 +9,10 @@ import (
 
 const Url = "/v1/orgService/energyPowerGenerationTrends"
 const Disabled = false
+const EndPointName = "MttvScreenService.energyPowerGenerationTrends"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

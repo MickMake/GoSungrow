@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/saveSysRole"
 const Disabled = false
+const EndPointName = "WebIscmAppService.saveSysRole"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

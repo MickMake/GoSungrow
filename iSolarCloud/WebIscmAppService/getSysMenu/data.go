@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/userService/getSysMenu"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getSysMenu"
 
 type RequestData struct {
 	MenuId valueTypes.Integer `json:"menuId" required:"true"`

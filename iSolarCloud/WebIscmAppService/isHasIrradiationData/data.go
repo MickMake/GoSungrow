@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/isHasIrradiationData"
 const Disabled = false
+const EndPointName = "WebIscmAppService.isHasIrradiationData"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

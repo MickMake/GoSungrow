@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getParamSetTemplatePointInfo"
 const Disabled = false
+const EndPointName = "AppService.getParamSetTemplatePointInfo"
 
 type RequestData struct {
 	UuidList          valueTypes.String  `json:"uuid_list" required:"true"`
@@ -17,6 +18,7 @@ type RequestData struct {
 }
 
 func (rd RequestData) IsValid() error {
+	fmt.Sprintf("")
 	rd.UuidList = valueTypes.SetStringValue("1179860")
 	rd.SetType = valueTypes.SetStringValue("1")
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/orgService/orgPowerReport"
 const Disabled = false
+const EndPointName = "MttvScreenService.orgPowerReport"
 
 type RequestData struct {
 	Type valueTypes.Integer  `json:"type" required:"true"`

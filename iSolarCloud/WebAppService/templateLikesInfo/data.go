@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/templateLikesInfo"
 const Disabled = false
+const EndPointName = "WebAppService.templateLikesInfo"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

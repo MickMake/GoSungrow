@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getDeviceTypeInfoList"
 const Disabled = false
+const EndPointName = "AppService.getDeviceTypeInfoList"
 
 type RequestData struct {
 }

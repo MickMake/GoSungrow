@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/getDevTypeList"
 const Disabled = false
+const EndPointName = "WebAppService.getDevTypeList"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

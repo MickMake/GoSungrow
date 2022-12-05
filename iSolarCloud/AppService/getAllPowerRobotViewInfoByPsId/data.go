@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getAllPowerRobotViewInfoByPsId"
 const Disabled = false
+const EndPointName = "AppService.getAllPowerRobotViewInfoByPsId"
 
 type RequestData struct {
 	PsId     valueTypes.PsId `json:"ps_id" required:"true"`

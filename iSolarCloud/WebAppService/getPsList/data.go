@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/powerStationService/getPsListForWeb"
 const Disabled = false
+const EndPointName = "WebAppService.getPsList"
 
 type RequestData struct {
 }

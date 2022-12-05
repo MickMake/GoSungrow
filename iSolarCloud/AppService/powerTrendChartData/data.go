@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/powerTrendChartData"
 const Disabled = false
+const EndPointName = "AppService.powerTrendChartData"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

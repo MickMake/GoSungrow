@@ -10,9 +10,10 @@ import (
 
 const Url = "/onlinepay/deleteRechargeOrder"
 const Disabled = false
+const EndPointName = "AppService.deleteRechargeOrder"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

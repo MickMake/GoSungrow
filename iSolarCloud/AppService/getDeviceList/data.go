@@ -11,6 +11,7 @@ import (
 
 const Url = "/v1/devService/getDeviceList"
 const Disabled = false
+const EndPointName = "AppService.getDeviceList"
 
 type RequestData struct {
 	PsId valueTypes.PsId `json:"ps_id" required:"true"`
@@ -27,59 +28,61 @@ func (rd RequestData) Help() string {
 
 // ResultData - Both getDeviceList & queryDeviceListForApp have the same output.
 type ResultData struct {
-	PageList []struct {
-		GoStruct                GoStruct.GoStruct   `json:"-" PointDeviceFrom:"PsKey" PointIdFrom:"PsKey" PointIdReplace:"true"`
-
-		PsKey                   valueTypes.PsKey    `json:"ps_key"`
-		PsId                    valueTypes.PsId     `json:"ps_id"`
-		DeviceType              valueTypes.Integer  `json:"device_type"`
-		DeviceCode              valueTypes.Integer  `json:"device_code"`
-		ChannelId               valueTypes.Integer  `json:"chnnl_id" PointId:"channel_id"`
-		Sn                      valueTypes.String   `json:"sn" PointName:"Serial Number"`
-		FactoryName             valueTypes.String   `json:"factory_name"`
-
-		AttrId                  valueTypes.Integer  `json:"attr_id"`
-		CommandStatus           valueTypes.Integer  `json:"command_status"`
-		ConnectState            valueTypes.Bool     `json:"connect_state"`
-		DataFlag                valueTypes.Integer  `json:"data_flag"`
-		DataFlagDetail          valueTypes.Integer  `json:"data_flag_detail"`
-
-		DevFaultStatus          valueTypes.Integer  `json:"dev_fault_status"`
-		DevStatus               valueTypes.Bool     `json:"dev_status"`
-		DeviceArea              valueTypes.String   `json:"device_area"`
-		DeviceFactoryDate       valueTypes.DateTime `json:"device_factory_date" PointNameDateFormat:"2006/01/02 15:04:05"`
-		DeviceId                valueTypes.Integer  `json:"device_id"`
-		DeviceModel             valueTypes.String   `json:"device_model"`
-		DeviceModelCode         valueTypes.String   `json:"device_model_code"`
-		DeviceModelId           valueTypes.Integer  `json:"device_model_id"`
-		DeviceName              valueTypes.String   `json:"device_name"`
-		DeviceProSn             valueTypes.String   `json:"device_pro_sn"`
-		DeviceState             valueTypes.Integer  `json:"device_state"`
-		DeviceSubType           interface{}         `json:"device_sub_type"`
-		DeviceSubTypeName       interface{}         `json:"device_sub_type_name"`
-
-		IsCountryCheck          valueTypes.Bool     `json:"is_country_check"`
-		IsHasFunctionEnum       valueTypes.Bool     `json:"is_has_function_enum"`
-		IsHasTheAbility         valueTypes.Bool     `json:"is_has_the_ability"`
-		IsInit                  valueTypes.Bool     `json:"is_init"`
-		IsReadSet               valueTypes.Bool     `json:"is_read_set"`
-		IsReplacing             valueTypes.Bool     `json:"is_replacing"`
-		IsReset                 valueTypes.Bool     `json:"is_reset"`
-		IsSecond                valueTypes.Bool     `json:"is_second"`
-		IsThirdParty            valueTypes.Bool     `json:"is_third_party"`
-
-		InstallerDevFaultStatus valueTypes.Integer  `json:"installer_dev_fault_status"`
-		InverterModelType       valueTypes.Integer  `json:"inverter_model_type"`
-		ModuleUUID              valueTypes.Integer  `json:"module_uuid"`
-		OwnerDevFaultStatus     valueTypes.Integer  `json:"owner_dev_fault_status"`
-		P24                     interface{}         `json:"p24"`
-		Posx                    interface{}         `json:"posx"`
-		Posy                    interface{}         `json:"posy"`
-		RelState                valueTypes.Bool     `json:"rel_state"`
-		TypeName                valueTypes.String   `json:"type_name"`
-		UUID                    valueTypes.Integer  `json:"uuid"`
-	} `json:"pageList" PointId:"devices" DataTable:"true" DataTableSortOn:"PsKey"`
+	PageList []Device `json:"pageList" PointId:"devices" DataTable:"true" DataTableSortOn:"PsKey"`
 	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count"`
+}
+
+type Device struct {
+	GoStruct                GoStruct.GoStruct   `json:"-" PointDeviceFrom:"PsKey" PointIdFrom:"PsKey" PointIdReplace:"true"`
+
+	PsKey                   valueTypes.PsKey    `json:"ps_key"`
+	PsId                    valueTypes.PsId     `json:"ps_id"`
+	DeviceType              valueTypes.Integer  `json:"device_type"`
+	DeviceCode              valueTypes.Integer  `json:"device_code"`
+	ChannelId               valueTypes.Integer  `json:"chnnl_id" PointId:"channel_id"`
+	Sn                      valueTypes.String   `json:"sn" PointName:"Serial Number"`
+	FactoryName             valueTypes.String   `json:"factory_name"`
+
+	AttrId                  valueTypes.Integer  `json:"attr_id"`
+	CommandStatus           valueTypes.Integer  `json:"command_status"`
+	ConnectState            valueTypes.Bool     `json:"connect_state"`
+	DataFlag                valueTypes.Integer  `json:"data_flag"`
+	DataFlagDetail          valueTypes.Integer  `json:"data_flag_detail"`
+
+	DevFaultStatus          valueTypes.Integer  `json:"dev_fault_status"`
+	DevStatus               valueTypes.Bool     `json:"dev_status"`
+	DeviceArea              valueTypes.String   `json:"device_area"`
+	DeviceFactoryDate       valueTypes.DateTime `json:"device_factory_date" PointNameDateFormat:"2006/01/02 15:04:05"`
+	DeviceId                valueTypes.Integer  `json:"device_id"`
+	DeviceModel             valueTypes.String   `json:"device_model"`
+	DeviceModelCode         valueTypes.String   `json:"device_model_code"`
+	DeviceModelId           valueTypes.Integer  `json:"device_model_id"`
+	DeviceName              valueTypes.String   `json:"device_name"`
+	DeviceProSn             valueTypes.String   `json:"device_pro_sn"`
+	DeviceState             valueTypes.Integer  `json:"device_state"`
+	DeviceSubType           interface{}         `json:"device_sub_type"`
+	DeviceSubTypeName       interface{}         `json:"device_sub_type_name"`
+
+	IsCountryCheck          valueTypes.Bool     `json:"is_country_check"`
+	IsHasFunctionEnum       valueTypes.Bool     `json:"is_has_function_enum"`
+	IsHasTheAbility         valueTypes.Bool     `json:"is_has_the_ability"`
+	IsInit                  valueTypes.Bool     `json:"is_init"`
+	IsReadSet               valueTypes.Bool     `json:"is_read_set"`
+	IsReplacing             valueTypes.Bool     `json:"is_replacing"`
+	IsReset                 valueTypes.Bool     `json:"is_reset"`
+	IsSecond                valueTypes.Bool     `json:"is_second"`
+	IsThirdParty            valueTypes.Bool     `json:"is_third_party"`
+
+	InstallerDevFaultStatus valueTypes.Integer  `json:"installer_dev_fault_status"`
+	InverterModelType       valueTypes.Integer  `json:"inverter_model_type"`
+	ModuleUUID              valueTypes.Integer  `json:"module_uuid"`
+	OwnerDevFaultStatus     valueTypes.Integer  `json:"owner_dev_fault_status"`
+	P24                     interface{}         `json:"p24"`
+	Posx                    interface{}         `json:"posx"`
+	Posy                    interface{}         `json:"posy"`
+	RelState                valueTypes.Bool     `json:"rel_state"`
+	TypeName                valueTypes.String   `json:"type_name"`
+	UUID                    valueTypes.Integer  `json:"uuid"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -87,45 +90,29 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-type Device struct {
-	Vendor        valueTypes.String
-	PsId          valueTypes.PsId
-	PsKey         valueTypes.PsKey
-	DeviceName    valueTypes.String
-	DeviceProSn   valueTypes.String
-	DeviceModel   valueTypes.String
-	DeviceType    valueTypes.Integer
-	DeviceCode    valueTypes.Integer
-	ChannelId     valueTypes.Integer
-	DeviceModelId valueTypes.Integer
-	TypeName      valueTypes.String
-	DeviceState   valueTypes.Integer
-	DevStatus     valueTypes.Bool
-	Uuid          valueTypes.Integer
-}
+// type Device struct {
+// 	Vendor        valueTypes.String
+//
+// 	PsKey         valueTypes.PsKey
+// 	PsId          valueTypes.PsId
+// 	DeviceType    valueTypes.Integer
+// 	DeviceCode    valueTypes.Integer
+// 	ChannelId     valueTypes.Integer
+//
+// 	DeviceName    valueTypes.String
+// 	DeviceProSn   valueTypes.String
+// 	DeviceModel   valueTypes.String
+// 	DeviceModelId valueTypes.Integer
+// 	TypeName      valueTypes.String
+// 	DeviceState   valueTypes.Integer
+// 	DevStatus     valueTypes.Bool
+// 	Uuid          valueTypes.Integer
+// }
+
 type Devices []Device
 
 func (e *EndPoint) GetDevices() Devices {
-	var ret Devices
-	for _, d := range e.Response.ResultData.PageList {
-		ret = append(ret, Device{
-			Vendor:        d.FactoryName,
-			PsKey:         d.PsKey,
-			PsId:          d.PsId,
-			DeviceType:    d.DeviceType,
-			DeviceCode:    d.DeviceCode,
-			ChannelId:     d.ChannelId,
-			TypeName:      d.TypeName,
-			DeviceProSn:   d.DeviceProSn,
-			DeviceModel:   d.DeviceModel,
-			DeviceModelId: d.DeviceModelId,
-			DeviceName:    d.DeviceName,
-			DeviceState:   d.DeviceState,
-			DevStatus:     d.DevStatus,
-			Uuid:          d.ModuleUUID,
-		})
-	}
-	return ret
+	return e.Response.ResultData.PageList
 }
 
 func (e *EndPoint) GetDevicesTable() output.Table {
@@ -168,9 +155,9 @@ func (e *EndPoint) GetDevicesTable() output.Table {
 		// 		// d.DeviceFactoryDate,
 		// 	)
 		// }
-
-		data := e.GetDevices()
-		table = GetDevicesTable(data)
+		//
+		// data := e.GetDevices()
+		table = GetDevicesTable(e.Response.ResultData.PageList)
 	}
 	return table
 }
@@ -254,7 +241,7 @@ func GetDevicesTable(data Devices) output.Table {
 		// )
 
 		for _, d := range data {
-			_ = table.AddRow(d.Vendor.String(),
+			_ = table.AddRow(d.FactoryName.String(),
 				d.PsKey.String(),
 				d.PsId.String(),
 				d.DeviceType.String(),
@@ -267,7 +254,7 @@ func GetDevicesTable(data Devices) output.Table {
 				d.DeviceName.String(),
 				d.DeviceState.String(),
 				d.DevStatus.String(),
-				d.Uuid.String(),
+				d.UUID.String(),
 			)
 		}
 	}

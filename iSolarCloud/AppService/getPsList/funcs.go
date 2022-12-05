@@ -6,34 +6,22 @@ import (
 )
 
 
-type Device struct {
-	PsId                   valueTypes.PsId
-	PsType                 valueTypes.Integer
-	PsName                 valueTypes.String
-	PsShortName            valueTypes.String
-	PsHolder               valueTypes.String
-	PsStatus               valueTypes.Bool
-	PsFaultStatus          valueTypes.Integer
-	PsHealthStatus         valueTypes.Integer
-}
-type Devices []Device
-
-func (e *ResultData) GetPsDevices() Devices {
-	var ret Devices
-	for _, d := range e.PageList {
-		ret = append(ret, Device{
-			PsFaultStatus:  d.PsFaultStatus,
-			PsHealthStatus: d.PsHealthStatus,
-			PsHolder:       d.PsHolder,
-			PsId:           d.PsId,
-			PsName:         d.PsName,
-			PsShortName:    d.PsShortName,
-			PsStatus:       d.PsStatus,
-			PsType:         d.PsType,
-		})
-	}
-	return ret
-}
+// type Device struct {
+// 	PsId                   valueTypes.PsId
+// 	PsType                 valueTypes.Integer
+// 	PsName                 valueTypes.String
+// 	PsShortName            valueTypes.String
+// 	PsHolder               valueTypes.String
+// 	PsStatus               valueTypes.Bool
+// 	PsFaultStatus          valueTypes.Integer
+// 	PsHealthStatus         valueTypes.Integer
+// }
+//
+// type Devices []Device
+//
+// func (e *ResultData) GetPsDevices() []Common.Device {
+// 	return e.PageList
+// }
 
 func (e *ResultData) GetPsIds() []valueTypes.PsId {
 	var ret []valueTypes.PsId

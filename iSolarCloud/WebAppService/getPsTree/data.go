@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/devService/getPsTree"
 const Disabled = false
+const EndPointName = "WebAppService.getPsTree"
 
 type RequestData struct {
 	// @TODO - Fixup this up for iSolarCloud/data_request.go

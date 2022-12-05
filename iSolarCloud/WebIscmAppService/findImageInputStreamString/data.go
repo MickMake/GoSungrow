@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/faultService/findImageInputStreamString"
 const Disabled = false
+const EndPointName = "WebIscmAppService.findImageInputStreamString"
 
 type RequestData struct {
 }

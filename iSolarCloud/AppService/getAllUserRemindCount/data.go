@@ -9,9 +9,10 @@ import (
 
 const Url = "/v1/devService/getAllUserRemindCount"
 const Disabled = false
+const EndPointName = "AppService.getAllUserRemindCount"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/getSingleIVData"
 const Disabled = false
+const EndPointName = "AppService.getSingleIVData"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

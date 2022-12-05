@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/devService/getPointInfoPage"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getPointInfoPage"
 
 type RequestData struct {
 }

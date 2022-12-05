@@ -10,9 +10,10 @@ import (
 
 const Url = "/devDataHandleService/sendPsTimeZoneInstruction"
 const Disabled = false
+const EndPointName = "AppService.sendPsTimeZoneInstruction"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

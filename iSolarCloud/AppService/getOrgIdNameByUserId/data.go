@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/orgService/getOrgIdNameByUserId"
 const Disabled = false
+const EndPointName = "AppService.getOrgIdNameByUserId"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

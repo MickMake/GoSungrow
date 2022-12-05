@@ -11,6 +11,7 @@ import (
 
 const Url = "/v1/devService/getPowerDeviceModelTree"
 const Disabled = false
+const EndPointName = "AppService.getPowerDeviceModelTree"
 
 type RequestData struct {
 	Id valueTypes.String `json:"id" required:"true"`

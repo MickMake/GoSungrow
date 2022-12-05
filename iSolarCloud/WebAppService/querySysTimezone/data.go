@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/commonService/querySysTimezone"
 const Disabled = false
+const EndPointName = "WebAppService.querySysTimezone"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

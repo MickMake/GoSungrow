@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/dealSysDeviceSimInfo"
 const Disabled = false
+const EndPointName = "AppService.dealSysDeviceSimInfo"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

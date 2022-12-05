@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/paramSetTryAgain"
 const Disabled = false
+const EndPointName = "AppService.paramSetTryAgain"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

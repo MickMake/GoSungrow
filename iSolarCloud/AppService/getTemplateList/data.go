@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/devService/getTemplateList"
 const Disabled = false
+const EndPointName = "AppService.getTemplateList"
 
 type RequestData struct {
 }
@@ -23,12 +24,14 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	PageList []struct {
-		UpdateTime   valueTypes.DateTime `json:"update_time" PointNameDateFormat:"2006/01/02 15:04:05"`
-		TemplateId   valueTypes.Integer  `json:"template_id"`
-		TemplateName valueTypes.String `json:"template_name"`
-	} `json:"pageList" PointId:"page_list" DataTable:"true" DataTableSortOn:"UpdateTime"`
+	PageList []Template `json:"pageList" PointId:"page_list" DataTable:"true" DataTableSortOn:"UpdateTime"`
 	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count"`
+}
+
+type Template struct {
+	TemplateId   valueTypes.Integer  `json:"template_id"`
+	TemplateName valueTypes.String `json:"template_name"`
+	UpdateTime   valueTypes.DateTime `json:"update_time" PointNameDateFormat:"2006/01/02 15:04:05"`
 }
 
 func (e *ResultData) IsValid() error {

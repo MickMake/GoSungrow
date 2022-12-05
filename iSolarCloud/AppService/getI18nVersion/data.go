@@ -10,9 +10,10 @@ import (
 
 const Url = "/integrationService/international/getI18nVersion"
 const Disabled = false
+const EndPointName = "AppService.getI18nVersion"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

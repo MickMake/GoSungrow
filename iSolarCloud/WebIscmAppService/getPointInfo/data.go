@@ -9,9 +9,10 @@ import (
 
 const Url = "/v1/devService/getPointInfo"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getPointInfo"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

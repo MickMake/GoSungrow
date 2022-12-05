@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/otherService/showMaterSubTypeList"
 const Disabled = false
+const EndPointName = "WebAppService.showMaterSubTypeList"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

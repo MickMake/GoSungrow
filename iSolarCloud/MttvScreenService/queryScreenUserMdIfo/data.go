@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/queryScreenUserMdIfo"
 const Disabled = false
+const EndPointName = "MttvScreenService.queryScreenUserMdIfo"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

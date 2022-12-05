@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/resetPasW"
 const Disabled = false
+const EndPointName = "WebIscmAppService.resetPasW"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

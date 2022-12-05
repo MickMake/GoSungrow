@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/getUserByInstaller"
 const Disabled = false
+const EndPointName = "AppService.getUserByInstaller"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

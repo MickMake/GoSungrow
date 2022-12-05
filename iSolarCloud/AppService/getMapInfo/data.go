@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/powerStationService/getMapInfo"
 const Disabled = false
+const EndPointName = "AppService.getMapInfo"
 
 type RequestData struct {
 }

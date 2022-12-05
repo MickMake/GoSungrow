@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/reportService/getReportInfoByReportId"
 const Disabled = false
+const EndPointName = "WebAppService.getReportInfoByReportId"
 
 type RequestData struct {
 	ReportId valueTypes.String `json:"report_id" required:"true"`

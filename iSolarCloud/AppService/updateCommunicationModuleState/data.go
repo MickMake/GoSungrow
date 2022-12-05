@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/updateCommunicationModuleState"
 const Disabled = false
+const EndPointName = "AppService.updateCommunicationModuleState"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

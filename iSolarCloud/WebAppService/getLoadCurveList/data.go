@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/reportService/getLoadCurveList"
 const Disabled = false
+const EndPointName = "WebAppService.getLoadCurveList"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

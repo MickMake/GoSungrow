@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/powerStationService/getCodeByType"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getCodeByType"
 
 type RequestData struct {
 }

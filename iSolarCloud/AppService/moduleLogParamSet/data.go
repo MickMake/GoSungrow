@@ -10,9 +10,10 @@ import (
 
 const Url = "/integrationService/moduleLogParamSet"
 const Disabled = false
+const EndPointName = "AppService.moduleLogParamSet"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/commonService/getNationList"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getNationList"
 
 type RequestData struct {
 }

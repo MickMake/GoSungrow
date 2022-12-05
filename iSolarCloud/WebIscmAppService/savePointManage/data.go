@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/savePointManage"
 const Disabled = false
+const EndPointName = "WebIscmAppService.savePointManage"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

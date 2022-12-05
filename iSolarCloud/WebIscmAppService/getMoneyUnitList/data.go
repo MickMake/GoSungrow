@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/commonService/getMoneyUnitList"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getMoneyUnitList"
 
 type RequestData struct {
 }

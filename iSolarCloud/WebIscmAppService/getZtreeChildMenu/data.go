@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/getZtreeChildMenu"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getZtreeChildMenu"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/commonService/getApiCallsForAppkeys"
 const Disabled = false
+const EndPointName = "AppService.getApiCallsForAppkeys"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/devService/getInvertDataList"
 const Disabled = false
+const EndPointName = "AppService.getInvertDataList"
 
 type RequestData struct {
 }

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/reportService/getPsIdByUserId"
 const Disabled = false
+const EndPointName = "WebAppService.getreportPermissionByUser"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

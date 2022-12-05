@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/queryBatchSpeedyAddPowerStationResult"
 const Disabled = false
+const EndPointName = "AppService.queryBatchSpeedyAddPowerStationResult"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/copyWorkTicket"
 const Disabled = false
+const EndPointName = "WebAppService.copyWorkTicket"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

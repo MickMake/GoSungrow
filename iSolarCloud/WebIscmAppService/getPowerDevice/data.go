@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getPowerDevice"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getPowerDevice"
 
 type RequestData struct {
 }

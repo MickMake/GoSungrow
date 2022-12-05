@@ -11,6 +11,7 @@ import (
 
 const Url = "/v1/devService/queryDeviceList"
 const Disabled = false
+const EndPointName = "AppService.queryDeviceList"
 
 type RequestData struct {
 	PsId valueTypes.PsId `json:"ps_id" required:"true"`

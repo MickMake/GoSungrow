@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/powerStationService/getPsIdState"
 const Disabled = false
+const EndPointName = "WebAppService.getPsIdState"
 
 type RequestData struct {
 	PsId     valueTypes.PsId `json:"ps_id" required:"true"`

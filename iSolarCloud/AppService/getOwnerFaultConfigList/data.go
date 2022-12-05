@@ -11,9 +11,10 @@ import (
 
 const Url = "/v1/faultService/getOwnerFaultConfigList"
 const Disabled = false
+const EndPointName = "AppService.getOwnerFaultConfigList"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

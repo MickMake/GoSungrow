@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/commonService/saveFirmwareFile"
 const Disabled = false
+const EndPointName = "AppService.saveFirmwareFile"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

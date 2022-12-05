@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/getInverterProcess"
 const Disabled = false
+const EndPointName = "AppService.getInverterProcess"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

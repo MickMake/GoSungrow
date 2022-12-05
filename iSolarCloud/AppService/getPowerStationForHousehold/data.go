@@ -11,6 +11,7 @@ import (
 
 const Url = "/v1/powerStationService/getPowerStationForHousehold"
 const Disabled = false
+const EndPointName = "AppService.getPowerStationForHousehold"
 
 type RequestData struct {
 	PsId valueTypes.PsId `json:"ps_id" required:"true"`

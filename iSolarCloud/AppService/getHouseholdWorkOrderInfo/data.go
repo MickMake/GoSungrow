@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/getHouseholdWorkOrderInfo"
 const Disabled = false
+const EndPointName = "AppService.getHouseholdWorkOrderInfo"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -3,26 +3,35 @@ package updatePointInfo
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
 
 const Url = "/v1/devService/updatePointInfo"
 const Disabled = false
+const EndPointName = "WebIscmAppService.updatePointInfo"
 
 type RequestData struct {
-	}
+	PointName  valueTypes.String `json:"point_name"`
+	Id         valueTypes.String `json:"id" required:"true"`
+	DeviceType valueTypes.Integer `json:"device_type" required:"true"`
+	PointId    valueTypes.String `json:"point_id" required:"true"`
+	PointType valueTypes.String `json:"point_type"`
+	PointGroupId valueTypes.String `json:"point_group_id"`
+}
 
-func (rd RequestData) IsValid() error {
-	return GoStruct.VerifyOptionsRequired(rd)
+func (rd *RequestData) IsValid() error {
+	rd.PointName = valueTypes.SetStringValue("")
+	rd.PointType = valueTypes.SetStringValue("")
+	rd.PointGroupId = valueTypes.SetStringValue("")
+	return GoStruct.VerifyOptionsRequired(*rd)
 }
 
 func (rd RequestData) Help() string {
-	ret := fmt.Sprintf("")
+	ret := fmt.Sprintf("Wireless Signal Strength")
 	return ret
 }
-
 
 type ResultData struct {
 	// Dummy valueTypes.String `json:"dummy"`
@@ -33,31 +42,8 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
-	}
-
+	entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	return entries
 }

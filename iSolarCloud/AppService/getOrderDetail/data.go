@@ -11,6 +11,7 @@ import (
 
 const Url = "/v1/faultService/getOrderDetail"
 const Disabled = false
+const EndPointName = "AppService.getOrderDetail"
 
 type RequestData struct {
 	OrderId valueTypes.String `json:"order_id" required:"true"`

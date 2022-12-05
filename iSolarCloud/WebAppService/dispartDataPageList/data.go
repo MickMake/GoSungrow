@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/commonService/dispartDataPageList"
 const Disabled = false
+const EndPointName = "WebAppService.dispartDataPageList"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

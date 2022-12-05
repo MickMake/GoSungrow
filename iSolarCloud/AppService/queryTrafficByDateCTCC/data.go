@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/queryTrafficByDateCTCC"
 const Disabled = false
+const EndPointName = "AppService.queryTrafficByDateCTCC"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -3,16 +3,18 @@ package getPsInstallerByPsId
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
 
 const Url = "/v1/orgService/getPsInstallerByPsId"
 const Disabled = false
+const EndPointName = "AppService.getPsInstallerByPsId"
 
 type RequestData struct {
-	}
+	PsId      valueTypes.PsId   `json:"ps_id" required:"true"`
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -24,8 +26,16 @@ func (rd RequestData) Help() string {
 }
 
 
-type ResultData struct {
-	// Dummy valueTypes.String `json:"dummy"`
+type ResultData   struct {
+	PsId           valueTypes.Integer `json:"ps_id"`
+	PsType         valueTypes.Integer `json:"ps_type"`
+	RootOrgId      valueTypes.Integer `json:"root_org_id"`
+	InstallerOrgId valueTypes.Integer `json:"installer_org_id"`
+	Installer      valueTypes.String  `json:"installer"`
+	InstallerEmail valueTypes.String  `json:"installer_email"`
+	InstallerPhone valueTypes.String  `json:"installer_phone"`
+	OrgIndexCode   valueTypes.String  `json:"org_index_code"`
+	OrgURL         interface{}        `json:"org_url"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -33,31 +43,8 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
-	}
-
+	entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
 	return entries
 }

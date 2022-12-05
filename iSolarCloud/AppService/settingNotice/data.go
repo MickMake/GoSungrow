@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/settingNotice"
 const Disabled = false
+const EndPointName = "AppService.settingNotice"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/orgService/updateSysOrgPro"
 const Disabled = false
+const EndPointName = "WebIscmAppService.updateSysOrgPro"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

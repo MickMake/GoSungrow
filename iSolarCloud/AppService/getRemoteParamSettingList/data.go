@@ -10,11 +10,12 @@ import (
 
 const Url = "/v1/devService/getRemoteParamSettingList"
 const Disabled = false
+const EndPointName = "AppService.getRemoteParamSettingList"
 
 type RequestData struct {
 	CurPage    valueTypes.Integer `json:"curPage" required:"true"`
 	Size       valueTypes.Integer `json:"size" required:"true"`
-	DeviceType valueTypes.String  `json:"device_type" required:"true"`
+	DeviceType valueTypes.Integer  `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

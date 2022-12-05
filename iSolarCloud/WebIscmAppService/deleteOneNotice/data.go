@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/otherService/deleteOneNotice"
 const Disabled = false
+const EndPointName = "WebIscmAppService.deleteOneNotice"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

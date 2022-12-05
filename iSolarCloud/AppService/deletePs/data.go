@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/deletePs"
 const Disabled = false
+const EndPointName = "AppService.deletePs"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

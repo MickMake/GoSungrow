@@ -11,6 +11,7 @@ import (
 
 const Url = "/v1/devService/getInverterInfo"
 const Disabled = false
+const EndPointName = "WebAppService.getInverterInfo"
 
 type RequestData struct {
 	PsId      valueTypes.PsId  `json:"ps_id" required:"true"`

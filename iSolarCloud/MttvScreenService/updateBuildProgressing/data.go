@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/updateBuildProgressing"
 const Disabled = false
+const EndPointName = "MttvScreenService.updateBuildProgressing"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

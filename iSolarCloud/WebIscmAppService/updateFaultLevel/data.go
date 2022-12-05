@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/updateFaultLevel"
 const Disabled = false
+const EndPointName = "WebIscmAppService.updateFaultLevel"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

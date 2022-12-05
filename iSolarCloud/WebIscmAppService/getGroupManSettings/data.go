@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/faultService/getGroupManSettings"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getGroupManSettings"
 
 type RequestData struct {
 }

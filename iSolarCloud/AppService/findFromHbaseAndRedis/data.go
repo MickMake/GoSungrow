@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/commonService/findFromHbaseAndRedis"
 const Disabled = false
+const EndPointName = "AppService.findFromHbaseAndRedis"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

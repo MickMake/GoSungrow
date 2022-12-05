@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/createAppkeyInfo"
 const Disabled = false
+const EndPointName = "AppService.createAppkeyInfo"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

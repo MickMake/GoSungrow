@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/reportService/renewSendReportConfirmEmail"
 const Disabled = false
+const EndPointName = "AppService.renewSendReportConfirmEmail"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,10 +10,11 @@ import (
 
 const Url = "/v1/devService/getPowerDeviceInfo"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getPowerDeviceInfo"
 
 type RequestData struct {
 	Uuid       valueTypes.String `json:"uuid" required:"true"`
-	DeviceType valueTypes.String `json:"device_type" required:"true"`
+	DeviceType valueTypes.Integer `json:"device_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

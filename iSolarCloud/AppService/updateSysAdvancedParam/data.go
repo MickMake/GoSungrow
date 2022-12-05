@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/updateSysAdvancedParam"
 const Disabled = false
+const EndPointName = "AppService.updateSysAdvancedParam"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

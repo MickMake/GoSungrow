@@ -12,6 +12,7 @@ import (
 
 const Url = "/v1/userService/login"
 const Disabled = false
+const EndPointName = "AppService.login"
 
 type RequestData struct {
 	UserAccount  valueTypes.String `json:"user_account" required:"true"`

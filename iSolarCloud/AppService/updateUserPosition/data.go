@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/updateUserPosition"
 const Disabled = false
+const EndPointName = "AppService.updateUserPosition"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

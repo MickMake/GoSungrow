@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/getPsListByUserIdAndAreaCode"
 const Disabled = false
+const EndPointName = "MttvScreenService.getPsListByUserIdAndAreaCode"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

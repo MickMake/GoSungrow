@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/powerStationService/queryAllPsIdAndName"
 const Disabled = false
+const EndPointName = "AppService.queryAllPsIdAndName"
 
 type RequestData struct {
 }

@@ -10,9 +10,10 @@ import (
 
 const Url = "/onlinepay/immediatePayment"
 const Disabled = false
+const EndPointName = "AppService.immediatePayment"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

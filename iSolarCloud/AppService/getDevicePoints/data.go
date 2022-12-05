@@ -9,9 +9,10 @@ import (
 
 const Url = "/v1/devService/getDevicePoints"
 const Disabled = false
+const EndPointName = "AppService.getDevicePoints"
 
 type RequestData struct {
-	PointId valueTypes.String `json:"point_id" required:"true"`
+	PointId valueTypes.PointId `json:"point_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

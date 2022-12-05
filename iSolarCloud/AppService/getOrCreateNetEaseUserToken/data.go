@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/getOrCreateNetEaseUserToken"
 const Disabled = false
+const EndPointName = "AppService.getOrCreateNetEaseUserToken"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

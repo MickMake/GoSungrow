@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/otherService/addSpareParts"
 const Disabled = false
+const EndPointName = "WebAppService.addSpareParts"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

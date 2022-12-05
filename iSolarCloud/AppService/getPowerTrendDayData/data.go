@@ -11,10 +11,11 @@ import (
 
 const Url = "/v1/powerStationService/getPowerTrendDayData"
 const Disabled = false
+const EndPointName = "AppService.getPowerTrendDayData"
 
 type RequestData struct {
-	BeginTime valueTypes.String `json:"beginTime" required:"true"`
-	EndTime   valueTypes.String `json:"endTime" required:"true"`
+	BeginTime2 valueTypes.String `json:"beginTime" required:"true"`
+	EndTime2   valueTypes.String `json:"endTime" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/commonService/dealNumberOfServiceCalls2Mysql"
 const Disabled = false
+const EndPointName = "AppService.dealNumberOfServiceCalls2Mysql"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

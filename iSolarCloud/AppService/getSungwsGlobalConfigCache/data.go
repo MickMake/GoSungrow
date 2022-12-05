@@ -12,9 +12,10 @@ import (
 
 const Url = "/v1/commonService/getSungwsGlobalConfigCache"
 const Disabled = false
+const EndPointName = "AppService.getSungwsGlobalConfigCache"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

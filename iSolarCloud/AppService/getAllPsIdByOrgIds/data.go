@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getAllPsIdByOrgIds"
 const Disabled = false
+const EndPointName = "AppService.getAllPsIdByOrgIds"
 
 type RequestData struct {
 	OrgIds valueTypes.String `json:"orgIds" required:"true"`

@@ -148,6 +148,13 @@ func (dt *DateTime) SetString(value string) DateTime {
 			break
 		}
 
+		// if value == "." {
+		// 	dt.format = DateTimeLayout
+		// 	dt.string = time.Now().Format(dt.format)
+		// 	dt.SetDateType(dt.string)
+		// 	break
+		// }
+
 		for _, f := range inputDateLayout {
 			dt.Time, dt.Error = time.Parse(f, value)
 			if dt.Error == nil {
@@ -222,12 +229,20 @@ func (dt *DateTime) GetDayStartTimestamp() string {
 	// return fmt.Sprintf("%s000000", dt.Time.Format(DtLayoutDay))
 }
 
+func (dt *DateTime) SetDayStart() {
+	dt.Time = dt.Time.Round(time.Hour * 24)
+}
+
 func (dt *DateTime) GetDayEndTimestamp() string {
 	var ret string
 	f1 := dt.Time.Round(time.Hour * 24).Add(time.Hour * 24)
 	ret = f1.Format(DateTimeLayoutSecond)
 	return ret
 	// return fmt.Sprintf("%s235900", dt.Time.Format(DtLayoutDay))
+}
+
+func (dt *DateTime) SetDayEnd() {
+	dt.Time = dt.Time.Round(time.Hour * 24).Add(time.Hour * 24)
 }
 
 func (dt DateTime) PrintFull() string {
@@ -269,7 +284,7 @@ const Now = "now"
 func NewDateTime(value string) DateTime {
 	var ret DateTime
 	for range Only.Once {
-		if (value == Now) || (value == "") {
+		if (value == Now) || (value == "") || (value == ".") {
 			// value = time.Now().Format(DateTimeLayout)
 			ret.SetValue(time.Now())
 			ret.SetDateType(ret.string)

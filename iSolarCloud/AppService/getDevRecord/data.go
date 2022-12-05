@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getDevRecord"
 const Disabled = false
+const EndPointName = "AppService.getDevRecord"
 
 type RequestData struct {
 	PsKey valueTypes.PsKey  `json:"ps_key"`

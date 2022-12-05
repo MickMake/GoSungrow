@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/otherService/sureAndImportSelettlementData"
 const Disabled = false
+const EndPointName = "AppService.sureAndImportSelettlementData"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

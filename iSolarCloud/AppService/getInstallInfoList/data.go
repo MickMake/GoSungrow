@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/orgService/getInstallInfoList"
 const Disabled = false
+const EndPointName = "AppService.getInstallInfoList"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

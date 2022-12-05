@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/queryBatteryBoardsPointsData"
 const Disabled = false
+const EndPointName = "WebAppService.queryBatteryBoardsPointsData"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

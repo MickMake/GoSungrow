@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/powerStationService/getPsDeviceListValue"
 const Disabled = false
+const EndPointName = "MttvScreenService.getPsDeviceListValue"
 
 type RequestData struct {
 	PsId valueTypes.PsId    `json:"ps_id" required:"true"`

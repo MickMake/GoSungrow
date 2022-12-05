@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/commonService/getCallApiResidueTimes"
 const Disabled = false
+const EndPointName = "AppService.getCallApiResidueTimes"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

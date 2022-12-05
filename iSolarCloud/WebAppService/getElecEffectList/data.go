@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/getElecEffectList"
 const Disabled = false
+const EndPointName = "WebAppService.getElecEffectList"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/getUserGDPRAttrs"
 const Disabled = false
+const EndPointName = "AppService.getUserGDPRAttrs"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

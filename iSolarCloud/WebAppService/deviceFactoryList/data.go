@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/deviceFactoryList"
 const Disabled = false
+const EndPointName = "WebAppService.deviceFactoryList"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

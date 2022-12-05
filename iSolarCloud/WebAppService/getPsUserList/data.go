@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/userService/getPsUserList"
 const Disabled = false
+const EndPointName = "WebAppService.getPsUserList"
 
 type RequestData struct {
 }

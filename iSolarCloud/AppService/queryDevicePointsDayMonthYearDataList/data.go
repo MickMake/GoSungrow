@@ -3,16 +3,24 @@ package queryDevicePointsDayMonthYearDataList
 import (
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct"
+	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
 
 const Url = "/v1/commonService/queryDevicePointsDayMonthYearDataList"
 const Disabled = false
+const EndPointName = "AppService.queryDevicePointsDayMonthYearDataList"
 
 type RequestData struct {
-	}
+	PsKey          valueTypes.PsKey    `json:"ps_key" required:"true"`
+	DataPoint      valueTypes.String   `json:"data_point" required:"true"`
+	StartTime      valueTypes.DateTime `json:"start_time" required:"true"`
+	EndTime        valueTypes.DateTime `json:"end_time" required:"true"`
+	DataType       valueTypes.String   `json:"data_type" required:"true"`
+	QueryType      valueTypes.String   `json:"query_type" required:"true"`
+	Points         valueTypes.String   `json:"points" required:"true"`
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -24,8 +32,13 @@ func (rd RequestData) Help() string {
 }
 
 
-type ResultData struct {
-	// Dummy valueTypes.String `json:"dummy"`
+type ResultData   struct {
+	One []struct {
+		TimeStamp valueTypes.DateTime `json:"time_stamp"`
+	} `json:"1"`
+	Two []struct {
+		TimeStamp valueTypes.DateTime `json:"time_stamp"`
+	} `json:"2"`
 }
 
 func (e *ResultData) IsValid() error {
@@ -33,31 +46,8 @@ func (e *ResultData) IsValid() error {
 	return err
 }
 
-//type DecodeResultData ResultData
-//
-//func (e *ResultData) UnmarshalJSON(data []byte) error {
-//	var err error
-//
-//	for range Only.Once {
-//		if len(data) == 0 {
-//			break
-//		}
-//		var pd DecodeResultData
-//
-//		// Store ResultData
-//		_ = json.Unmarshal(data, &pd)
-//		e.Dummy = pd.Dummy
-//	}
-//
-//	return err
-//}
-
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
-	}
-
+	entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	return entries
 }

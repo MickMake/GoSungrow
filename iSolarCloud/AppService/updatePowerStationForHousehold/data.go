@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/updatePowerStationForHousehold"
 const Disabled = false
+const EndPointName = "AppService.updatePowerStationForHousehold"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

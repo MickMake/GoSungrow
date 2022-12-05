@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/powerStationService/getAreaList"
 const Disabled = false
+const EndPointName = "AppService.getAreaList"
 
 type RequestData struct {
 }
@@ -25,7 +26,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		GoStruct          GoStruct.GoStruct    `json:"-" PointIdFrom:"OrgId" PointIdReplace:"true"`
+		GoStruct.GoStructParent    `json:"-" PointIdFromChild:"OrgId" PointIdReplace:"true"`
 
 		OrgId             valueTypes.Integer   `json:"org_id"`
 		OrgName           valueTypes.String    `json:"org_name"`

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/reportService/getInverterDiscreteList"
 const Disabled = false
+const EndPointName = "WebAppService.getInverterDiscreteList"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

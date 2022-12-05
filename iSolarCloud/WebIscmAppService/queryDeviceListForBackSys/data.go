@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/queryDeviceListForBackSys"
 const Disabled = false
+const EndPointName = "WebIscmAppService.queryDeviceListForBackSys"
 
 type RequestData struct {
 	PsId       valueTypes.PsId     `json:"ps_id" require:"true"`

@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/querySysAdvancedParam"
 const Disabled = false
+const EndPointName = "AppService.querySysAdvancedParam"
 
 type RequestData struct {
 	PsId2   valueTypes.PsId    `json:"psId" required:"true"`

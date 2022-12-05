@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getModelPoints"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getModelPoints"
 
 type RequestData struct {
 	DeviceModelId valueTypes.String `json:"device_model_id" required:"true"`

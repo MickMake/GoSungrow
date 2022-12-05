@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/dealPsDataSupplement"
 const Disabled = false
+const EndPointName = "AppService.dealPsDataSupplement"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

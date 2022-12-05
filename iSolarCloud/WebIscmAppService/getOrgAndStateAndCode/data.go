@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/getOrgAndStateAndCode"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getOrgAndStateAndCode"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

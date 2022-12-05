@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/devService/getMultiPowers"
 const Disabled = false
+const EndPointName = "WebAppService.getMultiPowers"
 
 type RequestData struct {
 	PsId       valueTypes.PsId   `json:"ps_id" required:"true"`

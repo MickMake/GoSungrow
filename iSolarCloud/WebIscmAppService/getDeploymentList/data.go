@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/faultService/getDeploymentList"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getDeploymentList"
 
 type RequestData struct {
 }

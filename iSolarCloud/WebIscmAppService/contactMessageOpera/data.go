@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/powerStationService/contactMessageOpera"
 const Disabled = false
+const EndPointName = "WebIscmAppService.contactMessageOpera"
 
 type RequestData struct {
 }

@@ -10,9 +10,10 @@ import (
 
 const Url = "/onlinepay/aliPayAppTest"
 const Disabled = false
+const EndPointName = "AppService.aliPayAppTest"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

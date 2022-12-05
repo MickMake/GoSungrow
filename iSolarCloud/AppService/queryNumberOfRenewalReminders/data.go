@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/queryNumberOfRenewalReminders"
 const Disabled = false
+const EndPointName = "AppService.queryNumberOfRenewalReminders"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

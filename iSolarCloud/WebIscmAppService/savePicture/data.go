@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/savePicture"
 const Disabled = false
+const EndPointName = "WebIscmAppService.savePicture"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

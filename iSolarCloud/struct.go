@@ -3,6 +3,7 @@ package iSolarCloud
 import (
 	"GoSungrow/iSolarCloud/AliSmsService"
 	"GoSungrow/iSolarCloud/AppService"
+	"GoSungrow/iSolarCloud/AppService/getUserList"
 	"GoSungrow/iSolarCloud/AppService/login"
 	"GoSungrow/iSolarCloud/MttvScreenService"
 	"GoSungrow/iSolarCloud/NullArea"
@@ -327,7 +328,7 @@ func (sg *SunGrow) Login(auth login.SunGrowAuth) error {
 				// We want to test a simple request first.
 			}
 
-			_ = sg.GetByStruct("AppService.getUserList", nil, DefaultCacheTimeout)
+			_ = sg.GetByStruct(getUserList.EndPointName, nil, DefaultCacheTimeout)
 			if !sg.IsLoggedOut() {
 				break
 			}

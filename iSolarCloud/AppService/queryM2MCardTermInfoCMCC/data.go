@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/queryM2MCardTermInfoCMCC"
 const Disabled = false
+const EndPointName = "AppService.queryM2MCardTermInfoCMCC"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,9 +10,10 @@ import (
 
 const Url = "/devDataHandleService/updateSnIsSureFlag"
 const Disabled = false
+const EndPointName = "AppService.updateSnIsSureFlag"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

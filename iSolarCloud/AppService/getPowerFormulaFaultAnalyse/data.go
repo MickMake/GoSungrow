@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/powerStationService/getPowerFormulaFaultAnalyse"
 const Disabled = false
+const EndPointName = "AppService.getPowerFormulaFaultAnalyse"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

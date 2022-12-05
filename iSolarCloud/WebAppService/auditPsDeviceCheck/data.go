@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/devService/auditPsDeviceCheck"
 const Disabled = false
+const EndPointName = "WebAppService.auditPsDeviceCheck"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/userService/queryUnitList"
 const Disabled = false
+const EndPointName = "AppService.queryUnitList"
 
 type RequestData struct {
 }

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/userService/findWebRole"
 const Disabled = false
+const EndPointName = "WebAppService.findWebRole"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

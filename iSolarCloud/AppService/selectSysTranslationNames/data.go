@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/reportService/selectSysTranslationNames"
 const Disabled = false
+const EndPointName = "AppService.selectSysTranslationNames"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

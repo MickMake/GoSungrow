@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/devService/getMaterialList"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getMaterialList"
 
 type RequestData struct {
 }

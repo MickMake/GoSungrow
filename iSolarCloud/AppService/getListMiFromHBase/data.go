@@ -11,6 +11,7 @@ import (
 
 const Url = "/v1/commonService/getListMiFromHBase"
 const Disabled = false
+const EndPointName = "AppService.getListMiFromHBase"
 
 type RequestData struct {
 	Table      valueTypes.String `json:"table" required:"true"`

@@ -9,6 +9,7 @@ import (
 
 const Url = "/v1/powerStationService/getAuthKey"
 const Disabled = false
+const EndPointName = "WebIscmAppService.getAuthKey"
 
 type RequestData struct {
 }

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/addHouseholdOpinionFeedback"
 const Disabled = false
+const EndPointName = "AppService.addHouseholdOpinionFeedback"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

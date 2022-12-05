@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/delOperRule"
 const Disabled = false
+const EndPointName = "AppService.delOperRule"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

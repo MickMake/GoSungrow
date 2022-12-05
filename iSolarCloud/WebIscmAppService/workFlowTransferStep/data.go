@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/workFlowTransferStep"
 const Disabled = false
+const EndPointName = "WebIscmAppService.workFlowTransferStep"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,9 +10,10 @@ import (
 
 const Url = "/onlinepay/createRenewInvoice"
 const Disabled = false
+const EndPointName = "AppService.createRenewInvoice"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

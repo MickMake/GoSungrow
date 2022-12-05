@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/powerStationService/getPsDataSupplementTaskList"
 const Disabled = false
+const EndPointName = "AppService.getPsDataSupplementTaskList"
 
 type RequestData struct {
 }

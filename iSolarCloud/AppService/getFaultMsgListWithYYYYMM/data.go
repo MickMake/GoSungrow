@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/getFaultMsgListWithYYYYMM"
 const Disabled = false
+const EndPointName = "AppService.getFaultMsgListWithYYYYMM"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/commonService/getConnectionInfoBySnAndLocalPort"
 const Disabled = false
+const EndPointName = "AppService.getConnectionInfoBySnAndLocalPort"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

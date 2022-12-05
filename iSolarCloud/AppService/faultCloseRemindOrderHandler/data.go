@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/faultService/faultCloseRemindOrderHandler"
 const Disabled = false
+const EndPointName = "AppService.faultCloseRemindOrderHandler"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

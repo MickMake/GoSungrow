@@ -10,6 +10,7 @@ import (
 
 const Url = "/v1/faultService/queryNounList"
 const Disabled = false
+const EndPointName = "WebAppService.queryNounList"
 
 type RequestData struct {
 	FaultTypeCode valueTypes.Integer `json:"fault_type_code" required:"true"`

@@ -10,9 +10,10 @@ import (
 
 const Url = "/v1/commonService/getFileOperationRecordOne"
 const Disabled = false
+const EndPointName = "AppService.getFileOperationRecordOne"
 
 type RequestData struct {
-	}
+}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
