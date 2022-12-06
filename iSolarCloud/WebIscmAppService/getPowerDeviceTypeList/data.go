@@ -28,7 +28,7 @@ func (rd RequestData) Help() string {
 type ResultData []struct {
 	GoStructParent        GoStruct.GoStructParent `json:"GoStruct" PointIdReplace:"true" DataTable:"true" DataTableSortOn:"UpdateDate"`
 
-	UpdateDate      valueTypes.DateTime     `json:"update_date" PointNameDateFormat:"2006/01/02 15:04:05"`
+	UpdateDate      valueTypes.DateTime     `json:"update_date" PointNameDateFormat:"2006-01-02 15:04:05"`
 	SysId           valueTypes.String       `json:"sys_id"`
 	SysName         valueTypes.String       `json:"sys_name"`
 	TypeId          valueTypes.Integer      `json:"type_id"`

@@ -28,7 +28,7 @@ type ResultData struct {
 	WeatherList []struct {
 		GoStruct   GoStruct.GoStruct   `json:"-" PointIdReplace:"true" PointIdFrom:"DateTime" PointNameDateFormat:"20060102" PointTimestampFrom:"DateTime"`
 
-		DateTime   valueTypes.DateTime `json:"date_time" PointNameDateFormat:"2006/01/02"`
+		DateTime   valueTypes.DateTime `json:"date_time" PointNameDateFormat:"2006-01-02"`
 		PsId       valueTypes.PsId     `json:"ps_id"`
 
 		Chill      valueTypes.Float    `json:"chill"`

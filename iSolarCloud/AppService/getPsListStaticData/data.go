@@ -38,7 +38,7 @@ type ResultData struct {
 		DesignCapacity         valueTypes.Float    `json:"design_capacity" PointUnit:"W"`
 		GprsLatitude           valueTypes.Float    `json:"gprs_latitude"`
 		GprsLongitude          valueTypes.Float    `json:"gprs_longitude"`
-		InstallDate            valueTypes.DateTime `json:"install_date" PointNameDateFormat:"2006/01/02 15:04:05"`
+		InstallDate            valueTypes.DateTime `json:"install_date" PointNameDateFormat:"2006-01-02 15:04:05"`
 		InstallerPsFaultStatus valueTypes.Integer  `json:"installer_ps_fault_status"`
 		Latitude               valueTypes.Float    `json:"latitude"`
 		Location               valueTypes.String   `json:"location"`

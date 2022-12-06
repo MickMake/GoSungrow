@@ -30,7 +30,7 @@ type ResultData struct {
 	AreaForecastList []struct {
 		GoStruct          GoStruct.GoStruct   `json:"-" PointIdReplace:"true" PointIdFrom:"DateTime" PointNameDateFormat:"20060102" PointTimestampFrom:"DateTime"`
 
-		DateTime          valueTypes.DateTime `json:"date_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+		DateTime          valueTypes.DateTime `json:"date_time" PointNameDateFormat:"2006-01-02 15:04:05"`
 
 		City              valueTypes.String   `json:"city"`
 		Chill             valueTypes.Float    `json:"chill"`

@@ -128,21 +128,21 @@ func (c *CmdInfo) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		cmdInfoCsv.Example = cmdHelp.PrintExamples(cmdInfoCsv, "[area.]<endpoint>")
 		c.AttachCmdInfo(cmdInfoCsv)
 
-		// ********************************************************************************
-		var cmdInfoPut = &cobra.Command{
-			Use:                   "put",
-			Aliases:               []string{"set", "write"},
-			Annotations:           map[string]string{"group": "Info"},
-			Short:                 fmt.Sprintf("Set info on iSolarCloud"),
-			Long:                  fmt.Sprintf("Set info on iSolarCloud"),
-			DisableFlagParsing:    false,
-			DisableFlagsInUseLine: false,
-			PreRunE:               cmds.SunGrowArgs,
-			Run:                   cmds.CmdInfoPut,
-			Args:                  cobra.ExactArgs(2),
-		}
-		c.SelfCmd.AddCommand(cmdInfoPut)
-		cmdInfoPut.Example = cmdHelp.PrintExamples(cmdInfoPut, "[area.]<endpoint> <value>")
+		// // ********************************************************************************
+		// var cmdInfoPut = &cobra.Command{
+		// 	Use:                   "put",
+		// 	Aliases:               []string{"set", "write"},
+		// 	Annotations:           map[string]string{"group": "Info"},
+		// 	Short:                 fmt.Sprintf("Set info on iSolarCloud"),
+		// 	Long:                  fmt.Sprintf("Set info on iSolarCloud"),
+		// 	DisableFlagParsing:    false,
+		// 	DisableFlagsInUseLine: false,
+		// 	PreRunE:               cmds.SunGrowArgs,
+		// 	Run:                   cmds.CmdInfoPut,
+		// 	Args:                  cobra.ExactArgs(2),
+		// }
+		// c.SelfCmd.AddCommand(cmdInfoPut)
+		// cmdInfoPut.Example = cmdHelp.PrintExamples(cmdInfoPut, "[area.]<endpoint> <value>")
 	}
 	return c.SelfCmd
 }
@@ -172,14 +172,14 @@ func (c *CmdInfo) AttachCmdInfo(cmd *cobra.Command) *cobra.Command {
 	return cmd
 }
 
-func (ca *Cmds) CmdInfoPut(_ *cobra.Command, _ []string) {
-	for range Only.Once {
-		fmt.Println("Not yet implemented.")
-		// ca.Api.SunGrow.OutputType.SetFile()
-		// args = cmdConfig.FillArray(2, args)
-		// c.Error = SunGrow.PutHighLevel(args[0], args[1])
-	}
-}
+// func (ca *Cmds) CmdInfoPut(_ *cobra.Command, _ []string) {
+// 	for range Only.Once {
+// 		fmt.Println("Not yet implemented.")
+// 		// ca.Api.SunGrow.OutputType.SetFile()
+// 		// args = cmdConfig.FillArray(2, args)
+// 		// c.Error = SunGrow.PutHighLevel(args[0], args[1])
+// 	}
+// }
 
 
 func (c *CmdInfo) AttachCmdInfoMqtt(cmd *cobra.Command) *cobra.Command {

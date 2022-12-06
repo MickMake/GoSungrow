@@ -35,25 +35,25 @@ type ResultData struct {
 		CountyAllowanceMoney   interface{}         `json:"county_allowance_money"`
 		DefaultCharge          valueTypes.Float    `json:"default_charge"`
 		ElectricChargeId       valueTypes.Integer  `json:"electric_charge_id"`
-		EndTime                valueTypes.DateTime `json:"end_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+		EndTime                valueTypes.DateTime `json:"end_time" PointNameDateFormat:"2006-01-02 15:04:05"`
 		IncomeStyle            interface{}         `json:"income_style"`
 		IntervalTimeCharge     interface{}         `json:"interval_time_charge"`
 		NationAllowanceMoney   interface{}         `json:"nation_allowance_money"`
 		ParamIncomeUnit        valueTypes.Integer  `json:"param_income_unit"`
 		ProvinceAllowanceMoney interface{}         `json:"province_allowance_money"`
 		PsId                   valueTypes.PsId  `json:"ps_id"`
-		StartTime              valueTypes.DateTime `json:"start_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+		StartTime              valueTypes.DateTime `json:"start_time" PointNameDateFormat:"2006-01-02 15:04:05"`
 		UseSharpPeekValleyFlat interface{}         `json:"use_sharp_peek_valley_flat"`
 		ValidFlag              valueTypes.Bool     `json:"valid_flag"`
 	} `json:"powerElectricalChargeMap" PointId:"power_electrical_charge_map"`
 	PowerIntervalTimesChargeMap interface{} `json:"powerIntevalTimesChargeMap" PointId:"power_interval_times_charge_map"`
 	PowerSelfUseTimesChargeMap  struct {
 		DefaultCharge            valueTypes.Float    `json:"default_charge"`
-		EndTime                  valueTypes.DateTime `json:"end_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+		EndTime                  valueTypes.DateTime `json:"end_time" PointNameDateFormat:"2006-01-02 15:04:05"`
 		IntervalTimeCharge       valueTypes.String   `json:"interval_time_charge"`
 		OnlineElectricityPercent valueTypes.Float    `json:"online_electricity_percent" PointUnit:"%"`
 		PsId                     valueTypes.PsId  `json:"ps_id"`
-		StartTime                valueTypes.DateTime `json:"start_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+		StartTime                valueTypes.DateTime `json:"start_time" PointNameDateFormat:"2006-01-02 15:04:05"`
 		UseElectricityDiscount   valueTypes.Float    `json:"use_electricity_discount" PointUnit:"%"`
 	} `json:"powerSelfUseTimesChargeMap" PointId:"power_selfuse_times_charge_map"`
 	PsId valueTypes.PsId `json:"ps_id"`

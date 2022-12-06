@@ -56,7 +56,7 @@ type ResultData []struct {
 	RegisteredAddress       valueTypes.String   `json:"registered_address"`
 	RegisteredArea          valueTypes.String   `json:"registered_area"`
 	RegisteredCapital       valueTypes.Integer  `json:"registered_capital"`
-	RegisteredDate          valueTypes.DateTime `json:"registered_date" PointNameDateFormat:"2006/01/02 15:04:05"`
+	RegisteredDate          valueTypes.DateTime `json:"registered_date" PointNameDateFormat:"2006-01-02 15:04:05"`
 	ServiceEmail            valueTypes.String   `json:"service_emaill" PointId:"service_email"`
 	TaxCertificate          valueTypes.String   `json:"tax_certificate"`
 	TelNo                   valueTypes.String   `json:"tel_no"`

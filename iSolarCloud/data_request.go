@@ -962,12 +962,15 @@ func (sgd *SunGrowDataRequest) IsRequiredAndNotSet(arg string) bool {
 	var yes bool
 	for range Only.Once {
 		if _, ok := sgd.Required[arg]; !ok {
+			yes = false
 			break
 		}
 		if sgd.IsNotRequired(arg) {
+			yes = false
 			break
 		}
 		if sgd.IsSet(arg) {
+			yes = false
 			break
 		}
 		yes = true
@@ -976,7 +979,59 @@ func (sgd *SunGrowDataRequest) IsRequiredAndNotSet(arg string) bool {
 }
 
 func (sgd *SunGrowDataRequest) IsRequiredAndSet(arg string) bool {
-	return !sgd.IsRequiredAndNotSet(arg)
+	var yes bool
+	for range Only.Once {
+		if _, ok := sgd.Required[arg]; !ok {
+			yes = false
+			break
+		}
+		if sgd.IsNotRequired(arg) {
+			yes = false
+			break
+		}
+		if sgd.IsNotSet(arg) {
+			yes = false
+			break
+		}
+		yes = true
+	}
+	return yes
+}
+
+// GetPrimaryArg - Fetch the primary arg that's set. Typically used in filename generation.
+func (sgd *SunGrowDataRequest) GetPrimaryArg() string {
+	var yes string
+	for range Only.Once {
+		switch {
+			case sgd.IsRequiredAndSet(NamePsKey):
+				yes = sgd.Get(NamePsKey)
+			case sgd.IsRequiredAndSet(NamePsId):
+				yes = sgd.Get(NamePsId)
+			case sgd.IsRequiredAndSet(NamePsId2):
+				yes = sgd.Get(NamePsId2)
+			case sgd.IsRequiredAndSet(NamePsId3):
+				yes = sgd.Get(NamePsId3)
+			case sgd.IsRequiredAndSet(NameUuid):
+				yes = sgd.Get(NameUuid)
+			case sgd.IsRequiredAndSet(NameFaultCode):
+				yes = sgd.Get(NameFaultCode)
+			case sgd.IsRequiredAndSet(NameDeviceType):
+				yes = sgd.Get(NameDeviceType)
+			case sgd.IsRequiredAndSet(NameOrgId):
+				yes = sgd.Get(NameOrgId)
+			case sgd.IsRequiredAndSet(NameTaskId):
+				yes = sgd.Get(NameTaskId)
+			case sgd.IsRequiredAndSet(NameSn):
+				yes = sgd.Get(NameSn)
+			case sgd.IsRequiredAndSet(NameCodeType):
+				yes = sgd.Get(NameCodeType)
+			case sgd.IsRequiredAndSet(NameReportType):
+				yes = sgd.Get(NameReportType)
+			case sgd.IsRequiredAndSet(NameUserId):
+				yes = sgd.Get(NameUserId)
+		}
+	}
+	return yes
 }
 
 func (sgd *SunGrowDataRequest) SetIfRequired(arg string, value string) {

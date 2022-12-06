@@ -16,13 +16,13 @@ type UnitValue struct {
 
 	TypeValue   string `json:"type_value"`
 
-	*float64     `json:"value_float,omitempty"`
-	*int64       `json:"value_int,omitempty"`
-	*bool        `json:"value_bool,omitempty"`
+	*float64    `json:"value_float,omitempty"`
+	*int64      `json:"value_int,omitempty"`
+	*bool       `json:"value_bool,omitempty"`
 
 	key         string
 	deviceId    string
-	Valid       bool `json:"valid"`
+	Valid       bool  `json:"valid"`
 	Error       error `json:"-"`
 }
 
@@ -293,6 +293,37 @@ func (t *UnitValue) ValueKey() string {
 	return t.key
 }
 
+func (t *UnitValue) IsFloat() bool {
+	if t.float64 != nil {
+		return true
+	}
+	return false
+}
+
+func (t *UnitValue) IsInt() bool {
+	if t.int64 != nil {
+		return true
+	}
+	return false
+}
+
+func (t *UnitValue) IsNumber() bool {
+	if t.float64 != nil {
+		return true
+	}
+	if t.int64 != nil {
+		return true
+	}
+	return false
+}
+
+func (t *UnitValue) IsBool() bool {
+	if t.float64 != nil {
+		return true
+	}
+	return false
+}
+
 func (t UnitValue) String() string {
 	var ret string
 	for range Only.Once {
@@ -348,6 +379,13 @@ func (t *UnitValue) Unit() string {
 
 func (t *UnitValue) Type() string {
 	return t.TypeValue
+}
+
+func (t *UnitValue) IsTypeDateTime() bool {
+	if t.TypeValue == "DateTime" {
+		return true
+	}
+	return false
 }
 
 func (t *UnitValue) DeviceId() string {

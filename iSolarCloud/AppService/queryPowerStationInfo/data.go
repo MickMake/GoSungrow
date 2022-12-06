@@ -56,14 +56,14 @@ type ResultData struct {
 	DivisionCode          valueTypes.String   `json:"division_code"`
 	Email                 valueTypes.String   `json:"email"`
 	EnergyScheme          interface{}         `json:"energy_scheme"`
-	ExpectInstallDate     valueTypes.DateTime `json:"expect_install_date" PointNameDateFormat:"2006/01/02 15:04:05"`
+	ExpectInstallDate     valueTypes.DateTime `json:"expect_install_date" PointNameDateFormat:"2006-01-02 15:04:05"`
 	GcjLatitude           valueTypes.Float    `json:"gcj_latitude"`
 	GcjLongitude          valueTypes.Float    `json:"gcj_longitude"`
 	GprsLatitude          valueTypes.Float    `json:"gprs_latitude"`
 	GprsLongitude         valueTypes.Float    `json:"gprs_longitude"`
 	GridLevel             interface{}         `json:"grid_level"`
-	InstallDate           valueTypes.DateTime `json:"install_date" PointNameDateFormat:"2006/01/02 15:04:05"`
-	InstallDateZone       valueTypes.DateTime `json:"install_date_zone" PointNameDateFormat:"2006/01/02 15:04:05"`
+	InstallDate           valueTypes.DateTime `json:"install_date" PointNameDateFormat:"2006-01-02 15:04:05"`
+	InstallDateZone       valueTypes.DateTime `json:"install_date_zone" PointNameDateFormat:"2006-01-02 15:04:05"`
 	InverterCount         valueTypes.Integer  `json:"inverter_count"`
 	InvestmentType        valueTypes.Integer  `json:"investment_type"`
 	InvestmentTypeDesc    valueTypes.String   `json:"investment_type_desc"`
@@ -93,7 +93,7 @@ type ResultData struct {
 	ParamIncomeUnitName   valueTypes.String   `json:"param_income_unit_name"`
 	ProvinceCode          valueTypes.String   `json:"province_code"`
 	ProvinceName          valueTypes.String   `json:"province_name"`
-	PsBuildDate           valueTypes.DateTime `json:"ps_build_date" PointNameDateFormat:"2006/01/02 15:04:05"`
+	PsBuildDate           valueTypes.DateTime `json:"ps_build_date" PointNameDateFormat:"2006-01-02 15:04:05"`
 	PsCountryId           valueTypes.Integer  `json:"ps_country_id"`
 	PsCreateUserId        valueTypes.Integer  `json:"ps_create_user_id"`
 	PsCurrentTimeZone     valueTypes.String   `json:"ps_current_time_zone"`
@@ -109,8 +109,8 @@ type ResultData struct {
 	PsTypeDesc            valueTypes.String   `json:"ps_type_desc"`
 	PsTypeName            valueTypes.String   `json:"ps_type_name"`
 	PsUserId              valueTypes.Integer  `json:"ps_user_id"`
-	RecordCreateTime      valueTypes.DateTime `json:"recore_create_time" PointId:"record_create_time" PointNameDateFormat:"2006/01/02 15:04:05"`
-	SafeStartDate         valueTypes.DateTime `json:"safe_start_date" PointNameDateFormat:"2006/01/02 15:04:05"`
+	RecordCreateTime      valueTypes.DateTime `json:"recore_create_time" PointId:"record_create_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+	SafeStartDate         valueTypes.DateTime `json:"safe_start_date" PointNameDateFormat:"2006-01-02 15:04:05"`
 	SetUserOrg            valueTypes.Integer  `json:"set_user_org"`
 	ShareType             valueTypes.Integer  `json:"share_type"`
 	ShareUserType         interface{}         `json:"share_user_type"`

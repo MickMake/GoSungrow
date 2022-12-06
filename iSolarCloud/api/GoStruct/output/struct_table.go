@@ -7,6 +7,7 @@ import (
 	"github.com/MickMake/GoUnify/Only"
 	tabular "github.com/agrison/go-tablib"
 	"os"
+	"reflect"
 	"sort"
 	"strings"
 )
@@ -132,8 +133,9 @@ func (t *Table) RowLength() int {
 	return t.table.Height()
 }
 
-func (t *Table) GetCell(row int, colName string) (interface{}, error) {
+func (t *Table) GetCell(row int, colName string) (string, interface{}, error) {
 	var ret interface{}
+	var retType string
 	for range Only.Once {
 		var r map[string]interface{}
 		r, t.Error = t.table.Row(row)
@@ -141,8 +143,10 @@ func (t *Table) GetCell(row int, colName string) (interface{}, error) {
 			break
 		}
 		ret = r[colName]
+		// retType = reflect.TypeOf(ret).String()
+		retType = reflect.TypeOf(ret).Name()
 	}
-	return ret, t.Error
+	return retType, ret, t.Error
 }
 
 func (t *Table) AddRow(row ...interface{}) error {
@@ -165,6 +169,10 @@ func (t *Table) writeFile(data string, perm os.FileMode) error {
 
 func (t *Table) SetTitle(title string, args ...interface{}) {
 	t.title = fmt.Sprintf(title, args...)
+}
+
+func (t *Table) AppendTitle(title string, args ...interface{}) {
+	t.title += fmt.Sprintf(title, args...)
 }
 
 func (t *Table) GetTitle() string {
@@ -237,6 +245,7 @@ func (t *Table) GetName() string {
 	return t.name
 }
 
+
 func (t *Table) Output() error {
 	for range Only.Once {
 		if t == nil {
@@ -268,14 +277,7 @@ func (t *Table) Output() error {
 				t.Error = t.WriteJson()
 
 			case t.OutputType.IsGraph():
-				t.Error = t.SetGraphFromJson(Json(t.graphFilter))
-				if t.Error != nil {
-					break
-				}
 				t.Error = t.CreateGraph()
-				if t.Error != nil {
-					break
-				}
 
 			case t.OutputType.IsStruct():
 				t.Error = t.WriteStruct()
@@ -287,23 +289,29 @@ func (t *Table) Output() error {
 	return t.Error
 }
 
-
-func (t *Table) GetTable() string {
+func (t *Table) AsTable() string {
 	return t.String()
 }
 
 func (t *Table) WriteTable() error {
 	for range Only.Once {
 		if t.IsNotValid() {
+			msg := fmt.Sprintf("# %s - has no data.", t.name)
+			if t.saveAsFile {
+				fmt.Println(msg)
+			} else {
+				_, _ = fmt.Fprintln(os.Stderr, msg)
+			}
 			break
 		}
 
+		fmt.Printf("# %s\n", t.title)
 		if t.saveAsFile {
 			t.filePrefix += "." + StringTypeTable
 			t.Error = t.writeFile(t.String(), DefaultFileMode)
 			break
 		}
-		fmt.Printf("# %s\n", t.title)
+
 		fmt.Print(t.String())
 	}
 	return t.Error
@@ -312,22 +320,29 @@ func (t *Table) WriteTable() error {
 func (t *Table) WriteList() error {
 	for range Only.Once {
 		if t.IsNotValid() {
+			msg := fmt.Sprintf("# %s - has no data.", t.name)
+			if t.saveAsFile {
+				fmt.Println(msg)
+			} else {
+				_, _ = fmt.Fprintln(os.Stderr, msg)
+			}
 			break
 		}
 
+		fmt.Printf("# %s\n", t.title)
 		if t.saveAsFile {
 			t.filePrefix += "." + StringTypeList
 			t.Error = t.writeFile(t.String(), DefaultFileMode)
 			break
 		}
-		fmt.Printf("# %s\n", t.title)
+
 		fmt.Print(t.String())
 	}
 	return t.Error
 }
 
 
-func (t *Table) GetCsv() string {
+func (t *Table) AsCsv() string {
 	var ret string
 	for range Only.Once {
 		if t.IsNotValid() {
@@ -347,21 +362,29 @@ func (t *Table) GetCsv() string {
 func (t *Table) WriteCsv() error {
 	for range Only.Once {
 		if t.IsNotValid() {
+			msg := fmt.Sprintf("# %s - has no data.", t.name)
+			if t.saveAsFile {
+				fmt.Println(msg)
+			} else {
+				_, _ = fmt.Fprintln(os.Stderr, msg)
+			}
 			break
 		}
 
 		if t.saveAsFile {
+			fmt.Printf("# %s\n", t.title)
 			t.filePrefix += "." + StringTypeCsv
-			t.Error = t.writeFile(t.GetCsv(), DefaultFileMode)
+			t.Error = t.writeFile(t.AsCsv(), DefaultFileMode)
 			break
 		}
-		fmt.Print(t.GetCsv())
+
+		fmt.Print(t.AsCsv())
 	}
 	return t.Error
 }
 
 
-func (t *Table) GetXml() string {
+func (t *Table) AsXml() string {
 	var ret string
 	for range Only.Once {
 		if t.IsNotValid() {
@@ -381,21 +404,29 @@ func (t *Table) GetXml() string {
 func (t *Table) WriteXml() error {
 	for range Only.Once {
 		if t.IsNotValid() {
+			msg := fmt.Sprintf("# %s - has no data.", t.name)
+			if t.saveAsFile {
+				fmt.Println(msg)
+			} else {
+				_, _ = fmt.Fprintln(os.Stderr, msg)
+			}
 			break
 		}
 
 		if t.saveAsFile {
+			fmt.Printf("# %s\n", t.title)
 			t.filePrefix += "." + StringTypeXML
-			t.Error = t.writeFile(t.GetXml(), DefaultFileMode)
+			t.Error = t.writeFile(t.AsXml(), DefaultFileMode)
 			break
 		}
-		fmt.Print(t.GetXml())
+
+		fmt.Print(t.AsXml())
 	}
 	return t.Error
 }
 
 
-func (t *Table) GetXLSX() string {
+func (t *Table) AsXLSX() string {
 	var ret string
 	for range Only.Once {
 		if t.IsNotValid() {
@@ -415,75 +446,81 @@ func (t *Table) GetXLSX() string {
 func (t *Table) WriteXLSX() error {
 	for range Only.Once {
 		if t.IsNotValid() {
+			msg := fmt.Sprintf("# %s - has no data.", t.name)
+			if t.saveAsFile {
+				fmt.Println(msg)
+			} else {
+				_, _ = fmt.Fprintln(os.Stderr, msg)
+			}
 			break
 		}
 
-		// if t.saveAsFile {
+		if t.saveAsFile {
+			fmt.Printf("# %s\n", t.title)
 			t.filePrefix += "." + StringTypeXLSX
-			t.Error = t.writeFile(t.GetXLSX(), DefaultFileMode)
-		// 	break
-		// }
-		// fmt.Print(t.GetXml())
+			t.Error = t.writeFile(t.AsXLSX(), DefaultFileMode)
+			break
+		}
+
+		fmt.Print(t.AsXLSX())
 	}
 	return t.Error
 }
 
 
-func (t *Table) GetJson() string {
+func (t *Table) AsJson() string {
 	return string(t.raw)
 }
 
 func (t *Table) WriteJson() error {
 	for range Only.Once {
-		if t.IsNotValid() {
-			break
-		}
+		// Don't check for valid table data.
 
 		if t.saveAsFile {
+			fmt.Printf("# %s\n", t.title)
 			t.filePrefix += "." + StringTypeJson
 			t.Error = t.writeFile(string(t.json), DefaultFileMode)
 			break
 		}
+
 		fmt.Printf("%s", t.json)
 	}
 	return t.Error
 }
 
 
-func (t *Table) GetRaw() string {
+func (t *Table) AsRaw() string {
 	return string(t.json)
 }
 
-func (t *Table) GetRawBytes() []byte {
+func (t *Table) AsRawBytes() []byte {
 	return t.json
 }
 
 func (t *Table) WriteRaw() error {
 	for range Only.Once {
-		// if t.IsNotValid() {
-		// 	break
-		// }
+		// Don't check for valid table data.
 
 		if t.saveAsFile {
+			fmt.Printf("# %s\n", t.title)
 			t.filePrefix += "." + StringTypeRaw
 			t.Error = t.writeFile(string(t.raw), DefaultFileMode)
 			break
 		}
+
 		fmt.Printf("%s", t.raw)
 	}
 	return t.Error
 }
 
 
-func (t *Table) GetStruct() string {
+func (t *Table) AsStruct() string {
 	return string(t.json)
 }
 
 func (t *Table) WriteStruct() error {
 	for range Only.Once {
-		// if t.IsNotValid() {
-		// 	break
-		// }
+		// Don't check for valid table data.
 
 		var data string
 		var options gojson.Options
@@ -501,10 +538,12 @@ func (t *Table) WriteStruct() error {
 		}
 
 		if t.saveAsFile {
+			fmt.Printf("# %s\n", t.title)
 			t.filePrefix += ".go"
 			t.Error = t.writeFile(data, DefaultFileMode)
 			break
 		}
+
 		fmt.Printf("%s", data)
 	}
 	return t.Error

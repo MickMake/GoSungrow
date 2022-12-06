@@ -1,5 +1,106 @@
 package api
 
+// -------------------------------------------------------------------------------- //
+// From struct_data.go
+//
+// func (dm *DataMap) CopyDataEntries(dep DataEntries, endpoint string, pointId string, name string) *DataEntries {
+// 	var ret *DataEntries
+// 	for range Only.Once {
+// 		var des DataEntries
+// 		des = dep.Copy()
+// 		for i := range des.Entries {
+// 			des.Entries[i].SetEndpoint(endpoint, pointId)
+// 			des.Entries[i].SetPointName(name)
+// 			dm.Add(des.Entries[i])
+// 		}
+//
+// 		if len(des.Entries) == 0 {
+// 			fmt.Printf("OOOPS\n")
+// 		}
+// 		epn := des.Entries[0].EndPoint
+// 		ret = dm.Map[epn]
+// 	}
+// 	return ret
+// }
+//
+// func (dm *DataMap) TableSort() []string {
+// 	var sorted []string
+//
+// 	for range Only.Once {
+// 		for p := range dm.DataTables {
+// 			sorted = append(sorted, p)
+// 		}
+// 		sort.Strings(sorted)
+// 	}
+// 	return sorted
+// }
+//
+// func (dm *DataMap) AddAny(endpoint string, parentDeviceId string, pid valueTypes.PointId, name string, groupName string, date valueTypes.DateTime, value interface{}, unit string, Type string, timeSpan string) {
+//
+// 	for range Only.Once {
+// 		var point Point
+// 		p := GetPoint(parentDeviceId + "." + pid.String())
+// 		if p == nil {
+// 			// No point found. Create one.
+// 			point = CreatePoint(parentDeviceId, pid, name, groupName, unit, Type, timeSpan)
+// 		} else {
+// 			point = *p
+// 		}
+//
+// 		uvs, isNil, ok := valueTypes.AnyToUnitValue(value, unit, Type, valueTypes.DateTimeLayout)
+// 		if !ok {
+// 			fmt.Printf("ERROR: AddAny(endpoint '%s', parentId '%s', pid '%s', name '%s', date '%s', value '%v')",
+// 				endpoint, parentDeviceId, pid, name, date, value)
+// 			break
+// 		}
+// 		if isNil {
+// 			point.ValueType += "(NIL)"
+// 		}
+//
+// 		for _, uv := range uvs {
+// 			if uv.GetUnit() != point.Unit {
+// 				fmt.Printf("OOOPS: Unit mismatch - %f %s != %f %s\n", value, point.Unit, uv.ValueFloat(), uv.GetUnit())
+// 				point.Unit = uv.GetUnit()
+// 			}
+//
+// 			var parent ParentDevice
+// 			parent.Set(parentDeviceId)
+// 			point.Parents.Add(parent)
+//
+// 			de := CreatePointDataEntry(endpoint, parentDeviceId, point, date, uv)
+// 			de.Point = &point
+// 			dm.Add(de)
+// 		}
+// 	}
+// }
+//
+// func (dm *DataMap) AddUnitValue(endpoint string, parentDeviceId string, pid valueTypes.PointId, name string, groupName string, date valueTypes.DateTime, uv valueTypes.UnitValue, timeSpan string) {
+//
+// 	for range Only.Once {
+// 		var point Point
+// 		p := GetPoint(parentDeviceId + "." + pid.String())
+// 		if p == nil {
+// 			// No point found. Create one.
+// 			point = CreatePoint(parentDeviceId, pid, name, groupName, uv.GetUnit(), uv.Type(), timeSpan)
+// 		} else {
+// 			point = *p
+// 		}
+//
+// 		if uv.GetUnit() != point.Unit {
+// 			fmt.Printf("OOOPS: Unit mismatch - %s %s != %f %s\n", uv.String(), point.Unit, uv.ValueFloat(), uv.GetUnit())
+// 			point.Unit = uv.GetUnit()
+// 		}
+//
+// 		var parent ParentDevice
+// 		parent.Set(parentDeviceId)
+// 		point.Parents.Add(parent)
+//
+// 		de := CreatePointDataEntry(endpoint, parentDeviceId, point, date, uv)
+// 		de.Point = &point
+// 		dm.Add(de)
+// 	}
+// }
+
 
 // -------------------------------------------------------------------------------- //
 // From struct_de.go
@@ -196,6 +297,109 @@ package api
 // 		de.Entries[i].MakeState(true)
 // 	}
 // 	return de
+// }
+//
+// func (dm *DataMap) CreateDataTables() Tables {
+// 	tables := make(Tables, 0)
+//
+// 	for range Only.Once {
+// 		for name := range dm.StructMap.TableMap {
+// 			// values = make(GoStruct.StructValuesMap)
+//
+// 			td := dm.StructMap.GetTableData(name)
+// 			if !td.IsValid {
+// 				continue
+// 			}
+//
+// 			values := td.GetValues()
+// 			if (values == nil) || (len(values) == 0) {
+// 				fmt.Printf("No data table results for '%s'\n", name)
+// 				break
+// 			}
+//
+// 			headers := td.GetHeaders()
+// 			table := output.NewTable(headers...)
+// 			for row := range values {
+// 				var items []interface{}
+// 				for _, col := range td.Columns {
+// 					items = append(items, values.GetCell(row, col))
+// 				}
+// 				dm.Error = table.AddRow(items...)
+// 				if dm.Error != nil {
+// 					break
+// 				}
+// 			}
+// 			if dm.Error != nil {
+// 				break
+// 			}
+//
+// 			title := td.Current.DataStructure.DataTableTitle
+// 			if title == "" {
+// 				title = td.Current.DataStructure.DataTableName
+// 			}
+// 			if title == "" {
+// 				title = valueTypes.PointToName(td.Current.DataStructure.DataTableId)
+// 			}
+// 			// if title == "" {
+// 			// 	title = valueTypes.PointToName(td.Current.DataStructure.PointId)
+// 			// }
+// 			// dm.EndPoint.GetRequestArgNames()
+//
+// 			table.SetName(name)
+// 			if title == "" {
+// 				table.SetTitle("DataTable %s.%s", dm.EndPoint.GetArea(), td.Name)
+// 				table.SetFilePrefix("%s.%s", dm.EndPoint.GetArea(), td.Name)
+// 			} else {
+// 				table.SetTitle("DataTable %s.%s (%s)", dm.EndPoint.GetArea(), td.Name, title)
+// 				table.SetFilePrefix("%s.%s-%s", dm.EndPoint.GetArea(), td.Name, td.Current.DataStructure.DataTableId)
+// 			}
+//
+// 			// table.Sort(td.SortOn)
+// 			table.SetJson(nil)
+// 			table.SetRaw(nil)
+//
+// 			table.SetGraphFilter("")	// @TODO - Consider setting graph options here instead of iSolarCloud/data.go:487
+//
+// 			// if sgd.Options.GraphRequest.TimeColumn == nil {
+// 			// 	for _, col := range table.GetHeaders() {
+// 			// 		val := value.GetCell(0, col)
+// 			// 		if val.Type() == "DateTime" {
+// 			// 			sgd.Options.GraphRequest.TimeColumn = &col
+// 			// 			break
+// 			// 		}
+// 			// 	}
+// 			// }
+// 			//
+// 			// if sgd.Options.GraphRequest.DataColumn == nil {
+// 			// 	for _, col := range table.GetHeaders() {
+// 			// 		val := value.GetCell(0, col)
+// 			// 		if val.IsNumber() {
+// 			// 			sgd.Options.GraphRequest.DataColumn = &col
+// 			// 			break
+// 			// 		}
+// 			// 	}
+// 			// }
+// 			//
+// 			// if sgd.Options.GraphRequest.ValueColumn == nil {
+// 			// 	for _, col := range table.GetHeaders() {
+// 			// 		val := value.GetCell(0, col)
+// 			// 		if val.IsNumber() {
+// 			// 			sgd.Options.GraphRequest.ValueColumn = &col
+// 			// 			break
+// 			// 		}
+// 			// 	}
+// 			// }
+//
+// 			tables[name] = Table {
+// 				Values: values,
+// 				Table:  table,
+// 			}
+// 			// values[name] = vals
+// 			// tables[name] = table
+// 		}
+// 	}
+//
+// 	return tables
 // }
 
 

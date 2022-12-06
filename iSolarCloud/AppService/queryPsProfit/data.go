@@ -33,8 +33,8 @@ type ResultData struct {
 	ActualList []struct {
 		GoStruct                 GoStruct.GoStruct   `json:"-" PointIdReplace:"true" PointIdFrom:"DateId" PointNameDateFormat:"20060102" PointTimestampFrom:"UpdateTime"`
 
-		DateId                   valueTypes.DateTime `json:"date_id" PointNameDateFormat:"2006/01/02" PointTimestampFrom:"UpdateTime"`
-		UpdateTime               valueTypes.DateTime `json:"update_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+		DateId                   valueTypes.DateTime `json:"date_id" PointNameDateFormat:"2006-01-02" PointTimestampFrom:"UpdateTime"`
+		UpdateTime               valueTypes.DateTime `json:"update_time" PointNameDateFormat:"2006-01-02 15:04:05"`
 
 		NetPowerProfit           valueTypes.Float    `json:"net_power_profit" PointTimestampFrom:"UpdateTime"`
 		SubsidyProfit            interface{}         `json:"subsidy_profit" PointTimestampFrom:"UpdateTime"`

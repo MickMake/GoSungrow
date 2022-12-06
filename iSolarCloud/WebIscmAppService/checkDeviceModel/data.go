@@ -40,7 +40,7 @@ type ResultData struct {
 	Remark            valueTypes.String   `json:"remark"`
 	SysId             valueTypes.String   `json:"sys_id"`
 	SysType           valueTypes.String   `json:"sys_type"`
-	UpdateDate        valueTypes.DateTime `json:"updatedate" PointId:"update_date" PointNameDateFormat:"2006/01/02 15:04:05"`
+	UpdateDate        valueTypes.DateTime `json:"updatedate" PointId:"update_date" PointNameDateFormat:"2006-01-02 15:04:05"`
 	UpdateUserCode    valueTypes.Bool     `json:"updateusercode" PointId:"update_user_code"`
 }
 

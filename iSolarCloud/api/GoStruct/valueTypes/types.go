@@ -284,8 +284,9 @@ func SizeOfArrayLength(ref interface{}) int {
 
 func AnyToUnitValue(ref interface{}, key string, unit string, typeString string, dateFormat string) (UnitValues, bool, bool) {
 	var uvs UnitValues
-	ok := true
 	isNil := false
+	ok := true
+
 	for range Only.Once {
 		if IsNil(ref) {
 			// fmt.Println("DEBUG: AnyToUnitValue(): NIL")
@@ -499,6 +500,7 @@ func AnyToUnitValue(ref interface{}, key string, unit string, typeString string,
 				ok = false
 		}
 	}
+
 	return uvs, isNil, ok
 }
 

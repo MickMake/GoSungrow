@@ -52,9 +52,9 @@ type ResultData struct {
 // 	AreaId                    valueTypes.String         `json:"area_id"`
 // 	AreaType                  valueTypes.Integer        `json:"area_type"`
 // 	ArrearsStatus             valueTypes.Integer        `json:"arrears_status"`
-// 	BuildDate                 valueTypes.DateTime       `json:"build_date" PointUpdateFreq:"UpdateFreqBoot" PointNameDateFormat:"2006/01/02 15:04:05"`
-// 	ExpectInstallDate         valueTypes.DateTime       `json:"expect_install_date" PointNameDateFormat:"2006/01/02 15:04:05"`
-// 	InstallDate               valueTypes.DateTime       `json:"install_date" PointNameDateFormat:"2006/01/02 15:04:05"`
+// 	BuildDate                 valueTypes.DateTime       `json:"build_date" PointUpdateFreq:"UpdateFreqBoot" PointNameDateFormat:"2006-01-02 15:04:05"`
+// 	ExpectInstallDate         valueTypes.DateTime       `json:"expect_install_date" PointNameDateFormat:"2006-01-02 15:04:05"`
+// 	InstallDate               valueTypes.DateTime       `json:"install_date" PointNameDateFormat:"2006-01-02 15:04:05"`
 // 	BuildStatus               valueTypes.Integer        `json:"build_status" PointUpdateFreq:"UpdateFreqBoot"`
 // 	Co2Reduce                 valueTypes.UnitValue      `json:"co2_reduce"`
 // 	Co2ReduceTotal            valueTypes.UnitValue      `json:"co2_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
@@ -93,8 +93,8 @@ type ResultData struct {
 // 	OwnerFaultCount           valueTypes.Count          `json:"owner_fault_count"`
 // 	OwnerPsFaultStatus        valueTypes.Integer        `json:"owner_ps_fault_status"`
 // 	Producer                  valueTypes.String         `json:"producer"`
-// 	RecordCreateTime          valueTypes.DateTime       `json:"recore_create_time" PointId:"record_create_time" PointNameDateFormat:"2006/01/02 15:04:05"`
-// 	SafeStartDate             valueTypes.DateTime       `json:"safe_start_date" PointNameDateFormat:"2006/01/02 15:04:05"`
+// 	RecordCreateTime          valueTypes.DateTime       `json:"recore_create_time" PointId:"record_create_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+// 	SafeStartDate             valueTypes.DateTime       `json:"safe_start_date" PointNameDateFormat:"2006-01-02 15:04:05"`
 // 	ShareType                 valueTypes.Integer        `json:"share_type"`
 // 	ShippingAddress           valueTypes.String         `json:"shipping_address"`
 // 	ShippingZipCode           valueTypes.String         `json:"shipping_zip_code"`

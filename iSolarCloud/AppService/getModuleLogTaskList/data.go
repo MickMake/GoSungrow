@@ -32,9 +32,9 @@ type ResultData struct {
 		GoStruct       GoStruct.GoStruct   `json:"-" PointIdReplace:"true" PointIdFrom:"TaskId" PointNameDateFormat:"20060102-150405" PointTimestampFrom:"CreateTime"`
 
 		TaskId         valueTypes.Integer  `json:"task_id"`
-		CreateTime     valueTypes.DateTime `json:"create_time" PointNameDateFormat:"2006/01/02 15:04:05"`
-		OverTime       valueTypes.DateTime `json:"over_time" PointNameDateFormat:"2006/01/02 15:04:05"`
-		UpdateTime     valueTypes.DateTime `json:"update_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+		CreateTime     valueTypes.DateTime `json:"create_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+		OverTime       valueTypes.DateTime `json:"over_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+		UpdateTime     valueTypes.DateTime `json:"update_time" PointNameDateFormat:"2006-01-02 15:04:05"`
 		ExpireSecond   valueTypes.Integer  `json:"expire_second"`
 		TaskName       valueTypes.String   `json:"task_name"`
 		CommandStatus  valueTypes.Integer  `json:"command_status"`

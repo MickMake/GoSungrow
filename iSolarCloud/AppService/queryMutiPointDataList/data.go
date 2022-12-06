@@ -42,7 +42,7 @@ type Value struct {
 	GoStructParent  GoStruct.GoStructParent   `json:"-" PointIdFrom:"PsKey.Timestamp" PointIdReplace:"true"`
 	// GoStruct  GoStruct.GoStruct   `json:"-" PointIdFrom:"PsKey" PointIdReplace:"false" PointDeviceFrom:"PsKey"`
 
-	Timestamp valueTypes.DateTime `json:"timestamp" PointNameDateFormat:"2006/01/02 15:04:05"`
+	Timestamp valueTypes.DateTime `json:"timestamp" PointNameDateFormat:"2006-01-02 15:04:05"`
 	PsKey     valueTypes.PsKey    `json:"ps_key"`
 	Points    map[string]valueTypes.Generic	`json:"points" PointDeviceFrom:"PsKey"`
 }
@@ -301,5 +301,18 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 	// entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
 	entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.EndPointPath{})
+
+	// table.InitGraph(output.GraphRequest {
+	// 	Title:        "",
+	// 	TimeColumn:   output.SetString("Date/Time"),
+	// 	SearchColumn: output.SetString("Point Id"),
+	// 	NameColumn:   output.SetString("Point Name"),
+	// 	ValueColumn:  output.SetString("Value"),
+	// 	UnitsColumn:  output.SetString("Units"),
+	// 	SearchString: output.SetString(""),
+	// 	MinLeftAxis:  output.SetFloat(0),
+	// 	MaxLeftAxis:  output.SetFloat(0),
+	// })
+
 	return entries
 }

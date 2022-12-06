@@ -30,10 +30,10 @@ type ResultData struct {
 		FileName      valueTypes.String   `json:"file_name"`
 		FileSize      valueTypes.Integer  `json:"file_size"`
 		FileType      valueTypes.Integer  `json:"file_type"`
-		UploadTime    valueTypes.DateTime `json:"upload_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+		UploadTime    valueTypes.DateTime `json:"upload_time" PointNameDateFormat:"2006-01-02 15:04:05"`
 		URL           valueTypes.String   `json:"url"`
 		Operation     valueTypes.Integer  `json:"operation"`
-		OperationTime valueTypes.DateTime `json:"operation_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+		OperationTime valueTypes.DateTime `json:"operation_time" PointNameDateFormat:"2006-01-02 15:04:05"`
 		OperatorId    valueTypes.String   `json:"operator_id"`
 		OperatorName  valueTypes.String   `json:"operator_name"`
 		System        valueTypes.String   `json:"system"`

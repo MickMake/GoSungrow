@@ -39,9 +39,9 @@ type ResultData struct {
 		OperateUserId        valueTypes.Integer  `json:"operate_user_id"`
 		CommandStatus        valueTypes.Integer  `json:"command_status"`
 		CommandType          valueTypes.Integer  `json:"command_type"`
-		CreateTime           valueTypes.DateTime `json:"create_time" PointNameDateFormat:"2006/01/02 15:04:05"`
-		UpdateTime           valueTypes.DateTime `json:"update_time" PointNameDateFormat:"2006/01/02 15:04:05"`
-		OverTime             valueTypes.DateTime `json:"over_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+		CreateTime           valueTypes.DateTime `json:"create_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+		UpdateTime           valueTypes.DateTime `json:"update_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+		OverTime             valueTypes.DateTime `json:"over_time" PointNameDateFormat:"2006-01-02 15:04:05"`
 		SetCancelNum         valueTypes.Count    `json:"set_cancel_num"`
 		SetFailNum           valueTypes.Count    `json:"set_fail_num"`
 		SetFinishNum         valueTypes.Count    `json:"set_finish_num"`

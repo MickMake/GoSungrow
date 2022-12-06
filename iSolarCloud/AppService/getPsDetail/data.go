@@ -29,12 +29,12 @@ type ResultData struct {
 	ActualEnergy                  []valueTypes.Float   `json:"actual_energy" PointId:"actual_energy" PointName:"Actual Energy" PointUnitFrom:"ActualEnergyUnit" PointArrayFlatten:"true"`
 	PlanEnergy                    []valueTypes.Float   `json:"plan_energy" PointUnitFrom:"PlanEnergyUnit" PointArrayFlatten:"true"`
 
-	BuildDate                     valueTypes.DateTime  `json:"build_date" PointNameDateFormat:"2006/01/02 15:04:05"`
-	DataLastUpdateTime            valueTypes.DateTime  `json:"data_last_update_time" PointNameDateFormat:"2006/01/02 15:04:05"`
-	ExpectInstallDate             valueTypes.DateTime  `json:"expect_install_date" PointNameDateFormat:"2006/01/02 15:04:05"`
-	InstallDate                   valueTypes.DateTime  `json:"install_date" PointNameDateFormat:"2006/01/02 15:04:05"`
-	RecordCreateTime              valueTypes.DateTime  `json:"recore_create_time" PointId:"record_create_time" PointNameDateFormat:"2006/01/02 15:04:05"`
-	SafeStartDate                 valueTypes.DateTime  `json:"safe_start_date" PointNameDateFormat:"2006/01/02 15:04:05"`
+	BuildDate                     valueTypes.DateTime  `json:"build_date" PointNameDateFormat:"2006-01-02 15:04:05"`
+	DataLastUpdateTime            valueTypes.DateTime  `json:"data_last_update_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+	ExpectInstallDate             valueTypes.DateTime  `json:"expect_install_date" PointNameDateFormat:"2006-01-02 15:04:05"`
+	InstallDate                   valueTypes.DateTime  `json:"install_date" PointNameDateFormat:"2006-01-02 15:04:05"`
+	RecordCreateTime              valueTypes.DateTime  `json:"recore_create_time" PointId:"record_create_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+	SafeStartDate                 valueTypes.DateTime  `json:"safe_start_date" PointNameDateFormat:"2006-01-02 15:04:05"`
 	ActualEnergyUnit              valueTypes.String    `json:"actual_energy_unit" PointId:"actual_energy_unit"  PointIgnore:"true"`
 	AlarmCount                    valueTypes.Count     `json:"alarm_count"`
 	AreaId                        interface{}          `json:"area_id"`
@@ -218,7 +218,7 @@ type ResultData struct {
 	StorageInverterData []struct {
 		GoStruct                GoStruct.GoStruct    `json:"-" PointIdReplace:"true" PointIdFrom:"PsKey" PointDeviceFrom:"PsKey"`
 
-		UpdateTime              valueTypes.DateTime  `json:"update_time" PointNameDateFormat:"2006/01/02 15:04:05"`
+		UpdateTime              valueTypes.DateTime  `json:"update_time" PointNameDateFormat:"2006-01-02 15:04:05"`
 		PsKey                   valueTypes.PsKey     `json:"ps_key"`
 		CommunicationDevSn      valueTypes.String    `json:"communication_dev_sn"`
 		DevFaultStatus          valueTypes.Integer   `json:"dev_fault_status"`

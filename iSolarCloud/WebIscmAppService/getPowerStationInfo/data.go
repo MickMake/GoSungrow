@@ -82,7 +82,7 @@ type ResultData struct {
 		AccessType        Common.Unknown      `json:"access_type"`
 		AreaType          Common.Unknown      `json:"area_type"`
 		AreaId            Common.Unknown      `json:"areaid" PointId:"area_id"`
-		BuildDate         valueTypes.DateTime `json:"build_date" PointNameDateFormat:"2006/01/02 15:04:05"`
+		BuildDate         valueTypes.DateTime `json:"build_date" PointNameDateFormat:"2006-01-02 15:04:05"`
 		BuildStatus       valueTypes.Integer  `json:"buildstatus" PointId:"build_status"`
 		CapitalType       valueTypes.Integer  `json:"capitaltype" PointId:"capital_type"`
 		City              Common.Unknown      `json:"city"`
@@ -91,13 +91,13 @@ type ResultData struct {
 		DistrictFlag      valueTypes.Integer  `json:"district_flag"`
 		DivisionCode      Common.Unknown      `json:"division_code"`
 		Email             valueTypes.String   `json:"email"`
-		ExpectInstallDate valueTypes.DateTime `json:"expect_install_date" PointNameDateFormat:"2006/01/02 15:04:05"`
+		ExpectInstallDate valueTypes.DateTime `json:"expect_install_date" PointNameDateFormat:"2006-01-02 15:04:05"`
 		FaultSendType     Common.Unknown      `json:"fault_send_type"`
 		GcjLatitude       valueTypes.Float    `json:"gcj_latitude"`
 		GcjLongitude      valueTypes.Float    `json:"gcj_longitude"`
 		GprsLatitude      valueTypes.Float    `json:"gprs_latitude"`
 		GprsLongitude     valueTypes.Float    `json:"gprs_longitude"`
-		InstallDate       valueTypes.DateTime `json:"installdate" PointNameDateFormat:"2006/01/02 15:04:05"`
+		InstallDate       valueTypes.DateTime `json:"installdate" PointNameDateFormat:"2006-01-02 15:04:05"`
 		InvestmentType    valueTypes.Integer  `json:"investment_type"`
 		Latitude          valueTypes.Float    `json:"latitude"`
 		Longitude         valueTypes.Float    `json:"longitude"`
@@ -119,7 +119,7 @@ type ResultData struct {
 		Producer          Common.Unknown      `json:"producer"`
 		Prov              Common.Unknown      `json:"prov"`
 		ProvCode          Common.Unknown      `json:"prov_code"`
-		PsBuildDate       valueTypes.DateTime `json:"ps_build_date" PointNameDateFormat:"2006/01/02 15:04:05"`
+		PsBuildDate       valueTypes.DateTime `json:"ps_build_date" PointNameDateFormat:"2006-01-02 15:04:05"`
 		PsCountryId       valueTypes.Integer  `json:"ps_country_id"`
 		PsCode            valueTypes.String   `json:"pscode" PointId:"ps_code"`
 		PsDesc            Common.Unknown      `json:"psdesc" PointId:"ps_desc"`
@@ -130,7 +130,7 @@ type ResultData struct {
 		PsNameEnus        Common.Unknown      `json:"psnameenus" PointId:"ps_name_enus"`
 		PsOrgId           Common.Unknown      `json:"psorgid" PointId:"ps_org_id"`
 		PsOrgName         Common.Unknown      `json:"psorgname" PointId:"ps_org_name"`
-		SafeStartDate     valueTypes.DateTime `json:"safe_start_date" PointNameDateFormat:"2006/01/02 15:04:05"`
+		SafeStartDate     valueTypes.DateTime `json:"safe_start_date" PointNameDateFormat:"2006-01-02 15:04:05"`
 		SchedulingType    valueTypes.Integer  `json:"schedulingtype" PointId:"scheduling_type"`
 		Shortname         valueTypes.String   `json:"shortname"`
 		Sn                valueTypes.String   `json:"sn"`
@@ -154,7 +154,7 @@ type ResultData struct {
 		ChannelDesc  Common.Unknown      `json:"chnnl_desc" PointId:"channel_description"`
 		ChannelId    valueTypes.Integer  `json:"chnnl_id" PointId:"channel_id"`
 		ChannelName  valueTypes.String   `json:"chnnl_name" PointId:"channel_name"`
-		CrtDate      valueTypes.DateTime `json:"crt_date" PointId:"create_date" PointNameDateFormat:"2006/01/02 15:04:05"`
+		CrtDate      valueTypes.DateTime `json:"crt_date" PointId:"create_date" PointNameDateFormat:"2006-01-02 15:04:05"`
 		CrtUserName  Common.Unknown      `json:"crt_user_name" PointId:"create_username"`
 		DataFlag     valueTypes.Integer  `json:"data_flag"`
 		FlagServer   Common.Unknown      `json:"flag_server"`
