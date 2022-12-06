@@ -929,41 +929,9 @@ func (r *Reflect) SetUnit() {
 	}
 }
 
-// func (r *Reflect) ConvertToState() {
-// 	for range Only.Once {
-// 		var ok bool
-//
-// 		switch {
-// 			case r.Value.First().ValueFloat() > 0:
-// 				ok = true
-// 			case r.Value.First().ValueFloat() < 0:
-// 				ok = true
-// 			case r.Value.First().ValueInt() > 0:
-// 				ok = true
-// 			case r.Value.First().ValueInt() < 0:
-// 				ok = true
-// 		}
-// 		r.Value = valueTypes.SetUnitValueBool(ok)
-// 	}
-// }
-
 func (r *Reflect) ValuesRange() []valueTypes.UnitValue {
 	return r.Value.Range(valueTypes.SortOrder)
 }
-
-// func (r *Reflect) SetValues(values ...interface{}) {
-// 	for range Only.Once {
-// 		r.InterfaceValue = values
-// 		var uvs valueTypes.UnitValues
-// 		for _, value := range values {
-// 			var uvs2 valueTypes.UnitValues
-// 			uvs2, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
-// 				value, "", r.DataStructure.PointUnit,
-// 				r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
-// 			uvs.AddUnitValues(uvs2)
-// 		}
-// 	}
-// }
 
 func (r *Reflect) SetUnitValue(value valueTypes.UnitValue) {
 	for range Only.Once {

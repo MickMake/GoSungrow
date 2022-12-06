@@ -12,6 +12,8 @@ import (
 )
 
 
+const AnyIndex = -1
+
 func GetPointNameFrom(ref interface{}, name string, intSize int, dateFormat string) string {
 	var ret string
 	for range Only.Once {
@@ -50,71 +52,6 @@ func GetPointNameFrom(ref interface{}, name string, intSize int, dateFormat stri
 
 	return ret
 }
-
-// func GetStringFrom(ref interface{}, name string) string {
-// 	var ret string
-// 	for range Only.Once {
-// 		vo := reflect.ValueOf(ref)
-//
-// 		switch vo.Kind() {
-// 		case reflect.Struct:
-// 			// Iterate over all available fields, looking for the field name.
-// 			for i := 0; i < vo.NumField(); i++ {
-// 				if vo.Type().Field(i).Name == name {
-// 					ret = valueTypes.AnyToValueString(vo.Field(i).Interface(), 0, "")
-// 					break
-// 				}
-// 			}
-//
-// 		case reflect.Array:
-// 			fallthrough
-// 		case reflect.Slice:
-// 			// Iterate over all available entities, looking for the field name under struct or map.
-// 			for i := 0; i < vo.Len(); i++ {
-// 				ivo := reflect.ValueOf(vo.Index(i).Interface())
-// 				foo := ivo.Interface()
-// 				fmt.Sprintf("%s", foo)
-// 				foo2 := vo.Index(i).Interface()
-// 				fmt.Sprintf("%s", foo2)
-// 				switch ivo.Kind() {
-// 				case reflect.Struct:
-// 					// Iterate over all available fields, looking for the field name.
-// 					for ii := 0; ii < ivo.NumField(); ii++ {
-// 						if ivo.Type().Field(ii).Name == name {
-// 							ret = valueTypes.AnyToValueString(ivo.Field(i).Interface(), 0, "")
-// 							break
-// 						}
-// 					}
-// 				case reflect.Map:
-// 					// Iterate over map, looking for the key name.
-// 					for _, key := range ivo.MapKeys() {
-// 						if key.String() == name {
-// 							ret = valueTypes.AnyToValueString(ivo.MapIndex(key).Interface(), 0, "")
-// 							break
-// 						}
-// 					}
-// 				}
-// 				// ret = GetStringFrom(vo.Index(i).Interface(), name)
-// 				// if ret != "" {
-// 				// 	break
-// 				// }
-// 			}
-//
-// 		case reflect.Map:
-// 			// Iterate over map, looking for the key name.
-// 			for _, key := range vo.MapKeys() {
-// 				if key.String() == name {
-// 					ret = valueTypes.AnyToValueString(vo.MapIndex(key).Interface(), 0, "")
-// 					break
-// 				}
-// 			}
-// 		}
-// 	}
-//
-// 	return ret
-// }
-
-const AnyIndex = -1
 
 func GetStringFrom(ref interface{}, index int, name string, intSize int, dateFormat string) string {
 	var ret string

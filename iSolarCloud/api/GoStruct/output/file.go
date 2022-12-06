@@ -1,10 +1,10 @@
 package output
 
 import (
-	"github.com/MickMake/GoUnify/Only"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 	"io/ioutil"
 	"os"
 )
@@ -13,6 +13,7 @@ import (
 // FileRead Retrieves data from a local file.
 func FileRead(fn string, ref interface{}) error {
 	var err error
+
 	for range Only.Once {
 		if fn == "" {
 			err = errors.New("empty file")
@@ -33,18 +34,6 @@ func FileRead(fn string, ref interface{}) error {
 
 		err = json.NewDecoder(f).Decode(&ref)
 	}
-
-	// for range Only.Once {
-	//	fn := ep.GetFilename()
-	//	if err != nil {
-	//		break
-	//	}
-	//
-	//	ret, err = os.FileRead(fn)
-	//	if err != nil {
-	//		break
-	//	}
-	// }
 
 	return err
 }
@@ -68,16 +57,6 @@ func FileWrite(fn string, ref interface{}, perm os.FileMode) error {
 		//goland:noinspection GoUnhandledErrorResult,GoDeferInLoop
 		defer f.Close()
 		err = json.NewEncoder(f).Encode(ref)
-
-		// fn := ep.GetFilename()
-		// if err != nil {
-		//	break
-		// }
-		//
-		// err = os.FileWrite(fn, data, perm)
-		// if err != nil {
-		//	break
-		// }
 	}
 
 	return err

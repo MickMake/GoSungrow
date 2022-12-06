@@ -465,6 +465,10 @@ func (sgd *SunGrowDataResponse) OutputDataTables() error {
 		// @iSolarCloud/api/struct_data.go:420
 		if sgd.Options.OutputType.IsGraph() {
 			for _, data := range tables {
+				if !data.IsValid {
+					fmt.Printf("# %s.%s - has no data.\n", data.Area, data.Name)
+					continue
+				}
 				// table := tables[name]
 				// table.OutputType = sgd.Options.OutputType
 				// table.SetSaveFile(sgd.Options.SaveAsFile)
@@ -531,21 +535,21 @@ func (sgd *SunGrowDataResponse) OutputDataTables() error {
 				if sgd.Options.GraphRequest.NameColumn == nil {
 				}
 
-				if sgd.Options.GraphRequest.DataMin == nil {
-					zero := 0.0
-					sgd.Options.GraphRequest.DataMin = &zero
-				}
+				// if sgd.Options.GraphRequest.DataMin == nil {
+				// 	zero := 0.0
+				// 	sgd.Options.GraphRequest.DataMin = &zero
+				// }
 
-				if sgd.Options.GraphRequest.DataMax == nil {
-					zero := 0.0
-					sgd.Options.GraphRequest.DataMax = &zero
-				}
+				// if sgd.Options.GraphRequest.DataMax == nil {
+				// 	zero := 0.0
+				// 	sgd.Options.GraphRequest.DataMax = &zero
+				// }
 
-				if sgd.Options.GraphRequest.Width == nil {
-				}
+				// if sgd.Options.GraphRequest.Width == nil {
+				// }
 
-				if sgd.Options.GraphRequest.Height == nil {
-				}
+				// if sgd.Options.GraphRequest.Height == nil {
+				// }
 
 				sgd.Error = data.Table.SetGraph(sgd.Options.GraphRequest)
 				if sgd.Error != nil {

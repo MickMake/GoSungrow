@@ -727,33 +727,3 @@ func (sm *StructMap) IsPointSplitOn(Current *Reflect) bool {
 	}
 	return yes
 }
-
-
-// func (sm *StructMap) SaveGoStructOptions(Child *Reflect) bool {
-// 	var yes bool
-//
-// 	for range Only.Once {
-// 		var ds DataTags
-// 		ds = Child.DataStructure
-// 		ds.Json = ""
-// 		ds.PointId = ""
-// 		ds.PointName = ""
-// 		ds.ValueType = ""
-// 		ds.ValueKind = ""
-// 		ds.Endpoint.Clear()
-//
-// 		sm.GoStructOptions = &ds
-// 		sm.GoStructOptionCurrent = Child.CurrentReflect.CurrentReflect		// @TODO - Need to sort out this mess.
-// 		if Child.IsTable() {
-// 			sm.GoStructOptionCurrent = Child.CurrentReflect.CurrentReflect
-// 		}
-// 		Child.CurrentReflect.CurrentReflect.GoStruct = &ds
-// 	}
-//
-// 	return yes
-// }
-//
-// func (sm *StructMap) ClearGoStructOptions() {
-// 	sm.GoStructOptions = nil
-// 	sm.GoStructOptionCurrent = nil
-// }

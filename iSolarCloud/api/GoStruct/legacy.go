@@ -1,6 +1,42 @@
 package GoStruct
 
 
+// -------------------------------------------------------------------------------- //
+// From struct_reflect.go
+//
+// func (r *Reflect) ConvertToState() {
+// 	for range Only.Once {
+// 		var ok bool
+//
+// 		switch {
+// 			case r.Value.First().ValueFloat() > 0:
+// 				ok = true
+// 			case r.Value.First().ValueFloat() < 0:
+// 				ok = true
+// 			case r.Value.First().ValueInt() > 0:
+// 				ok = true
+// 			case r.Value.First().ValueInt() < 0:
+// 				ok = true
+// 		}
+// 		r.Value = valueTypes.SetUnitValueBool(ok)
+// 	}
+// }
+//
+// func (r *Reflect) SetValues(values ...interface{}) {
+// 	for range Only.Once {
+// 		r.InterfaceValue = values
+// 		var uvs valueTypes.UnitValues
+// 		for _, value := range values {
+// 			var uvs2 valueTypes.UnitValues
+// 			uvs2, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
+// 				value, "", r.DataStructure.PointUnit,
+// 				r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
+// 			uvs.AddUnitValues(uvs2)
+// 		}
+// 	}
+// }
+
+
 // func FindStart(fieldName string, Parent *Reflect, Current *Reflect, name EndPointPath) *Reflect {
 // 	var ret Reflect
 //
@@ -103,7 +139,6 @@ package GoStruct
 
 // -------------------------------------------------------------------------------- //
 // From structmap.go
-//
 //
 // func (sm *StructMap) GetTables() StructTables {
 // 	var ret StructTables
@@ -349,4 +384,33 @@ package GoStruct
 // 	return ret
 // }
 //
+//
+// func (sm *StructMap) SaveGoStructOptions(Child *Reflect) bool {
+// 	var yes bool
+//
+// 	for range Only.Once {
+// 		var ds DataTags
+// 		ds = Child.DataStructure
+// 		ds.Json = ""
+// 		ds.PointId = ""
+// 		ds.PointName = ""
+// 		ds.ValueType = ""
+// 		ds.ValueKind = ""
+// 		ds.Endpoint.Clear()
+//
+// 		sm.GoStructOptions = &ds
+// 		sm.GoStructOptionCurrent = Child.CurrentReflect.CurrentReflect		// @TODO - Need to sort out this mess.
+// 		if Child.IsTable() {
+// 			sm.GoStructOptionCurrent = Child.CurrentReflect.CurrentReflect
+// 		}
+// 		Child.CurrentReflect.CurrentReflect.GoStruct = &ds
+// 	}
+//
+// 	return yes
+// }
+//
+// func (sm *StructMap) ClearGoStructOptions() {
+// 	sm.GoStructOptions = nil
+// 	sm.GoStructOptionCurrent = nil
+// }
 

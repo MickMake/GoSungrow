@@ -78,7 +78,7 @@ func (ta *StructTable) Get() ReflectArray {
 	return ta.Reflects
 }
 
-func (ta *StructTable) Process(name string, Current *Reflect) error {
+func (ta *StructTable) Process(area string, name string, Current *Reflect) error {
 
 	for range Only.Once {
 		if Current == nil {
@@ -88,6 +88,7 @@ func (ta *StructTable) Process(name string, Current *Reflect) error {
 
 		ta.Current = Current
 		ta.MapName = name
+		ta.Area = area
 		ta.Name = ta.Current.Name()
 		ta.IsValid = true
 
@@ -182,6 +183,7 @@ func (ta *StructTable) Process(name string, Current *Reflect) error {
 		}
 
 		if refs == nil {
+			ta.IsValid = false
 			break
 		}
 
@@ -515,7 +517,7 @@ func (ta *StructTable) CreateTable() (output.Table, error) { // (output.Tables, 
 			ta.Table.SetFilePrefix("%s.%s-%s", ta.Area, ta.Name, ta.Current.DataStructure.DataTableId)
 		}
 
-		// table.Sort(td.SortOn)
+		ta.Table.Sort(ta.SortOn)
 		ta.Table.SetJson(nil)
 		ta.Table.SetRaw(nil)
 
