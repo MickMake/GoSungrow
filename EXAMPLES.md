@@ -28,6 +28,8 @@ Available Commands:
 
 ### api commands
 
+Low-level interface to the SunGrow api.
+
 ```
 Available Commands:
   ls           Api	- List SunGrow api endpoints/areas
