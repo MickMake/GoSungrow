@@ -24,7 +24,6 @@ import (
 	"GoSungrow/iSolarCloud/AppService/psForcastInfo"
 	"GoSungrow/iSolarCloud/AppService/psHourPointsValue"
 	"GoSungrow/iSolarCloud/AppService/queryAllPsIdAndName"
-	"GoSungrow/iSolarCloud/AppService/queryDeviceList"
 	"GoSungrow/iSolarCloud/AppService/queryDeviceListForApp"
 	"GoSungrow/iSolarCloud/AppService/queryPowerStationInfo"
 	"GoSungrow/iSolarCloud/AppService/queryPsIdList"
@@ -32,6 +31,7 @@ import (
 	"GoSungrow/iSolarCloud/AppService/queryPsStructureList"
 	"GoSungrow/iSolarCloud/AppService/querySysAdvancedParam"
 	"GoSungrow/iSolarCloud/AppService/reportList"
+	"GoSungrow/iSolarCloud/Common"
 	"GoSungrow/iSolarCloud/MttvScreenService/getPsDeviceListValue"
 	"GoSungrow/iSolarCloud/MttvScreenService/getPsKpiForHoursByPsId"
 	"GoSungrow/iSolarCloud/WebAppService/getPsIdState"
@@ -39,6 +39,7 @@ import (
 	"GoSungrow/iSolarCloud/WebAppService/showPSView"
 	"GoSungrow/iSolarCloud/WebIscmAppService/getMaxDeviceIdByPsId"
 	"GoSungrow/iSolarCloud/WebIscmAppService/getPsTreeMenu"
+	"GoSungrow/iSolarCloud/WebIscmAppService/queryDeviceListForBackSys"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
@@ -46,6 +47,131 @@ import (
 	"time"
 )
 
+
+func (sg *SunGrow) GetPsKeys() valueTypes.PsKeys {
+	var ret valueTypes.PsKeys
+
+	for range Only.Once {
+		//        PsKey                   valueTypes.PsKey   `json:"ps_key" PointId:"ps_key" PointUpdateFreq:"UpdateFreqBoot"`
+		//        PsId                    valueTypes.PsId    `json:"ps_id" PointId:"ps_id" PointUpdateFreq:"UpdateFreqBoot"`
+		//        DeviceType              valueTypes.Integer `json:"device_type" PointId:"device_type" PointUpdateFreq:"UpdateFreqBoot"`
+		//        DeviceCode              valueTypes.Integer `json:"device_code" PointId:"device_code" PointUpdateFreq:"UpdateFreqBoot"`
+		//        ChannelId               valueTypes.Integer `json:"chnnl_id" PointId:"channel_id" PointUpdateFreq:"UpdateFreqBoot"`
+
+		var pskeys []string
+		// Different methods to obtain all pskeys.
+		// queryDeviceInfo - DEAD
+		// AppService.queryDeviceInfoForApp DeviceSn:B2281302388 - Needs UUID.
+
+		// // WebIscmAppService.queryDeviceListForBackSys - Missing values.
+		// pids := sg.GetDevices()
+		// if sg.Error != nil {
+		// 	break
+		// }
+		// fmt.Printf("%v\n", pids)
+		// for _, pid := range pids {
+		// 	fmt.Printf("%s_%s_%s_%s\n", "UUID", pid.DeviceType, pid.DeviceCode, pid.ChannelId)
+		// }
+
+		// AppService.getDeviceList - Around 7kB
+		pids2, _ := sg.GetDeviceList()
+		if sg.Error != nil {
+			break
+		}
+		// fmt.Printf("%v\n", pids2)
+		for _, pid := range pids2 {
+			pskey := fmt.Sprintf("%s_%s_%s_%s", pid.PsId, pid.DeviceType, pid.DeviceCode, pid.ChannelId)
+			pskeys = append(pskeys, pskey)
+		}
+		if len(pskeys) > 0 {
+			ret.Set(pskeys...)
+			break
+		}
+
+		// // AppService.getPsList - Around 8.5kB - Doesn't return any pid.DeviceType, pid.DeviceCode, pid.ChannelId
+		// pids4, _ := sg.GetPsList()
+		// if sg.Error != nil {
+		// 	break
+		// }
+		// // fmt.Printf("%v\n", pids4)
+		// for _, pid := range pids4 {
+		// 	pskey := fmt.Sprintf("%s_%s_%s_%s\n", pid.PsId, pid.DeviceType, pid.DeviceCode, pid.ChannelId)
+		// 	pskeys = append(pskeys, pskey)
+		// 	fmt.Printf("(%s) %s\n", pid.PsKey, pskey)
+		// }
+		// if len(pskeys) > 0 {
+		// 	ret.Set(pskeys...)
+		// 	break
+		// }
+
+		// AppService.queryDeviceList - Around 118kB
+		pids3, _ := sg.QueryDeviceList()
+		if sg.Error != nil {
+			break
+		}
+		// fmt.Printf("%v\n", pids3)
+		for _, pid := range pids3 {
+			pskey := fmt.Sprintf("%s_%s_%s_%s", pid.PsId, pid.DeviceType, pid.DeviceCode, pid.ChannelId)
+			pskeys = append(pskeys, pskey)
+		}
+		if len(pskeys) > 0 {
+			ret.Set(pskeys...)
+			break
+		}
+	}
+
+	return ret
+}
+
+// func (sg *SunGrow) GetPsKeys() ([]string, error) {
+// 	var ret []string
+//
+// 	for range Only.Once {
+// 		var psIds valueTypes.PsIds
+// 		psIds, sg.Error = sg.GetPsIds()
+// 		if sg.Error != nil {
+// 			break
+// 		}
+//
+// 		for _, psId := range psIds {
+// 			ep := sg.GetByStruct(getPsDetailWithPsType.EndPointName,
+// 				// getPsDetailWithPsType.RequestData{PsId: strconv.FormatInt(psId, 10)},
+// 				getPsDetailWithPsType.RequestData{PsId: psId},
+// 				DefaultCacheTimeout)
+// 			if sg.IsError() {
+// 				break
+// 			}
+//
+// 			data := getPsDetailWithPsType.Assert(ep)
+// 			ret = append(ret, data.GetPsKeys()...)
+// 		}
+// 	}
+//
+// 	return ret, sg.Error
+// }
+
+
+func (sg *SunGrow) GetDevices() []queryDeviceListForBackSys.Device {
+	var ret []queryDeviceListForBackSys.Device
+	for range Only.Once {
+		var pids valueTypes.PsIds
+		pids, sg.Error = sg.GetPsIds()
+		if sg.Error != nil {
+			break
+		}
+
+		for _, pid := range pids {
+			var devices []queryDeviceListForBackSys.Device
+			devices, sg.Error = sg.QueryDeviceListForBackSys(pid.String())
+			if sg.Error != nil {
+				break
+			}
+
+			ret = append(ret, devices...)
+		}
+	}
+	return ret
+}
 
 func (sg *SunGrow) SetPsIds(args ...string) valueTypes.PsIds {
 	var pids valueTypes.PsIds
@@ -55,13 +181,30 @@ func (sg *SunGrow) SetPsIds(args ...string) valueTypes.PsIds {
 			break
 		}
 
-		pids, sg.Error = sg.PsIds()
+		pids, sg.Error = sg.GetPsIds()
 		if sg.Error != nil {
 			break
 		}
 	}
 	return pids
 }
+
+func (sg *SunGrow) GetPsIds() (valueTypes.PsIds, error) {
+	var ret valueTypes.PsIds
+
+	for range Only.Once {
+		ep := sg.GetByStruct(getPsList.EndPointName, nil, DefaultCacheTimeout)
+		if sg.IsError() {
+			break
+		}
+
+		data := getPsList.AssertResultData(ep)
+		ret = data.GetPsIds()
+	}
+
+	return ret, sg.Error
+}
+
 
 // func (sg *SunGrow) GetPsId() (valueTypes.PsId, error) {
 // 	var ret valueTypes.PsId
@@ -85,8 +228,35 @@ func (sg *SunGrow) SetPsIds(args ...string) valueTypes.PsIds {
 // 	return ret, sg.Error
 // }
 
-func (sg *SunGrow) PsIds() (valueTypes.PsIds, error) {
-	var ret valueTypes.PsIds
+
+// QueryDeviceListForBackSys - WebIscmAppService.queryDeviceListForBackSys
+func (sg *SunGrow) QueryDeviceListForBackSys(psId string) ([]queryDeviceListForBackSys.Device, error) {
+	var ret []queryDeviceListForBackSys.Device
+
+	for range Only.Once {
+		pid := valueTypes.SetPsIdString(psId)
+		if !pid.Valid {
+			sg.Error = pid.Error
+			break
+		}
+
+		ep := sg.GetByStruct(queryDeviceListForBackSys.EndPointName,
+			queryDeviceListForBackSys.RequestData{ PsId: pid },
+			DefaultCacheTimeout)
+		if sg.IsError() {
+			break
+		}
+
+		ret = queryDeviceListForBackSys.AssertResultData(ep)
+	}
+
+	return ret, sg.Error
+}
+
+
+// GetPsList - AppService.getPsList
+func (sg *SunGrow) GetPsList() ([]Common.Device, error) {
+	var ret []Common.Device
 
 	for range Only.Once {
 		ep := sg.GetByStruct(getPsList.EndPointName, nil, DefaultCacheTimeout)
@@ -94,8 +264,8 @@ func (sg *SunGrow) PsIds() (valueTypes.PsIds, error) {
 			break
 		}
 
-		_getPsList := getPsList.AssertResultData(ep)
-		ret = _getPsList.GetPsIds()
+		data := getPsList.AssertResultData(ep)
+		ret = data.PageList
 	}
 
 	return ret, sg.Error
@@ -743,27 +913,6 @@ func (sg *SunGrow) GetPsHourPointsValue(psId valueTypes.PsId) (psHourPointsValue
 		}
 
 		data := psHourPointsValue.Assert(ep)
-		ret = data.Response.ResultData
-	}
-
-	return ret, sg.Error
-}
-
-// QueryDeviceList - AppService.queryDeviceList
-func (sg *SunGrow) QueryDeviceList(psId valueTypes.PsId) (queryDeviceList.ResultData, error) {
-	var ret queryDeviceList.ResultData
-	for range Only.Once {
-		ep := sg.GetByStruct(queryDeviceList.EndPointName,
-			queryDeviceList.RequestData {
-				PsId: psId,
-			},
-			time.Hour * 24,
-		)
-		if sg.IsError() {
-			break
-		}
-
-		data := queryDeviceList.Assert(ep)
 		ret = data.Response.ResultData
 	}
 

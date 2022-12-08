@@ -27,21 +27,24 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-type ResultData []Points
+type ResultData []Point
 
-type Points struct {
+// type Points []Point
+
+type Point struct {
 	GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"Id"`
 	// GoStruct.GoStruct `json:"-" PointIdFrom:"PsId" PointIdReplace:"false"`
 
 	PsId             valueTypes.Integer `json:"psid" PointId:"ps_id"`
 	DeviceType       valueTypes.Integer `json:"pid" PointId:"device_type"`
+	ChannelId        valueTypes.Integer `json:"chnnlid" PointId:"channel_id"`
+
 	StationName      valueTypes.String  `json:"stationname" PointId:"station_name"`
 	StationShortName valueTypes.String  `json:"stationshortname" PointId:"station_short_name"`
 	IsParent         valueTypes.Bool    `json:"isparent" PointId:"is_parent"`
 	DeviceModelId    valueTypes.Integer `json:"device_model_id"`
 	DeviceName       valueTypes.String  `json:"devicename" PointId:"device_name"`
 	AType            valueTypes.Integer `json:"atype" PointId:"a_type"`
-	ChannelId        valueTypes.Integer `json:"chnnlid" PointId:"channel_id"`
 	CodeId           valueTypes.Integer `json:"code_id"`
 	CType            valueTypes.Integer `json:"ctype" PointId:"c_type"`
 
@@ -68,6 +71,6 @@ func (e *EndPoint) GetData() api.DataMap {
 	return entries
 }
 
-func (e *EndPoint) Points() []Points {
+func (e *EndPoint) Points() []Point {
 	return e.Response.ResultData
 }

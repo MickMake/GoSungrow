@@ -86,9 +86,9 @@ func (dt *DateTime) UnmarshalJSON(data []byte) error {
 		for _, f := range inputDateLayout {
 			dt.Time, dt.Error = time.Parse(f, string(data))
 			if dt.Error == nil {
+				dt.SetDateType(string(data))
 				dt.format = f
 				dt.string = dt.Time.Format(DateTimeLayout)
-				dt.SetDateType(string(data))
 				break
 			}
 		}
@@ -158,9 +158,9 @@ func (dt *DateTime) SetString(value string) DateTime {
 		for _, f := range inputDateLayout {
 			dt.Time, dt.Error = time.Parse(f, value)
 			if dt.Error == nil {
+				dt.SetDateType(value)
 				dt.format = f
 				dt.string = dt.Time.Format(f)
-				dt.SetDateType(value)
 				break
 			}
 		}
@@ -182,8 +182,8 @@ func (dt *DateTime) SetValue(value time.Time) DateTime {
 			break
 		}
 
-		dt.string = value.Format(DateTimeLayout)
 		dt.format = DateTimeLayout
+		dt.string = value.Format(dt.format)
 		dt.DateType = "3"
 	}
 
@@ -191,23 +191,35 @@ func (dt *DateTime) SetValue(value time.Time) DateTime {
 }
 
 func (dt *DateTime) SetDateType(value string) {
-	switch  {
-		case len(value) == len(DateTimeLayout):
-			dt.DateType = "1"
-		case len(value) == len(DateTimeLayoutYear):
-			dt.DateType = "3"
-		case len(value) == len(DateTimeLayoutMonth):
-			dt.DateType = "2"
-		case len(value) == len(DateTimeLayoutDay):
-			dt.DateType = "1"
-		case len(value) == len(DateTimeLayoutHour):
-			dt.DateType = "1"
-		case len(value) == len(DateTimeLayoutMinute):
-			dt.DateType = "1"
-		case len(value) == len(DateTimeLayoutSecond):
-			dt.DateType = "1"
-		case value == "total":
-			dt.DateType = "4"
+	for range Only.Once {
+		l := len(value)
+		switch {
+			case l == len(DateTimeLayout):
+				dt.DateType = "1"
+				dt.format = DateTimeLayout
+			case l == len(DateTimeLayoutYear):
+				dt.DateType = "3"
+				dt.format = DateTimeLayoutYear
+			case l == len(DateTimeLayoutMonth):
+				dt.DateType = "2"
+				dt.format = DateTimeLayoutMonth
+			case l == len(DateTimeLayoutDay):
+				dt.DateType = "1"
+				dt.format = DateTimeLayoutDay
+			case l == len(DateTimeLayoutHour):
+				dt.DateType = "1"
+				dt.format = DateTimeLayoutHour
+			case l == len(DateTimeLayoutMinute):
+				dt.DateType = "1"
+				dt.format = DateTimeLayoutMinute
+			case l == len(DateTimeLayoutSecond):
+				dt.DateType = "1"
+				dt.format = DateTimeLayoutSecond
+			case value == "total":
+				dt.DateType = "4"
+				dt.format = DateTimeLayoutYear
+		}
+		dt.string = dt.Time.Format(dt.format)
 	}
 }
 
@@ -231,6 +243,7 @@ func (dt *DateTime) GetDayStartTimestamp() string {
 
 func (dt *DateTime) SetDayStart() {
 	dt.Time = dt.Time.Round(time.Hour * 24)
+	dt.string = dt.Time.Format(dt.format)
 }
 
 func (dt *DateTime) GetDayEndTimestamp() string {
@@ -242,7 +255,8 @@ func (dt *DateTime) GetDayEndTimestamp() string {
 }
 
 func (dt *DateTime) SetDayEnd() {
-	dt.Time = dt.Time.Round(time.Hour * 24).Add(time.Hour * 24)
+	dt.Time = dt.Time.Truncate(time.Hour * 24).Add(time.Hour * 24)
+	dt.string = dt.Time.Format(dt.format)
 }
 
 func (dt DateTime) PrintFull() string {
@@ -293,9 +307,9 @@ func NewDateTime(value string) DateTime {
 		for _, f := range inputDateLayout {
 			ret.Time, ret.Error = time.Parse(f, value)
 			if ret.Error == nil {
-				ret.format = f
 				ret.SetValue(ret.Time)
 				ret.SetDateType(value)
+				ret.format = f
 				break
 			}
 		}

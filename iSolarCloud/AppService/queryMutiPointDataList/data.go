@@ -19,7 +19,7 @@ type RequestData struct {
 	StartTimeStamp valueTypes.DateTime `json:"start_time_stamp" required:"true"`
 	EndTimeStamp   valueTypes.DateTime `json:"end_time_stamp" required:"true"`
 	MinuteInterval valueTypes.Integer  `json:"minute_interval" required:"true"`
-	PsKeys         valueTypes.PsKey    `json:"ps_key" required:"true"`
+	PsKeys         valueTypes.PsKeys   `json:"ps_key" required:"true"`
 	Points         valueTypes.PointIds `json:"points" required:"true"`
 }
 
@@ -39,8 +39,8 @@ type ResultData struct {
 
 type Data map[valueTypes.DateTime]Value
 type Value struct {
-	GoStructParent  GoStruct.GoStructParent   `json:"-" PointIdFrom:"PsKey.Timestamp" PointIdReplace:"true"`
-	// GoStruct  GoStruct.GoStruct   `json:"-" PointIdFrom:"PsKey" PointIdReplace:"false" PointDeviceFrom:"PsKey"`
+	GoStructParent  GoStruct.GoStructParent   `json:"-" PointIdFrom:"PsKey.Timestamp" PointIdReplace:"true" PointDeviceFrom:"PsKey"`
+	// GoStruct  GoStruct.GoStruct   `json:"-" PointDeviceFrom:"PsKey"`
 
 	Timestamp valueTypes.DateTime `json:"timestamp" PointNameDateFormat:"2006-01-02 15:04:05"`
 	PsKey     valueTypes.PsKey    `json:"ps_key"`

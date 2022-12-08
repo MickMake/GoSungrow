@@ -4,7 +4,6 @@ import (
 	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
-	"github.com/MickMake/GoUnify/cmdConfig"
 	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/spf13/cobra"
 )
@@ -176,7 +175,7 @@ func (c *CmdInfo) AttachCmdInfo(cmd *cobra.Command) *cobra.Command {
 // 	for range Only.Once {
 // 		fmt.Println("Not yet implemented.")
 // 		// ca.Api.SunGrow.OutputType.SetFile()
-// 		// args = cmdConfig.FillArray(2, args)
+// 		// args = MinimumArraySize(2, args)
 // 		// c.Error = SunGrow.PutHighLevel(args[0], args[1])
 // 	}
 // }
@@ -195,7 +194,7 @@ func (c *CmdInfo) AttachCmdInfoMqtt(cmd *cobra.Command) *cobra.Command {
 		PreRunE:               cmds.SunGrowArgs,
 		RunE:                  func(cmd *cobra.Command, args []string) error {
 			_ = cmds.SetOutputType(cmd)
-			args = cmdConfig.FillArray(1, args)
+			args = MinimumArraySize(1, args)
 			return cmds.Api.SunGrow.GetIsolarcloudMqtt(args[0])
 		},
 		Args:                  cobra.RangeArgs(0, 1),
@@ -420,7 +419,7 @@ func (c *CmdInfo) AttachCmdInfoRealTime(cmd *cobra.Command) *cobra.Command {
 		PreRunE:               cmds.SunGrowArgs,
 		RunE:                  func(cmd *cobra.Command, args []string) error {
 			_ = cmds.SetOutputType(cmd)
-			args = cmdConfig.FillArray(1, args)
+			args = MinimumArraySize(1, args)
 			return cmds.Api.SunGrow.GetRealTimeData(args[0])
 		},
 		Args:                  cobra.RangeArgs(0, 1),

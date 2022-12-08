@@ -833,6 +833,7 @@ func (sgd *SunGrowDataRequest) SetDateId(date string) {
 		sgd.args.DateId = &did
 		if sgd.args.DateId.IsZero() {
 			did = valueTypes.NewDateTime(valueTypes.Now)
+			did.DateType = "4"
 			sgd.args.DateId = &did
 		}
 
@@ -1111,7 +1112,7 @@ func (sgd *SunGrowDataRequest) SetPoints(points string) {
 			}
 		}
 		if sgd.IsRequired(NamePsKeys) {
-			sgd.args.PsKeys = &psk
+			sgd.args.PsKeys = psk
 		}
 	}
 }

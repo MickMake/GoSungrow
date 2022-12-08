@@ -19,45 +19,11 @@ import (
 	datatable "go.pennock.tech/tabular/auto"
 	"math"
 	"os"
+	"sort"
 	"strings"
 	"time"
 )
 
-
-// GetDevicePointAttrs - WebAppService.getDevicePointAttrs Uuid: PsId: DeviceType
-func (sg *SunGrow) GetDevicePointAttrs(psId valueTypes.PsId) ([]getDevicePointAttrs.Points, error) {
-	var ret []getDevicePointAttrs.Points
-
-	for range Only.Once {
-		var tree PsTree
-		tree, sg.Error = sg.PsTreeMenu(psId.String())
-		if sg.Error != nil {
-			break
-		}
-
-		for _, pid := range tree.Devices {
-			ep := sg.GetByStruct(getDevicePointAttrs.EndPointName,
-				getDevicePointAttrs.RequestData {
-					Uuid:        pid.UUID,
-					PsId2:       pid.PsId,
-					DeviceType2: pid.DeviceType,
-				},
-				time.Hour * 24,
-			)
-			if sg.IsError() {
-				break
-			}
-
-			data := getDevicePointAttrs.Assert(ep)
-
-			ret = append(ret, data.Points()...)
-
-			// more := sg.GetDevicePointNames(pid.DeviceType)
-		}
-	}
-
-	return ret, sg.Error
-}
 
 // GetPowerDevicePointInfo - AppService.getPowerDevicePointInfo
 func (sg *SunGrow) GetPowerDevicePointInfo(min valueTypes.Integer, max valueTypes.Integer) ([]getPowerDevicePointInfo.ResultData, error) {
@@ -85,124 +51,6 @@ func (sg *SunGrow) GetPowerDevicePointInfo(min valueTypes.Integer, max valueType
 
 	return ret, sg.Error
 }
-
-// // QueryMultiPointDataList - AppService.queryMutiPointDataList MinuteInterval:5 StartTimeStamp:20221001000000 EndTimeStamp:20221001235900 PsId:1129147 Points:1129147_14_1_1.p13148,1129147_14_1_1.p13147,1129147_14_1_1.p13146,1129147_14_1_1.p13145,1129147_14_1_1.p13144,1129147_14_1_1.p13143
-// func (sg *SunGrow) QueryMultiPointDataList(startDate valueTypes.DateTime, endDate valueTypes.DateTime, interval valueTypes.Integer, points valueTypes.PointIds) (queryMutiPointDataList.Data, error) {
-// 	var ret queryMutiPointDataList.Data
-// 	for range Only.Once {
-// 		if len(points.PointIds) == 0 {
-// 			break
-// 		}
-//
-// 		var psId valueTypes.PsId
-// 		psids := points.PsIds()
-// 		if len(psids) != 1 {
-// 			// Should only have one ps_id.
-// 			break
-// 		}
-// 		psId := psids[0]
-//
-// 		if !psId.Valid {
-// 			interval.SetValue(5)
-// 		}
-//
-// 		if startDate.IsZero() {
-// 			startDate.SetValue(time.Now())
-// 			startDate.SetDayStart()
-// 		}
-//
-// 		if endDate.IsZero() {
-// 			endDate.SetValue(startDate.Value())
-// 			endDate.SetDayEnd()
-// 		}
-//
-// 		if !interval.Valid {
-// 			interval.SetValue(5)
-// 		}
-//
-// 		ep := sg.GetByStruct(
-// 			"WebAppService.queryMutiPointDataList",
-// 			queryMutiPointDataList.RequestData {
-// 				PsId: psId,
-// 				StartTimeStamp: startDate,
-// 				EndTimeStamp: endDate,
-// 				MinuteInterval: interval,
-// 				PsKeys: (points.PsKeys().String()),
-// 				Points: points,
-// 			},
-// 			time.Hour * 24,
-// 		)
-// 		if sg.IsError() {
-// 			break
-// 		}
-//
-// 		data := queryMutiPointDataList.Assert(ep)
-// 		ret = data.Response.ResultData.Data
-//
-// 		// tables := data.GetEndPointDataTables()
-// 		// for _, table := range tables {
-// 		// 	table.OutputType = sg.OutputType
-// 		// 	table.Output()
-// 		// }
-// 		//
-// 		// // ret = data.Response.ResultData
-// 		// //
-// 		// // table := output.NewTable(
-// 		// // 	"Date/Time",
-// 		// // 	"Point Id",
-// 		// // 	"Point Name",
-// 		// // 	"Value",
-// 		// // 	"Units",
-// 		// // )
-// 		// // table.SetTitle("")
-// 		// //
-// 		// // t := data.Request.RequestData.StartTimeStamp
-// 		// // data.SetFilenamePrefix(t.String())
-// 		// // table.SetFilePrefix(t.String())
-// 		// //
-// 		// // for deviceName, deviceRef := range data.Response.ResultData.Data {
-// 		// // 	for pointId, pointRef := range deviceRef.Points {
-// 		// // 		for _, tim := range pointRef.Times {
-// 		// // 			gp := points.GetPoint(deviceName, pointId)
-// 		// // 			sg.Error = table.AddRow(tim.Key.PrintFull(),
-// 		// // 				fmt.Sprintf("%s.%s", deviceName, pointId),
-// 		// // 				gp.Name,
-// 		// // 				tim.Value,
-// 		// // 				gp.Unit,
-// 		// // 			)
-// 		// // 			if sg.Error != nil {
-// 		// // 				continue
-// 		// // 			}
-// 		// // 		}
-// 		// // 	}
-// 		// // }
-// 		// //
-// 		// // table.InitGraph(output.GraphRequest {
-// 		// // 	Title:        "",
-// 		// // 	TimeColumn:   output.SetString("Date/Time"),
-// 		// // 	SearchColumn: output.SetString("Point Id"),
-// 		// // 	NameColumn:   output.SetString("Point Name"),
-// 		// // 	ValueColumn:  output.SetString("Value"),
-// 		// // 	UnitsColumn:  output.SetString("Units"),
-// 		// // 	SearchString: output.SetString(""),
-// 		// // 	MinLeftAxis:  output.SetFloat(0),
-// 		// // 	MaxLeftAxis:  output.SetFloat(0),
-// 		// // })
-// 		// //
-// 		// // table.SetTitle("Point Data %s", psId)
-// 		// // table.SetFilePrefix(data.SetFilenamePrefix("%d", psId))
-// 		// // table.SetGraphFilter("")
-// 		// // table.SetSaveFile(sg.SaveAsFile)
-// 		// // table.OutputType = sg.OutputType
-// 		// // sg.Error = table.Output()
-// 		// if sg.IsError() {
-// 		// 	break
-// 		// }
-//
-// 	}
-//
-// 	return ret, sg.Error
-// }
 
 func (sg *SunGrow) GetAllPointsData(psIds ...string) error {
 	for range Only.Once {
@@ -410,9 +258,124 @@ func (sg *SunGrow) GetAllPointsData(psIds ...string) error {
 	return sg.Error
 }
 
-// PointNames - Return all points associated with psIds.
-func (sg *SunGrow) PointNames(psIds ...string) string {
+
+// PointNamesData - Return all points associated with psIds and device_type filter.
+func (sg *SunGrow) PointNamesData(psIds []string, deviceType string, startDate string, endDate string, interval string) string {
 	var ret string
+
+	for range Only.Once {
+		pskeys := sg.GetPsKeys()
+		_, _ = fmt.Fprintf(os.Stderr, "Found ps_keys: %s\n", pskeys)
+
+		points := sg.PsPointNames(psIds, deviceType)
+
+		var ps []string
+		for _, pid := range points {
+			match := pskeys.MatchPsIdDeviceType(pid.PsId.String(), pid.DeviceType.String())
+			if match.Valid {
+				ps = append(ps, fmt.Sprintf("%s.%s", match, pid.Id))
+			}
+		}
+		// _, _ = fmt.Fprintf(os.Stderr, "Found points: %s\n", strings.Join(ps, " "))
+
+		sg.PointData(startDate, endDate, interval, ps...)
+	}
+
+	return ret
+}
+
+// PointNames - Return all points associated with psIds and device_type filter.
+func (sg *SunGrow) PointNames(psIds []string, deviceType string) string {
+	var ret string
+
+	for range Only.Once {
+		points := sg.PsPointNames(psIds, deviceType)
+
+		// Sort table based on PsId + DeviceType + Id
+		pn := map[string]int{}
+		for index, point := range points {
+			pn[point.PsId.String()+"."+point.DeviceType.String()+"."+point.Id.String()] = index
+		}
+		var names []string
+		for point := range pn {
+			names = append(names, point)
+		}
+		sort.Strings(names)
+
+		table := datatable.New("utf8-heavy")
+		table.AddHeaders("Id", "Name", "Unit", "Unit Type", "Ps Id", "Device Type", "Device Name")
+		for _, name := range names {
+			index := pn[name]
+			point := points[index]
+			table.AddRowItems(point.Id, point.Name, point.Unit, point.UnitType, point.PsId, point.DeviceType, point.DeviceName)
+		}
+
+	   // PsKey
+	   // PsId
+	   // DeviceType
+	   // DeviceCode
+	   // ChannelId
+
+		var r string
+		r, sg.Error = table.Render()
+		if sg.Error != nil {
+			break
+		}
+		ret += fmt.Sprintln("# Available points:")
+		ret += r
+
+		// var pids valueTypes.PsIds
+		// pids = sg.SetPsIds(psIds...)
+		// if sg.Error != nil {
+		// 	break
+		// }
+		//
+		// for _, pid := range pids {
+		// 	var points []getDevicePointAttrs.Points
+		// 	points, sg.Error = sg.GetDevicePointAttrs(pid)
+		// 	if sg.Error != nil {
+		// 		break
+		// 	}
+		//
+		// 	if len(points) == 0 {
+		// 		continue
+		// 	}
+		//
+		// 	ret += fmt.Sprintf("# Available points for ps_id %s:\n", pid.String())
+		// 	table := datatable.New("utf8-heavy")
+		// 	table.AddHeaders("Id", "Name", "Unit", "UnitType", "PsId", "DeviceType", "DeviceName")
+		// 	for _, point := range points {
+		// 		if (deviceType != "") && point.DeviceType.MatchString(deviceType) {
+		// 			continue
+		// 		}
+		// 		table.AddRowItems(point.Id, point.Name, point.Unit, point.UnitType, point.PsId, point.DeviceType, point.DeviceName)
+		// 	}
+		//
+		// 	var r string
+		// 	r, sg.Error = table.Render()
+		// 	if sg.Error != nil {
+		// 		break
+		// 	}
+		// 	ret += r
+		//
+		// 	// @TODO - Include AppService.getPowerDevicePointNames
+		// 	// points2 := cmds.Api.SunGrow.GetDevicePointNames(pid)
+		// 	// if c.Error != nil {
+		// 	// 	break
+		// 	// }
+		// 	// if len(points) == 0 {
+		// 	// 	continue
+		// 	// }
+		//
+		// }
+	}
+
+	return ret
+}
+
+// PsPointNames - Return all points associated with psIds and device_type filter.
+func (sg *SunGrow) PsPointNames(psIds []string, deviceType string) []getDevicePointAttrs.Point {
+	var points []getDevicePointAttrs.Point
 
 	for range Only.Once {
 		var pids valueTypes.PsIds
@@ -422,29 +385,22 @@ func (sg *SunGrow) PointNames(psIds ...string) string {
 		}
 
 		for _, pid := range pids {
-			var points []getDevicePointAttrs.Points
-			points, sg.Error = sg.GetDevicePointAttrs(pid)
+			var p []getDevicePointAttrs.Point
+			p, sg.Error = sg.GetDevicePointAttrs(pid)
 			if sg.Error != nil {
 				break
 			}
 
-			if len(points) == 0 {
-				continue
+			for _, point := range p {
+				if deviceType == "" {
+					points = append(points, point)
+					continue
+				}
+				if point.DeviceType.MatchString(deviceType) {
+					points = append(points, point)
+					continue
+				}
 			}
-
-			ret += fmt.Sprintf("# Available points for ps_id %s:\n", pid.String())
-			table := datatable.New("utf8-heavy")
-			table.AddHeaders("Id", "Name", "Unit", "UnitType", "PsId", "DeviceType", "DeviceName")
-			for _, point := range points {
-				table.AddRowItems(point.Id, point.Name, point.Unit, point.UnitType, point.PsId, point.DeviceType, point.DeviceName)
-			}
-
-			var r string
-			r, sg.Error = table.Render()
-			if sg.Error != nil {
-				break
-			}
-			ret += r
 
 			// @TODO - Include AppService.getPowerDevicePointNames
 			// points2 := cmds.Api.SunGrow.GetDevicePointNames(pid)
@@ -454,42 +410,87 @@ func (sg *SunGrow) PointNames(psIds ...string) string {
 			// if len(points) == 0 {
 			// 	continue
 			// }
-
+		}
+		if sg.Error != nil {
+			break
 		}
 	}
 
-	return ret
+	return points
 }
+
+// GetDevicePointAttrs - WebAppService.getDevicePointAttrs Uuid: PsId: DeviceType
+func (sg *SunGrow) GetDevicePointAttrs(psId valueTypes.PsId) ([]getDevicePointAttrs.Point, error) {
+	var ret []getDevicePointAttrs.Point
+
+	for range Only.Once {
+		var tree PsTree
+		tree, sg.Error = sg.PsTreeMenu(psId.String())
+		if sg.Error != nil {
+			break
+		}
+
+		for _, pid := range tree.Devices {
+			ep := sg.GetByStruct(getDevicePointAttrs.EndPointName,
+				getDevicePointAttrs.RequestData {
+					Uuid:        pid.UUID,
+					PsId2:       pid.PsId,
+					DeviceType2: pid.DeviceType,
+				},
+				time.Hour * 24,
+			)
+			if sg.IsError() {
+				break
+			}
+
+			data := getDevicePointAttrs.Assert(ep)
+			ret = append(ret, data.Points()...)
+			// more := sg.GetDevicePointNames(pid.DeviceType)
+		}
+	}
+
+	return ret, sg.Error
+}
+
 
 func (sg *SunGrow) PointData(startDate string, endDate string, interval string, points ...string) string {
 	var ret string
 
 	for range Only.Once {
+		// _, _ = sg.QueryMultiPointDataList(
+		// 	valueTypes.SetDateTimeString(startDate),
+		// 	valueTypes.SetDateTimeString(endDate),
+		// 	valueTypes.SetIntegerString(interval),
+		// 	valueTypes.SetPointIdsString(points...),
+		// )
+
 		data := sg.NewSunGrowData()
-		data.SetEndpoints(queryMutiPointDataList.EndPointName)
-		// req := iSolarCloud.RequestArgs{
+		// req := iSolarCloud.RequestArgs {
 		// 	StartTimeStamp:           startDate,
 		// 	EndTimeStamp:   endDate,
 		// }
 		// var req iSolarCloud.RequestArgs
 		// data.Request.SetPoints(points)
 
-		startDate = valueTypes.NewDateTime(startDate).Format(valueTypes.DateTimeLayoutSecond)
-		endDate = valueTypes.NewDateTime(endDate).Format(valueTypes.DateTimeLayoutSecond)
+		sd := valueTypes.NewDateTime(startDate)
+		var ed valueTypes.DateTime
+		if endDate == "" {
+			ed = sd
+			ed.SetDayEnd()
+		} else {
+			ed = valueTypes.NewDateTime(endDate)
+		}
 
+		// _, _ = fmt.Fprintf(os.Stderr,"Points: %s\n", strings.Join(points, " "))
 		data.SetArgs(
-			"StartTimeStamp:" + startDate,
-			"EndTimeStamp:" + endDate,
+			"StartTimeStamp:" + sd.Format(valueTypes.DateTimeLayoutSecond),
+			"EndTimeStamp:" + ed.Format(valueTypes.DateTimeLayoutSecond),
 			"MinuteInterval:" + interval,
 			"Points:" + strings.Join(points, ","),
 		)
+		data.SetEndpoints(queryMutiPointDataList.EndPointName)
 
 		sg.Error = data.GetData()
-		if sg.Error != nil {
-			break
-		}
-
-		sg.Error = data.Process()
 		if sg.Error != nil {
 			break
 		}
@@ -498,105 +499,6 @@ func (sg *SunGrow) PointData(startDate string, endDate string, interval string, 
 		if sg.Error != nil {
 			break
 		}
-
-		// var argStartDate valueTypes.DateTime
-		// switch {
-		// 	case startDate == valueTypes.Now:
-		// 		fallthrough
-		// 	case startDate == "":
-		// 		fallthrough
-		// 	case startDate == ".":
-		// 		argStartDate = valueTypes.NewDateTime(valueTypes.Now)
-		// 		argStartDate.SetDayStart()
-		// 	default:
-		// 		argStartDate = valueTypes.NewDateTime(startDate)
-		// }
-		// if argStartDate.Error != nil {
-		// 	c.Error = argStartDate.Error
-		// 	break
-		// }
-		//
-		// var argEndDate valueTypes.DateTime
-		// switch {
-		// 	case endDate == valueTypes.Now:
-		// 		fallthrough
-		// 	case endDate == "":
-		// 		fallthrough
-		// 	case endDate == ".":
-		// 		argEndDate = valueTypes.NewDateTime(valueTypes.Now)
-		// 		argEndDate.SetDayEnd()
-		// 	default:
-		// 		argEndDate = valueTypes.NewDateTime(endDate)
-		// }
-		// if argEndDate.Error != nil {
-		// 	c.Error = argEndDate.Error
-		// 	break
-		// }
-		//
-		// var argInterval valueTypes.Integer
-		// switch {
-		// 	case endDate == "":
-		// 		fallthrough
-		// 	case endDate == ".":
-		// 		argInterval = valueTypes.SetIntegerString("5")
-		// 	default:
-		// 		argInterval = valueTypes.SetIntegerString(interval)
-		// }
-		// if argInterval.Error != nil {
-		// 	c.Error = argInterval.Error
-		// 	break
-		// }
-		//
-		// argPsId := valueTypes.SetPsIdString(psId)
-		// if argPsId.Error != nil {
-		// 	c.Error = argPsId.Error
-		// 	break
-		// }
-		//
-		// var argPsKey valueTypes.PsKey
-		// argPsKey = valueTypes.SetPsKeyString(psKey)
-		// if argPsKey.Error != nil {
-		// 	c.Error = argPsKey.Error
-		// 	break
-		// }
-		//
-		// var argPoints valueTypes.PointIds
-		// argPoints.Set(points...)
-		// if argPoints.Error != nil {
-		// 	c.Error = argPoints.Error
-		// 	break
-		// }
-		// var data queryMutiPointDataList.Data
-		// data, c.Error = cmds.Api.SunGrow.QueryMultiPointDataList(argStartDate, argEndDate, argInterval, argPsId, argPsKey, argPoints)
-		// if c.Error != nil {
-		// 	break
-		// }
-		//
-		// table := output.NewTable(
-		// 	"Timestamp",
-		// 	"Ps Key",
-		// 	"Key",
-		// 	"Value",
-		// )
-		//
-		// for _, d := range data {
-		// 	for k, v := range d.Points {
-		// 		c.Error = table.AddRow(
-		// 			d.Timestamp.String(),
-		// 			d.PsKey.String(),
-		// 			k,
-		// 			v.String(),
-		// 		)
-		// 		if c.Error != nil {
-		// 			break
-		// 		}
-		// 	}
-		// }
-		// if c.Error != nil {
-		// 	break
-		// }
-		//
-		// ret = table.String()
 	}
 
 	return ret
@@ -681,4 +583,92 @@ func PrintPause(index int64, max int) {
 			_, _ = fmt.Fprintf(os.Stderr,".")
 		}
 	}
+}
+
+// QueryMultiPointDataList - AppService.queryMutiPointDataList MinuteInterval:5 StartTimeStamp:20221001000000 EndTimeStamp:20221001235900 PsId:1129147 Points:1129147_14_1_1.p13148,1129147_14_1_1.p13147,1129147_14_1_1.p13146,1129147_14_1_1.p13145,1129147_14_1_1.p13144,1129147_14_1_1.p13143
+func (sg *SunGrow) QueryMultiPointDataList(startDate valueTypes.DateTime, endDate valueTypes.DateTime, interval valueTypes.Integer, points valueTypes.PointIds) (queryMutiPointDataList.Data, error) {
+	var ret queryMutiPointDataList.Data
+	for range Only.Once {
+		if len(points.PointIds) == 0 {
+			break
+		}
+
+		psids := points.PsIds()
+		if len(psids) == 0 {
+			break
+		}
+		psId := psids[0]
+
+		if !interval.Valid {
+			interval.SetValue(5)
+		}
+
+		if startDate.IsZero() {
+			startDate.SetValue(time.Now())
+			startDate.SetDayStart()
+		}
+		startDate.SetDateType(valueTypes.DateTimeLayoutSecond)
+
+		if endDate.IsZero() {
+			endDate.SetValue(startDate.Value())
+			endDate.SetDayEnd()
+		}
+		endDate.SetDateType(valueTypes.DateTimeLayoutSecond)
+
+		if !interval.Valid {
+			interval.SetValue(5)
+		}
+
+		ep := sg.GetByStruct(
+			"AppService.queryMutiPointDataList",
+			queryMutiPointDataList.RequestData {
+				PsId: psId,
+				StartTimeStamp: startDate,
+				EndTimeStamp: endDate,
+				MinuteInterval: interval,
+				PsKeys: *points.PsKeys(),
+				Points: points,
+			},
+			time.Hour * 24,
+		)
+		if sg.IsError() {
+			break
+		}
+
+		var response SunGrowDataResponse
+		response.Data = ep.GetEndPointData()
+
+		response.Data.ProcessMap()
+		if response.Data.Error != nil {
+			sg.Error = response.Data.Error
+			break
+		}
+
+		response.Options = OutputOptions {
+			OutputType:  sg.OutputType,
+			SaveAsFile:  sg.SaveAsFile,
+			GraphRequest: output.GraphRequest{},
+		}
+
+		// // Outputs that can drop through to DataTables.
+		// if sg.OutputType.IsTable() || sg.OutputType.IsXLSX() || sg.OutputType.IsCsv() || sg.OutputType.IsXML() {
+		// 	table := response.Data.CreateResultTable(false)
+		// 	table.OutputType = sg.OutputType
+		// 	table.SetSaveFile(sg.SaveAsFile)
+		// 	// table.AppendTitle(" - %s", sg.TitleSuffix)
+		// 	// table.AppendFilePrefix(sg.FileSuffix)
+		// 	sg.Error = table.Output()
+		// 	if sg.Error != nil {
+		// 		break
+		// 	}
+		// }
+
+		sg.Error = response.OutputDataTables()
+		if sg.IsError() {
+			break
+		}
+
+	}
+
+	return ret, sg.Error
 }

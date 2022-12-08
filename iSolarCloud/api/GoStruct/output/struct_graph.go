@@ -18,6 +18,7 @@ import (
 
 type GraphRequest struct {
 	Title        string  `json:"title"`
+	SubTitle     string  `json:"sub_title"`
 
 	TimeColumn  *string  `json:"time_column"`
 	DataColumn  *string  `json:"value_column"`
@@ -107,6 +108,10 @@ func (t *Table) SetGraph(req GraphRequest) error {
 
 func (t *Table) SetGraphFromJson(j Json) error {
 	for range Only.Once {
+		if j == "" {
+			break
+		}
+
 		gr := JsonToGraphRequest(j)
 		if gr.Error != nil {
 			t.Error = gr.Error
@@ -272,9 +277,7 @@ func (t *Table) CreateGraph() error {
 type Chart struct {
 	Error error `json:"-"`
 
-	// otherSearch SearchStrings
 	searchName  string
-	title       string
 	req         GraphRequest
 	filename    string
 	timeSeries1 chart.TimeSeries
@@ -515,10 +518,7 @@ func (c *Chart) ProcessGraphData(table *Table) error {
 			// }
 		}
 
-		var filename string
-		// filename = fmt.Sprintf("%s-%s.png", t.filePrefix, strings.ReplaceAll(t.graph.searchName, " ", ""))
-		filename = fmt.Sprintf("%s.png", table.filePrefix)
-		c.Error = c.SetFilename(filename)
+		c.Error = c.SetFilename(table.filePrefix)
 		if c.Error != nil {
 			break
 		}
@@ -536,6 +536,50 @@ func (c *Chart) ProcessGraphData(table *Table) error {
 		if c.Error != nil {
 			break
 		}
+
+		c.timeSeries1.Style = chart.Style {
+			StrokeColor: drawing.ColorBlue,
+			FillColor:   drawing.ColorBlue.WithAlpha(64),
+		}
+
+		c.minSeries = &chart.MinSeries {
+			Name: "Min",
+			Style:  chart.Style {
+				// StrokeColor:     chart.ColorAlternateGray,
+				// StrokeColor:     drawing.ColorBlue,
+				// FillColor:       drawing.ColorBlue.WithAlpha(50),
+				StrokeColor:     drawing.ColorBlue,
+				StrokeDashArray: []float64{5.0, 5.0},
+				DotWidth: 0.5,
+			},
+			InnerSeries: c.timeSeries1,
+		}
+
+		c.maxSeries = &chart.MaxSeries {
+			Name: "Max",
+			Style: chart.Style {
+				// StrokeColor:     chart.ColorAlternateGray,
+				// StrokeColor:     drawing.ColorGreen,
+				// FillColor:       drawing.ColorGreen.WithAlpha(64),
+				StrokeColor:     drawing.ColorBlue,
+				StrokeDashArray: []float64{5.0, 5.0},
+				DotWidth: 1.0,
+			},
+			InnerSeries: c.timeSeries1,
+		}
+
+		c.graph.Series = []chart.Series {
+			c.timeSeries1,
+			// c.annotation,
+			c.minSeries,
+			c.maxSeries,
+			chart.LastValueAnnotationSeries(c.minSeries),
+			chart.LastValueAnnotationSeries(c.maxSeries),
+			// c.timeSeries2,
+		}
+
+		c.graph.DPI = 150
+		c.graph.Elements = []chart.Renderable{chart.Legend(&c.graph)}
 	}
 
 	return c.Error
@@ -576,8 +620,10 @@ func (c *Chart) SetFilename(fn string) error {
 			c.Error = errors.New("empty filename")
 			break
 		}
+
 		fn = strings.TrimSuffix(fn, ".png")
 		fn = strings.TrimSuffix(fn, ".PNG")
+		fn = strings.ReplaceAll(fn, " ", "_")
 		c.filename = fn + ".png"
 	}
 	return c.Error
@@ -585,7 +631,7 @@ func (c *Chart) SetFilename(fn string) error {
 
 func (c *Chart) SetTitle(title string) error {
 	c.graph.Title = title
-	// c.req.Title = title
+	// c.title = title
 	return c.Error
 }
 
@@ -752,7 +798,7 @@ func (c *Chart) SetY(name string, values ...float64) error {
 		}
 
 		if (c.req.DataMin == nil) && (c.req.DataMax == nil) {
-			rng := ((maxY - minY) / 2) * 0.5
+			rng := ((maxY - minY) / 2) * 0.25
 			nMin := minY - rng
 			if (nMin < 0.0) && (minY >= 0.0) {
 				// If the subtraction has sent us negative.
@@ -837,61 +883,6 @@ func (c *Chart) Generate() error {
 		if c.filename == "" {
 			c.Error = errors.New("empty filename")
 			break
-		}
-
-		c.timeSeries1.Style = chart.Style {
-			StrokeColor: drawing.ColorBlue,
-			FillColor:   drawing.ColorBlue.WithAlpha(64),
-		}
-
-		c.minSeries = &chart.MinSeries {
-			Name: "Min",
-			Style:  chart.Style {
-				// StrokeColor:     chart.ColorAlternateGray,
-				// StrokeColor:     drawing.ColorBlue,
-				// FillColor:       drawing.ColorBlue.WithAlpha(50),
-				StrokeColor:     drawing.ColorBlue,
-				StrokeDashArray: []float64{5.0, 5.0},
-				DotWidth: 0.5,
-			},
-			InnerSeries: c.timeSeries1,
-		}
-
-		c.maxSeries = &chart.MaxSeries {
-			Name: "Max",
-			Style: chart.Style {
-				// StrokeColor:     chart.ColorAlternateGray,
-				// StrokeColor:     drawing.ColorGreen,
-				// FillColor:       drawing.ColorGreen.WithAlpha(64),
-				StrokeColor:     drawing.ColorBlue,
-				StrokeDashArray: []float64{5.0, 5.0},
-				DotWidth: 1.0,
-			},
-			InnerSeries: c.timeSeries1,
-		}
-
-		c.graph.Series = []chart.Series {
-			c.timeSeries1,
-			// c.annotation,
-			c.minSeries,
-			c.maxSeries,
-			chart.LastValueAnnotationSeries(c.minSeries),
-			chart.LastValueAnnotationSeries(c.maxSeries),
-			// c.timeSeries2,
-		}
-
-		c.graph.DPI = 150
-		c.graph.Elements = []chart.Renderable{chart.Legend(&c.graph)}
-
-		for range Only.Once {
-			if c.req.Title != "" {
-				c.graph.Title = c.req.Title
-				break
-			}
-			if c.title != "" {
-				c.graph.Title = c.title
-				break
-			}
 		}
 
 		fmt.Printf("Creating graph file '%s'\n", c.filename)

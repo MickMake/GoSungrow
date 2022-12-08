@@ -17,8 +17,9 @@ type RequestData struct {
 	PsKeyList valueTypes.String `json:"ps_key_list" required:"true"`
 }
 
-func (rd RequestData) IsValid() error {
-	return GoStruct.VerifyOptionsRequired(rd)
+func (rd *RequestData) IsValid() error {
+	rd.PsKeyList = valueTypes.SetStringValue("1171348_11_0_0")
+	return GoStruct.VerifyOptionsRequired(*rd)
 }
 
 func (rd RequestData) Help() string {

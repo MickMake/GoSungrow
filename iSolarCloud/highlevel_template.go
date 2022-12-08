@@ -152,6 +152,7 @@ func (sg *SunGrow) TemplateData(template string, startDate string, endDate strin
 
 		// @TODO - Figure out a way to push the Unit values from QueryUserCurveTemplateData to this table.
 		// @TODO - Maybe use a point cache?!
+		// sg.OutputType.SetTable()
 		sg.PointData(startDate, endDate, interval, points...)
 		if sg.Error != nil {
 			break
@@ -160,7 +161,6 @@ func (sg *SunGrow) TemplateData(template string, startDate string, endDate strin
 
 	return sg.Error
 }
-
 
 func (sg *SunGrow) TemplatePoints(template string) error {
 	for range Only.Once {
@@ -184,11 +184,6 @@ func (sg *SunGrow) TemplatePoints(template string) error {
 			"TemplateId:" + template,
 		)
 		sg.Error = data.GetData()
-		if sg.Error != nil {
-			break
-		}
-
-		sg.Error = data.Process()
 		if sg.Error != nil {
 			break
 		}
@@ -244,11 +239,6 @@ func (sg *SunGrow) TemplateList() error {
 		data.SetEndpoints(getTemplateList.EndPointName)
 		data.SetArgs()
 		sg.Error = data.GetData()
-		if sg.Error != nil {
-			break
-		}
-
-		sg.Error = data.Process()
 		if sg.Error != nil {
 			break
 		}

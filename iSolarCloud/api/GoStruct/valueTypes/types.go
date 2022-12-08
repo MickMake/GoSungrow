@@ -316,6 +316,7 @@ func AnyToUnitValue(ref interface{}, key string, unit string, typeString string,
 					uv, isNil, ok = AnyToUnitValue(val, key, unit, typeString, dateFormat) // uvs.AddUnitValue(ref.(UnitValue))
 					uvs.AddUnitValues(key, uv)
 				}
+				// uvs.SetUnit(unit)
 				break
 			}
 

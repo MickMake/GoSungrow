@@ -31,6 +31,7 @@ func (e *ResultData) GetPsIds() []valueTypes.PsId {
 			break
 		}
 		for _, p := range e.PageList {
+			// fmt.Printf("%s_%s_%s\n", p.PsId, p.)
 			if p.PsId.Value() != 0 {
 				ret = append(ret, p.PsId)
 			}

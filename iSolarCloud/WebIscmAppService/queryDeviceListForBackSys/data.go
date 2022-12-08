@@ -25,14 +25,18 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-type ResultData []struct {
+type ResultData []Device
+
+type Device struct {
 	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"UUID"`
 
 	UUID       valueTypes.Integer `json:"uuid"`
+
 	DeviceCode valueTypes.Integer `json:"device_code"`
 	DeviceType valueTypes.Integer `json:"device_type"`
 	ChannelId  valueTypes.Integer `json:"chnnl_id" PointId:"channel_id"`
 	DeviceId   valueTypes.Integer `json:"device_id"`
+
 	TypeName   valueTypes.String  `json:"type_name"`
 	DeviceName valueTypes.String  `json:"device_name"`
 	IsPublic   valueTypes.Bool    `json:"is_public"`

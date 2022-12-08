@@ -18,7 +18,6 @@ import (
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
-	"strings"
 	"time"
 )
 
@@ -206,14 +205,16 @@ func (sg *SunGrow) GetIsolarcloudMqtt(appKey string) error {
 func (sg *SunGrow) GetRealTimeData(psKey string) error {
 	for range Only.Once {
 		if psKey == "" {
-			var psKeys []string
-			psKeys, sg.Error = sg.GetPsKeys()
-			if sg.IsError() {
-				break
-			}
-			fmt.Printf("psKeys: %v\n", psKeys)
-			psKey = strings.Join(psKeys, ",")
+			// var psKeys []string
+			// psKeys, sg.Error = sg.GetPsKeys()
+			// if sg.IsError() {
+			// 	break
+			// }
+			// fmt.Printf("psKeys: %v\n", psKeys)
+			// psKey = strings.Join(psKeys, ",")
 		}
+		fmt.Println("TO FIX")
+		break
 
 		ep := sg.GetByStruct(queryDeviceRealTimeDataByPsKeys.EndPointName,
 			queryDeviceRealTimeDataByPsKeys.RequestData{PsKeyList: valueTypes.SetStringValue(psKey)},
@@ -489,7 +490,7 @@ func (sg *SunGrow) GetPsModels() ([]string, error) {
 
 	for range Only.Once {
 		var psIds valueTypes.PsIds
-		psIds, sg.Error = sg.PsIds()
+		psIds, sg.Error = sg.GetPsIds()
 		if sg.Error != nil {
 			break
 		}
@@ -516,7 +517,7 @@ func (sg *SunGrow) GetPsSerials() ([]string, error) {
 
 	for range Only.Once {
 		var psIds valueTypes.PsIds
-		psIds, sg.Error = sg.PsIds()
+		psIds, sg.Error = sg.GetPsIds()
 		if sg.Error != nil {
 			break
 		}
@@ -532,33 +533,6 @@ func (sg *SunGrow) GetPsSerials() ([]string, error) {
 
 			data := getPsDetailWithPsType.Assert(ep)
 			ret = append(ret, data.GetDeviceSerial())
-		}
-	}
-
-	return ret, sg.Error
-}
-
-func (sg *SunGrow) GetPsKeys() ([]string, error) {
-	var ret []string
-
-	for range Only.Once {
-		var psIds valueTypes.PsIds
-		psIds, sg.Error = sg.PsIds()
-		if sg.Error != nil {
-			break
-		}
-
-		for _, psId := range psIds {
-			ep := sg.GetByStruct(getPsDetailWithPsType.EndPointName,
-				// getPsDetailWithPsType.RequestData{PsId: strconv.FormatInt(psId, 10)},
-				getPsDetailWithPsType.RequestData{PsId: psId},
-				DefaultCacheTimeout)
-			if sg.IsError() {
-				break
-			}
-
-			data := getPsDetailWithPsType.Assert(ep)
-			ret = append(ret, data.GetPsKeys()...)
 		}
 	}
 

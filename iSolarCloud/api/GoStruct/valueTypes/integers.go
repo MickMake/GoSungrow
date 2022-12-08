@@ -75,6 +75,16 @@ func (t Integer) Match(comp int64) bool {
 	return false
 }
 
+func (t Integer) MatchString(comp string) bool {
+	if comp == "" {
+		return false
+	}
+	if t.string == comp {
+		return true
+	}
+	return false
+}
+
 func (t *Integer) SetString(value string) Integer {
 	for range Only.Once {
 		t.string = value

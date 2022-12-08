@@ -26,13 +26,13 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent GoStruct.GoStructParent  `json:"-" PointIdFromChild:"PsId" PointIdReplace:"true" DataTable:"true" DataTableSortOn:"PsId"`
-	GoStruct       GoStruct.GoStruct        `json:"-" PointDeviceFrom:"PsId"`
+	GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"PsId"`	// PointIdFrom:"PsId" PointIdReplace:"true"`
 
 	PsId      valueTypes.Integer `json:"psid" PointId:"ps_id"`
 	Id        valueTypes.Integer `json:"id"`
 	ChannelId valueTypes.Integer `json:"chnnlid" PointId:"channel_id"`
 	Pid       valueTypes.Integer `json:"pid"`
+
 	Name      valueTypes.String  `json:"name"`
 	IsParent  valueTypes.Bool    `json:"isparent" PointId:"is_parent"`
 	Level     valueTypes.Integer `json:"level"`

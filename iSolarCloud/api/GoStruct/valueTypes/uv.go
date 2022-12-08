@@ -524,7 +524,7 @@ func (t *UnitValue) SetBoolString(value string) UnitValue {
 func (t *UnitValue) SetUnit(unit string) UnitValue {
 	for range Only.Once {
 		t.UnitValue = unit
-		t.TypeValue = UnitValueType(unit)
+		t.SetType(UnitValueType(unit))
 	}
 
 	return *t
@@ -532,6 +532,9 @@ func (t *UnitValue) SetUnit(unit string) UnitValue {
 
 func (t *UnitValue) SetType(Type string) UnitValue {
 	for range Only.Once {
+		if Type == "" {
+			break
+		}
 		t.TypeValue = Type
 	}
 
@@ -540,6 +543,9 @@ func (t *UnitValue) SetType(Type string) UnitValue {
 
 func (t *UnitValue) SetDeviceId(deviceId string) UnitValue {
 	for range Only.Once {
+		if deviceId == "" {
+			break
+		}
 		t.deviceId = deviceId
 	}
 
@@ -622,8 +628,8 @@ func SetUnitValueBool(value bool) UnitValue {
 
 
 type UnitValues struct {
-	arrayValues []UnitValue
-	mapValues   map[string]UnitValue
+	arrayValues []*UnitValue
+	mapValues   map[string]*UnitValue
 	mapOrder    []string
 
 	Unit      string `json:"unit"`
@@ -704,8 +710,7 @@ func (t *UnitValues) GetUnit() string {
 
 		if t.IsMap() {
 			for _, k := range t.mapOrder {
-				m := t.mapValues[k]
-				ret = m.Unit()
+				ret = t.mapValues[k].Unit()
 				break
 			}
 			break
@@ -714,11 +719,11 @@ func (t *UnitValues) GetUnit() string {
 	return ret
 }
 
-func (t *UnitValues) GetmapValues() map[string]UnitValue {
+func (t *UnitValues) GetmapValues() map[string]*UnitValue {
 	return t.mapValues
 }
 
-func (t *UnitValues) GetarrayValues() []UnitValue {
+func (t *UnitValues) GetarrayValues() []*UnitValue {
 	return t.arrayValues
 }
 
@@ -729,7 +734,7 @@ func (t *UnitValues) Range(loadOrder bool) []UnitValue {
 	for range Only.Once {
 		if t.IsArray() {
 			for _, k := range t.arrayValues {
-				ret = append(ret, k)
+				ret = append(ret, *k)
 			}
 			break
 		}
@@ -737,7 +742,7 @@ func (t *UnitValues) Range(loadOrder bool) []UnitValue {
 		if t.IsMap() {
 			if loadOrder {
 				for _, k := range t.mapOrder {
-					ret = append(ret, t.mapValues[k])
+					ret = append(ret, *t.mapValues[k])
 				}
 				break
 			}
@@ -748,7 +753,7 @@ func (t *UnitValues) Range(loadOrder bool) []UnitValue {
 			}
 			sort.Strings(keys)
 			for _, k := range keys {
-				ret = append(ret, t.mapValues[k])
+				ret = append(ret, *t.mapValues[k])
 			}
 			break
 		}
@@ -805,6 +810,10 @@ func (t *UnitValues) Type() string {
 
 func (t *UnitValues) SetType(Type string) *UnitValues {
 	for range Only.Once {
+		if Type == "" {
+			break
+		}
+
 		t.TypeValue = Type
 
 		if t.IsArray() {
@@ -816,8 +825,7 @@ func (t *UnitValues) SetType(Type string) *UnitValues {
 
 		if t.IsMap() {
 			for k := range t.mapValues {
-				m := t.mapValues[k]
-				m.SetType(Type)
+				t.mapValues[k].SetType(Type)
 			}
 			break
 		}
@@ -838,8 +846,7 @@ func (t *UnitValues) SetUnit(unit string) *UnitValues {
 
 		if t.IsMap() {
 			for k := range t.mapValues {
-				m := t.mapValues[k]
-				m.SetUnit(unit)
+				t.mapValues[k].SetUnit(unit)
 			}
 			break
 		}
@@ -847,8 +854,28 @@ func (t *UnitValues) SetUnit(unit string) *UnitValues {
 	return t
 }
 
-func (t *UnitValues) GetIndex(index int) UnitValue {
-	var ret UnitValue
+func (t *UnitValues) SetDeviceId(deviceId string) *UnitValues {
+	for range Only.Once {
+		if t.IsArray() {
+			for k := range t.arrayValues {
+				t.arrayValues[k].SetDeviceId(deviceId)
+			}
+			break
+		}
+
+		if t.IsMap() {
+			for k := range t.mapValues {
+				t.mapValues[k].SetDeviceId(deviceId)
+			}
+			break
+		}
+	}
+
+	return t
+}
+
+func (t *UnitValues) GetIndex(index int) *UnitValue {
+	var ret *UnitValue
 	for range Only.Once {
 		if t.IsArray() {
 			if index >= len(t.arrayValues) {
@@ -870,8 +897,8 @@ func (t *UnitValues) GetIndex(index int) UnitValue {
 	return ret
 }
 
-func (t *UnitValues) GetKey(key string) UnitValue {
-	var ret UnitValue
+func (t *UnitValues) GetKey(key string) *UnitValue {
+	var ret *UnitValue
 	for range Only.Once {
 		if t.IsArray() {
 			// Doesn't make sense to return anything.
@@ -889,7 +916,7 @@ func (t *UnitValues) GetKey(key string) UnitValue {
 }
 
 func (t *UnitValues) First() *UnitValue {
-	var ret UnitValue
+	var ret *UnitValue
 	for range Only.Once {
 		if t.IsArray() {
 			if len(t.arrayValues) == 0 {
@@ -908,11 +935,11 @@ func (t *UnitValues) First() *UnitValue {
 			break
 		}
 	}
-	return &ret
+	return ret
 }
 
 func (t *UnitValues) Last() *UnitValue {
-	var ret UnitValue
+	var ret *UnitValue
 	for range Only.Once {
 		if t.IsArray() {
 			if len(t.arrayValues) == 0 {
@@ -931,7 +958,7 @@ func (t *UnitValues) Last() *UnitValue {
 			break
 		}
 	}
-	return &ret
+	return ret
 }
 
 
@@ -953,12 +980,12 @@ func (t *UnitValues) addMap(key string, value UnitValue) *UnitValues {
 		t.mapOrder = append(t.mapOrder, key) // Keep track of the order.
 
 		if t.mapValues == nil {
-			t.mapValues = make(map[string]UnitValue)
+			t.mapValues = make(map[string]*UnitValue)
 		}
 		if value.key == "" {
 			value.key = key
 		}
-		t.mapValues[key] = value
+		t.mapValues[key] = &value
 	}
 	return t
 }
@@ -969,7 +996,7 @@ func (t *UnitValues) setupMap() bool {
 		if !t.IsInit() {
 			break
 		}
-		t.mapValues = make(map[string]UnitValue)
+		t.mapValues = make(map[string]*UnitValue)
 		t.mapOrder = make([]string, 0)
 		yes = true
 	}
@@ -1067,12 +1094,12 @@ func (t *UnitValues) appendArray(value UnitValue) *UnitValues {
 		}
 
 		if t.arrayValues == nil {
-			t.arrayValues = make([]UnitValue, 0)
+			t.arrayValues = make([]*UnitValue, 0)
 		}
 		if value.key == "" {
 			value.key = strconv.Itoa(len(t.arrayValues))
 		}
-		t.arrayValues = append(t.arrayValues, value)
+		t.arrayValues = append(t.arrayValues, &value)
 	}
 	return t
 }
@@ -1083,7 +1110,7 @@ func (t *UnitValues) setupArray() bool {
 		if !t.IsInit() {
 			break
 		}
-		t.arrayValues = make([]UnitValue, 0)
+		t.arrayValues = make([]*UnitValue, 0)
 		yes = true
 	}
 	return yes

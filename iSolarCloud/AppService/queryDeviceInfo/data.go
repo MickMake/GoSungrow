@@ -44,14 +44,17 @@ type ResultData struct {
 		UUID           valueTypes.String  `json:"uuid"`
 	} `json:"devicePropertyValueList" PointId:"device_property_value_list" DataTable:"true"`
 
-	PsId                    valueTypes.PsId    `json:"ps_id"`
 	PsKey                   valueTypes.String  `json:"ps_key"`
+	PsId                    valueTypes.PsId    `json:"ps_id"`
+	DeviceType              valueTypes.Integer `json:"device_type"`
+	DeviceCode              valueTypes.Integer `json:"device_code"`
+	ChannelId               valueTypes.Integer `json:"chnnl_id" PointId:"channel_id"`
+
 	PsName                  valueTypes.String  `json:"ps_name"`
 	PsShortName             valueTypes.String  `json:"ps_short_name"`
 	ArmVersion              interface{}        `json:"arm_version"`
 	BatVersion              valueTypes.String  `json:"bat_version"`
 	BatteryVersion          interface{}        `json:"battery_version"`
-	ChannelId               valueTypes.Integer `json:"chnnl_id" PointId:"channel_id"`
 	CommandStatus           valueTypes.Integer `json:"command_status"`
 	CommunicationDevUUID    valueTypes.Integer `json:"communication_dev_uuid"`
 	CountryId               valueTypes.Integer `json:"country_id"`
@@ -61,7 +64,6 @@ type ResultData struct {
 	DevStatus               valueTypes.Integer `json:"dev_status"`
 	DeviceArea              valueTypes.String  `json:"device_area"`
 	DeviceAreaName          valueTypes.String  `json:"device_area_name"`
-	DeviceCode              valueTypes.Integer `json:"device_code"`
 	DeviceFactoryId         interface{}        `json:"device_factory_id"`
 	DeviceModel             valueTypes.String  `json:"device_model"`
 	DeviceModelCode         valueTypes.String  `json:"device_model_code"`
@@ -69,7 +71,6 @@ type ResultData struct {
 	DeviceName              valueTypes.String  `json:"device_name"`
 	DeviceProSn             valueTypes.String  `json:"device_pro_sn"`
 	DeviceStatus            valueTypes.Integer `json:"device_status"`
-	DeviceType              valueTypes.Integer `json:"device_type"`
 	FactoryName             valueTypes.String  `json:"factory_name"`
 	GridTypeId              valueTypes.Float   `json:"grid_type_id"`
 	InstallerDevFaultStatus valueTypes.Float   `json:"installer_dev_fault_status"`

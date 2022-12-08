@@ -651,6 +651,8 @@ func (r *Reflect) Init(parent interface{}, current interface{}, name EndPointPat
 				r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
 					r.InterfaceValue, "", r.DataStructure.PointUnit,
 					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
+				r.SetUnit()
+				r.Value.SetDeviceId(r.DataStructure.PointDevice)
 
 			case reflect.Slice:
 				fallthrough
@@ -671,6 +673,8 @@ func (r *Reflect) Init(parent interface{}, current interface{}, name EndPointPat
 				r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
 					r.InterfaceValue, "", r.DataStructure.PointUnit,
 					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
+				r.SetUnit()
+				r.Value.SetDeviceId(r.DataStructure.PointDevice)
 
 			case reflect.Map:
 				r.Length = len(r.ValueOf.MapKeys())
@@ -691,6 +695,8 @@ func (r *Reflect) Init(parent interface{}, current interface{}, name EndPointPat
 				r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
 					r.InterfaceValue, "", r.DataStructure.PointUnit,
 					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
+				r.SetUnit()
+				r.Value.SetDeviceId(r.DataStructure.PointDevice)
 		}
 
 		// r.SetGoStructOptions()
@@ -798,6 +804,7 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 					r.InterfaceValue, "", r.DataStructure.PointUnit,
 					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
 				r.SetUnit()
+				r.Value.SetDeviceId(r.DataStructure.PointDevice)
 
 			case reflect.Slice:
 				fallthrough
@@ -851,6 +858,7 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 					r.InterfaceValue, "", r.DataStructure.PointUnit,
 					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
 				r.SetUnit()
+				r.Value.SetDeviceId(r.DataStructure.PointDevice)
 
 			case reflect.Map:
 				r.FieldTo = reflect.StructField{}
@@ -897,6 +905,7 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 					r.InterfaceValue, "", r.DataStructure.PointUnit,
 					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
 				r.SetUnit()
+				r.Value.SetDeviceId(r.DataStructure.PointDevice)
 
 
 			default:

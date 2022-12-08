@@ -90,6 +90,10 @@ func (t PsKey) String() string {
 	return a[0]
 }
 
+func (t *PsKey) PsIdDeviceType() string {
+	return t.PsId + "_" + t.DeviceType
+}
+
 func (t *PsKey) Match(comp string) bool {
 	if t.string == comp {
 		return true
@@ -112,14 +116,14 @@ func (t *PsKey) SetValue(value string) PsKey {
 
 		s := strings.Split(value, "_")
 		switch {
-			case len(s) <= 1:
+			case len(s) == 1:
 				t.PsId = s[0]
 				t.Valid = true
 			case len(s) == 2:
 				t.PsId = s[0]
 				t.DeviceType = s[1]
 				t.Valid = true
-			case len(s) >= 3:
+			case len(s) == 3:
 				t.PsId = s[0]
 				t.DeviceType = s[1]
 				t.DeviceCode = s[2]
@@ -565,6 +569,18 @@ func (t PsKeys) String() string {
 	return ret
 }
 
+func (t *PsKeys) Join(sep string) string {
+	return strings.Join(t.Strings(), sep)
+}
+
+func (t *PsKeys) Strings() []string {
+	var ret []string
+	for _, pskey := range t.PsKeys {
+		ret = append(ret, pskey.String())
+	}
+	return ret
+}
+
 func (t *PsKeys) Set(values ...string) PsKeys {
 	for _, value := range values {
 		for _, v := range strings.Split(value, ",") {
@@ -575,6 +591,43 @@ func (t *PsKeys) Set(values ...string) PsKeys {
 	}
 
 	return *t
+}
+
+func (t *PsKeys) Match(pskey PsKey) bool {
+	var yes bool
+	for _, value := range t.PsKeys {
+		if pskey.String() == value.String() {
+			yes = true
+			break
+		}
+	}
+	return yes
+}
+
+func (t *PsKeys) MatchPsIdDeviceType(psid string, deviceType string) PsKey {
+	var ret PsKey
+	for _, value := range t.PsKeys {
+		if value.PsId != psid {
+			continue
+		}
+		if value.DeviceType != deviceType {
+			continue
+		}
+		ret = value
+		break
+	}
+	return ret
+}
+
+func (t *PsKeys) MatchString(pskey string) bool {
+	var yes bool
+	for _, value := range t.PsKeys {
+		if pskey == value.String() {
+			yes = true
+			break
+		}
+	}
+	return yes
 }
 
 func SetPsKeysString(values string) PsKeys {
@@ -651,14 +704,14 @@ func (t *PointIds) Set(values ...string) PointIds {
 	return *t
 }
 
-func (t *PointIds) PsKeys() PsKeys {
+func (t *PointIds) PsKeys() *PsKeys {
 	var ret PsKeys
 	var psks []string
 	for _, pskey := range t.PointIds {
 		psks = append(psks, pskey.PsKey.String())
 	}
 	ret = SetPsKeysString(strings.Join(psks, ","))
-	return ret
+	return &ret
 }
 
 func (t *PointIds) PsIds() PsIds {
@@ -671,8 +724,12 @@ func (t *PointIds) PsIds() PsIds {
 	return ret
 }
 
-func SetPointIdsString(values string) PointIds {
+func SetPointIdsString(values ...string) PointIds {
 	var t PointIds
-	t.Set(strings.Split(values, ",")...)
+	var vals []string
+	for _, value := range values {
+		vals = append(vals, strings.Split(value, ",")...)
+	}
+	t.Set(vals...)
 	return t
 }

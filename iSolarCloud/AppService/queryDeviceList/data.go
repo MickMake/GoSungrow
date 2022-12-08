@@ -27,57 +27,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	PageList []struct {
-		GoStruct                GoStruct.GoStruct  `json:"-" PointIdFrom:"PsKey" PointIdReplace:"true" PointDeviceFrom:"PsKey"`
-
-		PointData               []PointStruct      `json:"point_data" PointId:"data" PointIdReplace:"true" DataTable:"true"`	// PointIdFromChild:"PointId" PointIdReplace:"true" PointId:"data" DataTable:"true"`
-		PsTimezoneInfo          struct {
-			IsDst    valueTypes.Bool   `json:"is_dst" PointUpdateFreq:"UpdateFreqInstant"`
-			TimeZone valueTypes.String `json:"time_zone" PointUpdateFreq:"UpdateFreqInstant"`
-		}       `json:"psTimezoneInfo" PointId:"ps_timezone_info"`
-
-		AlarmCount              valueTypes.Count   `json:"alarm_count" PointId:"alarm_count" PointUpdateFreq:"UpdateFreqTotal"`
-		ChannelId               valueTypes.Integer `json:"chnnl_id" PointId:"channel_id" PointUpdateFreq:"UpdateFreqBoot"`
-		CommandStatus           valueTypes.Integer `json:"command_status" PointId:"command_status" PointUpdateFreq:"UpdateFreqInstant"`
-		ComponentAmount         valueTypes.Integer `json:"component_amount" PointId:"component_amount"`
-		DataFlag                valueTypes.Integer `json:"data_flag" PointId:"data_flag" PointUpdateFreq:"UpdateFreqBoot"`
-		DataFlagDetail          valueTypes.Integer `json:"data_flag_detail" PointId:"data_flag_detail"`
-		DeviceArea              valueTypes.Integer `json:"device_area" PointId:"device_area" PointUpdateFreq:"UpdateFreqBoot"` // References UUID and referenced by UUIDIndexCode
-		DeviceAreaName          valueTypes.String  `json:"device_area_name" PointId:"device_area_name" PointUpdateFreq:"UpdateFreqBoot"`
-		DeviceCode              valueTypes.Integer `json:"device_code" PointId:"device_code" PointUpdateFreq:"UpdateFreqBoot"`
-		DeviceId                valueTypes.Integer `json:"device_id" PointId:"device_id" PointUpdateFreq:"UpdateFreqBoot"`
-		DeviceModelCode         valueTypes.String  `json:"device_model_code" PointId:"device_model_code" PointUpdateFreq:"UpdateFreqBoot"`
-		DeviceModelId           valueTypes.Integer `json:"device_model_id" PointId:"device_model_id" PointUpdateFreq:"UpdateFreqBoot"`
-		DeviceName              valueTypes.String  `json:"device_name" PointId:"device_name" PointUpdateFreq:"UpdateFreqBoot"`
-		DeviceStatus            valueTypes.Bool    `json:"device_status" PointId:"device_status" PointUpdateFreq:"UpdateFreqInstant"`
-		DeviceType              valueTypes.Integer `json:"device_type" PointId:"device_type" PointUpdateFreq:"UpdateFreqBoot"`
-		FaultCount              valueTypes.Count   `json:"fault_count" PointId:"fault_count" PointUpdateFreq:"UpdateFreqTotal"`
-		FaultStatus             valueTypes.String  `json:"fault_status" PointId:"fault_status" PointUpdateFreq:"UpdateFreqInstant"`
-		FunctionEnum            valueTypes.String  `json:"function_enum" PointId:"function_enum" PointUpdateFreq:"UpdateFreqInstant"`
-		InstallerAlarmCount     valueTypes.Count   `json:"installer_alarm_count" PointId:"installer_alarm_count" PointUpdateFreq:"UpdateFreqTotal"`
-		InstallerDevFaultStatus valueTypes.Integer `json:"installer_dev_fault_status" PointId:"installer_dev_fault_status" PointUpdateFreq:"UpdateFreqInstant"`
-		InstallerFaultCount     valueTypes.Count   `json:"installer_fault_count" PointId:"installer_fault_count" PointUpdateFreq:"UpdateFreqTotal"`
-		InverterModelType       valueTypes.Integer `json:"inverter_model_type" PointId:"inverter_model_type" PointUpdateFreq:"UpdateFreqBoot"`
-		IsDeveloper             valueTypes.Bool    `json:"is_developer" PointId:"is_developer" PointUpdateFreq:"UpdateFreqBoot"`
-		IsG2point5Module        valueTypes.Bool    `json:"is_g2point5_module" PointId:"is_g2point5_module" PointUpdateFreq:"UpdateFreqBoot"`
-		IsInit                  valueTypes.Bool    `json:"is_init" PointId:"is_init" PointUpdateFreq:"UpdateFreqBoot"`
-		IsSecond                valueTypes.Bool    `json:"is_second" PointId:"is_second" PointUpdateFreq:"UpdateFreqBoot"`
-		IsSupportParamset       valueTypes.Bool    `json:"is_support_paramset" PointId:"is_support_paramset" PointUpdateFreq:"UpdateFreqBoot"`
-		NodeTimestamps          interface{}        `json:"node_timestamps" PointId:"node_timestamps"`
-		OwnerAlarmCount         valueTypes.Count   `json:"owner_alarm_count" PointId:"owner_alarm_count" PointUpdateFreq:"UpdateFreqTotal"`
-		OwnerDevFaultStatus     valueTypes.Integer `json:"owner_dev_fault_status" PointId:"owner_dev_fault_status" PointUpdateFreq:"UpdateFreqInstant"`
-		OwnerFaultCount         valueTypes.Count   `json:"owner_fault_count" PointId:"owner_fault_count" PointUpdateFreq:"UpdateFreqTotal"`
-		Points                  interface{}        `json:"points" PointId:"points"`
-		PsId                    valueTypes.PsId    `json:"ps_id" PointId:"ps_id" PointUpdateFreq:"UpdateFreqBoot"`
-		PsKey                   valueTypes.PsKey   `json:"ps_key" PointId:"ps_key" PointUpdateFreq:"UpdateFreqBoot"`
-		RelState                valueTypes.Integer `json:"rel_state" PointId:"rel_state" PointUpdateFreq:"UpdateFreqInstant"`
-		Sn                      valueTypes.String  `json:"sn" PointId:"sn" PointName:"Serial Number" PointUpdateFreq:"UpdateFreqBoot"`
-		StringAmount            valueTypes.Integer `json:"string_amount" PointId:"string_amount"`
-		TypeName                valueTypes.String  `json:"type_name" PointId:"type_name" PointUpdateFreq:"UpdateFreqBoot"`
-		UnitName                valueTypes.String  `json:"unit_name" PointId:"unit_name" PointUpdateFreq:"UpdateFreqBoot"`
-		UUID                    valueTypes.Integer `json:"uuid" PointId:"uuid" PointUpdateFreq:"UpdateFreqBoot"`                       // Referenced by DeviceArea
-		UUIDIndexCode           valueTypes.String  `json:"uuid_index_code" PointId:"uuid_index_code" PointUpdateFreq:"UpdateFreqBoot"` // Referenced by DeviceArea
-	} `json:"pageList" PointId:"devices"`
+	PageList []Device `json:"pageList" PointId:"devices"`
 
 	DevCountByStatusMap struct {
 		FaultCount   valueTypes.Count `json:"fault_count" PointId:"fault_count" PointUpdateFreq:"UpdateFreqTotal"`
@@ -86,7 +36,7 @@ type ResultData struct {
 		WarningCount valueTypes.Count `json:"warning_count" PointId:"warning_count" PointUpdateFreq:"UpdateFreqTotal"`
 	} `json:"dev_count_by_status_map" PointId:"device_status_count"`
 	DevCountByTypeMap map[string]valueTypes.Integer `json:"dev_count_by_type_map" PointId:"device_type_count" PointUpdateFreq:"UpdateFreqBoot"`
-	DevTypeDefinition map[string]valueTypes.String `json:"dev_type_definition" PointId:"device_types" PointUpdateFreq:"UpdateFreqBoot"`
+	DevTypeDefinition map[string]valueTypes.String `json:"dev_type_definition" PointId:"device_types" PointUpdateFreq:"UpdateFreqBoot"`	// DataTable:"true"`
 	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 }
 // DevCountByTypeMap struct {
@@ -143,6 +93,59 @@ type ResultData struct {
 // 	Nine   valueTypes.String `json:"9"`
 // 	Nine9  valueTypes.String `json:"99"`
 // } `json:"dev_type_definition"`
+
+type Device struct {
+	GoStruct                GoStruct.GoStruct  `json:"-" PointIdFrom:"PsKey" PointIdReplace:"true" PointDeviceFrom:"PsKey"`
+
+	PsKey                   valueTypes.PsKey   `json:"ps_key" PointId:"ps_key" PointUpdateFreq:"UpdateFreqBoot"`
+	PsId                    valueTypes.PsId    `json:"ps_id" PointId:"ps_id" PointUpdateFreq:"UpdateFreqBoot"`
+	DeviceType              valueTypes.Integer `json:"device_type" PointId:"device_type" PointUpdateFreq:"UpdateFreqBoot"`
+	DeviceCode              valueTypes.Integer `json:"device_code" PointId:"device_code" PointUpdateFreq:"UpdateFreqBoot"`
+	ChannelId               valueTypes.Integer `json:"chnnl_id" PointId:"channel_id" PointUpdateFreq:"UpdateFreqBoot"`
+	Sn                      valueTypes.String  `json:"sn" PointId:"sn" PointName:"Serial Number" PointUpdateFreq:"UpdateFreqBoot"`
+
+	AlarmCount              valueTypes.Count   `json:"alarm_count" PointId:"alarm_count" PointUpdateFreq:"UpdateFreqTotal"`
+	CommandStatus           valueTypes.Integer `json:"command_status" PointId:"command_status" PointUpdateFreq:"UpdateFreqInstant"`
+	ComponentAmount         valueTypes.Integer `json:"component_amount" PointId:"component_amount"`
+	DataFlag                valueTypes.Integer `json:"data_flag" PointId:"data_flag" PointUpdateFreq:"UpdateFreqBoot"`
+	DataFlagDetail          valueTypes.Integer `json:"data_flag_detail" PointId:"data_flag_detail"`
+	DeviceArea              valueTypes.Integer `json:"device_area" PointId:"device_area" PointUpdateFreq:"UpdateFreqBoot"` // References UUID and referenced by UUIDIndexCode
+	DeviceAreaName          valueTypes.String  `json:"device_area_name" PointId:"device_area_name" PointUpdateFreq:"UpdateFreqBoot"`
+	DeviceId                valueTypes.Integer `json:"device_id" PointId:"device_id" PointUpdateFreq:"UpdateFreqBoot"`
+	DeviceModelCode         valueTypes.String  `json:"device_model_code" PointId:"device_model_code" PointUpdateFreq:"UpdateFreqBoot"`
+	DeviceModelId           valueTypes.Integer `json:"device_model_id" PointId:"device_model_id" PointUpdateFreq:"UpdateFreqBoot"`
+	DeviceName              valueTypes.String  `json:"device_name" PointId:"device_name" PointUpdateFreq:"UpdateFreqBoot"`
+	DeviceStatus            valueTypes.Bool    `json:"device_status" PointId:"device_status" PointUpdateFreq:"UpdateFreqInstant"`
+	FaultCount              valueTypes.Count   `json:"fault_count" PointId:"fault_count" PointUpdateFreq:"UpdateFreqTotal"`
+	FaultStatus             valueTypes.String  `json:"fault_status" PointId:"fault_status" PointUpdateFreq:"UpdateFreqInstant"`
+	FunctionEnum            valueTypes.String  `json:"function_enum" PointId:"function_enum" PointUpdateFreq:"UpdateFreqInstant"`
+	InstallerAlarmCount     valueTypes.Count   `json:"installer_alarm_count" PointId:"installer_alarm_count" PointUpdateFreq:"UpdateFreqTotal"`
+	InstallerDevFaultStatus valueTypes.Integer `json:"installer_dev_fault_status" PointId:"installer_dev_fault_status" PointUpdateFreq:"UpdateFreqInstant"`
+	InstallerFaultCount     valueTypes.Count   `json:"installer_fault_count" PointId:"installer_fault_count" PointUpdateFreq:"UpdateFreqTotal"`
+	InverterModelType       valueTypes.Integer `json:"inverter_model_type" PointId:"inverter_model_type" PointUpdateFreq:"UpdateFreqBoot"`
+	IsDeveloper             valueTypes.Bool    `json:"is_developer" PointId:"is_developer" PointUpdateFreq:"UpdateFreqBoot"`
+	IsG2point5Module        valueTypes.Bool    `json:"is_g2point5_module" PointId:"is_g2point5_module" PointUpdateFreq:"UpdateFreqBoot"`
+	IsInit                  valueTypes.Bool    `json:"is_init" PointId:"is_init" PointUpdateFreq:"UpdateFreqBoot"`
+	IsSecond                valueTypes.Bool    `json:"is_second" PointId:"is_second" PointUpdateFreq:"UpdateFreqBoot"`
+	IsSupportParamset       valueTypes.Bool    `json:"is_support_paramset" PointId:"is_support_paramset" PointUpdateFreq:"UpdateFreqBoot"`
+	NodeTimestamps          interface{}        `json:"node_timestamps" PointId:"node_timestamps"`
+	OwnerAlarmCount         valueTypes.Count   `json:"owner_alarm_count" PointId:"owner_alarm_count" PointUpdateFreq:"UpdateFreqTotal"`
+	OwnerDevFaultStatus     valueTypes.Integer `json:"owner_dev_fault_status" PointId:"owner_dev_fault_status" PointUpdateFreq:"UpdateFreqInstant"`
+	OwnerFaultCount         valueTypes.Count   `json:"owner_fault_count" PointId:"owner_fault_count" PointUpdateFreq:"UpdateFreqTotal"`
+	Points                  interface{}        `json:"points" PointId:"points"`
+	RelState                valueTypes.Integer `json:"rel_state" PointId:"rel_state" PointUpdateFreq:"UpdateFreqInstant"`
+	StringAmount            valueTypes.Integer `json:"string_amount" PointId:"string_amount"`
+	TypeName                valueTypes.String  `json:"type_name" PointId:"type_name" PointUpdateFreq:"UpdateFreqBoot"`
+	UnitName                valueTypes.String  `json:"unit_name" PointId:"unit_name" PointUpdateFreq:"UpdateFreqBoot"`
+	UUID                    valueTypes.Integer `json:"uuid" PointId:"uuid" PointUpdateFreq:"UpdateFreqBoot"`                       // Referenced by DeviceArea
+	UUIDIndexCode           valueTypes.String  `json:"uuid_index_code" PointId:"uuid_index_code" PointUpdateFreq:"UpdateFreqBoot"` // Referenced by DeviceArea
+
+	PointData               []PointStruct      `json:"point_data" PointId:"data" PointIdReplace:"true" DataTable:"true"`	// PointIdFromChild:"PointId" PointIdReplace:"true" PointId:"data" DataTable:"true"`
+	PsTimezoneInfo          struct {
+		IsDst    valueTypes.Bool   `json:"is_dst" PointUpdateFreq:"UpdateFreqInstant"`
+		TimeZone valueTypes.String `json:"time_zone" PointUpdateFreq:"UpdateFreqInstant"`
+	}       `json:"psTimezoneInfo" PointId:"ps_timezone_info"`
+}
 
 type PointStruct struct {
 	GoStruct               GoStruct.GoStruct   `json:"-" PointIdFrom:"PointId" PointIdReplace:"true" PointTimestampFrom:"TimeStamp" PointDeviceFromParent:"PsKey"`

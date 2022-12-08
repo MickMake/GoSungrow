@@ -51,7 +51,7 @@ func (dm *DataMap) StructToDataMap(endpoint EndPoint, parentDeviceId string, nam
 			StartAt:        "ResultData",
 			Name:           name,
 			TimeStamp:      dm.TimeStamp,
-			Debug:          false,
+			Debug:          dm.Debug,
 			AddUnexported:  false,
 			AddUnsupported: false,
 			AddInvalid:     false,
@@ -83,6 +83,12 @@ func (dm *DataMap) AddPointUnitValues(Current *GoStruct.Reflect, parentDeviceId 
 		point.UpdateFreq = Current.DataStructure.PointUpdateFreq
 		point.SetName(Current.DataStructure.PointName)
 
+		// if Current.Value.DeviceId() != "" {
+		// 	parentDeviceId = Current.Value.DeviceId()
+		// } else {
+		// 	Current.Value.SetDeviceId(parentDeviceId)
+		// }
+
 		if Current.Value.GetUnit() != point.Unit {
 			if dm.Debug {
 				_, _ = fmt.Fprintf(os.Stderr, "OOOPS FP['%s'] - Point/Value unit mismatch - Point:%s != Value:%s (%f)\n",
@@ -91,17 +97,17 @@ func (dm *DataMap) AddPointUnitValues(Current *GoStruct.Reflect, parentDeviceId 
 			point.Unit = Current.Value.GetUnit()
 		}
 
-		// Add arrays as multiple entries.
-		if Current.Value.Length() > 1 {
-			entries := CreatePointDataEntries(Current, parentDeviceId, point, date)
-			dm.Add(entries.Entries...)
-			break
-		}
-
 		if Current.Value.Length() == 0 {
 			if dm.Debug {
 				_, _ = fmt.Fprintf(os.Stderr, "OOOPS FP['%s'] - UVS is nil\n", Current.FieldPath.String())
 			}
+			break
+		}
+
+		// Add arrays as multiple entries.
+		if Current.Value.Length() > 1 {
+			entries := CreatePointDataEntries(Current, parentDeviceId, point, date)
+			dm.Add(entries.Entries...)
 			break
 		}
 
@@ -286,12 +292,12 @@ func (dm *DataMap) ProcessMap() {
 				when = valueTypes.SetDateTimeValue(dm.TimeStamp)
 			}
 
-			pdi := dm.parentDeviceId
-			if Child.DataStructure.PointDevice != "" {
-				pdi = Child.DataStructure.PointDevice
-			}
+			// pdi := dm.parentDeviceId
+			// if Child.DataStructure.PointDevice != "" {
+			// 	pdi = Child.DataStructure.PointDevice
+			// }
 
-			dm.AddPointUnitValues(Child, pdi, when)
+			dm.AddPointUnitValues(Child, dm.parentDeviceId, when)
 		}
 
 		// Convert Struct.VirtualMap to DataMap
@@ -307,10 +313,10 @@ func (dm *DataMap) ProcessMap() {
 				when = valueTypes.SetDateTimeValue(dm.TimeStamp)
 			}
 
-			pdi := dm.parentDeviceId
-			if Child.DataStructure.PointDevice != "" {
-				pdi = Child.DataStructure.PointDevice
-			}
+			// pdi := dm.parentDeviceId
+			// if Child.DataStructure.PointDevice != "" {
+			// 	pdi = Child.DataStructure.PointDevice
+			// }
 
 			if Child.DataStructure.PointVirtualShift > 0 {
 				Child.DataStructure.Endpoint.ShiftLeft(Child.DataStructure.PointVirtualShift)
@@ -318,7 +324,7 @@ func (dm *DataMap) ProcessMap() {
 			} else {
 				Child.DataStructure.Endpoint.ReplaceFirst("virtual")
 			}
-			dm.AddPointUnitValues(Child, pdi, when)
+			dm.AddPointUnitValues(Child, dm.parentDeviceId, when)
 		}
 	}
 }
@@ -536,6 +542,12 @@ func CreatePointDataEntry(Current *GoStruct.Reflect, parentDeviceId string, poin
 	// CreatePointDataEntry(Current, Current.EndPointPath().String(), parentDeviceId, point, date, *Current.Value.First())
 	var ret DataEntry
 	for range Only.Once {
+		if uv.DeviceId() != "" {
+			parentDeviceId = uv.DeviceId()
+		} else {
+			uv.SetDeviceId(parentDeviceId)
+		}
+
 		ret = DataEntry {
 			Current:    Current,
 			EndPoint:   Current.EndPointPath().String(),
@@ -569,6 +581,12 @@ func CreatePointDataEntries(Current *GoStruct.Reflect, parentDeviceId string, po
 				epn = JoinWithDots(res, valueTypes.DateTimeLayoutDay, Current.EndPointPath().String(), i)
 			} else {
 				epn = JoinWithDots(res, valueTypes.DateTimeLayoutDay, Current.EndPointPath().String(), uv.ValueKey())
+			}
+
+			if uv.DeviceId() != "" {
+				parentDeviceId = uv.DeviceId()
+			} else {
+				uv.SetDeviceId(parentDeviceId)
 			}
 
 			ret.Entries = append(ret.Entries, DataEntry{

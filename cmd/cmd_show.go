@@ -7,23 +7,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// type CmdShow struct {
-// 	CmdDefault
-// 	PsId CmdDefault
-// 	Device CmdDefault
-// 	Template CmdDefault
-// }
-//
-// func NewCmdShow() *CmdShow {
-// 	ret := &CmdShow {
-// 		CmdDefault: CmdDefault {
-// 			Error:   nil,
-// 			cmd:     nil,
-// 			SelfCmd: nil,
-// 		},
-// 	}
-// 	return ret
-// }
 
 type CmdShow CmdDefault
 

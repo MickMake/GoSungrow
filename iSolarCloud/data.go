@@ -8,6 +8,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
+	"os"
+	"sort"
 	"strings"
 )
 
@@ -58,7 +60,13 @@ type SunGrowData struct {
 	sunGrow    *SunGrow
 	outputType output.OutputType
 	saveAsFile bool
+
+	Debug      bool
 	Error      error
+}
+
+func (sgd *SunGrowData) PrintDebug(format string, args ...interface{})  {
+	if sgd.Debug { _, _ = fmt.Fprintf(os.Stderr, format, args...) }
 }
 
 func (sgd *SunGrowData) New(ref *SunGrow) {
@@ -164,10 +172,10 @@ func (sgd *SunGrowData) CallEndpoint(endpoint api.EndPoint, request SunGrowDataR
 		var req []byte
 		req, sgd.Error = json.Marshal(request)
 		if sgd.Error != nil {
-			fmt.Printf("GetEndpoint - ERR: %s\n", sgd.Error)
+			fmt.Printf("GetEndPoint - Error: %s\n", sgd.Error)
 			break
 		}
-		// fmt.Printf("%s\n", req)
+		// fmt.Printf("Request: %s\n", req)
 
 		if string(req) != "" {
 			endpoint = endpoint.SetRequestByJson(output.Json(req))
@@ -177,7 +185,7 @@ func (sgd *SunGrowData) CallEndpoint(endpoint api.EndPoint, request SunGrowDataR
 				break
 			}
 		}
-		// fmt.Printf("%s\n", endpoint.GetRequestJson())
+		sgd.PrintDebug("Request: %s\n", endpoint.GetRequestJson())
 
 		endpoint = endpoint.Call()
 		sgd.Error = endpoint.GetError()
@@ -187,26 +195,36 @@ func (sgd *SunGrowData) CallEndpoint(endpoint api.EndPoint, request SunGrowDataR
 				break
 			}
 			fmt.Println(endpoint.Help())
+			sgd.PrintDebug("Error response[%s]: %s\n", sgd.Error, endpoint.GetResponseJson())
 			break
 		}
+		sgd.PrintDebug("Response: %s\n", endpoint.GetResponseJson())
 
 		response.Data = endpoint.GetEndPointData()
 		args := request.GetArgs(response.Data.EndPoint)
 		name := endpoint.GetArea().String() + "." + endpoint.GetName().String()
+		var title string
+		var file string		// + " - " + request.RequestAsFilePrefix(),
+		key := request.GetPrimaryArg()
+		if key != "" {
+			title = key
+			file = key
+		}
 
 		response.Options = OutputOptions {
-			Name:        endpoint.GetName().String(),
+			Name:        name,
 			OutputType:  sgd.sunGrow.OutputType,
-			FileSuffix:  request.GetPrimaryArg(), // + " - " + request.RequestAsFilePrefix(),
+			PrimaryKey:  key,
+			FileSuffix:  file,
 			SaveAsFile:  sgd.sunGrow.SaveAsFile,
 			TitleSuffix: args,
 			GraphRequest: output.GraphRequest {
-				Title:       name + " - " + args,
+				Title:       title,
+				SubTitle:    args,
 				TimeColumn:  nil,
 				DataColumn:  nil,
 				UnitsColumn: nil,
 				NameColumn:  nil,
-				// DataColumn:   nil,
 				DataMin: nil,
 				DataMax: nil,
 				Width:   nil,
@@ -214,6 +232,7 @@ func (sgd *SunGrowData) CallEndpoint(endpoint api.EndPoint, request SunGrowDataR
 				Error:   nil,
 			},
 		}
+		sgd.PrintDebug("OutputOptions: %v\n", response.Options)
 	}
 
 	return response
@@ -227,55 +246,151 @@ func (sgd *SunGrowData) GetData() error {
 		}
 
 		for _, endpoint := range sgd.endPoints {
-			// Lookup endpoint interface from string.
-			ep := sgd.sunGrow.GetEndpoint(endpoint)
-			if sgd.sunGrow.IsError() {
-				sgd.Error = sgd.sunGrow.Error
-				break
-			}
-			sgd.Request.SetRequired(ep.GetRequestArgNames())
-			sgd.Request.SetArgs(sgd.Args...)
-
-			// PsId not required.
-			if sgd.Request.IsPsIdNotRequired() {
-				var result SunGrowDataResult
-
-				result.EndPointArea = ep.GetArea()
-				result.EndPointName = ep.GetName()
-				result.EndPoint = ep
-				result.Request = sgd.Request
-				result.Response = sgd.CallEndpoint(ep, result.Request)
-				sgd.Results[result.EndPointName.String()] = result
-				break
-			}
-
-			// PsId required and not set.
-			if len(sgd.Request.aPsId) == 0 {
-				sgd.SetPsIds()
-				if sgd.Error != nil {
-					break
-				}
-			}
-
-			// PsId required.
-			for _, psId := range sgd.Request.aPsId {
-				var result SunGrowDataResult
-				result.Request = sgd.Request
-				result.Request.SetPsId(psId.String())
-
-				result.EndPointArea = ep.GetArea()
-				result.EndPointName = ep.GetName()
-				result.EndPoint = ep
-				result.Response = sgd.CallEndpoint(ep, result.Request)
-				if sgd.Error != nil {
-					break
-				}
-				sgd.Results[result.EndPointName.String() + "/" + psId.String()] = result
-			}
-
+			sgd.Error = sgd.GetDataSingle(endpoint)
 			if sgd.Error != nil {
 				break
 			}
+
+			// // Lookup endpoint interface from string.
+			// ep := sgd.sunGrow.GetEndpoint(endpoint)
+			// if sgd.sunGrow.IsError() {
+			// 	sgd.Error = sgd.sunGrow.Error
+			// 	break
+			// }
+			// sgd.Request.SetRequired(ep.GetRequestArgNames())
+			// sgd.Request.SetArgs(sgd.Args...)
+			//
+			// // PsId not required.
+			// if sgd.Request.IsPsIdNotRequired() {
+			// 	var result SunGrowDataResult
+			//
+			// 	result.EndPointArea = ep.GetArea()
+			// 	result.EndPointName = ep.GetName()
+			// 	result.EndPoint = ep
+			// 	result.Request = sgd.Request
+			// 	result.Response = sgd.CallEndpoint(ep, result.Request)
+			// 	sgd.Results[result.EndPointName.String()] = result
+			// 	break
+			// }
+			//
+			// // PsId required and not set.
+			// if len(sgd.Request.aPsId) == 0 {
+			// 	sgd.SetPsIds()
+			// 	if sgd.Error != nil {
+			// 		break
+			// 	}
+			// }
+			//
+			// // PsId required.
+			// for _, psId := range sgd.Request.aPsId {
+			// 	var result SunGrowDataResult
+			// 	result.Request = sgd.Request
+			// 	result.Request.SetPsId(psId.String())
+			//
+			// 	result.EndPointArea = ep.GetArea()
+			// 	result.EndPointName = ep.GetName()
+			// 	result.EndPoint = ep
+			// 	result.Response = sgd.CallEndpoint(ep, result.Request)
+			// 	if sgd.Error != nil {
+			// 		break
+			// 	}
+			// 	sgd.Results[result.EndPointName.String() + "/" + psId.String()] = result
+			// }
+			//
+			// if sgd.Error != nil {
+			// 	break
+			// }
+		}
+		if sgd.Error != nil {
+			break
+		}
+
+		sgd.Error = sgd.Process()
+		if sgd.Error != nil {
+			break
+		}
+	}
+
+	return sgd.Error
+}
+
+func (sgd *SunGrowData) GetDataSingle(endpoint string) error {
+	for range Only.Once {
+		// Lookup endpoint interface from string.
+		ep := sgd.sunGrow.GetEndpoint(endpoint)
+		if sgd.sunGrow.IsError() {
+			sgd.Error = sgd.sunGrow.Error
+			break
+		}
+		sgd.Request.SetRequired(ep.GetRequestArgNames())
+		sgd.Request.SetArgs(sgd.Args...)
+
+		// PsId not required.
+		if sgd.Request.IsPsIdNotRequired() {
+			sgd.Error = sgd.getDataSinglePsIdNotRequired(ep)
+			break
+		}
+
+		// PsId required.
+		if sgd.Request.IsPsIdRequired() {
+			sgd.Error = sgd.getDataSinglePsIdRequired(ep)
+			break
+		}
+	}
+
+	return sgd.Error
+}
+
+func (sgd *SunGrowData) getDataSinglePsIdNotRequired(ep api.EndPoint) error {
+	for range Only.Once {
+		var result SunGrowDataResult
+		result.EndPointArea = ep.GetArea()
+		result.EndPointName = ep.GetName()
+		result.EndPoint = ep
+		result.Request = sgd.Request
+
+		result.Response = sgd.CallEndpoint(ep, result.Request)
+		if sgd.Error != nil {
+			break
+		}
+
+		sgd.Results[result.EndPointName.String()] = result
+		sgd.Error = sgd.Process()
+		if sgd.Error != nil {
+			break
+		}
+	}
+
+	return sgd.Error
+}
+
+func (sgd *SunGrowData) getDataSinglePsIdRequired(ep api.EndPoint) error {
+	for range Only.Once {
+		if sgd.Request.aPsId == nil {
+			sgd.SetPsIds()
+		}
+
+		for _, psId := range sgd.Request.aPsId {
+			var result SunGrowDataResult
+			result.Request = sgd.Request
+			result.Request.SetPsId(psId.String())
+
+			result.EndPointArea = ep.GetArea()
+			result.EndPointName = ep.GetName()
+			result.EndPoint = ep
+			result.Response = sgd.CallEndpoint(ep, result.Request)
+			if sgd.Error != nil {
+				break
+			}
+			sgd.Results[result.EndPointName.String() + "/" + psId.String()] = result
+		}
+		if sgd.Error != nil {
+			break
+		}
+
+		sgd.Error = sgd.Process()
+		if sgd.Error != nil {
+			break
 		}
 	}
 
@@ -348,7 +463,7 @@ type SunGrowDataResult struct {
 	Error        error
 }
 
-func (sgd *SunGrowDataResult) ProcessMap() error {
+func (sgd *SunGrowDataResult) Process() error {
 	sgd.Response.Data.ProcessMap()
 	sgd.Error = sgd.Response.Data.Error
 	return sgd.Error
@@ -360,17 +475,17 @@ func (sgd *SunGrowDataResult) ProcessMapForMqtt() error {
 	return sgd.Error
 }
 
-func (sgd *SunGrowDataResult) CreateResultTable(full bool) output.Table {
-	ret := sgd.Response.CreateResultTable(full)
-	sgd.Error = sgd.Response.Data.Error
-	return ret
-}
+// func (sgd *SunGrowDataResult) CreateResultTable(full bool) output.Table {
+// 	ret := sgd.Response.CreateResultTable(full)
+// 	sgd.Error = sgd.Response.Data.Error
+// 	return ret
+// }
 
-func (sgd *SunGrowDataResult) CreateDataTables() api.Tables {
-	tables := sgd.Response.CreateDataTables()
-	sgd.Error = sgd.Response.Data.Error
-	return tables
-}
+// func (sgd *SunGrowDataResult) CreateDataTables() api.Tables {
+// 	tables := sgd.Response.CreateDataTables()
+// 	sgd.Error = sgd.Response.Data.Error
+// 	return tables
+// }
 
 func (sgd *SunGrowDataResult) Sort() []string {
 	return sgd.Response.Data.Sort()
@@ -382,11 +497,12 @@ func (sgd *SunGrowDataResult) Print() {
 
 
 type OutputOptions struct {
-	Name        string
-	TitleSuffix string
-	OutputType output.OutputType
-	FileSuffix string
-	SaveAsFile bool
+	Name         string
+	TitleSuffix  string
+	OutputType   output.OutputType
+	PrimaryKey   string
+	FileSuffix   string
+	SaveAsFile   bool
 	GraphRequest output.GraphRequest
 
 	// table.InitGraph(output.GraphRequest {
@@ -410,17 +526,17 @@ type SunGrowDataResponse struct {
 	Error    error
 }
 
-func (sgd *SunGrowDataResponse) CreateResultTable(full bool) output.Table {
-	ret := sgd.Data.CreateResultTable(full)
-	sgd.Error = sgd.Data.Error
-	return ret
-}
+// func (sgd *SunGrowDataResponse) CreateResultTable(full bool) output.Table {
+// 	ret := sgd.Data.CreateResultTable(full)
+// 	sgd.Error = sgd.Data.Error
+// 	return ret
+// }
 
-func (sgd *SunGrowDataResponse) CreateDataTables() api.Tables {
-	tables := sgd.Data.CreateDataTables()
-	sgd.Error = sgd.Data.Error
-	return tables
-}
+// func (sgd *SunGrowDataResponse) CreateDataTables() api.Tables {
+// 	tables := sgd.Data.CreateDataTables()
+// 	sgd.Error = sgd.Data.Error
+// 	return tables
+// }
 
 func (sgd *SunGrowDataResponse) Output() error {
 	for range Only.Once {
@@ -463,28 +579,121 @@ func (sgd *SunGrowDataResponse) OutputDataTables() error {
 		}
 
 		// @iSolarCloud/api/struct_data.go:420
-		if sgd.Options.OutputType.IsGraph() {
-			for _, data := range tables {
+		// if sgd.Options.OutputType.IsGraph() {
+		// 	for _, data := range tables {
+		// 		if !data.IsValid {
+		// 			fmt.Printf("# %s.%s - has no graphable data.\n", data.Area, data.Name)
+		// 			continue
+		// 		}
+		//
+		// 		if sgd.Options.TitleSuffix == "" {
+		// 			sgd.Options.TitleSuffix = data.Table.GetTitle()
+		// 		}
+		// 		data.Table.OutputType = sgd.Options.OutputType
+		// 		data.Table.SetSaveFile(true)	// sgd.Options.SaveAsFile
+		// 		data.Table.AppendTitle(" - %s", sgd.Options.TitleSuffix)
+		// 		data.Table.AppendFilePrefix(sgd.Options.FileSuffix)
+		//
+		// 		if sgd.Options.GraphRequest.TimeColumn == nil {
+		// 			for _, col := range data.Table.GetHeaders() {
+		// 				val := data.Values.GetCell(0, col)
+		// 				if val.IsTypeDateTime() {
+		// 					sgd.Options.GraphRequest.TimeColumn = &col
+		// 					break
+		// 				}
+		// 			}
+		// 		}
+		// 		if sgd.Options.GraphRequest.TimeColumn == nil {
+		// 			// No time column - abort.
+		// 			break
+		// 		}
+		//
+		// 		if sgd.Options.GraphRequest.UnitsColumn != nil {
+		// 			for _, col := range data.Table.GetHeaders() {
+		// 				if *sgd.Options.GraphRequest.UnitsColumn != col {
+		// 					continue
+		// 				}
+		// 				val := data.Values.GetCell(0, col)
+		// 				unit := val.Unit()
+		// 				if unit != "" {
+		// 					continue
+		// 				}
+		// 				sgd.Options.GraphRequest.UnitsColumn = &col
+		// 				sgd.Options.GraphRequest.DataUnit = &unit
+		// 				break
+		// 			}
+		// 		}
+		//
+		// 		if sgd.Options.GraphRequest.NameColumn == nil {
+		// 		}
+		//
+		// 		// if sgd.Options.GraphRequest.Width == nil {
+		// 		// }
+		//
+		// 		// if sgd.Options.GraphRequest.Height == nil {
+		// 		// }
+		//
+		// 		var values []string
+		// 		if sgd.Options.GraphRequest.DataColumn == nil {
+		// 			fmt.Println("Finding points to graph...")
+		// 			fmt.Printf("Table Headers: %s\n", strings.Join(data.Table.GetHeaders(), ", "))
+		// 			fmt.Printf("Table rows: %d\n", data.Rows)
+		// 			// We don't have any DataColumn defined - find them.
+		// 			for _, col := range data.Table.GetHeaders() {
+		// 				val := data.Values.GetCell(0, col)
+		// 				if val.IsNumber() {
+		// 					values = append(values, col)
+		// 				}
+		// 			}
+		// 			fmt.Printf("Found %d points:\n", len(values))
+		// 		}
+		//
+		// 		// title := data.Table.GetTitle()
+		// 		// file := data.Table.GetFilePrefix()
+		// 		var title string
+		// 		var file string
+		// 		if sgd.Options.PrimaryKey == "" {
+		// 			title = fmt.Sprintf("%s.%s", data.Area, data.Name)
+		// 			file = fmt.Sprintf("%s.%ss", data.Area, data.Name)
+		// 		} else {
+		// 			title = fmt.Sprintf("%s.%s - %s", data.Area, data.Name, sgd.Options.PrimaryKey)
+		// 			file = fmt.Sprintf("%s.%s-%s", data.Area, data.Name, sgd.Options.PrimaryKey)
+		// 		}
+		//
+		// 		for _, value := range values {
+		// 			sgd.Options.GraphRequest.DataColumn = &value
+		// 			data.Table.SetTitle("%s - %s", title, value)
+		// 			sgd.Options.GraphRequest.Title = data.Table.GetTitle()
+		// 			data.Table.SetFilePrefix("%s-%s", file, value)
+		//
+		// 			sgd.Error = data.Table.SetGraph(sgd.Options.GraphRequest)
+		// 			if sgd.Error != nil {
+		// 				break
+		// 			}
+		//
+		// 			sgd.Error = data.Table.Output()
+		// 			if sgd.Error != nil {
+		// 				break
+		// 			}
+		// 		}
+		// 	}
+		// 	break
+		// }
+
+		for _, data := range tables {
+			if sgd.Options.TitleSuffix == "" {
+				sgd.Options.TitleSuffix = data.Table.GetTitle()
+			}
+			data.Table.OutputType = sgd.Options.OutputType
+			data.Table.SetSaveFile(sgd.Options.SaveAsFile)	// sgd.Options.SaveAsFile
+
+			if sgd.Options.OutputType.IsGraph() {
 				if !data.IsValid {
-					fmt.Printf("# %s.%s - has no data.\n", data.Area, data.Name)
+					fmt.Printf("# %s.%s - has no graphable data.\n", data.Area, data.Name)
 					continue
 				}
-				// table := tables[name]
-				// table.OutputType = sgd.Options.OutputType
-				// table.SetSaveFile(sgd.Options.SaveAsFile)
-				// table.SetFilePrefix("%s", sgd.Options.Filename)
 
-				// value := values[name]
-				// fmt.Printf("Writing (%d)\n", len(value))
-				// fmt.Printf("%v\n", table.GetHeaders())
-
-				if sgd.Options.TitleSuffix == "" {
-					sgd.Options.TitleSuffix = data.Table.GetTitle()
-				}
-				data.Table.OutputType = sgd.Options.OutputType
 				data.Table.SetSaveFile(true)
-				data.Table.AppendTitle(" - %s", sgd.Options.TitleSuffix)
-				data.Table.AppendFilePrefix(sgd.Options.FileSuffix)
 
 				if sgd.Options.GraphRequest.TimeColumn == nil {
 					for _, col := range data.Table.GetHeaders() {
@@ -495,25 +704,9 @@ func (sgd *SunGrowDataResponse) OutputDataTables() error {
 						}
 					}
 				}
-
-				// if sgd.Options.GraphRequest.DataColumn == nil {
-				// 	for _, col := range data.Table.GetHeaders() {
-				// 		val := data.Values.GetCell(0, col)
-				// 		if val.IsNumber() {
-				// 			sgd.Options.GraphRequest.DataColumn = &col
-				// 			break
-				// 		}
-				// 	}
-				// }
-
-				if sgd.Options.GraphRequest.DataColumn == nil {
-					for _, col := range data.Table.GetHeaders() {
-						val := data.Values.GetCell(0, col)
-						if val.IsNumber() {
-							sgd.Options.GraphRequest.DataColumn = &col
-							break
-						}
-					}
+				if sgd.Options.GraphRequest.TimeColumn == nil {
+					// No time column - abort.
+					break
 				}
 
 				if sgd.Options.GraphRequest.UnitsColumn != nil {
@@ -535,42 +728,70 @@ func (sgd *SunGrowDataResponse) OutputDataTables() error {
 				if sgd.Options.GraphRequest.NameColumn == nil {
 				}
 
-				// if sgd.Options.GraphRequest.DataMin == nil {
-				// 	zero := 0.0
-				// 	sgd.Options.GraphRequest.DataMin = &zero
-				// }
-
-				// if sgd.Options.GraphRequest.DataMax == nil {
-				// 	zero := 0.0
-				// 	sgd.Options.GraphRequest.DataMax = &zero
-				// }
-
 				// if sgd.Options.GraphRequest.Width == nil {
 				// }
 
 				// if sgd.Options.GraphRequest.Height == nil {
 				// }
 
-				sgd.Error = data.Table.SetGraph(sgd.Options.GraphRequest)
-				if sgd.Error != nil {
-					break
+				var values []string
+				if sgd.Options.GraphRequest.DataColumn == nil {
+					fmt.Println("Finding points to graph...")
+					fmt.Printf("Table Headers: %s\n", strings.Join(data.Table.GetHeaders(), ", "))
+					fmt.Printf("Table rows: %d\n", data.Rows)
+					// We don't have any DataColumn defined - find them.
+					for _, col := range data.Table.GetHeaders() {
+						val := data.Values.GetCell(0, col)
+						if !val.IsNumber() {
+							continue
+						}
+						values = append(values, col)
+						// if val.ValueKey() == "" {
+						// 	values = append(values, col)
+						// 	continue
+						// }
+						// if val.DeviceId() == "" {
+						// 	values = append(values, val.ValueKey())
+						// 	continue
+						// }
+						// values = append(values, val.DeviceId() + "." + val.ValueKey())
+					}
+					fmt.Printf("Found %d points.\n", len(values))
 				}
 
-				sgd.Error = data.Table.Output()
-				if sgd.Error != nil {
-					break
+				title := data.Table.GetTitle()
+				file := data.Table.GetFilePrefix()
+
+				sort.Strings(values)
+				for _, value := range values {
+					// @TODO - Lookup pointIds here.
+					sgd.Options.GraphRequest.DataColumn = &value
+					if sgd.Options.PrimaryKey != "" {
+						data.Table.SetTitle("%s - %s - %s", title, sgd.Options.PrimaryKey, value)
+						data.Table.SetFilePrefix("%s-%s-%s", file, sgd.Options.PrimaryKey, value)
+					} else {
+						data.Table.SetTitle("%s - %s", title, value)
+						data.Table.SetFilePrefix("%s-%s", file, value)
+					}
+					sgd.Options.GraphRequest.Title = data.Table.GetTitle()
+
+					sgd.Error = data.Table.SetGraph(sgd.Options.GraphRequest)
+					if sgd.Error != nil {
+						break
+					}
+
+					sgd.Error = data.Table.Output()
+					if sgd.Error != nil {
+						break
+					}
 				}
+
+				break
 			}
-			break
-		}
 
-		for _, data := range tables {
-			fmt.Println()
-			data.Table.OutputType = sgd.Options.OutputType
-			data.Table.SetSaveFile(sgd.Options.SaveAsFile)
 			data.Table.AppendTitle(" - %s", sgd.Options.TitleSuffix)
 			data.Table.AppendFilePrefix(sgd.Options.FileSuffix)
-
+			fmt.Println()
 			sgd.Error = data.Table.Output()
 			if sgd.Error != nil {
 				break
@@ -579,6 +800,10 @@ func (sgd *SunGrowDataResponse) OutputDataTables() error {
 	}
 
 	return sgd.Error
+}
+
+func (sgd *SunGrowDataResponse) LookUpPointId() {
+
 }
 
 func (sgd *SunGrowDataResponse) Print() {

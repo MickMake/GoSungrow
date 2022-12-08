@@ -228,20 +228,74 @@ func (ta *StructTable) GetValues() StructValues {
 
 		var colName = func(sub *Reflect, value *valueTypes.UnitValue, length int) string {
 			name := sub.DataStructure.PointName
-			if value.ValueKey() == "" {
-				if name == "" {
-					name = "Column " + strconv.Itoa(length)
-				}
-			} else {
-				name += " " + value.ValueKey()
+			var pointName bool
+			if sub.DataStructure.PointName != "" {
+				pointName = true
 			}
+			var deviceId bool
+			if value.DeviceId() != "" {
+				deviceId = true
+			}
+			var valueKey bool
+			if value.ValueKey() != "" {
+				valueKey = true
+			}
+			switch {
+				case pointName == true && deviceId == true && valueKey == true:
+					name = value.DeviceId() + "." + value.ValueKey()
+				case pointName == true && deviceId == true && valueKey == false:
+					name = value.DeviceId() + "." + sub.DataStructure.PointName
+
+				case pointName == true && deviceId == false && valueKey == true:
+					name = value.ValueKey()
+				case pointName == true && deviceId == false && valueKey == false:
+					name = sub.DataStructure.PointName
+
+				case pointName == false && deviceId == true && valueKey == true:
+					name = value.DeviceId() + "." + value.ValueKey()
+				case pointName == false && deviceId == true && valueKey == false:
+					name = "Column " + strconv.Itoa(length)
+
+				case pointName == false && deviceId == false && valueKey == true:
+					name = value.ValueKey()
+				case pointName == false && deviceId == false && valueKey == false:
+					name = "Column " + strconv.Itoa(length)
+			}
+
+			// if value.DeviceId() != "" {
+			// 	if name != "" {
+			// 		// Prepend DeviceId to PointName.
+			// 		name = value.DeviceId() + "." + sub.DataStructure.PointName
+			// 	} else {
+			// 		name = value.DeviceId()
+			// 	}
+			// }
+			// if value.ValueKey() != "" {
+			// 	if name != "" {
+			// 		name += "." + value.ValueKey()
+			// 	} else {
+			// 		name = value.ValueKey()
+			// 	}
+			// } else {
+			// 	if name == "" {
+			// 		name = "Column " + strconv.Itoa(length)
+			// 	}
+			// }
+
+			// if value.ValueKey() == "" {
+			// 	if name == "" {
+			// 		name = "Column " + strconv.Itoa(length)
+			// 	}
+			// } else {
+			// 	name += " " + value.ValueKey()
+			// }
 			switch value.Unit() {
-			case "--":
-			case "":
-			default:
-				if !sub.DataStructure.PointVariableUnit {
-					name += " (" + value.Unit() + ")"
-				}
+				case "--":
+				case "":
+				default:
+					if !sub.DataStructure.PointVariableUnit {
+						name += " (" + value.Unit() + ")"
+					}
 			}
 			return name
 		}
@@ -334,10 +388,10 @@ func (ta *StructTable) GetValues() StructValues {
 				name := sub.DataStructure.PointName
 				if !sub.DataStructure.PointVariableUnit {
 					switch sub.Value.GetUnit() {
-					case "--":
-					case "":
-					default:
-						name += " (" + sub.Value.GetUnit() + ")"
+						case "--":
+						case "":
+						default:
+							name += " (" + sub.Value.GetUnit() + ")"
 					}
 					addCol(name)
 				} else {
@@ -459,8 +513,7 @@ func (ta *StructTable) GetValues() StructValues {
 		}
 
 		ta.Columns = sortMapByValues(colOrder)
-
-		// @TODO - Add sorting capability here.
+		// @TODO - Add row sorting capability here.
 	}
 
 	return ta.Values

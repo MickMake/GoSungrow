@@ -5,17 +5,8 @@ import (
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/Unify"
 	"github.com/spf13/cobra"
-	"time"
 )
 
-
-//goland:noinspection SpellCheckingInspection
-const (
-	defaultHost      = "https://augateway.isolarcloud.com"
-	defaultApiAppKey = "93D72E60331ABDCDC7B39ADC2D1F32B3"
-
-	defaultTimeout = time.Second * 30
-)
 
 type Cmds struct {
 	Unify  *Unify.Unify

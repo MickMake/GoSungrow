@@ -40,6 +40,7 @@ type Device struct {
 	DeviceType              valueTypes.Integer  `json:"device_type"`
 	DeviceCode              valueTypes.Integer  `json:"device_code"`
 	ChannelId               valueTypes.Integer  `json:"chnnl_id" PointId:"channel_id"`
+
 	Sn                      valueTypes.String   `json:"sn" PointName:"Serial Number"`
 	FactoryName             valueTypes.String   `json:"factory_name"`
 

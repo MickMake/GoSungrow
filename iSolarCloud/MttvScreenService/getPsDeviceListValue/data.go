@@ -31,8 +31,8 @@ type ResultData struct {
 		PsKey                   valueTypes.String  `json:"pskey" PointId:"ps_key"`
 		PsId                    valueTypes.Integer `json:"ps_id"`
 		DeviceType              valueTypes.Integer `json:"device_type"`
-		// DeviceCode              valueTypes.Integer  `json:"device_code"`
-		// ChannelId               valueTypes.Integer  `json:"chnnl_id" PointId:"channel_id"`
+		DeviceCode              valueTypes.Integer  `json:"device_code"`
+		ChannelId               valueTypes.Integer  `json:"chnnl_id" PointId:"channel_id"`
 
 		AttrId                  valueTypes.Integer `json:"attr_id"`
 		ComponentAmount         valueTypes.Integer `json:"component_amount"`

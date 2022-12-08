@@ -8,7 +8,13 @@ import (
 
 type Device struct {
 	GoStruct                  GoStruct.GoStruct    `json:"GoStruct" PointIdFrom:"PsId" PointIdReplace:"true" PointDeviceFrom:"PsId"`
-	PsId                      valueTypes.PsId      `json:"ps_id"`
+
+        PsKey                     valueTypes.PsKey     `json:"ps_key" PointId:"ps_key" PointUpdateFreq:"UpdateFreqBoot"`
+        PsId                      valueTypes.PsId      `json:"ps_id" PointId:"ps_id" PointUpdateFreq:"UpdateFreqBoot"`
+        DeviceType                valueTypes.Integer   `json:"device_type" PointId:"device_type" PointUpdateFreq:"UpdateFreqBoot"`
+        DeviceCode                valueTypes.Integer   `json:"device_code" PointId:"device_code" PointUpdateFreq:"UpdateFreqBoot"`
+        ChannelId                 valueTypes.Integer   `json:"chnnl_id" PointId:"channel_id" PointUpdateFreq:"UpdateFreqBoot"`
+
 	PsName                    valueTypes.String    `json:"ps_name"`
 	PsStatus                  valueTypes.Bool      `json:"ps_status"`
 	PsIsNotInit               valueTypes.Bool      `json:"ps_is_not_init"`

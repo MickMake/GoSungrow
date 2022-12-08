@@ -56,11 +56,11 @@ func NewCmdApi() *CmdApi {
 				cmd:     nil,
 				SelfCmd: nil,
 			},
-			ApiTimeout:   defaultTimeout,
-			Url:          defaultHost,
+			ApiTimeout:   iSolarCloud.DefaultTimeout,
+			Url:          iSolarCloud.DefaultHost,
 			Username:     "",
 			Password:     "",
-			AppKey:       defaultApiAppKey,
+			AppKey:       iSolarCloud.DefaultApiAppKey,
 			LastLogin:    "",
 			ApiToken:     "",
 			ApiTokenFile: "",
@@ -240,13 +240,13 @@ func (c *CmdApi) AttachFlags(cmd *cobra.Command, viper *viper.Viper) {
 		viper.SetDefault(flagApiUsername, "")
 		cmd.PersistentFlags().StringVarP(&c.Password, flagApiPassword, "p", "", fmt.Sprintf("SunGrow: api password."))
 		viper.SetDefault(flagApiPassword, "")
-		cmd.PersistentFlags().StringVarP(&c.AppKey, flagApiAppKey, "", defaultApiAppKey, fmt.Sprintf("SunGrow: api application key."))
-		viper.SetDefault(flagApiAppKey, defaultApiAppKey)
-		cmd.PersistentFlags().StringVarP(&c.Url, flagApiUrl, "", defaultHost, fmt.Sprintf("SunGrow: Provider API URL."))
-		viper.SetDefault(flagApiUrl, defaultHost)
-		// cmd.PersistentFlags().DurationVarP(&c.ApiTimeout, flagApiTimeout, "", defaultTimeout, fmt.Sprintf("SunGrow: API timeout."))
-		// viper.SetDefault(flagApiTimeout, defaultTimeout)
-		c.ApiTimeout = defaultTimeout
+		cmd.PersistentFlags().StringVarP(&c.AppKey, flagApiAppKey, "", iSolarCloud.DefaultApiAppKey, fmt.Sprintf("SunGrow: api application key."))
+		viper.SetDefault(flagApiAppKey, iSolarCloud.DefaultApiAppKey)
+		cmd.PersistentFlags().StringVarP(&c.Url, flagApiUrl, "", iSolarCloud.DefaultHost, fmt.Sprintf("SunGrow: Provider API URL."))
+		viper.SetDefault(flagApiUrl, iSolarCloud.DefaultHost)
+		// cmd.PersistentFlags().DurationVarP(&c.ApiTimeout, flagApiTimeout, "", iSolarCloud.DefaultTimeout, fmt.Sprintf("SunGrow: API timeout."))
+		// viper.SetDefault(flagApiTimeout, iSolarCloud.DefaultTimeout)
+		c.ApiTimeout = iSolarCloud.DefaultTimeout
 		cmd.PersistentFlags().StringVar(&c.LastLogin, flagApiLastLogin, "", "SunGrow: last login.")
 		viper.SetDefault(flagApiLastLogin, "")
 		// _ = cmd.PersistentFlags().MarkHidden(flagApiLastLogin)
@@ -281,7 +281,7 @@ func (ca *Cmds) SunGrowArgs(cmd *cobra.Command, args []string) error {
 		ca.Api.SunGrow.SaveAsFile = ca.Api.SaveFile
 
 		if ca.Api.AppKey == "" {
-			ca.Api.AppKey = defaultApiAppKey
+			ca.Api.AppKey = iSolarCloud.DefaultApiAppKey
 		}
 
 		ca.Error = ca.Api.ApiLogin(false)
@@ -338,7 +338,7 @@ func (c *CmdApi) CmdApiList(cmd *cobra.Command, args []string) {
 
 func (c *CmdApi) CmdApiGet(_ *cobra.Command, args []string) error {
 	for range Only.Once {
-		args = cmdConfig.FillArray(2, args)
+		args = MinimumArraySize(2, args)
 		if args[0] == "all" {
 			c.Error = c.SunGrow.AllCritical()
 			break
@@ -405,4 +405,22 @@ func (c *CmdApi) ApiLogin(force bool)	error {
 		}
 	}
 	return c.Error
+}
+
+
+func MinimumArraySize(count int, args []string) []string {
+	var ret []string
+	for range Only.Once {
+		ret = cmdConfig.FillArray(count, args)
+		for i, e := range args {
+			if e == "." {
+				e = ""
+			}
+			if e == "-" {
+				e = ""
+			}
+			ret[i] = e
+		}
+	}
+	return ret
 }

@@ -5,7 +5,6 @@ import (
 	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
-	"github.com/MickMake/GoUnify/cmdConfig"
 	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/spf13/cobra"
 )
@@ -209,7 +208,7 @@ func (c *CmdData) GetEndpoints(cmd *cobra.Command, args []string) error {
 			cmds.Api.SaveFile = true
 		}
 
-		args = cmdConfig.FillArray(2, args)
+		args = MinimumArraySize(2, args)
 		eps := iSolarCloud.SplitArg(args[0])
 
 		data := cmds.Api.SunGrow.NewSunGrowData()

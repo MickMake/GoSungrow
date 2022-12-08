@@ -1,10 +1,11 @@
 package api
 
 import (
-	"github.com/MickMake/GoUnify/Only"
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdPath"
+	"io"
 	"path/filepath"
 	"time"
 
@@ -12,7 +13,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 )
 
@@ -151,7 +151,7 @@ func (w *Web) getApi(endpoint EndPoint) ([]byte, error) {
 			break
 		}
 
-		w.Body, w.Error = ioutil.ReadAll(w.httpResponse.Body)
+		w.Body, w.Error = io.ReadAll(w.httpResponse.Body)
 		if w.Error != nil {
 			break
 		}
