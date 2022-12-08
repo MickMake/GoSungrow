@@ -11,8 +11,9 @@ import (
 	"sort"
 	"strings"
 )
+// "go.pennock.tech/tabular/auto"
+// "github.com/olekukonko/tablewriter"
 // "github.com/agrison/go-tablib"
-// "go.pennock.tech/tabular"
 // "github.com/jbub/tabular"
 
 
@@ -279,10 +280,14 @@ func (t *Table) Output() error {
 			case t.OutputType.IsGraph():
 				t.Error = t.CreateGraph()
 
+			case t.OutputType.IsMarkDown():
+				t.Error = t.WriteMarkDown()
+
 			case t.OutputType.IsStruct():
 				t.Error = t.WriteStruct()
 
 			default:
+				t.Error = t.WriteTable()
 		}
 	}
 
@@ -545,6 +550,48 @@ func (t *Table) WriteStruct() error {
 		}
 
 		fmt.Printf("%s", data)
+	}
+	return t.Error
+}
+
+
+func (t *Table) AsMarkDown() string {
+	var ret string
+	for range Only.Once {
+		if t.IsNotValid() {
+			break
+		}
+
+		var result *tabular.Exportable
+		result = t.table.Markdown()
+		if t.Error != nil {
+			break
+		}
+		ret = result.String()
+	}
+	return ret
+}
+
+func (t *Table) WriteMarkDown() error {
+	for range Only.Once {
+		if t.IsNotValid() {
+			msg := fmt.Sprintf("# %s - has no data.", t.name)
+			if t.saveAsFile {
+				fmt.Println(msg)
+			} else {
+				_, _ = fmt.Fprintln(os.Stderr, msg)
+			}
+			break
+		}
+
+		if t.saveAsFile {
+			_, _ = fmt.Fprintf(os.Stderr,"# %s\n", t.title)
+			t.filePrefix += "." + StringTypeMarkDown
+			t.Error = t.writeFile(t.AsMarkDown(), DefaultFileMode)
+			break
+		}
+
+		fmt.Print(t.AsMarkDown())
 	}
 	return t.Error
 }

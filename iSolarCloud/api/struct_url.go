@@ -1,10 +1,10 @@
 package api
 
 import (
-	"github.com/MickMake/GoUnify/Only"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 	"net/url"
 )
 
@@ -35,6 +35,10 @@ func (u *EndPointUrl) IsValid() error {
 			err = errors.New("empty url")
 			break
 		}
+		if u.EndPoint == nil {
+			err = errors.New("empty url")
+			break
+		}
 		if u.EndPoint.String() == "" {
 			err = errors.New("empty url")
 			break
@@ -45,6 +49,9 @@ func (u *EndPointUrl) IsValid() error {
 }
 
 func (u EndPointUrl) String() string {
+	if u.EndPoint == nil {
+		return ""
+	}
 	return u.EndPoint.String()
 }
 

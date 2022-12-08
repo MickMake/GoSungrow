@@ -181,6 +181,22 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		cmdApiXLSX.Example = cmdHelp.PrintExamples(cmdApiXLSX, "queryDeviceList", "WebAppService.showPSView")
 
 		// ******************************************************************************** //
+		var cmdApiMarkDown = &cobra.Command{
+			Use:                   output.StringTypeMarkDown + " <[area.]endpoint> [endpoint args ...]",
+			Aliases:               []string{},
+			Annotations:           map[string]string{"group": "Data"},
+			Short:                 fmt.Sprintf("Get data from the Sungrow api (MarkDown)"),
+			Long:                  fmt.Sprintf("Get data from the Sungrow api (MarkDown)"),
+			DisableFlagParsing:    false,
+			DisableFlagsInUseLine: false,
+			PreRunE:               cmds.SunGrowArgs,
+			RunE:                  c.GetEndpoints,
+			Args:                  cobra.MinimumNArgs(0),
+		}
+		c.SelfCmd.AddCommand(cmdApiMarkDown)
+		cmdApiMarkDown.Example = cmdHelp.PrintExamples(cmdApiMarkDown, "queryDeviceList", "WebAppService.showPSView")
+
+		// ******************************************************************************** //
 		var cmdApiStruct = &cobra.Command{
 			Use:                   output.StringTypeStruct + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
@@ -205,6 +221,9 @@ func (c *CmdData) GetEndpoints(cmd *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.SetOutputType(cmd.Name())
 		if cmd.Name() == output.StringTypeXLSX {
+			cmds.Api.SaveFile = true
+		}
+		if cmd.Name() == output.StringTypeGraph {
 			cmds.Api.SaveFile = true
 		}
 

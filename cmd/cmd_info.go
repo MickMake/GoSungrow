@@ -127,6 +127,25 @@ func (c *CmdInfo) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		cmdInfoCsv.Example = cmdHelp.PrintExamples(cmdInfoCsv, "[area.]<endpoint>")
 		c.AttachCmdInfo(cmdInfoCsv)
 
+		// ********************************************************************************
+		var cmdInfoMarkDown = &cobra.Command{
+			Use:                   output.StringTypeMarkDown,
+			Aliases:               []string{},
+			Annotations:           map[string]string{"group": "Info"},
+			Short:                 fmt.Sprintf("Get info from iSolarCloud (MarkDown)"),
+			Long:                  fmt.Sprintf("Get info from iSolarCloud (MarkDown)"),
+			DisableFlagParsing:    false,
+			DisableFlagsInUseLine: false,
+			PreRunE:               cmds.SunGrowArgs,
+			RunE: func(cmd *cobra.Command, args []string) error {
+				return cmd.Help()
+			},
+			Args: cobra.MinimumNArgs(1),
+		}
+		c.SelfCmd.AddCommand(cmdInfoMarkDown)
+		cmdInfoMarkDown.Example = cmdHelp.PrintExamples(cmdInfoMarkDown, "[area.]<endpoint>")
+		c.AttachCmdInfo(cmdInfoMarkDown)
+
 		// // ********************************************************************************
 		// var cmdInfoPut = &cobra.Command{
 		// 	Use:                   "put",

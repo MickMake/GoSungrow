@@ -1,10 +1,10 @@
 package api
 
 import (
-	"github.com/MickMake/GoUnify/Only"
 	"bytes"
 	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 	"github.com/olekukonko/tablewriter"
 	"sort"
 )
@@ -64,7 +64,7 @@ func (ps TypeEndPoints) String() string {
 			ret += buf.String()
 		}
 
-		ret += fmt.Sprintf("\n# Implemented: %d Non-implemented: %d\n", len(ep), len(dp))
+		ret += fmt.Sprintf("\n# Implemented: %d Non-implemented: %d\n\n", len(ep), len(dp))
 
 	}
 	return ret

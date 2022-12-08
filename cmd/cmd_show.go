@@ -26,13 +26,12 @@ func (c *CmdShow) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		}
 		c.cmd = cmd
 
-		// ******************************************************************************** //
 		c.SelfCmd = &cobra.Command{
 			Use:                   "show",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Show"},
-			Short:                 fmt.Sprintf("Helpful Sungrow functions."),
-			Long:                  fmt.Sprintf("Helpful Sungrow functions."),
+			Short:                 fmt.Sprintf("High-level Sungrow commands."),
+			Long:                  fmt.Sprintf("High-level Sungrow commands."),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               func(cmd *cobra.Command, args []string) error {
@@ -56,8 +55,8 @@ func (c *CmdShow) AttachCommand(cmd *cobra.Command) *cobra.Command {
 
 		c.AttachPsId(c.SelfCmd)
 		c.AttachDevice(c.SelfCmd)
-		c.AttachPoint(c.SelfCmd)
 		c.AttachTemplate(c.SelfCmd)
+		c.AttachPoint(c.SelfCmd)
 	}
 	return c.SelfCmd
 }

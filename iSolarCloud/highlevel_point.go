@@ -16,10 +16,8 @@ import (
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
-	datatable "go.pennock.tech/tabular/auto"
 	"math"
 	"os"
-	"sort"
 	"strings"
 	"time"
 )
@@ -259,122 +257,8 @@ func (sg *SunGrow) GetAllPointsData(psIds ...string) error {
 }
 
 
-// PointNamesData - Return all points associated with psIds and device_type filter.
-func (sg *SunGrow) PointNamesData(psIds []string, deviceType string, startDate string, endDate string, interval string) string {
-	var ret string
-
-	for range Only.Once {
-		pskeys := sg.GetPsKeys()
-		_, _ = fmt.Fprintf(os.Stderr, "Found ps_keys: %s\n", pskeys)
-
-		points := sg.PsPointNames(psIds, deviceType)
-
-		var ps []string
-		for _, pid := range points {
-			match := pskeys.MatchPsIdDeviceType(pid.PsId.String(), pid.DeviceType.String())
-			if match.Valid {
-				ps = append(ps, fmt.Sprintf("%s.%s", match, pid.Id))
-			}
-		}
-		// _, _ = fmt.Fprintf(os.Stderr, "Found points: %s\n", strings.Join(ps, " "))
-
-		sg.PointData(startDate, endDate, interval, ps...)
-	}
-
-	return ret
-}
-
-// PointNames - Return all points associated with psIds and device_type filter.
-func (sg *SunGrow) PointNames(psIds []string, deviceType string) string {
-	var ret string
-
-	for range Only.Once {
-		points := sg.PsPointNames(psIds, deviceType)
-
-		// Sort table based on PsId + DeviceType + Id
-		pn := map[string]int{}
-		for index, point := range points {
-			pn[point.PsId.String()+"."+point.DeviceType.String()+"."+point.Id.String()] = index
-		}
-		var names []string
-		for point := range pn {
-			names = append(names, point)
-		}
-		sort.Strings(names)
-
-		table := datatable.New("utf8-heavy")
-		table.AddHeaders("Id", "Name", "Unit", "Unit Type", "Ps Id", "Device Type", "Device Name")
-		for _, name := range names {
-			index := pn[name]
-			point := points[index]
-			table.AddRowItems(point.Id, point.Name, point.Unit, point.UnitType, point.PsId, point.DeviceType, point.DeviceName)
-		}
-
-	   // PsKey
-	   // PsId
-	   // DeviceType
-	   // DeviceCode
-	   // ChannelId
-
-		var r string
-		r, sg.Error = table.Render()
-		if sg.Error != nil {
-			break
-		}
-		ret += fmt.Sprintln("# Available points:")
-		ret += r
-
-		// var pids valueTypes.PsIds
-		// pids = sg.SetPsIds(psIds...)
-		// if sg.Error != nil {
-		// 	break
-		// }
-		//
-		// for _, pid := range pids {
-		// 	var points []getDevicePointAttrs.Points
-		// 	points, sg.Error = sg.GetDevicePointAttrs(pid)
-		// 	if sg.Error != nil {
-		// 		break
-		// 	}
-		//
-		// 	if len(points) == 0 {
-		// 		continue
-		// 	}
-		//
-		// 	ret += fmt.Sprintf("# Available points for ps_id %s:\n", pid.String())
-		// 	table := datatable.New("utf8-heavy")
-		// 	table.AddHeaders("Id", "Name", "Unit", "UnitType", "PsId", "DeviceType", "DeviceName")
-		// 	for _, point := range points {
-		// 		if (deviceType != "") && point.DeviceType.MatchString(deviceType) {
-		// 			continue
-		// 		}
-		// 		table.AddRowItems(point.Id, point.Name, point.Unit, point.UnitType, point.PsId, point.DeviceType, point.DeviceName)
-		// 	}
-		//
-		// 	var r string
-		// 	r, sg.Error = table.Render()
-		// 	if sg.Error != nil {
-		// 		break
-		// 	}
-		// 	ret += r
-		//
-		// 	// @TODO - Include AppService.getPowerDevicePointNames
-		// 	// points2 := cmds.Api.SunGrow.GetDevicePointNames(pid)
-		// 	// if c.Error != nil {
-		// 	// 	break
-		// 	// }
-		// 	// if len(points) == 0 {
-		// 	// 	continue
-		// 	// }
-		//
-		// }
-	}
-
-	return ret
-}
-
-// PsPointNames - Return all points associated with psIds and device_type filter.
-func (sg *SunGrow) PsPointNames(psIds []string, deviceType string) []getDevicePointAttrs.Point {
+// DevicePointAttrs - Return all points associated with psIds and device_type filter.
+func (sg *SunGrow) DevicePointAttrs(psIds []string, deviceType string) ([]getDevicePointAttrs.Point, error) {
 	var points []getDevicePointAttrs.Point
 
 	for range Only.Once {
@@ -416,7 +300,7 @@ func (sg *SunGrow) PsPointNames(psIds []string, deviceType string) []getDevicePo
 		}
 	}
 
-	return points
+	return points, sg.Error
 }
 
 // GetDevicePointAttrs - WebAppService.getDevicePointAttrs Uuid: PsId: DeviceType
@@ -453,9 +337,7 @@ func (sg *SunGrow) GetDevicePointAttrs(psId valueTypes.PsId) ([]getDevicePointAt
 }
 
 
-func (sg *SunGrow) PointData(startDate string, endDate string, interval string, points ...string) string {
-	var ret string
-
+func (sg *SunGrow) PointData(startDate string, endDate string, interval string, points ...string) error {
 	for range Only.Once {
 		// _, _ = sg.QueryMultiPointDataList(
 		// 	valueTypes.SetDateTimeString(startDate),
@@ -501,10 +383,10 @@ func (sg *SunGrow) PointData(startDate string, endDate string, interval string, 
 		}
 	}
 
-	return ret
+	return sg.Error
 }
 
-func (sg *SunGrow) PointScan(min string, max string) string {
+func (sg *SunGrow) PointScan(min string, max string) (string, error) {
 	var ret string
 
 	for range Only.Once {
@@ -561,7 +443,7 @@ func (sg *SunGrow) PointScan(min string, max string) string {
 		ret = table.String()
 	}
 
-	return ret
+	return ret, sg.Error
 }
 
 

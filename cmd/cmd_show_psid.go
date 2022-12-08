@@ -16,8 +16,8 @@ func (c *CmdShow) AttachPsId(cmd *cobra.Command) *cobra.Command {
 			Use:                   "ps",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "PsId"},
-			Short:                 fmt.Sprintf("General iSolarCloud functions."),
-			Long:                  fmt.Sprintf("General iSolarCloud functions."),
+			Short:                 fmt.Sprintf("Ps related Sungrow commands."),
+			Long:                  fmt.Sprintf("Ps related Sungrow commands."),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               cmds.SunGrowArgs,
@@ -29,24 +29,27 @@ func (c *CmdShow) AttachPsId(cmd *cobra.Command) *cobra.Command {
 		cmd.AddCommand(self)
 		self.Example = cmdHelp.PrintExamples(self, "")
 
-		c.AttachPsIdList(self)
+		c.AttachPsList(self)
 		c.AttachPsTree(self)
 		c.AttachPsPoints(self)
+		c.AttachPsData(self)
+		c.AttachPsGraph(self)
 	}
 	return c.SelfCmd
 }
 
-func (c *CmdShow) AttachPsIdList(cmd *cobra.Command) *cobra.Command {
+
+func (c *CmdShow) AttachPsList(cmd *cobra.Command) *cobra.Command {
 	var self = &cobra.Command{
 		Use:                   "list",
 		Aliases:               []string{"ls"},
-		Annotations:           map[string]string{"group": "Device"},
+		Annotations:           map[string]string{"group": "PsId"},
 		Short:                 fmt.Sprintf("Show all devices on account."),
 		Long:                  fmt.Sprintf("Show all devices on account."),
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               cmds.SunGrowArgs,
-		RunE:                  c.funcPsIdListList,
+		RunE:                  c.funcPsList,
 		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(self)
@@ -54,13 +57,14 @@ func (c *CmdShow) AttachPsIdList(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
-func (c *CmdShow) funcPsIdListList(_ *cobra.Command, args []string) error {
+func (c *CmdShow) funcPsList(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		var devices string
-		devices, c.Error = cmds.Api.SunGrow.Devices(args...)
+		devices, c.Error = cmds.Api.SunGrow.PsList(args...)
 		if c.Error != nil {
 			break
 		}
+
 		fmt.Printf("%s\n", devices)
 	}
 	return c.Error
@@ -68,7 +72,7 @@ func (c *CmdShow) funcPsIdListList(_ *cobra.Command, args []string) error {
 
 func (c *CmdShow) AttachPsIdList2(cmd *cobra.Command) *cobra.Command {
 	var self = &cobra.Command{
-		Use:                   "list",
+		Use:                   "list2",
 		Aliases:               []string{"ls"},
 		Annotations:           map[string]string{"group": "PsId"},
 		Short:                 fmt.Sprintf("Show all available PS."),
@@ -90,6 +94,7 @@ func (c *CmdShow) funcAttachPsIdList2(_ *cobra.Command, args []string) error {
 		if c.Error != nil {
 			break
 		}
+
 		fmt.Printf("%s\n", pids)
 	}
 	return c.Error
@@ -120,6 +125,7 @@ func (c *CmdShow) funcAttachPsTree(_ *cobra.Command, args []string) error {
 		if c.Error != nil {
 			break
 		}
+
 		fmt.Printf("%s\n", pids)
 	}
 	return c.Error
@@ -127,11 +133,11 @@ func (c *CmdShow) funcAttachPsTree(_ *cobra.Command, args []string) error {
 
 func (c *CmdShow) AttachPsPoints(cmd *cobra.Command) *cobra.Command {
 	var self = &cobra.Command{
-		Use:                   "points <ps_ids | .> [device_type]",
+		Use:                   "points [ps_ids | .] [device_type]",
 		Aliases:               []string{"point"},
 		Annotations:           map[string]string{"group": "PsId"},
-		Short:                 fmt.Sprintf("Show available PS points."),
-		Long:                  fmt.Sprintf("Show available PS points."),
+		Short:                 fmt.Sprintf("List points used for a given ps_id."),
+		Long:                  fmt.Sprintf("List points used for a given ps_id."),
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               cmds.SunGrowArgs,
@@ -146,12 +152,73 @@ func (c *CmdShow) AttachPsPoints(cmd *cobra.Command) *cobra.Command {
 func (c *CmdShow) funcAttachPsPoints(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		args = MinimumArraySize(2, args)
-		points := cmds.Api.SunGrow.PointNames(strings.Split(args[0], ","), args[1])
-		if cmds.Api.SunGrow.Error != nil {
-			c.Error = cmds.Api.SunGrow.Error
+		var points string
+		points, c.Error = cmds.Api.SunGrow.PsPoints(strings.Split(args[0], ","), args[1])
+		if c.Error != nil {
 			break
 		}
+
 		fmt.Printf("%s\n", points)
+	}
+	return c.Error
+}
+
+func (c *CmdShow) AttachPsData(cmd *cobra.Command) *cobra.Command {
+	var self = &cobra.Command{
+		Use:                   "data <ps_ids | .> [device_type | .] [start date] [end date] [interval]",
+		Aliases:               []string{"point"},
+		Annotations:           map[string]string{"group": "PsId"},
+		Short:                 fmt.Sprintf("Generate points table for a given ps_id."),
+		Long:                  fmt.Sprintf("Generate points table for a given ps_id."),
+		DisableFlagParsing:    false,
+		DisableFlagsInUseLine: false,
+		PreRunE:               cmds.SunGrowArgs,
+		RunE:                  c.funcAttachPsData,
+		Args:                  cobra.MinimumNArgs(1),
+	}
+	cmd.AddCommand(self)
+	self.Example = cmdHelp.PrintExamples(self, "")
+
+	return cmd
+}
+func (c *CmdShow) funcAttachPsData(_ *cobra.Command, args []string) error {
+	for range Only.Once {
+		cmds.Api.SunGrow.OutputType.SetTable()
+		args = MinimumArraySize(5, args)
+		c.Error = cmds.Api.SunGrow.PsPointsData(strings.Split(args[0], ","), args[1], args[2], args[3], args[4])
+		if c.Error != nil {
+			break
+		}
+	}
+	return c.Error
+}
+
+func (c *CmdShow) AttachPsGraph(cmd *cobra.Command) *cobra.Command {
+	var self = &cobra.Command{
+		Use:                   "graph <ps_ids | .> [device_type]",
+		Aliases:               []string{},
+		Annotations:           map[string]string{"group": "PsId"},
+		Short:                 fmt.Sprintf("Generate graphs of points for a given ps_id."),
+		Long:                  fmt.Sprintf("Generate graphs of points for a given ps_id."),
+		DisableFlagParsing:    false,
+		DisableFlagsInUseLine: false,
+		PreRunE:               cmds.SunGrowArgs,
+		RunE:                  c.funcAttachPsGraph,
+		Args:                  cobra.MinimumNArgs(1),
+	}
+	cmd.AddCommand(self)
+	self.Example = cmdHelp.PrintExamples(self, "")
+
+	return cmd
+}
+func (c *CmdShow) funcAttachPsGraph(_ *cobra.Command, args []string) error {
+	for range Only.Once {
+		cmds.Api.SunGrow.OutputType.SetGraph()
+		args = MinimumArraySize(5, args)
+		c.Error = cmds.Api.SunGrow.PsPointsData(strings.Split(args[0], ","), args[1], args[2], args[3], args[4])
+		if c.Error != nil {
+			break
+		}
 	}
 	return c.Error
 }

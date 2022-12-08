@@ -7,27 +7,29 @@ import (
 
 
 const (
-	TypeNone   = iota
-	TypeJson   = iota
-	TypeCsv    = iota
-	TypeList   = iota
-	TypeTable  = iota
-	TypeRaw    = iota
-	TypeGraph  = iota
-	TypeStruct = iota
-	TypeXML    = iota
-	TypeXLSX   = iota
+	TypeNone     = iota
+	TypeJson     = iota
+	TypeCsv      = iota
+	TypeList     = iota
+	TypeTable    = iota
+	TypeRaw      = iota
+	TypeGraph    = iota
+	TypeStruct   = iota
+	TypeXML      = iota
+	TypeXLSX     = iota
+	TypeMarkDown = iota
 
-	StringTypeNone   = ""
-	StringTypeJson   = "json"
-	StringTypeCsv    = "csv"
-	StringTypeList   = "list"
-	StringTypeTable  = "table"
-	StringTypeRaw    = "raw"
-	StringTypeGraph  = "graph"
-	StringTypeStruct = "struct"
-	StringTypeXML    = "xml"
-	StringTypeXLSX   = "xlsx"
+	StringTypeNone     = ""
+	StringTypeJson     = "json"
+	StringTypeCsv      = "csv"
+	StringTypeList     = "list"
+	StringTypeTable    = "table"
+	StringTypeRaw      = "raw"
+	StringTypeGraph    = "graph"
+	StringTypeStruct   = "struct"
+	StringTypeXML      = "xml"
+	StringTypeXLSX     = "xlsx"
+	StringTypeMarkDown = "md"
 )
 
 //goland:noinspection GoNameStartsWithPackageName
@@ -63,6 +65,9 @@ func (out *OutputType) SetXML() {
 }
 func (out *OutputType) SetXLSX() {
 	*out = TypeXLSX
+}
+func (out *OutputType) SetMarkDown() {
+	*out = TypeMarkDown
 }
 
 
@@ -126,6 +131,12 @@ func (out *OutputType) IsXLSX() bool {
 	}
 	return false
 }
+func (out *OutputType) IsMarkDown() bool {
+	if *out == TypeMarkDown {
+		return true
+	}
+	return false
+}
 
 
 func (out *OutputType) IsStrNone(t string) bool {
@@ -182,6 +193,12 @@ func (out *OutputType) IsStrXLSX(t string) bool {
 	}
 	return false
 }
+func (out *OutputType) IsStrMarkDown(t string) bool {
+	if t == StringTypeMarkDown {
+		return true
+	}
+	return false
+}
 
 
 func (out *OutputType) Set(outputType string) {
@@ -210,6 +227,8 @@ func (out *OutputType) Set(outputType string) {
 				out.SetXML()
 			case StringTypeXLSX:
 				out.SetXLSX()
+			case StringTypeMarkDown:
+				out.SetMarkDown()
 			case StringTypeList:
 				fallthrough
 			default:

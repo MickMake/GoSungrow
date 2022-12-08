@@ -3,40 +3,17 @@ module GoSungrow
 go 1.19
 
 //replace github.com/MickMake/GoUnify => ../../GoUnify
-
-//replace github.com/MickMake/GoUnify/cmdConfig v0.0.0-00010101000000-000000000000 => github.com/MickMake/GoUnify/cmdConfig v0.0.0-20220923023100-6cf4e624a412
 //replace github.com/MickMake/GoUnify/cmdConfig => ../../GoUnify/cmdConfig
-
-//replace github.com/MickMake/GoUnify/cmdLog v0.0.0-00010101000000-000000000000 => github.com/MickMake/GoUnify/cmdLog v0.0.0-20220923023100-6cf4e624a412
 //replace github.com/MickMake/GoUnify/cmdLog => ../../GoUnify/cmdLog
-
-//replace github.com/MickMake/GoUnify/cmdHelp v0.0.0-00010101000000-000000000000 => github.com/MickMake/GoUnify/cmdHelp v0.0.0-20220923023100-6cf4e624a412
 //replace github.com/MickMake/GoUnify/cmdHelp => ../../GoUnify/cmdHelp
-
-//replace github.com/MickMake/GoUnify/Unify v0.0.0-00010101000000-000000000000 => github.com/MickMake/GoUnify/Unify v0.0.0-20220923023100-6cf4e624a412
 //replace github.com/MickMake/GoUnify/Unify => ../../GoUnify/Unify
-
-//replace github.com/MickMake/GoUnify/Only v0.0.0-00010101000000-000000000000 => github.com/MickMake/GoUnify/Only v0.0.0-20220923023100-6cf4e624a412
 //replace github.com/MickMake/GoUnify/Only => ../../GoUnify/Only
-
-//replace github.com/MickMake/GoUnify/cmdCron v0.0.0-00010101000000-000000000000 => github.com/MickMake/GoUnify/cmdCron v0.0.0-20220923023100-6cf4e624a412
 //replace github.com/MickMake/GoUnify/cmdCron => ../../GoUnify/cmdCron
-
-//replace github.com/MickMake/GoUnify/cmdDaemon v0.0.0-00010101000000-000000000000 => github.com/MickMake/GoUnify/cmdDaemon v0.0.0-20220923023100-6cf4e624a412
 //replace github.com/MickMake/GoUnify/cmdDaemon => ../../GoUnify/cmdDaemon
-
-//replace github.com/MickMake/GoUnify/cmdShell v0.0.0-00010101000000-000000000000 => github.com/MickMake/GoUnify/cmdShell v0.0.0-20220923023100-6cf4e624a412
 //replace github.com/MickMake/GoUnify/cmdShell => ../../GoUnify/cmdShell
-
-//replace github.com/MickMake/GoUnify/cmdVersion v0.0.0-00010101000000-000000000000 => github.com/MickMake/GoUnify/cmdVersion v0.0.0-20220923023100-6cf4e624a412
 //replace github.com/MickMake/GoUnify/cmdVersion => ../../GoUnify/cmdVersion
-
-//replace github.com/MickMake/GoUnify/cmdExec v0.0.0-00010101000000-000000000000 => github.com/MickMake/GoUnify/cmdExec v0.0.0-20220923023100-6cf4e624a412
 //replace github.com/MickMake/GoUnify/cmdExec => ../../GoUnify/cmdExec
-
 //replace github.com/MickMake/GoUnify/cmdPath => ../../GoUnify/cmdPath
-
-//require github.com/MickMake/GoUnify/Only v0.0.0-20221125013232-022ba4a63055 // indirect
 
 require (
 	github.com/MickMake/GoUnify/Only v0.0.0-20221125023651-ff4a37b1928a

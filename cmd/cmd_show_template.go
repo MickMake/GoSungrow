@@ -14,8 +14,8 @@ func (c *CmdShow) AttachTemplate(cmd *cobra.Command) *cobra.Command {
 			Use:                   "template",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Template"},
-			Short:                 fmt.Sprintf("General iSolarCloud functions."),
-			Long:                  fmt.Sprintf("General iSolarCloud functions."),
+			Short:                 fmt.Sprintf("Template related Sungrow commands."),
+			Long:                  fmt.Sprintf("Template related Sungrow commands."),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               cmds.SunGrowArgs,
@@ -30,16 +30,16 @@ func (c *CmdShow) AttachTemplate(cmd *cobra.Command) *cobra.Command {
 		c.AttachTemplateList(self)
 		c.AttachTemplatePoints(self)
 		c.AttachTemplateData(self)
-		c.AttachTemplateDataGraph(self)
+		c.AttachTemplateGraph(self)
 	}
 	return c.SelfCmd
 }
 
+
 func (c *CmdShow) AttachTemplateList(cmd *cobra.Command) *cobra.Command {
-	// ********************************************************************************
 	var self = &cobra.Command{
 		Use:                   "list",
-		Aliases:               []string{},
+		Aliases:               []string{"ls"},
 		Annotations:           map[string]string{"group": "Template"},
 		Short:                 fmt.Sprintf("Get all defined templates."),
 		Long:                  fmt.Sprintf("Get all defined templates."),
@@ -63,13 +63,12 @@ func (c *CmdShow) funcTemplateList(_ *cobra.Command, _ []string) error {
 }
 
 func (c *CmdShow) AttachTemplatePoints(cmd *cobra.Command) *cobra.Command {
-	// ********************************************************************************
 	var self = &cobra.Command{
 		Use:                   "points <template id>",
 		Aliases:               []string{"point"},
 		Annotations:           map[string]string{"group": "Template"},
-		Short:                 fmt.Sprintf("Get all points defined within a template."),
-		Long:                  fmt.Sprintf("Get all points defined within a template."),
+		Short:                 fmt.Sprintf("List points used for a given template_id."),
+		Long:                  fmt.Sprintf("List points used for a given template_id."),
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               cmds.SunGrowArgs,
@@ -90,12 +89,12 @@ func (c *CmdShow) funcTemplatePoints(_ *cobra.Command, args []string) error {
 }
 
 func (c *CmdShow) AttachTemplateData(cmd *cobra.Command) *cobra.Command {
-	// ********************************************************************************
 	var self = &cobra.Command{
 		Use:                   "data <template_id> [start date] [end date] [interval]",
+		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "Template"},
-		Short:                 fmt.Sprintf("Get data from report template."),
-		Long:                  fmt.Sprintf("Get data from report template."),
+		Short:                 fmt.Sprintf("Generate points table for a given template_id."),
+		Long:                  fmt.Sprintf("Generate points table for a given template_id."),
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               cmds.SunGrowArgs,
@@ -122,17 +121,17 @@ func (c *CmdShow) funcTemplateData(_ *cobra.Command, args []string) error {
 	return c.Error
 }
 
-func (c *CmdShow) AttachTemplateDataGraph(cmd *cobra.Command) *cobra.Command {
-	// ********************************************************************************
+func (c *CmdShow) AttachTemplateGraph(cmd *cobra.Command) *cobra.Command {
 	var self = &cobra.Command{
-		Use:                   "data-graph <template_id> [start date] [end date] [interval]",
+		Use:                   "graph <template_id> [start date] [end date] [interval]",
+		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "Template"},
-		Short:                 fmt.Sprintf("Get data from report template."),
-		Long:                  fmt.Sprintf("Get data from report template."),
+		Short:                 fmt.Sprintf("Generate graphs of points for a given template_id."),
+		Long:                  fmt.Sprintf("Generate graphs of points for a given template_id."),
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               cmds.SunGrowArgs,
-		RunE:                  c.funcTemplateDataGraph,
+		RunE:                  c.funcTemplateGraph,
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmd.AddCommand(self)
@@ -146,7 +145,7 @@ func (c *CmdShow) AttachTemplateDataGraph(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
-func (c *CmdShow) funcTemplateDataGraph(_ *cobra.Command, args []string) error {
+func (c *CmdShow) funcTemplateGraph(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.OutputType.SetGraph()
 		args = MinimumArraySize(4, args)

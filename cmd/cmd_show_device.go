@@ -14,8 +14,8 @@ func (c *CmdShow) AttachDevice(cmd *cobra.Command) *cobra.Command {
 			Use:                   "device",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Device"},
-			Short:                 fmt.Sprintf("Sungrow devices."),
-			Long:                  fmt.Sprintf("Sungrow devices."),
+			Short:                 fmt.Sprintf("Device related Sungrow commands."),
+			Long:                  fmt.Sprintf("Device related Sungrow commands."),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               cmds.SunGrowArgs,
@@ -29,6 +29,8 @@ func (c *CmdShow) AttachDevice(cmd *cobra.Command) *cobra.Command {
 
 		c.AttachDeviceList(self)
 		c.AttachDevicePoints(self)
+		c.AttachDeviceData(self)
+		c.AttachDeviceGraph(self)
 		c.AttachDeviceModels(self)
 	}
 	return c.SelfCmd
@@ -36,8 +38,7 @@ func (c *CmdShow) AttachDevice(cmd *cobra.Command) *cobra.Command {
 
 
 func (c *CmdShow) AttachDeviceList(cmd *cobra.Command) *cobra.Command {
-	// ********************************************************************************
-	var c2 = &cobra.Command{
+	var self = &cobra.Command{
 		Use:                   "list",
 		Aliases:               []string{"ls"},
 		Annotations:           map[string]string{"group": "Device"},
@@ -49,36 +50,40 @@ func (c *CmdShow) AttachDeviceList(cmd *cobra.Command) *cobra.Command {
 		RunE:                  c.funcDeviceTypeList,
 		Args:                  cobra.MinimumNArgs(0),
 	}
-	cmd.AddCommand(c2)
-	c2.Example = cmdHelp.PrintExamples(c2, "")
+	cmd.AddCommand(self)
+	self.Example = cmdHelp.PrintExamples(self, "")
 
 	return cmd
 }
 func (c *CmdShow) funcDeviceTypeList(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.OutputType.SetTable()
-		ret := cmds.Api.SunGrow.DeviceTypeList()
+		var ret string
+		ret, c.Error = cmds.Api.SunGrow.DeviceTypeList()
+		if c.Error != nil {
+			break
+		}
+
 		fmt.Println(ret)
 	}
 	return c.Error
 }
 
 func (c *CmdShow) AttachDevicePoints(cmd *cobra.Command) *cobra.Command {
-	// ********************************************************************************
-	var c2 = &cobra.Command{
+	var self = &cobra.Command{
 		Use:                   "points <device_type ...>",
 		Aliases:               []string{"point"},
 		Annotations:           map[string]string{"group": "Device"},
-		Short:                 fmt.Sprintf("List data points used by a device."),
-		Long:                  fmt.Sprintf("List data points used by a device."),
+		Short:                 fmt.Sprintf("List points used for a given device_type."),
+		Long:                  fmt.Sprintf("List points used for a given device_type."),
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               cmds.SunGrowArgs,
 		RunE:                  c.funcDevicePoints,
 		Args:                  cobra.MinimumNArgs(1),
 	}
-	cmd.AddCommand(c2)
-	c2.Example = cmdHelp.PrintExamples(c2,
+	cmd.AddCommand(self)
+	self.Example = cmdHelp.PrintExamples(self,
 		"1",
 		"11",
 	)
@@ -88,19 +93,24 @@ func (c *CmdShow) AttachDevicePoints(cmd *cobra.Command) *cobra.Command {
 func (c *CmdShow) funcDevicePoints(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.OutputType.SetTable()
-		ret := cmds.Api.SunGrow.DevicePoints(args...)
+		var ret string
+		ret, c.Error = cmds.Api.SunGrow.DeviceTypePoints(args...)
+		if c.Error != nil {
+			break
+		}
+
 		fmt.Println(ret)
 	}
 	return c.Error
 }
 
 func (c *CmdShow) AttachDeviceData(cmd *cobra.Command) *cobra.Command {
-	// ********************************************************************************
 	var self = &cobra.Command{
 		Use:                   "data <device_type> [start date] [end date] [interval]",
+		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "Device"},
-		Short:                 fmt.Sprintf("Get data from report template."),
-		Long:                  fmt.Sprintf("Get data from report template."),
+		Short:                 fmt.Sprintf("Generate points table for a given device_type."),
+		Long:                  fmt.Sprintf("Generate points table for a given device_type."),
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               cmds.SunGrowArgs,
@@ -122,22 +132,22 @@ func (c *CmdShow) funcDeviceData(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.OutputType.SetTable()
 		args = MinimumArraySize(4, args)
-		c.Error = cmds.Api.SunGrow.DeviceData(args[0], args[1], args[2], args[3])
+		c.Error = cmds.Api.SunGrow.DeviceTypeData(args[0], args[1], args[2], args[3])
 	}
 	return c.Error
 }
 
-func (c *CmdShow) AttachDeviceDataGraph(cmd *cobra.Command) *cobra.Command {
-	// ********************************************************************************
+func (c *CmdShow) AttachDeviceGraph(cmd *cobra.Command) *cobra.Command {
 	var self = &cobra.Command{
-		Use:                   "data-graph <device_type> [start date] [end date] [interval]",
+		Use:                   "graph <device_type> [start date] [end date] [interval]",
+		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "Device"},
-		Short:                 fmt.Sprintf("Get data from report template."),
-		Long:                  fmt.Sprintf("Get data from report template."),
+		Short:                 fmt.Sprintf("Generate graphs of points for a given device_type."),
+		Long:                  fmt.Sprintf("Generate graphs of points for a given device_type."),
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               cmds.SunGrowArgs,
-		RunE:                  c.funcDeviceDataGraph,
+		RunE:                  c.funcDeviceGraph,
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmd.AddCommand(self)
@@ -151,18 +161,17 @@ func (c *CmdShow) AttachDeviceDataGraph(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
-func (c *CmdShow) funcDeviceDataGraph(_ *cobra.Command, args []string) error {
+func (c *CmdShow) funcDeviceGraph(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.OutputType.SetGraph()
 		args = MinimumArraySize(4, args)
-		c.Error = cmds.Api.SunGrow.DeviceData(args[0], args[1], args[2], args[3])
+		c.Error = cmds.Api.SunGrow.DeviceTypeData(args[0], args[1], args[2], args[3])
 	}
 	return c.Error
 }
 
 func (c *CmdShow) AttachDeviceModels(cmd *cobra.Command) *cobra.Command {
-	// ********************************************************************************
-	var c2 = &cobra.Command{
+	var self = &cobra.Command{
 		Use:                   "models",
 		Aliases:               []string{"model"},
 		Annotations:           map[string]string{"group": "Device"},
@@ -174,14 +183,14 @@ func (c *CmdShow) AttachDeviceModels(cmd *cobra.Command) *cobra.Command {
 		RunE:                  c.funcDeviceModels,
 		Args:                  cobra.MinimumNArgs(0),
 	}
-	cmd.AddCommand(c2)
-	c2.Example = cmdHelp.PrintExamples(c2, "")
+	cmd.AddCommand(self)
+	self.Example = cmdHelp.PrintExamples(self, "")
 
 	return cmd
 }
 func (c *CmdShow) funcDeviceModels(_ *cobra.Command, _ []string) error {
 	for range Only.Once {
-		// _ = cmds.SetOutputType(cmd)
+		cmds.Api.SunGrow.OutputType.SetTable()
 		c.Error = cmds.Api.SunGrow.DeviceModelInfoList()
 	}
 	return c.Error
