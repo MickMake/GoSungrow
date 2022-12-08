@@ -44,6 +44,8 @@ Available Commands:
 
 ### data commands
 
+Mid-level access to the Sungrow api.
+
 ```
 Available Commands:
   list         Data	- Get data from the Sungrow api (list)
