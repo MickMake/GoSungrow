@@ -127,7 +127,7 @@ Available Commands:
 ### Templates
 
 ```
-GoSungrow show template points
+GoSungrow show template list
 ┏━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┓
 ┃ Template Id ┃ Template Name ┃ Update On           ┃
 ┣━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━┫
@@ -148,7 +148,7 @@ GoSungrow show template points
 
 
 ```
-GoSungrow show template data 7981 20221201 20221202
+GoSungrow show template points 7981
 ┏━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━┓
 ┃ PointStruct Id        ┃ Description                           ┃ Unit ┃
 ┣━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━┫
