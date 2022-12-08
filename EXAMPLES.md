@@ -63,6 +63,8 @@ Available Commands:
 
 ### show commands
 
+High-level Sungrow commands.
+
 ```
 Available Commands:
   ps           PsId	- Ps related Sungrow commands.
