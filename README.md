@@ -85,7 +85,7 @@ This GoLang package does several things:
 1. Provides ready access to all API calls via a simple get/put framework.
 2. MQTT client to push to [HomeAssistant](https://www.home-assistant.io/).
 3. Graphing any data points, over daily, monthly and yearly with 5 minute to 1 hour granularity.
-4. Output data to various formats - JSON, CSV, raw, Graphing, XML, XLSX, Markdown, and GoLang structures.
+4. Output data to various formats - tables, JSON, CSV, raw, Graphing, XML, XLSX, Markdown, SQL, HTML and GoLang structures.
 
 
 ## What is the roadmap?
