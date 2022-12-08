@@ -123,7 +123,12 @@ Token:	424242_42424242424242424242424242424242
 Token File:	/Users/mick/.GoSungrow/AppService_login.json
 ```
 
+
 ### High level reporting examples.
+For more examples see the EXAMPLES.md and examples.txt files.
+[EXAMPLES.md](https://github.com/MickMake/GoSungrow/blob/master/EXAMPLES.md)
+[examples.txt](https://github.com/MickMake/GoSungrow/blob/master/examples.txt)
+
 
 Show all devices on your iSolarCloud account.
 ```
@@ -139,6 +144,7 @@ Show all devices on your iSolarCloud account.
 ┃ 1171348_43_2_2   │ 1171348 │ 43          │ 2           │ 2          │ B2281302388 │ SUNGROW      │ SBR096       ┃
 ┗━━━━━━━━━━━━━━━━━━┷━━━━━━━━━┷━━━━━━━━━━━━━┷━━━━━━━━━━━━━┷━━━━━━━━━━━━┷━━━━━━━━━━━━━┷━━━━━━━━━━━━━━┷━━━━━━━━━━━━━━┛
 ```
+
 
 Show the device tree on your iSolarCloud account.
 ```
@@ -156,6 +162,7 @@ Show the device tree on your iSolarCloud account.
 +--	    PsId:1171348	PsName:MickMake42	PsKey:1171348_14_1_2	DeviceName:Energy Storage System 02_01	Uuid:1179878
 +----	PsId:1171348	PsName:MickMake42	PsKey:1171348_43_2_2	DeviceName:Battery 02_02	Uuid:1179879
 ```
+
 
 List all known data points for all PS on your account.
 ```
@@ -221,6 +228,7 @@ Produce data table of device_type 22 on ps_id 1171348 between 20221001 and 20221
 ------------------------  ---------------------  ----------------------------
 ```
 
+
 Do the same, but with a graph!
 ```
 ./bin/GoSungrow show ps graph 1171348 22 20221001 20221002 60
@@ -267,6 +275,7 @@ Get all defined report templates.
 ----------------  ------------------  ------------------------
 ```
 
+
 Show all data points used in a report template.
 ```
 ./bin/GoSungrow show template points 8040
@@ -288,6 +297,7 @@ Show all data points used in a report template.
       p18064               Phase C Backup Current       1129147       1129147_14_1_1       #000000          123809       MickMake                5           1          A
 -------------  -----------------------------------  ------------  -------------------  ------------  --------------  -------------  ---------------  ----------  ---------  --------------
 ```
+
 
 Produce daily report for template 8040 for date 2022/02/24 display on STDOUT.
 ```
@@ -312,6 +322,7 @@ Produce daily report for template 8040 for date 2022/02/24 display on STDOUT.
     2022-02-05 00:00:00       1129147_14_1_1                           0                           0                           0                           0                           0                           0                          30                          30                           0                         0.1                           0
 ------------------------  -------------------  --------------------------  --------------------------  --------------------------  --------------------------  --------------------------  --------------------------  --------------------------  --------------------------  --------------------------  --------------------------  --------------------------
 ```
+
 
 And now graph it!
 ```
@@ -427,6 +438,7 @@ Creating graph file 'AppService.queryMutiPointDataList.ResultData.Data-1129147-1
 
 
 ### Using the API instead.
+Want to get your hands dirty?
 
 Get basic inverter information for inverter id 1129147
 ```
@@ -474,80 +486,19 @@ Get the household storage report
 $ ./bin/GoSungrow api get getHouseholdStoragePsReport '{"date_id":"2022","date_type":"4","ps_id":"1129147"}'
 ```
 
-### Git commands
-Record statistics data from iSolarCloud to GitHub. (Will clone if not existing.)
-
-	% GoSungrow git sync 'Updating statistics' statistics
-
-Record all changes made to GitHub.
-
-	% GoSungrow git sync 'Update everything'
-
-Record changes with default commit message.
-
-	% GoSungrow git sync default
-
-Record changes made every 30 minutes.
-
-	% GoSungrow cron run ./30 . . . . git sync default
-
-List files in repo, (identical to ls).
-
-```
-% GoSungrow git ls -l
- - rw- r-- r--  admin-mickh admin-mickh     51B 10.Jan'22 13:31 README.md
- - rw- rw- r--  admin-mickh admin-mickh  15.60K 10.Jan'22 13:31 contact.json
- - rw- rw- r--  admin-mickh admin-mickh    496B 10.Jan'22 13:31 department.json
- - rw- rw- r--  admin-mickh admin-mickh 132.14K 10.Jan'22 13:31 device.json
- - rw- rw- r--  admin-mickh admin-mickh   1.29K 10.Jan'22 13:31 domain.json
- - rw- rw- r--  admin-mickh admin-mickh 858.86K 10.Jan'22 13:31 model.json
- - rw- rw- r--  admin-mickh admin-mickh  24.90K 10.Jan'22 13:31 presence.json
- - rw- rw- r--  admin-mickh admin-mickh  53.66K 10.Jan'22 13:31 profile.json
- - rw- rw- r--  admin-mickh admin-mickh     88B 10.Jan'22 13:31 site.json
- - rw- rw- r--  admin-mickh admin-mickh  16.70K 10.Jan'22 13:31 user.json
-```
-
-Show changes made to a JSON file.
-
-	% GoSungrow git diff devices.json
-
-### Other available Gitlab commands.
-Clone repo.
-
-	% GoSungrow git clone
-
-Pull repo.
-
-	% GoSungrow git pull
-
-Add files to repo.
-
-	% GoSungrow git add .
-
-Push repo.
-
-	% GoSungrow git push
-
-Commit changes to repo.
-
-	% GoSungrow git commit 'this is a commit message'
 
 ### Config file.
 Show current config.
 
 	% GoSungrow config read
 
+Write current config.
+
+	% GoSungrow config write
+
 Change diff command used in compares.
 
 	% GoSungrow --diff-cmd='sdiff' config write
-
-Change Git repo directory.
-
-	% GoSungrow --git-dir=/some/other/directory config write
-
-Change Git repo url.
-
-	% GoSungrow --git-url=https://github.com/MickMake/iSolarCloudData config write
 
 Change iSolarCloud API token.
 
@@ -556,43 +507,27 @@ Change iSolarCloud API token.
 
 ## Flags available for all commands:
 ```
-      --config string         GoSungrow: config file. (default "$HOME/.GoSungrow/config.json")
-      --debug                 GoSungrow: Debug mode.
-      --diff-cmd string       Git: Command for diffs. (default "tkdiff")
-      --git-dir string        Git: Local repo directory.
-      --git-password string   Git: Repo password.
-      --git-repo string       Git: Repo url for updates.
-      --git-sshkey string     Git: Repo SSH keyfile.
-      --git-token string      Git: Repo token string.
-      --git-username string   Git: Repo username.
-      --google-sheet string   Google: Sheet URL for updates.
-      --host string           iSolarCloud: Provider API URL. (default "https://augateway.isolarcloud.com")
-  -p, --password string       iSolarCloud: Extension password.
-  -q, --quiet                 iSolarCloud: Silence all messages.
-      --timeout duration      iSolarCloud: API timeout. (default 30s)
-  -u, --user string           iSolarCloud: Extension username.
-```
-
-## Using environment variables instad of flags.
-```
-+----------------+------------+---------------------+--------------------------------+-----------------------------------------------+
-|      FLAG      | SHORT FLAG |   ENVIRONMENT       |          DESCRIPTION           |                    DEFAULT                    |
-+----------------+------------+---------------------+--------------------------------+-----------------------------------------------+
-| --user         | -u         | SUNGROW_USER         | SUNGRO: API username.          |                                               |
-| --password     | -p         | SUNGROW_PASSWORD     | SUNGRO: API password.          |                                               |
-| --host         |            | SUNGROW_HOST         | SUNGRO: Provider API URL.      | https://augateway.isolarcloud.com             |
-| --timeout      |            | SUNGROW_TIMEOUT      | SUNGRO: API timeout.           | 30s                                           |
-| --google-sheet |            | SUNGROW_GOOGLE_SHEET | Google: Sheet URL for updates. |                                               |
-| --git-repo     |            | SUNGROW_GIT_REPO     | Git: Repo url for updates.     |                                               |
-| --git-dir      |            | SUNGROW_GIT_DIR      | Git: Local repo directory.     |                                               |
-| --git-username |            | SUNGROW_GIT_USERNAME | Git: Repo username.            |                                               |
-| --git-password |            | SUNGROW_GIT_PASSWORD | Git: Repo password.            |                                               |
-| --git-sshkey   |            | SUNGROW_GIT_SSHKEY   | Git: Repo SSH keyfile.         |                                               |
-| --git-token    |            | SUNGROW_GIT_TOKEN    | Git: Repo token string.        |                                               |
-| --diff-cmd     |            | SUNGROW_DIFF_CMD     | Git: Command for diffs.        | tkdiff                                        |
-| --config       |            | SUNGROW_CONFIG       | GoSungrow: config file.         | $HOME/.GoSungrow/config.json                   |
-| --debug        |            | SUNGROW_DEBUG        | GoSungrow: Debug mode.          | false                                         |
-| --quiet        | -q         | SUNGROW_QUIET        | GoSungrow: Silence all messages.| false                                         |
-+----------------+------------+------------------+--------------------------------+--------------------------------------------------+
+./bin/GoSungrow help flags
++-----------------+------------+-------------------------+--------------------------------+------------------------------------+
+|      FLAG       | SHORT FLAG |       ENVIRONMENT       |          DESCRIPTION           |        VALUE (* = DEFAULT)         |
++-----------------+------------+-------------------------+--------------------------------+------------------------------------+
+| --config        |            | GOSUNGROW_CONFIG        | GoSungrow: config file.        | /Users/mick/.GoSungrow/config.json |
+| --debug         |            | GOSUNGROW_DEBUG         | GoSungrow: Debug mode.         | false *                            |
+| --quiet         |            | GOSUNGROW_QUIET         | GoSungrow: Silence all         | false *                            |
+|                 |            |                         | messages.                      |                                    |
+| --timeout       |            | GOSUNGROW_TIMEOUT       | Web timeout.                   | 0s                                 |
+| --user          | -u         | GOSUNGROW_USER          | SunGrow: api username.         | ------------------                 |
+| --password      | -p         | GOSUNGROW_PASSWORD      | SunGrow: api password.         | ---------------------------        |
+| --appkey        |            | GOSUNGROW_APPKEY        | SunGrow: api application key.  | 93D72E60331ABDCDC7B39ADC2D1F32B3   |
+|                 |            |                         |                                | *                                  |
+| --host          |            | GOSUNGROW_HOST          | SunGrow: Provider API URL.     | https://augateway.isolarcloud.com  |
+|                 |            |                         |                                | *                                  |
+| --token-expiry  |            | GOSUNGROW_TOKEN_EXPIRY  | SunGrow: last login.           | 2022-12-08T16:58:19                |
+| --save          | -s         | GOSUNGROW_SAVE          | Save output as a file.         | false *                            |
+| --mqtt-user     |            | GOSUNGROW_MQTT_USER     | HASSIO: mqtt username.         | ------------------                 |
+| --mqtt-password |            | GOSUNGROW_MQTT_PASSWORD | HASSIO: mqtt password.         | --------------                     |
+| --mqtt-host     |            | GOSUNGROW_MQTT_HOST     | HASSIO: mqtt host.             | localhost                          |
+| --mqtt-port     |            | GOSUNGROW_MQTT_PORT     | HASSIO: mqtt port.             |                               1883 |
++-----------------+------------+-------------------------+--------------------------------+------------------------------------+
 ```
 

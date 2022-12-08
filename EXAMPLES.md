@@ -5,47 +5,129 @@
     GoSungrow api login
 
 
-## High-level info commands
+## Top level
 
 ```
-Usage:
-  GoSungrow info [command]
-
 Available Commands:
-  get          Info	- Get info from iSolarCloud (table)
-  raw          Info	- Get info from iSolarCloud (raw)
-  json         Info	- Get info from iSolarCloud (json)
-  csv          Info	- Get info from iSolarCloud (json)
-  put          Info	- Set info on iSolarCloud
+  api          Api	- Low-level interface to the SunGrow api.
+  data         Data	- Mid-level access to the Sungrow api.
+  info         Info	- General iSolarCloud functions.
+  show         Show	- High-level Sungrow commands.
+  mqtt         Connect to a HASSIO broker.
+  version      Version	- Self-manage this executable.
+  selfupdate   Version	- Update version of executable.
+  daemon       Daemon	- Daemonize commands.
+  cron         Cron	- Run a command via schedule.
+  config       Config	- Create, update or show config file.
+  shell        Shell	- Run as an interactive shell.
+  help         Help	- Extended help
+  help         Help about any command
+  completion   Generate the autocompletion script for the specified shell
 ```
 
-```
-Usage:
-  GoSungrow info get [command]
 
+### api commands
+
+```
 Available Commands:
-  point-names         Info	- Get iSolarCloud point names.
-  mqtt                Info	- Get iSolarCloud MQTT service login details.
-  search-point-names  Info	- Get iSolarCloud search point names.
-  devices             Info	- Get iSolarCloud devices.
-  models              Info	- Get ALL iSolarCloud models.
-  templates           Info	- Get all defined templates.
-  template-points     Info	- List data points used in report template.
-  device-points       Info	- List all available device data points.
+  ls           Api	- List SunGrow api endpoints/areas
+  login        Api	- Login to the SunGrow api.
+  get          Api	- Get endpoint details from the SunGrow api.
+  raw          Api	- Raw response from the SunGrow api.
+  save         Api	- Save the response from the SunGrow api.
+  struct       Api	- Show response as Go structure (debug)
+  put          Api	- Put details onto the SunGrow api.
 ```
 
 
-## Get device details
-
-    GoSungrow info get device
-    GoSungrow info get search-point-names
-    GoSungrow info get models
-
-
-## Templates
+### data commands
 
 ```
-GoSungrow info get templates
+Available Commands:
+  list         Data	- Get data from the Sungrow api (list)
+  table        Data	- Get data from the Sungrow api (table)
+  raw          Data	- Get data from the Sungrow api (raw)
+  json         Data	- Get data from the Sungrow api (json)
+  csv          Data	- Get data from the Sungrow api (csv)
+  graph        Data	- Get data from the Sungrow api (graph)
+  xml          Data	- Get data from the Sungrow api (xml)
+  xlsx         Data	- Get data from the Sungrow api (XLSX)
+  md           Data	- Get data from the Sungrow api (MarkDown)
+  struct       Data	- Show response as Go structure (debug)
+```
+
+
+### show commands
+
+```
+Available Commands:
+  ps           PsId	- Ps related Sungrow commands.
+  device       Device	- Device related Sungrow commands.
+  template     Template	- Template related Sungrow commands.
+  point        Point	- Point related Sungrow commands.
+```
+
+
+#### show ps commands
+
+```
+Available Commands:
+  list         PsId	- Show all devices on account.
+  tree         PsId	- Show the PS tree.
+  points       PsId	- List points used for a given ps_id.
+  data         PsId	- Generate points table for a given ps_id.
+  graph        PsId	- Generate graphs of points for a given ps_id.
+```
+
+
+#### show device commands
+
+```
+Available Commands:
+  list         Device	- List all device types.
+  points       Device	- List points used for a given device_type.
+  data         Device	- Generate points table for a given device_type.
+  graph        Device	- Generate graphs of points for a given device_type.
+  models       Device	- Get ALL Sungrow models (large list).
+```
+
+
+#### show template commands
+
+```
+Available Commands:
+  list         Template	- Get all defined templates.
+  points       Template	- List points used for a given template_id.
+  data         Template	- Generate points table for a given template_id.
+  graph        Template	- Generate graphs of points for a given template_id.
+```
+
+
+#### show point commands
+
+```
+Available Commands:
+  ps              Point	- List data points used by a given ps_id.
+  ps-data         Point	- Generate points table for a given ps_id.
+  ps-graph        Point	- Generate graphs of points for a given ps_id.
+  device          Point	- List data points used by a device.
+  device-data     Point	- Generate points table for a given device.
+  device-graph    Point	- Generate graphs of points for a given device.
+  template        Point	- List data points used by a report template.
+  template-data   Point	- Generate points table for a given report template.
+  template-graph  Point	- Generate graphs of points for a given report template.
+  data            Point	- Get data points.
+  graph           Point	- Graph data points.
+  scan            Point	- Scan full list of points.
+```
+
+
+## High-level data commands
+
+### Templates
+
+```
+GoSungrow show template points
 ┏━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┓
 ┃ Template Id ┃ Template Name ┃ Update On           ┃
 ┣━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━┫
@@ -65,62 +147,8 @@ GoSungrow info get templates
 ```
 
 
-## High-level data commands
-
 ```
-Usage:
-  GoSungrow data [command]
-
-Available Commands:
-  get          Data	- Get high-level data from iSolarCloud (table)
-  raw          Data	- Get high-level data from iSolarCloud (raw)
-  json         Data	- Get high-level data from iSolarCloud (json)
-  csv          Data	- Get high-level data from iSolarCloud (json)
-  graph        Data	- Get high-level data from iSolarCloud (graph)
-```
-
-```
-Usage:
-  GoSungrow data get [command]
-
-Available Commands:
-  stats        Data	- Get current inverter stats, (last 5 minutes).
-  template     Data	- Get data from report template.
-  points       Data	- Get points data for a specific date.
-  real-time    Data	- Get iSolarCloud real-time data.
-  psdetails    Data	- Get iSolarCloud ps details.
-```
-
-
-## General
-
-```
-GoSungrow data get stats
-┏━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━┓
-┃ Date                ┃ Point Id  ┃ Point Name                ┃ Value   ┃ Unit ┃
-┣━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━┫
-┃ 2022-10-08 09:55:00 │ 1129147.0 │ Co2 Reduce                │ 0       │ kg   ┃
-┃ 2022-10-08 09:55:00 │ 1129147.0 │ Co2 Reduce Total          │ 5819    │ kg   ┃
-┃ 2022-10-08 09:55:00 │ 1129147.0 │ Curr Power                │ 788     │ W    ┃
-┃ 2022-10-08 09:55:00 │ 1129147.0 │ Daily Irradiation         │ --      │      ┃
-┃ 2022-10-08 09:55:00 │ 1129147.0 │ Equivalent Hour           │ 0.27    │ Hour ┃
-
-...
-
-┃ 2022-10-08 09:55:00 │ 1171348.0 │ Today Income              │ 0.397   │ AUD  ┃
-┃ 2022-10-08 09:55:00 │ 1171348.0 │ Total Capacity            │         │      ┃
-┃ 2022-10-08 09:55:00 │ 1171348.0 │ Total Energy              │ 176.5   │ kWh  ┃
-┃ 2022-10-08 09:55:00 │ 1171348.0 │ Total Income              │ 35.806  │ AUD  ┃
-┃ 2022-10-08 09:55:00 │ 1171348.0 │ Use Energy                │ 6.7     │ kWh  ┃
-┗━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━┷━━━━━━━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━┷━━━━━━┛
-```
-
-
-
-## Templates
-
-```
-GoSungrow info get template-points 7981
+GoSungrow show template data 7981 20221201 20221202
 ┏━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━┓
 ┃ PointStruct Id        ┃ Description                           ┃ Unit ┃
 ┣━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━┫
@@ -147,7 +175,7 @@ GoSungrow info get template-points 7981
 ```
 
 ```
-GoSungrow data get template 8042 20220212
+GoSungrow show template data 8042 20220212
 ┏━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━┓
 ┃ Date/Time           ┃ Point Id              ┃ Point Name                 ┃ Value       ┃ Units ┃
 ┣━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━┫
@@ -166,22 +194,8 @@ GoSungrow data get template 8042 20220212
 ┗━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━┷━━━━━━━┛
 ```
 
-    GoSungrow data graph template 8042 20220212 '{"search_string":"p13019","min_left_axis":-6000,"max_left_axis":12000}'
-    GoSungrow data graph template 8042 20220212 '{"search_string":"p13019"}'
-    GoSungrow data graph template 8042 20220212 '{"search_string":"p83106","min_left_axis":-6000,"max_left_axis":12000}'
-    GoSungrow data graph template 8042 20220212 '{"search_string":"p83106"}'
-    GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":"1","value_column":"4","search_column":"3","search_string":"p83106","file_name":"foo.png"}'
-    GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p13019","min_left_axis":0,"max_left_axis":0}'
-    GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p13149","min_left_axis":0,"max_left_axis":0}'
-    GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p83106","file_name":"foo.png"}'
-    GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p83106","min_left_axis":-6000,"max_left_axis":1000}'
-    GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p83106","min_left_axis":-6000,"max_left_axis":12000}'
-    GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p83106","min_left_axis":-6000,"max_left_axis":42000}'
-    GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":2,"search_string":"p83106","min_left_axis":0,"max_left_axis":0}'
-    GoSungrow data graph template 8042 20220212 '{"title":"Testing 1. 2. 3.","time_column":1,"value_column":4,"search_column":3,"search_string":"p83106","file_name":"foo.png"}'
-    GoSungrow data raw template '' 20220201
-    GoSungrow data save template '' 20220201
-    GoSungrow data save template 8042 20220212
+    GoSungrow show template graph 8042 20220212 p13019
+    GoSungrow show template graph 8042 20220212 p83106
 
 
 ## Hacking
@@ -211,131 +225,148 @@ put          Put details onto iSolarCloud
 
 ## Get device details
 
-    GoSungrow api get getPsList
-    GoSungrow api get getPsListByName
-    GoSungrow api get getPsDataSupplementTaskList
-    GoSungrow api get getPsUser
-    GoSungrow api get queryPsIdList
-    GoSungrow api get getInstallInfoList
-    GoSungrow api get getPsListStaticData
-    GoSungrow api get queryAllPsIdAndName
-    GoSungrow api get getPsDetail '{"ps_id":"1171348"}'
-    GoSungrow api get getPsDetailWithPsType '{"ps_id":"1171348"}'
-    GoSungrow api get getPsHealthState '{"ps_id":"1171348"}'
-    GoSungrow api get getPsWeatherList '{"ps_id":"1171348"}'
-    GoSungrow api get queryDeviceList '{"ps_id":"1171348"}'
-    GoSungrow api get queryDeviceListByUserId '{"ps_id":"1171348"}'
-    GoSungrow api get queryDeviceListForApp '{"ps_id":"1171348"}'
-    GoSungrow api get findPsType '{"ps_id":"1171348"}'
-    GoSungrow api get getDeviceList '{"ps_id":"1171348"}'
-    GoSungrow api get getIncomeSettingInfos '{"ps_id":"1171348"}'
-    GoSungrow api get getPowerChargeSettingInfo '{"ps_id":"1171348"}'
-    GoSungrow api get getPowerStationInfo '{"ps_id":"1171348"}'
-    GoSungrow api get WebAppService.getDeviceUuid '{"ps_key":"1171348"}'
-    GoSungrow api get getPowerStationForHousehold '{"ps_id":"1171348"}'
+    GoSungrow data get getPsList
+    GoSungrow data get getPsListByName
+    GoSungrow data get getPsDataSupplementTaskList
+    GoSungrow data get getPsUser
+    GoSungrow data get queryPsIdList
+    GoSungrow data get getInstallInfoList
+    GoSungrow data get getPsListStaticData
+    GoSungrow data get queryAllPsIdAndName
+    GoSungrow data get getPsDetail PsId:1171348
+    GoSungrow data get getPsDetailWithPsType PsId:1171348
+    GoSungrow data get getPsHealthState PsId:1171348
+    GoSungrow data get getPsWeatherList PsId:1171348
+    GoSungrow data get queryDeviceList PsId:1171348
+    GoSungrow data get queryDeviceListByUserId PsId:1171348
+    GoSungrow data get queryDeviceListForApp PsId:1171348
+    GoSungrow data get findPsType PsId:1171348
+    GoSungrow data get getDeviceList PsId:1171348
+    GoSungrow data get getIncomeSettingInfos PsId:1171348
+    GoSungrow data get getPowerChargeSettingInfo PsId:1171348
+    GoSungrow data get getPowerStationInfo PsId:1171348
+    GoSungrow data get WebAppService.getDeviceUuid PsKey:1171348
+    GoSungrow data get getPowerStationForHousehold PsId:1171348
 
 
 ## Get device data
 
-    GoSungrow api get energyTrend
-    GoSungrow api get getKpiInfo
-    GoSungrow api get queryPsProfit '{"date_id":"20221001","date_type":"1","ps_id":"1171348"}'
-    GoSungrow api get getPowerStationData '{"date_id":"20221001","date_type":"1","ps_id":"1171348"}'
-    GoSungrow api get getHouseholdStoragePsReport '{"date_id":"20221001","date_type":"1","ps_id":"1171348"}'
-    GoSungrow api get queryPsProfit '{"date_id":"202210","date_type":"2","ps_id":"1171348"}'
-    GoSungrow api get getPowerStationData '{"date_id":"202210","date_type":"2","ps_id":"1171348"}'
-    GoSungrow api get getHouseholdStoragePsReport '{"date_id":"202210","date_type":"2","ps_id":"1171348"}'
-    GoSungrow api get queryPsProfit '{"date_id":"2022","date_type":"3","ps_id":"1171348"}'
-    GoSungrow api get getPowerStationData '{"date_id":"2022","date_type":"3","ps_id":"1171348"}'
-    GoSungrow api get getHouseholdStoragePsReport '{"date_id":"2022","date_type":"3","ps_id":"1171348"}'
-    GoSungrow api get getPowerTrendDayData '{"BeginTime":"20221004"}'
-    GoSungrow api get getPowerStatistics '{"ps_id":"1171348"}'
-    GoSungrow api get WebAppService.showPSView '{"ps_id":"1171348"}'
+    GoSungrow data get energyTrend
+    GoSungrow data get getKpiInfo
+    GoSungrow data get queryPsProfit DateId:20221001 PsId:1171348
+    GoSungrow data get getPowerStationData DateId:20221001 PsId:1171348
+    GoSungrow data get getHouseholdStoragePsReport DateId:20221001 PsId:1171348
+    GoSungrow data get queryPsProfit DateId:202210 PsId:1171348
+    GoSungrow data get getPowerStationData DateId:202210 PsId:1171348
+    GoSungrow data get getHouseholdStoragePsReport DateId:202210 PsId:1171348
+    GoSungrow data get queryPsProfit DateId:2022 PsId:1171348
+    GoSungrow data get getPowerStationData DateId:2022 PsId:1171348
+    GoSungrow data get getHouseholdStoragePsReport DateId:2022 PsId:1171348
+    GoSungrow data get getPowerTrendDayData BeginTime:20221004
+    GoSungrow data get getPowerStatistics PsId:1171348
+    GoSungrow data get WebAppService.showPSView PsId:1171348
 
 
 ## Reports
 
-    GoSungrow api get getPsReport '{"report_type":"1","date_id":"20220201","date_type":"1","ps_id":"1171348"}'
-    GoSungrow api get getPsReport '{"report_type":"1","date_id":"20220201","date_type":"2","ps_id":"1171348"}'
-    GoSungrow api get getPsReport '{"report_type":"1","date_id":"20220201","date_type":"3","ps_id":"1171348"}'
-    GoSungrow api get reportList '{"ps_id":"1171348","report_type":"1"}'
-    GoSungrow api get reportList '{"ps_id":"1171348","report_type":"2"}'
-    GoSungrow api get reportList '{"ps_id":"1171348","report_type":"3"}'
-    GoSungrow api get reportList '{"ps_id":"1171348","report_type":"4"}'
+    GoSungrow data get getPsReport DateId:20220201 PsId:1171348
+    GoSungrow data get getPsReport DateId:20220201 PsId:1171348
+    GoSungrow data get getPsReport DateId:20220201 PsId:1171348
+    GoSungrow data get reportList PsId:1171348 ReportType:1
+    GoSungrow data get reportList PsId:1171348 ReportType:2
+    GoSungrow data get reportList PsId:1171348 ReportType:3
+    GoSungrow data get reportList PsId:1171348 ReportType:4
 
 
 ## Templates
 
-    GoSungrow api get template 20220202
-    GoSungrow api get template 8042 20220212
-    GoSungrow api get getTemplateList
-    GoSungrow api get WebAppService.queryUserCurveTemplateData '{"template_id":"8042","date_type":"1","start_time":"20220223000000","end_time":"20220223235900"}'
+    GoSungrow data get template 20220202
+    GoSungrow data get template 8042 20220212
+    GoSungrow data get getTemplateList
+    GoSungrow data get WebAppService.queryUserCurveTemplateData TemplateId:8042 StartTime:20220223000000 EndTime:20220223235900
 
 
 ## User/installer/support info
 
-    GoSungrow api get getUserList
-    GoSungrow api get getUserPsOrderList
-    GoSungrow api get getPhotoInfo
-    GoSungrow api get getOrgListByName
-    GoSungrow api get getOrgListByUserId
-    GoSungrow api get getOrgListForUser
-    GoSungrow api get queryUserList
-    GoSungrow api get getInstallerInfoByDealerOrgCodeOrId '{"dealer_org_code":"AUSCEKK7"}'
-    GoSungrow api get getInstallerInfoByDealerOrgCodeOrId '{"org_id":"362245"}'
-    GoSungrow api get getInstallerInfoByDealerOrgCodeOrId '{"org_id":"80384"}'
-    GoSungrow api get getInstallerInfoByDealerOrgCodeOrId '{"org_id":"80393"}'
-    GoSungrow api get getInstallerInfoByDealerOrgCodeOrId '{"org_id":"300977"}'
+    GoSungrow data get getUserList
+    GoSungrow data get getUserPsOrderList
+    GoSungrow data get getPhotoInfo
+    GoSungrow data get getOrgListByName
+    GoSungrow data get getOrgListByUserId
+    GoSungrow data get getOrgListForUser
+    GoSungrow data get queryUserList
+    GoSungrow data get getInstallerInfoByDealerOrgCodeOrId dealer_org_code:AUSCEKK7
+    GoSungrow data get getInstallerInfoByDealerOrgCodeOrId OrgId:362245
+    GoSungrow data get getInstallerInfoByDealerOrgCodeOrId OrgId:80384
+    GoSungrow data get getInstallerInfoByDealerOrgCodeOrId OrgId:80393
+    GoSungrow data get getInstallerInfoByDealerOrgCodeOrId OrgId:300977
 
 
 ## Meta-data
 
-    GoSungrow api get getDeviceTypeInfoList
-    GoSungrow api get getDeviceTypeList
-    GoSungrow api get getInvertDataList
-    GoSungrow api get getModuleLogTaskList
-    GoSungrow api get powerDevicePointList
-    GoSungrow api get getPowerDevicePointNames '{"device_type":"1"}'
-    GoSungrow api get getPowerDevicePointNames '{"device_type":"2"}'
-    GoSungrow api get getPowerDevicePointNames '{"device_type":"7"}'
-    GoSungrow api get getDeviceModelInfoList
-    GoSungrow api get queryUnitList
-    GoSungrow api get getPowerSettingCharges
-    GoSungrow api get getPowerDevicePointNames '{"device_type":"1"}'
-    GoSungrow api get getPowerDeviceModelTechList '{"device_type":"1"}'
-    GoSungrow api get getPowerDevicePointInfo '{"id":"1"}'
+	WebIscmAppService.modelPointsPage DeviceModelId:714 DeviceType:14 - Use this to fetch all points for a particular ps_key.
+	AppService.getPowerDevicePointNames DeviceType:14 - Point names for device.
+	WebIscmAppService.getModelPoints DeviceModelId:714 - Point names for device.
+	WebIscmAppService.queryDeviceListForBackSys - Basic relationships between devices.
+	AppService.queryInverterModelList
+	WebIscmAppService.getDeviceModel
+	WebIscmAppService.getPointInfo
+	WebIscmAppService.getPointInfoPage
+	WebIscmAppService.getPowerDeviceTypeList
+	WebIscmAppService.getPsTreeMenu
+	WebIscmAppService.getUserMenuLs UserId:276937
+	WebIscmAppService.getSysMenu MenuId:613
+	WebIscmAppService.getDeviceTechnical
+	WebIscmAppService.getDeviceType
+	WebIscmAppService.getDeviceTypeInfoById CodeType:14
+	WebIscmAppService.getCodeByType
+	WebIscmAppService.getDeviceFactoryListByIds
+	AppService.getOwnerFaultConfigList
+	AppService.getSungwsGlobalConfigCache
+	AppService.getRemoteParamSettingList CurPage:1 Size:100 DeviceType:14
+	WebAppService.getSelfReportPoint
+	WebAppService.getDevicePointAttrs Uuid:1179878 DeviceType2:14 PsId:1171348
+
+    GoSungrow data get getDeviceTypeInfoList
+    GoSungrow data get getDeviceTypeList
+    GoSungrow data get getInvertDataList
+    GoSungrow data get getModuleLogTaskList
+    GoSungrow data get powerDevicePointList
+    GoSungrow data get getDeviceModelInfoList
+    GoSungrow data get queryUnitList
+    GoSungrow data get getPowerSettingCharges
+    GoSungrow data get getPowerDeviceModelTechList DeviceType:14
+    GoSungrow data get getPowerDevicePointInfo Id:1
 
 
 ## Task commands
 
-    GoSungrow api get queryBatchCreatePsTaskList
-    GoSungrow api get getPowerDeviceSetTaskDetailList '{"query_type":"2","task_id":"1","uuid":"844763"}'
-    GoSungrow api get getPowerDeviceSetTaskDetailList '{"query_type":"7","task_id":"1","uuid":"844763"}'
-    GoSungrow api get getPowerDeviceSetTaskDetailList '{"size":0,"curPage":0}'
-    GoSungrow api get getPowerDeviceSetTaskList '{"size":0,"curPage":0}'
-    GoSungrow api get getPowerDeviceSetTaskList '{"size":0,"curPage":1}'
-    GoSungrow api get getRemoteUpgradeSubTasksList '{"query_type":"1","task_id":"1577700"}'
-    GoSungrow api get getRemoteUpgradeTaskList '{"ps_id_list":"1171348"}'
+    GoSungrow data get queryBatchCreatePsTaskList
+    GoSungrow data get getPowerDeviceSetTaskDetailList QueryType:2 TaskId:1 Uuid:844763
+    GoSungrow data get getPowerDeviceSetTaskDetailList QueryType:7 TaskId:1 Uuid:844763
+    GoSungrow data get getPowerDeviceSetTaskList Size:0 CurPage:1
+    GoSungrow data get getRemoteUpgradeSubTasksList QueryType:2 TaskId:1577700
+    GoSungrow data get getRemoteUpgradeTaskList PsIdList:1171348
 
 
 ## Misc commands
 
-    GoSungrow api get getDevicePoints '{"point_id":"13003"}'
-    GoSungrow api get getPowerPictureList
+    GoSungrow data get getDevicePoints PointId:13003
+    GoSungrow data get getPowerPictureList
 
 
 ## Hacking
 
-    GoSungrow api get checkUnitStatus
-    GoSungrow api get getAllPowerDeviceSetName
-    GoSungrow api get getAreaList
-    GoSungrow api get getCloudList
-    GoSungrow api get getConfigList
-    GoSungrow api get getDeviceInfo
-    GoSungrow api get getOSSConfig
-    GoSungrow api get getOssObjectStream
-    GoSungrow api get getEncryptPublicKey
-    GoSungrow api get getFaultCount
-    GoSungrow api get getFaultDetail '{"fault_code":"34"}'
-    GoSungrow api get getFaultMsgByFaultCode '{"fault_code":"703"}'
-    GoSungrow api get getFaultMsgListWithYYYYMM
+    GoSungrow data get checkUnitStatus
+    GoSungrow data get getAllPowerDeviceSetName
+    GoSungrow data get getAreaList
+    GoSungrow data get getCloudList
+    GoSungrow data get getConfigList
+    GoSungrow data get getDeviceInfo
+    GoSungrow data get getOSSConfig
+    GoSungrow data get getOssObjectStream
+    GoSungrow data get getEncryptPublicKey
+    GoSungrow data get getFaultCount
+    GoSungrow data get getFaultDetail FaultCode:34
+    GoSungrow data get getFaultMsgByFaultCode FaultCode:703
+    GoSungrow data get getFaultMsgListWithYYYYMM

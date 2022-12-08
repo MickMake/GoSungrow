@@ -1,5 +1,190 @@
+################################################################################
 GoSungrow api login
 GoSungrow api ls areas
+
+
+################################################################################
+"table" can be replaced with:
+  list         Data	- Get data from the Sungrow api (list)
+  table        Data	- Get data from the Sungrow api (table)
+  raw          Data	- Get data from the Sungrow api (raw)
+  json         Data	- Get data from the Sungrow api (json)
+  csv          Data	- Get data from the Sungrow api (csv)
+  graph        Data	- Get data from the Sungrow api (graph)
+  xml          Data	- Get data from the Sungrow api (xml)
+  xlsx         Data	- Get data from the Sungrow api (XLSX)
+  md           Data	- Get data from the Sungrow api (MarkDown)
+  struct       Data	- Show response as Go structure (debug)
+
+
+# large reports
+GoSungrow data table WebAppService.getReportListByType
+GoSungrow data table WebIscmAppService.getVillageList
+GoSungrow data table AppService.getDeviceModelInfoList
+GoSungrow data table AppService.showInverterByUnit
+GoSungrow data table AppService.queryInverterModelList
+GoSungrow data table AppService.getSendReportConfigCron
+GoSungrow data table AppService.getSungwsGlobalConfigCache
+GoSungrow data table AppService.getOwnerFaultConfigList
+
+################################################################################
+GoSungrow data table WebAppService.getDevicePointAttrs Uuid:1179878 DeviceType2:14 PsId:1171348
+GoSungrow data table WebAppService.getSelfReportPoint
+GoSungrow data table AppService.getSnConnectionInfo CurPage:1 Size:100
+GoSungrow data table AppService.stationsPointReport Type:1
+GoSungrow data table AppService.getRemoteUpgradeDeviceList DeviceType:14
+GoSungrow data table AppService.getRemoteParamSettingList CurPage:1 Size:100 DeviceType:14
+GoSungrow data table AppService.getCommunicationDeviceConfigInfo
+GoSungrow data table AppService.getOSSConfig
+GoSungrow data table AppService.getSendReportConfigCron
+
+GoSungrow data table data raw WebIscmAppService.contactMessageOpera
+GoSungrow data table data raw WebIscmAppService.findImageInputStreamString
+GoSungrow data table data raw WebIscmAppService.getAuthKey
+GoSungrow data table data raw WebIscmAppService.getAuthKeyList
+GoSungrow data table data raw WebIscmAppService.getContactMessage
+GoSungrow data table data raw WebIscmAppService.getDefinitionIdByKey
+
+GoSungrow data table AppService.devicePointsDataFromMySql PsKey:1171348_14_1_2
+GoSungrow data table AppService.energyTrend
+GoSungrow data table AppService.findCodeValueList CodeType:1
+GoSungrow data table AppService.findPsType
+GoSungrow data table AppService.getAPIServiceInfo
+GoSungrow data table AppService.getAllPsIdByOrgIds OrgIds:300977
+GoSungrow data table AppService.getAreaList
+GoSungrow data table AppService.getChnnlListByPsId
+GoSungrow data table AppService.getCloudList
+GoSungrow data table AppService.getCustomerList
+GoSungrow data table AppService.getDeviceList
+GoSungrow data table AppService.getDeviceTypeList
+GoSungrow data table AppService.getHouseholdStoragePsReport DateId:2022
+GoSungrow data table AppService.getHouseholdStoragePsReport DateId:202210
+GoSungrow data table AppService.getHouseholdStoragePsReport DateId:20221001
+GoSungrow data table AppService.getIncomeSettingInfos
+GoSungrow data table AppService.getInstallInfoList
+GoSungrow data table AppService.getInstallerInfoByDealerOrgCodeOrId DealerOrgCode:300977
+GoSungrow data table AppService.getKpiInfo
+GoSungrow data table AppService.getModuleLogTaskList
+GoSungrow data table AppService.getPowerChargeSettingInfo
+GoSungrow data table AppService.getPowerDevicePointNames DeviceType:14
+GoSungrow data table AppService.getPowerDeviceSetTaskList
+GoSungrow data table AppService.getPowerDeviceSetTaskList CurPage:1 Size:100
+GoSungrow data table AppService.getPowerSettingCharges
+GoSungrow data table AppService.getPowerStationBasicInfo
+GoSungrow data table AppService.getPowerStationData DateId:2022
+GoSungrow data table AppService.getPowerStationData DateId:202210
+GoSungrow data table AppService.getPowerStationData DateId:20221020
+GoSungrow data table AppService.getPowerStationForHousehold
+GoSungrow data table AppService.getPowerStationInfo
+GoSungrow data table AppService.getPowerStatistics
+GoSungrow data table AppService.getPsDetail
+GoSungrow data table AppService.getPsDetailForSinglePage
+GoSungrow data table AppService.getPsDetailWithPsType
+GoSungrow data table AppService.getPsDeviceListValue
+GoSungrow data table AppService.getPsHealthState
+GoSungrow data table AppService.getPsList
+GoSungrow data table AppService.getPsListByName
+GoSungrow data table AppService.getPsListStaticData
+GoSungrow data table AppService.getPsReport DateId:20221028 ReportType:1
+GoSungrow data table AppService.getPsReport DateId:20221028 ReportType:2
+GoSungrow data table AppService.getPsReport DateId:20221028 ReportType:5
+GoSungrow data table AppService.getPsWeatherList
+GoSungrow data table AppService.getRegionalTree
+GoSungrow data table AppService.getRemoteUpgradeTaskList
+GoSungrow data table AppService.getReportData ReportType:1
+GoSungrow data table AppService.getReportEmailConfigInfo
+GoSungrow data table AppService.getSysMsg
+GoSungrow data table AppService.getTemplateList
+GoSungrow data table AppService.getUpTimePoint
+GoSungrow data table AppService.powerDevicePointList
+GoSungrow data table AppService.psForcastInfo
+GoSungrow data table AppService.psHourPointsValue PsId:1171348
+GoSungrow data table AppService.queryAllPsIdAndName
+GoSungrow data table AppService.queryDeviceInfo Uuid:1179860
+GoSungrow data table AppService.queryDeviceInfo Uuid:1179878
+GoSungrow data table AppService.queryDeviceInfo Uuid:844775
+GoSungrow data table AppService.queryDeviceInfoForApp Uuid:1179860
+GoSungrow data table AppService.queryDeviceInfoForApp Uuid:844775
+GoSungrow data table AppService.queryDeviceList
+GoSungrow data table AppService.queryDeviceListForApp
+GoSungrow data table AppService.queryFaultTypeByDevice
+GoSungrow data table AppService.queryFaultTypeByDevicePage
+GoSungrow data table AppService.queryFirmwareFilesPage
+GoSungrow data table AppService.queryPowerStationInfo
+GoSungrow data table AppService.queryPsIdList
+GoSungrow data table AppService.queryPsProfit
+GoSungrow data table AppService.queryPsProfit DateId:2022
+GoSungrow data table AppService.queryPsProfit DateId:202210
+GoSungrow data table AppService.queryPsProfit DateId:20221001
+GoSungrow data table AppService.queryPsStructureList
+GoSungrow data table AppService.queryUnitList
+GoSungrow data table AppService.reportList ReportType:1
+GoSungrow data table AppService.reportList ReportType:3
+GoSungrow data table MttvScreenService.energyEquivalentHoursRanking
+GoSungrow data table MttvScreenService.energyPowerGenerationTrends
+GoSungrow data table MttvScreenService.getPsDeviceListValue
+GoSungrow data table MttvScreenService.getPsKpiForHoursByPsId Day:20221002
+GoSungrow data table MttvScreenService.getTheoryAndActualPower
+GoSungrow data table WebAppService.getMqttConfigInfoByAppkey AppKey:93D72E60331ABDCDC7B39ADC2D1F32B3
+GoSungrow data table WebAppService.getPsIdState
+GoSungrow data table WebAppService.getPsList
+GoSungrow data table WebAppService.getPsTree
+GoSungrow data table WebAppService.getPsValue CurPage:1 Size:100
+GoSungrow data table WebAppService.getReportPsTree DeviceType:14
+GoSungrow data table WebAppService.queryNounList FaultTypeCode:719
+GoSungrow data table WebAppService.queryUserCurveTemplateData TemplateId:8042
+GoSungrow data table WebAppService.showPSView
+GoSungrow data table WebIscmAppService.checkDeviceModel
+GoSungrow data table WebIscmAppService.getAllDevTypeList
+GoSungrow data table WebIscmAppService.getAllNodeByType
+GoSungrow data table WebIscmAppService.getCodeByType
+GoSungrow data table WebIscmAppService.getDeploymentList
+GoSungrow data table WebIscmAppService.getDeviceFactoryListByIds
+GoSungrow data table WebIscmAppService.getDeviceModel
+GoSungrow data table WebIscmAppService.getDevicePro
+GoSungrow data table WebIscmAppService.getDeviceTechnical
+GoSungrow data table WebIscmAppService.getDeviceType
+GoSungrow data table WebIscmAppService.getDeviceTypeInfoById CodeType:14
+GoSungrow data table WebIscmAppService.getMaterialList
+GoSungrow data table WebIscmAppService.getMaxDeviceIdByPsId
+GoSungrow data table WebIscmAppService.getModelPoints DeviceModelId:714
+GoSungrow data table WebIscmAppService.getMoneyUnitList
+GoSungrow data table WebIscmAppService.getNationList
+GoSungrow data table WebIscmAppService.getOrgList
+GoSungrow data table WebIscmAppService.getPointInfo
+GoSungrow data table WebIscmAppService.getPointInfoPage
+GoSungrow data table WebIscmAppService.getPowerDevice
+GoSungrow data table WebIscmAppService.getPowerDeviceChannl Id:44
+GoSungrow data table WebIscmAppService.getPowerDeviceFactory
+GoSungrow data table WebIscmAppService.getPowerDeviceFactoryListCount
+GoSungrow data table WebIscmAppService.getPowerDeviceInfo Uuid:844775 DeviceType:14
+GoSungrow data table WebIscmAppService.getPowerDeviceModelList DeviceType:14
+GoSungrow data table WebIscmAppService.getPowerDeviceModelTechList DeviceType:14
+GoSungrow data table WebIscmAppService.getPowerDeviceTypeList
+GoSungrow data table WebIscmAppService.getPowerPlanList
+GoSungrow data table WebIscmAppService.getPowerStation
+GoSungrow data table WebIscmAppService.getPowerStationInfo PsId:1171348
+GoSungrow data table WebIscmAppService.getPowerStationList
+GoSungrow data table WebIscmAppService.getPowerStore
+GoSungrow data table WebIscmAppService.getProvcnNew
+GoSungrow data table WebIscmAppService.getPsTreeMenu PsId:1171348
+GoSungrow data table WebIscmAppService.getSysMenu MenuId:613
+GoSungrow data table WebIscmAppService.getSysOrgPro
+GoSungrow data table WebIscmAppService.getUserMenuLs UserId:276937
+GoSungrow data table WebIscmAppService.modelPointsPage DeviceModelId:714 DeviceType:14
+GoSungrow data table WebIscmAppService.queryDeviceListForBackSys PsId:1171348
+GoSungrow data table WebIscmAppService.queryDutyType
+GoSungrow data table WebIscmAppService.viewDeviceModel
+GoSungrow data table WebIscmAppService.viewDeviceParameter
+
+GoSungrow data table AppService.queryDevicePointDayMonthYearDataList DataType:1 DataPoint:1 PsKey:1171348_14_1_2 StartTime:2020 EndTime:2022
+GoSungrow data table AppService.queryDevicePointDayMonthYearDataList DataType:1 DataPoint:1 PsKey:1171348_14_1_2 StartTime:202201 EndTime:202211
+GoSungrow data table AppService.queryDevicePointDayMonthYearDataList DataType:1 DataPoint:1 PsKey:1171348_14_1_2 StartTime:20221001 EndTime:20221101
+GoSungrow data table AppService.queryDevicePointMinuteDataList QueryType:1 DataType:1 DataPoint:1 StartTimeStamp:20221001000000 EndTimeStamp:20221001235900 PsKey:1171348_14_1_2 Points:p13143,p13144,p13145,p13146,p13147,p13148
+GoSungrow data table AppService.getDevicePointMinuteDataList StartTimeStamp:20221001000000 EndTimeStamp:20221001235900 Points:1129147_14_1_1.p13148,1129147_14_1_1.p13147,1129147_14_1_1.p13146,1129147_14_1_1.p13145,1129147_14_1_1.p13144,1129147_14_1_1.p13143
+GoSungrow data table AppService.queryMutiPointDataList MinuteInterval:5 StartTimeStamp:20221001000000 EndTimeStamp:20221001235900 Points:1129147_14_1_1.p13148,1129147_14_1_1.p13147,1129147_14_1_1.p13146,1129147_14_1_1.p13145,1129147_14_1_1.p13144,1129147_14_1_1.p13143
+
+
 
 GoSungrow api get WebAppService.getDeviceUuid '{"ps_key":"1171348"}'
 GoSungrow api get WebAppService.showPSView '{"ps_id":"1171348"}'

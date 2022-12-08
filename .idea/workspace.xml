@@ -6,27 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="76adadc9-ae71-42a6-82a1-66dbc8ecb14c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppService.queryMutiPointDataList.ResultData.Data-Points_p58603.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppService.queryMutiPointDataList.ResultData.Data-Points_p58604.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppService.queryMutiPointDataList.ResultData.Data-Points_p58605.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppService.queryMutiPointDataList.ResultData.Data-Points_p58606.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/EXAMPLES.md" beforeDir="false" afterPath="$PROJECT_DIR$/EXAMPLES.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/cmd_data.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/cmd_info.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_info.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/cmd_show.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_show.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/cmd_show_device.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_show_device.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/cmd_show_point.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_show_point.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/cmd_show_psid.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_show_psid.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/cmd_show_template.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_show_template.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/GoStruct/output/struct_output.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/GoStruct/output/struct_output.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/GoStruct/output/struct_table.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/GoStruct/output/struct_table.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/struct_endpoints.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/struct_endpoints.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/struct_url.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/struct_url.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/highlevel_device.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/highlevel_device.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/highlevel_point.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/highlevel_point.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/highlevel_ps.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/highlevel_ps.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/highlevel_template.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/highlevel_template.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples.txt" beforeDir="false" afterPath="$PROJECT_DIR$/examples.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
