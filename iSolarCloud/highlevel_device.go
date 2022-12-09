@@ -5,11 +5,13 @@ import (
 	"GoSungrow/iSolarCloud/AppService/getDeviceModelInfoList"
 	"GoSungrow/iSolarCloud/AppService/getPowerDevicePointNames"
 	"GoSungrow/iSolarCloud/AppService/queryDeviceList"
+	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 	datatable "go.pennock.tech/tabular/auto"
+	"os"
 	"sort"
 	"time"
 )
@@ -28,7 +30,6 @@ func (sg *SunGrow) DeviceTypeList(psIds ...string) (string, error) {
 			break
 		}
 
-
 		// data := sg.NewSunGrowData()
 		// data.SetEndpoints(queryDeviceList.EndPointName)
 		// data.SetArgs(
@@ -43,7 +44,6 @@ func (sg *SunGrow) DeviceTypeList(psIds ...string) (string, error) {
 		// if sg.Error != nil {
 		// 	break
 		// }
-
 
 		table := datatable.New("utf8-heavy")
 		table.AddHeaders("Device Type", "Name")
@@ -85,15 +85,28 @@ func (sg *SunGrow) DeviceTypePoints(deviceTypes ...string) (string, error) {
 	var ret string
 
 	for range Only.Once {
-		if len(deviceTypes) == 0 {
+		pids := sg.SetPsIds()
+		if sg.Error != nil {
+			break
+		}
+		if len(pids) == 0 {
 			break
 		}
 
-		table := datatable.New("utf8-heavy")
-		table.AddHeaders("Device Type", "Point Id", "Name", "Cal Type")
+		ep1 := sg.GetByStruct(queryDeviceList.EndPointName,
+			queryDeviceList.RequestData{ PsId: pids[0] },
+			DefaultCacheTimeout,
+		)
+		if sg.IsError() {
+			break
+		}
+		data1 := queryDeviceList.Assert(ep1)
 
-		var points []getPowerDevicePointNames.Point
-		for _, deviceType := range deviceTypes {
+
+		table := output.NewTable("Point Id", "Name", "Cal Type", "Device Type", "Device Name")
+
+		// var points []getPowerDevicePointNames.Point
+		for deviceType, deviceName := range data1.Response.ResultData.DevTypeDefinition {
 			ep := sg.GetByStruct(getPowerDevicePointNames.EndPointName,
 				getPowerDevicePointNames.RequestData{ DeviceType: valueTypes.SetIntegerString(deviceType) },
 				DefaultCacheTimeout,
@@ -102,36 +115,41 @@ func (sg *SunGrow) DeviceTypePoints(deviceTypes ...string) (string, error) {
 				break
 			}
 			data := getPowerDevicePointNames.Assert(ep)
-			points = append(points, data.Response.ResultData...)
+			// points = append(points, data.Response.ResultData...)
 
 			// Sort table based on PointId
-			pn := map[string]int{}
-			for index, point := range points {
-				pn[point.PointId.String()] = index
-			}
-			var names []string
-			for point := range pn {
-				names = append(names, point)
-			}
-			sort.Strings(names)
+			// pn := map[string]int{}
+			// for index, point := range points {
+			// 	pn[point.PointId.String()] = index
+			// }
+			// var names []string
+			// for point := range pn {
+			// 	names = append(names, point)
+			// }
+			// sort.Strings(names)
 
-			for _, name := range names {
-				index := pn[name]
-				point := points[index]
-				table.AddRowItems(deviceType, point.PointId, point.PointName, point.PointCalType)
+			for name := range data.Response.ResultData {
+				point := data.Response.ResultData[name]
+				// point := points[index]
+				sg.Error = table.AddRow(point.PointId.Value(), point.PointName.String(), point.PointCalType.String(), deviceType, deviceName.String())
+				if sg.IsError() {
+					break
+				}
 			}
+			_, _ = fmt.Fprintf(os.Stderr, ".")
+			time.Sleep(time.Millisecond * 200)
 		}
+		_, _ = fmt.Fprintf(os.Stderr, "\n")
 		if sg.IsError() {
 			break
 		}
 
-		var r string
-		r, sg.Error = table.Render()
+		ret = fmt.Sprintln("# Available points:")
+		table.Sort("Point Id")
+		ret += table.String()
 		if sg.Error != nil {
 			break
 		}
-		ret += fmt.Sprintln("# Available points:")
-		ret += r
 	}
 
 	return ret, sg.Error

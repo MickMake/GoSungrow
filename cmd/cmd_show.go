@@ -53,10 +53,11 @@ func (c *CmdShow) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		cmd.AddCommand(c.SelfCmd)
 		c.SelfCmd.Example = cmdHelp.PrintExamples(c.SelfCmd, "")
 
-		c.AttachPsId(c.SelfCmd)
+		c.AttachPs(c.SelfCmd)
 		c.AttachDevice(c.SelfCmd)
 		c.AttachTemplate(c.SelfCmd)
 		c.AttachPoint(c.SelfCmd)
+		c.AttachMeta(c.SelfCmd)
 	}
 	return c.SelfCmd
 }

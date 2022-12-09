@@ -1,9 +1,9 @@
 package api
 
 import (
-	"github.com/MickMake/GoUnify/Only"
 	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 
@@ -48,4 +48,10 @@ func (as AreaStruct) CountEnabled() int {
 
 func (as AreaStruct) CountDisabled() int {
 	return len(as.EndPoints.GetDisabled())
+}
+
+func (as AreaStruct) CoveragePercent() float64 {
+	d := len(as.EndPoints.GetDisabled())
+	e := len(as.EndPoints.GetEnabled())
+	return (float64(e) / (float64(e) + float64(d))) * 100
 }

@@ -56,6 +56,7 @@ type RequestArgs struct {
 	DateId         *valueTypes.DateTime  `json:"date_id,omitempty"`
 	DateType       *string               `json:"date_type,omitempty"`
 	MonthDate      *valueTypes.DateTime  `json:"month_date,omitempty"`
+	MonthDate2     *valueTypes.DateTime  `json:"monthDate,omitempty"`
 	Day            *valueTypes.DateTime  `json:"day,omitempty"`
 	BeginTime1     *valueTypes.DateTime  `json:"beginTime,omitempty"`	// valueTypes.Time
 	EndTime1       *valueTypes.DateTime  `json:"endTime,omitempty"`		// valueTypes.Time

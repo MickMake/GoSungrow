@@ -8,7 +8,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
-	datatable "go.pennock.tech/tabular/auto"
 	"os"
 	"sort"
 	"strings"
@@ -382,7 +381,15 @@ func (dm *DataMap) CreateDataTables() Tables {
 		for name := range dm.StructMap.TableMap {
 			var ret GoStruct.StructTable
 			dm.Error = ret.Process(dm.EndPoint.GetArea().String(), name, dm.StructMap.TableMap[name])
+			if dm.Error != nil {
+				break
+			}
+
 			_, dm.Error = ret.CreateTable()
+			if dm.Error != nil {
+				break
+			}
+
 			tables[name] = &ret
 		}
 	}
@@ -405,7 +412,7 @@ func (dm *DataMap) CreateResultTable(full bool) output.Table {
 			"Update Freq",
 		)
 
-		for _, p := range dm.Sort() {
+		for p := range dm.Map {
 			entries := dm.Map[p].Entries
 			for _, de := range entries {
 				if full {
@@ -473,10 +480,10 @@ func (dm *DataMap) CreateResultTable(full bool) output.Table {
 	return table
 }
 
-func (dm *DataMap) Print() {
+func (dm DataMap) String() string {
+	var ret string
 	for range Only.Once {
-		table := datatable.New("utf8-heavy")
-		table.AddHeaders(
+		table := output.NewTable(
 			"Index",
 			"EndPoint",
 
@@ -500,7 +507,7 @@ func (dm *DataMap) Print() {
 			for _, v := range dm.Map[k].Entries {
 				i++
 
-				table.AddRowItems(
+				dm.Error = table.AddRow(
 					i,
 					v.EndPoint,
 
@@ -517,12 +524,62 @@ func (dm *DataMap) Print() {
 					v.Point.Parents.Types(),
 					v.Point.Parents.Codes(),
 				)
+				if dm.Error != nil {
+					break
+				}
 			}
 		}
 
-		ret, _ := table.Render()
-		fmt.Println(ret)
+		ret = table.String()
+
+		// table := datatable.New("utf8-heavy")
+		// table.AddHeaders(
+		// 	"Index",
+		// 	"EndPoint",
+		//
+		// 	"Id",
+		// 	"Name",
+		// 	"Unit",
+		// 	"Type",
+		// 	"Value",
+		// 	"(Value)",
+		// 	"Valid",
+		//
+		// 	"GroupName",
+		// 	"Parent Ids",
+		// 	"Parent Types",
+		// 	"Parent Codes",
+		// )
+		// // dm.Order - Produces double the amount of entries for some reason.
+		// i := 0
+		// for k := range dm.Map {
+		// 	for _, v := range dm.Map[k].Entries {
+		// 		i++
+		//
+		// 		table.AddRowItems(
+		// 			i,
+		// 			v.EndPoint,
+		//
+		// 			v.Point.Id,
+		// 			v.Point.Description,
+		// 			v.Point.Unit,
+		// 			v.Point.UpdateFreq,
+		// 			v.Value,
+		// 			v.Current.Value.First(),
+		// 			v.Point.Valid,
+		//
+		// 			v.Point.GroupName,
+		// 			v.Point.Parents.PsIds(),
+		// 			v.Point.Parents.Types(),
+		// 			v.Point.Parents.Codes(),
+		// 		)
+		// 	}
+		// }
+		//
+		// ret, _ := table.Render()
+		// fmt.Println(ret)
 	}
+	return ret
 }
 
 func (dm *DataMap) Sort() []string {

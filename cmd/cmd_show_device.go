@@ -80,7 +80,7 @@ func (c *CmdShow) AttachDevicePoints(cmd *cobra.Command) *cobra.Command {
 		DisableFlagsInUseLine: false,
 		PreRunE:               cmds.SunGrowArgs,
 		RunE:                  c.funcDevicePoints,
-		Args:                  cobra.MinimumNArgs(1),
+		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(self)
 	self.Example = cmdHelp.PrintExamples(self,

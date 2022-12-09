@@ -2,10 +2,10 @@ package output
 
 import (
 	"GoSungrow/iSolarCloud/api/GoStruct/gojson"
+	"GoSungrow/tablib"
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
-	tabular "github.com/agrison/go-tablib"
 	"os"
 	"reflect"
 	"sort"
@@ -36,40 +36,113 @@ func (t *Tables) Sort() []string {
 
 
 type Table struct {
-	name       string
-	filePrefix string
-	title      string
-	table      *tabular.Dataset
-	graph      *Chart
-	json       []byte
-	raw        []byte
-	OutputType OutputType
-	saveAsFile bool
+	name        string
+	filePrefix  string
+	title       string
+	graph       *Chart
+	json        []byte
+	raw         []byte
+	OutputType  OutputType
+	saveAsFile  bool
 	graphFilter string
-	Error      error
+	Error       error
+
+	tablib      *tablib.Dataset
+	// tabular     tabular.RenderTable
+	// tablewriter *tablewriter.Table
+	// buf         *bytes.Buffer
+	// headers     []string
+	// method      int8
 }
 
 func NewTable(headers ...string) Table {
-	return Table {
-		filePrefix: "",
-		title:      "",
-		table:      tabular.NewDataset(headers),
-		Error: nil,
+	// buf := new(bytes.Buffer)
+	t := Table {
+		filePrefix:  "",
+		title:       "",
+		tablib:      tablib.NewDataset(headers),
+		// tabular:     tabular.New("utf8-heavy"),
+		// tablewriter: tablewriter.NewWriter(buf),
+		// buf:         buf,
+		// headers:     []string{},
+		// method:      MethodTablib,
+
+		Error:       nil,
 	}
+
+	t.tablib.SetAlign(tablib.AlignLeft)
+	t.tablib.SetEmptyString(" ")
+	t.tablib.SetMaxCellSize(128)
+	t.tablib.SetWrapStrings(true)
+	t.tablib.SetFloatFormat('f')
+	t.tablib.SetWrapDelimiter(' ')
+	t.tablib.SetDenseMode(true)
+	t.tablib.SetSplitConcat(" ")
+
+	// var h1 []interface{}
+	// for _, h2 := range headers {
+	// 	h1 = append(h1, h2)
+	// }
+	// t.tabular.AddHeaders(h1...)
+	// t.tablewriter.SetHeader(headers)
+	// t.headers = headers
+	return t
 }
 
-func (t *Table) String() string {
+// const (
+// 	MethodTablib      = iota
+// 	MethodTabular     = iota
+// 	MethodTableWriter = iota
+// )
+// func (t *Table) SetTablib()  {
+// 	t.method = MethodTablib
+// }
+// func (t *Table) Tablib() *tablib.Dataset {
+// 	return t.tablib
+// }
+//
+// func (t *Table) SetTabular()  {
+// 	t.method = MethodTabular
+// }
+// func (t *Table) Tabular() tabular.RenderTable {
+// 	return t.tabular
+// }
+//
+// func (t *Table) SetTableWriter()  {
+// 	t.method = MethodTableWriter
+// }
+// func (t *Table) TableWriter() *tablewriter.Table {
+// 	return t.tablewriter
+// }
+
+func (t Table) String() string {
 	var ret string
 	for range Only.Once {
-		if t == nil {
-			break
-		}
+		// switch t.method {
+		// 	case 2:
+		// 		// Example: GoSungrow api ls endpoints / GoSungrow api ls areas
+		// 		if t.buf == nil {
+		// 			break
+		// 		}
+		// 		t.tablewriter.SetBorder(true)
+		// 		t.tablewriter.Render()
+		// 		ret = t.buf.String()
+		// 		t.buf = nil
+		//
+		// 	case 1:
+		// 		ret, t.Error = t.tabular.Render()
+		// 		// t.Error = tabular.RenderTo(t.tabular, ret, "") // "csv", "html", "json", "markdown"
+		//
+		// 	case 0:
+		// 		fallthrough
+		// 	default:
+		// 		if !t.tablib.Valid() {
+		// 			break
+		// 		}
+		// 		ret = t.tablib.Tabular("utf8").String()
+		// }
 
-		if !t.table.Valid() {
-			break
-		}
-
-		ret = t.table.Tabular("condensed").String()
+		ret = t.tablib.Tabular("utf8").String()
 	}
 	return ret
 }
@@ -77,16 +150,16 @@ func (t *Table) String() string {
 func (t *Table) IsValid() bool {
 	var yes bool
 	for range Only.Once {
-		if t.table == nil {
+		if t.tablib == nil {
 			break
 		}
-		if !t.table.Valid() {
+		if !t.tablib.Valid() {
 			break
 		}
-		if t.table.Height() == 0 {
+		if t.tablib.Height() == 0 {
 			break
 		}
-		if t.table.Width() == 0 {
+		if t.tablib.Width() == 0 {
 			break
 		}
 		yes = true
@@ -99,16 +172,41 @@ func (t *Table) IsNotValid() bool {
 }
 
 func (t *Table) GetHeaders() []string {
-	return t.table.Headers()
+	var ret []string
+	for range Only.Once {
+		// switch t.method {
+		// case 2:
+		// 	if t.buf == nil {
+		// 		break
+		// 	}
+		// 	ret = t.headers
+		//
+		// case 1:
+		// 	for _, r2 := range t.tabular.Headers() {
+		// 		ret = append(ret, r2.String())
+		// 	}
+		//
+		// case 0:
+		// 	fallthrough
+		// default:
+		// 	if !t.tablib.Valid() {
+		// 		break
+		// 	}
+		// 	ret = t.tablib.Headers()
+		// }
+
+		if !t.tablib.Valid() {
+			break
+		}
+		ret = t.tablib.Headers()
+	}
+	return ret
 }
 
 func (t *Table) GetSortedHeaders() []string {
 	var sorted []string
-
 	for range Only.Once {
-		for _, h := range t.table.Headers() {
-			sorted = append(sorted, h)
-		}
+		sorted = t.GetHeaders()
 		sort.Strings(sorted)
 	}
 	return sorted
@@ -120,10 +218,31 @@ func (t *Table) Sort(sort string) {
 			break
 		}
 
+		// switch t.method {
+		// 	case 2:
+		// 		// @TODO -
+		// 		// t.tablewriter.???()
+		//
+		// 	case 1:
+		// 		// @TODO -
+		// 		// t.tabular.???()
+		//
+		// 	case 0:
+		// 		fallthrough
+		// 	default:
+		// 		// Make sure we have a header.
+		// 		for _, header := range t.tablib.Headers() {
+		// 			if header == sort {
+		// 				t.tablib = t.tablib.Sort(sort)
+		// 				break
+		// 			}
+		// 		}
+		// }
 		// Make sure we have a header.
-		for _, header := range t.table.Headers() {
+
+		for _, header := range t.tablib.Headers() {
 			if header == sort {
-				t.table = t.table.Sort(sort)
+				t.tablib = t.tablib.Sort(sort)
 				break
 			}
 		}
@@ -131,18 +250,67 @@ func (t *Table) Sort(sort string) {
 }
 
 func (t *Table) RowLength() int {
-	return t.table.Height()
+	// var ret int
+	// switch t.method {
+	// 	case 2:
+	// 		ret = t.tablewriter.NumLines()
+	//
+	// 	case 1:
+	// 		ret = t.tabular.NRows()
+	//
+	// 	case 0:
+	// 		fallthrough
+	// 	default:
+	// 		ret = t.tablib.Height()
+	// }
+	// return ret
+
+	return t.tablib.Height()
 }
 
 func (t *Table) GetCell(row int, colName string) (string, interface{}, error) {
 	var ret interface{}
 	var retType string
 	for range Only.Once {
+		// switch t.method {
+		// 	case 2:
+		// 		// @TODO -
+		// 		// t.tablewriter.??(row)
+		// 		fmt.Println("Not supported.")
+		//
+		// 	case 1:
+		// 		// @TODO -
+		// 		var h string
+		// 		var i int
+		// 		for i, h = range t.headers {
+		// 			if h == colName {
+		// 				break
+		// 			}
+		// 		}
+		// 		c, err := t.tabular.CellAt(t2.CellLocation {
+		// 			Row:    row,
+		// 			Column: i,
+		// 		})
+		// 		if err != nil {
+		// 			t.Error = err
+		// 			break
+		// 		}
+		// 		ret = c.Item()
+		//
+		// 	case 0:
+		// 		fallthrough
+		// 	default:
+		// 		var r map[string]interface{}
+		// 		r, t.Error = t.tablib.Row(row)
+		// 		ret = r[colName]
+		// }
+
 		var r map[string]interface{}
-		r, t.Error = t.table.Row(row)
+		r, t.Error = t.tablib.Row(row)
 		if t.Error != nil {
 			break
 		}
+
 		ret = r[colName]
 		// retType = reflect.TypeOf(ret).String()
 		retType = reflect.TypeOf(ret).Name()
@@ -151,8 +319,25 @@ func (t *Table) GetCell(row int, colName string) (string, interface{}, error) {
 }
 
 func (t *Table) AddRow(row ...interface{}) error {
-	t.Error = t.table.Append(row)
-	return t.Error
+	// switch t.method {
+	// 	case 2:
+	// 		var ra []string
+	// 		for _, r := range row {
+	// 			ra = append(ra, fmt.Sprintf("%s", r))
+	// 		}
+	// 		t.tablewriter.Append(ra)
+	//
+	// 	case 1:
+	// 		t.tabular.AddRowItems(row...)
+	//
+	// 	case 0:
+	// 		fallthrough
+	// 	default:
+	// 		t.Error = t.tablib.Append(row)
+	// }
+	// return t.Error
+
+	return t.tablib.Append(row)
 }
 
 func (t *Table) writeFile(data string, perm os.FileMode) error {
@@ -354,8 +539,8 @@ func (t *Table) AsCsv() string {
 			break
 		}
 
-		var result *tabular.Exportable
-		result, t.Error = t.table.CSV()
+		var result *tablib.Exportable
+		result, t.Error = t.tablib.CSV()
 		if t.Error != nil {
 			break
 		}
@@ -396,8 +581,8 @@ func (t *Table) AsXml() string {
 			break
 		}
 
-		var result *tabular.Exportable
-		result, t.Error = t.table.XML()
+		var result *tablib.Exportable
+		result, t.Error = t.tablib.XML()
 		if t.Error != nil {
 			break
 		}
@@ -438,8 +623,8 @@ func (t *Table) AsXLSX() string {
 			break
 		}
 
-		var result *tabular.Exportable
-		result, t.Error = t.table.XLSX()
+		var result *tablib.Exportable
+		result, t.Error = t.tablib.XLSX()
 		if t.Error != nil {
 			break
 		}
@@ -562,8 +747,8 @@ func (t *Table) AsMarkDown() string {
 			break
 		}
 
-		var result *tabular.Exportable
-		result = t.table.Markdown()
+		var result *tablib.Exportable
+		result = t.tablib.Markdown()
 		if t.Error != nil {
 			break
 		}

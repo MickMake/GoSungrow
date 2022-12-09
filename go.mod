@@ -22,7 +22,6 @@ require (
 	github.com/MickMake/GoUnify/cmdHelp v0.0.0-20221125023651-ff4a37b1928a
 	github.com/MickMake/GoUnify/cmdLog v0.0.0-20221125023651-ff4a37b1928a
 	github.com/MickMake/GoUnify/cmdPath v0.0.0-20221125023651-ff4a37b1928a
-	github.com/agrison/go-tablib v0.0.0-20160310143025-4930582c22ee
 	github.com/eclipse/paho.mqtt.golang v1.4.2
 	github.com/go-co-op/gocron v1.18.0
 	github.com/olekukonko/tablewriter v0.0.5
@@ -47,7 +46,6 @@ require (
 	github.com/agrison/mxj v0.0.0-20160310142625-1269f8afb3b4 // indirect
 	github.com/alecthomas/chroma v0.7.1 // indirect
 	github.com/blang/semver v3.5.1+incompatible // indirect
-	github.com/bndr/gotabulate v1.1.2 // indirect
 	github.com/briandowns/spinner v1.19.0 // indirect
 	github.com/clbanning/mxj v1.8.4 // indirect
 	github.com/danwakefield/fnmatch v0.0.0-20160403171240-cbb64ac3d964 // indirect

@@ -59,8 +59,8 @@
 				"fault_alarm_offline_dev_count":0,
 				"fault_count":0,
 				"fault_dev_count":0,
-				"gcj_latitude":"-33.732621764598136",
-				"gcj_longitude":"151.04299275383877",
+				"gcj_latitude":"",
+				"gcj_longitude":"",
 				"gprs_latitude":null,
 				"gprs_longitude":null,
 				"images":[
@@ -87,11 +87,11 @@
 				"is_bank_ps":0,
 				"is_tuv":0,
 				"join_year_init_elec":0.0000,
-				"latitude":-35.4429347,
+				"latitude":,
 				"location":"HERE",
-				"longitude":147.7136952,
-				"map_latitude":"-35.4429347",
-				"map_longitude":"147.7136952",
+				"longitude":,
+				"map_latitude":"",
+				"map_longitude":"",
 				"mlpe_flag":0,
 				"nmi":"",
 				"offline_dev_count":0,
@@ -185,9 +185,9 @@
 					"value":"55.2"
 				},
 				"valid_flag":1,
-				"wgs_latitude":-33.73262176459814,
-				"wgs_longitude":151.04299275383877,
-				"zip_code":"2125"
+				"wgs_latitude":,
+				"wgs_longitude":,
+				"zip_code":""
 			}
 		],
 		"rowCount":1

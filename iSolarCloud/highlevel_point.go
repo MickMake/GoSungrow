@@ -250,7 +250,7 @@ func (sg *SunGrow) GetAllPointsData(psIds ...string) error {
 
 		}
 
-		points.Print()
+		fmt.Println(points.String())
 	}
 
 	return sg.Error

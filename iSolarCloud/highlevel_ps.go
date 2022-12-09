@@ -302,9 +302,11 @@ func (sg *SunGrow) GetDevices() []queryDeviceListForBackSys.Device {
 func (sg *SunGrow) SetPsIds(args ...string) valueTypes.PsIds {
 	var pids valueTypes.PsIds
 	for range Only.Once {
-		pids = valueTypes.SetPsIdStrings(args)
-		if len(pids) > 0 {
-			break
+		if len(args) > 0 {
+			pids = valueTypes.SetPsIdStrings(args)
+			if len(pids) > 0 {
+				break
+			}
 		}
 
 		pids, sg.Error = sg.GetPsIds()

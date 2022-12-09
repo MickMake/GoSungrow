@@ -1,13 +1,12 @@
 package api
 
 import (
-	"github.com/MickMake/GoUnify/Only"
 	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"errors"
 	"fmt"
-	"github.com/olekukonko/tablewriter"
-	"os"
+	"github.com/MickMake/GoUnify/Only"
 	"sort"
+	"strings"
 )
 
 
@@ -148,35 +147,122 @@ func (an Areas) ListAreas() {
 	for range Only.Once {
 		fmt.Println("Listing all endpoint areas:")
 
-		table := tablewriter.NewWriter(os.Stdout)
-		table.SetHeader([]string{"Areas", "Enabled EndPoints", "Disabled EndPoints", "Coverage %"})
-		table.SetBorder(true)
+		table := output.NewTable("Areas", "Enabled EndPoints", "Disabled EndPoints", "Coverage %")
 		te := 0
 		td := 0
 		for _, area := range an.SortAreas() {
 			e := an[area].CountEnabled()
 			d := an[area].CountDisabled()
-			p := (float64(e) / float64(d)) * 100
-			table.Append([]string{
+
+			_ = table.AddRow(
 				string(area),
-				fmt.Sprintf("%d", e),
-				fmt.Sprintf("%d", d),
-				fmt.Sprintf("%.1f %%", p),
-			})
+				// fmt.Sprintf("%d", e),
+				// fmt.Sprintf("%d", d),
+				// fmt.Sprintf("%.1f %%", an[area].CoveragePercent()),
+				e, d, an[area].CoveragePercent(),
+			)
 			te += e
 			td += d
 		}
-
-		table.Append([]string{"----------------", "----------------", "-----------------", "---------"})
-
-		p := (float64(te) / float64(td)) * 100
-		table.Append([]string{
+		_ = table.AddRow(strings.Repeat("-", 20), strings.Repeat("-", 20), strings.Repeat("-", 20), strings.Repeat("-", 10))
+		p := (float64(te) / (float64(te) + float64(td))) * 100
+		_ = table.AddRow(
 			"Total",
-			fmt.Sprintf("%d", te),
-			fmt.Sprintf("%d", td),
-			fmt.Sprintf("%.1f %%", p),
-		})
-		table.Render()
+			// fmt.Sprintf("%d", te),
+			// fmt.Sprintf("%d", td),
+			// fmt.Sprintf("%.1f %%", p),
+			te, td, p,
+		)
+		fmt.Println(table.String())
+
+		// table = output.NewTable("Areas", "Enabled EndPoints", "Disabled EndPoints", "Coverage %")
+		// table.SetTabular()
+		// te = 0
+		// td = 0
+		// for _, area := range an.SortAreas() {
+		// 	e := an[area].CountEnabled()
+		// 	d := an[area].CountDisabled()
+		//
+		// 	_ = table.AddRow(
+		// 		string(area),
+		// 		// fmt.Sprintf("%d", e),
+		// 		// fmt.Sprintf("%d", d),
+		// 		// fmt.Sprintf("%.1f %%", an[area].CoveragePercent()),
+		// 		e, d, an[area].CoveragePercent(),
+		// 	)
+		// 	te += e
+		// 	td += d
+		// }
+		// _ = table.AddRow(strings.Repeat("-", 20), strings.Repeat("-", 20), strings.Repeat("-", 20), strings.Repeat("-", 10))
+		// p = (float64(te) / (float64(te) + float64(td))) * 100
+		// _ = table.AddRow(
+		// 	"Total",
+		// 	// fmt.Sprintf("%d", te),
+		// 	// fmt.Sprintf("%d", td),
+		// 	// fmt.Sprintf("%.1f %%", p),
+		// 	te, td, p,
+		// )
+		// fmt.Println(table.String())
+
+		// table = output.NewTable("Areas", "Enabled EndPoints", "Disabled EndPoints", "Coverage %")
+		// table.SetTableWriter()
+		// te = 0
+		// td = 0
+		// for _, area := range an.SortAreas() {
+		// 	e := an[area].CountEnabled()
+		// 	d := an[area].CountDisabled()
+		//
+		// 	_ = table.AddRow(
+		// 		string(area),
+		// 		// fmt.Sprintf("%d", e),
+		// 		// fmt.Sprintf("%d", d),
+		// 		// fmt.Sprintf("%.1f %%", an[area].CoveragePercent()),
+		// 		e, d, an[area].CoveragePercent(),
+		// 	)
+		// 	te += e
+		// 	td += d
+		// }
+		// _ = table.AddRow(strings.Repeat("-", 20), strings.Repeat("-", 20), strings.Repeat("-", 20), strings.Repeat("-", 10))
+		// p = (float64(te) / (float64(te) + float64(td))) * 100
+		// _ = table.AddRow(
+		// 	"Total",
+		// 	// fmt.Sprintf("%d", te),
+		// 	// fmt.Sprintf("%d", td),
+		// 	// fmt.Sprintf("%.1f %%", p),
+		// 	te, td, p,
+		// )
+		// fmt.Println(table.String())
+		// fmt.Println()
+
+		// table := tablewriter.NewWriter(os.Stdout)
+		// table.SetHeader([]string{"Areas", "Enabled EndPoints", "Disabled EndPoints", "Coverage %"})
+		// table.SetBorder(true)
+		// te := 0
+		// td := 0
+		// for _, area := range an.SortAreas() {
+		// 	e := an[area].CountEnabled()
+		// 	d := an[area].CountDisabled()
+		// 	p := (float64(e) / float64(d)) * 100
+		// 	table.Append([]string{
+		// 		string(area),
+		// 		fmt.Sprintf("%d", e),
+		// 		fmt.Sprintf("%d", d),
+		// 		fmt.Sprintf("%.1f %%", p),
+		// 	})
+		// 	te += e
+		// 	td += d
+		// }
+		//
+		// table.Append([]string{"----------------", "----------------", "-----------------", "---------"})
+		//
+		// p := (float64(te) / float64(td)) * 100
+		// table.Append([]string{
+		// 	"Total",
+		// 	fmt.Sprintf("%d", te),
+		// 	fmt.Sprintf("%d", td),
+		// 	fmt.Sprintf("%.1f %%", p),
+		// })
+		// table.Render()
 	}
 }
 

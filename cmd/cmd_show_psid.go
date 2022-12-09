@@ -10,7 +10,7 @@ import (
 )
 
 
-func (c *CmdShow) AttachPsId(cmd *cobra.Command) *cobra.Command {
+func (c *CmdShow) AttachPs(cmd *cobra.Command) *cobra.Command {
 	for range Only.Once {
 		var self = &cobra.Command{
 			Use:                   "ps",

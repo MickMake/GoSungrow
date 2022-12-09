@@ -301,14 +301,6 @@ func (sgd *SunGrowData) GetData() error {
 			// 	break
 			// }
 		}
-		if sgd.Error != nil {
-			break
-		}
-
-		sgd.Error = sgd.Process()
-		if sgd.Error != nil {
-			break
-		}
 	}
 
 	return sgd.Error
@@ -492,7 +484,7 @@ func (sgd *SunGrowDataResult) Sort() []string {
 }
 
 func (sgd *SunGrowDataResult) Print() {
-	sgd.Response.Data.Print()
+	fmt.Println(sgd.Response.Data.String())
 }
 
 
@@ -574,112 +566,15 @@ func (sgd *SunGrowDataResponse) Output() error {
 func (sgd *SunGrowDataResponse) OutputDataTables() error {
 	for range Only.Once {
 		tables := sgd.Data.CreateDataTables()
+		if sgd.Data.Error != nil {
+			sgd.Error = sgd.Data.Error
+			break
+		}
 		if len(tables) == 0 {
 			break
 		}
 
 		// @iSolarCloud/api/struct_data.go:420
-		// if sgd.Options.OutputType.IsGraph() {
-		// 	for _, data := range tables {
-		// 		if !data.IsValid {
-		// 			fmt.Printf("# %s.%s - has no graphable data.\n", data.Area, data.Name)
-		// 			continue
-		// 		}
-		//
-		// 		if sgd.Options.TitleSuffix == "" {
-		// 			sgd.Options.TitleSuffix = data.Table.GetTitle()
-		// 		}
-		// 		data.Table.OutputType = sgd.Options.OutputType
-		// 		data.Table.SetSaveFile(true)	// sgd.Options.SaveAsFile
-		// 		data.Table.AppendTitle(" - %s", sgd.Options.TitleSuffix)
-		// 		data.Table.AppendFilePrefix(sgd.Options.FileSuffix)
-		//
-		// 		if sgd.Options.GraphRequest.TimeColumn == nil {
-		// 			for _, col := range data.Table.GetHeaders() {
-		// 				val := data.Values.GetCell(0, col)
-		// 				if val.IsTypeDateTime() {
-		// 					sgd.Options.GraphRequest.TimeColumn = &col
-		// 					break
-		// 				}
-		// 			}
-		// 		}
-		// 		if sgd.Options.GraphRequest.TimeColumn == nil {
-		// 			// No time column - abort.
-		// 			break
-		// 		}
-		//
-		// 		if sgd.Options.GraphRequest.UnitsColumn != nil {
-		// 			for _, col := range data.Table.GetHeaders() {
-		// 				if *sgd.Options.GraphRequest.UnitsColumn != col {
-		// 					continue
-		// 				}
-		// 				val := data.Values.GetCell(0, col)
-		// 				unit := val.Unit()
-		// 				if unit != "" {
-		// 					continue
-		// 				}
-		// 				sgd.Options.GraphRequest.UnitsColumn = &col
-		// 				sgd.Options.GraphRequest.DataUnit = &unit
-		// 				break
-		// 			}
-		// 		}
-		//
-		// 		if sgd.Options.GraphRequest.NameColumn == nil {
-		// 		}
-		//
-		// 		// if sgd.Options.GraphRequest.Width == nil {
-		// 		// }
-		//
-		// 		// if sgd.Options.GraphRequest.Height == nil {
-		// 		// }
-		//
-		// 		var values []string
-		// 		if sgd.Options.GraphRequest.DataColumn == nil {
-		// 			fmt.Println("Finding points to graph...")
-		// 			fmt.Printf("Table Headers: %s\n", strings.Join(data.Table.GetHeaders(), ", "))
-		// 			fmt.Printf("Table rows: %d\n", data.Rows)
-		// 			// We don't have any DataColumn defined - find them.
-		// 			for _, col := range data.Table.GetHeaders() {
-		// 				val := data.Values.GetCell(0, col)
-		// 				if val.IsNumber() {
-		// 					values = append(values, col)
-		// 				}
-		// 			}
-		// 			fmt.Printf("Found %d points:\n", len(values))
-		// 		}
-		//
-		// 		// title := data.Table.GetTitle()
-		// 		// file := data.Table.GetFilePrefix()
-		// 		var title string
-		// 		var file string
-		// 		if sgd.Options.PrimaryKey == "" {
-		// 			title = fmt.Sprintf("%s.%s", data.Area, data.Name)
-		// 			file = fmt.Sprintf("%s.%ss", data.Area, data.Name)
-		// 		} else {
-		// 			title = fmt.Sprintf("%s.%s - %s", data.Area, data.Name, sgd.Options.PrimaryKey)
-		// 			file = fmt.Sprintf("%s.%s-%s", data.Area, data.Name, sgd.Options.PrimaryKey)
-		// 		}
-		//
-		// 		for _, value := range values {
-		// 			sgd.Options.GraphRequest.DataColumn = &value
-		// 			data.Table.SetTitle("%s - %s", title, value)
-		// 			sgd.Options.GraphRequest.Title = data.Table.GetTitle()
-		// 			data.Table.SetFilePrefix("%s-%s", file, value)
-		//
-		// 			sgd.Error = data.Table.SetGraph(sgd.Options.GraphRequest)
-		// 			if sgd.Error != nil {
-		// 				break
-		// 			}
-		//
-		// 			sgd.Error = data.Table.Output()
-		// 			if sgd.Error != nil {
-		// 				break
-		// 			}
-		// 		}
-		// 	}
-		// 	break
-		// }
-
 		for _, data := range tables {
 			if sgd.Options.TitleSuffix == "" {
 				sgd.Options.TitleSuffix = data.Table.GetTitle()
@@ -807,5 +702,5 @@ func (sgd *SunGrowDataResponse) LookUpPointId() {
 }
 
 func (sgd *SunGrowDataResponse) Print() {
-	sgd.Data.Print()
+	fmt.Println(sgd.Data.String())
 }
