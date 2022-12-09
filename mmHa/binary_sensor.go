@@ -1,8 +1,8 @@
 package mmHa
 
 import (
-	"github.com/MickMake/GoUnify/Only"
 	"encoding/json"
+	"github.com/MickMake/GoUnify/Only"
 	"strings"
 )
 
@@ -111,6 +111,11 @@ func (m *Mqtt) BinarySensorPublishValue(config EntityConfig) error {
 		payload := MqttState {
 			LastReset: m.GetLastReset(config.UniqueId),
 			Value:     config.Value,
+		}
+		if config.Units == LabelBinarySensor {
+			payload = MqttState {
+				Value:     config.Value,
+			}
 		}
 		t := m.client.Publish(tag, 0, true, payload.Json())
 		if !t.WaitTimeout(m.Timeout) {

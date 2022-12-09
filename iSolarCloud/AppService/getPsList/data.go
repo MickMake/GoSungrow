@@ -25,7 +25,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	PageList []Common.Device  `json:"pageList" PointId:"page_list"`
+	PageList []Common.Device  `json:"pageList" PointId:"devices"`
 	RowCount valueTypes.Count `json:"rowCount" PointId:"row_count"`
 }
 

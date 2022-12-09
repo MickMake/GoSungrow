@@ -291,11 +291,6 @@ func (dm *DataMap) ProcessMap() {
 				when = valueTypes.SetDateTimeValue(dm.TimeStamp)
 			}
 
-			// pdi := dm.parentDeviceId
-			// if Child.DataStructure.PointDevice != "" {
-			// 	pdi = Child.DataStructure.PointDevice
-			// }
-
 			dm.AddPointUnitValues(Child, dm.parentDeviceId, when)
 		}
 
@@ -312,11 +307,6 @@ func (dm *DataMap) ProcessMap() {
 				when = valueTypes.SetDateTimeValue(dm.TimeStamp)
 			}
 
-			// pdi := dm.parentDeviceId
-			// if Child.DataStructure.PointDevice != "" {
-			// 	pdi = Child.DataStructure.PointDevice
-			// }
-
 			if Child.DataStructure.PointVirtualShift > 0 {
 				Child.DataStructure.Endpoint.ShiftLeft(Child.DataStructure.PointVirtualShift)
 				Child.DataStructure.Endpoint.InsertFirst("virtual")
@@ -328,48 +318,48 @@ func (dm *DataMap) ProcessMap() {
 	}
 }
 
-func (dm *DataMap) ProcessMapForMqtt() {
-	for range Only.Once {
-		// Convert StructMap to DataMap
-		for _, Child := range dm.StructMap.Map {
-			if Child.IsPointIgnore() {
-				fmt.Printf("[%s] - IGNORE\n", Child.FieldPath.String())
-				continue
-			}
-
-			if Child.CurrentReflect.IsPointListFlatten() {
-				// fmt.Printf("[%s] - PointListFlatten", Child.FieldPath.String())
-				// if len(de.Current.ChildReflect) > 0 {
-				// 	continue // We already have the children.
-				// }
-				if len(Child.ChildReflect) == 0 {
-					// fmt.Printf(" - IGNORE\n")
-					// fmt.Printf(" - ignore\n")
-					continue // Ignore points with no children.
-				}
-				// fmt.Println("")
-			}
-
-			if Child.DataStructure.DataTable {
-				continue	// We are a datatable parent.
-			}
-
-			var when valueTypes.DateTime
-			if Child.IsPointTimestampNotZero() {
-				when = valueTypes.SetDateTimeValue(Child.DataStructure.PointTimestamp)
-			} else {
-				when = valueTypes.SetDateTimeValue(dm.TimeStamp)
-			}
-
-			pdi := dm.parentDeviceId
-			if Child.DataStructure.PointDevice != "" {
-				pdi = Child.DataStructure.PointDevice
-			}
-
-			dm.AddPointUnitValues(Child, pdi, when)
-		}
-	}
-}
+// func (dm *DataMap) ProcessMapForMqtt() {
+// 	for range Only.Once {
+// 		// Convert StructMap to DataMap
+// 		for _, Child := range dm.StructMap.Map {
+// 			if Child.IsPointIgnore() {
+// 				fmt.Printf("[%s] - IGNORE\n", Child.FieldPath.String())
+// 				continue
+// 			}
+//
+// 			if Child.CurrentReflect.IsPointListFlatten() {
+// 				// fmt.Printf("[%s] - PointListFlatten", Child.FieldPath.String())
+// 				// if len(de.Current.ChildReflect) > 0 {
+// 				// 	continue // We already have the children.
+// 				// }
+// 				if len(Child.ChildReflect) == 0 {
+// 					// fmt.Printf(" - IGNORE\n")
+// 					// fmt.Printf(" - ignore\n")
+// 					continue // Ignore points with no children.
+// 				}
+// 				// fmt.Println("")
+// 			}
+//
+// 			if Child.DataStructure.DataTable {
+// 				continue	// We are a datatable parent.
+// 			}
+//
+// 			var when valueTypes.DateTime
+// 			if Child.IsPointTimestampNotZero() {
+// 				when = valueTypes.SetDateTimeValue(Child.DataStructure.PointTimestamp)
+// 			} else {
+// 				when = valueTypes.SetDateTimeValue(dm.TimeStamp)
+// 			}
+//
+// 			pdi := dm.parentDeviceId
+// 			if Child.DataStructure.PointDevice != "" {
+// 				pdi = Child.DataStructure.PointDevice
+// 			}
+//
+// 			dm.AddPointUnitValues(Child, pdi, when)
+// 		}
+// 	}
+// }
 
 
 type Tables GoStruct.StructTables

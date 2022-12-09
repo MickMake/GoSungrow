@@ -461,11 +461,11 @@ func (sgd *SunGrowDataResult) Process() error {
 	return sgd.Error
 }
 
-func (sgd *SunGrowDataResult) ProcessMapForMqtt() error {
-	sgd.Response.Data.ProcessMapForMqtt()
-	sgd.Error = sgd.Response.Data.Error
-	return sgd.Error
-}
+// func (sgd *SunGrowDataResult) ProcessMapForMqtt() error {
+// 	sgd.Response.Data.ProcessMapForMqtt()
+// 	sgd.Error = sgd.Response.Data.Error
+// 	return sgd.Error
+// }
 
 // func (sgd *SunGrowDataResult) CreateResultTable(full bool) output.Table {
 // 	ret := sgd.Response.CreateResultTable(full)

@@ -177,7 +177,11 @@ func (sg *SunGrow) PsPoints(psIds []string, deviceType string) (string, error) {
 // PsPointsData - Return all points associated with psIds and device_type filter.
 func (sg *SunGrow) PsPointsData(psIds []string, deviceType string, startDate string, endDate string, interval string) error {
 	for range Only.Once {
-		pskeys := sg.GetPsKeys()
+		var pskeys valueTypes.PsKeys
+		pskeys, sg.Error = sg.GetPsKeys()
+		if sg.Error != nil {
+			break
+		}
 		_, _ = fmt.Fprintf(os.Stderr, "Found ps_keys: %s\n", pskeys)
 
 		var points []getDevicePointAttrs.Point
@@ -202,7 +206,7 @@ func (sg *SunGrow) PsPointsData(psIds []string, deviceType string, startDate str
 }
 
 
-func (sg *SunGrow) GetPsKeys() valueTypes.PsKeys {
+func (sg *SunGrow) GetPsKeys() (valueTypes.PsKeys, error) {
 	var ret valueTypes.PsKeys
 
 	for range Only.Once {
@@ -274,7 +278,7 @@ func (sg *SunGrow) GetPsKeys() valueTypes.PsKeys {
 		}
 	}
 
-	return ret
+	return ret, sg.Error
 }
 
 func (sg *SunGrow) GetDevices() []queryDeviceListForBackSys.Device {

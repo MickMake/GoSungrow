@@ -630,6 +630,10 @@ func (t *PsKeys) MatchString(pskey string) bool {
 	return yes
 }
 
+func (t *PsKeys) Length() int {
+	return len(t.PsKeys)
+}
+
 func SetPsKeysString(values string) PsKeys {
 	var t PsKeys
 	t.Set(strings.Split(values, ",")...)

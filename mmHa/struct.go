@@ -1,13 +1,13 @@
 package mmHa
 
 import (
-	"github.com/MickMake/GoUnify/Only"
 	"GoSungrow/iSolarCloud/AppService/getDeviceList"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"net/url"
 	"time"
@@ -29,6 +29,9 @@ type Mqtt struct {
 	clientOptions *mqtt.ClientOptions
 	LastRefresh    time.Time             `json:"-"`
 	SungrowDevices getDeviceList.Devices `json:"-"`
+	// SungrowDevices valueTypes.PsKeys `json:"-"`
+	// SungrowDevices valueTypes.PsIds `json:"-"`
+	// SungrowDevices getPsTreeMenu.ResultData `json:"-"`
 	SungrowPsIds   map[valueTypes.PsId]bool
 
 	DeviceName  string
@@ -519,6 +522,10 @@ func (config *EntityConfig) IsBinarySensor() bool {
 			ok = true
 			break
 		}
+		if config.Units == "Bool" {
+			ok = true
+			break
+		}
 	}
 
 	return ok
@@ -566,6 +573,8 @@ func (config *EntityConfig) FixConfig() {
 		// mdi:check-circle-outline | mdi:arrow-right-bold
 
 		switch config.Units {
+			case "Bool":
+				fallthrough
 			case LabelBinarySensor:
 				config.DeviceClass = SetDefault(config.DeviceClass, "power")
 				config.Icon = SetDefault(config.Icon, "mdi:check-circle-outline")
@@ -642,10 +651,10 @@ func (config *EntityConfig) FixConfig() {
 			break
 		}
 
-		pt := api.GetDevicePoint(config.FullId)
-		if !pt.Valid {
-			break
-		}
+		// pt := api.GetDevicePoint(config.FullId)
+		// if !pt.Valid {
+		// 	break
+		// }
 
 		if config.StateClass == "instant" {
 			config.StateClass = "measurement"
@@ -657,7 +666,7 @@ func (config *EntityConfig) FixConfig() {
 			break
 		}
 
-		config.LastReset = pt.WhenReset()
+		// config.LastReset = pt.WhenReset()
 		config.LastResetValueTemplate = SetDefault(config.LastResetValueTemplate, "{{ value_json.last_reset | as_datetime() }}")
 		// config.LastResetValueTemplate = SetDefault(config.LastResetValueTemplate, "{{ value_json.last_reset | int | timestamp_local | as_datetime }}")
 

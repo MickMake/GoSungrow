@@ -159,21 +159,15 @@ func (ca *Cmds) MqttArgs(_ *cobra.Command, _ []string) error {
 		}
 
 		cmdLog.LogPrintDate("Connecting to SunGrow...\n")
-		// ca.Mqtt.Client.SungrowDevices, ca.Error = ca.Api.SunGrow.GetDevices()
-		fmt.Println("FIX THIS UP")
-		fmt.Println("FIX THIS UP")
-		fmt.Println("FIX THIS UP")
-		fmt.Println("FIX THIS UP")
-		fmt.Println("FIX THIS UP")
-		fmt.Println("FIX THIS UP")
-		fmt.Println("FIX THIS UP")
-		fmt.Println("FIX THIS UP")
-		time.Sleep(time.Hour * 24)
+		ca.Mqtt.Client.SungrowDevices, ca.Error = ca.Api.SunGrow.GetDeviceList()
+		// ca.Mqtt.Client.SungrowDevices, ca.Error = ca.Api.SunGrow.GetPsKeys()
+		// ca.Mqtt.Client.SungrowDevices, ca.Error = ca.Api.SunGrow.GetPsIds()
+		// ca.Mqtt.Client.SungrowDevices, ca.Error = ca.Api.SunGrow.GetPsTreeMenu()
 		if ca.Error != nil {
 			break
 		}
-		cmdLog.LogPrintDate("Found SunGrow %d devices\n", len(ca.Mqtt.Client.SungrowDevices))
 
+		cmdLog.LogPrintDate("Found SunGrow %d devices\n", len(ca.Mqtt.Client.SungrowDevices))
 		ca.Mqtt.Client.DeviceName = "GoSungrow"
 		ca.Error = ca.Mqtt.Client.SetDeviceConfig(
 			ca.Mqtt.Client.DeviceName,
@@ -219,6 +213,19 @@ func (ca *Cmds) MqttArgs(_ *cobra.Command, _ []string) error {
 			if ca.Error != nil {
 				break
 			}
+			ca.Error = ca.Mqtt.Client.SetDeviceConfig(
+				"GoSungrow",
+				"GoSungrow",
+				psId.PsId.String(),
+				psId.FactoryName.Value(),
+				psId.FactoryName.Value(),
+				psId.FactoryName.Value(),
+				"Roof",
+			)
+			if ca.Error != nil {
+				break
+			}
+
 			ca.Mqtt.Client.SungrowPsIds[psId.PsId] = true
 		}
 
@@ -362,7 +369,7 @@ func (ca *Cmds) MqttCron() error {
 			break
 		}
 
-		All := []string{ "queryDeviceList", "getPsList", "getPsDetailWithPsType", "getPsDetail"}	//, queryMutiPointDataList, getDevicePointMinuteDataList }
+		All := []string{ "queryDeviceList", "getPsList", "getPsDetailWithPsType", "getPsDetail", "getKpiInfo"}	//, queryMutiPointDataList, getDevicePointMinuteDataList }
 		// All := []string{ "queryDeviceList", "WebIscmAppService.queryDeviceListForBackSys", "WebIscmAppService.getDeviceModel" }
 		// All := []string{ "WebIscmAppService.getDeviceModel" }
 		data.SetEndpoints(All...)
@@ -374,7 +381,8 @@ func (ca *Cmds) MqttCron() error {
 		// results := data.GetResults()
 
 		for _, result := range data.Results {
-			ca.Error = result.ProcessMapForMqtt()
+			// ca.Error = result.ProcessMapForMqtt()
+			ca.Error = result.Process()
 			if ca.Error != nil {
 				continue
 			}
@@ -403,13 +411,15 @@ func (ca *Cmds) Update(endpoint string, data api.DataMap, newDay bool) error {
 			entries := data.Map[o]
 			r := entries.GetEntry(api.LastEntry) // Gets the last entry
 
-			if strings.Contains(r.Current.FieldPath.String(), "AllFactoryList") {
-				fmt.Printf("")
-			}
-
 			fullId := r.EndPoint
 			if r.Point.GroupName == "alias" {
 				fullId = mmHa.JoinStringsForId(r.Parent.Key, r.Point.Parents.Index[0], r.Point.Id)
+			}
+			if r.Point.Unit == "" {
+				r.Point.Unit = r.Point.ValueType
+			}
+			if r.Point.Unit == "Bool" {
+				r.Point.Unit = mmHa.LabelBinarySensor
 			}
 
 			re := mmHa.EntityConfig {
@@ -435,7 +445,7 @@ func (ca *Cmds) Update(endpoint string, data api.DataMap, newDay bool) error {
 			}
 
 			if !r.Point.Valid {
-				cmdLog.LogPrintDate("[%s] - invalid value - %s ...\n", r.Current.FieldPath.String(), r.Value.String()[:80])
+				cmdLog.LogPrintDate("\n[%s] - invalid value - %s ...\n", r.Current.FieldPath.String(), r.Value.String())
 				// re.Value = r.Value.String()
 				// // var mapIt map[string]string
 				// // ca.Error = json.Unmarshal([]byte(r.Value.String()), &mapIt)
@@ -444,6 +454,10 @@ func (ca *Cmds) Update(endpoint string, data api.DataMap, newDay bool) error {
 				// // }
 				// re.ValueTemplate = ""
 				continue
+			}
+
+			if strings.Contains(r.Current.DataStructure.Endpoint.String(), "active") {
+				fmt.Printf("")
 			}
 
 			if newDay {
