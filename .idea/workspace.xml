@@ -5,33 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="76adadc9-ae71-42a6-82a1-66dbc8ecb14c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/cmd/cmd_show_meta.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/cmd_show.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_show.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/cmd_show_device.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_show_device.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/cmd_show_psid.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_show_psid.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/data/getPsList.response.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/data/getPsList.response.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/exportParamSettingValPDF/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/exportParamSettingValPDF/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/exportPlantReportPDF/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/exportPlantReportPDF/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getApiCallsForAppkeys/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getApiCallsForAppkeys/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerDeviceSetTaskDetailList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPowerDeviceSetTaskDetailList/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPsDataSupplementTaskList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPsDataSupplementTaskList/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getUpTimePoint/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getUpTimePoint/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/queryParamSettingTask/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/queryParamSettingTask/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/WebAppService/getLoadCurveList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/WebAppService/getLoadCurveList/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/GoStruct/output/struct_table.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/GoStruct/output/struct_table.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/struct_area.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/struct_area.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/struct_areas.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/struct_areas.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/struct_data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/struct_data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/data_request.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/data_request.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/highlevel_device.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/highlevel_device.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/highlevel_meta.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/highlevel_meta.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/highlevel_point.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/highlevel_point.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/highlevel_ps.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/highlevel_ps.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

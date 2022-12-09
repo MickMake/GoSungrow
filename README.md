@@ -148,42 +148,21 @@ Show all devices on your iSolarCloud account.
 
 Show the device tree on your iSolarCloud account.
 ```
-<<<<<<< HEAD
 % ./bin/GoSungrow show ps tree
-+	    PsId:1129147	PsName:MickMake	    PsKey:1129147_11_0_0	DeviceName:MickMake	Uuid:844763
-+--	    PsId:1129147	PsName:MickMake	    PsKey:1129147_14_1_1	DeviceName:SH10RT	Uuid:844775
-+----	PsId:1129147	PsName:MickMake	    PsKey:1129147_43_2_1	DeviceName:Battery_001_002	Uuid:1155386
-+	    PsId:1129147	PsName:MickMake	    PsKey:1129147_11_0_0	DeviceName:MickMake	Uuid:844763
-+--	    PsId:1129147	PsName:MickMake	    PsKey:1129147_14_1_1	DeviceName:SH10RT	Uuid:844775
-+----	PsId:1129147	PsName:MickMake	    PsKey:1129147_43_2_1	DeviceName:Battery_001_002	Uuid:1155386
-+--	    PsId:1129147	PsName:MickMake	    PsKey:1129147_22_247_1	DeviceName:WiNet-S	Uuid:844774
-+	    PsId:1171348	PsName:MickMake42	PsKey:1171348_11_0_0	DeviceName:MickMake42	Uuid:1179860
-=======
-./bin/GoSungrow show ps tree
-+	    PsId:1129147	PsName:MickMake	    PsKey:1129147_11_0_0	DeviceName:MickMake	        Uuid:844763
-+	    PsId:1129147	PsName:MickMake	    PsKey:1129147_11_0_0	DeviceName:MickMake	        Uuid:844763
-+--	    PsId:1129147	PsName:MickMake	    PsKey:1129147_14_1_1	DeviceName:SH10RT	        Uuid:844775
-+----	    PsId:1129147	PsName:MickMake	    PsKey:1129147_43_2_1	DeviceName:Battery_001_002	Uuid:1155386
-+	    PsId:1129147	PsName:MickMake	    PsKey:1129147_11_0_0	DeviceName:MickMake	        Uuid:844763
-+--	    PsId:1129147	PsName:MickMake	    PsKey:1129147_14_1_1	DeviceName:SH10RT	        Uuid:844775
-+----	    PsId:1129147	PsName:MickMake	    PsKey:1129147_43_2_1	DeviceName:Battery_001_002	Uuid:1155386
-+--	    PsId:1129147	PsName:MickMake	    PsKey:1129147_22_247_1	DeviceName:WiNet-S	        Uuid:844774
-
-+	    PsId:1171348	PsName:MickMake42	PsKey:1171348_11_0_0	DeviceName:MickMake42	                Uuid:1179860
->>>>>>> 3fdd0fb2dd14284e400f4ab67bdbb181629e85c9
-+--	    PsId:1171348	PsName:MickMake42	PsKey:1171348_22_247_2	DeviceName:Communication Module 02_247	Uuid:1179877
-+--	    PsId:1171348	PsName:MickMake42	PsKey:1171348_14_1_2	DeviceName:Energy Storage System 02_01	Uuid:1179878
-+----	    PsId:1171348	PsName:MickMake42	PsKey:1171348_43_2_2	DeviceName:Battery 02_02	        Uuid:1179879
++	PsId:1129147	PsName:MickMake	PsKey:1129147_11_0_0	DeviceName:MickMake	Uuid:844763
++--	PsId:1129147	PsName:MickMake	PsKey:1129147_14_1_1	DeviceName:SH10RT	Uuid:844775
++----	PsId:1129147	PsName:MickMake	PsKey:1129147_43_2_1	DeviceName:Battery_001_002	Uuid:1155386
++--	PsId:1129147	PsName:MickMake	PsKey:1129147_22_247_1	DeviceName:WiNet-S	Uuid:844774
++	PsId:1171348	PsName:MickMake42	PsKey:1171348_11_0_0	DeviceName:MickMake42	Uuid:1179860
++--	PsId:1171348	PsName:MickMake42	PsKey:1171348_22_247_2	DeviceName:Communication Module 02_247	Uuid:1179877
++--	PsId:1171348	PsName:MickMake42	PsKey:1171348_14_1_2	DeviceName:Energy Storage System 02_01	Uuid:1179878
++----	PsId:1171348	PsName:MickMake42	PsKey:1171348_43_2_2	DeviceName:Battery 02_02	Uuid:1179879
 ```
 
 
 List all known data points for all PS on your account.
 ```
-<<<<<<< HEAD
 % ./bin/GoSungrow show ps points 
-=======
-./bin/GoSungrow show ps points
->>>>>>> 3fdd0fb2dd14284e400f4ab67bdbb181629e85c9
 # Available points:
 ┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃ Id       ┃ Name                                                     ┃ Unit   ┃ Unit Type ┃ Ps Id   ┃ Device Type ┃ Device Name                 ┃
