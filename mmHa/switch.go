@@ -1,8 +1,8 @@
 package mmHa
 
 import (
-	"github.com/MickMake/GoUnify/Only"
 	"encoding/json"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 
@@ -35,6 +35,7 @@ func (m *Mqtt) SwitchPublishConfig(config EntityConfig) error {
 			Name:                   JoinStrings(m.DeviceName, config.Name),
 			StateTopic:             JoinStringsForTopic(m.switchPrefix, id, "state"),
 			CommandTopic:           JoinStringsForTopic(m.switchPrefix, id, "cmd"),
+			ObjectId:               id,
 			UniqueId:               id,
 			Qos:                    0,
 			Retain:                 true,
@@ -157,6 +158,7 @@ type Switch struct {
 	JSONAttributesTemplate string `json:"json_attr_tpl,omitempty"`
 	JSONAttributesTopic    string `json:"json_attr_t,omitempty"`
 	Name                   string `json:"name,omitempty"`
+	ObjectId               string       `json:"object_id,omitempty" required:"false"`
 	Optimistic             bool   `json:"opt,omitempty"`
 	PayloadAvailable       string `json:"pl_avail,omitempty"`
 	PayloadNotAvailable    string `json:"pl_not_avail,omitempty"`

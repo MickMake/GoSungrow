@@ -2,6 +2,7 @@ package mmHa
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 	"strings"
 )
@@ -14,23 +15,6 @@ func (m *Mqtt) BinarySensorPublishConfig(config EntityConfig) error {
 		if !config.IsBinarySensor() {
 			break
 		}
-
-		// LastReset := m.GetLastReset(config.UniqueId)
-		// LastResetValueTemplate := ""
-		// if LastReset != "" {
-		// 	LastResetValueTemplate = "{{ value_json.last_reset | as_datetime() }}"
-		// }
-
-		// device := m.Device
-		// // device.Name = JoinStrings(m.Device.Name, config.ParentId)
-		// device.Name = JoinStrings(m.Device.Name, config.ParentName)	// , config.ValueName)
-		// device.Connections = [][]string {
-		// 	{ m.Device.Name, JoinStringsForId(m.Device.Name, config.ParentName) },
-		// 	{ JoinStringsForId(m.Device.Name, config.ParentName), JoinStringsForId(m.Device.Name, config.ParentId) },
-		// 	// { JoinStringsForId(m.Device.Name, config.ParentId), JoinStringsForId(m.Device.Name, config.ParentId, config.Name) },
-		// }
-		// // device.Identifiers = []string{ JoinStringsForId(m.Device.Name, config.ParentId, config.Name) }
-		// device.Identifiers = []string{ JoinStringsForId(m.Device.Name, config.ParentId) }
 
 		ok, newDevice := m.NewDevice(config)
 		if !ok {
@@ -45,6 +29,7 @@ func (m *Mqtt) BinarySensorPublishConfig(config EntityConfig) error {
 			Name:                   JoinStrings(m.DeviceName, config.Name),
 			StateTopic:             JoinStringsForTopic(m.binarySensorPrefix, id, "state"),
 			StateClass:             config.StateClass,
+			ObjectId:               id,
 			UniqueId:               id,
 			UnitOfMeasurement:      config.Units,
 			DeviceClass:            config.DeviceClass,
@@ -108,6 +93,9 @@ func (m *Mqtt) BinarySensorPublishValue(config EntityConfig) error {
 			break
 		}
 
+		if strings.Contains(tag, "GoSunGrow") {
+			fmt.Println("")
+		}
 		payload := MqttState {
 			LastReset: m.GetLastReset(config.UniqueId),
 			Value:     config.Value,

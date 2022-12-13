@@ -115,3 +115,10 @@ func (e *EndPointPath) PopLast() {
 	return
 	// return (*e)[:len(*e) - 1]
 }
+
+func (e *EndPointPath) AddString(path ...string) string {
+	var ret EndPointPath
+	ret = *e
+	ret.path = append(ret.path, path...)
+	return ret.String()
+}

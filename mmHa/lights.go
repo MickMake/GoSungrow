@@ -1,8 +1,8 @@
 package mmHa
 
 import (
-	"github.com/MickMake/GoUnify/Only"
 	"encoding/json"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 
@@ -25,6 +25,8 @@ func (m *Mqtt) PublishLightConfig(config EntityConfig) error {
 			Device:                 newDevice,
 			Name:                   JoinStrings(m.DeviceName, config.Name),
 			StateTopic:             JoinStringsForTopic(m.switchPrefix, id, "state"),
+			UniqueId:               id,
+			ObjectId:               id,
 
 			// StateClass:             config.StateClass,
 			// UniqueId:               id,
@@ -42,7 +44,6 @@ func (m *Mqtt) PublishLightConfig(config EntityConfig) error {
 			// Icon:                   config.Icon,
 
 			// StateClass:             "measurement",
-			// UniqueId:               id,
 			// UnitOfMeasurement:      units,
 			// DeviceClass:            class,
 			// Qos:                    0,
@@ -139,6 +140,7 @@ type Light struct {
 	MaxMireds                int      `json:"max_mireds,omitempty"`
 	MinMireds                int      `json:"min_mireds,omitempty"`
 	Name                     string   `json:"name,omitempty"`
+	ObjectId               string       `json:"object_id,omitempty" required:"false"`
 	OnCommandType            string   `json:"on_command_type,omitempty"`
 	Optimistic               bool     `json:"opt,omitempty"`
 	PayloadAvailable         string   `json:"payload_available,omitempty"`
@@ -154,7 +156,7 @@ type Light struct {
 	Schema                   string   `json:"schema,omitempty"`
 	StateTopic               string   `json:"state_topic,omitempty"`
 	StateValueTemplate       string   `json:"state_value_template,omitempty"`
-	UniqueID                 string   `json:"unique_id,omitempty"`
+	UniqueId               string       `json:"unique_id,omitempty" required:"false"`
 	WhiteValueCommandTopic   string   `json:"white_value_command_topic,omitempty"`
 	WhiteValueScale          int      `json:"white_value_scale,omitempty"`
 	WhiteValueStateTopic     string   `json:"white_value_state_topic,omitempty"`

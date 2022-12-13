@@ -3,6 +3,7 @@ package valueTypes
 import (
 	"encoding/json"
 	"github.com/MickMake/GoUnify/Only"
+	"math"
 	"strconv"
 )
 
@@ -114,6 +115,14 @@ func (t *Float) SetValue(value float64) Float {
 	return *t
 }
 
+func (t *Float) SetPrecision(precision int) Float {
+	for range Only.Once {
+		t.float64 = SetPrecision(t.float64, precision)
+	}
+
+	return *t
+}
+
 func (t *Float) ToUnitValue() UnitValue {
 	return SetUnitValueFloat("", "", t.float64)
 }
@@ -126,4 +135,13 @@ func SetFloatString(value string) Float {
 func SetFloatValue(value float64) Float {
 	var t Float
 	return t.SetValue(value)
+}
+
+func round(num float64) int {
+	return int(num + math.Copysign(0.5, num))
+}
+
+func SetPrecision(num float64, precision int) float64 {
+	output := math.Pow(10, float64(precision))
+	return float64(round(num * output)) / output
 }

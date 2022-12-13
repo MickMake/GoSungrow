@@ -925,6 +925,12 @@ func (r *Reflect) SetValue(value interface{}) {
 	}
 }
 
+func (r *Reflect) SetValuePrecision(precision int) {
+	for range Only.Once {
+		r.Value.SetPrecision(precision)
+	}
+}
+
 func (r *Reflect) SetUnit() {
 	for range Only.Once {
 		switch {
@@ -1699,14 +1705,14 @@ func GetStructValuesAsArray(ref *Reflect) []string {
 	return ret
 }
 
-func AddFloatValues(refs ...*Reflect) float64 {
+func AddFloatValues(precision int, refs ...*Reflect) float64 {
 	var ret float64
 	for _, ref := range refs {
 		for _, value := range ref.Value.Range(true) {
 			ret += value.ValueFloat()
 		}
 	}
-	return ret
+	return valueTypes.SetPrecision(ret, precision)
 }
 
 func AddIntegerValues(refs ...*Reflect) int64 {

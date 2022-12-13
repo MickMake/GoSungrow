@@ -1,9 +1,9 @@
 package mmHa
 
 import (
-	"github.com/MickMake/GoUnify/Only"
 	"encoding/json"
 	"fmt"
+	"github.com/MickMake/GoUnify/Only"
 	"strings"
 )
 
@@ -15,93 +15,6 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 		if !config.IsSensor() {
 			break
 		}
-
-		// if config.LastReset == "" {
-		// 	config.LastReset = m.GetLastReset(config.UniqueId)
-		// }
-		// if config.LastReset != "" {
-		// 	if config.LastResetValueTemplate == "" {
-		// 		config.LastResetValueTemplate = "{{ value_json.last_reset | as_datetime() }}"
-		// 	}
-		// 	// LastResetValueTemplate = "{{ value_json.last_reset | int | timestamp_local | as_datetime }}"
-		// }
-
-		// switch config.Units {
-		// 	case "MW":
-		// 		fallthrough
-		// 	case "kW":
-		// 		fallthrough
-		// 	case "W":
-		// 		config.DeviceClass = "power"
-		//
-		// 	case "MWh":
-		// 		fallthrough
-		// 	case "kWh":
-		// 		fallthrough
-		// 	case "Wh":
-		// 		config.DeviceClass = "energy"
-		//
-		// 	case "kvar":
-		// 		config.DeviceClass = "reactive_power"
-		//
-		// 	case "Hz":
-		// 		config.DeviceClass = "frequency"
-		//
-		// 	case "V":
-		// 		config.DeviceClass = "voltage"
-		//
-		// 	case "A":
-		// 		config.DeviceClass = "current"
-		//
-		// 	case "℃":
-		// 		config.DeviceClass = "temperature"
-		// 		// point.Unit = "C"
-		//
-		// 	case "℉":
-		// 		config.DeviceClass = "temperature"
-		// 		// point.Unit = "C"
-		//
-		// 	case "C":
-		// 		config.DeviceClass = "temperature"
-		// 		config.Units = "℃"
-		//
-		// 	case "%":
-		// 		config.DeviceClass = "battery"
-		//
-		// 	default:
-		// 		ValueTemplate = "{{ value_json.value }}"
-		// }
-
-		// var ok bool
-		// var device Device
-		// if device, ok = m.Devices[config.ParentName]; !ok {
-		// 	break
-		// }
-		//
-		// newDevice := Device{
-		// 	ConfigurationUrl: device.ConfigurationUrl,
-		// 	Connections:      [][]string {
-		// 		{ device.Name, JoinStringsForId(device.Name, config.ParentName) },
-		// 		{ JoinStringsForId(device.Name, config.ParentName), JoinStringsForId(device.Name, config.ParentId) },
-		// 	},
-		// 	Identifiers:      []string{ JoinStringsForId(device.Name, config.ParentId) },
-		// 	Manufacturer:     device.Manufacturer,
-		// 	Model:            device.Model,
-		// 	Name:             JoinStrings(device.Name, config.ParentName),
-		// 	SuggestedArea:    device.SuggestedArea,
-		// 	SwVersion:        device.SwVersion,
-		// 	ViaDevice:        device.ViaDevice,
-		// }
-
-		// // device.Name = JoinStrings(m.Device.Name, config.ParentId)
-		// device.Name = JoinStrings(m.Device.Name, config.ParentName)	// , config.ValueName)
-		// device.Connections = [][]string {
-		// 	{ m.Device.Name, JoinStringsForId(m.Device.Name, config.ParentName) },
-		// 	{ JoinStringsForId(m.Device.Name, config.ParentName), JoinStringsForId(m.Device.Name, config.ParentId) },
-		// 	// { JoinStringsForId(m.Device.Name, config.ParentId), JoinStringsForId(m.Device.Name, config.ParentId, config.Name) },
-		// }
-		// // device.Identifiers = []string{ JoinStringsForId(m.Device.Name, config.ParentId, config.Name) }
-		// device.Identifiers = []string{ JoinStringsForId(m.Device.Name, config.ParentId) }
 
 		ok, newDevice := m.NewDevice(config)
 		if !ok {
@@ -116,6 +29,7 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 			Name:                   JoinStrings(m.DeviceName, config.Name),
 			StateTopic:             JoinStringsForTopic(m.sensorPrefix, id, "state"),
 			StateClass:             config.StateClass,
+			ObjectId:               id,
 			UniqueId:               id,
 			UnitOfMeasurement:      config.Units,
 			DeviceClass:            config.DeviceClass,
@@ -176,10 +90,19 @@ func (m *Mqtt) SensorPublishValue(config EntityConfig) error {
 			break
 		}
 
-		payload := MqttState{
-			LastReset: m.GetLastReset(config.FullId),
+		if strings.Contains(tag, "GoSunGrow") {
+			fmt.Println("")
+		}
+		payload := MqttState {
+			LastReset: config.LastReset,	// m.GetLastReset(config.FullId),
 			Value:     config.Value,
 		}
+		if config.StateClass != "total" {
+			payload = MqttState {
+				Value:     config.Value,
+			}
+		}
+		fmt.Printf("\nValue: %v   ", payload)
 		t := m.client.Publish(tag, 0, true, payload.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()

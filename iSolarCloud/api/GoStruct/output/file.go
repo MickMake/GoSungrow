@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
-	"io/ioutil"
+	"io"
 	"os"
 )
 
@@ -84,7 +84,7 @@ func PlainFileRead(fn string) ([]byte, error) {
 		//goland:noinspection GoUnhandledErrorResult,GoDeferInLoop
 		defer f.Close()
 
-		data, err = ioutil.ReadAll(f)
+		data, err = io.ReadAll(f)
 	}
 
 	return data, err

@@ -560,6 +560,16 @@ func (t *UnitValue) SetKey(key string) UnitValue {
 	return *t
 }
 
+func (t *UnitValue) SetPrecision(precision int) UnitValue {
+	for range Only.Once {
+		if t.float64 != nil {
+			v := SetPrecision(*t.float64, precision)
+			t.SetFloat(v)
+		}
+	}
+	return *t
+}
+
 func (t *UnitValue) IsZero() bool {
 	var yes bool
 	switch {
@@ -959,6 +969,24 @@ func (t *UnitValues) Last() *UnitValue {
 		}
 	}
 	return ret
+}
+
+func (t *UnitValues) SetPrecision(precision int) {
+	for range Only.Once {
+		if t.IsArray() {
+			for k := range t.arrayValues {
+				t.arrayValues[k].SetPrecision(precision)
+			}
+			break
+		}
+
+		if t.IsMap() {
+			for k := range t.mapValues {
+				t.mapValues[k].SetPrecision(precision)
+			}
+			break
+		}
+	}
 }
 
 

@@ -57,7 +57,11 @@ func (dm *DataMap) StructToDataMap(endpoint EndPoint, parentDeviceId string, nam
 			AddNil:         false,
 			AddEmpty:       false,
 		})
+		if dm.parentDeviceId == "" {
+			dm.parentDeviceId = name.First()
+		}
 	}
+
 	return *dm
 }
 
@@ -131,9 +135,14 @@ func (dm *DataMap) CopyPoint(refEndpoint *GoStruct.Reflect, endpoint GoStruct.En
 		if pointId != "" {
 			Current.DataStructure.PointId = pointId
 		}
+
 		if pointName != "" {
 			Current.DataStructure.PointName = pointName
+			// Current.DataStructure.PointName += " (" + Current.DataStructure.PointId + ")"
+		// } else {
+
 		}
+
 		if !endpoint.IsZero() {
 			Current.DataStructure.Endpoint.Clear()
 			Current.DataStructure.Endpoint = endpoint
@@ -194,10 +203,10 @@ func (dm *DataMap) GetReflect(refEndpoint string) *GoStruct.Reflect {
 	return Current
 }
 
-func (dm *DataMap) MakeState(refEndpoint *GoStruct.Reflect, endpoint GoStruct.EndPointPath, pointId string, pointName string) *GoStruct.Reflect {
-	var Current *GoStruct.Reflect
+func (dm *DataMap) MakeState(Current *GoStruct.Reflect) *GoStruct.Reflect {
+	// func (dm *DataMap) MakeState(refEndpoint *GoStruct.Reflect, endpoint GoStruct.EndPointPath, pointId string, pointName string) *GoStruct.Reflect {
 	for range Only.Once {
-		Current = dm.CopyPoint(refEndpoint, endpoint, pointId, pointName)
+		// Current = dm.CopyPoint(refEndpoint, endpoint, pointId, pointName)
 		bv := Current.Value.First().IsNotZero()
 		Current.Value.Reset()
 		vt := valueTypes.SetUnitValueBool(bv)
@@ -222,8 +231,8 @@ func (dm *DataMap) LowerUpper(lowerEntry *GoStruct.Reflect, upperEntry *GoStruct
 	return ret
 }
 
-func (dm *DataMap) GetPercent(entry *GoStruct.Reflect, max *GoStruct.Reflect) float64 {
-	return GetPercent(entry.Value.First().ValueFloat(), max.Value.First().ValueFloat())
+func (dm *DataMap) GetPercent(entry *GoStruct.Reflect, max *GoStruct.Reflect, precision int) float64 {
+	return GetPercent(entry.Value.First().ValueFloat(), max.Value.First().ValueFloat(), precision)
 }
 
 func (dm *DataMap) AppendMap(add DataMap) {
@@ -283,6 +292,13 @@ func (dm *DataMap) ProcessMap() {
 			if Child.IsPointIgnore() {
 				continue
 			}
+
+			// key := Child.EndPointPath().String()
+			// if strings.HasPrefix(key, "virtual") {
+			// 	// Move virtual mappings over.
+			// 	dm.StructMap.VirtualMap[key] = Child
+			// 	delete(dm.StructMap.Map, key)
+			// }
 
 			var when valueTypes.DateTime
 			if Child.IsPointTimestampNotZero() {
@@ -692,11 +708,13 @@ func CreatePoint(Current *GoStruct.Reflect, parentDeviceId string) Point {
 	return point
 }
 
-func GetPercent(value float64, max float64) float64 {
+func GetPercent(value float64, max float64, precision int) float64 {
 	if max == 0 {
 		return 0
 	}
-	return (value / max) * 100
+
+	percent := valueTypes.SetPrecision((value / max) * 100, precision)
+	return percent
 }
 
 func JoinWithDots(intSize int, dateFormat string, args ...interface{}) string {

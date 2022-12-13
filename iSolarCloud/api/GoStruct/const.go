@@ -37,6 +37,8 @@ const (
 	PointUpdateFreq = "PointUpdateFreq"
 	UpdateFreqInstant = "instant"
 	UpdateFreq5Mins   = "5mins"
+	UpdateFreq15Mins  = "15mins"
+	UpdateFreq30Mins  = "30mins"
 	UpdateFreqBoot    = "boot"
 	UpdateFreqDay     = "daily"
 	UpdateFreqMonth   = "monthly"

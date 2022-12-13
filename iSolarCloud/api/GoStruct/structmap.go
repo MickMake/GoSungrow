@@ -60,6 +60,10 @@ func (sm *StructMap) InitScan(current interface{}, options StructMapOptions) {
 
 		sm.PrintDebug("InitScan() EndPoint: '%s' Current: %s\n", sm.StructMapOptions.Name, sm.Start)
 
+		sm.Map = make(map[string]*Reflect)
+		sm.VirtualMap = make(map[string]*Reflect)
+		sm.TableMap = make(map[string]*Reflect)
+
 		sm.Scan(&Parent, &Parent)
 		// fmt.Printf("sm.Current size: %v\n", unsafe.Sizeof(sm.Current))
 		// fmt.Printf("sm.Map size: %v\n", unsafe.Sizeof(sm.Map))

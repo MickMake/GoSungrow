@@ -470,9 +470,9 @@ type EntityConfig struct {
 	ParentId      string
 	ParentName    string
 
-	UniqueId string
-	FullId   string
-	Units    string
+	UniqueId      string
+	FullId        string
+	Units         string
 	ValueName     string
 	DeviceClass   string
 	StateClass    string
@@ -481,6 +481,7 @@ type EntityConfig struct {
 	Value         string
 	ValueTemplate string
 
+	UpdateFreq    string
 	LastReset     string
 	LastResetValueTemplate string
 

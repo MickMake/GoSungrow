@@ -39,8 +39,30 @@ func (p *Point) WhenReset() string {
 		now := time.Now()
 
 		switch {
+			case p.Is5Minute():
+				now, err = time.Parse("2006-01-02T15:04:05", now.Truncate(time.Minute * 5).Format("2006-01-02T15:04:05"))
+				// ret = fmt.Sprintf("%d", now.Unix())
+				ret = now.Format("2006-01-02T15:04:05") + ""
+
+			case p.Is15Minute():
+				now, err = time.Parse("2006-01-02T15:04:05", now.Truncate(time.Minute * 15).Format("2006-01-02T15:04:05"))
+				// ret = fmt.Sprintf("%d", now.Unix())
+				ret = now.Format("2006-01-02T15:04:05") + ""
+
+			case p.Is30Minute():
+				now, err = time.Parse("2006-01-02T15:04:05", now.Truncate(time.Minute * 30).Format("2006-01-02T15:04:05"))
+				// ret = fmt.Sprintf("%d", now.Unix())
+				ret = now.Format("2006-01-02T15:04:05") + ""
+
+
 			case p.IsInstant():
-				ret = ""
+				// ret = ""
+				ret = now.Format("2006-01-02T15:04:05") + ""
+
+			case p.IsBoot():
+				now, err = time.Parse("2006-01-02T15:04:05", now.Format("2006-01-02") + "T00:00:00")
+				// ret = fmt.Sprintf("%d", now.Unix())
+				ret = now.Format("2006-01-02T15:04:05") + ""
 
 			case p.IsDaily():
 				now, err = time.Parse("2006-01-02T15:04:05", now.Format("2006-01-02") + "T00:00:00")
@@ -58,15 +80,14 @@ func (p *Point) WhenReset() string {
 				ret = now.Format("2006-01-02T15:04:05") + ""
 
 			case p.IsTotal():
-				// ret = "0"
 				ret = "1970-01-01T00:00:00"
 
 			default:
-				// ret = "0"
-				ret = "1970-01-01T00:00:00"
+				// ret = "1970-01-01T00:00:00"
+				ret = now.Format("2006-01-02T15:04:05") + ""
 		}
 		if err != nil {
-			now := time.Now()
+			// now := time.Now()
 			ret = fmt.Sprintf("%d", now.Unix())
 		}
 	}
@@ -76,6 +97,34 @@ func (p *Point) WhenReset() string {
 
 func (p Point) String() string {
 	return fmt.Sprintf("Id:%s\tName:%s\tUnits:%s\tUpdateFreq:%s", p.Id, p.Description, p.Unit, p.UpdateFreq)
+}
+
+func (p Point) Is5Minute() bool {
+	if p.UpdateFreq == GoStruct.UpdateFreq5Mins {
+		return true
+	}
+	return false
+}
+
+func (p Point) Is15Minute() bool {
+	if p.UpdateFreq == GoStruct.UpdateFreq15Mins {
+		return true
+	}
+	return false
+}
+
+func (p Point) Is30Minute() bool {
+	if p.UpdateFreq == GoStruct.UpdateFreq30Mins {
+		return true
+	}
+	return false
+}
+
+func (p Point) IsBoot() bool {
+	if p.UpdateFreq == GoStruct.UpdateFreqBoot {
+		return true
+	}
+	return false
 }
 
 func (p Point) IsInstant() bool {

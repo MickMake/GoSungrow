@@ -18,9 +18,9 @@ import (
 
 
 type Web struct {
-	Url   EndPointUrl
-	Body  []byte
-	Error error
+	ServerUrl EndPointUrl
+	Body      []byte
+	Error     error
 
 	cacheDir     string
 	cacheTimeout time.Duration
@@ -32,18 +32,17 @@ type Web struct {
 
 
 func (w *Web) SetUrl(u string) error {
-	w.Url = SetUrl(u)
-	// w.Error = w.Url.Error
+	w.ServerUrl = SetUrl(u)
 	return w.Error
 }
 
 func (w *Web) AppendUrl(endpoint string) EndPointUrl {
-	return w.Url.AppendPath(endpoint)
+	return w.ServerUrl.AppendPath(endpoint)
 }
 
 func (w *Web) Get(endpoint EndPoint) EndPoint {
 	for range Only.Once {
-		w.Error = w.Url.IsValid()
+		w.Error = w.ServerUrl.IsValid()
 		if w.Error != nil {
 			w.Error = errors.New("Sungrow API EndPoint not yet implemented")
 			fmt.Println(w.Error)
@@ -87,9 +86,8 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 			break
 		}
 
-
 		if isCached {
-
+			// Do nothing.
 		} else {
 			w.Error = w.WebCacheWrite(endpoint, w.Body)
 			if w.Error != nil {
@@ -123,7 +121,7 @@ func (w *Web) getApi(endpoint EndPoint) ([]byte, error) {
 			break
 		}
 
-		postUrl := w.Url.AppendPath(u.String()).String()
+		postUrl := w.ServerUrl.AppendPath(u.String()).String()
 		var j []byte
 		j, w.Error = json.Marshal(request)
 		if w.Error != nil {
