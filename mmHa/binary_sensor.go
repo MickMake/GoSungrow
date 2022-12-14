@@ -2,7 +2,6 @@ package mmHa
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 	"strings"
 )
@@ -93,9 +92,6 @@ func (m *Mqtt) BinarySensorPublishValue(config EntityConfig) error {
 			break
 		}
 
-		if strings.Contains(tag, "GoSunGrow") {
-			fmt.Println("")
-		}
 		payload := MqttState {
 			LastReset: m.GetLastReset(config.UniqueId),
 			Value:     config.Value,

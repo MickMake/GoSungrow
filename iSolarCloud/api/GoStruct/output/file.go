@@ -142,3 +142,32 @@ func FileRemove(fn string) error {
 
 	return err
 }
+
+// FileExists - Checks if a file exists.
+func FileExists(fn string) bool {
+	var yes bool
+	for range Only.Once {
+		var err error
+		if fn == "" {
+			// err = errors.New("empty file")
+			break
+		}
+
+		var f os.FileInfo
+		f, err = os.Stat(fn)
+		if os.IsNotExist(err) {
+			break
+		}
+		if err != nil {
+			break
+		}
+		if f.IsDir() {
+			// err = errors.New("file is a directory")
+			break
+		}
+
+		yes = true
+	}
+
+	return yes
+}

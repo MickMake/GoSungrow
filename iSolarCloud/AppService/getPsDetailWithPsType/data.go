@@ -34,11 +34,11 @@ type ResultData struct {
 	ConnectType                 valueTypes.Integer   `json:"connect_type" PointId:"connect_type" PointUpdateFreq:"UpdateFreqBoot"`
 	CurrPower                   valueTypes.UnitValue `json:"curr_power" PointId:"curr_power" PointUpdateFreq:"UpdateFreqInstant"`
 	DesignCapacity              valueTypes.UnitValue `json:"design_capacity" PointId:"design_capacity" PointUpdateFreq:"UpdateFreqBoot"`
-	EnergyScheme                interface{}          `json:"energy_scheme" PointId:"energy_scheme"`
+	EnergyScheme                valueTypes.Generic          `json:"energy_scheme" PointId:"energy_scheme"`
 	GcjLatitude                 valueTypes.Float     `json:"gcj_latitude" PointId:"gcj_latitude" PointUpdateFreq:"UpdateFreqBoot"`
 	GcjLongitude                valueTypes.Float     `json:"gcj_longitude" PointId:"gcj_longitude" PointUpdateFreq:"UpdateFreqBoot"`
 	HasAmmeter                  valueTypes.Bool      `json:"has_ammeter" PointId:"has_ammeter" PointUpdateFreq:"UpdateFreqBoot"`
-	HouseholdInverterData       interface{}          `json:"household_inverter_data" PointId:"household_inverter_data"`
+	HouseholdInverterData       valueTypes.Generic          `json:"household_inverter_data" PointId:"household_inverter_data"`
 	InstallerPsFaultStatus      valueTypes.Integer   `json:"installer_ps_fault_status" PointId:"installer_ps_fault_status" PointUpdateFreq:"UpdateFreqInstant"`
 	IsHaveEsInverter            valueTypes.Bool      `json:"is_have_es_inverter" PointId:"is_have_es_inverter" PointUpdateFreq:"UpdateFreqBoot"`
 	IsSingleInverter            valueTypes.Bool      `json:"is_single_inverter" PointId:"is_single_inverter" PointUpdateFreq:"UpdateFreqBoot"`
@@ -54,7 +54,7 @@ type ResultData struct {
 	MonthEnergy                 valueTypes.UnitValue `json:"month_energy" PointId:"month_energy" PointUpdateFreq:"UpdateFreqMonth"`
 	MonthEnergyVirgin           valueTypes.UnitValue `json:"month_energy_virgin"  PointIgnore:"true"`
 	MonthIncome                 valueTypes.UnitValue `json:"month_income" PointId:"month_income" PointUpdateFreq:"UpdateFreqMonth"`
-	NegativeLoadMsg             interface{}          `json:"negative_load_msg" PointId:"negative_load_msg"`
+	NegativeLoadMsg             valueTypes.Generic          `json:"negative_load_msg" PointId:"negative_load_msg"`
 	OwnerPsFaultStatus          valueTypes.Integer   `json:"owner_ps_fault_status" PointId:"owner_ps_fault_status" PointUpdateFreq:"UpdateFreqInstant"`
 
 	P83081Map                   valueTypes.UnitValue `json:"p83081_map" PointId:"p83081" PointName:"Load Power" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`

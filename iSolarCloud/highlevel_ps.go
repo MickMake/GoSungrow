@@ -86,7 +86,7 @@ func (sg *SunGrow) PsPoints(psIds []string, deviceType string) (string, error) {
 	var ret string
 
 	for range Only.Once {
-		var points []getDevicePointAttrs.Point
+		var points getDevicePointAttrs.Points
 		points, sg.Error = sg.DevicePointAttrs(psIds, deviceType)
 		if sg.Error != nil {
 			break
@@ -184,7 +184,7 @@ func (sg *SunGrow) PsPointsData(psIds []string, deviceType string, startDate str
 		}
 		_, _ = fmt.Fprintf(os.Stderr, "Found ps_keys: %s\n", pskeys)
 
-		var points []getDevicePointAttrs.Point
+		var points getDevicePointAttrs.Points
 		points, sg.Error = sg.DevicePointAttrs(psIds, deviceType)
 		if sg.Error != nil {
 			break

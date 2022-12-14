@@ -5,7 +5,6 @@ import (
 	"GoSungrow/iSolarCloud/api/GoStruct"
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/reportService/powerDevicePointList"
@@ -25,42 +24,31 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
+	PageDataList []Point            `json:"pageDataList" PointId:"points" PointArrayFlatten:"false" DataTable:"true"` // DataTableSortOn:"Id"`
 	CurrentPage  valueTypes.Integer `json:"currentPage" PointIgnore:"true"`
-	PageDataList []struct {
-		CreateTime   valueTypes.DateTime `json:"create_time" PointIgnore:"true" PointNameDateFormat:"2006-01-02 15:04:05"`
-		DeviceType   valueTypes.Integer  `json:"device_type"`
-		Id           valueTypes.Integer  `json:"id"`
-		Period       valueTypes.Integer  `json:"period"`		// 0, 1, 2, 3, 4
-		PointId      valueTypes.PointId  `json:"point_id"`
-		PointName    valueTypes.String `json:"point_name" PointIgnore:"true"`	// Old name of point.
-		PointNameNew valueTypes.String `json:"point_name_new" PointId:"name"`
-		TypeName     valueTypes.String `json:"type_name"`
-	} `json:"pageDataList" PointId:"points" PointArrayFlatten:"false" DataTable:"true"`
-	PageSize    valueTypes.Integer `json:"pageSize" PointIgnore:"true"`
-	TotalCounts valueTypes.Integer `json:"totalCounts" PointId:"total_counts"`
-	TotalPages  valueTypes.Integer `json:"totalPages" PointIgnore:"true"`
+	PageSize     valueTypes.Integer `json:"pageSize" PointIgnore:"true"`
+	TotalCounts  valueTypes.Integer `json:"totalCounts" PointId:"total_count"`
+	TotalPages   valueTypes.Integer `json:"totalPages" PointIgnore:"true"`
+}
+
+type Point struct {
+	CreateTime   valueTypes.DateTime `json:"create_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+	DeviceType   valueTypes.Integer  `json:"device_type"`
+	Id           valueTypes.Integer  `json:"id"`
+	Period       valueTypes.Integer  `json:"period"` // 0, 1, 2, 3, 4
+	PointId      valueTypes.PointId  `json:"point_id"`
+	PointName    valueTypes.String   `json:"point_name" PointIgnore:"true"` // Old name of point.
+	PointNameNew valueTypes.String   `json:"point_name_new" PointId:"name"`
+	TypeName     valueTypes.String   `json:"type_name"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
-	//switch {
-	//case e.Dummy == "":
-	//	break
-	//default:
-	//	err = errors.New(fmt.Sprintf("unknown error '%s'", e.Dummy))
-	//}
 	return err
 }
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-
-	for range Only.Once {
-		// pkg := reflection.GetName("", *e)
-		// dt := valueTypes.NewDateTime(valueTypes.Now)
-		// name := pkg + "." + e.Request.PsId.String()
-		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
-	}
-
+	entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	return entries
 }

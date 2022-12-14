@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"GoSungrow/iSolarCloud/WebAppService/getDevicePointAttrs"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"GoSungrow/mmHa"
@@ -43,6 +44,7 @@ type CmdMqtt struct {
 
 	Client         *mmHa.Mqtt
 	endpoints      MqttEndPoints
+	points         getDevicePointAttrs.PointsMap
 }
 
 func NewCmdMqtt() *CmdMqtt {
@@ -242,6 +244,18 @@ func (c *CmdMqtt) MqttArgs(_ *cobra.Command, _ []string) error {
 		if c.Error != nil {
 			break
 		}
+
+		cmdLog.LogPrintDate("Caching Sungrow metadata...\n")
+		c.Error = c.GetEndPoints()
+		if c.Error != nil {
+			break
+		}
+
+		c.points, c.Error = cmds.Api.SunGrow.DevicePointAttrsMap(nil, "")
+		if c.Error != nil {
+			break
+		}
+		cmdLog.LogPrintDate("Cached %d Sungrow data points...\n", len(c.points))
 	}
 
 	return c.Error
@@ -351,11 +365,6 @@ func (c *CmdMqtt) Cron() error {
 			break
 		}
 
-		c.Error = c.GetEndPoints()
-		if c.Error != nil {
-			break
-		}
-
 		if c.Client.IsFirstRun() {
 			c.Client.UnsetFirstRun()
 		} else {
@@ -374,9 +383,6 @@ func (c *CmdMqtt) Cron() error {
 			break
 		}
 
-		// All := []string{ "queryDeviceList", "getPsList", "getPsDetailWithPsType", "getPsDetail", "getKpiInfo"}
-		// All := []string{ "queryDeviceList", "getPsList", "getPsDetailWithPsType", "getPsDetail", "getKpiInfo"}	//, queryMutiPointDataList, getDevicePointMinuteDataList }
-		// All := []string{ "WebIscmAppService.getDeviceModel" }
 		data.SetEndpoints(c.endpoints.Names()...)
 		c.Error = data.GetData()
 		if c.Error != nil {
@@ -418,6 +424,8 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 				continue
 			}
 
+			_ = c.UpdatePoint(r)
+
 			var id string
 			var name string
 			switch {
@@ -431,7 +439,6 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 					id = r.EndPoint
 					name = r.EndPoint
 			}
-			// name = mmHa.JoinStringsForName(" - ", name)
 
 			if r.Point.Unit == "" {
 				r.Point.Unit = r.Point.ValueType
@@ -463,15 +470,6 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 				// ValueTemplate:          "",
 				LastReset:              r.Point.WhenReset(),
 				// LastResetValueTemplate: "",
-			}
-
-			fmt.Println(re.UniqueId)
-			if strings.Contains(r.EndPoint, "p13121") {
-				fmt.Printf("")
-			}
-
-			if strings.Contains(r.EndPoint, "power_pv_to_grid") {
-				fmt.Printf("")
 			}
 
 			if re.Value == "--" {
@@ -520,11 +518,21 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 func (c *CmdMqtt) GetEndPoints() error {
 	for range Only.Once {
 		fn := filepath.Join(cmds.ConfigDir, "mqtt_endpoints.json")
+		if !output.FileExists(fn) {
+			c.Error = output.PlainFileWrite(fn, []byte(DefaultMqttFile), 0644)
+			if c.Error != nil {
+				break
+			}
+		}
+
 		c.Error = output.FileRead(fn, &c.endpoints)
 		if c.Error != nil {
 			break
 		}
 
+		// All := []string{ "queryDeviceList", "getPsList", "getPsDetailWithPsType", "getPsDetail", "getKpiInfo"}
+		// All := []string{ "queryDeviceList", "getPsList", "getPsDetailWithPsType", "getPsDetail", "getKpiInfo"}	//, queryMutiPointDataList, getDevicePointMinuteDataList }
+		// All := []string{ "WebIscmAppService.getDeviceModel" }
 		for name := range c.endpoints {
 			c.Error = c.Client.SetDeviceConfig(
 				DefaultServiceName,
@@ -539,6 +547,58 @@ func (c *CmdMqtt) GetEndPoints() error {
 				break
 			}
 		}
+	}
+	return c.Error
+}
+
+func (c *CmdMqtt) UpdatePoint(entry *api.DataEntry) error {
+	for range Only.Once {
+		if !c.points.Exists(entry.Point.Id) {
+			// fmt.Printf("entry.Point: %s - NOT FOUND\n", entry.Point.Id)
+			break
+		}
+
+		p := c.points.Get(entry.Point.Id)
+		if p == nil {
+			// fmt.Printf("entry.Point: %s - FOUND - EMPTY\n", entry.Point.Id)
+			break
+		}
+
+		// {
+		// 	fmt.Printf("entry.Point: %s - FOUND - %v\n", entry.Point.Id, p)
+		// 	// fmt.Printf("\tValue   - Description:'-'\t\tUnit:'%s'\tGroupName:'-'\tValueType:'%s'\n",
+		// 	// 	r.Value.UnitValue, r.Point.ValueType)
+		// 	fmt.Printf("\tDescription:'%s'\tPointName:'%s' - SAME:%t\n",
+		// 		entry.Point.Description, entry.Current.DataStructure.PointName, entry.Current.DataStructure.PointName == entry.Point.Description)
+		// 	fmt.Printf("\tUnit:'%s'\tPointUnit:'%s' - SAME:%t\n",
+		// 		entry.Point.Unit, entry.Current.DataStructure.PointUnit, entry.Current.DataStructure.PointUnit == entry.Point.Unit)
+		// 	fmt.Printf("\tGroupName:'%s'\tPointGroupName:'%s' - SAME:%t\n",
+		// 		entry.Point.GroupName, entry.Current.DataStructure.PointGroupName, entry.Current.DataStructure.PointGroupName == entry.Point.GroupName)
+		// 	fmt.Printf("\tValueType:'%s'\tValueType:'%s' - SAME:%t\n",
+		// 		entry.Point.ValueType, entry.Current.DataStructure.ValueType, entry.Current.DataStructure.ValueType == entry.Point.ValueType)
+		// }
+
+		if (p.Name.String() != entry.Point.Description) && (p.Unit.String() != entry.Point.Unit) && (entry.Point.GroupName == "") {
+			// fmt.Printf("\nNOT SAME\n")
+			// fmt.Println("BEFORE:")
+			// fmt.Printf("\tName:'%s'\tDescription:'%s'\n", p.Name, entry.Point.Description)
+			// fmt.Printf("\tPointGroupId:'%s'\tGroupName:'%s'\n", p.PointGroupId, entry.Point.GroupName)
+			// fmt.Printf("\tUnitType:'%s'\tValueType:'%s'\n", p.UnitType, entry.Point.ValueType)
+			// fmt.Printf("\tUnit:'%s'\tUnit:'%s'\n", p.Unit, entry.Point.Unit)
+
+			entry.Point.Description = p.Name.String()
+			entry.Point.Unit = p.Unit.String()
+			entry.Point.GroupName = p.PointGroupName
+			entry.Point.ValueType = p.UnitType.String()
+
+			// fmt.Println("AFTER:")
+			// fmt.Printf("\tName:'%s'\tDescription:'%s'\n", p.Name, entry.Point.Description)
+			// fmt.Printf("\tPointGroupId:'%s'\tGroupName:'%s'\n", p.PointGroupId, entry.Point.GroupName)
+			// fmt.Printf("\tUnitType:'%s'\tValueType:'%s'\n", p.UnitType, entry.Point.ValueType)
+			// fmt.Printf("\tUnit:'%s'\tUnit:'%s'\n", p.Unit, entry.Point.Unit)
+			// fmt.Println("")
+		}
+
 	}
 	return c.Error
 }
@@ -614,3 +674,30 @@ func (c *MqttEndPoints) IsOK(check *api.DataEntry) bool {
 	}
 	return yes
 }
+
+const DefaultMqttFile = `{
+	"queryDeviceList": {
+		"include": [
+			"virtual.*"
+		],
+		"exclude": [
+			"queryDeviceList.*.devices.*",
+			"queryDeviceList.*.device_types.*"
+		]
+	},
+	"getPsList": {
+		"include": [
+			"virtual.*"
+		],
+		"exclude": [
+		]
+	}
+	"getPsDetail": {
+		"include": [
+			"virtual.*"
+		],
+		"exclude": [
+		]
+	}
+}
+`

@@ -58,7 +58,7 @@ func (c *CmdShow) AttachPointPs(cmd *cobra.Command) *cobra.Command {
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               cmds.SunGrowArgs,
-		RunE:                  c.funcAttachPsPoints,
+		RunE:                  c.funcPsPoints,
 		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(self)
@@ -77,7 +77,7 @@ func (c *CmdShow) AttachPointPsTable(cmd *cobra.Command) *cobra.Command {
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               cmds.SunGrowArgs,
-		RunE:                  c.funcAttachPsData,
+		RunE:                  c.funcPsData,
 		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(self)
@@ -101,7 +101,7 @@ func (c *CmdShow) AttachPointPsGraph(cmd *cobra.Command) *cobra.Command {
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               cmds.SunGrowArgs,
-		RunE:                  c.funcAttachPsGraph,
+		RunE:                  c.funcPsGraph,
 		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(self)

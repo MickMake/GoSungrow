@@ -179,7 +179,7 @@ type ResultData struct {
 	P83101MapVirgin               valueTypes.UnitValue `json:"p83101_map_virgin"  PointIgnore:"true"`
 	P83102Map                     valueTypes.UnitValue `json:"p83102_map" PointId:"p83102" PointName:"Energy Purchased" PointVirtual:"true"`
 	P83102MapVirgin               valueTypes.UnitValue `json:"p83102_map_virgin"  PointIgnore:"true"`
-	P83102Percent                 valueTypes.Float     `json:"p83102_percent" PointId:"p83102_percent" PointName:"Energy Purchased Percent" PointVirtual:"true"`
+	P83102Percent                 valueTypes.Float     `json:"p83102_percent" PointId:"p83102_percent" PointName:"Energy Purchased Percent" PointUnit:"%" PointVirtual:"true"`
 	P83105Map                     valueTypes.UnitValue `json:"p83105_map" PointId:"p83105" PointVirtual:"true"`
 	P83105MapVirgin               valueTypes.UnitValue `json:"p83105_map_virgin"  PointIgnore:"true"`
 	P83106Map                     valueTypes.UnitValue `json:"p83106_map" PointId:"p83106" PointVirtual:"true"`

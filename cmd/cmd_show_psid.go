@@ -80,7 +80,7 @@ func (c *CmdShow) AttachPsIdList2(cmd *cobra.Command) *cobra.Command {
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               cmds.SunGrowArgs,
-		RunE:                  c.funcAttachPsIdList2,
+		RunE:                  c.funcPsIdList2,
 		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(self)
@@ -88,7 +88,7 @@ func (c *CmdShow) AttachPsIdList2(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
-func (c *CmdShow) funcAttachPsIdList2(_ *cobra.Command, args []string) error {
+func (c *CmdShow) funcPsIdList2(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		pids := cmds.Api.SunGrow.SetPsIds(args...)
 		if c.Error != nil {
@@ -110,7 +110,7 @@ func (c *CmdShow) AttachPsTree(cmd *cobra.Command) *cobra.Command {
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               cmds.SunGrowArgs,
-		RunE:                  c.funcAttachPsTree,
+		RunE:                  c.funcPsTree,
 		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(self)
@@ -118,7 +118,7 @@ func (c *CmdShow) AttachPsTree(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
-func (c *CmdShow) funcAttachPsTree(_ *cobra.Command, args []string) error {
+func (c *CmdShow) funcPsTree(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		var pids iSolarCloud.PsTree
 		pids, c.Error = cmds.Api.SunGrow.PsTreeMenu(args...)
@@ -141,7 +141,7 @@ func (c *CmdShow) AttachPsPoints(cmd *cobra.Command) *cobra.Command {
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               cmds.SunGrowArgs,
-		RunE:                  c.funcAttachPsPoints,
+		RunE:                  c.funcPsPoints,
 		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(self)
@@ -149,7 +149,7 @@ func (c *CmdShow) AttachPsPoints(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
-func (c *CmdShow) funcAttachPsPoints(_ *cobra.Command, args []string) error {
+func (c *CmdShow) funcPsPoints(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		args = MinimumArraySize(2, args)
 		var points string
@@ -173,7 +173,7 @@ func (c *CmdShow) AttachPsData(cmd *cobra.Command) *cobra.Command {
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               cmds.SunGrowArgs,
-		RunE:                  c.funcAttachPsData,
+		RunE:                  c.funcPsData,
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmd.AddCommand(self)
@@ -181,7 +181,7 @@ func (c *CmdShow) AttachPsData(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
-func (c *CmdShow) funcAttachPsData(_ *cobra.Command, args []string) error {
+func (c *CmdShow) funcPsData(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.OutputType.SetTable()
 		args = MinimumArraySize(5, args)
@@ -203,7 +203,7 @@ func (c *CmdShow) AttachPsGraph(cmd *cobra.Command) *cobra.Command {
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               cmds.SunGrowArgs,
-		RunE:                  c.funcAttachPsGraph,
+		RunE:                  c.funcPsGraph,
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmd.AddCommand(self)
@@ -211,7 +211,7 @@ func (c *CmdShow) AttachPsGraph(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
-func (c *CmdShow) funcAttachPsGraph(_ *cobra.Command, args []string) error {
+func (c *CmdShow) funcPsGraph(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.OutputType.SetGraph()
 		args = MinimumArraySize(5, args)

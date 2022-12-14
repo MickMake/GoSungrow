@@ -48,6 +48,7 @@ type Mqtt struct {
 	err      error
 }
 
+
 func New(req Mqtt) *Mqtt {
 	var ret Mqtt
 
@@ -221,11 +222,6 @@ func (m *Mqtt) Disconnect() error {
 	return m.err
 }
 
-// const ServiceBaseName = "GoSungrow"
-// const ServiceBaseUniqueId = ServiceBaseName + "_Service"
-// const ServiceBaseTopic = "homeassistant/sensor/" + ServiceBaseName
-// const SensorBaseTopic = "homeassistant/sensor/" + ServiceBaseName
-
 func (m *Mqtt) createClientOptions() error {
 	for range Only.Once {
 		m.clientOptions = mqtt.NewClientOptions()
@@ -267,25 +263,6 @@ func (m *Mqtt) Publish(topic string, qos byte, retained bool, payload interface{
 	}
 	return m.err
 }
-
-
-// func (m *Mqtt) PublishConfig(config EntityConfig) error {
-// 	// func (m *Mqtt) PublishConfig(t string, id string, name string, subName string, units string, valueName string, class string) error {
-// 	switch config.Type {
-// 	// case "sensor":
-// 	// 	m.err = m.PublishSensorConfig(id, name, subName, units, valueName, class)
-// 	case "binary_sensor":
-// 		m.err = m.PublishBinarySensorConfig(config)	// (id, name, subName, units, valueName, class)
-// 	// case "lights":
-// 	// 	m.err = m.PublishLightConfig(id, name, subName, units, valueName, class)
-// 	// case "switch":
-// 	// 	m.err = m.PublishSwitchConfig(id, name, subName, units, valueName, class)
-// 	// default:
-// 	// 	m.err = m.PublishSensorConfig(config)
-// 	}
-//
-// 	return m.err
-// }
 
 func (m *Mqtt) PublishState(Type string, subtopic string, payload interface{}) error {
 	for range Only.Once {
@@ -370,23 +347,6 @@ func (m *Mqtt) PublishValue(Type string, subtopic string, value string) error {
 	return m.err
 }
 
-// func (m *Mqtt) PublishValue(t string, topic string, value string) error {
-// 	switch t {
-// 		case "sensor":
-// 			m.err = m.PublishSensorValue(topic, value)
-// 		case "binary_sensor":
-// 			m.err = m.PublishBinarySensorState(topic, value)
-// 		case "lights":
-// 			m.err = m.PublishLightState(topic, value)
-// 		case "switch":
-// 			m.err = m.PublishSwitchState(topic, value)
-// 		default:
-// 			m.err = m.PublishSensorState(topic, value)
-// 	}
-//
-// 	return m.err
-// }
-
 func (m *Mqtt) SetDeviceConfig(swname string, parentId string, id string, name string, model string, vendor string, area string) error {
 	for range Only.Once {
 		// id = JoinStringsForId(m.EntityPrefix, id)
@@ -413,6 +373,23 @@ func (m *Mqtt) SetDeviceConfig(swname string, parentId string, id string, name s
 		}
 	}
 	return m.err
+}
+
+func (m *Mqtt) GetLastReset(pointType string) string {
+	var ret string
+
+	for range Only.Once {
+		pt := api.GetDevicePoint(pointType)
+		if !pt.Valid {
+			break
+		}
+		if pt.UpdateFreq == "" {
+			break
+		}
+		ret = pt.WhenReset()
+	}
+
+	return ret
 }
 
 
@@ -442,24 +419,6 @@ type Availability struct {
 	ValueTemplate       string `json:"value_template,omitempty" required:"false"`
 }
 type SensorState string
-
-
-func (m *Mqtt) GetLastReset(pointType string) string {
-	var ret string
-
-	for range Only.Once {
-		pt := api.GetDevicePoint(pointType)
-		if !pt.Valid {
-			break
-		}
-		if pt.UpdateFreq == "" {
-			break
-		}
-		ret = pt.WhenReset()
-	}
-
-	return ret
-}
 
 
 type EntityConfig struct {
@@ -557,7 +516,6 @@ func (config *EntityConfig) IsLight() bool {
 
 	return ok
 }
-
 
 func (config *EntityConfig) FixConfig() {
 

@@ -90,9 +90,6 @@ func (m *Mqtt) SensorPublishValue(config EntityConfig) error {
 			break
 		}
 
-		if strings.Contains(tag, "GoSunGrow") {
-			fmt.Println("")
-		}
 		payload := MqttState {
 			LastReset: config.LastReset,	// m.GetLastReset(config.FullId),
 			Value:     config.Value,
@@ -102,7 +99,6 @@ func (m *Mqtt) SensorPublishValue(config EntityConfig) error {
 				Value:     config.Value,
 			}
 		}
-		fmt.Printf("\nValue: %v   ", payload)
 		t := m.client.Publish(tag, 0, true, payload.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()

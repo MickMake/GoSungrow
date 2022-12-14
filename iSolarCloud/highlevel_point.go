@@ -258,8 +258,8 @@ func (sg *SunGrow) GetAllPointsData(psIds ...string) error {
 
 
 // DevicePointAttrs - Return all points associated with psIds and device_type filter.
-func (sg *SunGrow) DevicePointAttrs(psIds []string, deviceType string) ([]getDevicePointAttrs.Point, error) {
-	var points []getDevicePointAttrs.Point
+func (sg *SunGrow) DevicePointAttrs(psIds []string, deviceType string) (getDevicePointAttrs.Points, error) {
+	var points getDevicePointAttrs.Points
 
 	for range Only.Once {
 		var pids valueTypes.PsIds
@@ -269,7 +269,7 @@ func (sg *SunGrow) DevicePointAttrs(psIds []string, deviceType string) ([]getDev
 		}
 
 		for _, pid := range pids {
-			var p []getDevicePointAttrs.Point
+			var p getDevicePointAttrs.Points
 			p, sg.Error = sg.GetDevicePointAttrs(pid)
 			if sg.Error != nil {
 				break
@@ -303,9 +303,28 @@ func (sg *SunGrow) DevicePointAttrs(psIds []string, deviceType string) ([]getDev
 	return points, sg.Error
 }
 
+// DevicePointAttrsMap - Return all points associated with psIds and device_type filter.
+func (sg *SunGrow) DevicePointAttrsMap(psIds []string, deviceType string) (getDevicePointAttrs.PointsMap, error) {
+	points := make(getDevicePointAttrs.PointsMap)
+
+	for range Only.Once {
+		var pa getDevicePointAttrs.Points
+		pa, sg.Error = sg.DevicePointAttrs(psIds, deviceType)
+		if sg.Error != nil {
+			break
+		}
+
+		for index := range pa {
+			points[pa[index].Id.String()] = &pa[index]
+		}
+	}
+
+	return points, sg.Error
+}
+
 // GetDevicePointAttrs - WebAppService.getDevicePointAttrs Uuid: PsId: DeviceType
-func (sg *SunGrow) GetDevicePointAttrs(psId valueTypes.PsId) ([]getDevicePointAttrs.Point, error) {
-	var ret []getDevicePointAttrs.Point
+func (sg *SunGrow) GetDevicePointAttrs(psId valueTypes.PsId) (getDevicePointAttrs.Points, error) {
+	var ret getDevicePointAttrs.Points
 
 	for range Only.Once {
 		var tree PsTree
