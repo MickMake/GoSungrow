@@ -73,7 +73,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	switch {
 		case e.Request.DateType.Match(valueTypes.DateTypeDay):
 			count := len(e.Response.ResultData.P34048List)
-			dur := time.Duration(int(time.Hour * 24) / count)
+			dur := time.Duration((float64(time.Hour) * 24) / float64(count))
 			r = e.Request.DateId.GetRanges(count, dur, valueTypes.DateTimeLayout)
 			t = "Hour"
 
