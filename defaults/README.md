@@ -1,8 +1,6 @@
 # GoSungrow - iSolarCloud API written in GoLang.
 
-Note: I'm currently going through a big refactor. The next major release, (v3.0.0).
-
-[Latest releases here](https://github.com/MickMake/GoSungrow/releases)
+Note: The next major release, (v3.0.0), is here! Check out the [Latest releases here](https://github.com/MickMake/GoSungrow/releases).
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/MickMake/GoSungrow.svg)](https://pkg.go.dev/github.com/MickMake/GoSungrow)
 
