@@ -691,7 +691,7 @@ const DefaultMqttFile = `{
 		],
 		"exclude": [
 		]
-	}
+	},
 	"getPsDetail": {
 		"include": [
 			"virtual.*"
