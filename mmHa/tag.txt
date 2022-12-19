@@ -1,0 +1,39 @@
+topic string REQUIRED
+The MQTT topic subscribed to receive tag scanned events.
+
+value_template string (optional)
+Defines a template that returns a tag ID.
+
+device map REQUIRED
+Information about the device this device trigger is a part of to tie it into the device registry. At least one of identifiers or connections must be present to identify the device.
+
+configuration_url string (optional)
+A link to the webpage that can manage the configuration of this device. Can be either an HTTP or HTTPS link.
+
+connections list | map (optional)
+A list of connections of the device to the outside world as a list of tuples [connection_type, connection_identifier]. For example the MAC address of a network interface: 'connections': ['mac', '02:5b:26:a8:dc:12'].
+
+hw_version string (optional)
+The hardware version of the device.
+
+identifiers list | string (optional)
+A list of IDs that uniquely identify the device. For example a serial number.
+
+manufacturer string (optional)
+The manufacturer of the device.
+
+model string (optional)
+The model of the device.
+
+name string (optional)
+The name of the device.
+
+suggested_area string (optional)
+Suggest an area if the device isn’t in one yet.
+
+sw_version string (optional)
+The firmware version of the device.
+
+via_device string (optional)
+Identifier of a device that routes messages between this device and Home Assistant. Examples of such devices are hubs, or parent devices of a sub-device. This is used to show device topology in Home Assistant.
+
