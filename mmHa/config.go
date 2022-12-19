@@ -27,19 +27,6 @@ func (c *Config) Json() string {
 	return string(j)
 }
 
-
-type Device struct {
-	ConfigurationUrl string     `json:"configuration_url,omitempty" required:"false"`
-	Connections      [][]string `json:"connections,omitempty" required:"false"`
-	Identifiers      []string   `json:"identifiers,omitempty" required:"false"`
-	Manufacturer     string     `json:"manufacturer,omitempty" required:"false"`
-	Model            string     `json:"model,omitempty" required:"false"`
-	Name             string     `json:"name,omitempty" required:"false"`
-	SuggestedArea    string     `json:"suggested_area,omitempty" required:"false"`
-	SwVersion        string     `json:"sw_version,omitempty" required:"false"`
-	ViaDevice        string     `json:"via_device,omitempty" required:"false"`
-}
-
 func (m *Mqtt) NewDevice(config EntityConfig) (bool, Device) {
 	var ok bool
 	var ret Device
@@ -80,52 +67,3 @@ func (m *Mqtt) NewDevice(config EntityConfig) (bool, Device) {
 	return ok, ret
 
 }
-
-// func (d *Device) NewDevice(config EntityConfig) Device {
-// 	var ret Device
-//
-// 	for range Only.Once {
-// 		ret = Device{
-// 			ConfigurationUrl: d.ConfigurationUrl,
-// 			Connections:      [][]string {
-// 				{ d.Name, JoinStringsForId(d.Name, config.ParentName) },
-// 				{ JoinStringsForId(d.Name, config.ParentName), JoinStringsForId(d.Name, config.ParentId) },
-// 			},
-// 			Identifiers:      []string{ JoinStringsForId(d.Name, config.ParentId) },
-// 			Manufacturer:     d.Manufacturer,
-// 			Model:            d.Model,
-// 			Name:             JoinStrings(d.Name, config.ParentName),
-// 			SuggestedArea:    d.SuggestedArea,
-// 			SwVersion:        d.SwVersion,
-// 			ViaDevice:        d.ViaDevice,
-// 		}
-//
-// 		// // device.Name = JoinStrings(m.Device.Name, config.ParentId)
-// 		// device.Name = JoinStrings(m.Device.Name, config.ParentName)	// , config.ValueName)
-// 		// device.Connections = [][]string {
-// 		// 	{ m.Device.Name, JoinStringsForId(m.Device.Name, config.ParentName) },
-// 		// 	{ JoinStringsForId(m.Device.Name, config.ParentName), JoinStringsForId(m.Device.Name, config.ParentId) },
-// 		// 	// { JoinStringsForId(m.Device.Name, config.ParentId), JoinStringsForId(m.Device.Name, config.ParentId, config.Name) },
-// 		// }
-// 		// // device.Identifiers = []string{ JoinStringsForId(m.Device.Name, config.ParentId, config.Name) }
-// 		// device.Identifiers = []string{ JoinStringsForId(m.Device.Name, config.ParentId) }
-// 	}
-//
-// 	return ret
-// }
-
-// {
-//	"device": {
-//		"identifiers": [
-//			"sungrow"
-//		],
-//		"manufacturer": "MickMake",
-//		"model": "GoLang",
-//		"name": "sungrow",
-//		"sw_version": "sungrow https://github.com/MickMake/GoSungrow"
-//	},
-//	"name": "sungrow",
-//	"stat_t": "~/state",
-//	"unique_id": "sungrow",
-//	"~": "homeassistant/binary_sensor/SunGrow"
-// }

@@ -37,11 +37,13 @@ type Mqtt struct {
 	DeviceName  string
 	MqttDevices map[string]Device
 
-	servicePrefix      string
-	sensorPrefix       string
-	lightPrefix        string
-	switchPrefix       string
-	binarySensorPrefix string
+	Prefix      string
+	// selectPrefix       string
+	// servicePrefix      string
+	// sensorPrefix       string
+	// lightPrefix        string
+	// switchPrefix       string
+	// binarySensorPrefix string
 
 	token    mqtt.Token
 	firstRun bool
@@ -59,12 +61,14 @@ func New(req Mqtt) *Mqtt {
 		}
 		ret.firstRun = true
 		ret.EntityPrefix = req.EntityPrefix
+		ret.Prefix = "homeassistant"
 
-		ret.servicePrefix = "homeassistant/sensor/" + req.ClientId
-		ret.sensorPrefix = "homeassistant/sensor/" + req.ClientId
-		ret.lightPrefix = "homeassistant/light/" + req.ClientId
-		ret.switchPrefix = "homeassistant/switch/" + req.ClientId
-		ret.binarySensorPrefix = "homeassistant/binary_sensor/" + req.ClientId
+		// ret.selectPrefix = fmt.Sprintf("homeassistant/%s/%s", LabelSelect, req.ClientId)
+		// ret.servicePrefix = fmt.Sprintf("homeassistant/%s/%s", LabelSensor, req.ClientId)
+		// ret.sensorPrefix = fmt.Sprintf("homeassistant/%s/%s", LabelSensor, req.ClientId)
+		// ret.lightPrefix = fmt.Sprintf("homeassistant/%s/%s", LabelLight, req.ClientId)
+		// ret.switchPrefix = fmt.Sprintf("homeassistant/%s/%s", LabelSwitch, req.ClientId)
+		// ret.binarySensorPrefix = fmt.Sprintf("homeassistant/%s/%s", LabelBinarySensor, req.ClientId)
 
 		ret.MqttDevices = make(map[string]Device)
 		ret.SungrowPsIds = make(map[valueTypes.PsId]bool)
@@ -186,7 +190,7 @@ func (m *Mqtt) Connect() error {
 		}
 
 		device := Config {
-			Entry:      m.servicePrefix,
+			Entry:      JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId),	// m.servicePrefix
 			Name:       m.ClientId,
 			UniqueId:   m.ClientId, 	// + "_Service",
 			StateTopic:   "~/state",
@@ -199,19 +203,49 @@ func (m *Mqtt) Connect() error {
 			},
 		}
 
-		m.err = m.Publish(JoinStringsForTopic(m.servicePrefix, "config"), 0, true, device.Json())
+		m.err = m.Publish(JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, "config"), 0, true, device.Json())
+		if m.err != nil {
+			break
+		}
+		m.err = m.Publish(JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, "state"), 0, true, "ON")
 		if m.err != nil {
 			break
 		}
 
-		m.err = m.Publish(JoinStringsForTopic(m.servicePrefix, "state"), 0, true, "ON")
+		// 			Device:       newDevice,
+		//			Name:         String(JoinStrings(m.DeviceName, config.Name)),
+		//			StateTopic:   String(JoinStringsForTopic(m.switchPrefix, id, "state")),
+		//			CommandTopic: String(JoinStringsForTopic(m.switchPrefix, id, "cmd")),
+		//			ObjectId:     String(id),
+		//			UniqueId:     String(id),
+		//			Qos:          0,
+		//			Retain:       true,
+		//
+		//			ValueTemplate: Template(config.ValueTemplate),
+		//			Icon:          Icon(config.Icon),
+		m.err = m.SelectPublishConfig(EntityConfig {
+			Name:          "Debug Level",
+			FullId:        "GoSungrow.Control.DebugLevel",
+			Icon:          "",
+			ValueTemplate: `{\"select\": \"{{ value }}\"}`,
+		})
 		if m.err != nil {
 			break
 		}
-
+		m.err = m.Subscribe(JoinStringsForTopic(m.Prefix, LabelSelect, m.ClientId, "state"), m.Fart)
+		if m.err != nil {
+			break
+		}
 	}
 
 	return m.err
+}
+
+func (m *Mqtt) Fart(client mqtt.Client, msg mqtt.Message) {
+	for range Only.Once {
+		fmt.Printf("DONE\n")
+		time.Sleep(1 * time.Second)
+	}
 }
 
 func (m *Mqtt) Disconnect() error {
@@ -231,7 +265,7 @@ func (m *Mqtt) createClientOptions() error {
 		m.clientOptions.SetPassword(password)
 		m.clientOptions.SetClientID(m.ClientId)
 
-		m.clientOptions.WillTopic = JoinStringsForTopic(m.servicePrefix, "state")
+		m.clientOptions.WillTopic = JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, "state")
 		m.clientOptions.WillPayload = []byte("OFF")
 		m.clientOptions.WillQos = 0
 		m.clientOptions.WillRetained = true
@@ -240,11 +274,17 @@ func (m *Mqtt) createClientOptions() error {
 	return m.err
 }
 
-func (m *Mqtt) Subscribe(topic string) error {
+// type SubscribeFunc func(client mqtt.Client, msg mqtt.Message)
+func (m *Mqtt) subscribeDefault(client mqtt.Client, msg mqtt.Message) {
+	fmt.Printf("* [%s] %s\n", msg.Topic(), string(msg.Payload()))
+}
+
+func (m *Mqtt) Subscribe(topic string, fn mqtt.MessageHandler) error {
 	for range Only.Once {
-		t := m.client.Subscribe(topic, 0, func(client mqtt.Client, msg mqtt.Message) {
-			fmt.Printf("* [%s] %s\n", msg.Topic(), string(msg.Payload()))
-		})
+		if fn == nil {
+			fn = m.subscribeDefault
+		}
+		t := m.client.Subscribe(topic, 0, fn)
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
 			// m.err = errors.New("mqtt subscribe timeout")
@@ -258,7 +298,6 @@ func (m *Mqtt) Publish(topic string, qos byte, retained bool, payload interface{
 		t := m.client.Publish(topic, qos, retained, payload)
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
-			// m.err = errors.New("mqtt publish timeout")
 		}
 	}
 	return m.err
@@ -271,16 +310,16 @@ func (m *Mqtt) PublishState(Type string, subtopic string, payload interface{}) e
 		// st := JoinStringsForTopic(m.sensorPrefix, JoinStringsForId(m.EntityPrefix, m.Device.FullName, strings.ReplaceAll(subName, "/", ".")), "state")
 		topic := ""
 		switch Type {
-			case "sensor":
-				topic = JoinStringsForTopic(m.sensorPrefix, subtopic, "state")
-			case "binary_sensor":
-				topic = JoinStringsForTopic(m.binarySensorPrefix, subtopic, "state")
-			case "lights":
-				topic = JoinStringsForTopic(m.lightPrefix, subtopic, "state")
-			case "switch":
-				topic = JoinStringsForTopic(m.switchPrefix, subtopic, "state")
+			case LabelSensor:
+				topic = JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, subtopic, "state")
+			case LabelBinarySensor:
+				topic = JoinStringsForTopic(m.Prefix, LabelBinarySensor, m.ClientId, subtopic, "state")
+			case LabelLight:
+				topic = JoinStringsForTopic(m.Prefix, LabelLight, m.ClientId, subtopic, "state")
+			case LabelSwitch:
+				topic = JoinStringsForTopic(m.Prefix, LabelSwitch, m.ClientId, subtopic, "state")
 			default:
-				topic = JoinStringsForTopic(m.sensorPrefix, subtopic, "state")
+				topic = JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, subtopic, "state")
 		}
 
 		t := m.client.Publish(topic, 0, true, payload)
@@ -295,40 +334,40 @@ func (m *Mqtt) PublishValue(Type string, subtopic string, value string) error {
 	for range Only.Once {
 		topic := ""
 		switch Type {
-		case "sensor":
-			topic = JoinStringsForTopic(m.sensorPrefix, subtopic, "state")
-			// state := MqttState {
-			// 	LastReset: "", // m.GetLastReset(point.PointId),
-			// 	Value:     value,
-			// }
-			// value = state.Json()
+			case LabelSensor:
+				topic = JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, subtopic, "state")
+				// state := MqttState {
+				// 	LastReset: "", // m.GetLastReset(point.PointId),
+				// 	Value:     value,
+				// }
+				// value = state.Json()
 
-		case "binary_sensor":
-			topic = JoinStringsForTopic(m.binarySensorPrefix, subtopic, "state")
-			// state := MqttState {
-			// 	LastReset: "", // m.GetLastReset(point.PointId),
-			// 	Value:     value,
-			// }
-			// value = state.Json()
+			case "binary_sensor":
+				topic = JoinStringsForTopic(m.Prefix, LabelBinarySensor, m.ClientId, subtopic, "state")
+				// state := MqttState {
+				// 	LastReset: "", // m.GetLastReset(point.PointId),
+				// 	Value:     value,
+				// }
+				// value = state.Json()
 
-		case "lights":
-			topic = JoinStringsForTopic(m.lightPrefix, subtopic, "state")
-			// state := MqttState {
-			// 	LastReset: "", // m.GetLastReset(point.PointId),
-			// 	Value:     value,
-			// }
-			// value = state.Json()
+			case "lights":
+				topic = JoinStringsForTopic(m.Prefix, LabelLight, m.ClientId, subtopic, "state")
+				// state := MqttState {
+				// 	LastReset: "", // m.GetLastReset(point.PointId),
+				// 	Value:     value,
+				// }
+				// value = state.Json()
 
-		case "switch":
-			topic = JoinStringsForTopic(m.switchPrefix, subtopic, "state")
-			// state := MqttState {
-			// 	LastReset: "", // m.GetLastReset(point.PointId),
-			// 	Value:     value,
-			// }
-			// value = state.Json()
+			case LabelSwitch:
+				topic = JoinStringsForTopic(m.Prefix, LabelSwitch, m.ClientId, subtopic, "state")
+				// state := MqttState {
+				// 	LastReset: "", // m.GetLastReset(point.PointId),
+				// 	Value:     value,
+				// }
+				// value = state.Json()
 
-		default:
-			topic = JoinStringsForTopic(m.sensorPrefix, subtopic, "state")
+			default:
+				topic = JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, subtopic, "state")
 		}
 
 		// t = JoinStringsForId(m.EntityPrefix, m.Device.Name, t)
@@ -411,15 +450,7 @@ func (mq *MqttState) Json() string {
 	return ret
 }
 
-
-type Availability struct {
-	PayloadAvailable    string `json:"payload_available,omitempty" required:"false"`
-	PayloadNotAvailable string `json:"payload_not_available,omitempty" required:"false"`
-	Topic               string `json:"topic,omitempty" required:"true"`
-	ValueTemplate       string `json:"value_template,omitempty" required:"false"`
-}
 type SensorState string
-
 
 type EntityConfig struct {
 	// Type          string
@@ -437,84 +468,17 @@ type EntityConfig struct {
 	StateClass    string
 	Icon          string
 
-	Value         string
+	Value         valueTypes.UnitValue
+	Point         *api.Point
 	ValueTemplate string
 
 	UpdateFreq    string
 	LastReset     string
 	LastResetValueTemplate string
 
+	IgnoreUpdate  bool
+
 	haType        string
-}
-
-func (config *EntityConfig) IsSensor() bool {
-	var ok bool
-
-	for range Only.Once {
-		if config.IsBinarySensor() {
-			break
-		}
-		if config.IsSwitch() {
-			break
-		}
-		if config.IsLight() {
-			break
-		}
-		// if config.Value != "" {
-		// 	ok = true
-		// 	break
-		// }
-		// if config.Units == "" {
-		// 	break
-		// }
-
-		ok = true
-	}
-
-	return ok
-}
-
-func (config *EntityConfig) IsBinarySensor() bool {
-	var ok bool
-
-	for range Only.Once {
-		if config.Units == LabelBinarySensor {
-			ok = true
-			break
-		}
-		if config.Units == "Bool" {
-			ok = true
-			break
-		}
-	}
-
-	return ok
-}
-
-func (config *EntityConfig) IsSwitch() bool {
-	var ok bool
-
-	for range Only.Once {
-		if config.Units == LabelSwitch {
-			ok = true
-			break
-		}
-	}
-
-	return ok
-}
-
-func (config *EntityConfig) IsLight() bool {
-	var ok bool
-
-	for range Only.Once {
-		if config.Units == LabelLight {
-			ok = true
-			break
-		}
-	}
-
-	return ok
 }
 
 func (config *EntityConfig) FixConfig() {
@@ -538,6 +502,9 @@ func (config *EntityConfig) FixConfig() {
 				config.DeviceClass = SetDefault(config.DeviceClass, "power")
 				config.Icon = SetDefault(config.Icon, "mdi:check-circle-outline")
 				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value }}")
+				// if !config.Value.Valid {
+				// 	config.Value = "false"
+				// }
 
 			case "MW":
 				fallthrough
@@ -546,9 +513,14 @@ func (config *EntityConfig) FixConfig() {
 			case "W":
 				config.DeviceClass = SetDefault(config.DeviceClass, "power")
 				config.Icon = SetDefault(config.Icon, "mdi:lightning-bolt")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
-				// config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
-				// - Used with merged values.
+				if config.ValueName == "" {
+					config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				} else {
+					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
+				}
+				if !config.Value.Valid {
+					config.IgnoreUpdate = true
+				}
 
 			case "MWh":
 				fallthrough
@@ -557,27 +529,62 @@ func (config *EntityConfig) FixConfig() {
 			case "Wh":
 				config.DeviceClass = SetDefault(config.DeviceClass, "energy")
 				config.Icon = SetDefault(config.Icon, "mdi:lightning-bolt")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				if config.ValueName == "" {
+					config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				} else {
+					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
+				}
+				if !config.Value.Valid {
+					config.IgnoreUpdate = true
+				}
 
 			case "kvar":
 				config.DeviceClass = SetDefault(config.DeviceClass, "reactive_power")
 				config.Icon = SetDefault(config.Icon, "mdi:lightning-bolt")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				if config.ValueName == "" {
+					config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				} else {
+					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
+				}
+				if !config.Value.Valid {
+					config.IgnoreUpdate = true
+				}
 
 			case "Hz":
 				config.DeviceClass = SetDefault(config.DeviceClass, "frequency")
 				config.Icon = SetDefault(config.Icon, "mdi:sine-wave")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				if config.ValueName == "" {
+					config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				} else {
+					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
+				}
+				if !config.Value.Valid {
+					config.IgnoreUpdate = true
+				}
 
 			case "V":
 				config.DeviceClass = SetDefault(config.DeviceClass, "voltage")
 				config.Icon = SetDefault(config.Icon, "mdi:current-dc")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				if config.ValueName == "" {
+					config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				} else {
+					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
+				}
+				if !config.Value.Valid {
+					config.IgnoreUpdate = true
+				}
 
 			case "A":
 				config.DeviceClass = SetDefault(config.DeviceClass, "current")
 				config.Icon = SetDefault(config.Icon, "mdi:current-ac")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				if config.ValueName == "" {
+					config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				} else {
+					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
+				}
+				if !config.Value.Valid {
+					config.IgnoreUpdate = true
+				}
 
 			case "°F":
 				fallthrough
@@ -593,12 +600,26 @@ func (config *EntityConfig) FixConfig() {
 				config.DeviceClass = SetDefault(config.DeviceClass, "temperature")
 				config.Units = "°C"
 				config.Icon = SetDefault(config.Icon, "mdi:thermometer")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				if config.ValueName == "" {
+					config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				} else {
+					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
+				}
+				if !config.Value.Valid {
+					config.IgnoreUpdate = true
+				}
 
 			case "%":
 				config.DeviceClass = SetDefault(config.DeviceClass, "battery")
 				config.Icon = SetDefault(config.Icon, "mdi:home-battery-outline")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				if config.ValueName == "" {
+					config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
+				} else {
+					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
+				}
+				if !config.Value.Valid {
+					config.IgnoreUpdate = true
+				}
 
 			default:
 				config.DeviceClass = SetDefault(config.DeviceClass, "")
