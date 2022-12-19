@@ -523,7 +523,7 @@ func (e *EndPoint) SetPvPoints(epp GoStruct.EndPointPath, entries api.DataMap) {
 		totalDailyEnergy := entries.CopyPointFromName(epp.AddString("p13199"), epp, "total_daily_energy", "Total Daily Energy (p13199)")
 
 		// dailyPvEnergy(p13112) - pvToGridEnergy(p13173) - pvToBatteryEnergy(p13174)
-		// WRONG - p13112 (Pv Daily Energy) - p13122 (Daily Feed-in Energy) - p13174 (Daily Battery Charging Energy from PV)
+		// WRONG!!! - p13112 (Pv Daily Energy) - p13122 (Daily Feed-in Energy) - p13174 (Daily Battery Charging Energy from PV)
 		dailyFeedInEnergy := entries.GetReflect(epp.AddString("p13173"))
 		batteryChargeEnergy := entries.GetReflect(epp.AddString("p13174"))
 		selfConsumptionOfPv := entries.CopyPointFromName(epp.AddString("p13116"), epp, "pv_consumption_energy", "Pv Consumption Energy (Calc)")
