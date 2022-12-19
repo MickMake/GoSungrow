@@ -2,9 +2,10 @@ bin/GoSungrow
 AppService_*.json
 WebAppService_*.json
 
-/*.txt
+#*.txt
 /GoSungrow
 /data/
 /dist/
 /notgit/
+logfile
 

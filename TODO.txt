@@ -1,0 +1,85 @@
+General issues:
+	- p13011                  Overview                          Total Active Power        0.587          W
+	- Change unit in "PointUnitFrom" when /1000.
+
+Formatting issues:
+	- getUpTimePoint		<- map[string]
+	- AppService.getKpiInfo		<- map[string]
+	- AppService.queryDeviceList	<- map[string]
+
+Fetch issues with:
+	- showInverterByUnit	- too large.
+	- WebAppService.getReportListByType	- too large.
+	- Need to deal with memory management on large JSON objects.
+
+Critical metadata
+	- WebIscmAppService.modelPointsPage DeviceModelId:714 DeviceType:14 - Use this to fetch all points for a particular ps_key.
+	- AppService.getPowerDevicePointNames DeviceType:14 - Point names for device.
+	- WebIscmAppService.getModelPoints DeviceModelId:714 - Point names for device.
+	- WebIscmAppService.queryDeviceListForBackSys - Basic relationships between devices.
+	- AppService.queryInverterModelList
+	- WebIscmAppService.getDeviceModel
+	- WebIscmAppService.getPointInfo
+	- WebIscmAppService.getPointInfoPage
+	- WebIscmAppService.getPowerDeviceTypeList
+	- WebIscmAppService.getPsTreeMenu
+	- WebIscmAppService.getUserMenuLs UserId:276937
+	- WebIscmAppService.getSysMenu MenuId:613
+	- WebIscmAppService.getDeviceTechnical
+	- WebIscmAppService.getDeviceType
+	- WebIscmAppService.getDeviceTypeInfoById CodeType:14
+	- WebIscmAppService.getCodeByType
+	- WebIscmAppService.getDeviceFactoryListByIds
+	- AppService.getOwnerFaultConfigList
+	- AppService.getSungwsGlobalConfigCache
+	- AppService.getRemoteParamSettingList CurPage:1 Size:100 DeviceType:14
+	- WebAppService.getSelfReportPoint
+	- WebAppService.getDevicePointAttrs Uuid:1179878 DeviceType2:14 PsId:1171348
+
+Handle virtual points automatically.
+	- iSolarCloud/AppService/getPsDetail/data.go
+	- iSolarCloud/AppService/queryDeviceListForApp/data.go
+	- iSolarCloud/AppService/getKpiInfo/data.go
+	- iSolarCloud/AppService/getPowerStationData/data.go
+	- iSolarCloud/AppService/getHouseholdStoragePsReport/data.go
+	- iSolarCloud/AppService/getAreaList/data.go
+	- iSolarCloud/AppService/getPsList/data.go
+	- iSolarCloud/AppService/getPsDetail/data.go
+
+Present these better:
+	- AppService.getUpTimePoint
+
+Handle large arrays by un-flattening.
+    - iSolarCloud/AppService/getPowerStationData/data.go
+
+Figure out how to better present large []structs.
+    - iSolarCloud/AppService/powerDevicePointList/data.go
+
+Fix DesignCapacity errors when set to Integer.
+    - iSolarCloud/AppService/queryPowerStationInfo/data.go
+
+Not producing correct results.
+    - iSolarCloud/AppService/queryPsIdList/data.go
+    - iSolarCloud/AppService/queryPsProfit/data.go
+    - iSolarCloud/AppService/queryPsNameByPsId/data.go
+
+Remove redundant reflect scans in
+	- Search for 'DO NOT BREAK'
+	- iSolarCloud//api/GoStruct/structmap.go
+	- iSolarCloud//api/GoStruct/struct_reflect.go
+	- iSolarCloud//api/GoStruct/struct_data.go
+	- iSolarCloud//api/GoStruct/struct_table.go
+
+Some problems with data:
+	- GoSungrow data table AppService.psHourPointsValue PsId:1171348
+
+Merge Device structs:
+	- AppService.queryDeviceInfo
+	- AppService.queryDeviceInfoForApp
+	- AppService.queryDeviceList
+	- AppService.getDeviceList
+	- WebAppService.getPsTree
+	- MttvScreenService.getPsDeviceListValue
+	- AppService.getPsList
+	- AppService.getPsListForPsDataByPsId
+
