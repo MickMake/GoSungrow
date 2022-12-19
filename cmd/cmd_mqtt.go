@@ -425,6 +425,7 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 			}
 
 			_ = c.UpdatePoint(r)
+			r.Value.UnitValueFix()	// @TODO - Fix this up properly
 
 			var id string
 			var name string
@@ -464,17 +465,18 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 				// ValueName:   r.Id,
 				DeviceClass: "",
 				StateClass:  r.Point.UpdateFreq,
-				Value:       r.Value.String(),
+				Value:       r.Value,
+				Point:       r.Point,
 
-				// Icon:                   "",
-				// ValueTemplate:          "",
 				LastReset:              r.Point.WhenReset(),
 				// LastResetValueTemplate: "",
 			}
 
-			if re.Value == "--" {
-				re.Value = ""
-			}
+			// if strings.Contains(r.EndPoint, "13149") || strings.Contains(r.Current.DataStructure.Endpoint.String(), "13149") ||
+			// 	strings.Contains(r.EndPoint, "13119") || strings.Contains(r.Current.DataStructure.Endpoint.String(), "13119") {
+			// 	fmt.Sprintf("")
+			// }
+
 			switch {
 				case r.Point.IsTotal():
 					re.StateClass = "total"
@@ -494,6 +496,10 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 					break
 				}
 			}
+
+			// if strings.Contains(r.EndPoint, "p13115") || strings.Contains(r.Current.DataStructure.Endpoint.String(), "p13115") {
+			// 	fmt.Sprintf("")
+			// }
 
 			fmt.Printf("U")
 			c.Error = c.Client.BinarySensorPublishValue(re)
@@ -578,26 +584,47 @@ func (c *CmdMqtt) UpdatePoint(entry *api.DataEntry) error {
 		// 		entry.Point.ValueType, entry.Current.DataStructure.ValueType, entry.Current.DataStructure.ValueType == entry.Point.ValueType)
 		// }
 
-		if (p.Name.String() != entry.Point.Description) && (p.Unit.String() != entry.Point.Unit) && (entry.Point.GroupName == "") {
-			// fmt.Printf("\nNOT SAME\n")
-			// fmt.Println("BEFORE:")
-			// fmt.Printf("\tName:'%s'\tDescription:'%s'\n", p.Name, entry.Point.Description)
-			// fmt.Printf("\tPointGroupId:'%s'\tGroupName:'%s'\n", p.PointGroupId, entry.Point.GroupName)
-			// fmt.Printf("\tUnitType:'%s'\tValueType:'%s'\n", p.UnitType, entry.Point.ValueType)
-			// fmt.Printf("\tUnit:'%s'\tUnit:'%s'\n", p.Unit, entry.Point.Unit)
-
-			entry.Point.Description = p.Name.String()
-			entry.Point.Unit = p.Unit.String()
-			entry.Point.GroupName = p.PointGroupName
-			entry.Point.ValueType = p.UnitType.String()
-
-			// fmt.Println("AFTER:")
-			// fmt.Printf("\tName:'%s'\tDescription:'%s'\n", p.Name, entry.Point.Description)
-			// fmt.Printf("\tPointGroupId:'%s'\tGroupName:'%s'\n", p.PointGroupId, entry.Point.GroupName)
-			// fmt.Printf("\tUnitType:'%s'\tValueType:'%s'\n", p.UnitType, entry.Point.ValueType)
-			// fmt.Printf("\tUnit:'%s'\tUnit:'%s'\n", p.Unit, entry.Point.Unit)
-			// fmt.Println("")
+		// If Point description matches ...
+		if p.Name.String() == entry.Point.Description {
+			break
 		}
+
+		// If Point unit matches ...
+		if p.Unit.String() == entry.Point.Unit {
+			break
+		}
+
+		// If Point group name is set ...
+		if entry.Point.GroupName != "" {
+			break
+		}
+
+		// ... update the Point.
+		entry.Point.Description = p.Name.String()
+		entry.Point.Unit = p.Unit.String()
+		entry.Point.GroupName = p.PointGroupName
+		entry.Point.ValueType = p.UnitType.String()
+
+		// if (p.Name.String() != entry.Point.Description) && (p.Unit.String() != entry.Point.Unit) && (entry.Point.GroupName == "") {
+		// 	// fmt.Printf("\nNOT SAME\n")
+		// 	// fmt.Println("BEFORE:")
+		// 	// fmt.Printf("\tName:'%s'\tDescription:'%s'\n", p.Name, entry.Point.Description)
+		// 	// fmt.Printf("\tPointGroupId:'%s'\tGroupName:'%s'\n", p.PointGroupId, entry.Point.GroupName)
+		// 	// fmt.Printf("\tUnitType:'%s'\tValueType:'%s'\n", p.UnitType, entry.Point.ValueType)
+		// 	// fmt.Printf("\tUnit:'%s'\tUnit:'%s'\n", p.Unit, entry.Point.Unit)
+		//
+		// 	entry.Point.Description = p.Name.String()
+		// 	entry.Point.Unit = p.Unit.String()
+		// 	entry.Point.GroupName = p.PointGroupName
+		// 	entry.Point.ValueType = p.UnitType.String()
+		//
+		// 	// fmt.Println("AFTER:")
+		// 	// fmt.Printf("\tName:'%s'\tDescription:'%s'\n", p.Name, entry.Point.Description)
+		// 	// fmt.Printf("\tPointGroupId:'%s'\tGroupName:'%s'\n", p.PointGroupId, entry.Point.GroupName)
+		// 	// fmt.Printf("\tUnitType:'%s'\tValueType:'%s'\n", p.UnitType, entry.Point.ValueType)
+		// 	// fmt.Printf("\tUnit:'%s'\tUnit:'%s'\n", p.Unit, entry.Point.Unit)
+		// 	// fmt.Println("")
+		// }
 
 	}
 	return c.Error
