@@ -1,0 +1,60 @@
+availability list (optional)
+A list of MQTT topics subscribed to receive availability (online/offline) updates. Must not be used together with availability_topic.
+
+payload_available string (optional, default: online)
+The payload that represents the available state.
+
+payload_not_available string (optional, default: offline)
+The payload that represents the unavailable state.
+
+topic string REQUIRED
+An MQTT topic subscribed to receive availability (online/offline) updates.
+
+value_template template (optional)
+Defines a template to extract device’s availability from the topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+
+availability_mode string (optional, default: latest)
+When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest. If set to all, payload_available must be received on all configured availability topics before the entity is marked as online. If set to any, payload_available must be received on at least one configured availability topic before the entity is marked as online. If set to latest, the last payload_available or payload_not_available received on any configured availability topic controls the availability.
+
+availability_template template (optional)
+Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+
+availability_topic string (optional)
+The MQTT topic subscribed to receive availability (online/offline) updates. Must not be used together with availability.
+
+command_topic string (optional)
+The MQTT topic to publish payload_on to activate the scene.
+
+enabled_by_default boolean (optional, default: true)
+Flag which defines if the entity should be enabled when first added.
+
+entity_category string (optional, default: None)
+The category of the entity.
+
+icon icon (optional)
+Icon for the scene.
+
+name string (optional, default: MQTT Scene)
+The name to use when displaying this scene.
+
+object_id string (optional)
+Used instead of name for automatic generation of entity_id
+
+payload_available string (optional, default: online)
+The payload that represents the available state.
+
+payload_not_available string (optional, default: offline)
+The payload that represents the unavailable state.
+
+payload_on string (optional, default: ON)
+The payload that will be sent to command_topic when activating the MQTT scene.
+
+qos integer (optional, default: 0)
+The maximum QoS level of the state topic. Default is 0 and will also be used to publishing messages.
+
+retain boolean (optional, default: false)
+If the published message should have the retain flag on or not.
+
+unique_id string (optional)
+An ID that uniquely identifies this scene entity. If two scenes have the same unique ID, Home Assistant will raise an exception.
+

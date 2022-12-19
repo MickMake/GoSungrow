@@ -1,0 +1,51 @@
+automation_type string REQUIRED
+The type of automation, must be ‘trigger’.
+
+payload string (optional)
+Optional payload to match the payload being sent over the topic.
+
+qos integer (optional, default: 0)
+The maximum QoS level to be used when receiving messages.
+
+topic string REQUIRED
+The MQTT topic subscribed to receive trigger events.
+
+type string REQUIRED
+The type of the trigger, e.g. button_short_press. Entries supported by the frontend: button_short_press, button_short_release, button_long_press, button_long_release, button_double_press, button_triple_press, button_quadruple_press, button_quintuple_press. If set to an unsupported value, will render as subtype type, e.g. button_1 spammed with type set to spammed and subtype set to button_1
+
+subtype string REQUIRED
+The subtype of the trigger, e.g. button_1. Entries supported by the frontend: turn_on, turn_off, button_1, button_2, button_3, button_4, button_5, button_6. If set to an unsupported value, will render as subtype type, e.g. left_button pressed with type set to button_short_press and subtype set to left_button
+
+device map REQUIRED
+Information about the device this device trigger is a part of to tie it into the device registry. At least one of identifiers or connections must be present to identify the device.
+
+configuration_url string (optional)
+A link to the webpage that can manage the configuration of this device. Can be either an HTTP or HTTPS link.
+
+connections list | map (optional)
+A list of connections of the device to the outside world as a list of tuples [connection_type, connection_identifier]. For example the MAC address of a network interface: 'connections': ['mac', '02:5b:26:a8:dc:12'].
+
+identifiers list | string (optional)
+A list of IDs that uniquely identify the device. For example a serial number.
+
+manufacturer string (optional)
+The manufacturer of the device.
+
+model string (optional)
+The model of the device.
+
+name string (optional)
+The name of the device.
+
+suggested_area string (optional)
+Suggest an area if the device isn’t in one yet.
+
+sw_version string (optional)
+The firmware version of the device.
+
+via_device string (optional)
+Identifier of a device that routes messages between this device and Home Assistant. Examples of such devices are hubs, or parent devices of a sub-device. This is used to show device topology in Home Assistant.
+
+value_template template (optional)
+Defines a template to extract the value.
+

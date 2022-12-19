@@ -1,0 +1,246 @@
+action_template template (optional)
+A template to render the value received on the action_topic with.
+
+action_topic string (optional)
+The MQTT topic to subscribe for changes of the current action. If this is set, the climate graph uses the value received as data source. Valid values: off, heating, cooling, drying, idle, fan.
+
+aux_command_topic string (optional)
+The MQTT topic to publish commands to switch auxiliary heat.
+
+aux_state_template template (optional)
+A template to render the value received on the aux_state_topic with.
+
+aux_state_topic string (optional)
+The MQTT topic to subscribe for changes of the auxiliary heat mode. If this is not set, the auxiliary heat mode works in optimistic mode (see below).
+
+availability list (optional)
+A list of MQTT topics subscribed to receive availability (online/offline) updates. Must not be used together with availability_topic.
+
+payload_available string (optional, default: online)
+The payload that represents the available state.
+
+payload_not_available string (optional, default: offline)
+The payload that represents the unavailable state.
+
+topic string REQUIRED
+An MQTT topic subscribed to receive availability (online/offline) updates.
+
+value_template template (optional)
+Defines a template to extract device’s availability from the topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+
+availability_mode string (optional, default: latest)
+When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest. If set to all, payload_available must be received on all configured availability topics before the entity is marked as online. If set to any, payload_available must be received on at least one configured availability topic before the entity is marked as online. If set to latest, the last payload_available or payload_not_available received on any configured availability topic controls the availability.
+
+availability_template template (optional)
+Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+
+availability_topic string (optional)
+The MQTT topic subscribed to receive availability (online/offline) updates. Must not be used together with availability.
+
+current_temperature_template template (optional)
+A template with which the value received on current_temperature_topic will be rendered.
+
+current_temperature_topic string (optional)
+The MQTT topic on which to listen for the current temperature.
+
+device map (optional)
+Information about the device this HVAC device is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set. At least one of identifiers or connections must be present to identify the device.
+
+configuration_url string (optional)
+A link to the webpage that can manage the configuration of this device. Can be either an HTTP or HTTPS link.
+
+connections list (optional)
+A list of connections of the device to the outside world as a list of tuples [connection_type, connection_identifier]. For example the MAC address of a network interface: "connections": [["mac", "02:5b:26:a8:dc:12"]].
+
+hw_version string (optional)
+The hardware version of the device.
+
+identifiers list | string (optional)
+A list of IDs that uniquely identify the device. For example a serial number.
+
+manufacturer string (optional)
+The manufacturer of the device.
+
+model string (optional)
+The model of the device.
+
+name string (optional)
+The name of the device.
+
+suggested_area string (optional)
+Suggest an area if the device isn’t in one yet.
+
+sw_version string (optional)
+The firmware version of the device.
+
+via_device string (optional)
+Identifier of a device that routes messages between this device and Home Assistant. Examples of such devices are hubs, or parent devices of a sub-device. This is used to show device topology in Home Assistant.
+
+enabled_by_default boolean (optional, default: true)
+Flag which defines if the entity should be enabled when first added.
+
+encoding string (optional, default: utf-8)
+The encoding of the payloads received and published messages. Set to "" to disable decoding of incoming payload.
+
+entity_category string (optional, default: None)
+The category of the entity.
+
+fan_mode_command_template template (optional)
+A template to render the value sent to the fan_mode_command_topic with.
+
+fan_mode_command_topic string (optional)
+The MQTT topic to publish commands to change the fan mode.
+
+fan_mode_state_template template (optional)
+A template to render the value received on the fan_mode_state_topic with.
+
+fan_mode_state_topic string (optional)
+The MQTT topic to subscribe for changes of the HVAC fan mode. If this is not set, the fan mode works in optimistic mode (see below).
+
+fan_modes list (optional)
+A list of supported fan modes.
+
+Default: [“auto”, “low”, “medium”, “high”]
+initial integer (optional, default: 21)
+Set the initial target temperature.
+
+icon icon (optional)
+Icon for the entity.
+
+json_attributes_template template (optional)
+Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic. Usage example can be found in MQTT sensor documentation.
+
+json_attributes_topic string (optional)
+The MQTT topic subscribed to receive a JSON dictionary payload and then set as sensor attributes. Usage example can be found in MQTT sensor documentation.
+
+max_temp float (optional)
+Maximum set point available.
+
+min_temp float (optional)
+Minimum set point available.
+
+mode_command_template template (optional)
+A template to render the value sent to the mode_command_topic with.
+
+mode_command_topic string (optional)
+The MQTT topic to publish commands to change the HVAC operation mode.
+
+mode_state_template template (optional)
+A template to render the value received on the mode_state_topic with.
+
+mode_state_topic string (optional)
+The MQTT topic to subscribe for changes of the HVAC operation mode. If this is not set, the operation mode works in optimistic mode (see below).
+
+modes list (optional)
+A list of supported modes. Needs to be a subset of the default values.
+
+Default: [“auto”, “off”, “cool”, “heat”, “dry”, “fan_only”]
+name string (optional, default: MQTT HVAC)
+The name of the HVAC.
+
+object_id string (optional)
+Used instead of name for automatic generation of entity_id
+
+payload_available string (optional, default: online)
+The payload that represents the available state.
+
+payload_not_available string (optional, default: offline)
+The payload that represents the unavailable state.
+
+payload_off string (optional, default: OFF)
+The payload that represents disabled state.
+
+payload_on string (optional, default: ON)
+The payload that represents enabled state.
+
+power_command_topic string (optional)
+The MQTT topic to publish commands to change the power state. This is useful if your device has a separate power toggle in addition to mode.
+
+precision float (optional)
+The desired precision for this device. Can be used to match your actual thermostat’s precision. Supported values are 0.1, 0.5 and 1.0.
+
+Default: 0.1 for Celsius and 1.0 for Fahrenheit.
+preset_mode_command_template template (optional)
+Defines a template to generate the payload to send to preset_mode_command_topic.
+
+preset_mode_command_topic string (optional)
+The MQTT topic to publish commands to change the preset mode.
+
+preset_mode_state_topic string (optional)
+The MQTT topic subscribed to receive climate speed based on presets. When preset ‘none’ is received or None the preset_mode will be reset.
+
+preset_mode_value_template string (optional)
+Defines a template to extract the preset_mode value from the payload received on preset_mode_state_topic.
+
+preset_modes list (optional, default: [])
+List of preset modes this climate is supporting. Common examples include eco, away, boost, comfort, home, sleep and activity.
+
+qos integer (optional, default: 0)
+The maximum QoS level to be used when receiving and publishing messages.
+
+retain boolean (optional, default: false)
+Defines if published messages should have the retain flag set.
+
+swing_mode_command_template template (optional)
+A template to render the value sent to the swing_mode_command_topic with.
+
+swing_mode_command_topic string (optional)
+The MQTT topic to publish commands to change the swing mode.
+
+swing_mode_state_template template (optional)
+A template to render the value received on the swing_mode_state_topic with.
+
+swing_mode_state_topic string (optional)
+The MQTT topic to subscribe for changes of the HVAC swing mode. If this is not set, the swing mode works in optimistic mode (see below).
+
+swing_modes list (optional, default: [“on”, “off”])
+A list of supported swing modes.
+
+temperature_command_template template (optional)
+A template to render the value sent to the temperature_command_topic with.
+
+temperature_command_topic string (optional)
+The MQTT topic to publish commands to change the target temperature.
+
+temperature_high_command_template template (optional)
+A template to render the value sent to the temperature_high_command_topic with.
+
+temperature_high_command_topic string (optional)
+The MQTT topic to publish commands to change the high target temperature.
+
+temperature_high_state_template template (optional)
+A template to render the value received on the temperature_high_state_topic with.
+
+temperature_high_state_topic string (optional)
+The MQTT topic to subscribe for changes in the target high temperature. If this is not set, the target high temperature works in optimistic mode (see below).
+
+temperature_low_command_template template (optional)
+A template to render the value sent to the temperature_low_command_topic with.
+
+temperature_low_command_topic string (optional)
+The MQTT topic to publish commands to change the target low temperature.
+
+temperature_low_state_template template (optional)
+A template to render the value received on the temperature_low_state_topic with.
+
+temperature_low_state_topic string (optional)
+The MQTT topic to subscribe for changes in the target low temperature. If this is not set, the target low temperature works in optimistic mode (see below).
+
+temperature_state_template template (optional)
+A template to render the value received on the temperature_state_topic with.
+
+temperature_state_topic string (optional)
+The MQTT topic to subscribe for changes in the target temperature. If this is not set, the target temperature works in optimistic mode (see below).
+
+temperature_unit string (optional)
+Defines the temperature unit of the device, C or F. If this is not set, the temperature unit is set to the system temperature unit.
+
+temp_step float (optional, default: 1)
+Step size for temperature set point.
+
+unique_id string (optional)
+An ID that uniquely identifies this HVAC device. If two HVAC devices have the same unique ID, Home Assistant will raise an exception.
+
+value_template template (optional)
+Default template to render the payloads on all *_state_topics with.
+

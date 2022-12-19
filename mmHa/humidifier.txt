@@ -1,0 +1,160 @@
+availability list (optional)
+A list of MQTT topics subscribed to receive availability (online/offline) updates. Must not be used together with availability_topic.
+
+payload_available string (optional, default: online)
+The payload that represents the available state.
+
+payload_not_available string (optional, default: offline)
+The payload that represents the unavailable state.
+
+topic string REQUIRED
+An MQTT topic subscribed to receive availability (online/offline) updates.
+
+value_template template (optional)
+Defines a template to extract device’s availability from the topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+
+availability_mode string (optional, default: latest)
+When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest. If set to all, payload_available must be received on all configured availability topics before the entity is marked as online. If set to any, payload_available must be received on at least one configured availability topic before the entity is marked as online. If set to latest, the last payload_available or payload_not_available received on any configured availability topic controls the availability.
+
+availability_template template (optional)
+Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+
+availability_topic string (optional)
+The MQTT topic subscribed to receive availability (online/offline) updates. Must not be used together with availability.
+
+command_template template (optional)
+Defines a template to generate the payload to send to command_topic.
+
+command_topic string REQUIRED
+The MQTT topic to publish commands to change the humidifier state.
+
+device map (optional)
+Information about the device this humidifier is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set. At least one of identifiers or connections must be present to identify the device.
+
+configuration_url string (optional)
+A link to the webpage that can manage the configuration of this device. Can be either an HTTP or HTTPS link.
+
+connections list | map (optional)
+A list of connections of the device to the outside world as a list of tuples [connection_type, connection_identifier]. For example the MAC address of a network interface: "connections": [["mac", "02:5b:26:a8:dc:12"]].
+
+hw_version string (optional)
+The hardware version of the device.
+
+identifiers string | list (optional)
+A list of IDs that uniquely identify the device. For example a serial number.
+
+manufacturer string (optional)
+The manufacturer of the device.
+
+model string (optional)
+The model of the device.
+
+name string (optional)
+The name of the device.
+
+suggested_area string (optional)
+Suggest an area if the device isn’t in one yet.
+
+sw_version string (optional)
+The firmware version of the device.
+
+via_device string (optional)
+Identifier of a device that routes messages between this device and Home Assistant. Examples of such devices are hubs, or parent devices of a sub-device. This is used to show device topology in Home Assistant.
+
+device_class string (optional, default: humidifier)
+The device class of the MQTT device. Must be either humidifier or dehumidifier.
+
+enabled_by_default boolean (optional, default: true)
+Flag which defines if the entity should be enabled when first added.
+
+encoding string (optional, default: utf-8)
+The encoding of the payloads received and published messages. Set to "" to disable decoding of incoming payload.
+
+entity_category string (optional, default: None)
+The category of the entity.
+
+icon icon (optional)
+Icon for the entity.
+
+json_attributes_template template (optional)
+Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic. Usage example can be found in MQTT sensor documentation.
+
+json_attributes_topic string (optional)
+The MQTT topic subscribed to receive a JSON dictionary payload and then set as sensor attributes. Usage example can be found in MQTT sensor documentation.
+
+max_humidity integer (optional, default: 100)
+The minimum target humidity percentage that can be set.
+
+min_humidity integer (optional, default: 0)
+The maximum target humidity percentage that can be set.
+
+name string (optional, default: MQTT humidifier)
+The name of the humidifier.
+
+object_id string (optional)
+Used instead of name for automatic generation of entity_id
+
+optimistic boolean (optional)
+Flag that defines if humidifier works in optimistic mode
+
+Default: true if no state topic defined, else false.
+payload_available string (optional, default: online)
+The payload that represents the available state.
+
+payload_not_available string (optional, default: offline)
+The payload that represents the unavailable state.
+
+payload_off string (optional, default: OFF)
+The payload that represents the stop state.
+
+payload_on string (optional, default: ON)
+The payload that represents the running state.
+
+payload_reset_humidity string (optional, default: None)
+A special payload that resets the target_humidity state attribute to None when received at the target_humidity_state_topic.
+
+payload_reset_mode string (optional, default: None)
+A special payload that resets the mode state attribute to None when received at the mode_state_topic.
+
+target_humidity_command_template template (optional)
+Defines a template to generate the payload to send to target_humidity_command_topic.
+
+target_humidity_command_topic string REQUIRED
+The MQTT topic to publish commands to change the humidifier target humidity state based on a percentage.
+
+target_humidity_state_topic string (optional)
+The MQTT topic subscribed to receive humidifier target humidity.
+
+target_humidity_state_template string (optional)
+Defines a template to extract a value for the humidifier target_humidity state.
+
+mode_command_template template (optional)
+Defines a template to generate the payload to send to mode_command_topic.
+
+mode_command_topic string (optional)
+The MQTT topic to publish commands to change the mode on the humidifier. This attribute ust be configured together with the modes attribute.
+
+mode_state_topic string (optional)
+The MQTT topic subscribed to receive the humidifier mode.
+
+mode_state_template string (optional)
+Defines a template to extract a value for the humidifier mode state.
+
+modes list (optional, default: [])
+List of available modes this humidifier is capable of running at. Common examples include normal, eco, away, boost, comfort, home, sleep, auto and baby. These examples offer built-in translations but other custom modes are allowed as well. This attribute ust be configured together with the mode_command_topic attribute.
+
+qos integer (optional, default: 0)
+The maximum QoS level of the state topic.
+
+retain boolean (optional, default: true)
+If the published message should have the retain flag on or not.
+
+state_topic string (optional)
+The MQTT topic subscribed to receive state updates.
+
+state_value_template string (optional)
+Defines a template to extract a value from the state.
+
+unique_id string (optional)
+An ID that uniquely identifies this humidifier. If two humidifiers have the same unique ID, Home Assistant will raise an exception.
+
