@@ -366,8 +366,8 @@ func (e *EndPoint) GetEnergyStorageSystem(entries api.DataMap) {
 			// pvFeedInPercent.Value.SetUnit("%")
 			//
 			// dailyPvEnergyPercent := entries.CopyPoint(dailyTotalEnergy, epp, "daily_pv_energy_percent", "")
-			// DailyPvEnergy := dailyTotalEnergy.Value.First().ValueFloat() - dailyPurchasedEnergy.Value.First().ValueFloat()
-			// dailyPvEnergyPercent.SetValue(api.GetPercent(DailyPvEnergy, dailyTotalEnergy.Value.First().ValueFloat(), 1))
+			// DailyPvEnergy := dailyTotalEnergy.GetValueFloat() - dailyPurchasedEnergy.GetValueFloat()
+			// dailyPvEnergyPercent.SetValue(api.GetPercent(DailyPvEnergy, dailyTotalEnergy.GetValueFloat(), 1))
 			// dailyPvEnergyPercent.Value.SetUnit("%")
 			//
 			// dailyPurchasedEnergyPercent := entries.CopyPoint(dailyTotalEnergy, epp, "daily_purchased_energy_percent", "")
@@ -381,7 +381,7 @@ func (e *EndPoint) GetEnergyStorageSystem(entries api.DataMap) {
 			// _ = entries.MakeState(powerPvActive)
 			//
 			// powerPvToBatteryActive := entries.CopyPoint(batteryChargePower, epp, "power_pv_to_battery_active", "")
-			// powerPvToBatteryActive.SetValue(batteryChargePower.Value.First().ValueFloat())
+			// powerPvToBatteryActive.SetValue(batteryChargePower.GetValueFloat())
 			// _ = entries.MakeState(powerPvToBatteryActive)
 			//
 			// // powerPvToGrid := entries.GetReflect(epp.AddString("p13121"))
@@ -390,9 +390,9 @@ func (e *EndPoint) GetEnergyStorageSystem(entries api.DataMap) {
 			// _ = entries.MakeState(powerPvToGridActive)
 			//
 			// powerPvToLoad := entries.CopyPoint(powerPv, epp, "power_pv_to_load", "Power Pv To Load (Calc)")
-			// one := powerPv.Value.First().ValueFloat()
-			// two := batteryChargePower.Value.First().ValueFloat()
-			// three := powerPvToGrid.Value.First().ValueFloat()
+			// one := powerPv.GetValueFloat()
+			// two := batteryChargePower.GetValueFloat()
+			// three := powerPvToGrid.GetValueFloat()
 			// powerPvToLoad.SetValue(one - two - three)
 			// powerPvToLoadActive := entries.CopyPoint(powerPvToLoad, epp, "power_pv_to_load_active", "Power Pv To Load Active (Calc)")
 			// _ = entries.MakeState(powerPvToLoadActive)
@@ -404,7 +404,7 @@ func (e *EndPoint) GetEnergyStorageSystem(entries api.DataMap) {
 			// _ = entries.MakeState(powerBatteryActive)
 			//
 			// powerBatteryToLoadActive := entries.CopyPoint(batteryDischargePower, epp, "power_battery_to_load_active", "Power Battery To Load Active (Calc)")
-			// powerBatteryToLoadActive.SetValue(batteryDischargePower.Value.First().ValueFloat())
+			// powerBatteryToLoadActive.SetValue(batteryDischargePower.GetValueFloat())
 			// _ = entries.MakeState(powerBatteryToLoadActive)
 			//
 			// powerBatteryToGridActive := entries.CopyPoint(batteryChargePower, epp, "power_battery_to_grid_active", "Power Battery To Grid Active (Calc)")
@@ -497,13 +497,13 @@ func (e *EndPoint) SetPvPoints(epp GoStruct.EndPointPath, entries api.DataMap) {
 		pvToBatteryPower := entries.CopyPointFromName(epp.AddString("p13126"), epp, "pv_to_battery_power", "Pv To Battery Power (p13126)")
 
 		pvToBatteryPowerActive := entries.CopyPoint(pvToBatteryPower, epp, "pv_to_battery_power_active", "Pv To Battery Power Active (p13126)")
-		pvToBatteryPowerActive.SetValue(pvToBatteryPower.Value.First().ValueFloat())
+		pvToBatteryPowerActive.SetValue(pvToBatteryPower.GetValueFloat())
 		_ = entries.MakeState(pvToBatteryPowerActive)
 
 		pvToLoadPower := entries.CopyPoint(pvPower, epp, "pv_to_load_power", "Pv To Load Power (Calc)")
-		one := pvPower.Value.First().ValueFloat()
-		two := pvToBatteryPower.Value.First().ValueFloat()
-		three := pvToGridPower.Value.First().ValueFloat()
+		one := pvPower.GetValueFloat()
+		two := pvToBatteryPower.GetValueFloat()
+		three := pvToGridPower.GetValueFloat()
 		pvToLoadPower.SetValue(one - two - three)
 		pvToLoadPower.SetValuePrecision(3)
 
@@ -522,12 +522,12 @@ func (e *EndPoint) SetPvPoints(epp GoStruct.EndPointPath, entries api.DataMap) {
 
 		totalDailyEnergy := entries.CopyPointFromName(epp.AddString("p13199"), epp, "total_daily_energy", "Total Daily Energy (p13199)")
 
-		// p13112 (Pv Daily Energy) - p13122 (Daily Feed-in Energy) - p13174 (Daily Battery Charging Energy from PV)
-		// 60.4 - 44.5 - 6.3
-		dailyFeedInEnergy := entries.GetReflect(epp.AddString("p13122"))
+		// dailyPvEnergy(p13112) - pvToGridEnergy(p13173) - pvToBatteryEnergy(p13174)
+		// WRONG - p13112 (Pv Daily Energy) - p13122 (Daily Feed-in Energy) - p13174 (Daily Battery Charging Energy from PV)
+		dailyFeedInEnergy := entries.GetReflect(epp.AddString("p13173"))
 		batteryChargeEnergy := entries.GetReflect(epp.AddString("p13174"))
 		selfConsumptionOfPv := entries.CopyPointFromName(epp.AddString("p13116"), epp, "pv_consumption_energy", "Pv Consumption Energy (Calc)")
-		tmp1 := pvDailyEnergy.Value.First().Value() - dailyFeedInEnergy.Value.First().Value() - batteryChargeEnergy.Value.First().Value()
+		tmp1 := pvDailyEnergy.GetValueFloat() - dailyFeedInEnergy.GetValueFloat() - batteryChargeEnergy.GetValueFloat()
 		selfConsumptionOfPv.SetValue(tmp1)
 		selfConsumptionOfPv.SetValuePrecision(3)
 
@@ -539,7 +539,7 @@ func (e *EndPoint) SetPvPoints(epp GoStruct.EndPointPath, entries api.DataMap) {
 		// WRONG!!! - pvToLoadEnergy := entries.CopyPointFromName(epp.AddString("p13116"), epp, "pv_to_load_energy", "Pv To Load Energy (p13116)")
 		gridToLoadEnergy := entries.GetReflect(epp.AddString("p13147"))
 		pvToLoadEnergy := entries.CopyPointFromName(epp.AddString("p13116"), epp, "pv_to_load_energy", "Pv To Load Energy (Calc)")
-		tmp2 := totalDailyEnergy.Value.First().Value() - gridToLoadEnergy.Value.First().Value()
+		tmp2 := totalDailyEnergy.GetValueFloat() - gridToLoadEnergy.GetValueFloat()
 		pvToLoadEnergy.SetValue(tmp2)
 		pvToLoadEnergy.SetValuePrecision(3)
 
@@ -549,8 +549,8 @@ func (e *EndPoint) SetPvPoints(epp GoStruct.EndPointPath, entries api.DataMap) {
 
 		gridToLoadDailyEnergy := entries.GetReflect(epp.AddString("p13147"))
 		pvDailyEnergyPercent := entries.CopyPoint(totalDailyEnergy, epp, "pv_daily_energy_percent", "Pv Daily Energy Percent (Calc)")
-		dpe := totalDailyEnergy.Value.First().ValueFloat() - gridToLoadDailyEnergy.Value.First().ValueFloat()
-		pvDailyEnergyPercent.SetValue(api.GetPercent(dpe, totalDailyEnergy.Value.First().ValueFloat(), 1))
+		dpe := totalDailyEnergy.GetValueFloat() - gridToLoadDailyEnergy.GetValueFloat()
+		pvDailyEnergyPercent.SetValue(api.GetPercent(dpe, totalDailyEnergy.GetValueFloat(), 1))
 		pvDailyEnergyPercent.Value.SetUnit("%")
 
 		pvEnergy := entries.CopyPointFromName(pvToLoadEnergy.PointId(), epp, "pv_energy", "Pv Energy (Calc)")
@@ -643,7 +643,7 @@ func (e *EndPoint) SetLoadPoints(epp GoStruct.EndPointPath, entries api.DataMap)
 //
 // 		// /////////////////////////////////////////////////////// //
 // 		batteryToLoadPowerActive := entries.CopyPoint(batteryDischargePower, epp, "battery_to_load_power_active", "Battery To Load Power Active (Calc)")
-// 		batteryToLoadPowerActive.SetValue(batteryDischargePower.Value.First().ValueFloat())
+// 		batteryToLoadPowerActive.SetValue(batteryDischargePower.GetValueFloat())
 // 		_ = entries.MakeState(batteryToLoadPowerActive)
 //
 // 		batteryToGridPowerActive := entries.CopyPoint(batteryDischargePower, epp, "battery_to_grid_power_active", "Battery To Grid Power Active (Calc)")
@@ -666,13 +666,13 @@ func (e *EndPoint) SetLoadPoints(epp GoStruct.EndPointPath, entries api.DataMap)
 //
 // 		pvToBatteryPower := entries.CopyPointFromName(epp.AddString("p13126"), epp, "pv_to_battery_power", "")
 // 		pvToBatteryPowerActive := entries.CopyPoint(pvToBatteryPower, epp, "pv_to_battery_power_active", "Pv To Battery Power Active (p13126)")
-// 		pvToBatteryPowerActive.SetValue(pvToBatteryPower.Value.First().ValueFloat())
+// 		pvToBatteryPowerActive.SetValue(pvToBatteryPower.GetValueFloat())
 // 		_ = entries.MakeState(pvToBatteryPowerActive)
 //
 // 		pvToLoadPower := entries.CopyPoint(pvPower, epp, "pv_to_load_power", "Pv To Load Power (Calc)")
-// 		one := pvPower.Value.First().ValueFloat()
-// 		two := pvToBatteryPower.Value.First().ValueFloat()
-// 		three := pvToGridPower.Value.First().ValueFloat()
+// 		one := pvPower.GetValueFloat()
+// 		two := pvToBatteryPower.GetValueFloat()
+// 		three := pvToGridPower.GetValueFloat()
 // 		pvToLoadPower.SetValue(one - two - three)
 // 		pvToLoadPowerActive := entries.CopyPoint(pvToLoadPower, epp, "pv_to_load_power_active", "Pv To Load Power Active (Calc)")
 // 		_ = entries.MakeState(pvToLoadPowerActive)
@@ -708,8 +708,8 @@ func (e *EndPoint) SetLoadPoints(epp GoStruct.EndPointPath, entries api.DataMap)
 // 		totalDailyEnergy := entries.GetReflect(epp.AddString("p13199"))
 // 		gridToLoadDailyEnergy := entries.GetReflect(epp.AddString("p13147"))
 // 		pvDailyEnergyPercent := entries.CopyPoint(totalDailyEnergy, epp, "pv_daily_energy_percent", "")
-// 		dpe := totalDailyEnergy.Value.First().ValueFloat() - gridToLoadDailyEnergy.Value.First().ValueFloat()
-// 		pvDailyEnergyPercent.SetValue(api.GetPercent(dpe, totalDailyEnergy.Value.First().ValueFloat(), 1))
+// 		dpe := totalDailyEnergy.GetValueFloat() - gridToLoadDailyEnergy.GetValueFloat()
+// 		pvDailyEnergyPercent.SetValue(api.GetPercent(dpe, totalDailyEnergy.GetValueFloat(), 1))
 // 		pvDailyEnergyPercent.Value.SetUnit("%")
 //
 // 		// DailyFeedInEnergy - @TODO - This may differ from DailyFeedInEnergyPv

@@ -916,6 +916,8 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 	}
 }
 
+// Operate on UnitValue
+
 func (r *Reflect) SetValue(value interface{}) {
 	for range Only.Once {
 		r.InterfaceValue = value
@@ -968,6 +970,22 @@ func (r *Reflect) SetUnitValues(value valueTypes.UnitValues) {
 		// 	r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
 	}
 }
+
+func (r *Reflect) GetValueFloat() float64 {
+	var ret float64
+	for range Only.Once {
+		v := r.Value.First()
+		if v == nil {
+			break
+		}
+		if !v.Valid {
+			break
+		}
+		ret = v.Value()
+	}
+	return ret
+}
+
 
 // SetPointId - Sets the EndPointPath based off struct tags?
 func (r *Reflect) SetPointId() EndPointPath {
