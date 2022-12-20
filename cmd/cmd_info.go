@@ -40,6 +40,8 @@ func (c *CmdInfo) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Annotations:           map[string]string{"group": "Info"},
 			Short:                 fmt.Sprintf("General iSolarCloud functions."),
 			Long:                  fmt.Sprintf("General iSolarCloud functions."),
+			Deprecated:            "show",
+			Hidden:                true,
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               cmds.SunGrowArgs,
