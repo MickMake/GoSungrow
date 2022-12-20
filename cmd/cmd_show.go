@@ -26,7 +26,7 @@ func (c *CmdShow) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		}
 		c.cmd = cmd
 
-		c.SelfCmd = &cobra.Command{
+		c.SelfCmd = &cobra.Command {
 			Use:                   "show",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Show"},

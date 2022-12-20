@@ -403,8 +403,16 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 				continue
 			}
 
+			// if strings.Contains(r.EndPoint, "p13149") {
+			// 	fmt.Println()
+			// }
+
 			_ = c.UpdatePoint(r)
 			r.Value.UnitValueFix()	// @TODO - Fix this up properly
+
+			// if strings.Contains(r.EndPoint, "p13149") {
+			// 	fmt.Println()
+			// }
 
 			var id string
 			var name string
@@ -457,6 +465,10 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 				default:
 					re.StateClass = "measurement"
 			}
+
+			// if strings.Contains(r.EndPoint, "p13149") {
+			// 	fmt.Println()
+			// }
 
 			if newDay {
 				c.LogDebug("Config: [%s]\n", r.EndPoint)
