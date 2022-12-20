@@ -73,8 +73,8 @@ func (m *Mqtt) CoverPublishValue(config EntityConfig) error {
 		}
 
 		// @TODO - Real hack here. Need to properly check for JSON.
-		if strings.Contains(config.Value.String(), `{`) || strings.Contains(config.Value.String(), `":`) {
-			t := m.client.Publish(tag, 0, true, config.Value.String())
+		if strings.Contains(value, `{`) || strings.Contains(value, `":`) {
+			t := m.client.Publish(tag, 0, true, value)
 			if !t.WaitTimeout(m.Timeout) {
 				m.err = t.Error()
 			}

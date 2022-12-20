@@ -65,5 +65,4 @@ func (m *Mqtt) NewDevice(config EntityConfig) (bool, Device) {
 	}
 
 	return ok, ret
-
 }

@@ -41,10 +41,6 @@ func JoinStringsForId(args ...string) string {
 	return strings.Join(newargs, "-")
 }
 
-// func (c *Config) JoinStringsForId() string {
-// 	return JoinStringsForId(m.Device.FullName, c.ParentName, c.FullName)
-// }
-
 func JoinStringsForTopic(args ...string) string {
 	var newargs []string
 	var re = regexp.MustCompile(`( |:)+`)

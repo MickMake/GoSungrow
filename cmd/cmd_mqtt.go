@@ -10,6 +10,7 @@ import (
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/MickMake/GoUnify/cmdLog"
+	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/go-co-op/gocron"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -26,8 +27,8 @@ const (
 	DefaultVendor      = "MickMake"
 	flagMqttUsername   = "mqtt-user"
 	flagMqttPassword   = "mqtt-password"
-	flagMqttHost   = "mqtt-host"
-	flagMqttPort   = "mqtt-port"
+	flagMqttHost       = "mqtt-host"
+	flagMqttPort       = "mqtt-port"
 )
 
 
@@ -45,6 +46,10 @@ type CmdMqtt struct {
 	Client         *mmHa.Mqtt
 	endpoints      MqttEndPoints
 	points         getDevicePointAttrs.PointsMap
+
+	optionLogLevel      int
+	optionSleepDelay    time.Duration
+	optionFetchSchedule time.Duration
 }
 
 func NewCmdMqtt() *CmdMqtt {
@@ -57,6 +62,10 @@ func NewCmdMqtt() *CmdMqtt {
 				cmd:     nil,
 				SelfCmd: nil,
 			},
+
+			optionLogLevel:      LogLevelInfo,
+			optionSleepDelay:    time.Second * 40,		// Takes up to 40 seconds for data to come in.
+			optionFetchSchedule: time.Minute * 5,
 		}
 	}
 
@@ -153,7 +162,7 @@ func (c *CmdMqtt) AttachFlags(cmd *cobra.Command, viper *viper.Viper) {
 
 func (c *CmdMqtt) MqttArgs(_ *cobra.Command, _ []string) error {
 	for range Only.Once {
-		cmdLog.LogPrintDate("Connecting to MQTT HASSIO Service...\n")
+		c.LogInfo("Connecting to MQTT HASSIO Service...\n")
 		c.Client = mmHa.New(mmHa.Mqtt {
 			ClientId:     DefaultServiceName,
 			EntityPrefix: DefaultServiceName,
@@ -167,37 +176,26 @@ func (c *CmdMqtt) MqttArgs(_ *cobra.Command, _ []string) error {
 			break
 		}
 
-		cmdLog.LogPrintDate("Connecting to SunGrow...\n")
+		c.LogInfo("Connecting to SunGrow...\n")
 		c.Client.SungrowDevices, c.Error = cmds.Api.SunGrow.GetDeviceList()
-		// ca.Mqtt.Client.SungrowDevices, ca.Error = ca.Api.SunGrow.GetPsKeys()
-		// ca.Mqtt.Client.SungrowDevices, ca.Error = ca.Api.SunGrow.GetPsIds()
-		// ca.Mqtt.Client.SungrowDevices, ca.Error = ca.Api.SunGrow.GetPsTreeMenu()
 		if c.Error != nil {
 			break
 		}
 
-		cmdLog.LogPrintDate("Found SunGrow %d devices\n", len(c.Client.SungrowDevices))
+		c.LogInfo("Found SunGrow %d devices\n", len(c.Client.SungrowDevices))
 		c.Client.DeviceName = DefaultServiceName
-		c.Error = c.Client.SetDeviceConfig(
-			c.Client.DeviceName,
-			c.Client.DeviceName,
-			"virtual",
-			"virtual",
-			"",
-			"",
+		_, c.Error = c.Client.SetDeviceConfig(
+			c.Client.DeviceName, c.Client.DeviceName,
+			"virtual", "virtual", "", DefaultServiceName,
 			DefaultServiceArea,
 		)
 		if c.Error != nil {
 			break
 		}
 
-		c.Error = c.Client.SetDeviceConfig(
-			c.Client.DeviceName,
-			c.Client.DeviceName,
-			"system",
-			"system",
-			"",
-			"",
+		_, c.Error = c.Client.SetDeviceConfig(
+			c.Client.DeviceName, c.Client.DeviceName,
+			"system", "system", "", DefaultServiceName,
 			DefaultServiceArea,
 		)
 		if c.Error != nil {
@@ -211,26 +209,18 @@ func (c *CmdMqtt) MqttArgs(_ *cobra.Command, _ []string) error {
 				parent = c.Client.DeviceName
 			}
 
-			c.Error = c.Client.SetDeviceConfig(
-				DefaultServiceName,
-				parent,
-				psId.PsKey.Value(),
-				psId.DeviceName.Value(),
-				psId.DeviceModel.Value(),
-				psId.FactoryName.Value(),
+			_, c.Error = c.Client.SetDeviceConfig(
+				DefaultServiceName, DefaultServiceName,
+				psId.PsId.String(), psId.FactoryName.Value(), psId.FactoryName.Value(), psId.FactoryName.Value(),
 				DefaultServiceArea,
 			)
 			if c.Error != nil {
 				break
 			}
 
-			c.Error = c.Client.SetDeviceConfig(
-				DefaultServiceName,
-				DefaultServiceName,
-				psId.PsId.String(),
-				psId.FactoryName.Value(),
-				psId.FactoryName.Value(),
-				psId.FactoryName.Value(),
+			_, c.Error = c.Client.SetDeviceConfig(
+				DefaultServiceName, parent,
+				psId.PsKey.Value(), psId.DeviceName.Value(), psId.DeviceModel.Value(), psId.FactoryName.Value(),
 				DefaultServiceArea,
 			)
 			if c.Error != nil {
@@ -245,7 +235,12 @@ func (c *CmdMqtt) MqttArgs(_ *cobra.Command, _ []string) error {
 			break
 		}
 
-		cmdLog.LogPrintDate("Caching Sungrow metadata...\n")
+		c.Error = c.Options()
+		if c.Error != nil {
+			break
+		}
+
+		c.LogInfo("Caching Sungrow metadata...\n")
 		c.Error = c.GetEndPoints()
 		if c.Error != nil {
 			break
@@ -255,7 +250,7 @@ func (c *CmdMqtt) MqttArgs(_ *cobra.Command, _ []string) error {
 		if c.Error != nil {
 			break
 		}
-		cmdLog.LogPrintDate("Cached %d Sungrow data points...\n", len(c.points))
+		c.LogInfo("Cached %d Sungrow data points...\n", len(c.points))
 	}
 
 	return c.Error
@@ -267,46 +262,26 @@ func (c *CmdMqtt) CmdMqtt(cmd *cobra.Command, _ []string) error {
 
 func (c *CmdMqtt) CmdMqttRun(_ *cobra.Command, _ []string) error {
 	for range Only.Once {
-		// switch1 := mmMqtt.BinarySensor {
-		// 	Device: mmMqtt.Device {
-		// 		Connections:  [][]string{{"sungrow_address", "0"}},
-		// 		Identifiers:  []string{"sungrow_bin_sensor_0"},
-		// 		Manufacturer: DefaultVendor,
-		// 		Model:        "SunGrow inverter",
-		// 		Name:         "SunGrow inverter online",
-		// 		SwVersion:    "GoSungrow https://github.com/MickMake/GoSungrow",
-		// 		ViaDevice:    DefaultServiceName,
-		// 	},
-		// 	Name:         "SunGrow inverter online",
-		// 	StateTopic:   "homeassistant/binary_sensor/GoSungrow_0/state",
-		// 	UniqueId:     "sungrow_bin_sensor_0",
-		// }
-		// err = foo.Publish("homeassistant/binary_sensor/GoSungrow_0/config", 0, true, switch1.Json())
-		// if err != nil {
-		// 	break
-		// }
-		// err = foo.Publish("homeassistant/binary_sensor/GoSungrow_0/state", 0, true, "OFF")
-		// if err != nil {
-		// 	break
-		// }
-
 		c.Error = c.Cron()
 		if c.Error != nil {
 			break
 		}
 
-		cmdLog.LogPrintDate("Starting ticker...\n")
-		updateCounter := 0
-		timer := time.NewTicker(60 * time.Second)
+		c.LogInfo("Starting ticker...\n")
+		c.LogInfo("Fetch Schedule: %s\n", c.GetFetchSchedule())
+		c.LogInfo("Sleep Delay:    %s\n", c.GetSleepDelay())
+		resolution := time.Second * 10
+		updateCounter := int(c.optionFetchSchedule / resolution)
+		timer := time.NewTicker(resolution)
 		for t := range timer.C {
-			if updateCounter < 5 {
-				updateCounter++
-				cmdLog.LogPrintDate("Sleeping: %d\n", updateCounter)
+			if updateCounter >= 0 {
+				updateCounter--
+				c.LogDebug("Sleeping: %d\n", updateCounter)
 				continue
 			}
 
-			updateCounter = 0
-			cmdLog.LogPrintDate("Update: %s\n", t.String())
+			updateCounter = int(c.optionFetchSchedule / resolution)
+			c.LogDebug("Update: %s\n", t.String())
 			c.Error = c.Cron()
 			if c.Error != nil {
 				break
@@ -342,7 +317,7 @@ func (c *CmdMqtt) CmdMqttSync(_ *cobra.Command, args []string) error {
 		}
 		job.IsRunning()
 
-		cmdLog.LogPrintDate("Created job schedule using '%s'\n", cronString)
+		c.LogInfo("Created job schedule using '%s'\n", cronString)
 		cron.StartBlocking()
 		if c.Error != nil {
 			break
@@ -352,6 +327,8 @@ func (c *CmdMqtt) CmdMqttSync(_ *cobra.Command, args []string) error {
 	return c.Error
 }
 
+
+// -------------------------------------------------------------------------------- //
 
 func (c *CmdMqtt) Cron() error {
 	for range Only.Once {
@@ -368,7 +345,8 @@ func (c *CmdMqtt) Cron() error {
 		if c.Client.IsFirstRun() {
 			c.Client.UnsetFirstRun()
 		} else {
-			time.Sleep(time.Second * 40)	// Takes up to 40 seconds for data to come in.
+			c.LogDebug("Sleeping for %s...\n", c.GetSleepDelay())
+			time.Sleep(c.optionSleepDelay)
 		}
 
 		newDay := false
@@ -400,7 +378,7 @@ func (c *CmdMqtt) Cron() error {
 	}
 
 	if c.Error != nil {
-		cmdLog.LogPrintDate("Error: %s\n", c.Error)
+		c.LogError("%s\n", c.Error)
 	}
 	return c.Error
 }
@@ -408,7 +386,7 @@ func (c *CmdMqtt) Cron() error {
 func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 	for range Only.Once {
 		// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
-		cmdLog.LogPrintDate("Syncing %d entries with HASSIO from %s.\n", len(data.Map), endpoint)
+		c.LogInfo("Syncing %d entries with HASSIO from %s.\n", len(data.Map), endpoint)
 
 		for o := range data.Map {
 			entries := data.Map[o]
@@ -416,7 +394,8 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 
 			if !r.Point.Valid {
 				// cmdLog.LogPrintDate("\n[%s] - invalid value - %s ...\n", r.Current.FieldPath.String(), r.Value.String())
-				fmt.Printf("?")
+				c.LogDebug("Invalid: [%s] = '%s'\n", r.EndPoint, r.Value.String())
+				c.LogPlainInfo("?")
 				continue
 			}
 
@@ -461,21 +440,16 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 				FullId: id, // string(r.FullId),	// WAS r.Point.FullId
 				// FullName:    r.Point.Name,
 				Units:       r.Point.Unit,
-				ValueName:   r.Point.Description,
-				// ValueName:   r.Id,
+				// ValueName:   r.Point.Description,
+				// ValueName:   r.Point.Id,
 				DeviceClass: "",
 				StateClass:  r.Point.UpdateFreq,
-				Value:       r.Value,
+				Value:       &r.Value,
 				Point:       r.Point,
 
 				LastReset:              r.Point.WhenReset(),
 				// LastResetValueTemplate: "",
 			}
-
-			// if strings.Contains(r.EndPoint, "13149") || strings.Contains(r.Current.DataStructure.Endpoint.String(), "13149") ||
-			// 	strings.Contains(r.EndPoint, "13119") || strings.Contains(r.Current.DataStructure.Endpoint.String(), "13119") {
-			// 	fmt.Sprintf("")
-			// }
 
 			switch {
 				case r.Point.IsTotal():
@@ -485,7 +459,8 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 			}
 
 			if newDay {
-				fmt.Printf("C")
+				c.LogDebug("Config: [%s]\n", r.EndPoint)
+				c.LogPlainInfo("C")
 				c.Error = c.Client.BinarySensorPublishConfig(re)
 				if c.Error != nil {
 					break
@@ -497,11 +472,8 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 				}
 			}
 
-			// if strings.Contains(r.EndPoint, "p13115") || strings.Contains(r.Current.DataStructure.Endpoint.String(), "p13115") {
-			// 	fmt.Sprintf("")
-			// }
-
-			fmt.Printf("U")
+			c.LogDebug("Update: [%s] = '%s' %s\n", r.EndPoint, r.Value.String(), r.Value.Unit())
+			c.LogPlainInfo("U")
 			c.Error = c.Client.BinarySensorPublishValue(re)
 			if c.Error != nil {
 				break
@@ -512,11 +484,7 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 				break
 			}
 		}
-		fmt.Println()
-	}
-
-	if c.Error != nil {
-		cmdLog.LogPrintDate("Error: %s\n", c.Error)
+		c.LogPlainInfo("\n")
 	}
 	return c.Error
 }
@@ -540,13 +508,9 @@ func (c *CmdMqtt) GetEndPoints() error {
 		// All := []string{ "queryDeviceList", "getPsList", "getPsDetailWithPsType", "getPsDetail", "getKpiInfo"}	//, queryMutiPointDataList, getDevicePointMinuteDataList }
 		// All := []string{ "WebIscmAppService.getDeviceModel" }
 		for name := range c.endpoints {
-			c.Error = c.Client.SetDeviceConfig(
-				DefaultServiceName,
-				DefaultServiceName,
-				name,
-				DefaultServiceName + "." + name,
-			 	DefaultServiceName,
-				DefaultVendor,
+			_, c.Error = c.Client.SetDeviceConfig(
+				DefaultServiceName, DefaultServiceName,
+				name, DefaultServiceName + "." + name, DefaultServiceName, DefaultVendor,
 				DefaultServiceArea,
 			)
 			if c.Error != nil {
@@ -630,6 +594,237 @@ func (c *CmdMqtt) UpdatePoint(entry *api.DataEntry) error {
 	return c.Error
 }
 
+
+// -------------------------------------------------------------------------------- //
+
+const (
+	LogLevelDebug   = 0
+	LogLevelInfo    = iota
+	LogLevelWarning = iota
+	LogLevelError   = iota
+
+	LogLevelDebugStr   = "debug"
+	LogLevelInfoStr    = "info"
+	LogLevelWarningStr = "warning"
+	LogLevelErrorStr   = "error"
+)
+
+func (c *CmdMqtt) SetLogLevel(level string) {
+	switch strings.ToLower(level) {
+	case LogLevelDebugStr:
+		c.optionLogLevel = LogLevelDebug
+	case LogLevelInfoStr:
+		c.optionLogLevel = LogLevelInfo
+	case LogLevelWarningStr:
+		c.optionLogLevel = LogLevelWarning
+	case LogLevelErrorStr:
+		c.optionLogLevel = LogLevelError
+	default:
+		cmdLog.LogPrintDate("Unknown log level, setting to default.")
+		c.optionLogLevel = LogLevelInfo
+	}
+}
+
+func (c *CmdMqtt) GetLogLevel() string {
+	var ret string
+	switch c.optionLogLevel {
+		case LogLevelDebug:
+			ret = LogLevelDebugStr
+		case LogLevelInfo:
+			ret = LogLevelInfoStr
+		case LogLevelWarning:
+			ret = LogLevelWarningStr
+		case LogLevelError:
+			ret = LogLevelErrorStr
+		default:
+			ret = LogLevelInfoStr
+	}
+	return ret
+}
+
+func (c *CmdMqtt) LogDebug(format string, args ...interface{}) {
+	if LogLevelDebug >= c.optionLogLevel {
+		cmdLog.LogPrintDate("DEBUG: " + format, args...)
+	}
+}
+
+func (c *CmdMqtt) LogInfo(format string, args ...interface{}) {
+	if LogLevelInfo >= c.optionLogLevel {
+		cmdLog.LogPrintDate("INFO: " + format, args...)
+	}
+}
+
+func (c *CmdMqtt) LogWarning(format string, args ...interface{}) {
+	if LogLevelWarning >= c.optionLogLevel {
+		cmdLog.LogPrintDate("WARNING: " + format, args...)
+	}
+}
+
+func (c *CmdMqtt) LogError(format string, args ...interface{}) {
+	if LogLevelError >= c.optionLogLevel {
+		cmdLog.LogPrintDate("ERROR: " + format, args...)
+	}
+}
+
+func (c *CmdMqtt) LogPlainDebug(format string, args ...interface{}) {
+	if LogLevelDebug >= c.optionLogLevel {
+		fmt.Print(cmdLog.LogSprintf(format, args...))
+	}
+}
+
+func (c *CmdMqtt) LogPlainInfo(format string, args ...interface{}) {
+	if LogLevelInfo >= c.optionLogLevel {
+		fmt.Print(cmdLog.LogSprintf(format, args...))
+	}
+}
+
+func (c *CmdMqtt) LogPlainWarning(format string, args ...interface{}) {
+	if LogLevelWarning >= c.optionLogLevel {
+		fmt.Print(cmdLog.LogSprintf(format, args...))
+	}
+}
+
+func (c *CmdMqtt) LogPlainError(format string, args ...interface{}) {
+	if LogLevelError >= c.optionLogLevel {
+		fmt.Print(cmdLog.LogSprintf(format, args...))
+	}
+}
+
+
+const (
+	OptionLogLevel      = "loglevel"
+	OptionFetchSchedule = "fetchschedule"
+	OptionSleepDelay    = "sleepdelay"
+	OptionServiceState  = "servicestate"
+)
+
+func (c *CmdMqtt) Options() error {
+	for range Only.Once {
+		c.Error = c.Client.SetOption(OptionLogLevel, "Log Level",
+			c.optionFuncLogLevel,
+			LogLevelErrorStr, LogLevelWarningStr, LogLevelInfoStr, LogLevelDebugStr)
+		if c.Error != nil {
+			break
+		}
+		c.Error = c.Client.SetOptionValue(OptionLogLevel, c.GetLogLevel())
+		if c.Error != nil {
+			break
+		}
+
+		c.Error = c.Client.SetOption(OptionFetchSchedule, "Fetch Schedule",
+			c.optionFuncFetchSchedule,
+			"2m", "3m", "4m", "5m", "6m", "7m", "8m", "9m", "10m")
+		if c.Error != nil {
+			break
+		}
+		c.Error = c.Client.SetOptionValue(OptionFetchSchedule, c.GetFetchSchedule())
+		if c.Error != nil {
+			break
+		}
+
+		c.Error = c.Client.SetOption(OptionSleepDelay, "Sleep Delay After Schedule",
+			c.optionFuncSleepDelay,
+			"0s", "10s", "20s", "30s", "40s", "50s", "60s")
+		if c.Error != nil {
+			break
+		}
+		c.Error = c.Client.SetOptionValue(OptionSleepDelay, c.GetSleepDelay())
+		if c.Error != nil {
+			break
+		}
+
+		c.Error = c.Client.SetOption(OptionServiceState, "Service State",
+			c.optionFuncServiceState,
+			"Run", "Restart", "Stop")
+		if c.Error != nil {
+			break
+		}
+		c.Error = c.Client.SetOptionValue(OptionServiceState, "Run")
+		if c.Error != nil {
+			break
+		}
+	}
+	return c.Error
+}
+
+
+func (c *CmdMqtt) optionFuncLogLevel(_ mqtt.Client, msg mqtt.Message) {
+	for range Only.Once {
+		request := strings.ToLower(string(msg.Payload()))
+		c.LogInfo("Option[%s] set to '%s'\n", OptionLogLevel, request)
+		c.SetLogLevel(request)
+		c.Error = c.Client.SetOptionValue(OptionLogLevel, request)
+		if c.Error != nil {
+			c.LogError("%s\n", c.Error)
+			break
+		}
+	}
+}
+
+func (c *CmdMqtt) optionFuncFetchSchedule(_ mqtt.Client, msg mqtt.Message) {
+	for range Only.Once {
+		request := strings.ToLower(string(msg.Payload()))
+		c.LogInfo("Option[%s] set to '%s'\n", OptionFetchSchedule, request)
+		c.optionFetchSchedule, c.Error = time.ParseDuration(request)
+		if c.Error != nil {
+			c.LogError("%s\n", c.Error)
+			break
+		}
+
+		c.Error = c.Client.SetOptionValue(OptionFetchSchedule, c.GetFetchSchedule())
+		if c.Error != nil {
+			c.LogError("%s\n", c.Error)
+			break
+		}
+	}
+}
+
+func (c *CmdMqtt) GetFetchSchedule() string {
+	return fmt.Sprintf("%.0fm", c.optionFetchSchedule.Minutes())
+}
+
+func (c *CmdMqtt) optionFuncSleepDelay(_ mqtt.Client, msg mqtt.Message) {
+	for range Only.Once {
+		request := strings.ToLower(string(msg.Payload()))
+		c.LogInfo("Option[%s] set to '%s'\n", OptionSleepDelay, request)
+		c.optionSleepDelay, c.Error = time.ParseDuration(request)
+		if c.Error != nil {
+			c.LogError("%s\n", c.Error)
+			break
+		}
+
+		c.Error = c.Client.SetOptionValue(OptionSleepDelay, request)
+		if c.Error != nil {
+			c.LogError("%s\n", c.Error)
+			break
+		}
+	}
+}
+
+func (c *CmdMqtt) GetSleepDelay() string {
+	return fmt.Sprintf("%.0fs", c.optionSleepDelay.Seconds())
+}
+
+func (c *CmdMqtt) optionFuncServiceState(_ mqtt.Client, msg mqtt.Message) {
+	for range Only.Once {
+		request := strings.ToLower(string(msg.Payload()))
+		c.LogInfo("Option[%s] set to '%s'\n", OptionServiceState, request)
+		switch request {
+			case "Run":
+			case "Restart":
+			case "Stop":
+		}
+
+		c.Error = c.Client.SetOptionValue(OptionServiceState, request)
+		if c.Error != nil {
+			c.LogError("%s\n", c.Error)
+			break
+		}
+	}
+}
+
+
+// -------------------------------------------------------------------------------- //
 
 type MqttEndPoints map[string]MqttEndPoint
 type MqttEndPoint struct {

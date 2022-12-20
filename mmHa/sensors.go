@@ -70,13 +70,15 @@ func (m *Mqtt) SensorPublishValue(config EntityConfig) error {
 		tag := JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, id, "state")
 
 		value := config.Value.String()
+		// fmt.Printf("[%s] = %s", tag, value)
 		if value == "--" {
 			value = ""
 		}
+		// fmt.Printf("(%s)\n", value)
 
 		// @TODO - Real hack here. Need to properly check for JSON.
-		if strings.Contains(config.Value.String(), `{`) || strings.Contains(config.Value.String(), `":`) {
-			t := m.client.Publish(tag, 0, true, config.Value.String())
+		if strings.Contains(value, `{`) || strings.Contains(value, `":`) {
+			t := m.client.Publish(tag, 0, true, value)
 			if !t.WaitTimeout(m.Timeout) {
 				m.err = t.Error()
 			}

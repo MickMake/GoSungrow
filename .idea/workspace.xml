@@ -5,8 +5,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="76adadc9-ae71-42a6-82a1-66dbc8ecb14c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/mmHa/options.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/cmd_mqtt.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_mqtt.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/alarm_control_panel.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/alarm_control_panel.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/binary_sensor.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/binary_sensor.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/button.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/button.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/camera.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/camera.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/climate.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/climate.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/cover.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/cover.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/device_tracker.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/device_tracker.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/device_trigger.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/device_trigger.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/fan.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/fan.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/funcs.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/funcs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/humidifier.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/humidifier.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/lights.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/lights.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/lock.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/lock.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/number.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/number.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/scene.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/scene.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/select.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/select.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/sensors.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/sensors.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/siren.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/siren.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/struct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/switch.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/switch.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/tag.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/tag.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/text.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/text.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/update.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/update.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/vacuum.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/vacuum.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -203,11 +229,6 @@
           <option name="timeStamp" value="4201" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/mmHa/binary_sensor.go</url>
-          <line>87</line>
-          <option name="timeStamp" value="4693" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/GoStruct/structmap.go</url>
           <line>122</line>
           <option name="timeStamp" value="5494" />
@@ -224,12 +245,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/GoStruct/struct_reflect.go</url>
-          <line>951</line>
+          <line>953</line>
           <option name="timeStamp" value="5785" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/GoStruct/struct_reflect.go</url>
-          <line>962</line>
+          <line>964</line>
           <option name="timeStamp" value="5786" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
@@ -613,11 +634,6 @@
           <option name="timeStamp" value="8311" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/mmHa/config.go</url>
-          <line>50</line>
-          <option name="timeStamp" value="8337" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/GoStruct/valueTypes/uv.go</url>
           <line>976</line>
           <option name="timeStamp" value="8365" />
@@ -626,6 +642,41 @@
           <url>file://$PROJECT_DIR$/iSolarCloud/WebAppService/getDevicePointAttrs/data.go</url>
           <line>97</line>
           <option name="timeStamp" value="8398" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/mmHa/struct.go</url>
+          <line>302</line>
+          <option name="timeStamp" value="8428" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/mmHa/struct.go</url>
+          <line>329</line>
+          <option name="timeStamp" value="8429" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/mmHa/struct.go</url>
+          <line>384</line>
+          <option name="timeStamp" value="8430" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/mmHa/struct.go</url>
+          <line>255</line>
+          <option name="timeStamp" value="8445" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/mmHa/struct.go</url>
+          <line>281</line>
+          <option name="timeStamp" value="8546" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/mmHa/struct.go</url>
+          <line>287</line>
+          <option name="timeStamp" value="8547" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/mmHa/struct.go</url>
+          <line>254</line>
+          <option name="timeStamp" value="8548" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

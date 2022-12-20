@@ -2,14 +2,16 @@ package mmHa
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/MickMake/GoUnify/Only"
+	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"strings"
 )
 
 const LabelSelect = "select"
 
 
-func (m *Mqtt) SelectPublishConfig(config EntityConfig) error {
+func (m *Mqtt) SelectPublishConfig(config EntityConfig, fn mqtt.MessageHandler) error {
 
 	for range Only.Once {
 		config.FixConfig()
@@ -23,61 +25,36 @@ func (m *Mqtt) SelectPublishConfig(config EntityConfig) error {
 		}
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
-
-		// {
-		//	"device": {
-		//		"connections": [
-		//			[
-		//				"GoSungrow",
-		//				"GoSungrow-Control"
-		//			]
-		//		],
-		//		"identifiers": [
-		//			"GoSungrow-Control"
-		//		],
-		//		"manufacturer": "MickMake",
-		//		"model": "GoSungrow",
-		//		"name": "GoSungrow Control",
-		//		"suggested_area": "Roof",
-		//		"sw_version": "GoSungrow https://github.com/MickMake/GoSungrow",
-		//		"via_device": "GoSungrow"
-		//	},
-		//	"object_id": "GoSungrow-select-endpoints",
-		//	"unique_id": "GoSungrow-select-endpoints",
-		//	"name": "GoSungrow Select EndPoints",
-		//	"command_topic": "homeassistant/select/GoSungrow/endpoint-select/set",
-		//	"state_topic": "homeassistant/select/GoSungrow/endpoint-select/state",
-		//	"command_template": "{\"select\": \"{{ value }}\" }",
-		//	"value_template": "{{ value_json.select }}",
-		//	"enabled_by_default": true,
-		//	"retain": true,
-		//	"encoding": "utf-8",
-		//	"icon": "mdi:format-list-group",
-		//	"options": [
-		//		"queryDeviceList",
-		//		"getPsList",
-		//		"getPsDetail"
-		//	]
-		// }
+		cmdTopic := JoinStringsForTopic(m.Prefix, LabelSelect, m.ClientId, id, "cmd")
 
 		payload := Select {
-			Device:       newDevice,
-			Name:         String(JoinStrings(m.DeviceName, config.Name)),
-			StateTopic:   String(JoinStringsForTopic(m.Prefix, LabelSelect, m.ClientId, id, "state")),
-			CommandTopic: String(JoinStringsForTopic(m.Prefix, LabelSelect, m.ClientId, id, "cmd")),
-			ObjectId:     String(id),
-			UniqueId:     String(id),
-			Qos:          0,
-			Retain:       true,
-
-			ValueTemplate: Template(config.ValueTemplate),
-			Icon:          Icon(config.Icon),
+			Device:           newDevice,
+			Name:             String(JoinStrings(m.DeviceName, config.Name)),
+			StateTopic:       String(JoinStringsForTopic(m.Prefix, LabelSelect, m.ClientId, id, "state")),
+			// CommandTemplate:  Template(fmt.Sprintf(`"%s":"{{ value }}"`, config.FullId)),
+			// CommandTemplate:  Template(fmt.Sprintf(`{{ value_json.value }}`)),
+			CommandTemplate:  Template(fmt.Sprintf(`{{ value }}`)),
+			CommandTopic:     String(cmdTopic),
+			ObjectId:         String(id),
+			UniqueId:         String(id),
+			Qos:              0,
+			Retain:           true,
+			EnabledByDefault: true,
+			Encoding:         "utf-8",
+			Options:          config.Options,
+			ValueTemplate:    Template(config.ValueTemplate),
+			Icon:             Icon(config.Icon),
 		}
 
 		tag := JoinStringsForTopic(m.Prefix, LabelSelect, m.ClientId, id, "config")
 		t := m.client.Publish(tag, 0, true, payload.Json())
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
+		}
+
+		m.err = m.Subscribe(cmdTopic, fn)
+		if m.err != nil {
+			break
 		}
 	}
 
@@ -104,15 +81,15 @@ func (m *Mqtt) SelectPublishValue(config EntityConfig) error {
 		}
 
 		// @TODO - Real hack here. Need to properly check for JSON.
-		if strings.Contains(config.Value.String(), `{`) || strings.Contains(config.Value.String(), `":`) {
-			t := m.client.Publish(tag, 0, true, config.Value.String())
+		if strings.Contains(value, `{`) || strings.Contains(value, `":`) {
+			t := m.client.Publish(tag, 0, true, value)
 			if !t.WaitTimeout(m.Timeout) {
 				m.err = t.Error()
 			}
 			break
 		}
 
-		payload := MqttState{
+		payload := MqttState {
 			LastReset: config.LastReset, // m.GetLastReset(config.FullId),
 			Value:     value,
 		}
@@ -319,40 +296,3 @@ func (config *EntityConfig) IsSelect() bool {
 
 	return ok
 }
-
-
-// {
-//	"device": {
-//		"connections": [
-//			[
-//				"GoSungrow",
-//				"GoSungrow-Control"
-//			]
-//		],
-//		"identifiers": [
-//			"GoSungrow-Control"
-//		],
-//		"manufacturer": "MickMake",
-//		"model": "GoSungrow",
-//		"name": "GoSungrow Control",
-//		"suggested_area": "Roof",
-//		"sw_version": "GoSungrow https://github.com/MickMake/GoSungrow",
-//		"via_device": "GoSungrow"
-//	},
-//	"object_id": "GoSungrow-select-endpoints",
-//	"unique_id": "GoSungrow-select-endpoints",
-//	"name": "GoSungrow Select EndPoints",
-//	"command_topic": "homeassistant/select/GoSungrow/endpoint-select/set",
-//	"state_topic": "homeassistant/select/GoSungrow/endpoint-select/state",
-//	"command_template": "{\"select\": \"{{ value }}\" }",
-//	"value_template": "{{ value_json.select }}",
-//	"enabled_by_default": true,
-//	"retain": true,
-//	"encoding": "utf-8",
-//	"icon": "mdi:format-list-group",
-//	"options": [
-//		"queryDeviceList",
-//		"getPsList",
-//		"getPsDetail"
-//	]
-// }

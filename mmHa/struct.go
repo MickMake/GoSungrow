@@ -8,8 +8,10 @@ import (
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/MickMake/GoUnify/cmdLog"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"net/url"
+	"strings"
 	"time"
 )
 
@@ -27,27 +29,19 @@ type Mqtt struct {
 	client        mqtt.Client
 	pubClient     mqtt.Client
 	clientOptions *mqtt.ClientOptions
+
+	DeviceName     string
 	LastRefresh    time.Time             `json:"-"`
 	SungrowDevices getDeviceList.Devices `json:"-"`
-	// SungrowDevices valueTypes.PsKeys `json:"-"`
-	// SungrowDevices valueTypes.PsIds `json:"-"`
-	// SungrowDevices getPsTreeMenu.ResultData `json:"-"`
 	SungrowPsIds   map[valueTypes.PsId]bool
-
-	DeviceName  string
-	MqttDevices map[string]Device
-
-	Prefix      string
-	// selectPrefix       string
-	// servicePrefix      string
-	// sensorPrefix       string
-	// lightPrefix        string
-	// switchPrefix       string
-	// binarySensorPrefix string
+	MqttDevices    map[string]Device
+	Prefix         string
+	UserOptions    Options
 
 	token    mqtt.Token
 	firstRun bool
 	err      error
+	debug    bool
 }
 
 
@@ -72,9 +66,15 @@ func New(req Mqtt) *Mqtt {
 
 		ret.MqttDevices = make(map[string]Device)
 		ret.SungrowPsIds = make(map[valueTypes.PsId]bool)
+		ret.Timeout = time.Second * 5
+		ret.UserOptions.Map = make(map[string]Option, 0)
 	}
 
 	return &ret
+}
+
+func (m *Mqtt) IsDebug() bool {
+	return m.debug
 }
 
 func (m *Mqtt) IsFirstRun() bool {
@@ -212,27 +212,25 @@ func (m *Mqtt) Connect() error {
 			break
 		}
 
-		// 			Device:       newDevice,
-		//			Name:         String(JoinStrings(m.DeviceName, config.Name)),
-		//			StateTopic:   String(JoinStringsForTopic(m.switchPrefix, id, "state")),
-		//			CommandTopic: String(JoinStringsForTopic(m.switchPrefix, id, "cmd")),
-		//			ObjectId:     String(id),
-		//			UniqueId:     String(id),
-		//			Qos:          0,
-		//			Retain:       true,
-		//
-		//			ValueTemplate: Template(config.ValueTemplate),
-		//			Icon:          Icon(config.Icon),
-		m.err = m.SelectPublishConfig(EntityConfig {
-			Name:          "Debug Level",
-			FullId:        "GoSungrow.Control.DebugLevel",
-			Icon:          "",
-			ValueTemplate: `{\"select\": \"{{ value }}\"}`,
-		})
+		_, m.err = m.SetDeviceConfig(
+			m.DeviceName, m.DeviceName,
+			"options", "Options", "", m.DeviceName,
+			m.DeviceName,
+		)
 		if m.err != nil {
 			break
 		}
-		m.err = m.Subscribe(JoinStringsForTopic(m.Prefix, LabelSelect, m.ClientId, "state"), m.Fart)
+
+		m.err = m.SetOption("mqtt_debug", "Mqtt Debug", m.funcMqttDebug)
+		if m.err != nil {
+			break
+		}
+
+		v := "Disabled"
+		if m.debug {
+			v = "Enabled"
+		}
+		m.err = m.SetOptionValue("mqtt_debug", v)
 		if m.err != nil {
 			break
 		}
@@ -241,10 +239,15 @@ func (m *Mqtt) Connect() error {
 	return m.err
 }
 
-func (m *Mqtt) Fart(client mqtt.Client, msg mqtt.Message) {
+func (m *Mqtt) funcMqttDebug(_ mqtt.Client, msg mqtt.Message) {
 	for range Only.Once {
-		fmt.Printf("DONE\n")
-		time.Sleep(1 * time.Second)
+		request := strings.ToLower(string(msg.Payload()))
+		cmdLog.LogPrintDate("Option[%s] set to '%s'\n", msg.Topic(), request)
+		if request == strings.ToLower(OptionEnabled) {
+			m.debug = true
+			break
+		}
+		m.debug = false
 	}
 }
 
@@ -276,7 +279,7 @@ func (m *Mqtt) createClientOptions() error {
 
 // type SubscribeFunc func(client mqtt.Client, msg mqtt.Message)
 func (m *Mqtt) subscribeDefault(client mqtt.Client, msg mqtt.Message) {
-	fmt.Printf("* [%s] %s\n", msg.Topic(), string(msg.Payload()))
+	fmt.Printf("*%t> [%s] %s\n", client.IsConnected(), msg.Topic(), string(msg.Payload()))
 }
 
 func (m *Mqtt) Subscribe(topic string, fn mqtt.MessageHandler) error {
@@ -287,7 +290,7 @@ func (m *Mqtt) Subscribe(topic string, fn mqtt.MessageHandler) error {
 		t := m.client.Subscribe(topic, 0, fn)
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
-			// m.err = errors.New("mqtt subscribe timeout")
+
 		}
 	}
 	return m.err
@@ -303,32 +306,32 @@ func (m *Mqtt) Publish(topic string, qos byte, retained bool, payload interface{
 	return m.err
 }
 
-func (m *Mqtt) PublishState(Type string, subtopic string, payload interface{}) error {
-	for range Only.Once {
-		// topic = JoinStringsForId(m.EntityPrefix, m.Device.Name, topic)
-		// topic = JoinStringsForTopic(m.sensorPrefix, topic, "state")
-		// st := JoinStringsForTopic(m.sensorPrefix, JoinStringsForId(m.EntityPrefix, m.Device.FullName, strings.ReplaceAll(subName, "/", ".")), "state")
-		topic := ""
-		switch Type {
-			case LabelSensor:
-				topic = JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, subtopic, "state")
-			case LabelBinarySensor:
-				topic = JoinStringsForTopic(m.Prefix, LabelBinarySensor, m.ClientId, subtopic, "state")
-			case LabelLight:
-				topic = JoinStringsForTopic(m.Prefix, LabelLight, m.ClientId, subtopic, "state")
-			case LabelSwitch:
-				topic = JoinStringsForTopic(m.Prefix, LabelSwitch, m.ClientId, subtopic, "state")
-			default:
-				topic = JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, subtopic, "state")
-		}
-
-		t := m.client.Publish(topic, 0, true, payload)
-		if !t.WaitTimeout(m.Timeout) {
-			m.err = t.Error()
-		}
-	}
-	return m.err
-}
+// func (m *Mqtt) PublishState(Type string, subtopic string, payload interface{}) error {
+// 	for range Only.Once {
+// 		// topic = JoinStringsForId(m.EntityPrefix, m.Device.Name, topic)
+// 		// topic = JoinStringsForTopic(m.sensorPrefix, topic, "state")
+// 		// st := JoinStringsForTopic(m.sensorPrefix, JoinStringsForId(m.EntityPrefix, m.Device.FullName, strings.ReplaceAll(subName, "/", ".")), "state")
+// 		topic := ""
+// 		switch Type {
+// 			case LabelSensor:
+// 				topic = JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, subtopic, "state")
+// 			case LabelBinarySensor:
+// 				topic = JoinStringsForTopic(m.Prefix, LabelBinarySensor, m.ClientId, subtopic, "state")
+// 			case LabelLight:
+// 				topic = JoinStringsForTopic(m.Prefix, LabelLight, m.ClientId, subtopic, "state")
+// 			case LabelSwitch:
+// 				topic = JoinStringsForTopic(m.Prefix, LabelSwitch, m.ClientId, subtopic, "state")
+// 			default:
+// 				topic = JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, subtopic, "state")
+// 		}
+//
+// 		t := m.client.Publish(topic, 0, true, payload)
+// 		if !t.WaitTimeout(m.Timeout) {
+// 			m.err = t.Error()
+// 		}
+// 	}
+// 	return m.err
+// }
 
 func (m *Mqtt) PublishValue(Type string, subtopic string, value string) error {
 	for range Only.Once {
@@ -386,7 +389,9 @@ func (m *Mqtt) PublishValue(Type string, subtopic string, value string) error {
 	return m.err
 }
 
-func (m *Mqtt) SetDeviceConfig(swname string, parentId string, id string, name string, model string, vendor string, area string) error {
+func (m *Mqtt) SetDeviceConfig(swname string, parentId string, id string, name string, model string, vendor string, area string) (Device, error) {
+	var ret Device
+
 	for range Only.Once {
 		// id = JoinStringsForId(m.EntityPrefix, id)
 
@@ -400,7 +405,7 @@ func (m *Mqtt) SetDeviceConfig(swname string, parentId string, id string, name s
 			}
 		}
 
-		m.MqttDevices[id] = Device {
+		ret = Device {
 			Connections:  c,
 			Identifiers:  []string{JoinStringsForId(m.EntityPrefix, id)},
 			Manufacturer: vendor,
@@ -410,26 +415,28 @@ func (m *Mqtt) SetDeviceConfig(swname string, parentId string, id string, name s
 			ViaDevice:    swname,
 			SuggestedArea: area,
 		}
-	}
-	return m.err
-}
-
-func (m *Mqtt) GetLastReset(pointType string) string {
-	var ret string
-
-	for range Only.Once {
-		pt := api.GetDevicePoint(pointType)
-		if !pt.Valid {
-			break
-		}
-		if pt.UpdateFreq == "" {
-			break
-		}
-		ret = pt.WhenReset()
+		m.MqttDevices[id] = ret
 	}
 
-	return ret
+	return ret, m.err
 }
+
+// func (m *Mqtt) GetLastReset(pointType string) string {
+// 	var ret string
+//
+// 	for range Only.Once {
+// 		pt := api.GetDevicePoint(pointType)
+// 		if !pt.Valid {
+// 			break
+// 		}
+// 		if pt.UpdateFreq == "" {
+// 			break
+// 		}
+// 		ret = pt.WhenReset()
+// 	}
+//
+// 	return ret
+// }
 
 
 type MqttState struct {
@@ -468,7 +475,7 @@ type EntityConfig struct {
 	StateClass    string
 	Icon          string
 
-	Value         valueTypes.UnitValue
+	Value         *valueTypes.UnitValue
 	Point         *api.Point
 	ValueTemplate string
 
@@ -479,6 +486,7 @@ type EntityConfig struct {
 	IgnoreUpdate  bool
 
 	haType        string
+	Options       []string
 }
 
 func (config *EntityConfig) FixConfig() {
