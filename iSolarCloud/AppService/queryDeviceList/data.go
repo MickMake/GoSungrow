@@ -484,9 +484,9 @@ func (e *EndPoint) SetPvPoints(epp GoStruct.EndPointPath, entries api.DataMap) {
 	for range Only.Once {
 		// /////////////////////////////////////////////////////// //
 		// PV Power
-		pvPower := entries.CopyPointFromName(epp.AddString("p13003"), epp, "pv_power", "Power Pv (p13003)")
+		pvPower := entries.CopyPointFromName(epp.AddString("p13003"), epp, "pv_power", "Pv Power (p13003)")
 
-		pvPowerActive := entries.CopyPoint(pvPower, epp, "pv_power_active", "Power Pv Active (p13003)")
+		pvPowerActive := entries.CopyPoint(pvPower, epp, "pv_power_active", "Pv Power Active (p13003)")
 		_ = entries.MakeState(pvPowerActive)
 
 		pvToGridPower := entries.CopyPointFromName(epp.AddString("p13121"), epp, "pv_to_grid_power", "Pv To Grid Power (p13121)")

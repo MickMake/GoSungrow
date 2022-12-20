@@ -86,10 +86,8 @@ func (dm *DataMap) AddPointUnitValues(Current *GoStruct.Reflect, parentDeviceId 
 		point.UpdateFreq = Current.DataStructure.PointUpdateFreq
 		point.SetName(Current.DataStructure.PointName)
 
-		// if Current.Value.DeviceId() != "" {
-		// 	parentDeviceId = Current.Value.DeviceId()
-		// } else {
-		// 	Current.Value.SetDeviceId(parentDeviceId)
+		// if strings.Contains(Current.DataStructure.Endpoint.String(), "p13149") {
+		// 	fmt.Println()
 		// }
 
 		if Current.Value.GetUnit() != point.Unit {

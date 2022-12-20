@@ -42,20 +42,32 @@ func (t *UnitValue) UnitValueFix() UnitValue {
 		case "Wh":
 			fallthrough
 		case "W":
-			if t.float64 == nil {
+			if t.float64 != nil {
 				// Only if we have a float.
+				fv := t.Value() / 1000
+				t.SetFloat(fv)
+				t.SetUnit("k" + t.UnitValue)
 				break
 			}
-			fv := t.Value() / 1000
-			t.SetFloat(fv)
-			t.SetUnit("k" + t.UnitValue)
 
-			// fv, dt.Error := strconv.ParseFloat(value, 64)
-			// if dt.Error == nil {
-			// 	fv = fv / 1000
-			// 	value, _ = DivideByThousand(value)
-			// 	UnitValue = "k" + UnitValue
-			// }
+			if t.StringValue != "" {
+				if t.StringValue == "--" {
+					t.StringValue = ""
+					break
+				}
+
+				var fv float64
+				fv, t.Error = strconv.ParseFloat(t.StringValue, 64)
+				if t.Error != nil {
+					t.Error = nil	// Silently ignore.
+					break
+				}
+
+				fv = fv / 1000
+				t.SetFloat(fv)
+				t.SetUnit("k" + t.UnitValue)
+				break
+			}
 	}
 
 	return *t
@@ -407,7 +419,7 @@ func (t *UnitValue) SetString(value string) UnitValue {
 		}
 
 		if value == "--" {
-			// value = ""
+			value = ""
 			break
 		}
 

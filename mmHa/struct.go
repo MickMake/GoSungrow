@@ -77,6 +77,10 @@ func (m *Mqtt) IsDebug() bool {
 	return m.debug
 }
 
+func (m *Mqtt) LogDebug(format string, args ...interface{})  {
+	cmdLog.LogPrintDate(format, args...)
+}
+
 func (m *Mqtt) IsFirstRun() bool {
 	return m.firstRun
 }
@@ -298,6 +302,7 @@ func (m *Mqtt) Subscribe(topic string, fn mqtt.MessageHandler) error {
 
 func (m *Mqtt) Publish(topic string, qos byte, retained bool, payload interface{}) error {
 	for range Only.Once {
+		m.LogDebug("Publish - topic: '%s'\tpayload: '%v'\n", topic, payload)
 		t := m.client.Publish(topic, qos, retained, payload)
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
@@ -373,13 +378,7 @@ func (m *Mqtt) PublishValue(Type string, subtopic string, value string) error {
 				topic = JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, subtopic, "state")
 		}
 
-		// t = JoinStringsForId(m.EntityPrefix, m.Device.Name, t)
-		// st := JoinStringsForTopic(m.sensorPrefix, JoinStringsForId(m.EntityPrefix, m.Device.FullName, strings.ReplaceAll(subName, "/", ".")), "state")
-		// payload := MqttState {
-		// 	LastReset: "", // m.GetLastReset(point.PointId),
-		// 	Value:     value,
-		// }
-		// m.client.Publish(JoinStringsForTopic(m.sensorPrefix, t, "state"), 0, true, payload.Json())
+		m.LogDebug("PublishValue - topic: '%s'\tpayload: '%s'\n", topic, value)
 		t := m.client.Publish(topic, 0, true, value)
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
