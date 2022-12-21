@@ -43,7 +43,7 @@ var cmds Cmds
 func init() {
 	for range Only.Once {
 		cmds.Unify = Unify.New(
-			Unify.Options{
+			Unify.Options {
 				Description:   defaults.Description,
 				BinaryName:    defaults.BinaryName,
 				BinaryVersion: defaults.BinaryVersion,

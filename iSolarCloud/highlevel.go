@@ -16,7 +16,6 @@ import (
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
-	"time"
 )
 
 
@@ -107,63 +106,63 @@ func (sg *SunGrow) AllCritical() error {
 	return sg.Error
 }
 
-func (sg *SunGrow) PrintCurrentStats() error {
-	var ep api.EndPoint
-	for range Only.Once {
-		ep = sg.GetByStruct(getPsList.EndPointName, nil, DefaultCacheTimeout)
-		if sg.IsError() {
-			break
-		}
-
-		_getPsList := getPsList.Assert(ep)
-		table := _getPsList.GetEndPointResultTable()
-		if table.Error != nil {
-			sg.Error = table.Error
-			break
-		}
-
-		table.SetTitle("getPsList")
-		table.SetFilePrefix(_getPsList.SetFilenamePrefix(""))
-		table.SetGraphFilter("")
-		table.SetSaveFile(sg.SaveAsFile)
-		table.OutputType = sg.OutputType
-		sg.Error = table.Output()
-		if sg.IsError() {
-			break
-		}
-
-		for _, psId := range _getPsList.GetPsIds() {
-			ep = sg.GetByStruct(queryDeviceList.EndPointName,
-				// queryDeviceList.RequestData{PsId: strconv.FormatInt(psId, 10)},
-				queryDeviceList.RequestData{PsId: psId},
-				time.Second*60,
-			)
-			if sg.IsError() {
-				break
-			}
-
-			data := queryDeviceList.Assert(ep)
-
-			table = data.GetEndPointResultTable()
-			if table.Error != nil {
-				sg.Error = table.Error
-				break
-			}
-
-			table.SetTitle("queryDeviceList %s", psId)
-			table.SetFilePrefix(data.SetFilenamePrefix("%s", psId))
-			table.SetGraphFilter("")
-			table.SetSaveFile(sg.SaveAsFile)
-			table.OutputType = sg.OutputType
-			sg.Error = table.Output()
-			if sg.IsError() {
-				break
-			}
-		}
-	}
-
-	return sg.Error
-}
+// func (sg *SunGrow) PrintCurrentStats() error {
+// 	var ep api.EndPoint
+// 	for range Only.Once {
+// 		ep = sg.GetByStruct(getPsList.EndPointName, nil, DefaultCacheTimeout)
+// 		if sg.IsError() {
+// 			break
+// 		}
+//
+// 		_getPsList := getPsList.Assert(ep)
+// 		table := _getPsList.GetEndPointResultTable()
+// 		if table.Error != nil {
+// 			sg.Error = table.Error
+// 			break
+// 		}
+//
+// 		table.SetTitle("getPsList")
+// 		table.SetFilePrefix(_getPsList.SetFilenamePrefix(""))
+// 		table.SetGraphFilter("")
+// 		table.SetSaveFile(sg.SaveAsFile)
+// 		table.OutputType = sg.OutputType
+// 		sg.Error = table.Output()
+// 		if sg.IsError() {
+// 			break
+// 		}
+//
+// 		for _, psId := range _getPsList.GetPsIds() {
+// 			ep = sg.GetByStruct(queryDeviceList.EndPointName,
+// 				// queryDeviceList.RequestData{PsId: strconv.FormatInt(psId, 10)},
+// 				queryDeviceList.RequestData{PsId: psId},
+// 				time.Second*60,
+// 			)
+// 			if sg.IsError() {
+// 				break
+// 			}
+//
+// 			data := queryDeviceList.Assert(ep)
+//
+// 			table = data.GetEndPointResultTable()
+// 			if table.Error != nil {
+// 				sg.Error = table.Error
+// 				break
+// 			}
+//
+// 			table.SetTitle("queryDeviceList %s", psId)
+// 			table.SetFilePrefix(data.SetFilenamePrefix("%s", psId))
+// 			table.SetGraphFilter("")
+// 			table.SetSaveFile(sg.SaveAsFile)
+// 			table.OutputType = sg.OutputType
+// 			sg.Error = table.Output()
+// 			if sg.IsError() {
+// 				break
+// 			}
+// 		}
+// 	}
+//
+// 	return sg.Error
+// }
 
 func (sg *SunGrow) GetPsNames() ([]string, error) {
 	var ret []string
