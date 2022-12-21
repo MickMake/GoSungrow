@@ -45,14 +45,7 @@ I'm currently using it in my [HomeAssistant](https://www.home-assistant.io/) ins
 ## What state is it in?
 
 It was originally intended for my needs, (seeing all data in [HomeAssistant](https://www.home-assistant.io/)), but there seems to be a big interest in this tool.
-So I've spent some time working on the v3.0.0 release.
-
-v3.0.0 changelog:
-- Support better api changes. This allows a much quicker change in my code when the api changes.
-- Support multiple devices. Previous versions only allowed query of one device.
-- Improve cli for queries. Now can fetch endpoints in either "list" or "table" formats, the latter showing point data in a similar fashion to pivot tables in spreadsheets.
-- Multiple output formats supported - not only csv, png and ascii, but markdown, xml, HTML, sql and plain MQTT.
-- Lots of bug fixes. :-).
+So I spent some time working on the v3.0.0 release, adding features.
 
 I have now mapped out all the API calls. All the read-only endpoints are mapped out and fully tested. The write-only calls haven't been tested fully.
 It's tricky as their "API" changes regularly; however I've accommodated for quick changes in the v3.0.0 release.

@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="76adadc9-ae71-42a6-82a1-66dbc8ecb14c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/cmd_info.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_info.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/commands.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/commands.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/defaults/const.go" beforeDir="false" afterPath="$PROJECT_DIR$/defaults/const.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iSolarCloud/highlevel.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/highlevel.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/defaults/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/defaults/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
