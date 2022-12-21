@@ -43,8 +43,6 @@ func (c *CmdHa) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Annotations:           map[string]string{"group": "Ha"},
 			Short:                 fmt.Sprintf("Home Assistant commands."),
 			Long:                  fmt.Sprintf("Home Assistant commands."),
-			Deprecated:            "show",
-			Hidden:                true,
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               cmds.SunGrowArgs,
@@ -197,7 +195,7 @@ const lovelaceBasic = `views:
             type: grid
             cards:
               - type: picture-elements
-                image: /local/SungrowEnergy2.png
+                image: /local/SungrowEnergy3.png
                 elements:
                   - type: image
                     entity: >-
@@ -943,444 +941,608 @@ const lovelaceGraphs = `views:
     icon: mdi:solar-power
     badges: []
     cards:
-      - square: false
-        columns: 2
-        type: grid
+      - type: vertical-stack
         cards:
-          - type: custom:canvas-gauge-card
-            entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13003
-            card_height: 220
-            gauge:
-              type: radial-gauge
-              title: PV Yield (kW)
-              height: 420
-              borderShadowWidth: 0
-              borderOuterWidth: 0
-              borderMiddleWidth: 0
-              borderInnerWidth: 0
-              minValue: 0
-              maxValue: 12
-              startAngle: 90
-              ticksAngle: 180
-              valueBox: false
-              majorTicks:
-                - '0'
-                - '2'
-                - '4'
-                - '6'
-                - '8'
-                - '10'
-                - '12'
-              minorTicks: 2
-              strokeTicks: true
-              highlights:
-                - from: 0
-                  to: 4
-                  color: rgba(200, 50, 50, .75)
-                - from: 4
-                  to: 8
-                  color: rgba(200, 200, 50, .75)
-                - from: 8
-                  to: 12
-                  color: rgba(50, 200, 50, .75)
-              borders: true
-          - type: custom:mini-graph-card
-            show:
-              labels: true
-              points: false
-              icon: false
-              name: false
-              average: true
-              extrema: true
-            color_thresholds:
-              - value: 0
-                color: rgba(200, 50, 50, .75)
-              - value: 4
-                color: rgba(200, 200, 50, .75)
-              - value: 8
-                color: rgba(50, 200, 50, .75)
-            hour24: true
-            animate: false
-            unit: kW
-            lower_bound: 0
-            points_per_hour: 20
-            line_width: 1
-            height: 150
-            entities:
-              - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13003
-                name: PV Yield
-          - type: custom:canvas-gauge-card
-            entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_pv_to_battery_power
-            card_height: 220
-            gauge:
-              type: radial-gauge
-              title: PV to Battery (kW)
-              height: 420
-              borderShadowWidth: 0
-              borderOuterWidth: 0
-              borderMiddleWidth: 0
-              borderInnerWidth: 0
-              minValue: 0
-              maxValue: 12
-              startAngle: 90
-              ticksAngle: 180
-              valueBox: false
-              majorTicks:
-                - '0'
-                - '2'
-                - '4'
-                - '6'
-                - '8'
-                - '10'
-                - '12'
-              minorTicks: 2
-              strokeTicks: true
-              highlights:
-                - from: 0
-                  to: 4
-                  color: rgba(200, 50, 50, .75)
-                - from: 4
-                  to: 8
-                  color: rgba(200, 200, 50, .75)
-                - from: 8
-                  to: 10.36
-                  color: rgba(50, 200, 50, .75)
-                - from: 10.36
-                  to: 12
-                  color: rgba(128, 128, 128, .75)
-              borders: true
-          - type: custom:mini-graph-card
-            show:
-              labels: true
-              points: false
-              icon: false
-              name: false
-              average: true
-              extrema: true
-            color_thresholds:
-              - value: 0
-                color: rgba(200, 50, 50, .75)
-              - value: 4
-                color: rgba(200, 200, 50, .75)
-              - value: 8
-                color: rgba(50, 200, 50, .75)
-            hour24: true
-            animate: false
-            unit: kW
-            lower_bound: 0
-            points_per_hour: 20
-            line_width: 1
-            height: 150
-            entities:
-              - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_pv_to_battery_power
-                name: PV to Battery
-          - type: custom:canvas-gauge-card
-            entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_pv_to_grid_power
-            card_height: 220
-            gauge:
-              type: radial-gauge
-              title: PV to Grid (kW)
-              height: 420
-              borderShadowWidth: 0
-              borderOuterWidth: 0
-              borderMiddleWidth: 0
-              borderInnerWidth: 0
-              minValue: 0
-              maxValue: 12
-              startAngle: 90
-              ticksAngle: 180
-              valueBox: false
-              majorTicks:
-                - '0'
-                - '2'
-                - '4'
-                - '6'
-                - '8'
-                - '10'
-                - '12'
-              minorTicks: 2
-              strokeTicks: true
-              highlights:
-                - from: 0
-                  to: 4
-                  color: rgba(200, 50, 50, .75)
-                - from: 4
-                  to: 8
-                  color: rgba(200, 200, 50, .75)
-                - from: 8
-                  to: 12
-                  color: rgba(50, 200, 50, .75)
-              borders: true
-          - type: custom:mini-graph-card
-            show:
-              labels: true
-              points: false
-              icon: false
-              name: false
-              average: true
-              extrema: true
-            color_thresholds:
-              - value: 0
-                color: rgba(200, 50, 50, .75)
-              - value: 4
-                color: rgba(200, 200, 50, .75)
-              - value: 8
-                color: rgba(50, 200, 50, .75)
-            hour24: true
-            animate: false
-            unit: kW
-            lower_bound: 0
-            points_per_hour: 20
-            line_width: 1
-            height: 150
-            entities:
-              - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_pv_to_grid_power
-                name: PV to Grid
-          - type: custom:canvas-gauge-card
-            entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_pv_to_load_power
-            card_height: 220
-            gauge:
-              type: radial-gauge
-              title: PV to Load (kW)
-              height: 420
-              borderShadowWidth: 0
-              borderOuterWidth: 0
-              borderMiddleWidth: 0
-              borderInnerWidth: 0
-              minValue: 0
-              maxValue: 12
-              startAngle: 90
-              ticksAngle: 180
-              valueBox: false
-              majorTicks:
-                - '0'
-                - '2'
-                - '4'
-                - '6'
-                - '8'
-                - '10'
-                - '12'
-              minorTicks: 2
-              strokeTicks: true
-              highlights:
-                - from: 0
-                  to: 4
-                  color: rgba(200, 50, 50, .75)
-                - from: 4
-                  to: 8
-                  color: rgba(200, 200, 50, .75)
-                - from: 8
-                  to: 12
-                  color: rgba(50, 200, 50, .75)
-              borders: true
-          - type: custom:mini-graph-card
-            show:
-              labels: true
-              points: false
-              icon: false
-              name: false
-              average: true
-              extrema: true
-            color_thresholds:
-              - value: 0
-                color: rgba(200, 50, 50, .75)
-              - value: 4
-                color: rgba(200, 200, 50, .75)
-              - value: 8
-                color: rgba(50, 200, 50, .75)
-            hour24: true
-            animate: false
-            unit: kW
-            lower_bound: 0
-            points_per_hour: 20
-            line_width: 1
-            height: 150
-            entities:
-              - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_pv_to_load_power
-                name: PV to Load
-          - type: custom:canvas-gauge-card
-            entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13119
-            card_height: 220
-            gauge:
-              type: radial-gauge
-              title: Load (kW)
-              height: 420
-              borderShadowWidth: 0
-              borderOuterWidth: 0
-              borderMiddleWidth: 0
-              borderInnerWidth: 0
-              minValue: 0
-              maxValue: 12
-              startAngle: 90
-              ticksAngle: 180
-              valueBox: false
-              majorTicks:
-                - '0'
-                - '2'
-                - '4'
-                - '6'
-                - '8'
-                - '10'
-                - '12'
-              minorTicks: 2
-              strokeTicks: true
-              highlights:
-                - from: 0
-                  to: 4
-                  color: rgba(50, 200, 50, .75)
-                - from: 4
-                  to: 8
-                  color: rgba(200, 200, 50, .75)
-                - from: 8
-                  to: 12
-                  color: rgba(200, 50, 50, .75)
-              borders: true
-          - type: custom:mini-graph-card
-            show:
-              labels: true
-              points: false
-              icon: false
-              name: false
-              average: true
-              extrema: true
-            color_thresholds:
-              - value: 0
-                color: rgba(50, 200, 50, .75)
-              - value: 4
-                color: rgba(200, 200, 50, .75)
-              - value: 8
-                color: rgba(200, 50, 50, .75)
-            hour24: true
-            animate: false
-            unit: kW
-            lower_bound: 0
-            points_per_hour: 20
-            line_width: 1
-            height: 150
-            entities:
-              - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13119
-                name: Load
-          - type: custom:canvas-gauge-card
-            entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_battery_to_load_power
-            card_height: 220
-            gauge:
-              type: radial-gauge
-              title: Battery to Load (kW)
-              height: 420
-              borderShadowWidth: 0
-              borderOuterWidth: 0
-              borderMiddleWidth: 0
-              borderInnerWidth: 0
-              minValue: 0
-              maxValue: 12
-              startAngle: 90
-              ticksAngle: 180
-              valueBox: false
-              majorTicks:
-                - '0'
-                - '2'
-                - '4'
-                - '6'
-                - '8'
-                - '10'
-                - '12'
-              minorTicks: 2
-              strokeTicks: true
-              highlights:
-                - from: 0
-                  to: 6
-                  color: rgba(200, 200, 50, .75)
-                - from: 6
-                  to: 12
-                  color: rgba(50, 200, 50, .75)
-              borders: true
-          - type: custom:mini-graph-card
-            show:
-              labels: true
-              points: false
-              icon: false
-              name: false
-              average: true
-              extrema: true
-            color_thresholds:
-              - value: 0
-                color: rgba(200, 200, 50, .75)
-              - value: 6
-                color: rgba(50, 200, 50, .75)
-            hour24: true
-            animate: false
-            unit: kW
-            lower_bound: 0
-            upper_bound: 12
-            points_per_hour: 20
-            line_width: 1
-            height: 150
-            entities:
-              - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_battery_to_load_power
-                name: Battery to Load
-          - type: custom:canvas-gauge-card
-            entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13149
-            card_height: 220
-            gauge:
-              type: radial-gauge
-              title: Grid to Load (kW)
-              height: 420
-              borderShadowWidth: 0
-              borderOuterWidth: 0
-              borderMiddleWidth: 0
-              borderInnerWidth: 0
-              minValue: 0
-              maxValue: 12
-              startAngle: 90
-              ticksAngle: 180
-              valueBox: false
-              majorTicks:
-                - '0'
-                - '2'
-                - '4'
-                - '6'
-                - '8'
-                - '10'
-                - '12'
-              minorTicks: 2
-              strokeTicks: true
-              highlights:
-                - from: 0
-                  to: 2
-                  color: rgba(50, 200, 50, .75)
-                - from: 2
-                  to: 6
-                  color: rgba(200, 200, 50, .75)
-                - from: 6
-                  to: 12
-                  color: rgba(200, 50, 50, .75)
-              borders: true
-          - type: custom:mini-graph-card
-            show:
-              labels: true
-              points: false
-              icon: false
-              name: false
-              average: true
-              extrema: true
-            color_thresholds:
-              - value: 0
-                color: rgba(50, 200, 50, .75)
-              - value: 4
-                color: rgba(200, 200, 50, .75)
-              - value: 8
-                color: rgba(200, 50, 50, .75)
-            hour24: true
-            animate: false
-            unit: kW
-            lower_bound: 0
-            upper_bound: 12
-            points_per_hour: 20
-            line_width: 1
-            height: 150
-            entities:
-              - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13149
-                name: Grid to Load
+          - type: markdown
+            content: ' '
+            title: Power (kW)
+          - type: horizontal-stack
+            cards:
+              - type: custom:canvas-gauge-card
+                entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13003
+                style:
+                  top: 50%
+                  left: 50%
+                  width: null
+                  heigth: null
+                  box-shadow: none
+                  background-color: transparent
+                  transform: scale(1,1) translate(-50%,-50%)
+                gauge:
+                  type: radial-gauge
+                  title: PV Yield (kW)
+                  height: 190
+                  width: 190
+                  barWidth: 20
+                  barShadow: 1
+                  colorBarProgress: rgba(254,141,75,0.8)
+                  colorBar: '#0000'
+                  borderShadowWidth: 0
+                  borderInnerWidth: 0
+                  borderOuterWidth: 0
+                  borderMiddleWidth: 0
+                  colorValueBoxShadow: 0
+                  colorValueBoxBackground: transparent
+                  needle: false
+                  needleCircleSize: 15
+                  needleCircleOuter: false
+                  minValue: 0
+                  maxValue: 12
+                  startAngle: 180
+                  ticksAngle: 360
+                  valueBox: true
+                  valueBoxWidth: 40
+                  valueBoxStroke: 1
+                  valueBoxBorderRadius: 5
+                  valueTextShadow: true
+                  valueInt: 1
+                  valueDec: 3
+                  majorTicks:
+                    - '0'
+                    - '3'
+                    - '6'
+                    - '9'
+                    - ''
+                  minorTicks: 2
+                  strokeTicks: false
+                  borders: true
+                  highlights:
+                    - from: 0
+                      to: 4
+                      color: rgba(200, 50, 50, .75)
+                    - from: 4
+                      to: 8
+                      color: rgba(200, 200, 50, .75)
+                    - from: 8
+                      to: 12
+                      color: rgba(50, 200, 50, .75)
+              - type: custom:mini-graph-card
+                show:
+                  labels: true
+                  points: false
+                  icon: false
+                  name: false
+                  average: true
+                  extrema: true
+                color_thresholds:
+                  - value: 0
+                    color: rgba(200, 50, 50, .75)
+                  - value: 4
+                    color: rgba(200, 200, 50, .75)
+                  - value: 8
+                    color: rgba(50, 200, 50, .75)
+                hour24: true
+                animate: false
+                unit: kW
+                lower_bound: 0
+                points_per_hour: 20
+                line_width: 1
+                height: 150
+                entities:
+                  - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13003
+                    name: PV Yield
+          - type: horizontal-stack
+            cards:
+              - type: custom:canvas-gauge-card
+                entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_pv_to_battery_power
+                style:
+                  top: 50%
+                  left: 50%
+                  width: null
+                  heigth: null
+                  box-shadow: none
+                  background-color: transparent
+                  transform: scale(1,1) translate(-50%,-50%)
+                gauge:
+                  type: radial-gauge
+                  title: PV to Battery (kW)
+                  height: 190
+                  width: 190
+                  barWidth: 20
+                  barShadow: 1
+                  colorBarProgress: rgba(125,195,77,0.8)
+                  colorBar: '#0000'
+                  borderShadowWidth: 0
+                  borderInnerWidth: 0
+                  borderOuterWidth: 0
+                  borderMiddleWidth: 0
+                  colorValueBoxShadow: 0
+                  colorValueBoxBackground: transparent
+                  needle: false
+                  needleCircleSize: 15
+                  needleCircleOuter: false
+                  minValue: 0
+                  maxValue: 12
+                  startAngle: 180
+                  ticksAngle: 360
+                  valueBox: true
+                  valueBoxWidth: 40
+                  valueBoxStroke: 1
+                  valueBoxBorderRadius: 5
+                  valueTextShadow: true
+                  valueInt: 1
+                  valueDec: 3
+                  majorTicks:
+                    - '0'
+                    - '3'
+                    - '6'
+                    - '9'
+                    - ''
+                  minorTicks: 2
+                  strokeTicks: false
+                  borders: true
+                  highlights:
+                    - from: 0
+                      to: 4
+                      color: rgba(200, 50, 50, .75)
+                    - from: 4
+                      to: 8
+                      color: rgba(200, 200, 50, .75)
+                    - from: 8
+                      to: 12
+                      color: rgba(50, 200, 50, .75)
+              - type: custom:mini-graph-card
+                show:
+                  labels: true
+                  points: false
+                  icon: false
+                  name: false
+                  average: true
+                  extrema: true
+                color_thresholds:
+                  - value: 0
+                    color: rgba(200, 50, 50, .75)
+                  - value: 4
+                    color: rgba(200, 200, 50, .75)
+                  - value: 8
+                    color: rgba(50, 200, 50, .75)
+                hour24: true
+                animate: false
+                unit: kW
+                lower_bound: 0
+                points_per_hour: 20
+                line_width: 1
+                height: 150
+                entities:
+                  - entity: >-
+                      sensor.gosungrow_virtual_{{ DeviceType:14 }}_pv_to_battery_power
+                    name: PV to Battery
+          - type: horizontal-stack
+            cards:
+              - type: custom:canvas-gauge-card
+                entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_pv_to_grid_power
+                style:
+                  top: 50%
+                  left: 50%
+                  width: null
+                  heigth: null
+                  box-shadow: none
+                  background-color: transparent
+                  transform: scale(1,1) translate(-50%,-50%)
+                gauge:
+                  type: radial-gauge
+                  title: PV to Grid (kW)
+                  height: 190
+                  width: 190
+                  barWidth: 20
+                  barShadow: 1
+                  colorBarProgress: rgba(74,176,249,0.8)
+                  colorBar: '#0000'
+                  borderShadowWidth: 0
+                  borderInnerWidth: 0
+                  borderOuterWidth: 0
+                  borderMiddleWidth: 0
+                  colorValueBoxShadow: 0
+                  colorValueBoxBackground: transparent
+                  needle: false
+                  needleCircleSize: 15
+                  needleCircleOuter: false
+                  minValue: 0
+                  maxValue: 12
+                  startAngle: 180
+                  ticksAngle: 360
+                  valueBox: true
+                  valueBoxWidth: 40
+                  valueBoxStroke: 1
+                  valueBoxBorderRadius: 5
+                  valueTextShadow: true
+                  valueInt: 1
+                  valueDec: 3
+                  majorTicks:
+                    - '0'
+                    - '3'
+                    - '6'
+                    - '9'
+                    - ''
+                  minorTicks: 2
+                  strokeTicks: false
+                  borders: true
+                  highlights:
+                    - from: 0
+                      to: 4
+                      color: rgba(200, 50, 50, .75)
+                    - from: 4
+                      to: 8
+                      color: rgba(200, 200, 50, .75)
+                    - from: 8
+                      to: 12
+                      color: rgba(50, 200, 50, .75)
+              - type: custom:mini-graph-card
+                show:
+                  labels: true
+                  points: false
+                  icon: false
+                  name: false
+                  average: true
+                  extrema: true
+                color_thresholds:
+                  - value: 0
+                    color: rgba(200, 50, 50, .75)
+                  - value: 4
+                    color: rgba(200, 200, 50, .75)
+                  - value: 8
+                    color: rgba(50, 200, 50, .75)
+                hour24: true
+                animate: false
+                unit: kW
+                lower_bound: 0
+                points_per_hour: 20
+                line_width: 1
+                height: 150
+                entities:
+                  - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_pv_to_grid_power
+                    name: PV to Grid
+          - type: horizontal-stack
+            cards:
+              - type: custom:canvas-gauge-card
+                entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_pv_to_load_power
+                style:
+                  top: 50%
+                  left: 50%
+                  width: null
+                  heigth: null
+                  box-shadow: none
+                  background-color: transparent
+                  transform: scale(1,1) translate(-50%,-50%)
+                gauge:
+                  type: radial-gauge
+                  title: PV to Load (kW)
+                  height: 190
+                  width: 190
+                  barWidth: 20
+                  barShadow: 1
+                  colorBarProgress: rgba(7,205,205,1)
+                  colorBar: '#0000'
+                  borderShadowWidth: 0
+                  borderInnerWidth: 0
+                  borderOuterWidth: 0
+                  borderMiddleWidth: 0
+                  colorValueBoxShadow: 0
+                  colorValueBoxBackground: transparent
+                  needle: false
+                  needleCircleSize: 15
+                  needleCircleOuter: false
+                  minValue: 0
+                  maxValue: 12
+                  startAngle: 180
+                  ticksAngle: 360
+                  valueBox: true
+                  valueBoxWidth: 40
+                  valueBoxStroke: 1
+                  valueBoxBorderRadius: 5
+                  valueTextShadow: true
+                  valueInt: 1
+                  valueDec: 3
+                  majorTicks:
+                    - '0'
+                    - '3'
+                    - '6'
+                    - '9'
+                    - ''
+                  minorTicks: 2
+                  strokeTicks: false
+                  borders: true
+                  highlights:
+                    - from: 0
+                      to: 4
+                      color: rgba(200, 50, 50, .75)
+                    - from: 4
+                      to: 8
+                      color: rgba(200, 200, 50, .75)
+                    - from: 8
+                      to: 12
+                      color: rgba(50, 200, 50, .75)
+              - type: custom:mini-graph-card
+                show:
+                  labels: true
+                  points: false
+                  icon: false
+                  name: false
+                  average: true
+                  extrema: true
+                color_thresholds:
+                  - value: 0
+                    color: rgba(200, 50, 50, .75)
+                  - value: 4
+                    color: rgba(200, 200, 50, .75)
+                  - value: 8
+                    color: rgba(50, 200, 50, .75)
+                hour24: true
+                animate: false
+                unit: kW
+                lower_bound: 0
+                points_per_hour: 20
+                line_width: 1
+                height: 150
+                entities:
+                  - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_pv_to_load_power
+                    name: PV to Load
+          - type: horizontal-stack
+            cards:
+              - type: custom:canvas-gauge-card
+                entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13119
+                style:
+                  top: 50%
+                  left: 50%
+                  width: null
+                  heigth: null
+                  box-shadow: none
+                  background-color: transparent
+                  transform: scale(1,1) translate(-50%,-50%)
+                gauge:
+                  type: radial-gauge
+                  title: Load (kW)
+                  height: 190
+                  width: 190
+                  barWidth: 20
+                  barShadow: 1
+                  colorBarProgress: rgba(254,141,75,0.8)
+                  colorBar: '#0000'
+                  borderShadowWidth: 0
+                  borderInnerWidth: 0
+                  borderOuterWidth: 0
+                  borderMiddleWidth: 0
+                  colorValueBoxShadow: 0
+                  colorValueBoxBackground: transparent
+                  needle: false
+                  needleCircleSize: 15
+                  needleCircleOuter: false
+                  minValue: 0
+                  maxValue: 12
+                  startAngle: 180
+                  ticksAngle: 360
+                  valueBox: true
+                  valueBoxWidth: 40
+                  valueBoxStroke: 1
+                  valueBoxBorderRadius: 5
+                  valueTextShadow: true
+                  valueInt: 1
+                  valueDec: 3
+                  majorTicks:
+                    - '0'
+                    - '3'
+                    - '6'
+                    - '9'
+                    - ''
+                  minorTicks: 2
+                  strokeTicks: false
+                  borders: true
+                  highlights:
+                    - from: 0
+                      to: 4
+                      color: rgba(200, 50, 50, .75)
+                    - from: 4
+                      to: 8
+                      color: rgba(200, 200, 50, .75)
+                    - from: 8
+                      to: 12
+                      color: rgba(50, 200, 50, .75)
+              - type: custom:mini-graph-card
+                show:
+                  labels: true
+                  points: false
+                  icon: false
+                  name: false
+                  average: true
+                  extrema: true
+                color_thresholds:
+                  - value: 0
+                    color: rgba(50, 200, 50, .75)
+                  - value: 4
+                    color: rgba(200, 200, 50, .75)
+                  - value: 8
+                    color: rgba(200, 50, 50, .75)
+                hour24: true
+                animate: false
+                unit: kW
+                lower_bound: 0
+                points_per_hour: 20
+                line_width: 1
+                height: 150
+                entities:
+                  - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13119
+                    name: Load
+          - type: horizontal-stack
+            cards:
+              - type: custom:canvas-gauge-card
+                entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_battery_to_load_power
+                style:
+                  top: 50%
+                  left: 50%
+                  width: null
+                  heigth: null
+                  box-shadow: none
+                  background-color: transparent
+                  transform: scale(1,1) translate(-50%,-50%)
+                gauge:
+                  type: radial-gauge
+                  title: Battery to Load (kW)
+                  height: 190
+                  width: 190
+                  barWidth: 20
+                  barShadow: 1
+                  colorBarProgress: rgba(125,195,77,0.8)
+                  colorBar: '#0000'
+                  borderShadowWidth: 0
+                  borderInnerWidth: 0
+                  borderOuterWidth: 0
+                  borderMiddleWidth: 0
+                  colorValueBoxShadow: 0
+                  colorValueBoxBackground: transparent
+                  needle: false
+                  needleCircleSize: 15
+                  needleCircleOuter: false
+                  minValue: 0
+                  maxValue: 12
+                  startAngle: 180
+                  ticksAngle: 360
+                  valueBox: true
+                  valueBoxWidth: 40
+                  valueBoxStroke: 1
+                  valueBoxBorderRadius: 5
+                  valueTextShadow: true
+                  valueInt: 1
+                  valueDec: 3
+                  majorTicks:
+                    - '0'
+                    - '3'
+                    - '6'
+                    - '9'
+                    - ''
+                  minorTicks: 2
+                  strokeTicks: false
+                  borders: true
+                  highlights:
+                    - from: 0
+                      to: 4
+                      color: rgba(200, 50, 50, .75)
+                    - from: 4
+                      to: 8
+                      color: rgba(200, 200, 50, .75)
+                    - from: 8
+                      to: 12
+                      color: rgba(50, 200, 50, .75)
+              - type: custom:mini-graph-card
+                show:
+                  labels: true
+                  points: false
+                  icon: false
+                  name: false
+                  average: true
+                  extrema: true
+                color_thresholds:
+                  - value: 0
+                    color: rgba(200, 200, 50, .75)
+                  - value: 6
+                    color: rgba(50, 200, 50, .75)
+                hour24: true
+                animate: false
+                unit: kW
+                lower_bound: 0
+                upper_bound: 12
+                points_per_hour: 20
+                line_width: 1
+                height: 150
+                entities:
+                  - entity: >-
+                      sensor.gosungrow_virtual_{{ DeviceType:14 }}_battery_to_load_power
+                    name: Battery to Load
+          - type: horizontal-stack
+            cards:
+              - type: custom:canvas-gauge-card
+                entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13149
+                style:
+                  top: 50%
+                  left: 50%
+                  width: null
+                  heigth: null
+                  box-shadow: none
+                  background-color: transparent
+                  transform: scale(1,1) translate(-50%,-50%)
+                gauge:
+                  type: radial-gauge
+                  title: Grid to Load (kW)
+                  height: 190
+                  width: 190
+                  barWidth: 20
+                  barShadow: 1
+                  colorBarProgress: rgba(74,176,249,0.8)
+                  colorBar: '#0000'
+                  borderShadowWidth: 0
+                  borderInnerWidth: 0
+                  borderOuterWidth: 0
+                  borderMiddleWidth: 0
+                  colorValueBoxShadow: 0
+                  colorValueBoxBackground: transparent
+                  needle: false
+                  needleCircleSize: 15
+                  needleCircleOuter: false
+                  minValue: 0
+                  maxValue: 12
+                  startAngle: 180
+                  ticksAngle: 360
+                  valueBox: true
+                  valueBoxWidth: 40
+                  valueBoxStroke: 1
+                  valueBoxBorderRadius: 5
+                  valueTextShadow: true
+                  valueInt: 1
+                  valueDec: 3
+                  majorTicks:
+                    - '0'
+                    - '3'
+                    - '6'
+                    - '9'
+                    - ''
+                  minorTicks: 2
+                  strokeTicks: false
+                  borders: true
+                  highlights:
+                    - from: 0
+                      to: 4
+                      color: rgba(200, 50, 50, .75)
+                    - from: 4
+                      to: 8
+                      color: rgba(200, 200, 50, .75)
+                    - from: 8
+                      to: 12
+                      color: rgba(50, 200, 50, .75)
+              - type: custom:mini-graph-card
+                show:
+                  labels: true
+                  points: false
+                  icon: false
+                  name: false
+                  average: true
+                  extrema: true
+                color_thresholds:
+                  - value: 0
+                    color: rgba(50, 200, 50, .75)
+                  - value: 4
+                    color: rgba(200, 200, 50, .75)
+                  - value: 8
+                    color: rgba(200, 50, 50, .75)
+                hour24: true
+                animate: false
+                unit: kW
+                lower_bound: 0
+                upper_bound: 12
+                points_per_hour: 20
+                line_width: 1
+                height: 150
+                entities:
+                  - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13149
+                    name: Grid to Load
   - theme: Backend-selected
     title: Energy
     path: energy
@@ -1388,454 +1550,625 @@ const lovelaceGraphs = `views:
     icon: mdi:home-lightning-bolt-outline
     badges: []
     cards:
-      - square: false
-        columns: 2
-        type: grid
+      - type: vertical-stack
         cards:
-          - type: custom:canvas-gauge-card
-            entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13112
-            card_height: 220
-            gauge:
-              type: radial-gauge
-              title: PV Yield (kWh)
-              height: 420
-              borderShadowWidth: 0
-              borderOuterWidth: 0
-              borderMiddleWidth: 0
-              borderInnerWidth: 0
-              minValue: 0
-              maxValue: 60
-              startAngle: 90
-              ticksAngle: 180
-              valueBox: false
-              majorTicks:
-                - '0'
-                - '10'
-                - '20'
-                - '30'
-                - '40'
-                - '50'
-                - '60'
-              minorTicks: 2
-              strokeTicks: true
-              highlights:
-                - from: 0
-                  to: 15
-                  color: rgba(200, 50, 50, .75)
-                - from: 15
-                  to: 30
-                  color: rgba(200, 200, 50, .75)
-                - from: 30
-                  to: 60
-                  color: rgba(50, 200, 50, .75)
-              borders: true
-          - type: custom:mini-graph-card
-            show:
-              labels: true
-              points: false
-              icon: false
-              name: false
-              average: true
-              extrema: true
-            color_thresholds:
-              - value: 0
-                color: rgba(200, 50, 50, .75)
-              - value: 15
-                color: rgba(200, 200, 50, .75)
-              - value: 30
-                color: rgba(50, 200, 50, .75)
-            hour24: true
-            animate: false
-            unit: kWh
-            lower_bound: 0
-            upper_bound: 60
-            points_per_hour: 20
-            line_width: 1
-            hours_to_show: 16
-            height: 150
-            entities:
-              - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13112
-                name: PV Yield
-          - type: custom:canvas-gauge-card
-            entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_battery_discharge_energy
-            card_height: 220
-            gauge:
-              type: radial-gauge
-              title: PV to Battery (kWh)
-              height: 420
-              borderShadowWidth: 0
-              borderOuterWidth: 0
-              borderMiddleWidth: 0
-              borderInnerWidth: 0
-              minValue: 0
-              maxValue: 12
-              startAngle: 90
-              ticksAngle: 180
-              valueBox: false
-              majorTicks:
-                - '0'
-                - '2'
-                - '4'
-                - '6'
-                - '8'
-                - '10'
-                - '12'
-              minorTicks: 2
-              strokeTicks: true
-              highlights:
-                - from: 0
-                  to: 4
-                  color: rgba(200, 50, 50, .75)
-                - from: 4
-                  to: 8
-                  color: rgba(200, 200, 50, .75)
-                - from: 8
-                  to: 12
-                  color: rgba(50, 200, 50, .75)
-              borders: true
-          - type: custom:mini-graph-card
-            show:
-              labels: true
-              points: false
-              icon: false
-              name: false
-              average: true
-              extrema: true
-            color_thresholds:
-              - value: 0
-                color: rgba(200, 50, 50, .75)
-              - value: 4
-                color: rgba(200, 200, 50, .75)
-              - value: 8
-                color: rgba(50, 200, 50, .75)
-            hour24: true
-            animate: false
-            unit: kWh
-            lower_bound: 0
-            upper_bound: 12
-            points_per_hour: 20
-            line_width: 1
-            hours_to_show: 16
-            height: 150
-            entities:
-              - entity: >-
+          - type: markdown
+            content: ' '
+            title: Energy (kWh)
+          - type: horizontal-stack
+            cards:
+              - type: custom:canvas-gauge-card
+                entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13112
+                style:
+                  top: 50%
+                  left: 50%
+                  width: null
+                  heigth: null
+                  box-shadow: none
+                  background-color: transparent
+                  transform: scale(1,1) translate(-50%,-50%)
+                gauge:
+                  type: radial-gauge
+                  title: PV Yield (kWh)
+                  height: 190
+                  width: 190
+                  barWidth: 20
+                  barShadow: 1
+                  colorBarProgress: rgba(254,141,75,0.8)
+                  colorBar: '#0000'
+                  borderShadowWidth: 0
+                  borderInnerWidth: 0
+                  borderOuterWidth: 0
+                  borderMiddleWidth: 0
+                  colorValueBoxShadow: 0
+                  colorValueBoxBackground: transparent
+                  needle: false
+                  needleCircleSize: 15
+                  needleCircleOuter: false
+                  minValue: 0
+                  maxValue: 60
+                  startAngle: 180
+                  ticksAngle: 360
+                  valueBox: true
+                  valueBoxWidth: 40
+                  valueBoxStroke: 1
+                  valueBoxBorderRadius: 5
+                  valueTextShadow: true
+                  valueInt: 1
+                  valueDec: 3
+                  majorTicks:
+                    - '0'
+                    - '15'
+                    - '30'
+                    - '45'
+                    - ''
+                  minorTicks: 2
+                  strokeTicks: false
+                  borders: true
+                  highlights:
+                    - from: 0
+                      to: 15
+                      color: rgba(200, 50, 50, .75)
+                    - from: 15
+                      to: 30
+                      color: rgba(200, 200, 50, .75)
+                    - from: 30
+                      to: 60
+                      color: rgba(50, 200, 50, .75)
+              - type: custom:mini-graph-card
+                show:
+                  labels: true
+                  points: false
+                  icon: false
+                  name: false
+                  average: true
+                  extrema: true
+                color_thresholds:
+                  - value: 0
+                    color: rgba(200, 50, 50, .75)
+                  - value: 15
+                    color: rgba(200, 200, 50, .75)
+                  - value: 30
+                    color: rgba(50, 200, 50, .75)
+                hour24: true
+                animate: false
+                unit: kWh
+                lower_bound: 0
+                upper_bound: 60
+                points_per_hour: 20
+                line_width: 1
+                hours_to_show: 16
+                height: 150
+                entities:
+                  - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13112
+                    name: PV Yield
+          - type: horizontal-stack
+            cards:
+              - type: custom:canvas-gauge-card
+                entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_battery_charge_energy
+                style:
+                  top: 50%
+                  left: 50%
+                  width: null
+                  heigth: null
+                  box-shadow: none
+                  background-color: transparent
+                  transform: scale(1,1) translate(-50%,-50%)
+                gauge:
+                  type: radial-gauge
+                  title: PV to Battery (kWh)
+                  height: 190
+                  width: 190
+                  barWidth: 20
+                  barShadow: 1
+                  colorBarProgress: rgba(125,195,77,0.8)
+                  colorBar: '#0000'
+                  borderShadowWidth: 0
+                  borderInnerWidth: 0
+                  borderOuterWidth: 0
+                  borderMiddleWidth: 0
+                  colorValueBoxShadow: 0
+                  colorValueBoxBackground: transparent
+                  needle: false
+                  needleCircleSize: 15
+                  needleCircleOuter: false
+                  minValue: 0
+                  maxValue: 12
+                  startAngle: 180
+                  ticksAngle: 360
+                  valueBox: true
+                  valueBoxWidth: 40
+                  valueBoxStroke: 1
+                  valueBoxBorderRadius: 5
+                  valueTextShadow: true
+                  valueInt: 1
+                  valueDec: 3
+                  majorTicks:
+                    - '0'
+                    - '3'
+                    - '6'
+                    - '9'
+                    - ''
+                  minorTicks: 2
+                  strokeTicks: false
+                  borders: true
+                  highlights:
+                    - from: 0
+                      to: 4
+                      color: rgba(200, 50, 50, .75)
+                    - from: 4
+                      to: 8
+                      color: rgba(200, 200, 50, .75)
+                    - from: 8
+                      to: 12
+                      color: rgba(50, 200, 50, .75)
+              - type: custom:mini-graph-card
+                show:
+                  labels: true
+                  points: false
+                  icon: false
+                  name: false
+                  average: true
+                  extrema: true
+                color_thresholds:
+                  - value: 0
+                    color: rgba(200, 50, 50, .75)
+                  - value: 4
+                    color: rgba(200, 200, 50, .75)
+                  - value: 8
+                    color: rgba(50, 200, 50, .75)
+                hour24: true
+                animate: false
+                unit: kWh
+                lower_bound: 0
+                upper_bound: 12
+                points_per_hour: 20
+                line_width: 1
+                hours_to_show: 16
+                height: 150
+                entities:
+                  - entity: >-
+                      sensor.gosungrow_virtual_{{ DeviceType:14 }}_battery_charge_energy
+                    name: PV to Battery
+          - type: horizontal-stack
+            cards:
+              - type: custom:canvas-gauge-card
+                entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_pv_consumption_energy
+                style:
+                  top: 50%
+                  left: 50%
+                  width: null
+                  heigth: null
+                  box-shadow: none
+                  background-color: transparent
+                  transform: scale(1,1) translate(-50%,-50%)
+                gauge:
+                  type: radial-gauge
+                  title: PV to Load (kWh)
+                  height: 190
+                  width: 190
+                  barWidth: 20
+                  barShadow: 1
+                  colorBarProgress: rgba(7,205,205,1)
+                  colorBar: '#0000'
+                  borderShadowWidth: 0
+                  borderInnerWidth: 0
+                  borderOuterWidth: 0
+                  borderMiddleWidth: 0
+                  colorValueBoxShadow: 0
+                  colorValueBoxBackground: transparent
+                  needle: false
+                  needleCircleSize: 15
+                  needleCircleOuter: false
+                  minValue: 0
+                  maxValue: 60
+                  startAngle: 180
+                  ticksAngle: 360
+                  valueBox: true
+                  valueBoxWidth: 40
+                  valueBoxStroke: 1
+                  valueBoxBorderRadius: 5
+                  valueTextShadow: true
+                  valueInt: 1
+                  valueDec: 3
+                  majorTicks:
+                    - '0'
+                    - '15'
+                    - '30'
+                    - '45'
+                    - ''
+                  minorTicks: 2
+                  strokeTicks: false
+                  borders: true
+                  highlights:
+                    - from: 0
+                      to: 15
+                      color: rgba(200, 50, 50, .75)
+                    - from: 15
+                      to: 30
+                      color: rgba(200, 200, 50, .75)
+                    - from: 30
+                      to: 60
+                      color: rgba(50, 200, 50, .75)
+              - type: custom:mini-graph-card
+                show:
+                  labels: true
+                  points: false
+                  icon: false
+                  name: false
+                  average: true
+                  extrema: true
+                color_thresholds:
+                  - value: 0
+                    color: rgba(200, 50, 50, .75)
+                  - value: 10
+                    color: rgba(200, 200, 50, .75)
+                  - value: 20
+                    color: rgba(50, 200, 50, .75)
+                hour24: true
+                animate: false
+                unit: kWh
+                lower_bound: 0
+                upper_bound: 60
+                points_per_hour: 20
+                line_width: 1
+                hours_to_show: 16
+                height: 150
+                entities:
+                  - entity: >-
+                      sensor.gosungrow_virtual_{{ DeviceType:14 }}_pv_consumption_energy
+                    name: PV to Load
+          - type: horizontal-stack
+            cards:
+              - type: custom:canvas-gauge-card
+                entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13173
+                style:
+                  top: 50%
+                  left: 50%
+                  width: null
+                  heigth: null
+                  box-shadow: none
+                  background-color: transparent
+                  transform: scale(1,1) translate(-50%,-50%)
+                gauge:
+                  type: radial-gauge
+                  title: PV to Grid (kWh)
+                  height: 190
+                  width: 190
+                  barWidth: 20
+                  barShadow: 1
+                  colorBarProgress: rgba(74,176,249,0.8)
+                  colorBar: '#0000'
+                  borderShadowWidth: 0
+                  borderInnerWidth: 0
+                  borderOuterWidth: 0
+                  borderMiddleWidth: 0
+                  colorValueBoxShadow: 0
+                  colorValueBoxBackground: transparent
+                  needle: false
+                  needleCircleSize: 15
+                  needleCircleOuter: false
+                  minValue: 0
+                  maxValue: 60
+                  startAngle: 180
+                  ticksAngle: 360
+                  valueBox: true
+                  valueBoxWidth: 40
+                  valueBoxStroke: 1
+                  valueBoxBorderRadius: 5
+                  valueTextShadow: true
+                  valueInt: 1
+                  valueDec: 3
+                  majorTicks:
+                    - '0'
+                    - '15'
+                    - '30'
+                    - '45'
+                    - ''
+                  minorTicks: 2
+                  strokeTicks: false
+                  borders: true
+                  highlights:
+                    - from: 0
+                      to: 15
+                      color: rgba(200, 50, 50, .75)
+                    - from: 15
+                      to: 30
+                      color: rgba(200, 200, 50, .75)
+                    - from: 30
+                      to: 60
+                      color: rgba(50, 200, 50, .75)
+              - type: custom:mini-graph-card
+                show:
+                  labels: true
+                  points: false
+                  icon: false
+                  name: false
+                  average: true
+                  extrema: true
+                color_thresholds:
+                  - value: 0
+                    color: rgba(200, 50, 50, .75)
+                  - value: 15
+                    color: rgba(200, 200, 50, .75)
+                  - value: 30
+                    color: rgba(50, 200, 50, .75)
+                hour24: true
+                animate: false
+                unit: kWh
+                lower_bound: 0
+                upper_bound: 60
+                points_per_hour: 20
+                line_width: 1
+                hours_to_show: 16
+                height: 150
+                entities:
+                  - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13173
+                    name: PV to Grid
+          - type: horizontal-stack
+            cards:
+              - type: custom:canvas-gauge-card
+                entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_pv_consumption_energy
+                style:
+                  top: 50%
+                  left: 50%
+                  width: null
+                  heigth: null
+                  box-shadow: none
+                  background-color: transparent
+                  transform: scale(1,1) translate(-50%,-50%)
+                gauge:
+                  type: radial-gauge
+                  title: Load (kWh)
+                  height: 190
+                  width: 190
+                  barWidth: 20
+                  barShadow: 1
+                  colorBarProgress: rgba(254,141,75,0.8)
+                  colorBar: '#0000'
+                  borderShadowWidth: 0
+                  borderInnerWidth: 0
+                  borderOuterWidth: 0
+                  borderMiddleWidth: 0
+                  colorValueBoxShadow: 0
+                  colorValueBoxBackground: transparent
+                  needle: false
+                  needleCircleSize: 15
+                  needleCircleOuter: false
+                  minValue: 0
+                  maxValue: 60
+                  startAngle: 180
+                  ticksAngle: 360
+                  valueBox: true
+                  valueBoxWidth: 40
+                  valueBoxStroke: 1
+                  valueBoxBorderRadius: 5
+                  valueTextShadow: true
+                  valueInt: 1
+                  valueDec: 3
+                  majorTicks:
+                    - '0'
+                    - '15'
+                    - '30'
+                    - '45'
+                    - ''
+                  minorTicks: 2
+                  strokeTicks: false
+                  borders: true
+                  highlights:
+                    - from: 0
+                      to: 15
+                      color: rgba(50, 200, 50, .75)
+                    - from: 15
+                      to: 30
+                      color: rgba(200, 200, 50, .75)
+                    - from: 30
+                      to: 60
+                      color: rgba(200, 50, 50, .75)
+              - type: custom:mini-graph-card
+                show:
+                  labels: true
+                  points: false
+                  icon: false
+                  name: false
+                  average: true
+                  extrema: true
+                color_thresholds:
+                  - value: 0
+                    color: rgba(200, 50, 50, .75)
+                  - value: 25
+                    color: rgba(200, 200, 50, .75)
+                  - value: 35
+                    color: rgba(50, 200, 50, .75)
+                hour24: true
+                animate: false
+                unit: kWh
+                lower_bound: 0
+                upper_bound: 60
+                points_per_hour: 20
+                line_width: 1
+                hours_to_show: 16
+                height: 150
+                entities:
+                  - entity: >-
+                      sensor.gosungrow_virtual_{{ DeviceType:14 }}_pv_consumption_energy
+                    name: Load
+          - type: horizontal-stack
+            cards:
+              - type: custom:canvas-gauge-card
+                entity: >-
                   sensor.gosungrow_virtual_{{ DeviceType:14 }}_battery_discharge_energy
-                name: PV to Battery
-          - type: custom:canvas-gauge-card
-            entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_pv_consumption_energy
-            card_height: 220
-            gauge:
-              type: radial-gauge
-              title: PV to Load (kWh)
-              height: 420
-              borderShadowWidth: 0
-              borderOuterWidth: 0
-              borderMiddleWidth: 0
-              borderInnerWidth: 0
-              minValue: 0
-              maxValue: 60
-              startAngle: 90
-              ticksAngle: 180
-              valueBox: false
-              majorTicks:
-                - '0'
-                - '10'
-                - '20'
-                - '30'
-                - '40'
-                - '50'
-                - '60'
-              minorTicks: 2
-              strokeTicks: true
-              highlights:
-                - from: 0
-                  to: 10
-                  color: rgba(200, 50, 50, .75)
-                - from: 10
-                  to: 20
-                  color: rgba(200, 200, 50, .75)
-                - from: 20
-                  to: 60
-                  color: rgba(50, 200, 50, .75)
-              borders: true
-          - type: custom:mini-graph-card
-            show:
-              labels: true
-              points: false
-              icon: false
-              name: false
-              average: true
-              extrema: true
-            color_thresholds:
-              - value: 0
-                color: rgba(200, 50, 50, .75)
-              - value: 10
-                color: rgba(200, 200, 50, .75)
-              - value: 20
-                color: rgba(50, 200, 50, .75)
-            hour24: true
-            animate: false
-            unit: kWh
-            lower_bound: 0
-            upper_bound: 60
-            points_per_hour: 20
-            line_width: 1
-            hours_to_show: 16
-            height: 150
-            entities:
-              - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_pv_consumption_energy
-                name: PV to Load
-          - type: custom:canvas-gauge-card
-            entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13173
-            card_height: 220
-            gauge:
-              type: radial-gauge
-              title: PV to Grid (kWh)
-              height: 420
-              borderShadowWidth: 0
-              borderOuterWidth: 0
-              borderMiddleWidth: 0
-              borderInnerWidth: 0
-              minValue: 0
-              maxValue: 60
-              startAngle: 90
-              ticksAngle: 180
-              valueBox: false
-              majorTicks:
-                - '0'
-                - '10'
-                - '20'
-                - '30'
-                - '40'
-                - '50'
-                - '60'
-              minorTicks: 2
-              strokeTicks: true
-              highlights:
-                - from: 0
-                  to: 15
-                  color: rgba(200, 50, 50, .75)
-                - from: 15
-                  to: 30
-                  color: rgba(200, 200, 50, .75)
-                - from: 30
-                  to: 60
-                  color: rgba(50, 200, 50, .75)
-              borders: true
-          - type: custom:mini-graph-card
-            show:
-              labels: true
-              points: false
-              icon: false
-              name: false
-              average: true
-              extrema: true
-            color_thresholds:
-              - value: 0
-                color: rgba(200, 50, 50, .75)
-              - value: 15
-                color: rgba(200, 200, 50, .75)
-              - value: 30
-                color: rgba(50, 200, 50, .75)
-            hour24: true
-            animate: false
-            unit: kWh
-            lower_bound: 0
-            upper_bound: 60
-            points_per_hour: 20
-            line_width: 1
-            hours_to_show: 16
-            height: 150
-            entities:
-              - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13173
-                name: PV to Grid
-          - type: custom:canvas-gauge-card
-            entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_pv_consumption_energy
-            card_height: 220
-            gauge:
-              type: radial-gauge
-              title: Load (kWh)
-              height: 420
-              borderShadowWidth: 0
-              borderOuterWidth: 0
-              borderMiddleWidth: 0
-              borderInnerWidth: 0
-              minValue: 0
-              maxValue: 60
-              startAngle: 90
-              ticksAngle: 180
-              valueBox: false
-              majorTicks:
-                - '0'
-                - '10'
-                - '20'
-                - '30'
-                - '40'
-                - '50'
-                - '60'
-              minorTicks: 2
-              strokeTicks: true
-              highlights:
-                - from: 0
-                  to: 15
-                  color: rgba(50, 200, 50, .75)
-                - from: 15
-                  to: 30
-                  color: rgba(200, 200, 50, .75)
-                - from: 30
-                  to: 60
-                  color: rgba(200, 50, 50, .75)
-              borders: true
-          - type: custom:mini-graph-card
-            show:
-              labels: true
-              points: false
-              icon: false
-              name: false
-              average: true
-              extrema: true
-            color_thresholds:
-              - value: 0
-                color: rgba(200, 50, 50, .75)
-              - value: 25
-                color: rgba(200, 200, 50, .75)
-              - value: 35
-                color: rgba(50, 200, 50, .75)
-            hour24: true
-            animate: false
-            unit: kWh
-            lower_bound: 0
-            upper_bound: 60
-            points_per_hour: 20
-            line_width: 1
-            hours_to_show: 16
-            height: 150
-            entities:
-              - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_pv_consumption_energy
-                name: Load
-          - type: custom:canvas-gauge-card
-            entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13029
-            card_height: 220
-            gauge:
-              type: radial-gauge
-              title: Battery to Load (kWh)
-              height: 420
-              borderShadowWidth: 0
-              borderOuterWidth: 0
-              borderMiddleWidth: 0
-              borderInnerWidth: 0
-              minValue: 0
-              maxValue: 12
-              startAngle: 90
-              ticksAngle: 180
-              valueBox: false
-              majorTicks:
-                - '0'
-                - '2'
-                - '4'
-                - '6'
-                - '8'
-                - '10'
-                - '12'
-              minorTicks: 2
-              strokeTicks: true
-              highlights:
-                - from: 0
-                  to: 5
-                  color: rgba(200, 200, 50, .75)
-                - from: 5
-                  to: 10
-                  color: rgba(50, 200, 50, .75)
-              borders: true
-          - type: custom:mini-graph-card
-            show:
-              labels: true
-              points: false
-              icon: false
-              name: false
-              average: true
-              extrema: true
-            color_thresholds:
-              - value: 0
-                color: rgba(200, 200, 50, .75)
-              - value: 5
-                color: rgba(50, 200, 50, .75)
-            hour24: true
-            animate: false
-            unit: kWh
-            lower_bound: 0
-            upper_bound: 12
-            points_per_hour: 20
-            line_width: 1
-            hours_to_show: 16
-            height: 150
-            entities:
-              - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13029
-                name: Battery to Load
-          - type: custom:canvas-gauge-card
-            entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13147
-            card_height: 220
-            gauge:
-              type: radial-gauge
-              title: Grid to Load (kWh)
-              height: 420
-              borderShadowWidth: 0
-              borderOuterWidth: 0
-              borderMiddleWidth: 0
-              borderInnerWidth: 0
-              minValue: 0
-              maxValue: 24
-              startAngle: 90
-              ticksAngle: 180
-              valueBox: false
-              majorTicks:
-                - '0'
-                - '4'
-                - '8'
-                - '12'
-                - '16'
-                - '20'
-                - '24'
-              minorTicks: 2
-              strokeTicks: true
-              highlights:
-                - from: 0
-                  to: 6
-                  color: rgba(50, 200, 50, .75)
-                - from: 6
-                  to: 12
-                  color: rgba(200, 200, 50, .75)
-                - from: 12
-                  to: 24
-                  color: rgba(200, 50, 50, .75)
-              borders: true
-          - type: custom:mini-graph-card
-            show:
-              labels: true
-              points: false
-              icon: false
-              name: false
-              average: true
-              extrema: true
-            color_thresholds:
-              - value: 0
-                color: rgba(50, 200, 50, .75)
-              - value: 6
-                color: rgba(200, 200, 50, .75)
-              - value: 12
-                color: rgba(200, 50, 50, .75)
-            hour24: true
-            animate: false
-            unit: kWh
-            lower_bound: 0
-            upper_bound: 24
-            points_per_hour: 20
-            line_width: 1
-            hours_to_show: 16
-            height: 150
-            entities:
-              - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13147
-                name: Grid to Load
+                style:
+                  top: 50%
+                  left: 50%
+                  width: null
+                  heigth: null
+                  box-shadow: none
+                  background-color: transparent
+                  transform: scale(1,1) translate(-50%,-50%)
+                gauge:
+                  type: radial-gauge
+                  title: Battery to Load (kWh)
+                  height: 190
+                  width: 190
+                  barWidth: 20
+                  barShadow: 1
+                  colorBarProgress: rgba(125,195,77,0.8)
+                  colorBar: '#0000'
+                  borderShadowWidth: 0
+                  borderInnerWidth: 0
+                  borderOuterWidth: 0
+                  borderMiddleWidth: 0
+                  colorValueBoxShadow: 0
+                  colorValueBoxBackground: transparent
+                  needle: false
+                  needleCircleSize: 15
+                  needleCircleOuter: false
+                  minValue: 0
+                  maxValue: 12
+                  startAngle: 180
+                  ticksAngle: 360
+                  valueBox: true
+                  valueBoxWidth: 40
+                  valueBoxStroke: 1
+                  valueBoxBorderRadius: 5
+                  valueTextShadow: true
+                  valueInt: 1
+                  valueDec: 3
+                  majorTicks:
+                    - '0'
+                    - '3'
+                    - '6'
+                    - '9'
+                    - ''
+                  minorTicks: 2
+                  strokeTicks: false
+                  borders: true
+                  highlights:
+                    - from: 0
+                      to: 4
+                      color: rgba(200, 50, 50, .75)
+                    - from: 4
+                      to: 8
+                      color: rgba(200, 200, 50, .75)
+                    - from: 8
+                      to: 12
+                      color: rgba(50, 200, 50, .75)
+              - type: custom:mini-graph-card
+                show:
+                  labels: true
+                  points: false
+                  icon: false
+                  name: false
+                  average: true
+                  extrema: true
+                color_thresholds:
+                  - value: 0
+                    color: rgba(200, 200, 50, .75)
+                  - value: 5
+                    color: rgba(50, 200, 50, .75)
+                hour24: true
+                animate: false
+                unit: kWh
+                lower_bound: 0
+                upper_bound: 12
+                points_per_hour: 20
+                line_width: 1
+                hours_to_show: 16
+                height: 150
+                entities:
+                  - entity: >-
+                      sensor.gosungrow_virtual_{{ DeviceType:14 }}_battery_discharge_energy
+                    name: Battery to Load
+          - type: horizontal-stack
+            cards:
+              - type: custom:canvas-gauge-card
+                entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13147
+                style:
+                  top: 50%
+                  left: 50%
+                  width: null
+                  heigth: null
+                  box-shadow: none
+                  background-color: transparent
+                  transform: scale(1,1) translate(-50%,-50%)
+                gauge:
+                  type: radial-gauge
+                  title: Grid to Load (kWh)
+                  height: 190
+                  width: 190
+                  barWidth: 20
+                  barShadow: 1
+                  colorBarProgress: rgba(74,176,249,0.8)
+                  colorBar: '#0000'
+                  borderShadowWidth: 0
+                  borderInnerWidth: 0
+                  borderOuterWidth: 0
+                  borderMiddleWidth: 0
+                  colorValueBoxShadow: 0
+                  colorValueBoxBackground: transparent
+                  needle: false
+                  needleCircleSize: 15
+                  needleCircleOuter: false
+                  minValue: 0
+                  maxValue: 30
+                  startAngle: 180
+                  ticksAngle: 360
+                  valueBox: true
+                  valueBoxWidth: 40
+                  valueBoxStroke: 1
+                  valueBoxBorderRadius: 5
+                  valueTextShadow: true
+                  valueInt: 1
+                  valueDec: 3
+                  majorTicks:
+                    - '0'
+                    - '5'
+                    - '10'
+                    - '15'
+                    - '20'
+                    - '25'
+                    - ''
+                  minorTicks: 2
+                  strokeTicks: false
+                  borders: true
+                  highlights:
+                    - from: 0
+                      to: 5
+                      color: rgba(50, 200, 50, .75)
+                    - from: 5
+                      to: 15
+                      color: rgba(200, 200, 50, .75)
+                    - from: 15
+                      to: 30
+                      color: rgba(200, 50, 50, .75)
+              - type: custom:mini-graph-card
+                show:
+                  labels: true
+                  points: false
+                  icon: false
+                  name: false
+                  average: true
+                  extrema: true
+                color_thresholds:
+                  - value: 0
+                    color: rgba(50, 200, 50, .75)
+                  - value: 6
+                    color: rgba(200, 200, 50, .75)
+                  - value: 12
+                    color: rgba(200, 50, 50, .75)
+                hour24: true
+                animate: false
+                unit: kWh
+                lower_bound: 0
+                upper_bound: 24
+                points_per_hour: 20
+                line_width: 1
+                hours_to_show: 16
+                height: 150
+                entities:
+                  - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13147
+                    name: Grid to Load
   - theme: Backend-selected
     type: panel
     title: Battery
@@ -1843,395 +2176,534 @@ const lovelaceGraphs = `views:
     path: battery
     badges: []
     cards:
-      - square: false
-        columns: 2
-        type: grid
+      - type: vertical-stack
         cards:
-          - type: custom:canvas-gauge-card
-            entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_battery_charge_energy
-            card_height: 220
-            gauge:
-              type: radial-gauge
-              title: Battery Charge (kWh)
-              height: 420
-              borderShadowWidth: 0
-              borderOuterWidth: 0
-              borderMiddleWidth: 0
-              borderInnerWidth: 0
-              minValue: 0
-              maxValue: 12
-              startAngle: 90
-              ticksAngle: 180
-              valueBox: false
-              majorTicks:
-                - '0'
-                - '2'
-                - '4'
-                - '6'
-                - '8'
-                - '10'
-                - '12'
-              minorTicks: 2
-              strokeTicks: true
-              highlights:
-                - from: 0
-                  to: 4
-                  color: rgba(200, 50, 50, .75)
-                - from: 4
-                  to: 8
-                  color: rgba(200, 200, 50, .75)
-                - from: 8
-                  to: 10.36
-                  color: rgba(50, 200, 50, .75)
-                - from: 10.36
-                  to: 12
-                  color: rgba(128, 128, 128, .75)
-              borders: true
-          - type: custom:mini-graph-card
-            show:
-              labels: true
-              points: false
-              icon: false
-              name: false
-              average: true
-              extrema: true
-            color_thresholds:
-              - value: 0
-                color: rgba(200, 50, 50, .75)
-              - value: 4
-                color: rgba(200, 200, 50, .75)
-              - value: 8
-                color: rgba(50, 200, 50, .75)
-            hour24: true
-            unit: kWh
-            lower_bound: 0
-            upper_bound: 12
-            points_per_hour: 20
-            line_width: 1
-            hours_to_show: 16
-            height: 150
-            entities:
-              - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_battery_charge_energy
-                name: Battery Charge
-          - type: custom:canvas-gauge-card
-            entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13140
-            card_height: 220
-            gauge:
-              type: radial-gauge
-              title: Battery Capacity (kWh)
-              height: 420
-              borderShadowWidth: 0
-              borderOuterWidth: 0
-              borderMiddleWidth: 0
-              borderInnerWidth: 0
-              minValue: 0
-              maxValue: 25
-              startAngle: 90
-              ticksAngle: 180
-              valueBox: false
-              majorTicks:
-                - '0'
-                - '5'
-                - '10'
-                - '15'
-                - '20'
-                - '25'
-              minorTicks: 2
-              strokeTicks: true
-              highlights:
-                - from: 0
-                  to: 10.36
-                  color: rgba(50, 200, 50, .75)
-                - from: 10.36
-                  to: 25
-                  color: rgba(128, 128, 128, .75)
-              borders: true
-          - type: custom:mini-graph-card
-            show:
-              labels: true
-              points: false
-              icon: false
-              name: false
-              average: true
-              extrema: true
-            color_thresholds:
-              - value: 0
-                color: rgba(200, 50, 50, .75)
-              - value: 4
-                color: rgba(200, 200, 50, .75)
-              - value: 8
-                color: rgba(50, 200, 50, .75)
-            hour24: true
-            unit: kWh
-            lower_bound: 0
-            upper_bound: 12
-            points_per_hour: 20
-            line_width: 1
-            hours_to_show: 16
-            height: 150
-            entities:
-              - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13140
-                name: Battery Capacity
-          - type: custom:canvas-gauge-card
-            entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13141
-            card_height: 220
-            gauge:
-              type: radial-gauge
-              title: Battery Level (%)
-              height: 420
-              borderShadowWidth: 0
-              borderOuterWidth: 0
-              borderMiddleWidth: 0
-              borderInnerWidth: 0
-              minValue: 0
-              maxValue: 100
-              startAngle: 90
-              ticksAngle: 180
-              valueBox: true
-              majorTicks:
-                - '0'
-                - '10'
-                - '20'
-                - '30'
-                - '40'
-                - '50'
-                - '60'
-                - '70'
-                - '80'
-                - '90'
-                - '100'
-              minorTicks: 2
-              strokeTicks: true
-              highlights:
-                - from: 0
-                  to: 25
-                  color: rgba(200, 50, 50, .75)
-                - from: 25
-                  to: 50
-                  color: rgba(200, 200, 50, .75)
-                - from: 50
-                  to: 100
-                  color: rgba(50, 200, 50, .75)
-              borders: true
-          - type: custom:mini-graph-card
-            show:
-              labels: true
-              points: false
-              icon: false
-              name: false
-              average: true
-              extrema: true
-            color_thresholds:
-              - value: 0
-                color: rgba(200, 50, 50, .75)
-              - value: 25
-                color: rgba(200, 200, 50, .75)
-              - value: 50
-                color: rgba(50, 200, 50, .75)
-            hour24: true
-            unit: '%'
-            lower_bound: 0
-            upper_bound: 100
-            points_per_hour: 20
-            line_width: 1
-            hours_to_show: 16
-            height: 150
-            entities:
-              - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13141
-                name: Battery Level
-          - type: custom:canvas-gauge-card
-            entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13142
-            card_height: 220
-            gauge:
-              type: radial-gauge
-              title: Battery Health (%)
-              height: 420
-              borderShadowWidth: 0
-              borderOuterWidth: 0
-              borderMiddleWidth: 0
-              borderInnerWidth: 0
-              minValue: 0
-              maxValue: 100
-              startAngle: 90
-              ticksAngle: 180
-              valueBox: true
-              majorTicks:
-                - '0'
-                - '10'
-                - '20'
-                - '30'
-                - '40'
-                - '50'
-                - '60'
-                - '70'
-                - '80'
-                - '90'
-                - '100'
-              minorTicks: 2
-              strokeTicks: true
-              highlights:
-                - from: 0
-                  to: 25
-                  color: rgba(200, 50, 50, .75)
-                - from: 25
-                  to: 50
-                  color: rgba(200, 200, 50, .75)
-                - from: 50
-                  to: 100
-                  color: rgba(50, 200, 50, .75)
-              borders: true
-          - type: custom:mini-graph-card
-            show:
-              labels: true
-              points: false
-              icon: false
-              name: false
-              average: true
-              extrema: true
-            color_thresholds:
-              - value: 0
-                color: rgba(200, 50, 50, .75)
-              - value: 25
-                color: rgba(200, 200, 50, .75)
-              - value: 50
-                color: rgba(50, 200, 50, .75)
-            hour24: true
-            unit: '%'
-            lower_bound: 0
-            upper_bound: 100
-            icon: mdi:battery-heart-outline
-            points_per_hour: 20
-            line_width: 1
-            hours_to_show: 16
-            height: 150
-            entities:
-              - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13142
-                name: Battery Health
-          - type: custom:canvas-gauge-card
-            entity: sensor.gosungrow_virtual_{{ DeviceType:43 }}_p58601
-            card_height: 220
-            gauge:
-              type: radial-gauge
-              title: Battery Voltage (V)
-              height: 420
-              borderShadowWidth: 0
-              borderOuterWidth: 0
-              borderMiddleWidth: 0
-              borderInnerWidth: 0
-              minValue: 0
-              maxValue: 500
-              startAngle: 90
-              ticksAngle: 180
-              valueBox: true
-              majorTicks:
-                - '0'
-                - '100'
-                - '200'
-                - '300'
-                - '400'
-                - '500'
-              minorTicks: 2
-              strokeTicks: true
-              highlights:
-                - from: 0
-                  to: 150
-                  color: rgba(200, 200, 50, .75)
-                - from: 150
-                  to: 300
-                  color: rgba(50, 200, 50, .75)
-                - from: 300
-                  to: 500
-                  color: rgba(200, 200, 50, .75)
-              borders: true
-          - type: custom:mini-graph-card
-            show:
-              labels: true
-              points: false
-              icon: false
-              name: false
-              average: true
-              extrema: true
-            color_thresholds:
-              - value: 0
-                color: rgba(200, 200, 50, .75)
-              - value: 150
-                color: rgba(50, 200, 50, .75)
-              - value: 250
-                color: rgba(200, 200, 50, .75)
-            hour24: true
-            unit: V
-            lower_bound: 0
-            upper_bound: 500
-            points_per_hour: 20
-            line_width: 1
-            hours_to_show: 16
-            height: 150
-            entities:
-              - entity: sensor.gosungrow_virtual_{{ DeviceType:43 }}_p58601
-                name: Battery Voltage
-          - type: custom:canvas-gauge-card
-            entity: sensor.gosungrow_virtual_{{ DeviceType:43 }}_p58602
-            card_height: 220
-            gauge:
-              type: radial-gauge
-              title: Battery Current (A)
-              height: 420
-              borderShadowWidth: 0
-              borderOuterWidth: 0
-              borderMiddleWidth: 0
-              borderInnerWidth: 0
-              minValue: -30
-              maxValue: 30
-              startAngle: 90
-              ticksAngle: 180
-              valueBox: true
-              majorTicks:
-                - '-30'
-                - '20'
-                - '-10'
-                - '0'
-                - '10'
-                - '20'
-                - '30'
-              minorTicks: 2
-              strokeTicks: true
-              highlights:
-                - from: -30
-                  to: -15
-                  color: rgba(200, 200, 50, .75)
-                - from: -15
-                  to: 15
-                  color: rgba(50, 200, 50, .75)
-                - from: 15
-                  to: 30
-                  color: rgba(200, 200, 50, .75)
-              borders: true
-          - type: custom:mini-graph-card
-            show:
-              labels: true
-              points: false
-              icon: false
-              name: false
-              average: true
-              extrema: true
-            color_thresholds:
-              - value: -25
-                color: rgba(200, 200, 50, .75)
-              - value: 0
-                color: rgba(50, 200, 50, .75)
-              - value: 25
-                color: rgba(200, 200, 50, .75)
-            hour24: true
-            unit: A
-            lower_bound: -50
-            upper_bound: 50
-            points_per_hour: 20
-            line_width: 1
-            hours_to_show: 16
-            height: 150
-            entities:
-              - entity: sensor.gosungrow_virtual_{{ DeviceType:43 }}_p58602
-                name: Battery Current
+          - type: markdown
+            content: ' '
+            title: Battery
+          - type: horizontal-stack
+            cards:
+              - type: custom:canvas-gauge-card
+                entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_battery_charge_energy
+                style:
+                  top: 50%
+                  left: 50%
+                  width: null
+                  heigth: null
+                  box-shadow: none
+                  background-color: transparent
+                  transform: scale(1,1) translate(-50%,-50%)
+                gauge:
+                  type: radial-gauge
+                  title: Battery Charge (kWh)
+                  height: 190
+                  width: 190
+                  barWidth: 20
+                  barShadow: 1
+                  colorBarProgress: rgba(125,195,77,0.8)
+                  colorBar: '#0000'
+                  borderShadowWidth: 0
+                  borderInnerWidth: 0
+                  borderOuterWidth: 0
+                  borderMiddleWidth: 0
+                  colorValueBoxShadow: 0
+                  colorValueBoxBackground: transparent
+                  needle: false
+                  needleCircleSize: 15
+                  needleCircleOuter: false
+                  minValue: 0
+                  maxValue: 12
+                  startAngle: 180
+                  ticksAngle: 360
+                  valueBox: true
+                  valueBoxWidth: 40
+                  valueBoxStroke: 1
+                  valueBoxBorderRadius: 5
+                  valueTextShadow: true
+                  valueInt: 1
+                  valueDec: 3
+                  majorTicks:
+                    - '0'
+                    - '2'
+                    - '4'
+                    - '6'
+                    - '8'
+                    - '10'
+                    - ''
+                  minorTicks: 0
+                  strokeTicks: false
+                  borders: true
+                  highlights:
+                    - from: 0
+                      to: 4
+                      color: rgba(200, 50, 50, .75)
+                    - from: 4
+                      to: 8
+                      color: rgba(200, 200, 50, .75)
+                    - from: 8
+                      to: 10.36
+                      color: rgba(50, 200, 50, .75)
+                    - from: 10.36
+                      to: 12
+                      color: rgba(128, 128, 128, .75)
+              - type: custom:mini-graph-card
+                show:
+                  labels: true
+                  points: false
+                  icon: false
+                  name: false
+                  average: true
+                  extrema: true
+                color_thresholds:
+                  - value: 0
+                    color: rgba(200, 50, 50, .75)
+                  - value: 4
+                    color: rgba(200, 200, 50, .75)
+                  - value: 8
+                    color: rgba(50, 200, 50, .75)
+                hour24: true
+                unit: kWh
+                lower_bound: 0
+                upper_bound: 12
+                points_per_hour: 20
+                line_width: 1
+                hours_to_show: 16
+                height: 150
+                entities:
+                  - entity: >-
+                      sensor.gosungrow_virtual_{{ DeviceType:14 }}_battery_charge_energy
+                    name: Battery Charge
+          - type: horizontal-stack
+            cards:
+              - type: custom:canvas-gauge-card
+                entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13140
+                style:
+                  top: 50%
+                  left: 50%
+                  width: null
+                  heigth: null
+                  box-shadow: none
+                  background-color: transparent
+                  transform: scale(1,1) translate(-50%,-50%)
+                gauge:
+                  type: radial-gauge
+                  title: Battery Capacity (kWh)
+                  height: 190
+                  width: 190
+                  barWidth: 20
+                  barShadow: 1
+                  colorBarProgress: rgba(125,195,77,0.8)
+                  colorBar: '#0000'
+                  borderShadowWidth: 0
+                  borderInnerWidth: 0
+                  borderOuterWidth: 0
+                  borderMiddleWidth: 0
+                  colorValueBoxShadow: 0
+                  colorValueBoxBackground: transparent
+                  needle: false
+                  needleCircleSize: 15
+                  needleCircleOuter: false
+                  minValue: 0
+                  maxValue: 12
+                  startAngle: 180
+                  ticksAngle: 360
+                  valueBox: true
+                  valueBoxWidth: 40
+                  valueBoxStroke: 1
+                  valueBoxBorderRadius: 5
+                  valueTextShadow: true
+                  valueInt: 1
+                  valueDec: 3
+                  majorTicks:
+                    - '0'
+                    - '3'
+                    - '6'
+                    - '9'
+                    - ''
+                  minorTicks: 0
+                  strokeTicks: false
+                  borders: true
+                  highlights:
+                    - from: 0
+                      to: 10.36
+                      color: rgba(50, 200, 50, .75)
+                    - from: 10.36
+                      to: 25
+                      color: rgba(128, 128, 128, .75)
+              - type: custom:mini-graph-card
+                show:
+                  labels: true
+                  points: false
+                  icon: false
+                  name: false
+                  average: true
+                  extrema: true
+                color_thresholds:
+                  - value: 0
+                    color: rgba(200, 50, 50, .75)
+                  - value: 4
+                    color: rgba(200, 200, 50, .75)
+                  - value: 8
+                    color: rgba(50, 200, 50, .75)
+                hour24: true
+                unit: kWh
+                lower_bound: 0
+                upper_bound: 12
+                points_per_hour: 20
+                line_width: 1
+                hours_to_show: 16
+                height: 150
+                entities:
+                  - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13140
+                    name: Battery Capacity
+          - type: horizontal-stack
+            cards:
+              - type: custom:canvas-gauge-card
+                entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13141
+                style:
+                  top: 50%
+                  left: 50%
+                  width: null
+                  heigth: null
+                  box-shadow: none
+                  background-color: transparent
+                  transform: scale(1,1) translate(-50%,-50%)
+                gauge:
+                  type: radial-gauge
+                  title: Battery Level (%)
+                  height: 190
+                  width: 190
+                  barWidth: 20
+                  barShadow: 1
+                  colorBarProgress: rgba(125,195,77,0.8)
+                  colorBar: '#0000'
+                  borderShadowWidth: 0
+                  borderInnerWidth: 0
+                  borderOuterWidth: 0
+                  borderMiddleWidth: 0
+                  colorValueBoxShadow: 0
+                  colorValueBoxBackground: transparent
+                  needle: false
+                  needleCircleSize: 15
+                  needleCircleOuter: false
+                  minValue: 0
+                  maxValue: 100
+                  startAngle: 180
+                  ticksAngle: 360
+                  valueBox: true
+                  valueBoxWidth: 40
+                  valueBoxStroke: 1
+                  valueBoxBorderRadius: 5
+                  valueTextShadow: true
+                  valueInt: 1
+                  valueDec: 1
+                  majorTicks:
+                    - '0'
+                    - '25'
+                    - '50'
+                    - '75'
+                    - ''
+                  minorTicks: 0
+                  strokeTicks: false
+                  borders: true
+                  highlights:
+                    - from: 0
+                      to: 25
+                      color: rgba(200, 50, 50, .75)
+                    - from: 25
+                      to: 50
+                      color: rgba(200, 200, 50, .75)
+                    - from: 50
+                      to: 100
+                      color: rgba(50, 200, 50, .75)
+              - type: custom:mini-graph-card
+                show:
+                  labels: true
+                  points: false
+                  icon: false
+                  name: false
+                  average: true
+                  extrema: true
+                color_thresholds:
+                  - value: 0
+                    color: rgba(200, 50, 50, .75)
+                  - value: 25
+                    color: rgba(200, 200, 50, .75)
+                  - value: 50
+                    color: rgba(50, 200, 50, .75)
+                hour24: true
+                unit: '%'
+                lower_bound: 0
+                upper_bound: 100
+                points_per_hour: 20
+                line_width: 1
+                hours_to_show: 16
+                height: 150
+                entities:
+                  - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13141
+                    name: Battery Level
+          - type: horizontal-stack
+            cards:
+              - type: custom:canvas-gauge-card
+                entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13142
+                style:
+                  top: 50%
+                  left: 50%
+                  width: null
+                  heigth: null
+                  box-shadow: none
+                  background-color: transparent
+                  transform: scale(1,1) translate(-50%,-50%)
+                gauge:
+                  type: radial-gauge
+                  title: Battery Health (%)
+                  height: 190
+                  width: 190
+                  barWidth: 20
+                  barShadow: 1
+                  colorBarProgress: rgba(125,195,77,0.8)
+                  colorBar: '#0000'
+                  borderShadowWidth: 0
+                  borderInnerWidth: 0
+                  borderOuterWidth: 0
+                  borderMiddleWidth: 0
+                  colorValueBoxShadow: 0
+                  colorValueBoxBackground: transparent
+                  needle: false
+                  needleCircleSize: 15
+                  needleCircleOuter: false
+                  minValue: 0
+                  maxValue: 100
+                  startAngle: 180
+                  ticksAngle: 360
+                  valueBox: true
+                  valueBoxWidth: 40
+                  valueBoxStroke: 1
+                  valueBoxBorderRadius: 5
+                  valueTextShadow: true
+                  valueInt: 1
+                  valueDec: 1
+                  majorTicks:
+                    - '0'
+                    - '25'
+                    - '50'
+                    - '75'
+                    - ''
+                  minorTicks: 2
+                  strokeTicks: false
+                  borders: true
+                  highlights:
+                    - from: 0
+                      to: 25
+                      color: rgba(200, 50, 50, .75)
+                    - from: 25
+                      to: 50
+                      color: rgba(200, 200, 50, .75)
+                    - from: 50
+                      to: 100
+                      color: rgba(50, 200, 50, .75)
+              - type: custom:mini-graph-card
+                show:
+                  labels: true
+                  points: false
+                  icon: false
+                  name: false
+                  average: true
+                  extrema: true
+                color_thresholds:
+                  - value: 0
+                    color: rgba(200, 50, 50, .75)
+                  - value: 25
+                    color: rgba(200, 200, 50, .75)
+                  - value: 50
+                    color: rgba(50, 200, 50, .75)
+                hour24: true
+                unit: '%'
+                lower_bound: 0
+                upper_bound: 100
+                icon: mdi:battery-heart-outline
+                points_per_hour: 20
+                line_width: 1
+                hours_to_show: 16
+                height: 150
+                entities:
+                  - entity: sensor.gosungrow_virtual_{{ DeviceType:14 }}_p13142
+                    name: Battery Health
+          - type: horizontal-stack
+            cards:
+              - type: custom:canvas-gauge-card
+                entity: sensor.gosungrow_virtual_{{ DeviceType:43 }}_p58601
+                style:
+                  top: 50%
+                  left: 50%
+                  width: null
+                  heigth: null
+                  box-shadow: none
+                  background-color: transparent
+                  transform: scale(1,1) translate(-50%,-50%)
+                gauge:
+                  type: radial-gauge
+                  title: Battery Voltage (V)
+                  height: 190
+                  width: 190
+                  barWidth: 20
+                  barShadow: 1
+                  colorBarProgress: rgba(125,195,77,0.8)
+                  colorBar: '#0000'
+                  borderShadowWidth: 0
+                  borderInnerWidth: 0
+                  borderOuterWidth: 0
+                  borderMiddleWidth: 0
+                  colorValueBoxShadow: 0
+                  colorValueBoxBackground: transparent
+                  needle: false
+                  needleCircleSize: 15
+                  needleCircleOuter: false
+                  minValue: 0
+                  maxValue: 500
+                  startAngle: 180
+                  ticksAngle: 360
+                  valueBox: true
+                  valueBoxWidth: 40
+                  valueBoxStroke: 1
+                  valueBoxBorderRadius: 5
+                  valueTextShadow: true
+                  valueInt: 1
+                  valueDec: 1
+                  majorTicks:
+                    - '0'
+                    - '100'
+                    - '200'
+                    - '300'
+                    - '400'
+                    - ''
+                  minorTicks: 2
+                  strokeTicks: false
+                  borders: true
+                  highlights:
+                    - from: 0
+                      to: 150
+                      color: rgba(200, 200, 50, .75)
+                    - from: 150
+                      to: 350
+                      color: rgba(50, 200, 50, .75)
+                    - from: 350
+                      to: 500
+                      color: rgba(200, 200, 50, .75)
+              - type: custom:mini-graph-card
+                show:
+                  labels: true
+                  points: false
+                  icon: false
+                  name: false
+                  average: true
+                  extrema: true
+                color_thresholds:
+                  - value: 0
+                    color: rgba(200, 200, 50, .75)
+                  - value: 150
+                    color: rgba(50, 200, 50, .75)
+                  - value: 250
+                    color: rgba(200, 200, 50, .75)
+                hour24: true
+                unit: V
+                lower_bound: 0
+                upper_bound: 500
+                points_per_hour: 20
+                line_width: 1
+                hours_to_show: 16
+                height: 150
+                entities:
+                  - entity: sensor.gosungrow_virtual_{{ DeviceType:43 }}_p58601
+                    name: Battery Voltage
+          - type: horizontal-stack
+            cards:
+              - type: custom:canvas-gauge-card
+                entity: sensor.gosungrow_virtual_{{ DeviceType:43 }}_p58602
+                style:
+                  top: 50%
+                  left: 50%
+                  width: null
+                  heigth: null
+                  box-shadow: none
+                  background-color: transparent
+                  transform: scale(1,1) translate(-50%,-50%)
+                gauge:
+                  type: radial-gauge
+                  title: Battery Current (A)
+                  height: 190
+                  width: 190
+                  barWidth: 20
+                  barShadow: 1
+                  colorBarProgress: rgba(125,195,77,0.8)
+                  colorBar: '#0000'
+                  borderShadowWidth: 0
+                  borderInnerWidth: 0
+                  borderOuterWidth: 0
+                  borderMiddleWidth: 0
+                  colorValueBoxShadow: 0
+                  colorValueBoxBackground: transparent
+                  needle: false
+                  needleCircleSize: 15
+                  needleCircleOuter: false
+                  minValue: -30
+                  maxValue: 30
+                  startAngle: 180
+                  ticksAngle: 360
+                  valueBox: true
+                  valueBoxWidth: 40
+                  valueBoxStroke: 1
+                  valueBoxBorderRadius: 5
+                  valueTextShadow: true
+                  valueInt: 1
+                  valueDec: 1
+                  majorTicks:
+                    - '-30'
+                    - '20'
+                    - '-10'
+                    - '0'
+                    - '10'
+                    - '20'
+                    - '30'
+                  minorTicks: 2
+                  strokeTicks: false
+                  borders: true
+                  highlights:
+                    - from: -30
+                      to: -15
+                      color: rgba(200, 200, 50, .75)
+                    - from: -15
+                      to: 15
+                      color: rgba(50, 200, 50, .75)
+                    - from: 15
+                      to: 30
+                      color: rgba(200, 200, 50, .75)
+              - type: custom:mini-graph-card
+                show:
+                  labels: true
+                  points: false
+                  icon: false
+                  name: false
+                  average: true
+                  extrema: true
+                color_thresholds:
+                  - value: -25
+                    color: rgba(200, 200, 50, .75)
+                  - value: 0
+                    color: rgba(50, 200, 50, .75)
+                  - value: 25
+                    color: rgba(200, 200, 50, .75)
+                hour24: true
+                unit: A
+                lower_bound: -50
+                upper_bound: 50
+                points_per_hour: 20
+                line_width: 1
+                hours_to_show: 16
+                height: 150
+                entities:
+                  - entity: sensor.gosungrow_virtual_{{ DeviceType:43 }}_p58602
+                    name: Battery Current
   - title: VA
     path: va
     type: panel
@@ -2454,7 +2926,7 @@ const lovelaceGraphs = `views:
                 aggregate_func: avg
                 name: Avg
                 color: green
-            name: PV Yield (hour)
+            name: PV Yield (fortnight)
             hours_to_show: 336
             group_by: hour
             points_per_hour: 20

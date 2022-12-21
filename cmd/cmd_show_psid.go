@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"GoSungrow/iSolarCloud"
+	"GoSungrow/iSolarCloud/AppService/getPsDetail"
+	"GoSungrow/iSolarCloud/AppService/getPsDetailWithPsType"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdHelp"
@@ -31,6 +33,7 @@ func (c *CmdShow) AttachPs(cmd *cobra.Command) *cobra.Command {
 
 		c.AttachPsList(self)
 		c.AttachPsTree(self)
+		c.AttachPsDetail(self)
 		c.AttachPsPoints(self)
 		c.AttachPsData(self)
 		c.AttachPsGraph(self)
@@ -216,6 +219,48 @@ func (c *CmdShow) funcPsGraph(_ *cobra.Command, args []string) error {
 		cmds.Api.SunGrow.OutputType.SetGraph()
 		args = MinimumArraySize(5, args)
 		c.Error = cmds.Api.SunGrow.PsPointsData(strings.Split(args[0], ","), args[1], args[2], args[3], args[4])
+		if c.Error != nil {
+			break
+		}
+	}
+	return c.Error
+}
+
+func (c *CmdShow) AttachPsDetail(cmd *cobra.Command) *cobra.Command {
+	var self = &cobra.Command{
+		Use:                   "detail [ps_id ...]",
+		Aliases:               []string{},
+		Annotations:           map[string]string{"group": "PsId"},
+		Short:                 fmt.Sprintf("Show detailed info on PS."),
+		Long:                  fmt.Sprintf("Show detailed info on PS."),
+		DisableFlagParsing:    false,
+		DisableFlagsInUseLine: false,
+		PreRunE:               cmds.SunGrowArgs,
+		RunE:                  c.funcPsDetail,
+		Args:                  cobra.MinimumNArgs(0),
+	}
+	cmd.AddCommand(self)
+	self.Example = cmdHelp.PrintExamples(self, "")
+
+	return cmd
+}
+func (c *CmdShow) funcPsDetail(_ *cobra.Command, args []string) error {
+	for range Only.Once {
+		pids := cmds.Api.SunGrow.SetPsIds(args...)
+		if c.Error != nil {
+			break
+		}
+
+		data := cmds.Api.SunGrow.NewSunGrowData()
+		data.SetPsIds(pids.Strings()...)
+		data.SetEndpoints(getPsDetail.EndPointName, getPsDetailWithPsType.EndPointName)
+
+		c.Error = data.GetData()
+		if c.Error != nil {
+			break
+		}
+
+		c.Error = data.Output()
 		if c.Error != nil {
 			break
 		}

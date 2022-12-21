@@ -7,9 +7,6 @@ import (
 )
 
 
-// https://augateway.isolarcloud.com/v1/
-
-
 func main() {
 	err := cmd.Execute()
 	if err != nil {
