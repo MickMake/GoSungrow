@@ -13,7 +13,6 @@ const LabelText = "text"
 func (m *Mqtt) TextPublishConfig(config EntityConfig) error {
 
 	for range Only.Once {
-		config.FixConfig()
 		if !config.IsText() {
 			break
 		}
@@ -44,10 +43,7 @@ func (m *Mqtt) TextPublishConfig(config EntityConfig) error {
 		}
 
 		tag := JoinStringsForTopic(m.Prefix, LabelText, m.ClientId, id, "config")
-		t := m.client.Publish(tag, 0, true, payload.Json())
-		if !t.WaitTimeout(m.Timeout) {
-			m.err = t.Error()
-		}
+		m.err = m.Publish(tag, 0, true, payload.Json())
 	}
 
 	return m.err
@@ -74,22 +70,15 @@ func (m *Mqtt) TextPublishValue(config EntityConfig) error {
 
 		// @TODO - Real hack here. Need to properly check for JSON.
 		if strings.Contains(value, `{`) || strings.Contains(value, `":`) {
-			t := m.client.Publish(tag, 0, true, value)
-			if !t.WaitTimeout(m.Timeout) {
-				m.err = t.Error()
-			}
+			m.err = m.Publish(tag, 0, true, value)
 			break
 		}
 
-		payload := MqttState{
+		payload := MqttState {
 			LastReset: config.LastReset, // m.GetLastReset(config.FullId),
 			Value:     value,
 		}
-
-		t := m.client.Publish(tag, 0, true, payload.Json())
-		if !t.WaitTimeout(m.Timeout) {
-			m.err = t.Error()
-		}
+		m.err = m.Publish(tag, 0, true, payload.Json())
 	}
 
 	return m.err

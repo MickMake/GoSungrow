@@ -33,8 +33,8 @@ type ResultData struct {
 		ChannelId      valueTypes.Integer  `json:"chnnl_id" PointId:"channel_id"`
 		ChannelName    valueTypes.String   `json:"chnnl_name" PointId:"channel_name"`
 		ChannelDesc    interface{}         `json:"chnnl_desc" PointId:"channel_description"`
-		CreateTime     valueTypes.DateTime `json:"create_time" PointNameDateFormat:"2006-01-02 15:04:05"`
-		UpdateDate     valueTypes.DateTime `json:"update_date" PointNameDateFormat:"2006-01-02 15:04:05"`
+		CreateTime     valueTypes.DateTime `json:"create_time" PointNameDateFormat:"DateTimeLayout"`
+		UpdateDate     valueTypes.DateTime `json:"update_date" PointNameDateFormat:"DateTimeLayout"`
 		DataFlag       valueTypes.Integer  `json:"data_flag"`
 		DataFlagDetail valueTypes.Integer  `json:"data_flag_detail"`
 		IsAuto         valueTypes.Bool     `json:"is_auto"`

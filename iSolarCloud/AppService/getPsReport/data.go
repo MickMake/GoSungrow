@@ -58,7 +58,7 @@ type ResultData struct {
 }
 
 type TotalData struct {
-	MinDateId                      valueTypes.DateTime  `json:"min_date_id" PointNameDateFormat:"2006-01-02 15:04:05"`
+	MinDateId                      valueTypes.DateTime  `json:"min_date_id" PointNameDateFormat:"DateTimeLayout"`
 
 	Co2Reduce                      valueTypes.Float     `json:"co2_reduce" PointUnitFrom:"Co2ReduceOriginalUnit"`
 	Co2ReduceMap                   valueTypes.UnitValue `json:"co2_reduce_map"`

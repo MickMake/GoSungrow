@@ -42,7 +42,7 @@ type Value struct {
 	GoStructParent  GoStruct.GoStructParent   `json:"-" PointIdFrom:"PsKey.Timestamp" PointIdReplace:"true" PointDeviceFrom:"PsKey"`
 	// GoStruct  GoStruct.GoStruct   `json:"-" PointDeviceFrom:"PsKey"`
 
-	Timestamp valueTypes.DateTime `json:"timestamp" PointNameDateFormat:"2006-01-02 15:04:05"`
+	Timestamp valueTypes.DateTime `json:"timestamp" PointNameDateFormat:"DateTimeLayout"`
 	PsKey     valueTypes.PsKey    `json:"ps_key"`
 	Points    map[string]valueTypes.Generic	`json:"points" PointDeviceFrom:"PsKey"`
 }

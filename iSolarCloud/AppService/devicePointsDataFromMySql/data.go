@@ -31,7 +31,7 @@ type ResultData struct {
 		AlarmCount              valueTypes.Count       `json:"alarm_count"`
 		DevFaultStatus          valueTypes.Integer       `json:"dev_fault_status"`
 		DevStatus               valueTypes.Integer       `json:"dev_status"`
-		DevUpdateTime           valueTypes.DateTime `json:"dev_update_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+		DevUpdateTime           valueTypes.DateTime `json:"dev_update_time" PointNameDateFormat:"DateTimeLayout"`
 		FaultCount              valueTypes.Count       `json:"fault_count"`
 		InstallerAlarmCount     valueTypes.Count       `json:"installer_alarm_count"`
 		InstallerDevFaultStatus valueTypes.Integer `json:"installer_dev_fault_status"`
@@ -61,7 +61,7 @@ type ResultData struct {
 		P81202                  interface{} `json:"p81202"`
 		P81203                  interface{} `json:"p81203"`
 		PsKey                   valueTypes.PsKey `json:"ps_key"`
-		UpdateTime              valueTypes.DateTime `json:"update_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+		UpdateTime              valueTypes.DateTime `json:"update_time" PointNameDateFormat:"DateTimeLayout"`
 		UpdateUser              valueTypes.Integer `json:"update_user"`
 		UUID                    valueTypes.Integer `json:"uuid"`
 	} `json:"device_point_data" DataTable:"true"`

@@ -56,9 +56,9 @@ func (e *ResultData) UnmarshalJSON(data []byte) error {
 }
 
 type DataPoint struct {
-	GoStruct.GoStructParent `json:"-" PointIdReplace:"true" PointIdFrom:"TimeStamp" PointNameDateFormat:"20060102-150405" PointTimestampFrom:"TimeStamp"`
+	GoStruct.GoStructParent `json:"-" PointIdReplace:"true" PointIdFrom:"TimeStamp" PointNameDateFormat:"DateTimeAltLayout" PointTimestampFrom:"TimeStamp"`
 
-	TimeStamp               valueTypes.DateTime             `json:"time_stamp" PointNameDateFormat:"2006-01-02 15:04:05"`
+	TimeStamp               valueTypes.DateTime             `json:"time_stamp" PointNameDateFormat:"DateTimeLayout"`
 	Points                  map[string]valueTypes.UnitValue `json:"points"`
 	IsPlatformDefaultUnit   valueTypes.Bool                 `json:"is_platform_default_unit"`
 }

@@ -31,7 +31,7 @@ type ResultData struct {
 type Template struct {
 	TemplateId   valueTypes.Integer  `json:"template_id"`
 	TemplateName valueTypes.String `json:"template_name"`
-	UpdateTime   valueTypes.DateTime `json:"update_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+	UpdateTime   valueTypes.DateTime `json:"update_time" PointNameDateFormat:"DateTimeLayout"`
 }
 
 func (e *ResultData) IsValid() error {

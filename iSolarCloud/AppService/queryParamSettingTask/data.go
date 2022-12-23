@@ -29,10 +29,10 @@ type ResultData struct {
 	TaskId         valueTypes.Integer  `json:"task_id"`
 	TaskName       valueTypes.String   `json:"task_name"`
 	CommandStatus  valueTypes.Integer  `json:"command_status"`
-	CreateTime     valueTypes.DateTime `json:"create_time" PointNameDateFormat:"2006-01-02 15:04:05"`
-	CreateTimeZone valueTypes.DateTime `json:"create_time_zone" PointNameDateFormat:"2006-01-02 15:04:05"`
-	OverTime       valueTypes.DateTime `json:"over_time" PointNameDateFormat:"2006-01-02 15:04:05"`
-	OverTimeZone   valueTypes.DateTime `json:"over_time_zone" PointNameDateFormat:"2006-01-02 15:04:05"`
+	CreateTime     valueTypes.DateTime `json:"create_time" PointNameDateFormat:"DateTimeLayout"`
+	CreateTimeZone valueTypes.DateTime `json:"create_time_zone" PointNameDateFormat:"DateTimeLayout"`
+	OverTime       valueTypes.DateTime `json:"over_time" PointNameDateFormat:"DateTimeLayout"`
+	OverTimeZone   valueTypes.DateTime `json:"over_time_zone" PointNameDateFormat:"DateTimeLayout"`
 
 	ParamList      []struct {
 		// GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableIndex:"true"`
@@ -46,10 +46,10 @@ type ResultData struct {
 		SetValName              valueTypes.String   `json:"set_val_name"`
 		SetValNameVal           valueTypes.String   `json:"set_val_name_val"`
 		CommandStatus           valueTypes.Integer  `json:"command_status"`
-		CreateTime              valueTypes.DateTime `json:"create_time" PointNameDateFormat:"2006-01-02 15:04:05"`
-		CreateTimeZone          valueTypes.DateTime `json:"create_time_zone" PointNameDateFormat:"2006-01-02 15:04:05"`
-		UpdateTime              valueTypes.DateTime `json:"update_time" PointNameDateFormat:"2006-01-02 15:04:05"`
-		UpdateTimeZone          valueTypes.DateTime `json:"update_time_zone" PointNameDateFormat:"2006-01-02 15:04:05"`
+		CreateTime              valueTypes.DateTime `json:"create_time" PointNameDateFormat:"DateTimeLayout"`
+		CreateTimeZone          valueTypes.DateTime `json:"create_time_zone" PointNameDateFormat:"DateTimeLayout"`
+		UpdateTime              valueTypes.DateTime `json:"update_time" PointNameDateFormat:"DateTimeLayout"`
+		UpdateTimeZone          valueTypes.DateTime `json:"update_time_zone" PointNameDateFormat:"DateTimeLayout"`
 		ParamCode               valueTypes.String   `json:"param_code"`
 	} `json:"param_list" DataTable:"true" DataTableIndex:"true"`
 }

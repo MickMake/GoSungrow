@@ -40,7 +40,7 @@ type ResultData   struct {
 		Meter          valueTypes.Float `json:"meter"`
 		MinPr          valueTypes.Float `json:"min_pr"`
 		P83018         valueTypes.Float `json:"p83018"`
-		P83022         valueTypes.Float `json:"p83022"`
+		P83022         valueTypes.Float `json:"p83022" PointUnit:"Wh"`
 		P83023         valueTypes.Float `json:"p83023"`
 		P83023Original valueTypes.Float `json:"p83023_original"`
 		P83025         valueTypes.Float `json:"p83025"`

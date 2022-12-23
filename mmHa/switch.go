@@ -12,19 +12,9 @@ const LabelSwitch = "switch"
 func (m *Mqtt) SwitchPublishConfig(config EntityConfig) error {
 
 	for range Only.Once {
-		config.FixConfig()
 		if !config.IsSwitch() {
 			break
 		}
-
-		// device := m.Device
-		// device.Name = JoinStrings(m.Device.Name, config.ParentId)
-		// device.Connections = [][]string{
-		// 	{ m.Device.Name, JoinStringsForId(m.Device.Name, config.ParentId) },
-		// 	{ JoinStringsForId(m.Device.Name, config.ParentId), JoinStringsForId(m.Device.Name, config.ParentId, config.Name) },
-		// }
-		// device.Identifiers = []string{ JoinStringsForId(m.Device.Name, config.ParentId) }
-		// st := JoinStringsForId(m.Device.Name, config.ParentId, config.Name)
 
 		ok, newDevice := m.NewDevice(config)
 		if !ok {
@@ -52,10 +42,7 @@ func (m *Mqtt) SwitchPublishConfig(config EntityConfig) error {
 		}
 
 		tag := JoinStringsForTopic(m.Prefix, LabelSwitch, m.ClientId, id, "config")
-		t := m.client.Publish(tag, 0, true, payload.Json())
-		if !t.WaitTimeout(m.Timeout) {
-			m.err = t.Error()
-		}
+		m.err = m.Publish(tag, 0, true, payload.Json())
 	}
 
 	return m.err
@@ -82,22 +69,15 @@ func (m *Mqtt) SwitchPublishValue(config EntityConfig) error {
 
 		// @TODO - Real hack here. Need to properly check for JSON.
 		if strings.Contains(value, `{`) || strings.Contains(value, `":`) {
-			t := m.client.Publish(tag, 0, true, value)
-			if !t.WaitTimeout(m.Timeout) {
-				m.err = t.Error()
-			}
+			m.err = m.Publish(tag, 0, true, value)
 			break
 		}
 
-		payload := MqttState{
+		payload := MqttState {
 			LastReset: config.LastReset, // m.GetLastReset(config.FullId),
 			Value:     value,
 		}
-
-		t := m.client.Publish(tag, 0, true, payload.Json())
-		if !t.WaitTimeout(m.Timeout) {
-			m.err = t.Error()
-		}
+		m.err = m.Publish(tag, 0, true, payload.Json())
 	}
 
 	return m.err

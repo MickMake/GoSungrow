@@ -29,12 +29,12 @@ type ResultData struct {
 	ActualEnergy                  []valueTypes.Float   `json:"actual_energy" PointId:"actual_energy" PointName:"Actual Energy" PointUnitFrom:"ActualEnergyUnit" PointArrayFlatten:"true"`
 	PlanEnergy                    []valueTypes.Float   `json:"plan_energy" PointUnitFrom:"PlanEnergyUnit" PointArrayFlatten:"true"`
 
-	BuildDate                     valueTypes.DateTime  `json:"build_date" PointNameDateFormat:"2006-01-02 15:04:05"`
-	DataLastUpdateTime            valueTypes.DateTime  `json:"data_last_update_time" PointNameDateFormat:"2006-01-02 15:04:05"`
-	ExpectInstallDate             valueTypes.DateTime  `json:"expect_install_date" PointNameDateFormat:"2006-01-02 15:04:05"`
-	InstallDate                   valueTypes.DateTime  `json:"install_date" PointNameDateFormat:"2006-01-02 15:04:05"`
-	RecordCreateTime              valueTypes.DateTime  `json:"recore_create_time" PointId:"record_create_time" PointNameDateFormat:"2006-01-02 15:04:05"`
-	SafeStartDate                 valueTypes.DateTime  `json:"safe_start_date" PointNameDateFormat:"2006-01-02 15:04:05"`
+	BuildDate                     valueTypes.DateTime  `json:"build_date" PointNameDateFormat:"DateTimeLayout"`
+	DataLastUpdateTime            valueTypes.DateTime  `json:"data_last_update_time" PointNameDateFormat:"DateTimeLayout"`
+	ExpectInstallDate             valueTypes.DateTime  `json:"expect_install_date" PointNameDateFormat:"DateTimeLayout"`
+	InstallDate                   valueTypes.DateTime  `json:"install_date" PointNameDateFormat:"DateTimeLayout"`
+	RecordCreateTime              valueTypes.DateTime  `json:"recore_create_time" PointId:"record_create_time" PointNameDateFormat:"DateTimeLayout"`
+	SafeStartDate                 valueTypes.DateTime  `json:"safe_start_date" PointNameDateFormat:"DateTimeLayout"`
 	ActualEnergyUnit              valueTypes.String    `json:"actual_energy_unit" PointId:"actual_energy_unit"  PointIgnore:"true"`
 	AlarmCount                    valueTypes.Count     `json:"alarm_count"`
 	AreaId                        interface{}          `json:"area_id"`
@@ -193,7 +193,7 @@ type ResultData struct {
 	P83120Map                     valueTypes.UnitValue `json:"p83120_map" PointId:"p83120" PointName:"Energy Battery Charge" PointVirtual:"true"`
 	P83120MapVirgin               valueTypes.UnitValue `json:"p83120_map_virgin"  PointIgnore:"true"`
 	P83121                        valueTypes.Float     `json:"p83121" PointId:"p83121" PointVirtual:"true"`
-	P83122                        valueTypes.Float     `json:"p83122" PointId:"p83122" PointName:"Self Sufficiency Percent" PointVirtual:"true"`
+	P83122                        valueTypes.Float     `json:"p83122" PointName:"Self Sufficiency Percent" PointUnit:"%" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
 	P83123Map                     valueTypes.UnitValue `json:"p83123_map" PointId:"p83123" PointVirtual:"true"`
 	P83123MapVirgin               valueTypes.UnitValue `json:"p83123_map_virgin"  PointIgnore:"true"`
 	P83124Map                     valueTypes.UnitValue `json:"p83124_map" PointId:"p83124" PointVirtual:"true"`
@@ -218,7 +218,7 @@ type ResultData struct {
 	StorageInverterData []struct {
 		GoStruct                GoStruct.GoStruct    `json:"-" PointIdReplace:"true" PointIdFrom:"PsKey" PointDeviceFrom:"PsKey"`
 
-		UpdateTime              valueTypes.DateTime  `json:"update_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+		UpdateTime              valueTypes.DateTime  `json:"update_time" PointNameDateFormat:"DateTimeLayout"`
 		PsKey                   valueTypes.PsKey     `json:"ps_key"`
 		CommunicationDevSn      valueTypes.String    `json:"communication_dev_sn"`
 		DevFaultStatus          valueTypes.Integer   `json:"dev_fault_status"`
@@ -249,13 +249,13 @@ type ResultData struct {
 		P13121MapVirgin         valueTypes.UnitValue `json:"p13121_map_virgin"  PointIgnore:"true"`
 		P13126Map               valueTypes.UnitValue `json:"p13126_map" PointId:"p13126" PointName:"PV Power To Battery" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreqInstant" PointVirtual:"true" PointVirtualShift:"3"`
 		P13126MapVirgin         valueTypes.UnitValue `json:"p13126_map_virgin"  PointIgnore:"true"`
-		P13141                  valueTypes.Float     `json:"p13141" PointId:"p13141" PointName:"Battery Charge Percent" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreqInstant" PointVirtual:"true" PointVirtualShift:"3"`
-		P13142                  valueTypes.Float     `json:"p13142" PointId:"p13142" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreqInstant" PointVirtual:"true" PointVirtualShift:"3"`
+		P13141                  valueTypes.Float     `json:"p13141" PointName:"Battery Charge Percent" PointUnit:"%" PointIcon:"mdi:battery" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true" PointVirtualShift:"3"`
+		P13142                  valueTypes.Float     `json:"p13142" PointName:"Battery Health" PointUnit:"%" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreqInstant" PointVirtual:"true" PointVirtualShift:"3"`
 		P13149Map               valueTypes.UnitValue `json:"p13149_map" PointId:"p13149" PointName:"Grid Power To Load" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreqInstant" PointVirtual:"true" PointVirtualShift:"3"`
 		P13149MapVirgin         valueTypes.UnitValue `json:"p13149_map_virgin"  PointIgnore:"true"`
 		P13150Map               valueTypes.UnitValue `json:"p13150_map" PointId:"p13150" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreqInstant" PointVirtual:"true" PointVirtualShift:"3"`
 		P13150MapVirgin         valueTypes.UnitValue `json:"p13150_map_virgin"  PointIgnore:"true"`
-		P13155                  valueTypes.Float     `json:"p13155" PointId:"p13155" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreqInstant" PointVirtual:"true" PointVirtualShift:"3"`
+		P13155                  valueTypes.Float     `json:"p13155" PointDeviceFrom:"PsKey" PointUpdateFreq:"UpdateFreqInstant" PointVirtual:"true" PointVirtualShift:"3"`
 	} `json:"storage_inverter_data" DataTable:"false"`
 }
 

@@ -33,7 +33,7 @@ type ResultData struct {
 	DesignCapacity    valueTypes.Float    `json:"design_capacity"`
 	Email             valueTypes.String   `json:"email"`
 	EnergyScheme      interface{}         `json:"energy_scheme"`
-	ExpectInstallDate valueTypes.DateTime `json:"expect_install_date" PointNameDateFormat:"2006-01-02 15:04:05"`
+	ExpectInstallDate valueTypes.DateTime `json:"expect_install_date" PointNameDateFormat:"DateTimeLayout"`
 	FaultSendType     interface{}         `json:"fault_send_type"`
 	GcjLatitude       valueTypes.Float    `json:"gcj_latitude"`
 	GcjLongitude      valueTypes.Float    `json:"gcj_longitude"`
@@ -46,7 +46,7 @@ type ResultData struct {
 	ParamIncome       valueTypes.Float    `json:"param_income"`
 	Prov              interface{}         `json:"prov"`
 	ProvCode          interface{}         `json:"prov_code"`
-	PsBuildDate       valueTypes.DateTime `json:"ps_build_date" PointNameDateFormat:"2006-01-02 15:04:05"`
+	PsBuildDate       valueTypes.DateTime `json:"ps_build_date" PointNameDateFormat:"DateTimeLayout"`
 	PsCountryId       valueTypes.Integer  `json:"ps_country_id"`
 	PsDesc            interface{}         `json:"ps_desc"`
 	PsHolder          valueTypes.String   `json:"ps_holder"`

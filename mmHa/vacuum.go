@@ -12,7 +12,6 @@ const LabelVacuum = "vacuum"
 func (m *Mqtt) VacuumPublishConfig(config EntityConfig) error {
 
 	for range Only.Once {
-		config.FixConfig()
 		if !config.IsVacuum() {
 			break
 		}

@@ -50,6 +50,8 @@ type DataTags struct {
 	// PointIdFromParent         string    `json:"point_name_from_parent,omitempty"`
 	PointNameDateFormat       string    `json:"point_name_date_format,omitempty"`
 
+	PointIcon                 string    `json:"point_icon,omitempty"`
+
 	PointIgnore               bool      `json:"point_ignore,omitempty"`
 	PointIgnoreZero           bool      `json:"point_ignore_zero,omitempty"`
 	PointIgnoreIfNil          string    `json:"point_ignore_if_nil,omitempty"`
@@ -152,6 +154,8 @@ func (ds *DataTags) GetTags(fieldTo reflect.StructField, fieldVo reflect.Value) 
 			PointIdFromChild:    fieldTo.Tag.Get(PointIdFromChild),
 			// PointIdFromParent:   fieldTo.Tag.Get(PointIdFromParent),
 			PointNameDateFormat: fieldTo.Tag.Get(PointNameDateFormat),
+
+			PointIcon:           fieldTo.Tag.Get(PointIcon),
 
 			PointUpdateFreq:       fieldTo.Tag.Get(PointUpdateFreq),
 
@@ -341,8 +345,10 @@ func (ds *DataTags) UpdateTags(parent *Reflect, current *Reflect) *DataTags {
 			}
 		}
 
-		if ds.PointNameDateFormat == "" {
-			// ds.PointNameDateFormat = valueTypes.DateTimeLayout
+		if ds.PointNameDateFormat != "" {
+			if v, ok := valueTypes.DateLayoutMap[ds.PointNameDateFormat]; ok {
+				ds.PointNameDateFormat = v
+			}
 		}
 
 		switch ds.PointUpdateFreq {
@@ -373,6 +379,7 @@ func (ds *DataTags) SetFrom(from *DataTags) error {
 		from.Json = ""
 		from.PointId = ""
 		from.PointName = ""
+		from.PointIcon = ""
 		from.ValueType = ""
 		from.ValueKind = ""
 		from.Endpoint.Clear()
@@ -1591,6 +1598,10 @@ func (r *Reflect) SetEndPointPath(epp EndPointPath) *EndPointPath {
 
 func (r *Reflect) PointId() string {
 	return r.DataStructure.PointId
+}
+
+func (r *Reflect) PointIcon() string {
+	return r.DataStructure.PointIcon
 }
 
 func (r *Reflect) PointName() string {

@@ -90,6 +90,16 @@ func (e *EndPointPath) IsZero() bool {
 	return false
 }
 
+func (e *EndPointPath) IsBeginsWith(compare string) bool {
+	if len(e.path) == 0 {
+		return false
+	}
+	if e.path[0] == compare {
+		return true
+	}
+	return false
+}
+
 func (e *EndPointPath) Copy() EndPointPath {
 	ret := make([]string, len(e.path))
 	copy(ret, e.path)

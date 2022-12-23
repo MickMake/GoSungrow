@@ -1,3 +1,18 @@
+## [3.0.3] - 2022-12-23
+### Features
+
+- Now supports the Energy Dashboard of HA!
+
+### Fixes
+
+- Fix double virtual.virtual entries.
+- Fixup float value determination logic.
+- CacheTimeout matches fetch schedule.
+- Fixed unit type guessing - "Template error: float got invalid input"
+- Fix battery class - correct point used for HA.
+- Added more DeviceClass types for HA - will affect long term stats as units will change on some points.
+
+
 ## [3.0.2] - 2022-12-21
 ### Features
 

@@ -86,10 +86,6 @@ func (dm *DataMap) AddPointUnitValues(Current *GoStruct.Reflect, parentDeviceId 
 		point.UpdateFreq = Current.DataStructure.PointUpdateFreq
 		point.SetName(Current.DataStructure.PointName)
 
-		// if strings.Contains(Current.DataStructure.Endpoint.String(), "p13149") {
-		// 	fmt.Println()
-		// }
-
 		if Current.Value.GetUnit() != point.Unit {
 			if dm.Debug {
 				_, _ = fmt.Fprintf(os.Stderr, "OOOPS FP['%s'] - Point/Value unit mismatch - Point:%s != Value:%s (%f)\n",
@@ -263,20 +259,21 @@ func (dm *DataMap) Add(des ...DataEntry) {
 	for range Only.Once {
 		for _, de := range des {
 			// fmt.Printf("DEBUG DataMap.Add() %s - Value(%s):'%s' Parent:'%s'\n", de.FullId(), de.Point.ValueType, de.Value, de.Parent)
-			endpoint := de.EndPoint
-			// de.Index = len(dm.Order)
+			// endpoint := de.EndPoint
 
-			if dm.Map[endpoint] == nil {
-				dm.Map[endpoint] = &DataEntries{Entries: []DataEntry{}}
+			if dm.Map[de.EndPoint] == nil {
+				dm.Map[de.EndPoint] = &DataEntries{Entries: []DataEntry{}}
 			}
-			entries := dm.Map[endpoint]
+
+			// We end up using the last entry in this list for MQTT.
+			entries := dm.Map[de.EndPoint]
 			if entries.Add(de) == nil {
 				continue
 			}
 			// dm.Order = append(dm.Order, endpoint)
 
-			if Points.Exists(endpoint) {
-				fmt.Printf("EXISTS: %s\n", endpoint)
+			if Points.Exists(de.EndPoint) {
+				fmt.Printf("EXISTS: %s\n", de.EndPoint)
 			}
 			Points.Add(*de.Point)
 		}
@@ -290,13 +287,6 @@ func (dm *DataMap) ProcessMap() {
 			if Child.IsPointIgnore() {
 				continue
 			}
-
-			// key := Child.EndPointPath().String()
-			// if strings.HasPrefix(key, "virtual") {
-			// 	// Move virtual mappings over.
-			// 	dm.StructMap.VirtualMap[key] = Child
-			// 	delete(dm.StructMap.Map, key)
-			// }
 
 			var when valueTypes.DateTime
 			if Child.IsPointTimestampNotZero() {
@@ -321,59 +311,20 @@ func (dm *DataMap) ProcessMap() {
 				when = valueTypes.SetDateTimeValue(dm.TimeStamp)
 			}
 
-			if Child.DataStructure.PointVirtualShift > 0 {
-				Child.DataStructure.Endpoint.ShiftLeft(Child.DataStructure.PointVirtualShift)
-				Child.DataStructure.Endpoint.InsertFirst("virtual")
-			} else {
-				Child.DataStructure.Endpoint.ReplaceFirst("virtual")
+			switch {
+				case Child.DataStructure.Endpoint.IsBeginsWith("virtual"):
+					// Don't prepend path - fixes the double virtual path issue.
+				case Child.DataStructure.PointVirtualShift > 0:
+					Child.DataStructure.Endpoint.ShiftLeft(Child.DataStructure.PointVirtualShift)
+					Child.DataStructure.Endpoint.InsertFirst("virtual")
+				default:
+					Child.DataStructure.Endpoint.ReplaceFirst("virtual")
 			}
+
 			dm.AddPointUnitValues(Child, dm.parentDeviceId, when)
 		}
 	}
 }
-
-// func (dm *DataMap) ProcessMapForMqtt() {
-// 	for range Only.Once {
-// 		// Convert StructMap to DataMap
-// 		for _, Child := range dm.StructMap.Map {
-// 			if Child.IsPointIgnore() {
-// 				fmt.Printf("[%s] - IGNORE\n", Child.FieldPath.String())
-// 				continue
-// 			}
-//
-// 			if Child.CurrentReflect.IsPointListFlatten() {
-// 				// fmt.Printf("[%s] - PointListFlatten", Child.FieldPath.String())
-// 				// if len(de.Current.ChildReflect) > 0 {
-// 				// 	continue // We already have the children.
-// 				// }
-// 				if len(Child.ChildReflect) == 0 {
-// 					// fmt.Printf(" - IGNORE\n")
-// 					// fmt.Printf(" - ignore\n")
-// 					continue // Ignore points with no children.
-// 				}
-// 				// fmt.Println("")
-// 			}
-//
-// 			if Child.DataStructure.DataTable {
-// 				continue	// We are a datatable parent.
-// 			}
-//
-// 			var when valueTypes.DateTime
-// 			if Child.IsPointTimestampNotZero() {
-// 				when = valueTypes.SetDateTimeValue(Child.DataStructure.PointTimestamp)
-// 			} else {
-// 				when = valueTypes.SetDateTimeValue(dm.TimeStamp)
-// 			}
-//
-// 			pdi := dm.parentDeviceId
-// 			if Child.DataStructure.PointDevice != "" {
-// 				pdi = Child.DataStructure.PointDevice
-// 			}
-//
-// 			dm.AddPointUnitValues(Child, pdi, when)
-// 		}
-// 	}
-// }
 
 
 type Tables GoStruct.StructTables

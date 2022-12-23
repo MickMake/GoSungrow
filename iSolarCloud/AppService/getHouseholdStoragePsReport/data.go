@@ -72,12 +72,12 @@ type DayData struct {
 	P83120MapVirgin valueTypes.UnitValue `json:"p83120_map_virgin"  PointIgnore:"true"`
 
 	P83121          valueTypes.Float     `json:"p83121" PointVirtual:"true" PointUpdateFreq:"UpdateFreqDay"`
-	P83122          valueTypes.Float     `json:"p83122" PointVirtual:"true" PointUpdateFreq:"UpdateFreqDay"`
+	P83122          valueTypes.Float     `json:"p83122" PointName:"Self Sufficiency Percent" PointUnit:"%" PointVirtual:"true" PointUpdateFreq:"UpdateFreqDay"`
 
 	PointData15List []struct {
-		GoStruct   GoStruct.GoStruct   `json:"-" PointIdFrom:"TimeStamp" PointNameDateFormat:"20060102-150405" PointIdReplace:"true"`
+		GoStruct   GoStruct.GoStruct   `json:"-" PointIdFrom:"TimeStamp" PointNameDateFormat:"DateTimeAltLayout" PointIdReplace:"true"`
 
-		TimeStamp  valueTypes.DateTime `json:"time_stamp" PointNameDateFormat:"20060102-150405"`
+		TimeStamp  valueTypes.DateTime `json:"time_stamp" PointNameDateFormat:"DateTimeAltLayout"`
 
 		Zfzy       valueTypes.Float    `json:"zfzy" PointName:"PV Power To Battery" PointUnitFrom:"ZfzyUnit" PointVirtual:"true"  PointTimestampFrom:"TimeStamp"`
 		ZfzyUnit   valueTypes.String   `json:"zfzy_unit"  PointIgnore:"true"`
@@ -129,12 +129,12 @@ type MonthData struct {
 	P83120MapVirgin valueTypes.UnitValue `json:"p83120_map_virgin"  PointIgnore:"true"`
 
 	P83121          valueTypes.Float     `json:"p83121" PointVirtual:"true" PointUpdateFreq:"UpdateFreqMonth"`
-	P83122          valueTypes.Float     `json:"p83122" PointVirtual:"true" PointUpdateFreq:"UpdateFreqMonth"`
+	P83122          valueTypes.Float     `json:"p83122" PointName:"Self Sufficiency Percent" PointUnit:"%" PointVirtual:"true" PointUpdateFreq:"UpdateFreqMonth"`
 
 	MonthDataDayList []struct {
-		GoStruct   GoStruct.GoStruct   `json:"-" PointIdFrom:"TimeStamp" PointNameDateFormat:"20060102" PointIdReplace:"true"`
+		GoStruct   GoStruct.GoStruct   `json:"-" PointIdFrom:"TimeStamp" PointNameDateFormat:"DateLayoutDay" PointIdReplace:"true"`
 
-		TimeStamp                valueTypes.DateTime `json:"time_stamp" PointNameDateFormat:"20060102"`
+		TimeStamp                valueTypes.DateTime `json:"time_stamp" PointNameDateFormat:"DateLayoutDay"`
 		DateId                   valueTypes.Integer  `json:"date_id"`
 		PsId                     valueTypes.PsId     `json:"ps_id"`
 
@@ -164,7 +164,8 @@ type MonthData struct {
 		P83022                   valueTypes.Float    `json:"p83022" PointUnit:"Wh" PointVirtual:"true"  PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqMonth"`
 		P83120                   valueTypes.Float    `json:"p83120" PointUnit:"Wh" PointVirtual:"true"  PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqMonth"`
 		P83121                   valueTypes.Float    `json:"p83121" PointVirtual:"true"  PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqMonth"`
-		P83122                   valueTypes.Float    `json:"p83122" PointVirtual:"true"  PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqMonth"`
+		P83122                   valueTypes.Float     `json:"p83122" PointName:"Self Sufficiency Percent" PointUnit:"%" PointVirtual:"true" PointUpdateFreq:"UpdateFreqMonth" PointTimestampFrom:"TimeStamp"`
+
 	} `json:"month_data_day_list" PointId:"data" PointIdReplace:"true" DataTable:"true"`
 }
 
@@ -197,12 +198,12 @@ type YearData struct {
 	P83120MapVirgin   valueTypes.UnitValue `json:"p83120_map_virgin"  PointIgnore:"true"`
 
 	P83121            valueTypes.Float     `json:"p83121" PointVirtual:"true" PointUpdateFreq:"UpdateFreqYear"`
-	P83122            valueTypes.Float     `json:"p83122" PointVirtual:"true" PointUpdateFreq:"UpdateFreqYear"`
+	P83122            valueTypes.Float     `json:"p83122" PointName:"Self Sufficiency Percent" PointUnit:"%" PointVirtual:"true" PointUpdateFreq:"UpdateFreqYear"`
 
 	YearDataMonthList []struct {
-		GoStruct   GoStruct.GoStruct   `json:"-" PointIdFrom:"TimeStamp" PointNameDateFormat:"200601" PointIdReplace:"true"`
+		GoStruct   GoStruct.GoStruct   `json:"-" PointIdFrom:"TimeStamp" PointNameDateFormat:"DateLayoutMonth" PointIdReplace:"true"`
 
-		TimeStamp                valueTypes.DateTime `json:"time_stamp" PointNameDateFormat:"200601"`
+		TimeStamp                valueTypes.DateTime `json:"time_stamp" PointNameDateFormat:"DateLayoutMonth"`
 		DateId                   valueTypes.Integer  `json:"date_id"`
 		PsId                     valueTypes.PsId     `json:"ps_id"`
 
@@ -232,7 +233,7 @@ type YearData struct {
 		P83037                   valueTypes.Float    `json:"p83037" PointUnit:"Wh" PointVirtual:"true"  PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqYear"`
 		P83120                   valueTypes.Float    `json:"p83120" PointUnit:"Wh" PointVirtual:"true"  PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqYear"`
 		P83121                   valueTypes.Float    `json:"p83121" PointVirtual:"true"  PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqYear"`
-		P83122                   valueTypes.Float    `json:"p83122" PointVirtual:"true"  PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqYear"`
+		P83122                   valueTypes.Float    `json:"p83122" PointName:"Self Sufficiency Percent" PointUnit:"%" PointVirtual:"true" PointUpdateFreq:"UpdateFreqYear" PointTimestampFrom:"TimeStamp"`
 	} `json:"year_data_month_list" PointId:"data" PointIdReplace:"true" DataTable:"true"`
 }
 
@@ -266,9 +267,9 @@ type TotalData struct {
 	P83126            valueTypes.Float     `json:"p83126" PointVirtual:"true" PointUpdateFreq:"UpdateFreqTotal"`
 
 	TotalDataYearList []struct {
-		GoStruct   GoStruct.GoStruct   `json:"-" PointIdFrom:"TimeStamp" PointNameDateFormat:"2006" PointIdReplace:"true"`
+		GoStruct   GoStruct.GoStruct   `json:"-" PointIdFrom:"TimeStamp" PointNameDateFormat:"DateLayoutYear" PointIdReplace:"true"`
 
-		TimeStamp                valueTypes.DateTime `json:"time_stamp" PointNameDateFormat:"2006"`
+		TimeStamp                valueTypes.DateTime `json:"time_stamp" PointNameDateFormat:"DateLayoutYear"`
 		DateId                   valueTypes.Integer  `json:"date_id"`
 		PsId                     valueTypes.PsId     `json:"ps_id"`
 
@@ -297,8 +298,7 @@ type TotalData struct {
 
 		P83038                   valueTypes.Float    `json:"p83038" PointUnit:"Wh" PointVirtual:"true"  PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqTotal"`
 		P83120                   valueTypes.Float    `json:"p83120" PointUnit:"Wh" PointVirtual:"true"  PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqTotal"`
-		P83121                   valueTypes.Float    `json:"p83121" PointVirtual:"true"  PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqTotal"`
-		P83122                   valueTypes.Float    `json:"p83122" PointVirtual:"true"  PointTimestampFrom:"TimeStamp" PointUpdateFreq:"UpdateFreqTotal"`
+		P83122                   valueTypes.Float    `json:"p83122" PointName:"Self Sufficiency Percent" PointUnit:"%" PointVirtual:"true" PointUpdateFreq:"UpdateFreqTotal" PointTimestampFrom:"TimeStamp"`
 	} `json:"total_data_year_list" PointId:"data" PointIdReplace:"true" DataTable:"true"`
 }
 

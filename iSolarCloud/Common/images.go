@@ -45,22 +45,22 @@ type Device struct {
 	FaultAlarmOfflineDevCount valueTypes.Count     `json:"fault_alarm_offline_dev_count"`
 	FaultCount                valueTypes.Count     `json:"fault_count"`
 	FaultDevCount             valueTypes.Count     `json:"fault_dev_count"`
-	GcjLatitude               valueTypes.Float     `json:"gcj_latitude"`
-	GcjLongitude              valueTypes.Float     `json:"gcj_longitude"`
-	GprsLatitude              valueTypes.Float     `json:"gprs_latitude"`
-	GprsLongitude             valueTypes.Float     `json:"gprs_longitude"`
+	GcjLatitude               valueTypes.Float     `json:"gcj_latitude" PointUnit:"GPS"`
+	GcjLongitude              valueTypes.Float     `json:"gcj_longitude" PointUnit:"GPS"`
+	GprsLatitude              valueTypes.Float     `json:"gprs_latitude" PointUnit:"GPS"`
+	GprsLongitude             valueTypes.Float     `json:"gprs_longitude" PointUnit:"GPS"`
 	InstalledPowerMap         valueTypes.UnitValue `json:"installed_power_map"`
 	InstalledPowerVirgin      valueTypes.Float     `json:"installed_power_virgin" PointIgnore:"true"`
 	InstallerAlarmCount       valueTypes.Count     `json:"installer_alarm_count"`
 	InstallerFaultCount       valueTypes.Count     `json:"installer_fault_count"`
 	InstallerPsFaultStatus    valueTypes.Integer   `json:"installer_ps_fault_status"`
 	JoinYearInitElec          valueTypes.Float     `json:"join_year_init_elec"`
-	Latitude                  valueTypes.Float     `json:"latitude"`
+	Latitude                  valueTypes.Float     `json:"latitude" PointUnit:"GPS"`
 	Location                  valueTypes.String    `json:"location"`
-	Longitude                 valueTypes.Float     `json:"longitude"`
-	MapLatitude               valueTypes.Float     `json:"map_latitude"`
-	MapLongitude              valueTypes.Float     `json:"map_longitude"`
-	MlpeFlag                  valueTypes.Integer   `json:"mlpe_flag"`
+	Longitude                 valueTypes.Float     `json:"longitude" PointUnit:"GPS"`
+	MapLatitude               valueTypes.Float     `json:"map_latitude" PointUnit:"GPS"`
+	MapLongitude              valueTypes.Float     `json:"map_longitude" PointUnit:"GPS"`
+	MlpeFlag                  valueTypes.Bool      `json:"mlpe_flag"`
 	Nmi                       valueTypes.String    `json:"nmi"`
 	OfflineDevCount           valueTypes.Count     `json:"offline_dev_count"`
 	OperateYear               valueTypes.String    `json:"operate_year"`
@@ -75,20 +75,20 @@ type Device struct {
 	ShippingAddress           valueTypes.String    `json:"shipping_address"`
 	ShippingZipCode           valueTypes.String    `json:"shipping_zip_code"`
 	SysScheme                 valueTypes.Integer   `json:"sys_scheme"`
-	WgsLatitude               valueTypes.Float     `json:"wgs_latitude"`
-	WgsLongitude              valueTypes.Float     `json:"wgs_longitude"`
+	WgsLatitude               valueTypes.Float     `json:"wgs_latitude" PointUnit:"GPS"`
+	WgsLongitude              valueTypes.Float     `json:"wgs_longitude" PointUnit:"GPS"`
 	ZipCode                   valueTypes.String    `json:"zip_code"`
 	Images                    PowerStationImages   `json:"images" PointArrayFlatten:"false"`
 
-	P83022y                valueTypes.String    `json:"p83022y" PointId:"p83022" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
-	P83046                 valueTypes.Float     `json:"p83046" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
+	P83022y                valueTypes.String    `json:"p83022y" PointId:"p83022" PointUpdateFreq:"UpdateFreq5Mins" PointUnit:"Wh" PointVirtual:"true"`
+	P83046                 valueTypes.Float     `json:"p83046" PointUpdateFreq:"UpdateFreq5Mins" PointUnit:"kW" PointVirtual:"true"`
 	P83048                 valueTypes.Float     `json:"p83048" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
 	P83049                 valueTypes.Float     `json:"p83049" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
 	P83050                 valueTypes.Float     `json:"p83050" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
 	P83051                 valueTypes.Float     `json:"p83051" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
 	P83054                 valueTypes.Float     `json:"p83054" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
 	P83055                 valueTypes.Float     `json:"p83055" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
-	P83067                 valueTypes.Float     `json:"p83067" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
+	P83067                 valueTypes.Float     `json:"p83067" PointUpdateFreq:"UpdateFreq5Mins" PointUnit:"kW" PointVirtual:"true"`
 	P83070                 valueTypes.Float     `json:"p83070" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
 	P83076                 valueTypes.Float     `json:"p83076" PointId:"_p83076" PointName:"Pv Power" PointIgnore:"true"`                  // Dupe of PvPower
 	P83077                 valueTypes.Float     `json:"p83077" PointId:"_p83077" PointName:"Pv Energy" PointIgnore:"true"`                 // Dupe of PvEnergy

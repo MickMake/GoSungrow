@@ -33,7 +33,7 @@ type ResultData []struct {
 	ArrearsStatus      valueTypes.Integer  `json:"arrears_status"`
 	DesignCapacity     valueTypes.Float    `json:"design_capacity" PointUnitFrom:"DesignCapacityUnit"`
 	DesignCapacityUnit valueTypes.String   `json:"design_capacity_unit" PointIgnore:"true"`
-	InstallDate        valueTypes.DateTime `json:"install_date" PointNameDateFormat:"2006-01-02 15:04:05"`
+	InstallDate        valueTypes.DateTime `json:"install_date" PointNameDateFormat:"DateTimeLayout"`
 	PsCode             valueTypes.String   `json:"ps_code"`
 	PsCountryId        valueTypes.Integer  `json:"ps_country_id"`
 	PsLocation         valueTypes.String   `json:"ps_location"`

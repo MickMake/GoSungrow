@@ -52,7 +52,7 @@ func (t *UnitValue) UnitValueFix() UnitValue {
 
 			if t.StringValue != "" {
 				if t.StringValue == "--" {
-					t.StringValue = ""
+					// -- Indicates a null or empty value.
 					break
 				}
 
@@ -136,6 +136,9 @@ func UnitValueType(unit string) string {
 			fallthrough
 		case "℃":
 			ret = "Temperature"
+
+		case "h":
+			ret = "DateTime"
 	}
 	return ret
 }
@@ -247,7 +250,6 @@ func (t UnitValue) MarshalJSON() ([]byte, error) {
 		}
 
 		data = []byte(fmt.Sprintf(`{"unit":"%s","value":"--","key":"%s"}`, t.UnitValue, t.key))
-
 		t.Error = nil
 		t.Valid = true
 	}
@@ -415,11 +417,13 @@ func (t *UnitValue) SetString(value string) UnitValue {
 		t.Valid = false
 
 		if value == "" {
+			t.Valid = true
 			break
 		}
 
 		if value == "--" {
-			value = ""
+			// -- Indicates a null or empty value.
+			t.Valid = false
 			break
 		}
 
@@ -433,23 +437,25 @@ func (t *UnitValue) SetString(value string) UnitValue {
 		}
 
 		if strings.Contains(value, ".") {
+			// Test if we have a float as the string and set it as such.
 			var v float64
 			v, t.Error = strconv.ParseFloat(t.StringValue, 64)
-			if t.Error != nil {
-				t.Error = nil	// Less than useful.
+			if t.Error == nil {
+				t.SetFloat(v)
 				break
 			}
-			t.SetFloat(v)
+		}
+
+		// Test if we have an integer as the string and set it as such.
+		var v int
+		v, t.Error = strconv.Atoi(t.StringValue)
+		if t.Error == nil {
+			t.SetInteger(int64(v))
 			break
 		}
 
-		var v int
-		v, t.Error = strconv.Atoi(t.StringValue)
-		if t.Error != nil {
-			t.Error = nil	// Less than useful.
-			break
-		}
-		t.SetInteger(int64(v))
+		t.Valid = true
+		t.Error = nil	// Default to assuming we have a string of something.
 	}
 
 	return *t
@@ -502,6 +508,10 @@ func (t *UnitValue) SetBoolString(value string) UnitValue {
 		// t.StringValue = strconv.FormatBool(value)
 
 		switch strings.ToLower(value) {
+			case "--":
+				// -- Indicates a null or empty value.
+				t.Valid = false
+
 			case "false":
 				fallthrough
 			case "no":
@@ -511,8 +521,6 @@ func (t *UnitValue) SetBoolString(value string) UnitValue {
 			case "0":
 				fallthrough
 			case "":
-				// 	fallthrough
-				// case "--":
 				t.bool = &varFalse
 				t.StringValue = "false"
 				t.Valid = true

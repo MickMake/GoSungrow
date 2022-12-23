@@ -12,7 +12,6 @@ const LabelCamera = "camera"
 func (m *Mqtt) CameraPublishConfig(config EntityConfig) error {
 
 	for range Only.Once {
-		config.FixConfig()
 		if !config.IsCamera() {
 			break
 		}
@@ -43,10 +42,7 @@ func (m *Mqtt) CameraPublishConfig(config EntityConfig) error {
 		}
 
 		tag := JoinStringsForTopic(m.Prefix, LabelCamera, m.ClientId, id, "config")
-		t := m.client.Publish(tag, 0, true, payload.Json())
-		if !t.WaitTimeout(m.Timeout) {
-			m.err = t.Error()
-		}
+		m.err = m.Publish(tag, 0, true, payload.Json())
 	}
 
 	return m.err
@@ -73,10 +69,7 @@ func (m *Mqtt) CameraPublishValue(config EntityConfig) error {
 
 		// @TODO - Real hack here. Need to properly check for JSON.
 		if strings.Contains(value, `{`) || strings.Contains(value, `":`) {
-			t := m.client.Publish(tag, 0, true, value)
-			if !t.WaitTimeout(m.Timeout) {
-				m.err = t.Error()
-			}
+			m.err = m.Publish(tag, 0, true, value)
 			break
 		}
 
@@ -85,10 +78,7 @@ func (m *Mqtt) CameraPublishValue(config EntityConfig) error {
 			Value:     value,
 		}
 
-		t := m.client.Publish(tag, 0, true, payload.Json())
-		if !t.WaitTimeout(m.Timeout) {
-			m.err = t.Error()
-		}
+		m.err = m.Publish(tag, 0, true, payload.Json())
 	}
 
 	return m.err

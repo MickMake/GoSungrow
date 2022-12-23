@@ -29,7 +29,7 @@ type ResultData struct {
 	List []Ps `json:"list" DataTable:"true"`
 }
 type Ps struct {
-	PsKey         valueTypes.String  `json:"ps_key"`
+	PsKey         valueTypes.PsKey   `json:"ps_key"`
 	PsId          valueTypes.PsId    `json:"ps_id"`
 	PsName        valueTypes.String  `json:"ps_name"`
 	DevPsId       valueTypes.Integer `json:"dev_ps_id"`

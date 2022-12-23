@@ -13,7 +13,6 @@ const LabelSensor = "sensor"
 func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 
 	for range Only.Once {
-		config.FixConfig()
 		if !config.IsSensor() {
 			break
 		}
@@ -46,10 +45,7 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 		}
 
 		tag := JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, id, "config")
-		t := m.client.Publish(tag, 0, true, payload.Json())
-		if !t.WaitTimeout(m.Timeout) {
-			m.err = t.Error()
-		}
+		m.err = m.Publish(tag, 0, true, payload.Json())
 	}
 
 	return m.err
@@ -70,18 +66,13 @@ func (m *Mqtt) SensorPublishValue(config EntityConfig) error {
 		tag := JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, id, "state")
 
 		value := config.Value.String()
-		// fmt.Printf("[%s] = %s", tag, value)
 		if value == "--" {
 			value = ""
 		}
-		// fmt.Printf("(%s)\n", value)
 
 		// @TODO - Real hack here. Need to properly check for JSON.
 		if strings.Contains(value, `{`) || strings.Contains(value, `":`) {
-			t := m.client.Publish(tag, 0, true, value)
-			if !t.WaitTimeout(m.Timeout) {
-				m.err = t.Error()
-			}
+			m.err = m.Publish(tag, 0, true, value)
 			break
 		}
 
@@ -89,16 +80,13 @@ func (m *Mqtt) SensorPublishValue(config EntityConfig) error {
 			LastReset: config.LastReset,	// m.GetLastReset(config.FullId),
 			Value:     value,
 		}
-		if config.StateClass != "total" {
+		if config.UpdateFreq == "" {
 			payload = MqttState {
 				Value:     value,
 			}
 		}
 
-		t := m.client.Publish(tag, 0, true, payload.Json())
-		if !t.WaitTimeout(m.Timeout) {
-			m.err = t.Error()
-		}
+		m.err = m.Publish(tag, 0, true, payload.Json())
 	}
 
 	return m.err

@@ -28,7 +28,7 @@ func (rd RequestData) Help() string {
 type ResultData []struct {
 	GoStructParent   GoStruct.GoStructParent   `json:"GoStruct" DataTable:"true" DataTableSortOn:"CreateTime"`
 
-	CreateTime valueTypes.DateTime `json:"create_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+	CreateTime valueTypes.DateTime `json:"create_time" PointNameDateFormat:"DateTimeLayout"`
 	Cycle      valueTypes.Integer  `json:"cycle"`
 	ID         valueTypes.Integer  `json:"id"`
 	MonthDate  valueTypes.String   `json:"month_date"`
@@ -36,7 +36,7 @@ type ResultData []struct {
 	ReportName valueTypes.String   `json:"report_name"`
 	ReportType valueTypes.Integer  `json:"report_type"`
 	Status     valueTypes.Bool     `json:"status"`
-	UpdateTime valueTypes.DateTime `json:"update_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+	UpdateTime valueTypes.DateTime `json:"update_time" PointNameDateFormat:"DateTimeLayout"`
 }
 
 func (e *ResultData) IsValid() error {

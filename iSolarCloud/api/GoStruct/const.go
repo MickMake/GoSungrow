@@ -88,6 +88,10 @@ const (
 	PointName = "PointName"
 
 
+	// PointIcon -  Icon of point.
+	PointIcon = "PointIcon"
+
+
 	// PointNameDateFormat -  Date format when using PointNameFrom, (if the field is a time.Time type).
 	PointNameDateFormat = "PointNameDateFormat"
 

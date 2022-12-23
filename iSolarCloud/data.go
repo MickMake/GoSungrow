@@ -11,6 +11,7 @@ import (
 	"os"
 	"sort"
 	"strings"
+	"time"
 )
 
 
@@ -60,6 +61,7 @@ type SunGrowData struct {
 	sunGrow    *SunGrow
 	outputType output.OutputType
 	saveAsFile bool
+	cacheTimeout time.Duration
 
 	Debug      bool
 	Error      error
@@ -73,49 +75,12 @@ func (sgd *SunGrowData) New(ref *SunGrow) {
 	for range Only.Once {
 		sgd.sunGrow = ref
 		sgd.Results = make(SunGrowDataResults)
-
-		// sgd.EndPoints = make(EndPoints)
-		// sgd.EndPoints["getPsList"] = EndPoint { Func: sgd.getPsList, HasArgs: false }
-		// sgd.EndPoints["queryDeviceList"] = EndPoint { Func: sgd.queryDeviceList, HasArgs: true }
-		// sgd.EndPoints["queryDeviceInfo"] = EndPoint { Func: sgd.queryDeviceInfo, HasArgs: true }
-		// sgd.EndPoints["queryDeviceListForApp"] = EndPoint { Func: sgd.queryDeviceListForApp, HasArgs: true }
-		// sgd.EndPoints["getPsDetailWithPsType"] = EndPoint { Func: sgd.getPsDetailWithPsType, HasArgs: true }
-		// sgd.EndPoints["getPsDetail"] = EndPoint { Func: sgd.getPsDetail, HasArgs: true }
-		// sgd.EndPoints["findPsType"] = EndPoint { Func: sgd.findPsType, HasArgs: true }
-		// // sg.EndPoints["getAllDeviceByPsId"] = EndPoint { Func: sg.getAllDeviceByPsId, HasArgs: false }	// Not working
-		// sgd.EndPoints["getDeviceList"] = EndPoint { Func: sgd.getDeviceList, HasArgs: true }
-		// sgd.EndPoints["getIncomeSettingInfos"] = EndPoint { Func: sgd.getIncomeSettingInfos, HasArgs: true }
-		// sgd.EndPoints["getKpiInfo"] = EndPoint { Func: sgd.getKpiInfo, HasArgs: false }
-		// sgd.EndPoints["getPowerChargeSettingInfo"] = EndPoint { Func: sgd.getPowerChargeSettingInfo, HasArgs: true }
-		// sgd.EndPoints["getHouseholdStoragePsReport"] = EndPoint { Func: sgd.getHouseholdStoragePsReport, HasArgs: true }
-		// // sg.EndPoints["getPowerStationBasicInfo"] = EndPoint { Func: sg.getPowerStationBasicInfo, HasArgs: true }	// Not working
-		// sgd.EndPoints["getPowerStationData"] = EndPoint { Func: sgd.getPowerStationData, HasArgs: true }
-		// sgd.EndPoints["getPowerStationForHousehold"] = EndPoint { Func: sgd.getPowerStationForHousehold, HasArgs: true }
-		// sgd.EndPoints["getPowerStationInfo"] = EndPoint { Func: sgd.getPowerStationInfo, HasArgs: true }
-		// sgd.EndPoints["getPowerStatistics"] = EndPoint { Func: sgd.getPowerStatistics, HasArgs: true }
-		// sgd.EndPoints["getPsHealthState"] = EndPoint { Func: sgd.getPsHealthState, HasArgs: true }
-		// sgd.EndPoints["powerDevicePointList"] = EndPoint { Func: sgd.powerDevicePointList, HasArgs: false }
-		// sgd.EndPoints["getPsWeatherList"] = EndPoint { Func: sgd.getPsWeatherList, HasArgs: true }
-		// sgd.EndPoints["getRemoteUpgradeTaskList"] = EndPoint { Func: sgd.getRemoteUpgradeTaskList, HasArgs: false } // Not working
-		// sgd.EndPoints["reportList"] = EndPoint { Func: sgd.reportList, HasArgs: true }
-		// sgd.EndPoints["getReportData"] = EndPoint { Func: sgd.getReportData, HasArgs: true }
-		// sgd.EndPoints["psForcastInfo"] = EndPoint { Func: sgd.psForcastInfo, HasArgs: true }
-		// sgd.EndPoints["queryPowerStationInfo"] = EndPoint { Func: sgd.queryPowerStationInfo, HasArgs: true }
-		// sgd.EndPoints["getPsIdState"] = EndPoint { Func: sgd.getPsIdState, HasArgs: true }
-		// sgd.EndPoints["queryPsProfit"] = EndPoint { Func: sgd.queryPsProfit, HasArgs: true }
-		// sgd.EndPoints["queryAllPsIdAndName"] = EndPoint { Func: sgd.queryAllPsIdAndName, HasArgs: false }
-		// sgd.EndPoints["queryPsIdList"] = EndPoint { Func: sgd.queryPsIdList, HasArgs: false }
-		// sgd.EndPoints["queryPsNameByPsId"] = EndPoint { Func: sgd.queryPsNameByPsId, HasArgs: true }
-		// sgd.EndPoints["showPSView"] = EndPoint { Func: sgd.showPSView, HasArgs: true }
-		// sgd.EndPoints["getMaxDeviceIdByPsId"] = EndPoint { Func: sgd.getMaxDeviceIdByPsId, HasArgs: true }
-		//
-		// sgd.EndPoints["energyTrend"] = EndPoint { Func: sgd.energyTrend, HasArgs: false }
-		// sgd.EndPoints["getAreaList"] = EndPoint { Func: sgd.getAreaList, HasArgs: false }
-		// sgd.EndPoints["getAllPsIdByOrgIds"] = EndPoint { Func: sgd.getAllPsIdByOrgIds, HasArgs: false }
-		// sgd.EndPoints["findCodeValueList"] = EndPoint { Func: sgd.findCodeValueList, HasArgs: false }
-		// sgd.EndPoints["queryFaultCodes"] = EndPoint { Func: sgd.queryFaultCodes, HasArgs: false }
-		// sgd.EndPoints["queryNounList"] = EndPoint { Func: sgd.queryNounList, HasArgs: false }
+		sgd.cacheTimeout = time.Minute * 5
 	}
+}
+
+func (sgd *SunGrowData) SetCacheTimeout(t time.Duration) {
+	sgd.cacheTimeout = t
 }
 
 func (sgd *SunGrowData) SetOutput(t string) {
@@ -140,16 +105,6 @@ func (sgd *SunGrowData) SetArgs(args ...string) {
 
 func (sgd *SunGrowData) SetPsIds(psids ...string) {
 	for range Only.Once {
-		// if len(psids) == 0 {
-		// 	var pids valueTypes.PsIds
-		// 	pids, sgd.Error = sgd.sunGrow.GetPsIds()
-		// 	if sgd.Error != nil {
-		// 		break
-		// 	}
-		// 	sgd.Request.SetPSIDs(pids.Strings())
-		// 	break
-		// }
-
 		var pids valueTypes.PsIds
 		pids = sgd.sunGrow.SetPsIds(psids...)
 		if sgd.Error != nil {
@@ -186,6 +141,9 @@ func (sgd *SunGrowData) CallEndpoint(endpoint api.EndPoint, request SunGrowDataR
 			}
 		}
 		sgd.PrintDebug("Request: %s\n", endpoint.GetRequestJson())
+
+		// @TODO - Make this a config option.
+		endpoint = endpoint.SetCacheTimeout(sgd.cacheTimeout)
 
 		endpoint = endpoint.Call()
 		sgd.Error = endpoint.GetError()
@@ -250,56 +208,6 @@ func (sgd *SunGrowData) GetData() error {
 			if sgd.Error != nil {
 				break
 			}
-
-			// // Lookup endpoint interface from string.
-			// ep := sgd.sunGrow.GetEndpoint(endpoint)
-			// if sgd.sunGrow.IsError() {
-			// 	sgd.Error = sgd.sunGrow.Error
-			// 	break
-			// }
-			// sgd.Request.SetRequired(ep.GetRequestArgNames())
-			// sgd.Request.SetArgs(sgd.Args...)
-			//
-			// // PsId not required.
-			// if sgd.Request.IsPsIdNotRequired() {
-			// 	var result SunGrowDataResult
-			//
-			// 	result.EndPointArea = ep.GetArea()
-			// 	result.EndPointName = ep.GetName()
-			// 	result.EndPoint = ep
-			// 	result.Request = sgd.Request
-			// 	result.Response = sgd.CallEndpoint(ep, result.Request)
-			// 	sgd.Results[result.EndPointName.String()] = result
-			// 	break
-			// }
-			//
-			// // PsId required and not set.
-			// if len(sgd.Request.aPsId) == 0 {
-			// 	sgd.SetPsIds()
-			// 	if sgd.Error != nil {
-			// 		break
-			// 	}
-			// }
-			//
-			// // PsId required.
-			// for _, psId := range sgd.Request.aPsId {
-			// 	var result SunGrowDataResult
-			// 	result.Request = sgd.Request
-			// 	result.Request.SetPsId(psId.String())
-			//
-			// 	result.EndPointArea = ep.GetArea()
-			// 	result.EndPointName = ep.GetName()
-			// 	result.EndPoint = ep
-			// 	result.Response = sgd.CallEndpoint(ep, result.Request)
-			// 	if sgd.Error != nil {
-			// 		break
-			// 	}
-			// 	sgd.Results[result.EndPointName.String() + "/" + psId.String()] = result
-			// }
-			//
-			// if sgd.Error != nil {
-			// 	break
-			// }
 		}
 	}
 

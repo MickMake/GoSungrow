@@ -65,15 +65,15 @@ type ResultData struct {
 	Isdst                  valueTypes.Bool    `json:"isdst"`
 	Jobs                   interface{} `json:"jobs"`
 	Language               string      `json:"language"`
-	LoginFirstDate         valueTypes.DateTime      `json:"loginFirstDate" PointNameDateFormat:"2006-01-02 15:04:05"`
-	LoginFirstDate2        valueTypes.DateTime      `json:"loginFristDate" PointNameDateFormat:"2006-01-02 15:04:05"`
-	LoginLastDate          valueTypes.DateTime      `json:"loginLastDate" PointNameDateFormat:"2006-01-02 15:04:05"`
+	LoginFirstDate         valueTypes.DateTime      `json:"loginFirstDate" PointNameDateFormat:"DateTimeLayout"`
+	LoginFirstDate2        valueTypes.DateTime      `json:"loginFristDate" PointNameDateFormat:"DateTimeLayout"`
+	LoginLastDate          valueTypes.DateTime      `json:"loginLastDate" PointNameDateFormat:"DateTimeLayout"`
 	LoginLastIP            string      `json:"loginLastIp"`
 	LoginTimes             valueTypes.Integer `json:"loginTimes"`
 	Logo                   interface{} `json:"logo"`
 	LogoHTTPSURL           interface{} `json:"logo_https_url"`
 	MapType                string      `json:"map_type"`
-	MinDate                valueTypes.DateTime      `json:"min_date" PointNameDateFormat:"2006-01-02 15:04:05"`
+	MinDate                valueTypes.DateTime      `json:"min_date" PointNameDateFormat:"DateTimeLayout"`
 	MobileTel              interface{} `json:"mobile_tel"`
 	OrgId                  string      `json:"org_id"`
 	OrgName                string      `json:"org_name"`

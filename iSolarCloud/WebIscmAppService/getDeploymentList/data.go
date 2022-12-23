@@ -27,7 +27,7 @@ func (rd RequestData) Help() string {
 type ResultData []struct {
 	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"DeploymentTime"`
 
-	DeploymentTime valueTypes.DateTime `json:"deploymentTime" PointId:"deployment_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+	DeploymentTime valueTypes.DateTime `json:"deploymentTime" PointId:"deployment_time" PointNameDateFormat:"DateTimeLayout"`
 	Id             valueTypes.String   `json:"id"`
 	Name           valueTypes.String   `json:"name"`
 }

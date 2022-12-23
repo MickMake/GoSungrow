@@ -11,9 +11,9 @@ import (
 var inputDateLayout = []string{
 	DateTimeFullLayout,
 	DateTimeLayout,
-	"2006/01/02 15:04:05",
+	DateHumanLayoutLayout,
 	DateLayout,
-	"2006/01/02",
+	DateHumanLayout,
 	DateTimeLayoutSecond,
 	DateTimeLayoutMinute,
 	DateTimeLayoutHour,
@@ -23,10 +23,39 @@ var inputDateLayout = []string{
 	DateTimeLayoutYear,
 }
 
+var DateLayoutMap = map[string]string {
+	"DateTimeFullLayout": DateTimeFullLayout,
+	"DateTimeLayout": DateTimeLayout,
+	"DateTimeAltLayout": DateTimeAltLayout,
+	"DateHumanLayoutLayout": DateHumanLayoutLayout,
+	"DateTimeLayoutZeroSeconds": DateTimeLayoutZeroSeconds,
+	"DateTimeLayoutSecond": DateTimeLayoutSecond,
+	"DateTimeLayoutMinute": DateTimeLayoutMinute,
+	"DateTimeLayoutHour": DateTimeLayoutHour,
+	"DateTimeLayoutDay": DateTimeLayoutDay,
+	"DateTimeLayoutMonth": DateTimeLayoutMonth,
+	"DateTimeLayoutYear": DateTimeLayoutYear,
+
+	"DateLayout": DateLayout,
+	"DateHumanLayout": DateHumanLayout,
+	"DateLayoutDay": DateLayoutDay,
+	"DateLayoutMonth": DateLayoutMonth,
+	"DateLayoutYear": DateLayoutYear,
+
+	"TimeLayout": TimeLayout,
+	"TimeLayoutZeroSeconds": TimeLayoutZeroSeconds,
+	"TimeLayoutHourColon": TimeLayoutHourColon,
+	"TimeLayoutSecond": TimeLayoutSecond,
+	"TimeLayoutMinute": TimeLayoutMinute,
+	"TimeLayoutHour": TimeLayoutHour,
+}
+
+
 const (
 	DateTimeFullLayout        = time.RFC3339
 	DateTimeLayout            = DateLayout + " " + TimeLayout
 	DateTimeAltLayout         = DateLayoutDay + "-" + TimeLayoutSecond
+	DateHumanLayoutLayout     = DateHumanLayout + " " + TimeLayout
 	DateTimeLayoutZeroSeconds = DateLayout + " " + TimeLayoutZeroSeconds
 	DateTimeLayoutSecond      = DateLayoutDay + TimeLayoutSecond
 	DateTimeLayoutMinute      = DateLayoutDay + TimeLayoutMinute
@@ -36,6 +65,7 @@ const (
 	DateTimeLayoutYear        = DateLayoutYear
 
 	DateLayout            = "2006-01-02"
+	DateHumanLayout       = "2006/01/02"
 	DateLayoutDay         = "20060102"
 	DateLayoutMonth       = "200601"
 	DateLayoutYear        = "2006"
@@ -319,6 +349,28 @@ func NewDateTime(value string) DateTime {
 		}
 	}
 	return ret
+}
+
+func ParseDateTime(value string) (time.Time, string, error) {
+	var ret time.Time
+	var format string
+	var err error
+
+	for range Only.Once {
+		if (value == Now) || (value == "") || (value == ".") {
+			ret = time.Now()
+			break
+		}
+
+		for _, format = range inputDateLayout {
+			ret, err = time.Parse(format, value)
+			if err == nil {
+				break
+			}
+		}
+	}
+
+	return ret, format, err
 }
 
 func TimeNowString() string {

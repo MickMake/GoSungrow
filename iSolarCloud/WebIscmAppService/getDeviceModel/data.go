@@ -71,7 +71,7 @@ type ResultData struct {
 		Phone                     valueTypes.String   `json:"phone"`
 		Protocol                  valueTypes.String   `json:"protocol"`
 		Remark                    valueTypes.String   `json:"remark"`
-		UpdateDate                valueTypes.DateTime `json:"updatedate" PointId:"update_date" PointNameDateFormat:"2006-01-02 15:04:05"`
+		UpdateDate                valueTypes.DateTime `json:"updatedate" PointId:"update_date" PointNameDateFormat:"DateTimeLayout"`
 		UpdateUserCode            valueTypes.Bool     `json:"updateusercode" PointId:"update_user_code"`
 	} `json:"powerDeviceModel"`
 	SysTypeList []struct {
@@ -101,7 +101,7 @@ type ResultData struct {
 		SysId           valueTypes.String   `json:"sys_id"`
 		SysName         valueTypes.String   `json:"sys_name"`
 		IsRemoteUpgrade valueTypes.Bool     `json:"is_remote_upgrade"`
-		UpdateDate      valueTypes.DateTime `json:"update_date" PointNameDateFormat:"2006-01-02 15:04:05"`
+		UpdateDate      valueTypes.DateTime `json:"update_date" PointNameDateFormat:"DateTimeLayout"`
 		ValidFlag       valueTypes.Bool     `json:"valid_flag"`
 	} `json:"deviceTypeList" PointId:"device_type_list" DataTable:"true" DataTableSortOn:"TypeId"`
 }

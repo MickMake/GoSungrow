@@ -12,7 +12,6 @@ const LabelBinarySensor = "binary_sensor"
 func (m *Mqtt) BinarySensorPublishConfig(config EntityConfig) error {
 
 	for range Only.Once {
-		config.FixConfig()
 		if !config.IsBinarySensor() {
 			break
 		}
@@ -84,10 +83,7 @@ func (m *Mqtt) BinarySensorPublishConfig(config EntityConfig) error {
 		}
 
 		tag := JoinStringsForTopic(m.Prefix, LabelBinarySensor, m.ClientId, id, "config")
-		t := m.client.Publish(tag, 0, true, payload.Json())
-		if !t.WaitTimeout(m.Timeout) {
-			m.err = t.Error()
-		}
+		m.err = m.Publish(tag, 0, true, payload.Json())
 	}
 
 	return m.err
@@ -105,7 +101,6 @@ func (m *Mqtt) BinarySensorPublishValue(config EntityConfig) error {
 		}
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
-		// tagId := JoinStringsForId(m.Device.Name, config.ParentName, config.Name, config.UniqueId),
 		tag := JoinStringsForTopic(m.Prefix, LabelBinarySensor, m.ClientId, id, "state")
 
 		value := config.Value.String()
@@ -115,10 +110,7 @@ func (m *Mqtt) BinarySensorPublishValue(config EntityConfig) error {
 
 		// @TODO - Real hack here. Need to properly check for JSON.
 		if strings.Contains(value, `{`) || strings.Contains(value, `":`) {
-			t := m.client.Publish(tag, 0, true, value)
-			if !t.WaitTimeout(m.Timeout) {
-				m.err = t.Error()
-			}
+			m.err = m.Publish(tag, 0, true, value)
 			break
 		}
 
@@ -132,10 +124,7 @@ func (m *Mqtt) BinarySensorPublishValue(config EntityConfig) error {
 			}
 		}
 
-		t := m.client.Publish(tag, 0, true, payload.Json())
-		if !t.WaitTimeout(m.Timeout) {
-			m.err = t.Error()
-		}
+		m.err = m.Publish(tag, 0, true, payload.Json())
 	}
 
 	return m.err

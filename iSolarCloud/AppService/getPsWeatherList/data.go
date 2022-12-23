@@ -26,9 +26,9 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	WeatherList []struct {
-		GoStruct   GoStruct.GoStruct   `json:"-" PointIdReplace:"true" PointIdFrom:"DateTime" PointNameDateFormat:"20060102" PointTimestampFrom:"DateTime"`
+		GoStruct   GoStruct.GoStruct   `json:"-" PointIdReplace:"true" PointIdFrom:"DateTime" PointNameDateFormat:"DateLayoutDay" PointTimestampFrom:"DateTime"`
 
-		DateTime   valueTypes.DateTime `json:"date_time" PointNameDateFormat:"2006-01-02"`
+		DateTime   valueTypes.DateTime `json:"date_time" PointNameDateFormat:"DateLayout"`
 		PsId       valueTypes.PsId     `json:"ps_id"`
 
 		Chill      valueTypes.Float    `json:"chill"`
@@ -49,7 +49,7 @@ type ResultData struct {
 		Sunset     valueTypes.Time     `json:"sunset"`
 
 		Visibility valueTypes.Float    `json:"visibility"`
-	} `json:"weather_list" PointIdFromChild:"DateTime" PointNameDateFormat:"20060102" DataTable:"true"`
+	} `json:"weather_list" PointIdFromChild:"DateTime" PointNameDateFormat:"DateLayoutDay" DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {

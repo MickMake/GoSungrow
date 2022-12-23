@@ -27,7 +27,7 @@ func (rd RequestData) Help() string {
 type ResultData struct {
 	// GoStruct                    GoStruct.GoStruct    `json:"-" PointIdFrom:"PsKey" PointIdReplace:"true"`
 
-	BatteryLevelPercent         valueTypes.Float     `json:"battery_level_percent" PointId:"battery_level_percent" PointUnit:"%" PointUpdateFreq:"UpdateFreqInstant"`
+	BatteryLevelPercent         valueTypes.Float     `json:"battery_level_percent" PointId:"battery_level_percent" PointUnit:"%" PointIcon:"mdi:battery" PointUpdateFreq:"UpdateFreqInstant"`
 	ChargingDischargingPowerMap valueTypes.UnitValue `json:"charging_discharging_power_map" PointId:"charging_discharging_power_map" PointUpdateFreq:"UpdateFreqInstant"`	// Holds the battery charge/discharge amount
 	Co2ReduceTotal              valueTypes.UnitValue `json:"co2_reduce_total" PointId:"co2_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
 	CoalReduceTotal             valueTypes.UnitValue `json:"coal_reduce_total" PointId:"coal_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
@@ -68,7 +68,7 @@ type ResultData struct {
 	P83119MapVirgin             valueTypes.UnitValue `json:"p83119_map_virgin"  PointIgnore:"true"`
 	P83120Map                   valueTypes.UnitValue `json:"p83120_map" PointId:"p83120" PointName:"Energy Battery Charge" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
 	P83120MapVirgin             valueTypes.UnitValue `json:"p83120_map_virgin"  PointIgnore:"true"`
-	P83122                      valueTypes.Float     `json:"p83122" PointId:"p83122" PointName:"Self Sufficiency Percent" PointUnit:"%" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
+	P83122                      valueTypes.Float     `json:"p83122" PointName:"Self Sufficiency Percent" PointUnit:"%" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
 	P83124Map                   valueTypes.UnitValue `json:"p83124_map" PointId:"p83124" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
 	P83124MapVirgin             valueTypes.UnitValue `json:"p83124_map_virgin"  PointIgnore:"true"`
 	P83202Map                   valueTypes.UnitValue `json:"p83202_map" PointId:"p83202" PointName:"Installed Power" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
@@ -134,7 +134,7 @@ type ResultData struct {
 		P13121MapVirgin         valueTypes.UnitValue `json:"p13121_map_virgin"  PointIgnore:"true"`
 		P13126Map               valueTypes.UnitValue `json:"p13126_map" PointId:"p13126" PointName:"PV Power To Battery" PointVirtual:"true" PointVirtualShift:"3" PointUpdateFreq:"UpdateFreq5Mins"`
 		P13126MapVirgin         valueTypes.UnitValue `json:"p13126_map_virgin"  PointIgnore:"true"`
-		P13141                  valueTypes.Float     `json:"p13141" PointId:"p13141" PointName:"Battery Charge Percent" PointVirtual:"true" PointVirtualShift:"3" PointUnit:"%" PointUpdateFreq:"UpdateFreq5Mins"`
+		P13141                  valueTypes.Float     `json:"p13141" PointId:"p13141" PointName:"Battery Charge Percent" PointIcon:"mdi:battery" PointVirtual:"true" PointVirtualShift:"3" PointUnit:"%" PointUpdateFreq:"UpdateFreq5Mins"`
 		P13149Map               valueTypes.UnitValue `json:"p13149_map" PointId:"p13149" PointName:"Grid Power To Load" PointVirtual:"true" PointVirtualShift:"3" PointUpdateFreq:"UpdateFreq5Mins"`
 		P13149MapVirgin         valueTypes.UnitValue `json:"p13149_map_virgin"  PointIgnore:"true"`
 		P13150Map               valueTypes.UnitValue `json:"p13150_map" PointId:"p13150" PointVirtual:"true" PointVirtualShift:"3" PointUpdateFreq:"UpdateFreq5Mins"`

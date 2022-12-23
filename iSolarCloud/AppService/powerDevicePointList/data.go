@@ -32,7 +32,7 @@ type ResultData struct {
 }
 
 type Point struct {
-	CreateTime   valueTypes.DateTime `json:"create_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+	CreateTime   valueTypes.DateTime `json:"create_time" PointNameDateFormat:"DateTimeLayout"`
 	DeviceType   valueTypes.Integer  `json:"device_type"`
 	Id           valueTypes.Integer  `json:"id"`
 	Period       valueTypes.Integer  `json:"period"` // 0, 1, 2, 3, 4

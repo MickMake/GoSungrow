@@ -50,6 +50,7 @@ type CmdMqtt struct {
 	optionLogLevel      int
 	optionSleepDelay    time.Duration
 	optionFetchSchedule time.Duration
+	// optionCacheTimeout  time.Duration
 }
 
 func NewCmdMqtt() *CmdMqtt {
@@ -355,6 +356,8 @@ func (c *CmdMqtt) Cron() error {
 		}
 
 		data := cmds.Api.SunGrow.NewSunGrowData()
+		data.SetCacheTimeout(c.optionFetchSchedule)
+
 		data.SetPsIds()
 		if data.Error != nil {
 			c.Error = data.Error
@@ -393,9 +396,10 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 			r := entries.GetEntry(api.LastEntry) // Gets the last entry
 
 			if !r.Point.Valid {
-				// cmdLog.LogPrintDate("\n[%s] - invalid value - %s ...\n", r.Current.FieldPath.String(), r.Value.String())
-				c.LogDebug("Invalid: [%s] = '%s'\n", r.EndPoint, r.Value.String())
-				c.LogPlainInfo("?")
+				// Any point that shouldn't be passed through to MQTT is ignored
+				// - includes child points of an aggregate of several points.
+				c.LogPlainInfo("-")
+				c.LogDebug("Ignored: [%s] = '%s'\n", r.EndPoint, r.Value.String())
 				continue
 			}
 
@@ -403,29 +407,22 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 				continue
 			}
 
-			// if strings.Contains(r.EndPoint, "p13149") {
-			// 	fmt.Println()
-			// }
+			if !r.Value.Valid {
+				// Point doesn't have a valid value.
+				// Usually a float or int that cannot be converted or is empty.
+				c.LogPlainInfo("?")
+				c.LogDebug("Invalid: [%s] = '%s'\n", r.EndPoint, r.Value.String())
+				continue
+			}
 
 			_ = c.UpdatePoint(r)
 			r.Value.UnitValueFix()	// @TODO - Fix this up properly
 
-			// if strings.Contains(r.EndPoint, "p13149") {
-			// 	fmt.Println()
-			// }
-
-			var id string
-			var name string
-			switch {
-				case r.Point.GroupName == "alias":
-					id = mmHa.JoinStringsForId(r.Parent.Key, r.Point.Parents.Index[0], r.Point.Id)
-					name = mmHa.JoinStringsForName(" - ", r.Parent.Key, r.Point.Parents.Index[0], r.Point.Id)
-				case r.Point.GroupName != "":
-					id = r.EndPoint
-					name = mmHa.JoinStringsForName(" - ", r.Parent.Key, r.Point.Id, r.Point.GroupName, r.Point.Description)
-				default:
-					id = r.EndPoint
-					name = r.EndPoint
+			id := r.EndPoint
+			name := r.EndPoint
+			if r.Point.GroupName != "" {
+				id = r.EndPoint
+				name = mmHa.JoinStringsForName(" - ", r.Parent.Key, r.Point.Id, r.Point.GroupName, r.Point.Description)
 			}
 
 			if r.Point.Unit == "" {
@@ -454,10 +451,20 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 				StateClass:  r.Point.UpdateFreq,
 				Value:       &r.Value,
 				Point:       r.Point,
+				Icon:        r.Current.PointIcon(),
+				UpdateFreq:  r.Current.DataStructure.PointUpdateFreq,
 
 				LastReset:              r.Point.WhenReset(),
 				// LastResetValueTemplate: "",
 			}
+
+			// if strings.Contains(r.EndPoint, "grid_to_load_energy") {
+			// 	fmt.Printf("EMPTY[%s] -> %s\n", r.EndPoint, r.Value.String())
+			// }
+			// if r.Current.DataStructure.PointUpdateFreq != "" {
+			// 	fmt.Printf("EMPTY[%s] -> %s\n", r.EndPoint, r.Value.String())
+			// }
+			re.FixConfig()
 
 			switch {
 				case r.Point.IsTotal():
@@ -466,13 +473,11 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 					re.StateClass = "measurement"
 			}
 
-			// if strings.Contains(r.EndPoint, "p13149") {
-			// 	fmt.Println()
-			// }
+			// fmt.Printf("UNIT[%s] -> %s / %s / %s / %s /\n", id, r.Point.GroupName, r.Point.Unit, r.Point.ValueType, r.Point.Description)
 
 			if newDay {
-				c.LogDebug("Config: [%s]\n", r.EndPoint)
 				c.LogPlainInfo("C")
+				c.LogDebug("Config: [%s]\n", r.EndPoint)
 				c.Error = c.Client.BinarySensorPublishConfig(re)
 				if c.Error != nil {
 					break
@@ -484,8 +489,8 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 				}
 			}
 
-			c.LogDebug("Update: [%s] = '%s' %s\n", r.EndPoint, r.Value.String(), r.Value.Unit())
 			c.LogPlainInfo("U")
+			c.LogDebug("Update: [%s] = '%s' %s\n", r.EndPoint, r.Value.String(), r.Value.Unit())
 			c.Error = c.Client.BinarySensorPublishValue(re)
 			if c.Error != nil {
 				break
@@ -533,16 +538,16 @@ func (c *CmdMqtt) GetEndPoints() error {
 	return c.Error
 }
 
+// UpdatePoint - Set Point values to something resembling sanity based off the points metadata.
 func (c *CmdMqtt) UpdatePoint(entry *api.DataEntry) error {
 	for range Only.Once {
-		if !c.points.Exists(entry.Point.Id) {
-			// fmt.Printf("entry.Point: %s - NOT FOUND\n", entry.Point.Id)
-			break
-		}
-
+		// if !c.points.Exists(entry.Point.Id) {
+		// 	c.LogDebug("Point Meta: %s - Not found.\n", entry.Point.Id)
+		// 	break
+		// }
 		p := c.points.Get(entry.Point.Id)
 		if p == nil {
-			// fmt.Printf("entry.Point: %s - FOUND - EMPTY\n", entry.Point.Id)
+			c.LogDebug("Point Meta: %s - Not found.\n", entry.Point.Id)
 			break
 		}
 
@@ -560,51 +565,218 @@ func (c *CmdMqtt) UpdatePoint(entry *api.DataEntry) error {
 		// 		entry.Point.ValueType, entry.Current.DataStructure.ValueType, entry.Current.DataStructure.ValueType == entry.Point.ValueType)
 		// }
 
-		// If Point description matches ...
-		if p.Name.String() == entry.Point.Description {
-			break
-		}
-
-		// If Point unit matches ...
-		if p.Unit.String() == entry.Point.Unit {
-			break
-		}
-
-		// If Point group name is set ...
-		if entry.Point.GroupName != "" {
-			break
-		}
-
-		// ... update the Point.
-		entry.Point.Description = p.Name.String()
-		entry.Point.Unit = p.Unit.String()
-		entry.Point.GroupName = p.PointGroupName
-		entry.Point.ValueType = p.UnitType.String()
-
-		// if (p.Name.String() != entry.Point.Description) && (p.Unit.String() != entry.Point.Unit) && (entry.Point.GroupName == "") {
-		// 	// fmt.Printf("\nNOT SAME\n")
-		// 	// fmt.Println("BEFORE:")
-		// 	// fmt.Printf("\tName:'%s'\tDescription:'%s'\n", p.Name, entry.Point.Description)
-		// 	// fmt.Printf("\tPointGroupId:'%s'\tGroupName:'%s'\n", p.PointGroupId, entry.Point.GroupName)
-		// 	// fmt.Printf("\tUnitType:'%s'\tValueType:'%s'\n", p.UnitType, entry.Point.ValueType)
-		// 	// fmt.Printf("\tUnit:'%s'\tUnit:'%s'\n", p.Unit, entry.Point.Unit)
+		// // If Point description matches ...
+		// if p.Name.String() == entry.Point.Description {
+		// 	break
+		// }
 		//
-		// 	entry.Point.Description = p.Name.String()
-		// 	entry.Point.Unit = p.Unit.String()
-		// 	entry.Point.GroupName = p.PointGroupName
-		// 	entry.Point.ValueType = p.UnitType.String()
-		//
-		// 	// fmt.Println("AFTER:")
-		// 	// fmt.Printf("\tName:'%s'\tDescription:'%s'\n", p.Name, entry.Point.Description)
-		// 	// fmt.Printf("\tPointGroupId:'%s'\tGroupName:'%s'\n", p.PointGroupId, entry.Point.GroupName)
-		// 	// fmt.Printf("\tUnitType:'%s'\tValueType:'%s'\n", p.UnitType, entry.Point.ValueType)
-		// 	// fmt.Printf("\tUnit:'%s'\tUnit:'%s'\n", p.Unit, entry.Point.Unit)
-		// 	// fmt.Println("")
+		// // If Point unit matches ...
+		// if p.Unit.String() == entry.Point.Unit {
+		// 	break
 		// }
 
+		// Unit
+		if entry.Value.Unit() == "" {
+			entry.Value.SetUnit(p.Unit.String())
+			// fmt.Printf("[%s] -> %s\n", entry.EndPoint, entry.Value.String())
+		}
+		if entry.Point.Unit == "" {
+			entry.Point.Unit = p.Unit.String()
+			// fmt.Printf("[%s] -> %s\n", entry.EndPoint, entry.Value.String())
+		}
+
+		// Parent
+		if len(entry.Point.Parents.Map) == 0 {
+		}
+		if entry.Parent.Key == "" {
+		}
+
+		// GroupName
+		if entry.Point.GroupName == "" {
+			entry.Point.Description = p.Name.String()
+			entry.Point.GroupName = p.PointGroupName
+		}
+
+		// ValueType
+		if entry.Point.ValueType == "" {
+			entry.Point.ValueType = p.UnitType.String()
+		}
 	}
+
 	return c.Error
 }
+
+// func FixConfig(config *mmHa.EntityConfig) {
+//
+// 	for range Only.Once {
+// 		// mdi:power-socket-au
+// 		// mdi:solar-power
+// 		// mdi:home-lightning-bolt-outline
+// 		// mdi:transmission-tower
+// 		// mdi:transmission-tower-export
+// 		// mdi:transmission-tower-import
+// 		// mdi:transmission-tower-off
+// 		// mdi:home-battery-outline
+// 		// mdi:lightning-bolt
+// 		// mdi:check-circle-outline | mdi:arrow-right-bold
+//
+// 		// Set ValueTemplate
+// 		switch config.Units {
+// 			case "MW":
+// 				fallthrough
+// 			case "kW":
+// 				fallthrough
+// 			case "W":
+// 				fallthrough
+// 			case "MWh":
+// 				fallthrough
+// 			case "kWh":
+// 				fallthrough
+// 			case "Wh":
+// 				fallthrough
+// 			case "kvar":
+// 				fallthrough
+// 			case "Hz":
+// 				fallthrough
+// 			case "V":
+// 				fallthrough
+// 			case "A":
+// 				fallthrough
+// 			case "°F":
+// 				fallthrough
+// 			case "F":
+// 				fallthrough
+// 			case "℉":
+// 				fallthrough
+// 			case "°C":
+// 				fallthrough
+// 			case "C":
+// 				fallthrough
+// 			case "℃":
+// 				fallthrough
+// 			case "%":
+// 				if !config.Value.Valid {
+// 					config.IgnoreUpdate = true
+// 				}
+// 				cnv := "| float"
+// 				if config.Value.String() == "" {
+// 					cnv = ""
+// 				}
+// 				if config.ValueName == "" {
+// 					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.value %s }}", cnv))
+// 				} else {
+// 					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s %s }}", config.ValueName, cnv))
+// 				}
+//
+// 			case "Bool":
+// 				fallthrough
+// 			case LabelBinarySensor:
+// 				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value }}")
+//
+// 			default:
+// 				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value }}")
+// 		}
+//
+// 		// Set DeviceClass & Icon
+// 		switch config.Units {
+// 		case "Bool":
+// 			fallthrough
+// 		case LabelBinarySensor:
+// 			config.DeviceClass = SetDefault(config.DeviceClass, "power")
+// 			config.Icon = SetDefault(config.Icon, "mdi:check-circle-outline")
+// 			// if !config.Value.Valid {
+// 			// 	config.Value = "false"
+// 			// }
+//
+// 		case "MW":
+// 			fallthrough
+// 		case "kW":
+// 			fallthrough
+// 		case "W":
+// 			config.DeviceClass = SetDefault(config.DeviceClass, "power")
+// 			config.Icon = SetDefault(config.Icon, "mdi:lightning-bolt")
+//
+// 		case "MWh":
+// 			fallthrough
+// 		case "kWh":
+// 			fallthrough
+// 		case "Wh":
+// 			config.DeviceClass = SetDefault(config.DeviceClass, "energy")
+// 			config.Icon = SetDefault(config.Icon, "mdi:lightning-bolt")
+//
+// 		case "kvar":
+// 			config.DeviceClass = SetDefault(config.DeviceClass, "reactive_power")
+// 			config.Icon = SetDefault(config.Icon, "mdi:lightning-bolt")
+//
+// 		case "Hz":
+// 			config.DeviceClass = SetDefault(config.DeviceClass, "frequency")
+// 			config.Icon = SetDefault(config.Icon, "mdi:sine-wave")
+//
+// 		case "V":
+// 			config.DeviceClass = SetDefault(config.DeviceClass, "voltage")
+// 			config.Icon = SetDefault(config.Icon, "mdi:current-dc")
+//
+// 		case "A":
+// 			config.DeviceClass = SetDefault(config.DeviceClass, "current")
+// 			config.Icon = SetDefault(config.Icon, "mdi:current-ac")
+//
+// 		case "°F":
+// 			fallthrough
+// 		case "F":
+// 			fallthrough
+// 		case "℉":
+// 			config.DeviceClass = SetDefault(config.DeviceClass, "temperature")
+// 			config.Units = "℉"
+// 			config.Icon = SetDefault(config.Icon, "mdi:thermometer")
+//
+// 		case "°C":
+// 			fallthrough
+// 		case "C":
+// 			fallthrough
+// 		case "℃":
+// 			config.DeviceClass = SetDefault(config.DeviceClass, "temperature")
+// 			config.Units = "°C"
+// 			config.Icon = SetDefault(config.Icon, "mdi:thermometer")
+//
+// 		case "%":
+// 			config.DeviceClass = SetDefault(config.DeviceClass, "battery")
+// 			config.Icon = SetDefault(config.Icon, "mdi:home-battery-outline")
+//
+// 		default:
+// 			config.DeviceClass = SetDefault(config.DeviceClass, "")
+// 			config.Icon = SetDefault(config.Icon, "")
+// 		}
+//
+// 		if config.LastReset != "" {
+// 			break
+// 		}
+//
+// 		// pt := api.GetDevicePoint(config.FullId)
+// 		// if !pt.Valid {
+// 		// 	break
+// 		// }
+//
+// 		if config.StateClass == "instant" {
+// 			config.StateClass = "measurement"
+// 			break
+// 		}
+//
+// 		if config.StateClass == "" {
+// 			config.StateClass = "measurement"
+// 			break
+// 		}
+//
+// 		// config.LastReset = pt.WhenReset()
+// 		config.LastResetValueTemplate = SetDefault(config.LastResetValueTemplate, "{{ value_json.last_reset | as_datetime() }}")
+// 		// config.LastResetValueTemplate = SetDefault(config.LastResetValueTemplate, "{{ value_json.last_reset | int | timestamp_local | as_datetime }}")
+//
+// 		if config.LastReset == "" {
+// 			config.StateClass = "measurement"
+// 			break
+// 		}
+// 		config.StateClass = "total"
+// 	}
+// }
 
 
 // -------------------------------------------------------------------------------- //
@@ -788,6 +960,8 @@ func (c *CmdMqtt) optionFuncFetchSchedule(_ mqtt.Client, msg mqtt.Message) {
 			c.LogError("%s\n", c.Error)
 			break
 		}
+
+		// c.optionCacheTimeout = c.optionFetchSchedule
 	}
 }
 

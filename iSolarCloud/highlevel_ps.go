@@ -220,8 +220,11 @@ func (sg *SunGrow) GetPsKeys() (valueTypes.PsKeys, error) {
 		// Different methods to obtain all pskeys.
 		// queryDeviceInfo - DEAD
 		// AppService.queryDeviceInfoForApp DeviceSn:B2281302388 - Needs UUID.
+		// getDeviceList - Doesn't return the parent device.
 
-		// // WebIscmAppService.queryDeviceListForBackSys - Missing values.
+
+		// -------------------------------------------------------------------------------- //
+		// Method 1: WebIscmAppService.queryDeviceListForBackSys - Missing values.
 		// pids := sg.GetDevices()
 		// if sg.Error != nil {
 		// 	break
@@ -231,12 +234,30 @@ func (sg *SunGrow) GetPsKeys() (valueTypes.PsKeys, error) {
 		// 	fmt.Printf("%s_%s_%s_%s\n", "UUID", pid.DeviceType, pid.DeviceCode, pid.ChannelId)
 		// }
 
-		// AppService.getDeviceList - Around 7kB
+
+		// -------------------------------------------------------------------------------- //
+		// Method 2: PsTreeMenu
+		var tree PsTree
+		tree, sg.Error = sg.PsTreeMenu()
+		if sg.Error != nil {
+			break
+		}
+		for _, pid := range tree.Devices {
+			// pskey := fmt.Sprintf("%s_%s_%s_%s", pid.PsId, pid.DeviceType, pid.PsKey.DeviceCode, pid.PsKey.ChannelId)
+			pskeys = append(pskeys, pid.PsKey.String())
+		}
+		if len(pskeys) > 0 {
+			ret.Set(pskeys...)
+			break
+		}
+
+
+		// -------------------------------------------------------------------------------- //
+		// Method 3: AppService.getDeviceList - Around 7kB
 		pids2, _ := sg.GetDeviceList()
 		if sg.Error != nil {
 			break
 		}
-		// fmt.Printf("%v\n", pids2)
 		for _, pid := range pids2 {
 			pskey := fmt.Sprintf("%s_%s_%s_%s", pid.PsId, pid.DeviceType, pid.DeviceCode, pid.ChannelId)
 			pskeys = append(pskeys, pskey)
@@ -246,7 +267,9 @@ func (sg *SunGrow) GetPsKeys() (valueTypes.PsKeys, error) {
 			break
 		}
 
-		// // AppService.getPsList - Around 8.5kB - Doesn't return any pid.DeviceType, pid.DeviceCode, pid.ChannelId
+
+		// -------------------------------------------------------------------------------- //
+		// Method 4: AppService.getPsList - Around 8.5kB - Doesn't return any pid.DeviceType, pid.DeviceCode, pid.ChannelId
 		// pids4, _ := sg.GetPsList()
 		// if sg.Error != nil {
 		// 	break
@@ -262,12 +285,13 @@ func (sg *SunGrow) GetPsKeys() (valueTypes.PsKeys, error) {
 		// 	break
 		// }
 
-		// AppService.queryDeviceList - Around 118kB
+
+		// -------------------------------------------------------------------------------- //
+		// Method 5: AppService.queryDeviceList - Around 118kB
 		pids3, _ := sg.QueryDeviceList()
 		if sg.Error != nil {
 			break
 		}
-		// fmt.Printf("%v\n", pids3)
 		for _, pid := range pids3 {
 			pskey := fmt.Sprintf("%s_%s_%s_%s", pid.PsId, pid.DeviceType, pid.DeviceCode, pid.ChannelId)
 			pskeys = append(pskeys, pskey)

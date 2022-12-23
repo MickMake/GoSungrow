@@ -12,7 +12,6 @@ const LabelLight = "light"
 func (m *Mqtt) PublishLightConfig(config EntityConfig) error {
 	// func (m *Mqtt) PublishLightConfig(id string, name string, subName string, units string, valueName string, class string) error {
 	for range Only.Once {
-		config.FixConfig()
 		if !config.IsLight() {
 			break
 		}
@@ -47,12 +46,8 @@ func (m *Mqtt) PublishLightConfig(config EntityConfig) error {
 			Icon:                   Icon(config.Icon),
 		}
 
-		// m.client.Publish(JoinStringsForTopic(m.lightPrefix, id, "config"), 0, true, payload.Json())
 		tag := JoinStringsForTopic(m.Prefix, LabelLight, m.ClientId, id, "config")
-		t := m.client.Publish(tag, 0, true, payload.Json())
-		if !t.WaitTimeout(m.Timeout) {
-			m.err = t.Error()
-		}
+		m.err = m.Publish(tag, 0, true, payload.Json())
 	}
 	return m.err
 }
@@ -78,10 +73,7 @@ func (m *Mqtt) LightPublishValue(config EntityConfig) error {
 
 		// @TODO - Real hack here. Need to properly check for JSON.
 		if strings.Contains(value, `{`) || strings.Contains(value, `":`) {
-			t := m.client.Publish(tag, 0, true, value)
-			if !t.WaitTimeout(m.Timeout) {
-				m.err = t.Error()
-			}
+			m.err = m.Publish(tag, 0, true, value)
 			break
 		}
 
@@ -89,11 +81,7 @@ func (m *Mqtt) LightPublishValue(config EntityConfig) error {
 			LastReset: config.LastReset,	// m.GetLastReset(config.FullId),
 			Value:     value,
 		}
-
-		t := m.client.Publish(tag, 0, true, payload.Json())
-		if !t.WaitTimeout(m.Timeout) {
-			m.err = t.Error()
-		}
+		m.err = m.Publish(tag, 0, true, payload.Json())
 	}
 
 	return m.err

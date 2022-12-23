@@ -67,7 +67,7 @@ func New(req Mqtt) *Mqtt {
 		ret.MqttDevices = make(map[string]Device)
 		ret.SungrowPsIds = make(map[valueTypes.PsId]bool)
 		ret.Timeout = time.Second * 5
-		ret.UserOptions.Map = make(map[string]Option, 0)
+		ret.UserOptions.New()
 	}
 
 	return &ret
@@ -78,6 +78,9 @@ func (m *Mqtt) IsDebug() bool {
 }
 
 func (m *Mqtt) LogDebug(format string, args ...interface{})  {
+	if !m.debug {
+		return
+	}
 	cmdLog.LogPrintDate(format, args...)
 }
 
@@ -230,9 +233,9 @@ func (m *Mqtt) Connect() error {
 			break
 		}
 
-		v := "Disabled"
+		v := OptionDisabled
 		if m.debug {
-			v = "Enabled"
+			v = OptionEnabled
 		}
 		m.err = m.SetOptionValue("mqtt_debug", v)
 		if m.err != nil {
@@ -248,9 +251,11 @@ func (m *Mqtt) funcMqttDebug(_ mqtt.Client, msg mqtt.Message) {
 		request := strings.ToLower(string(msg.Payload()))
 		cmdLog.LogPrintDate("Option[%s] set to '%s'\n", msg.Topic(), request)
 		if request == strings.ToLower(OptionEnabled) {
+			m.err = m.SetOptionValue("mqtt_debug", OptionEnabled)
 			m.debug = true
 			break
 		}
+		m.err = m.SetOptionValue("mqtt_debug", OptionDisabled)
 		m.debug = false
 	}
 }
@@ -300,9 +305,9 @@ func (m *Mqtt) Subscribe(topic string, fn mqtt.MessageHandler) error {
 	return m.err
 }
 
-func (m *Mqtt) Publish(topic string, qos byte, retained bool, payload interface{}) error {
+func (m *Mqtt) Publish(topic string, qos byte, retained bool, payload string) error {
 	for range Only.Once {
-		m.LogDebug("Publish - topic: '%s'\tpayload: '%v'\n", topic, payload)
+		m.LogDebug("MQTT[%s] -> %v\n", topic, payload)
 		t := m.client.Publish(topic, qos, retained, payload)
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
@@ -310,33 +315,6 @@ func (m *Mqtt) Publish(topic string, qos byte, retained bool, payload interface{
 	}
 	return m.err
 }
-
-// func (m *Mqtt) PublishState(Type string, subtopic string, payload interface{}) error {
-// 	for range Only.Once {
-// 		// topic = JoinStringsForId(m.EntityPrefix, m.Device.Name, topic)
-// 		// topic = JoinStringsForTopic(m.sensorPrefix, topic, "state")
-// 		// st := JoinStringsForTopic(m.sensorPrefix, JoinStringsForId(m.EntityPrefix, m.Device.FullName, strings.ReplaceAll(subName, "/", ".")), "state")
-// 		topic := ""
-// 		switch Type {
-// 			case LabelSensor:
-// 				topic = JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, subtopic, "state")
-// 			case LabelBinarySensor:
-// 				topic = JoinStringsForTopic(m.Prefix, LabelBinarySensor, m.ClientId, subtopic, "state")
-// 			case LabelLight:
-// 				topic = JoinStringsForTopic(m.Prefix, LabelLight, m.ClientId, subtopic, "state")
-// 			case LabelSwitch:
-// 				topic = JoinStringsForTopic(m.Prefix, LabelSwitch, m.ClientId, subtopic, "state")
-// 			default:
-// 				topic = JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, subtopic, "state")
-// 		}
-//
-// 		t := m.client.Publish(topic, 0, true, payload)
-// 		if !t.WaitTimeout(m.Timeout) {
-// 			m.err = t.Error()
-// 		}
-// 	}
-// 	return m.err
-// }
 
 func (m *Mqtt) PublishValue(Type string, subtopic string, value string) error {
 	for range Only.Once {
@@ -501,137 +479,212 @@ func (config *EntityConfig) FixConfig() {
 		// mdi:home-battery-outline
 		// mdi:lightning-bolt
 		// mdi:check-circle-outline | mdi:arrow-right-bold
+		// mdi:transmission-tower
 
-		switch config.Units {
-			case "Bool":
+		// Set ValueTemplate
+		switch {
+			// 	fallthrough
+			//
+			// case config.Value.TypeValue == "Energy":
+			// 	fallthrough
+			//
+			// case config.Units == "MW":
+			// 	fallthrough
+			// case config.Units == "kW":
+			// 	fallthrough
+			// case config.Units == "W":
+			// 	fallthrough
+			//
+			// case config.Units == "kWp":
+			// 	fallthrough
+			// case config.Units == "MWh":
+			// 	fallthrough
+			// case config.Units == "kWh":
+			// 	fallthrough
+			// case config.Units == "Wh":
+			// 	fallthrough
+			//
+			// case config.Units == "kvar":
+			// 	fallthrough
+			// case config.Units == "Hz":
+			// 	fallthrough
+			// case config.Units == "V":
+			// 	fallthrough
+			// case config.Units == "A":
+			// 	fallthrough
+			// case config.Units == "°F":
+			// 	fallthrough
+			// case config.Units == "F":
+			// 	fallthrough
+			// case config.Units == "℉":
+			// 	fallthrough
+			// case config.Units == "°C":
+			// 	fallthrough
+			// case config.Units == "C":
+			// 	fallthrough
+			// case config.Units == "℃":
+			// 	fallthrough
+			// case config.Units == "%":
+			case config.Value.IsFloat():
+				if !config.Value.Valid {
+					config.IgnoreUpdate = true
+				}
+				cnv := "| float"
+				if config.Value.String() == "" {
+					cnv = ""
+				}
+				if config.ValueName == "" {
+					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.value %s }}", cnv))
+				} else {
+					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s %s }}", config.ValueName, cnv))
+				}
+
+			case config.Value.IsBool():
 				fallthrough
-			case LabelBinarySensor:
+			case config.Value.Unit() == LabelBinarySensor:
+				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value }}")
+
+			case config.Value.Unit() == "DateTime":
+				fallthrough
+			case config.Value.TypeValue == "DateTime":
+				value, _, err := valueTypes.ParseDateTime(config.Value.String())
+				if err == nil {
+					config.Value.SetString(value.Local().Format(valueTypes.DateTimeFullLayout))
+					config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | as_datetime }}")
+				} else {
+					config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value }}")
+				}
+
+			case config.Value.IsInt():
+				fallthrough
+			default:
+				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value }}")
+		}
+
+		// Set DeviceClass & Icon
+		switch {
+			case config.Units == "Bool":
+				fallthrough
+			case config.Units == LabelBinarySensor:
 				config.DeviceClass = SetDefault(config.DeviceClass, "power")
 				config.Icon = SetDefault(config.Icon, "mdi:check-circle-outline")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value }}")
 				// if !config.Value.Valid {
 				// 	config.Value = "false"
 				// }
 
-			case "MW":
+			case config.Value.TypeValue == "Power":
 				fallthrough
-			case "kW":
+			case config.Units == "MW":
 				fallthrough
-			case "W":
+			case config.Units == "kW":
+				fallthrough
+			case config.Units == "W":
 				config.DeviceClass = SetDefault(config.DeviceClass, "power")
 				config.Icon = SetDefault(config.Icon, "mdi:lightning-bolt")
-				if config.ValueName == "" {
-					config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
-				} else {
-					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
-				}
-				if !config.Value.Valid {
-					config.IgnoreUpdate = true
-				}
 
-			case "MWh":
+			case config.Value.TypeValue == "Energy":
 				fallthrough
-			case "kWh":
+			case config.Units == "MWh":
 				fallthrough
-			case "Wh":
+			case config.Units == "kWh":
+				fallthrough
+			case config.Units == "Wh":
 				config.DeviceClass = SetDefault(config.DeviceClass, "energy")
-				config.Icon = SetDefault(config.Icon, "mdi:lightning-bolt")
-				if config.ValueName == "" {
-					config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
-				} else {
-					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
-				}
-				if !config.Value.Valid {
-					config.IgnoreUpdate = true
-				}
+				config.Icon = SetDefault(config.Icon, "mdi:transmission-tower")
 
-			case "kvar":
+			case config.Units == "var":
+				fallthrough
+			case config.Units == "kvar":
 				config.DeviceClass = SetDefault(config.DeviceClass, "reactive_power")
 				config.Icon = SetDefault(config.Icon, "mdi:lightning-bolt")
-				if config.ValueName == "" {
-					config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
-				} else {
-					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
-				}
-				if !config.Value.Valid {
-					config.IgnoreUpdate = true
-				}
 
-			case "Hz":
+			case config.Units == "VA":
+				config.DeviceClass = SetDefault(config.DeviceClass, "apparent_power")
+				config.Icon = SetDefault(config.Icon, "mdi:lightning-bolt")
+
+			case config.Units == "Hz":
 				config.DeviceClass = SetDefault(config.DeviceClass, "frequency")
 				config.Icon = SetDefault(config.Icon, "mdi:sine-wave")
-				if config.ValueName == "" {
-					config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
-				} else {
-					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
-				}
-				if !config.Value.Valid {
-					config.IgnoreUpdate = true
-				}
 
-			case "V":
+			case config.Units == "V":
 				config.DeviceClass = SetDefault(config.DeviceClass, "voltage")
 				config.Icon = SetDefault(config.Icon, "mdi:current-dc")
-				if config.ValueName == "" {
-					config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
-				} else {
-					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
-				}
-				if !config.Value.Valid {
-					config.IgnoreUpdate = true
-				}
 
-			case "A":
+			case config.Units == "A":
 				config.DeviceClass = SetDefault(config.DeviceClass, "current")
 				config.Icon = SetDefault(config.Icon, "mdi:current-ac")
-				if config.ValueName == "" {
-					config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
-				} else {
-					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
-				}
-				if !config.Value.Valid {
-					config.IgnoreUpdate = true
-				}
 
-			case "°F":
+			case config.Units == "°F":
 				fallthrough
-			case "F":
+			case config.Units == "F":
 				fallthrough
-			case "℉":
+			case config.Units == "℉":
+				config.DeviceClass = SetDefault(config.DeviceClass, "temperature")
+				config.Units = "℉"
+				config.Icon = SetDefault(config.Icon, "mdi:thermometer")
+
+			case config.Units == "°C":
 				fallthrough
-			case "°C":
+			case config.Units == "C":
 				fallthrough
-			case "C":
-				fallthrough
-			case "℃":
+			case config.Units == "℃":
 				config.DeviceClass = SetDefault(config.DeviceClass, "temperature")
 				config.Units = "°C"
 				config.Icon = SetDefault(config.Icon, "mdi:thermometer")
-				if config.ValueName == "" {
-					config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
-				} else {
-					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
-				}
-				if !config.Value.Valid {
-					config.IgnoreUpdate = true
-				}
 
-			case "%":
+			case config.Icon == "mdi:home-battery-outline":
+				fallthrough
+			case config.Icon == "mdi:battery":
 				config.DeviceClass = SetDefault(config.DeviceClass, "battery")
-				config.Icon = SetDefault(config.Icon, "mdi:home-battery-outline")
-				if config.ValueName == "" {
-					config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | float }}")
-				} else {
-					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | float }}", config.ValueName))
-				}
-				if !config.Value.Valid {
-					config.IgnoreUpdate = true
-				}
+				// config.Icon = SetDefault(config.Icon, "mdi:percent") // mdi:home-battery-outline
+
+			case config.Value.TypeValue == "Percent":
+				fallthrough
+			case config.Units == "%":
+				// @TODO - Not supported in older versions of HA.
+				// config.DeviceClass = SetDefault(config.DeviceClass, "battery")
+				config.Icon = SetDefault(config.Icon, "mdi:percent") // mdi:home-battery-outline
+
+			case config.Value.TypeValue == "DateTime":
+				config.DeviceClass = SetDefault(config.DeviceClass, "timestamp") // date
+				config.Icon = SetDefault(config.Icon, "mdi:clock-outline")
+
+			case config.Units == "h":
+				// config.DeviceClass = SetDefault(config.DeviceClass, "timestamp") // date
+				config.Icon = SetDefault(config.Icon, "mdi:clock-outline")
+
+			case config.Units == "kg":
+				config.DeviceClass = SetDefault(config.DeviceClass, "weight")
+				config.Icon = SetDefault(config.Icon, "mdi:weight")
+
+			case config.Units == "km":
+				config.DeviceClass = SetDefault(config.DeviceClass, "distance")
+				config.Icon = SetDefault(config.Icon, "mdi:map-marker-distance")
+
+			case config.Units == "Wh/㎡":
+				fallthrough
+			case config.Units == "W/㎡":
+				// @TODO - Not supported in older versions of HA.
+				config.DeviceClass = SetDefault(config.DeviceClass, "irradiance")
+				config.Icon = SetDefault(config.Icon, "mdi:weather-sunny")
+
+			case config.Value.TypeValue == "Currency":
+				fallthrough
+			case config.Units == "AUD":
+				fallthrough
+			case config.Units == "$":
+				config.DeviceClass = SetDefault(config.DeviceClass, "monetary")
+				config.Icon = SetDefault(config.Icon, "mdi:currency-usd")
+
+				// p13013 - power_factor
+
+			case config.Units == "GPS":
+				// config.DeviceClass = SetDefault(config.DeviceClass, "")
+				config.Icon = SetDefault(config.Icon, "mdi:crosshairs-gps")
 
 			default:
 				config.DeviceClass = SetDefault(config.DeviceClass, "")
 				config.Icon = SetDefault(config.Icon, "")
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value }}")
 		}
 
 		if config.LastReset != "" {

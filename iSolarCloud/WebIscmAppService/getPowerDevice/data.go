@@ -39,7 +39,7 @@ type ResultData struct {
 	PsGUID           valueTypes.String   `json:"psGuid" PointId:"ps_guid"`
 	SnCode           interface{}         `json:"snCode" PointId:"sn_code"`
 	SyncDate         interface{}         `json:"syncDate" PointId:"sync_date"`
-	UpdateDate       valueTypes.DateTime `json:"updateDate" PointId:"update_date" PointNameDateFormat:"2006-01-02 15:04:05"`
+	UpdateDate       valueTypes.DateTime `json:"updateDate" PointId:"update_date" PointNameDateFormat:"DateTimeLayout"`
 	UpdateUserCode   interface{}         `json:"updateUserCode" PointId:"update_user_code"`
 }
 

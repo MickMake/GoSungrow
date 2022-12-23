@@ -29,23 +29,23 @@ type ResultData struct {
 	ReportEmailConfigInfoList []struct {
 		Email      valueTypes.String `json:"email"`
 		ReportList []struct {
-			CreateTime                 valueTypes.DateTime `json:"create_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+			CreateTime                 valueTypes.DateTime `json:"create_time" PointNameDateFormat:"DateTimeLayout"`
 			CreateUserId               valueTypes.Integer  `json:"create_user_id"`
-			EmailAddTime               valueTypes.DateTime `json:"email_add_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+			EmailAddTime               valueTypes.DateTime `json:"email_add_time" PointNameDateFormat:"DateTimeLayout"`
 			Id                         valueTypes.Integer  `json:"id"`
 			IsAllowEmailSend           valueTypes.Bool     `json:"is_allow_email_send"`
 			IsBank                     valueTypes.Bool     `json:"is_bank"`
 			IsCanRenewSendConfirmEmail valueTypes.Bool     `json:"is_can_renew_send_confirm_email"`
 			IsNewWeb                   valueTypes.Bool     `json:"is_new_web"`
 			OrderId                    valueTypes.Integer  `json:"order_id"`
-			ReSendConfirmEmailTime     valueTypes.DateTime `json:"re_send_confirm_email_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+			ReSendConfirmEmailTime     valueTypes.DateTime `json:"re_send_confirm_email_time" PointNameDateFormat:"DateTimeLayout"`
 			ReportId                   valueTypes.Integer  `json:"report_id"`
 			ReportName                 valueTypes.String   `json:"report_name"`
 			SendEmail                  valueTypes.String   `json:"send_email"`
 			Status                     valueTypes.Bool     `json:"status"`
 			TimeDimension              valueTypes.Integer  `json:"time_dimension"`
 			Type                       valueTypes.Integer  `json:"type"`
-			UpdateTime                 valueTypes.DateTime `json:"update_time" PointNameDateFormat:"2006-01-02 15:04:05"`
+			UpdateTime                 valueTypes.DateTime `json:"update_time" PointNameDateFormat:"DateTimeLayout"`
 			UserId                     valueTypes.Integer  `json:"user_id"`
 		} `json:"report_list" DataTable:"true"`
 	} `json:"report_email_config_info_list"`
