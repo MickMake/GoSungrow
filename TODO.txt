@@ -1,6 +1,10 @@
 Next up:
   - Add supoort for yaml output.
-  - 
+  - Add error output from iSolarCloud to mqtt.
+  - Add iSolarCloud state to mqtt.
+  - Add retry counts when run as 'mqtt run' or 'mqtt sync' and exit after a configured number.
+  - Add retry and max_retry to mqtt.
+
 
 General issues:
 	- p13011                  Overview                          Total Active Power        0.587          W
