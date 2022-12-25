@@ -1,3 +1,7 @@
+Next up:
+  - Add supoort for yaml output.
+  - 
+
 General issues:
 	- p13011                  Overview                          Total Active Power        0.587          W
 	- Change unit in "PointUnitFrom" when /1000.
