@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="76adadc9-ae71-42a6-82a1-66dbc8ecb14c" name="Changes" comment="" />
+    <list default="true" id="76adadc9-ae71-42a6-82a1-66dbc8ecb14c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/cmd_mqtt.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_mqtt.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/getPsDetail/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/getPsDetail/data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/AppService/queryDeviceList/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/AppService/queryDeviceList/data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iSolarCloud/api/struct_point.go" beforeDir="false" afterPath="$PROJECT_DIR$/iSolarCloud/api/struct_point.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/sensors.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/sensors.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmHa/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/mmHa/struct.go" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -565,16 +573,6 @@
           <option name="timeStamp" value="8165" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/iSolarCloud/api/struct_point.go</url>
-          <line>52</line>
-          <option name="timeStamp" value="8236" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/iSolarCloud/api/struct_point.go</url>
-          <line>47</line>
-          <option name="timeStamp" value="8237" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/iSolarCloud/api/struct_data.go</url>
           <line>71</line>
           <option name="timeStamp" value="8311" />
@@ -720,9 +718,9 @@
           <option name="timeStamp" value="8769" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/mmHa/struct.go</url>
-          <line>554</line>
-          <option name="timeStamp" value="8793" />
+          <url>file://$PROJECT_DIR$/iSolarCloud/api/struct_point.go</url>
+          <line>82</line>
+          <option name="timeStamp" value="8828" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

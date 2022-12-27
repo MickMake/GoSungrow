@@ -80,7 +80,7 @@ func (m *Mqtt) SensorPublishValue(config EntityConfig) error {
 			LastReset: config.LastReset,	// m.GetLastReset(config.FullId),
 			Value:     value,
 		}
-		if config.UpdateFreq == "" {
+		if config.StateClass != "total" {
 			payload = MqttState {
 				Value:     value,
 			}

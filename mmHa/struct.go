@@ -687,34 +687,51 @@ func (config *EntityConfig) FixConfig() {
 				config.Icon = SetDefault(config.Icon, "")
 		}
 
-		if config.LastReset != "" {
-			break
+		switch {
+			case config.Point.IsBoot():
+				config.StateClass = "measurement"
+				config.LastReset = ""
+				config.LastResetValueTemplate = ""
+
+			case config.Point.IsDaily():
+				fallthrough
+			case config.Point.IsMonthly():
+				fallthrough
+			case config.Point.IsYearly():
+				fallthrough
+			case config.Point.IsTotal():
+				config.StateClass = "total"
+				config.LastResetValueTemplate = SetDefault(config.LastResetValueTemplate, "{{ value_json.last_reset | as_datetime }}")
+				// config.LastReset = config.Point.WhenReset(config.Date)
+
+			case config.Point.Is5Minute():
+				fallthrough
+			case config.Point.Is15Minute():
+				fallthrough
+			case config.Point.Is30Minute():
+				fallthrough
+			case config.Point.IsInstant():
+				fallthrough
+			default:
+				config.StateClass = "measurement"
+				config.LastReset = ""
+				config.LastResetValueTemplate = ""
 		}
 
+		// if config.LastReset == "" {
+		// 	break
+		// }
+		//
 		// pt := api.GetDevicePoint(config.FullId)
 		// if !pt.Valid {
 		// 	break
 		// }
-
-		if config.StateClass == "instant" {
-			config.StateClass = "measurement"
-			break
-		}
-
-		if config.StateClass == "" {
-			config.StateClass = "measurement"
-			break
-		}
-
+		//
 		// config.LastReset = pt.WhenReset()
-		config.LastResetValueTemplate = SetDefault(config.LastResetValueTemplate, "{{ value_json.last_reset | as_datetime() }}")
+		// config.LastResetValueTemplate = SetDefault(config.LastResetValueTemplate, "{{ value_json.last_reset | as_datetime }}")
 		// config.LastResetValueTemplate = SetDefault(config.LastResetValueTemplate, "{{ value_json.last_reset | int | timestamp_local | as_datetime }}")
-
-		if config.LastReset == "" {
-			config.StateClass = "measurement"
-			break
-		}
-		config.StateClass = "total"
+		// config.StateClass = "total"
+		// config.StateClass = "measurement"
 	}
 }
 

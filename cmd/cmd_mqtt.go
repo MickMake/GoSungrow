@@ -46,6 +46,7 @@ type CmdMqtt struct {
 	Client         *mmHa.Mqtt
 	endpoints      MqttEndPoints
 	points         getDevicePointAttrs.PointsMap
+	previous       map[string]*api.DataEntries
 
 	optionLogLevel      int
 	optionSleepDelay    time.Duration
@@ -67,6 +68,7 @@ func NewCmdMqtt() *CmdMqtt {
 			optionLogLevel:      LogLevelInfo,
 			optionSleepDelay:    time.Second * 40,		// Takes up to 40 seconds for data to come in.
 			optionFetchSchedule: time.Minute * 5,
+			previous:            make(map[string]*api.DataEntries, 0),
 		}
 	}
 
@@ -84,8 +86,8 @@ func (c *CmdMqtt) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		var cmdMqtt = &cobra.Command{
 			Use:                   "mqtt",
 			Aliases:               []string{""},
-			Short:                 fmt.Sprintf("Connect to a HASSIO broker."),
-			Long:                  fmt.Sprintf("Connect to a HASSIO broker."),
+			Short:                 "Connect to a HASSIO broker.",
+			Long:                  "Connect to a HASSIO broker.",
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               nil,
@@ -99,8 +101,8 @@ func (c *CmdMqtt) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		var cmdMqttRun = &cobra.Command{
 			Use:                   "run",
 			Aliases:               []string{""},
-			Short:                 fmt.Sprintf("One-off sync to a HASSIO broker."),
-			Long:                  fmt.Sprintf("One-off sync to a HASSIO broker."),
+			Short:                 "One-off sync to a HASSIO broker.",
+			Long:                  "One-off sync to a HASSIO broker.",
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               func(cmd *cobra.Command, args []string) error {
@@ -124,8 +126,8 @@ func (c *CmdMqtt) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		var cmdMqttSync = &cobra.Command{
 			Use:                   "sync",
 			Aliases:               []string{""},
-			Short:                 fmt.Sprintf("Sync to a HASSIO MQTT broker."),
-			Long:                  fmt.Sprintf("Sync to a HASSIO MQTT broker."),
+			Short:                 "Sync to a HASSIO MQTT broker.",
+			Long:                  "Sync to a HASSIO MQTT broker.",
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               func(cmd *cobra.Command, args []string) error {
@@ -150,13 +152,13 @@ func (c *CmdMqtt) AttachCommand(cmd *cobra.Command) *cobra.Command {
 
 func (c *CmdMqtt) AttachFlags(cmd *cobra.Command, viper *viper.Viper) {
 	for range Only.Once {
-		cmd.PersistentFlags().StringVarP(&c.MqttUsername, flagMqttUsername, "", "", fmt.Sprintf("HASSIO: mqtt username."))
+		cmd.PersistentFlags().StringVarP(&c.MqttUsername, flagMqttUsername, "", "", "HASSIO: mqtt username.")
 		viper.SetDefault(flagMqttUsername, "")
-		cmd.PersistentFlags().StringVarP(&c.MqttPassword, flagMqttPassword, "", "", fmt.Sprintf("HASSIO: mqtt password."))
+		cmd.PersistentFlags().StringVarP(&c.MqttPassword, flagMqttPassword, "", "", "HASSIO: mqtt password.")
 		viper.SetDefault(flagMqttPassword, "")
-		cmd.PersistentFlags().StringVarP(&c.MqttHost, flagMqttHost, "", "", fmt.Sprintf("HASSIO: mqtt host."))
+		cmd.PersistentFlags().StringVarP(&c.MqttHost, flagMqttHost, "", "", "HASSIO: mqtt host.")
 		viper.SetDefault(flagMqttHost, "")
-		cmd.PersistentFlags().StringVarP(&c.MqttPort, flagMqttPort, "", "", fmt.Sprintf("HASSIO: mqtt port."))
+		cmd.PersistentFlags().StringVarP(&c.MqttPort, flagMqttPort, "", "", "HASSIO: mqtt port.")
 		viper.SetDefault(flagMqttPort, "")
 	}
 }
@@ -392,8 +394,21 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 		c.LogInfo("Syncing %d entries with HASSIO from %s.\n", len(data.Map), endpoint)
 
 		for o := range data.Map {
+			refreshConfig := newDay
+
 			entries := data.Map[o]
 			r := entries.GetEntry(api.LastEntry) // Gets the last entry
+
+			if strings.Contains(r.EndPoint, "pv_to_grid_energy") {
+				fmt.Printf("EMPTY[%s] -> %s\n", r.EndPoint, r.Value.String())
+			}
+			if _, ok := c.previous[o]; ok {
+				previous := c.previous[o].GetEntry(api.LastEntry)
+				if r.Value.String() != previous.Value.String() {
+					refreshConfig = true
+				}
+			}
+			c.previous[o] = entries
 
 			if !r.Point.Valid {
 				// Any point that shouldn't be passed through to MQTT is ignored
@@ -425,15 +440,15 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 				name = mmHa.JoinStringsForName(" - ", r.Parent.Key, r.Point.Id, r.Point.GroupName, r.Point.Description)
 			}
 
-			if r.Point.Unit == "" {
-				r.Point.Unit = r.Point.ValueType
-			}
-			if r.Point.Unit == "Bool" {
-				r.Point.Unit = mmHa.LabelBinarySensor
-			}
-			if r.Point.ValueType == "Bool" {
-				r.Point.Unit = mmHa.LabelBinarySensor
-			}
+			// if r.Point.Unit == "" {
+			// 	r.Point.Unit = r.Point.ValueType
+			// }
+			// if r.Point.Unit == "Bool" {
+			// 	r.Point.Unit = mmHa.LabelBinarySensor
+			// }
+			// if r.Point.ValueType == "Bool" {
+			// 	r.Point.Unit = mmHa.LabelBinarySensor
+			// }
 
 			re := mmHa.EntityConfig {
 				Name:        name,	// mmHa.JoinStringsForName(" - ", id), // r.Point.Name, // PointName,
@@ -454,28 +469,21 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 				Icon:        r.Current.PointIcon(),
 				UpdateFreq:  r.Current.DataStructure.PointUpdateFreq,
 
-				LastReset:              r.Point.WhenReset(),
+				// LastReset:   "",
 				// LastResetValueTemplate: "",
 			}
 
-			// if strings.Contains(r.EndPoint, "grid_to_load_energy") {
-			// 	fmt.Printf("EMPTY[%s] -> %s\n", r.EndPoint, r.Value.String())
-			// }
-			// if r.Current.DataStructure.PointUpdateFreq != "" {
-			// 	fmt.Printf("EMPTY[%s] -> %s\n", r.EndPoint, r.Value.String())
-			// }
 			re.FixConfig()
-
-			switch {
-				case r.Point.IsTotal():
-					re.StateClass = "total"
-				default:
-					re.StateClass = "measurement"
+			if re.LastResetValueTemplate != "" {
+				re.LastReset = r.Point.WhenReset(r.Date)
 			}
 
+			// if strings.Contains(r.EndPoint, "pv_to_grid_energy") {
+			// 	fmt.Printf("EMPTY[%s] -> %s\n", r.EndPoint, r.Value.String())
+			// }
 			// fmt.Printf("UNIT[%s] -> %s / %s / %s / %s /\n", id, r.Point.GroupName, r.Point.Unit, r.Point.ValueType, r.Point.Description)
 
-			if newDay {
+			if refreshConfig {
 				c.LogPlainInfo("C")
 				c.LogDebug("Config: [%s]\n", r.EndPoint)
 				c.Error = c.Client.BinarySensorPublishConfig(re)
@@ -583,6 +591,15 @@ func (c *CmdMqtt) UpdatePoint(entry *api.DataEntry) error {
 		if entry.Point.Unit == "" {
 			entry.Point.Unit = p.Unit.String()
 			// fmt.Printf("[%s] -> %s\n", entry.EndPoint, entry.Value.String())
+		}
+		if entry.Point.Unit == "" {
+			entry.Point.Unit = entry.Point.ValueType
+		}
+		if entry.Point.Unit == "Bool" {
+			entry.Point.Unit = mmHa.LabelBinarySensor
+		}
+		if entry.Point.ValueType == "Bool" {
+			entry.Point.Unit = mmHa.LabelBinarySensor
 		}
 
 		// Parent

@@ -31,60 +31,63 @@ func (p *Point) FixUnitType() Point {
 	return *p
 }
 
-func (p *Point) WhenReset() string {
+func (p *Point) WhenReset(date valueTypes.DateTime) string {
 	var ret string
 
 	for range Only.Once {
 		var err error
-		now := time.Now()
+		var now time.Time
+		// now := time.Now()
+		now = date.Time
 
 		switch {
 			case p.Is5Minute():
-				now, err = time.Parse("2006-01-02T15:04:05", now.Truncate(time.Minute * 5).Format("2006-01-02T15:04:05"))
+				// now, err = time.Parse("2006-01-02T15:04:05", now.Truncate(time.Minute * 5).Format("2006-01-02T15:04:05"))
 				// ret = fmt.Sprintf("%d", now.Unix())
-				ret = now.Format("2006-01-02T15:04:05") + ""
+				ret = now.Truncate(time.Minute * 5).Format(valueTypes.DateTimeFullLayout)
 
 			case p.Is15Minute():
-				now, err = time.Parse("2006-01-02T15:04:05", now.Truncate(time.Minute * 15).Format("2006-01-02T15:04:05"))
+				// now, err = time.Parse("2006-01-02T15:04:05", now.Truncate(time.Minute * 15).Format("2006-01-02T15:04:05"))
 				// ret = fmt.Sprintf("%d", now.Unix())
-				ret = now.Format("2006-01-02T15:04:05") + ""
+				ret = now.Truncate(time.Minute * 15).Format(valueTypes.DateTimeFullLayout)
 
 			case p.Is30Minute():
-				now, err = time.Parse("2006-01-02T15:04:05", now.Truncate(time.Minute * 30).Format("2006-01-02T15:04:05"))
+				// now, err = time.Parse("2006-01-02T15:04:05", now.Truncate(time.Minute * 30).Format("2006-01-02T15:04:05"))
 				// ret = fmt.Sprintf("%d", now.Unix())
-				ret = now.Format("2006-01-02T15:04:05") + ""
+				ret = now.Truncate(time.Minute * 30).Format(valueTypes.DateTimeFullLayout)
 
 
 			case p.IsInstant():
 				// ret = ""
-				ret = now.Format("2006-01-02T15:04:05") + ""
+				// valueTypes.DateTimeFullLayout
+				ret = now.Format(valueTypes.DateTimeFullLayout)
 
 			case p.IsBoot():
 				now, err = time.Parse("2006-01-02T15:04:05", now.Format("2006-01-02") + "T00:00:00")
 				// ret = fmt.Sprintf("%d", now.Unix())
-				ret = now.Format("2006-01-02T15:04:05") + ""
+				ret = now.Format(valueTypes.DateTimeFullLayout)
 
 			case p.IsDaily():
 				now, err = time.Parse("2006-01-02T15:04:05", now.Format("2006-01-02") + "T00:00:00")
 				// ret = fmt.Sprintf("%d", now.Unix())
-				ret = now.Format("2006-01-02T15:04:05") + ""
+				ret = now.Format(valueTypes.DateTimeFullLayout)
 
 			case p.IsMonthly():
 				now, err = time.Parse("2006-01-02T15:04:05", now.Format("2006-01") + "-01T00:00:00")
 				ret = fmt.Sprintf("%d", now.Unix())
-				ret = now.Format("2006-01-02T15:04:05") + ""
+				ret = now.Format(valueTypes.DateTimeFullLayout)
 
 			case p.IsYearly():
 				now, err = time.Parse("2006-01-02T15:04:05", now.Format("2006") + "-01-01T00:00:00")
 				ret = fmt.Sprintf("%d", now.Unix())
-				ret = now.Format("2006-01-02T15:04:05") + ""
+				ret = now.Format(valueTypes.DateTimeFullLayout)
 
 			case p.IsTotal():
 				ret = "1970-01-01T00:00:00"
 
 			default:
 				// ret = "1970-01-01T00:00:00"
-				ret = now.Format("2006-01-02T15:04:05") + ""
+				ret = now.Format(valueTypes.DateTimeFullLayout)
 		}
 		if err != nil {
 			// now := time.Now()
