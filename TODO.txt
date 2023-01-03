@@ -1,16 +1,23 @@
-General issues:
-	- p13011                  Overview                          Total Active Power        0.587          W
-	- Change unit in "PointUnitFrom" when /1000.
+Next up:
+  - Add supoort for yaml output.
+  - Add error output from iSolarCloud to mqtt.
+  - Add iSolarCloud state to mqtt.
+  - Add retry counts when run as 'mqtt run' or 'mqtt sync' and exit after a configured number.
+  - Add retry and max_retry to mqtt.
+  - Maybe add all known endpoints to mqtt as an option for regular polling instead of using a json file.
+
 
 Formatting issues:
 	- getUpTimePoint		<- map[string]
 	- AppService.getKpiInfo		<- map[string]
 	- AppService.queryDeviceList	<- map[string]
 
+
 Fetch issues with:
 	- showInverterByUnit	- too large.
 	- WebAppService.getReportListByType	- too large.
 	- Need to deal with memory management on large JSON objects.
+
 
 Critical metadata
 	- WebIscmAppService.modelPointsPage DeviceModelId:714 DeviceType:14 - Use this to fetch all points for a particular ps_key.
@@ -36,6 +43,7 @@ Critical metadata
 	- WebAppService.getSelfReportPoint
 	- WebAppService.getDevicePointAttrs Uuid:1179878 DeviceType2:14 PsId:1171348
 
+
 Handle virtual points automatically.
 	- iSolarCloud/AppService/getPsDetail/data.go
 	- iSolarCloud/AppService/queryDeviceListForApp/data.go
@@ -46,22 +54,24 @@ Handle virtual points automatically.
 	- iSolarCloud/AppService/getPsList/data.go
 	- iSolarCloud/AppService/getPsDetail/data.go
 
-Present these better:
-	- AppService.getUpTimePoint
 
 Handle large arrays by un-flattening.
     - iSolarCloud/AppService/getPowerStationData/data.go
 
+
 Figure out how to better present large []structs.
     - iSolarCloud/AppService/powerDevicePointList/data.go
 
+
 Fix DesignCapacity errors when set to Integer.
     - iSolarCloud/AppService/queryPowerStationInfo/data.go
+
 
 Not producing correct results.
     - iSolarCloud/AppService/queryPsIdList/data.go
     - iSolarCloud/AppService/queryPsProfit/data.go
     - iSolarCloud/AppService/queryPsNameByPsId/data.go
+
 
 Remove redundant reflect scans in
 	- Search for 'DO NOT BREAK'
