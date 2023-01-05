@@ -399,9 +399,9 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 			entries := data.Map[o]
 			r := entries.GetEntry(api.LastEntry) // Gets the last entry
 
-			if strings.Contains(r.EndPoint, "pv_to_grid_energy") {
-				fmt.Printf("EMPTY[%s] -> %s\n", r.EndPoint, r.Value.String())
-			}
+			//if strings.Contains(r.EndPoint, "pv_to_grid_energy") {
+			//	fmt.Printf("EMPTY[%s] -> %s\n", r.EndPoint, r.Value.String())
+			//}
 			if _, ok := c.previous[o]; ok {
 				previous := c.previous[o].GetEntry(api.LastEntry)
 				if r.Value.String() != previous.Value.String() {
