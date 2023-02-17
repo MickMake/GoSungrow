@@ -1,10 +1,11 @@
 package getPowerDeviceFactory
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
 const Url = "/v1/devService/getPowerDeviceFactory"
@@ -23,7 +24,7 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-type ResultData   struct {
+type ResultData struct {
 	IndustryList []struct {
 		CodeValue  valueTypes.String `json:"code_value"`
 		CodeName   valueTypes.String `json:"code_name"`

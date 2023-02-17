@@ -1,10 +1,11 @@
 package getIncomeSettingInfos
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -41,7 +42,7 @@ type ResultData struct {
 		NationAllowanceMoney   interface{}         `json:"nation_allowance_money"`
 		ParamIncomeUnit        valueTypes.Integer  `json:"param_income_unit"`
 		ProvinceAllowanceMoney interface{}         `json:"province_allowance_money"`
-		PsId                   valueTypes.PsId  `json:"ps_id"`
+		PsId                   valueTypes.PsId     `json:"ps_id"`
 		StartTime              valueTypes.DateTime `json:"start_time" PointNameDateFormat:"DateTimeLayout"`
 		UseSharpPeekValleyFlat interface{}         `json:"use_sharp_peek_valley_flat"`
 		ValidFlag              valueTypes.Bool     `json:"valid_flag"`
@@ -52,7 +53,7 @@ type ResultData struct {
 		EndTime                  valueTypes.DateTime `json:"end_time" PointNameDateFormat:"DateTimeLayout"`
 		IntervalTimeCharge       valueTypes.String   `json:"interval_time_charge"`
 		OnlineElectricityPercent valueTypes.Float    `json:"online_electricity_percent" PointUnit:"%"`
-		PsId                     valueTypes.PsId  `json:"ps_id"`
+		PsId                     valueTypes.PsId     `json:"ps_id"`
 		StartTime                valueTypes.DateTime `json:"start_time" PointNameDateFormat:"DateTimeLayout"`
 		UseElectricityDiscount   valueTypes.Float    `json:"use_electricity_discount" PointUnit:"%"`
 	} `json:"powerSelfUseTimesChargeMap" PointId:"power_selfuse_times_charge_map"`

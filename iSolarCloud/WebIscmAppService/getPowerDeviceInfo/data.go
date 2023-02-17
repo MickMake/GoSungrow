@@ -1,9 +1,9 @@
 package getPowerDeviceInfo
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 
 	"fmt"
 )
@@ -13,7 +13,7 @@ const Disabled = false
 const EndPointName = "WebIscmAppService.getPowerDeviceInfo"
 
 type RequestData struct {
-	Uuid       valueTypes.String `json:"uuid" required:"true"`
+	Uuid       valueTypes.String  `json:"uuid" required:"true"`
 	DeviceType valueTypes.Integer `json:"device_type" required:"true"`
 }
 

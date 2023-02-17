@@ -1,10 +1,11 @@
 package getCommunicationDeviceConfigInfo
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
 const Url = "/v1/devService/getCommunicationDeviceConfigInfo"
@@ -23,10 +24,9 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData []struct {
-	GoStructParent         GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"TypeId"`
-	GoStruct               GoStruct.GoStruct        `json:"-" PointIdFrom:"TypeId" PointIdReplace:"false"`
+	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"TypeId"`
+	GoStruct       GoStruct.GoStruct       `json:"-" PointIdFrom:"TypeId" PointIdReplace:"false"`
 
 	TypeId                 valueTypes.Integer `json:"type_id"`
 	DeviceName             valueTypes.String  `json:"device_name"`

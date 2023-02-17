@@ -1,11 +1,12 @@
 package getAllPowerDeviceSetName
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/getAllPowerDeviceSetName"
@@ -25,9 +26,9 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	Remark  valueTypes.String `json:"remark"`
-	SetId   valueTypes.Integer  `json:"set_id"`
-	SetName valueTypes.String `json:"set_name"`
+	Remark  valueTypes.String  `json:"remark"`
+	SetId   valueTypes.Integer `json:"set_id"`
+	SetName valueTypes.String  `json:"set_name"`
 }
 
 func (e *ResultData) IsValid() error {

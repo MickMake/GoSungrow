@@ -1,10 +1,11 @@
 package queryAllPsIdAndName
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
 const Url = "/v1/powerStationService/queryAllPsIdAndName"
@@ -27,8 +28,8 @@ type ResultData struct {
 	PageList []struct {
 		GoStruct GoStruct.GoStruct `json:"-" PointIdReplace:"true" PointIdFrom:"PsId"`
 
-		PsId     valueTypes.PsId   `json:"ps_id"`
-		PsName   valueTypes.String `json:"ps_name"`
+		PsId   valueTypes.PsId   `json:"ps_id"`
+		PsName valueTypes.String `json:"ps_name"`
 	} `json:"pageList" PointId:"page_list" DataTable:"true"`
 }
 

@@ -1,8 +1,9 @@
 package api
 
 import (
-	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"time"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
 )
 
 type EndPoint interface {

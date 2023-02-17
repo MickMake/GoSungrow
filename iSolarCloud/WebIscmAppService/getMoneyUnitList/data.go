@@ -1,10 +1,11 @@
 package getMoneyUnitList
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -25,7 +26,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"CodeId"`
+	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"CodeId"`
 
 	CodeId   valueTypes.String `json:"code_id"`
 	CodeName valueTypes.String `json:"code_name"`
@@ -35,7 +36,6 @@ func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

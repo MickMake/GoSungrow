@@ -1,38 +1,38 @@
 package iSolarCloud
 
 import (
-	"GoSungrow/iSolarCloud/AppService/getHouseholdStoragePsReport"
-	"GoSungrow/iSolarCloud/AppService/getKpiInfo"
-	"GoSungrow/iSolarCloud/AppService/getPowerDevicePointInfo"
-	"GoSungrow/iSolarCloud/AppService/getPowerStationData"
-	"GoSungrow/iSolarCloud/AppService/getPsDetail"
-	"GoSungrow/iSolarCloud/AppService/getPsDetailWithPsType"
-	"GoSungrow/iSolarCloud/AppService/getPsList"
-	"GoSungrow/iSolarCloud/AppService/queryDeviceList"
-	"GoSungrow/iSolarCloud/AppService/queryMutiPointDataList"
-	"GoSungrow/iSolarCloud/WebAppService/getDevicePointAttrs"
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct/output"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 	"math"
 	"os"
 	"strings"
 	"time"
-)
 
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getHouseholdStoragePsReport"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getKpiInfo"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPowerDevicePointInfo"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPowerStationData"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPsDetail"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPsDetailWithPsType"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPsList"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/queryDeviceList"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/queryMutiPointDataList"
+	"github.com/MickMake/GoSungrow/iSolarCloud/WebAppService/getDevicePointAttrs"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoUnify/Only"
+)
 
 // GetPowerDevicePointInfo - AppService.getPowerDevicePointInfo
 func (sg *SunGrow) GetPowerDevicePointInfo(min valueTypes.Integer, max valueTypes.Integer) ([]getPowerDevicePointInfo.ResultData, error) {
 	var ret []getPowerDevicePointInfo.ResultData
 	for range Only.Once {
-		_, _ = fmt.Fprintf(os.Stderr,"Scanning from %s to %s.", min, max)
+		_, _ = fmt.Fprintf(os.Stderr, "Scanning from %s to %s.", min, max)
 		for id := min.Value(); id < max.Value(); id++ {
 			PrintPause(id, 20)
 
 			ep := sg.GetByStruct(getPowerDevicePointInfo.EndPointName,
-				getPowerDevicePointInfo.RequestData {
+				getPowerDevicePointInfo.RequestData{
 					Id: valueTypes.SetIntegerValue(id),
 				},
 				time.Hour*24,
@@ -44,7 +44,7 @@ func (sg *SunGrow) GetPowerDevicePointInfo(min valueTypes.Integer, max valueType
 			data := getPowerDevicePointInfo.Assert(ep)
 			ret = append(ret, data.Response.ResultData)
 		}
-		_, _ = fmt.Fprintf(os.Stderr,"\n")
+		_, _ = fmt.Fprintf(os.Stderr, "\n")
 	}
 
 	return ret, sg.Error
@@ -102,7 +102,7 @@ func (sg *SunGrow) GetAllPointsData(psIds ...string) error {
 			// getPowerStationData
 			// api raw getPowerStationData '{"date_id":"20221007","date_type":"1","ps_id":"1171348"}'
 			ep = sg.GetByStruct(getPowerStationData.EndPointName,
-				getPowerStationData.RequestData{ PsId: psId, DateType: valueTypes.SetStringValue("1"), DateId: valueTypes.SetDateTimeString("20221007")},
+				getPowerStationData.RequestData{PsId: psId, DateType: valueTypes.SetStringValue("1"), DateId: valueTypes.SetDateTimeString("20221007")},
 				DefaultCacheTimeout)
 			if sg.IsError() {
 				break
@@ -117,7 +117,7 @@ func (sg *SunGrow) GetAllPointsData(psIds ...string) error {
 
 			// api raw getPowerStationData '{"date_id":"202210","date_type":"2","ps_id":"1171348"}'
 			ep = sg.GetByStruct(getPowerStationData.EndPointName,
-				getPowerStationData.RequestData{ PsId: psId, DateType: valueTypes.SetStringValue("2"), DateId: valueTypes.SetDateTimeString("202210")},
+				getPowerStationData.RequestData{PsId: psId, DateType: valueTypes.SetStringValue("2"), DateId: valueTypes.SetDateTimeString("202210")},
 				DefaultCacheTimeout)
 			if sg.IsError() {
 				break
@@ -132,7 +132,7 @@ func (sg *SunGrow) GetAllPointsData(psIds ...string) error {
 
 			// api raw getPowerStationData '{"date_id":"2022","date_type":"3","ps_id":"1171348"}'
 			ep = sg.GetByStruct(getPowerStationData.EndPointName,
-				getPowerStationData.RequestData{ PsId: psId, DateType: valueTypes.SetStringValue("3"), DateId: valueTypes.SetDateTimeString("2022")},
+				getPowerStationData.RequestData{PsId: psId, DateType: valueTypes.SetStringValue("3"), DateId: valueTypes.SetDateTimeString("2022")},
 				DefaultCacheTimeout)
 			if sg.IsError() {
 				break
@@ -145,10 +145,9 @@ func (sg *SunGrow) GetAllPointsData(psIds ...string) error {
 			}
 			points.AppendMap(data)
 
-
 			// queryDeviceList
 			// api get AppService.queryDeviceList '{"ps_id":"1171348"}'
-			ep = sg.GetByStruct(queryDeviceList.EndPointName, queryDeviceList.RequestData{ PsId: psId }, DefaultCacheTimeout)
+			ep = sg.GetByStruct(queryDeviceList.EndPointName, queryDeviceList.RequestData{PsId: psId}, DefaultCacheTimeout)
 			if sg.IsError() {
 				break
 			}
@@ -160,11 +159,10 @@ func (sg *SunGrow) GetAllPointsData(psIds ...string) error {
 			}
 			points.AppendMap(data)
 
-
 			// getHouseholdStoragePsReport
 			// api get getHouseholdStoragePsReport '{"date_id":"20221001","date_type":"1","ps_id":"1129147"}'
 			ep = sg.GetByStruct(getHouseholdStoragePsReport.EndPointName,
-				getHouseholdStoragePsReport.RequestData{ DateId: valueTypes.SetDateTimeString("20221001"), DateType: valueTypes.SetStringValue("1"), PsId: psId },
+				getHouseholdStoragePsReport.RequestData{DateId: valueTypes.SetDateTimeString("20221001"), DateType: valueTypes.SetStringValue("1"), PsId: psId},
 				DefaultCacheTimeout,
 			)
 			if sg.IsError() {
@@ -178,9 +176,8 @@ func (sg *SunGrow) GetAllPointsData(psIds ...string) error {
 			}
 			points.AppendMap(data)
 
-
 			// getPsDetailWithPsType
-			ep = sg.GetByStruct(getPsDetailWithPsType.EndPointName, getPsDetailWithPsType.RequestData{ PsId: psId }, DefaultCacheTimeout)
+			ep = sg.GetByStruct(getPsDetailWithPsType.EndPointName, getPsDetailWithPsType.RequestData{PsId: psId}, DefaultCacheTimeout)
 			if sg.IsError() {
 				break
 			}
@@ -192,9 +189,8 @@ func (sg *SunGrow) GetAllPointsData(psIds ...string) error {
 			}
 			points.AppendMap(data)
 
-
 			// getPsDetail
-			ep = sg.GetByStruct(getPsDetail.EndPointName, getPsDetail.RequestData{ PsId: psId }, DefaultCacheTimeout)
+			ep = sg.GetByStruct(getPsDetail.EndPointName, getPsDetail.RequestData{PsId: psId}, DefaultCacheTimeout)
 			if sg.IsError() {
 				break
 			}
@@ -206,9 +202,8 @@ func (sg *SunGrow) GetAllPointsData(psIds ...string) error {
 			}
 			points.AppendMap(data)
 
-
 			// getKpiInfo
-			ep = sg.GetByStruct(getKpiInfo.EndPointName, getKpiInfo.RequestData{ }, DefaultCacheTimeout)
+			ep = sg.GetByStruct(getKpiInfo.EndPointName, getKpiInfo.RequestData{}, DefaultCacheTimeout)
 			if sg.IsError() {
 				break
 			}
@@ -219,7 +214,6 @@ func (sg *SunGrow) GetAllPointsData(psIds ...string) error {
 				break
 			}
 			points.AppendMap(data)
-
 
 			// // getPowerDevicePointInfo
 			// ep = sg.GetByStruct(getPowerDevicePointInfo.EndPointName, getPowerDevicePointInfo.RequestData{ Id: psId }, DefaultCacheTimeout)
@@ -233,7 +227,6 @@ func (sg *SunGrow) GetAllPointsData(psIds ...string) error {
 			// 	break
 			// }
 			// points.AppendMap(data)
-
 
 			// // queryDeviceRealTimeDataByPsKeys
 			// ep = sg.GetByStruct(queryDeviceRealTimeDataByPsKeys.EndPointName, queryDeviceRealTimeDataByPsKeys.RequestData{ PsKeyList: psId }, DefaultCacheTimeout)
@@ -255,7 +248,6 @@ func (sg *SunGrow) GetAllPointsData(psIds ...string) error {
 
 	return sg.Error
 }
-
 
 // DevicePointAttrs - Return all points associated with psIds and device_type filter.
 func (sg *SunGrow) DevicePointAttrs(psIds []string, deviceType string) (getDevicePointAttrs.Points, error) {
@@ -335,12 +327,12 @@ func (sg *SunGrow) GetDevicePointAttrs(psId valueTypes.PsId) (getDevicePointAttr
 
 		for _, pid := range tree.Devices {
 			ep := sg.GetByStruct(getDevicePointAttrs.EndPointName,
-				getDevicePointAttrs.RequestData {
+				getDevicePointAttrs.RequestData{
 					Uuid:        pid.UUID,
 					PsId2:       pid.PsId,
 					DeviceType2: pid.DeviceType,
 				},
-				time.Hour * 24,
+				time.Hour*24,
 			)
 			if sg.IsError() {
 				break
@@ -354,7 +346,6 @@ func (sg *SunGrow) GetDevicePointAttrs(psId valueTypes.PsId) (getDevicePointAttr
 
 	return ret, sg.Error
 }
-
 
 func (sg *SunGrow) PointData(startDate string, endDate string, interval string, points ...string) error {
 	for range Only.Once {
@@ -384,10 +375,10 @@ func (sg *SunGrow) PointData(startDate string, endDate string, interval string, 
 
 		// _, _ = fmt.Fprintf(os.Stderr,"Points: %s\n", strings.Join(points, " "))
 		data.SetArgs(
-			"StartTimeStamp:" + sd.Format(valueTypes.DateTimeLayoutSecond),
-			"EndTimeStamp:" + ed.Format(valueTypes.DateTimeLayoutSecond),
-			"MinuteInterval:" + interval,
-			"Points:" + strings.Join(points, ","),
+			"StartTimeStamp:"+sd.Format(valueTypes.DateTimeLayoutSecond),
+			"EndTimeStamp:"+ed.Format(valueTypes.DateTimeLayoutSecond),
+			"MinuteInterval:"+interval,
+			"Points:"+strings.Join(points, ","),
 		)
 		data.SetEndpoints(queryMutiPointDataList.EndPointName)
 
@@ -465,23 +456,22 @@ func (sg *SunGrow) PointScan(min string, max string) (string, error) {
 	return ret, sg.Error
 }
 
-
 func PrintPause(index int64, max int) {
 	for range Only.Once {
 		if index == 0 {
-			_, _ = fmt.Fprintf(os.Stderr,"\n%.3d ", index)
+			_, _ = fmt.Fprintf(os.Stderr, "\n%.3d ", index)
 			break
 		}
 
 		m := math.Mod(float64(index), float64(max))
 		if m == 0 {
-			_, _ = fmt.Fprintf(os.Stderr,"PAUSE")
+			_, _ = fmt.Fprintf(os.Stderr, "PAUSE")
 			time.Sleep(time.Millisecond * 500)
 			// fmt.Printf("\r%s%.3d ", strings.Repeat(" ", 4), pni)
-			_, _ = fmt.Fprintf(os.Stderr,"\r%.3d ", index)
+			_, _ = fmt.Fprintf(os.Stderr, "\r%.3d ", index)
 		} else {
 			time.Sleep(time.Millisecond * 100)
-			_, _ = fmt.Fprintf(os.Stderr,".")
+			_, _ = fmt.Fprintf(os.Stderr, ".")
 		}
 	}
 }
@@ -522,15 +512,15 @@ func (sg *SunGrow) QueryMultiPointDataList(startDate valueTypes.DateTime, endDat
 
 		ep := sg.GetByStruct(
 			"AppService.queryMutiPointDataList",
-			queryMutiPointDataList.RequestData {
-				PsId: psId,
+			queryMutiPointDataList.RequestData{
+				PsId:           psId,
 				StartTimeStamp: startDate,
-				EndTimeStamp: endDate,
+				EndTimeStamp:   endDate,
 				MinuteInterval: interval,
-				PsKeys: *points.PsKeys(),
-				Points: points,
+				PsKeys:         *points.PsKeys(),
+				Points:         points,
 			},
-			time.Hour * 24,
+			time.Hour*24,
 		)
 		if sg.IsError() {
 			break
@@ -545,9 +535,9 @@ func (sg *SunGrow) QueryMultiPointDataList(startDate valueTypes.DateTime, endDat
 			break
 		}
 
-		response.Options = OutputOptions {
-			OutputType:  sg.OutputType,
-			SaveAsFile:  sg.SaveAsFile,
+		response.Options = OutputOptions{
+			OutputType:   sg.OutputType,
+			SaveAsFile:   sg.SaveAsFile,
 			GraphRequest: output.GraphRequest{},
 		}
 

@@ -1,10 +1,11 @@
 package getPsValue
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -27,7 +28,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent GoStruct.GoStructParent  `json:"-" PointIdFromChild:"PsId" PointIdReplace:"true"`
+	GoStructParent GoStruct.GoStructParent `json:"-" PointIdFromChild:"PsId" PointIdReplace:"true"`
 
 	PsId          valueTypes.PsId     `json:"ps_id"`
 	Id            valueTypes.Integer  `json:"id"`

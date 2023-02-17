@@ -1,10 +1,11 @@
 package getModuleLogTaskList
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -29,7 +30,7 @@ type ResultData struct {
 	IsMore   valueTypes.Bool    `json:"isMore" PointId:"is_more"`
 	PageList []struct {
 		// PointIdFromChild:"TaskId" PointIdReplace:"true"
-		GoStruct       GoStruct.GoStruct   `json:"-" PointIdReplace:"true" PointIdFrom:"TaskId" PointNameDateFormat:"DateTimeAltLayout" PointTimestampFrom:"CreateTime"`
+		GoStruct GoStruct.GoStruct `json:"-" PointIdReplace:"true" PointIdFrom:"TaskId" PointNameDateFormat:"DateTimeAltLayout" PointTimestampFrom:"CreateTime"`
 
 		TaskId         valueTypes.Integer  `json:"task_id"`
 		CreateTime     valueTypes.DateTime `json:"create_time" PointNameDateFormat:"DateTimeLayout"`

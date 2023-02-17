@@ -5,9 +5,9 @@
 package login
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct/output"
-	"GoSungrow/iSolarCloud/api/GoStruct/reflection"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/reflection"
 	"github.com/MickMake/GoUnify/Only"
 
 	"encoding/json"
@@ -15,7 +15,6 @@ import (
 	"fmt"
 	"time"
 )
-
 
 // api.EndPoint - Import API endpoint interface
 var _ api.EndPoint = (*EndPoint)(nil)
@@ -42,8 +41,8 @@ type Response struct {
 
 // Init - Used to initialize a new endpoint instance. Usually called from an area.
 func Init(apiRoot api.Web) EndPoint {
-	return EndPoint {
-		EndPointStruct: api.EndPointStruct {
+	return EndPoint{
+		EndPointStruct: api.EndPointStruct{
 			ApiRoot:  apiRoot,
 			Area:     api.GetArea(EndPoint{}),
 			Name:     api.GetName(EndPoint{}),
@@ -52,21 +51,20 @@ func Init(apiRoot api.Web) EndPoint {
 			Response: Response{},
 			Error:    nil,
 		},
-		Auth: &SunGrowAuth {
+		Auth: &SunGrowAuth{
 			AppKey:       "",
 			UserAccount:  "",
 			UserPassword: "",
 			TokenFile:    DefaultAuthTokenFile,
 			// Token:        "",
-			Force:        false,
-			lastLogin:    time.Time{},
-			newToken:     false,
+			Force:     false,
+			lastLogin: time.Time{},
+			newToken:  false,
 			// retry:        0,
-			err:          nil,
+			err: nil,
 		},
 	}
 }
-
 
 // ******************************************************************************** //
 
@@ -89,17 +87,18 @@ func (e EndPoint) GetResponse() Response {
 }
 
 // Assert - Used to obtain locally scoped EndPoint methods, (not visible from api.EndPoint).
+//
 //goland:noinspection GoUnusedExportedFunction
 func Assert(e api.EndPoint) EndPoint {
 	return e.(EndPoint)
 }
 
 // AssertResultData - Used to obtain locally scoped ResultData methods, (not visible from api.EndPoint).
+//
 //goland:noinspection GoUnusedExportedFunction
 func AssertResultData(e api.EndPoint) ResultData {
 	return e.(EndPoint).Response.ResultData
 }
-
 
 // ******************************************************************************** //
 
@@ -181,7 +180,6 @@ func (e EndPoint) WriteDataFile() error {
 	return e.ApiWriteDataFile(e.Response.ResultData)
 }
 
-
 // ********************************************************************************
 
 // SetRequest - Save an interface reference as either api.RequestCommon or RequestData.
@@ -255,7 +253,6 @@ func (e EndPoint) IsRequestValid() error {
 	return e.Error
 }
 
-
 // ********************************************************************************
 
 // SetResponse - Save a JSON string to the Response structure.
@@ -311,7 +308,6 @@ func (e EndPoint) ResponseString() string {
 	return output.GetRequestString(e.Response)
 }
 
-
 // ********************************************************************************
 
 // MarshalJSON - Marshall the EndPoint.
@@ -334,7 +330,6 @@ func (e EndPoint) MarshalJSON() ([]byte, error) {
 	// 	Response: e.Response,
 	// })
 }
-
 
 // ********************************************************************************
 
@@ -375,7 +370,6 @@ func (e EndPoint) GetCacheTimeout() time.Duration {
 	return e.ApiRoot.GetCacheTimeout()
 }
 
-
 func (e EndPoint) GetEndPointData() api.DataMap {
 	return e.GetData()
 }
@@ -407,4 +401,3 @@ func (e EndPoint) ResultDataRef() ResultData {
 func (e EndPoint) IsDebug() bool {
 	return e.ApiIsDebug()
 }
-

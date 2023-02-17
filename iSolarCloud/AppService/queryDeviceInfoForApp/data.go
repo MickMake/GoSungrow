@@ -1,10 +1,11 @@
 package queryDeviceInfoForApp
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
 const Url = "/v1/devService/queryDeviceInfoForApp"
@@ -27,7 +28,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	DeviceModelList []struct {
-		GoStruct        GoStruct.GoStruct  `json:"-" PointIdFrom:"ModelId" PointIdReplace:"true"`
+		GoStruct GoStruct.GoStruct `json:"-" PointIdFrom:"ModelId" PointIdReplace:"true"`
 
 		ModelId         valueTypes.Integer `json:"model_id"`
 		DeviceModel     valueTypes.String  `json:"device_model"`
@@ -47,11 +48,11 @@ type ResultData struct {
 		CodeTypeName valueTypes.String `json:"code_type_name"`
 	} `json:"subTypeList" PointId:"sub_type_list" PointArrayFlatten:"false" DataTable:"true"`
 
-	PsKey                   valueTypes.String  `json:"ps_key"`
-	PsId                    valueTypes.PsId    `json:"ps_id"`
-	DeviceType              valueTypes.Integer `json:"device_type"`
-	DeviceCode              valueTypes.Integer `json:"device_code"`
-	ChannelId               valueTypes.Integer `json:"chnnl_id" PointId:"channel_id"`
+	PsKey      valueTypes.String  `json:"ps_key"`
+	PsId       valueTypes.PsId    `json:"ps_id"`
+	DeviceType valueTypes.Integer `json:"device_type"`
+	DeviceCode valueTypes.Integer `json:"device_code"`
+	ChannelId  valueTypes.Integer `json:"chnnl_id" PointId:"channel_id"`
 
 	PsName                  valueTypes.String  `json:"ps_name"`
 	ArmVersion              interface{}        `json:"arm_version"`
@@ -139,6 +140,6 @@ func (e *ResultData) IsValid() error {
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-	entries.StructToDataMap(*e,  e.Response.ResultData.PsId.String(), GoStruct.NewEndPointPath(e.Response.ResultData.PsId.String()))
+	entries.StructToDataMap(*e, e.Response.ResultData.PsId.String(), GoStruct.NewEndPointPath(e.Response.ResultData.PsId.String()))
 	return entries
 }

@@ -1,10 +1,11 @@
 package getTemplateList
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
 const Url = "/v1/devService/getTemplateList"
@@ -24,13 +25,13 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	PageList []Template `json:"pageList" PointId:"page_list" DataTable:"true" DataTableSortOn:"UpdateTime"`
+	PageList []Template         `json:"pageList" PointId:"page_list" DataTable:"true" DataTableSortOn:"UpdateTime"`
 	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 }
 
 type Template struct {
 	TemplateId   valueTypes.Integer  `json:"template_id"`
-	TemplateName valueTypes.String `json:"template_name"`
+	TemplateName valueTypes.String   `json:"template_name"`
 	UpdateTime   valueTypes.DateTime `json:"update_time" PointNameDateFormat:"DateTimeLayout"`
 }
 

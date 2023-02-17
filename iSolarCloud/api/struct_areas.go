@@ -1,19 +1,18 @@
 package api
 
 import (
-	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"errors"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 	"sort"
 	"strings"
-)
 
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/MickMake/GoUnify/Only"
+)
 
 type Areas map[AreaName]AreaStruct // TypeEndPoints		// Map of EndPoints by area name.
 type AreaName string
 type AreaNames []AreaName
-
 
 func (an *Areas) Exists(area string) bool {
 	var ok bool

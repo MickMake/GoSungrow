@@ -1,10 +1,11 @@
 package queryFaultTypeByDevicePage
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -33,7 +34,7 @@ type ResultData struct {
 		IsAllowOwnerView valueTypes.Bool    `json:"is_allow_owner_view"`
 	} `json:"pageList" PointId:"page_list" DataTable:"true"`
 	CurPage    valueTypes.Integer `json:"curPage" PointId:"cur_page"`
-	IsMore     valueTypes.Bool `json:"isMore" PointId:"is_more"`
+	IsMore     valueTypes.Bool    `json:"isMore" PointId:"is_more"`
 	RowCount   valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 	Size       valueTypes.Integer `json:"size"`
 	StartIndex valueTypes.Integer `json:"startIndex" PointId:"start_index"`

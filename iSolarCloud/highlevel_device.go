@@ -1,21 +1,21 @@
 package iSolarCloud
 
 import (
-	"GoSungrow/iSolarCloud/AppService/getDeviceList"
-	"GoSungrow/iSolarCloud/AppService/getDeviceModelInfoList"
-	"GoSungrow/iSolarCloud/AppService/getPowerDevicePointNames"
-	"GoSungrow/iSolarCloud/AppService/queryDeviceList"
-	"GoSungrow/iSolarCloud/api/GoStruct/output"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"errors"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
-	datatable "go.pennock.tech/tabular/auto"
 	"os"
 	"sort"
 	"time"
-)
 
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getDeviceList"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getDeviceModelInfoList"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPowerDevicePointNames"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/queryDeviceList"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoUnify/Only"
+	datatable "go.pennock.tech/tabular/auto"
+)
 
 // DeviceTypeList - Return all device_types.
 func (sg *SunGrow) DeviceTypeList(psIds ...string) (string, error) {
@@ -49,7 +49,7 @@ func (sg *SunGrow) DeviceTypeList(psIds ...string) (string, error) {
 		table.AddHeaders("Device Type", "Name")
 
 		ep := sg.GetByStruct(queryDeviceList.EndPointName,
-			queryDeviceList.RequestData{ PsId: pids[0] },
+			queryDeviceList.RequestData{PsId: pids[0]},
 			DefaultCacheTimeout,
 		)
 		if sg.IsError() {
@@ -94,7 +94,7 @@ func (sg *SunGrow) DeviceTypePoints(deviceTypes ...string) (string, error) {
 		}
 
 		ep1 := sg.GetByStruct(queryDeviceList.EndPointName,
-			queryDeviceList.RequestData{ PsId: pids[0] },
+			queryDeviceList.RequestData{PsId: pids[0]},
 			DefaultCacheTimeout,
 		)
 		if sg.IsError() {
@@ -102,13 +102,12 @@ func (sg *SunGrow) DeviceTypePoints(deviceTypes ...string) (string, error) {
 		}
 		data1 := queryDeviceList.Assert(ep1)
 
-
 		table := output.NewTable("Point Id", "Name", "Cal Type", "Device Type", "Device Name")
 
 		// var points []getPowerDevicePointNames.Point
 		for deviceType, deviceName := range data1.Response.ResultData.DevTypeDefinition {
 			ep := sg.GetByStruct(getPowerDevicePointNames.EndPointName,
-				getPowerDevicePointNames.RequestData{ DeviceType: valueTypes.SetIntegerString(deviceType) },
+				getPowerDevicePointNames.RequestData{DeviceType: valueTypes.SetIntegerString(deviceType)},
 				DefaultCacheTimeout,
 			)
 			if sg.IsError() {
@@ -189,7 +188,6 @@ func (sg *SunGrow) DeviceTypeData(deviceType string, startDate string, endDate s
 	return sg.Error
 }
 
-
 // GetDeviceList - AppService.getDeviceList
 func (sg *SunGrow) GetDeviceList(psIds ...string) ([]getDeviceList.Device, error) {
 	var ret []getDeviceList.Device
@@ -202,10 +200,10 @@ func (sg *SunGrow) GetDeviceList(psIds ...string) ([]getDeviceList.Device, error
 
 		for _, psId := range pids {
 			ep := sg.GetByStruct(getDeviceList.EndPointName,
-				getDeviceList.RequestData {
+				getDeviceList.RequestData{
 					PsId: psId,
 				},
-				time.Hour * 24,
+				time.Hour*24,
 			)
 			if sg.IsError() {
 				break
@@ -230,7 +228,7 @@ func (sg *SunGrow) QueryDeviceList(psIds ...string) ([]queryDeviceList.Device, e
 
 		for _, psId := range pids {
 			ep := sg.GetByStruct(queryDeviceList.EndPointName,
-				queryDeviceList.RequestData {
+				queryDeviceList.RequestData{
 					PsId: psId,
 				},
 				time.Hour*24,
@@ -246,7 +244,6 @@ func (sg *SunGrow) QueryDeviceList(psIds ...string) ([]queryDeviceList.Device, e
 
 	return ret, sg.Error
 }
-
 
 func (sg *SunGrow) GetPowerDevicePointNames(device valueTypes.Integer) ([]getPowerDevicePointNames.Point, error) {
 	var ret []getPowerDevicePointNames.Point
@@ -265,7 +262,6 @@ func (sg *SunGrow) GetPowerDevicePointNames(device valueTypes.Integer) ([]getPow
 
 	return ret, sg.Error
 }
-
 
 func (sg *SunGrow) DeviceModelInfoList() error {
 	for range Only.Once {
@@ -297,7 +293,6 @@ func (sg *SunGrow) DeviceModelInfoList() error {
 
 	return sg.Error
 }
-
 
 // func (sg *SunGrow) GetDevices(psId valueTypes.PsId) (getDeviceList.Devices, error) {
 // 	var ret getDeviceList.Devices

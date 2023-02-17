@@ -1,10 +1,10 @@
 package getPowerDevicePointNames
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/output"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 
 	"fmt"
@@ -78,9 +78,9 @@ type ResultData []Point
 type Point struct {
 	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true"`
 
-	PointId        valueTypes.Integer      `json:"point_id"`
-	PointName      valueTypes.String       `json:"point_name"`
-	PointCalType   valueTypes.Integer      `json:"point_cal_type"`
+	PointId      valueTypes.Integer `json:"point_id"`
+	PointName    valueTypes.String  `json:"point_name"`
+	PointCalType valueTypes.Integer `json:"point_cal_type"`
 }
 
 func (e *ResultData) IsValid() error {

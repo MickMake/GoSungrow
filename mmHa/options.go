@@ -1,13 +1,13 @@
 package mmHa
 
 import (
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"errors"
+	"sync"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
-	"sync"
 )
-
 
 type Options struct {
 	mu  sync.Mutex
@@ -19,7 +19,6 @@ type Option struct {
 	Handler mqtt.MessageHandler
 	Values  []string
 }
-
 
 func (m *Mqtt) SetOption(id string, name string, fn mqtt.MessageHandler, options ...string) error {
 	for range Only.Once {
@@ -59,7 +58,6 @@ func (m *Mqtt) GetOption(id string) string {
 	return m.UserOptions.GetOption(id)
 }
 
-
 const OptionEnabled = "Enabled"
 const OptionDisabled = "Disabled"
 
@@ -84,11 +82,11 @@ func (m *Options) SetOption(id string, name string, handler mqtt.MessageHandler,
 		//goland:noinspection GoDeferInLoop
 		defer m.mu.Unlock()
 
-		m.Map[id] = Option {
-			Config:  &EntityConfig {
-				Name:          "Option " + name,
-				FullId:        JoinStringsForId("option", id),
-				Icon:          "mdi:format-list-group",
+		m.Map[id] = Option{
+			Config: &EntityConfig{
+				Name:   "Option " + name,
+				FullId: JoinStringsForId("option", id),
+				Icon:   "mdi:format-list-group",
 				// ValueTemplate: `{"value": "{{ value }}"}`,
 				ValueTemplate: `{{ value }}`,
 				Units:         LabelSelect,

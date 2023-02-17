@@ -1,10 +1,11 @@
 package queryFaultTypeByDevice
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -25,7 +26,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent          GoStruct.GoStructParent   `json:"-" DataTable:"true" DataTableSortOn:"FaultTypeCode"`
+	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"FaultTypeCode"`
 
 	FaultTypeCode     valueTypes.Integer   `json:"fault_type_code"`
 	FaultTypeCodeList []valueTypes.Integer `json:"fault_type_code_list"`

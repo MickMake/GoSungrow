@@ -1,10 +1,11 @@
 package getAllPsIdByOrgIds
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -25,7 +26,6 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData []string
 
 func (e *ResultData) IsValid() error {
@@ -40,7 +40,7 @@ func (e *EndPoint) GetData() api.DataMap {
 		// pkg := reflection.GetName("", *e)
 		// dt := valueTypes.NewDateTime(valueTypes.Now)
 		// name := pkg + "." + e.Request.OrgIds.String()
-		entries.StructToDataMap(*e,  e.Request.OrgIds.String(), GoStruct.NewEndPointPath(e.Request.OrgIds.String()))
+		entries.StructToDataMap(*e, e.Request.OrgIds.String(), GoStruct.NewEndPointPath(e.Request.OrgIds.String()))
 	}
 
 	return entries

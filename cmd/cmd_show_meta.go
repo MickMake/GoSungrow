@@ -1,13 +1,13 @@
 package cmd
 
 import (
-	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/spf13/cobra"
 )
-
 
 func (c *CmdShow) AttachMeta(cmd *cobra.Command) *cobra.Command {
 	for range Only.Once {
@@ -34,7 +34,6 @@ func (c *CmdShow) AttachMeta(cmd *cobra.Command) *cobra.Command {
 	}
 	return c.SelfCmd
 }
-
 
 func (c *CmdShow) AttachMetaUnitList(cmd *cobra.Command) *cobra.Command {
 	var self = &cobra.Command{

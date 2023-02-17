@@ -1,16 +1,16 @@
 package api
 
 import (
-	"github.com/MickMake/GoUnify/Only"
-	"GoSungrow/iSolarCloud/api/GoStruct/output"
-	"GoSungrow/iSolarCloud/api/GoStruct/reflection"
 	"errors"
 	"fmt"
-	"github.com/MickMake/GoUnify/cmdPath"
 	"os"
 	"path/filepath"
-)
 
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/reflection"
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/MickMake/GoUnify/cmdPath"
+)
 
 // func (ep *EndPointStruct) ApiSetFilenamePrefix2(ref interface{}, format string, args ...interface{}) string {
 // 	f := strings.Join(GoStruct.GetStructValuesAsArray(ref), "-")
@@ -86,7 +86,6 @@ func (ep *EndPointStruct) GetFilePath() string {
 
 	return ret
 }
-
 
 // FileExists Checks for existence of a local file.
 func (ep *EndPointStruct) FileExists(fn string) bool {

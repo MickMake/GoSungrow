@@ -1,10 +1,11 @@
 package getNationList
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -24,9 +25,8 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData []struct {
-	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"NationCode"`
+	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"NationCode"`
 
 	NationCode valueTypes.String `json:"nation_code"`
 	Nation     valueTypes.String `json:"nation"`
@@ -36,7 +36,6 @@ func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

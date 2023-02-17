@@ -1,11 +1,12 @@
 package getParamSetTemplate4NewProtocol
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+
+	"fmt"
 
 	"github.com/MickMake/GoUnify/Only"
-	"fmt"
 )
 
 const Url = "/v1/devService/getParamSetTemplate4NewProtocol"
@@ -23,7 +24,6 @@ func (rd RequestData) Help() string {
 	ret := fmt.Sprintf("")
 	return ret
 }
-
 
 type ResultData struct {
 	// Dummy valueTypes.String `json:"dummy"`

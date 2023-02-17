@@ -1,11 +1,12 @@
 package getOwnerFaultConfigList
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -27,7 +28,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		GoStruct          GoStruct.GoStruct  `json:"-" PointIdFrom:"FaultTypeId" PointIdReplace:"true"`
+		GoStruct GoStruct.GoStruct `json:"-" PointIdFrom:"FaultTypeId" PointIdReplace:"true"`
 
 		FaultTypeId       valueTypes.Integer `json:"fault_type_id"`
 		FaultTypeCode     valueTypes.Integer `json:"fault_type_code"`
@@ -35,10 +36,10 @@ type ResultData struct {
 		FaultLevel        valueTypes.Integer `json:"fault_level"`
 		FaultType         valueTypes.Integer `json:"fault_type"`
 
-		DeviceType        valueTypes.Integer `json:"device_type"`
-		DeviceTypeName    valueTypes.String  `json:"device_type_name"`
-		DevFaultTypeCode  valueTypes.String  `json:"dev_fault_type_code"`
-		NewFaultTypeCode  valueTypes.Integer `json:"new_fault_type_code"`
+		DeviceType       valueTypes.Integer `json:"device_type"`
+		DeviceTypeName   valueTypes.String  `json:"device_type_name"`
+		DevFaultTypeCode valueTypes.String  `json:"dev_fault_type_code"`
+		NewFaultTypeCode valueTypes.Integer `json:"new_fault_type_code"`
 
 		IsAllowOwnerView     valueTypes.Bool `json:"is_allow_owner_view"`
 		IsAllowUserAdd       valueTypes.Bool `json:"is_allow_user_add"`

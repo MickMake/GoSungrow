@@ -1,10 +1,11 @@
 package getPowerDeviceSetTaskList
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
 const Url = "/v1/devService/getPowerDeviceSetTaskList"
@@ -27,7 +28,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		GoStruct             GoStruct.GoStruct   `json:"GoStruct" PointIdFrom:"TaskId" PointIdReplace:"true" PointDeviceFrom:"PsId"`
+		GoStruct GoStruct.GoStruct `json:"GoStruct" PointIdFrom:"TaskId" PointIdReplace:"true" PointDeviceFrom:"PsId"`
 
 		TaskId               valueTypes.Integer  `json:"task_id"`
 		TaskType             valueTypes.Integer  `json:"task_type"`

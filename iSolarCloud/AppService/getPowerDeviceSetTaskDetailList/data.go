@@ -1,10 +1,11 @@
 package getPowerDeviceSetTaskDetailList
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
 const Url = "/v1/devService/getPowerDeviceSetTaskDetailList"
@@ -65,13 +66,13 @@ type ResultData struct {
 	} `json:"device_list" DataTable:"true" DataTableIndex:"true"`
 	PageList []struct {
 		// GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"PsId"`
-		GoStruct.GoStruct  `json:"-" PointIdFrom:"PsId" PointIdReplace:"true"`
+		GoStruct.GoStruct `json:"-" PointIdFrom:"PsId" PointIdReplace:"true"`
 
-		PsId   valueTypes.Integer `json:"ps_id"`
-		PsName valueTypes.String  `json:"ps_name"`
-		ChannelId             valueTypes.Integer  `json:"chnnl_id" PointId:"channel_id"`
-		DeviceType            valueTypes.Integer  `json:"device_type"`
-		Sn                    valueTypes.String   `json:"sn"`
+		PsId       valueTypes.Integer `json:"ps_id"`
+		PsName     valueTypes.String  `json:"ps_name"`
+		ChannelId  valueTypes.Integer `json:"chnnl_id" PointId:"channel_id"`
+		DeviceType valueTypes.Integer `json:"device_type"`
+		Sn         valueTypes.String  `json:"sn"`
 
 		PointId     valueTypes.Integer `json:"point_id"`
 		PointIdType valueTypes.Integer `json:"point_id_type"`

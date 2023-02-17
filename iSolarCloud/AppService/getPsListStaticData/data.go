@@ -1,10 +1,11 @@
 package getPsListStaticData
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -26,13 +27,13 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		GoStruct               GoStruct.GoStruct   `json:"GoStruct" PointIdFrom:"PsId" PointIdReplace:"true" PointDeviceFrom:"PsId"`
+		GoStruct GoStruct.GoStruct `json:"GoStruct" PointIdFrom:"PsId" PointIdReplace:"true" PointDeviceFrom:"PsId"`
 
-		PsId                   valueTypes.PsId     `json:"ps_id"`
-		PsName                 valueTypes.String   `json:"ps_name"`
-		PsShortName            valueTypes.String   `json:"ps_short_name"`
-		PsStatus               valueTypes.Bool     `json:"ps_status"`
-		PsType                 valueTypes.Integer  `json:"ps_type"`
+		PsId        valueTypes.PsId    `json:"ps_id"`
+		PsName      valueTypes.String  `json:"ps_name"`
+		PsShortName valueTypes.String  `json:"ps_short_name"`
+		PsStatus    valueTypes.Bool    `json:"ps_status"`
+		PsType      valueTypes.Integer `json:"ps_type"`
 
 		AreaId                 interface{}         `json:"area_id"`
 		DesignCapacity         valueTypes.Float    `json:"design_capacity" PointUnit:"W"`

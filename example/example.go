@@ -1,19 +1,19 @@
 package example
 
 import (
-	"GoSungrow/iSolarCloud"
-	"GoSungrow/iSolarCloud/AppService/login"
-	"GoSungrow/iSolarCloud/AppService/queryMutiPointDataList"
-	"GoSungrow/iSolarCloud/api/GoStruct/output"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 	"log"
 	"os"
 	"strings"
 	"time"
-)
 
+	"github.com/MickMake/GoSungrow/iSolarCloud"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/login"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/queryMutiPointDataList"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoUnify/Only"
+)
 
 // Example1 - GoSungrow API example
 func Example1(startDate string, endDate string, interval string, points []string) error {
@@ -39,7 +39,7 @@ func Example1(startDate string, endDate string, interval string, points []string
 			break
 		}
 
-		auth := login.SunGrowAuth {
+		auth := login.SunGrowAuth{
 			AppKey:       appKey,
 			UserAccount:  user,
 			UserPassword: password,
@@ -51,7 +51,6 @@ func Example1(startDate string, endDate string, interval string, points []string
 			break
 		}
 
-
 		// -------------------------------------------------------------------------------- //
 		// Produce output.
 		data := sg.NewSunGrowData()
@@ -61,10 +60,10 @@ func Example1(startDate string, endDate string, interval string, points []string
 
 		fmt.Printf("Points: %s\n", strings.Join(points, ","))
 		data.SetArgs(
-			"StartTimeStamp:" + startDate,
-			"EndTimeStamp:" + endDate,
-			"MinuteInterval:" + interval,
-			"Points:" + strings.Join(points, ","),
+			"StartTimeStamp:"+startDate,
+			"EndTimeStamp:"+endDate,
+			"MinuteInterval:"+interval,
+			"Points:"+strings.Join(points, ","),
 		)
 		data.SetEndpoints(queryMutiPointDataList.EndPointName)
 
@@ -123,7 +122,6 @@ func Example2(startDate string, endDate string, interval string, points []string
 		}
 		ed.SetDateType(valueTypes.DateTimeLayoutSecond)
 
-
 		// -------------------------------------------------------------------------------- //
 		// Initial setup.
 		url := "https://augateway.isolarcloud.com"
@@ -143,7 +141,7 @@ func Example2(startDate string, endDate string, interval string, points []string
 			break
 		}
 
-		auth := login.SunGrowAuth {
+		auth := login.SunGrowAuth{
 			AppKey:       appKey,
 			UserAccount:  user,
 			UserPassword: password,
@@ -155,20 +153,19 @@ func Example2(startDate string, endDate string, interval string, points []string
 			break
 		}
 
-
 		// -------------------------------------------------------------------------------- //
 		// Produce output.
 		ep := sg.GetByStruct(
 			"AppService.queryMutiPointDataList",
-			queryMutiPointDataList.RequestData {
-				PsId: psId,
+			queryMutiPointDataList.RequestData{
+				PsId:           psId,
 				StartTimeStamp: sd,
-				EndTimeStamp: ed,
+				EndTimeStamp:   ed,
 				MinuteInterval: i,
-				PsKeys: *p.PsKeys(),
-				Points: p,
+				PsKeys:         *p.PsKeys(),
+				Points:         p,
 			},
-			time.Hour * 24,
+			time.Hour*24,
 		)
 		if sg.IsError() {
 			break
@@ -191,9 +188,9 @@ func Example2(startDate string, endDate string, interval string, points []string
 			break
 		}
 
-		response.Options = iSolarCloud.OutputOptions {
-			OutputType:  output.TypeTable,
-			SaveAsFile:  false,
+		response.Options = iSolarCloud.OutputOptions{
+			OutputType:   output.TypeTable,
+			SaveAsFile:   false,
 			GraphRequest: output.GraphRequest{},
 		}
 
@@ -242,7 +239,6 @@ func Example3(startDate valueTypes.DateTime, endDate valueTypes.DateTime, interv
 			interval.SetValue(5)
 		}
 
-
 		// -------------------------------------------------------------------------------- //
 		// Initial setup.
 		url := "https://augateway.isolarcloud.com"
@@ -262,7 +258,7 @@ func Example3(startDate valueTypes.DateTime, endDate valueTypes.DateTime, interv
 			break
 		}
 
-		auth := login.SunGrowAuth {
+		auth := login.SunGrowAuth{
 			AppKey:       appKey,
 			UserAccount:  user,
 			UserPassword: password,
@@ -274,20 +270,19 @@ func Example3(startDate valueTypes.DateTime, endDate valueTypes.DateTime, interv
 			break
 		}
 
-
 		// -------------------------------------------------------------------------------- //
 		// Produce output.
 		ep := sg.GetByStruct(
 			"AppService.queryMutiPointDataList",
-			queryMutiPointDataList.RequestData {
-				PsId: psId,
+			queryMutiPointDataList.RequestData{
+				PsId:           psId,
 				StartTimeStamp: startDate,
-				EndTimeStamp: endDate,
+				EndTimeStamp:   endDate,
 				MinuteInterval: interval,
-				PsKeys: *points.PsKeys(),
-				Points: points,
+				PsKeys:         *points.PsKeys(),
+				Points:         points,
 			},
-			time.Hour * 24,
+			time.Hour*24,
 		)
 		if sg.IsError() {
 			break
@@ -302,9 +297,9 @@ func Example3(startDate valueTypes.DateTime, endDate valueTypes.DateTime, interv
 			break
 		}
 
-		response.Options = iSolarCloud.OutputOptions {
-			OutputType:  output.TypeGraph,
-			SaveAsFile:  false,
+		response.Options = iSolarCloud.OutputOptions{
+			OutputType:   output.TypeGraph,
+			SaveAsFile:   false,
 			GraphRequest: output.GraphRequest{},
 		}
 
@@ -317,7 +312,6 @@ func Example3(startDate valueTypes.DateTime, endDate valueTypes.DateTime, interv
 	return err
 }
 
-
 func main() {
 	var err error
 
@@ -326,20 +320,17 @@ func main() {
 	interval := "5"
 	points := []string{"Points:1171348_43_2_2.p58603", "1171348_43_2_2.p58604", "1171348_43_2_2.p58605", "1171348_43_2_2.p58606"}
 
-
 	err = Example1(startDate, endDate, interval, points)
 	if err != nil {
 		log.Fatalf("Error: %s", err)
 		os.Exit(1)
 	}
 
-
 	err = Example2(startDate, endDate, interval, points)
 	if err != nil {
 		log.Fatalf("Error: %s", err)
 		os.Exit(1)
 	}
-
 
 	err = Example3(valueTypes.SetDateTimeString(startDate), valueTypes.SetDateTimeString(endDate),
 		valueTypes.SetIntegerString(interval), valueTypes.SetPointIdsString(points...))

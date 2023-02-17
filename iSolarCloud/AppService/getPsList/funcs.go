@@ -1,10 +1,9 @@
 package getPsList
 
 import (
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
-
 
 // type Device struct {
 // 	PsId                   valueTypes.PsId

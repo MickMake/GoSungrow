@@ -1,11 +1,12 @@
 package queryPowerStationInfo
 
 import (
-	"GoSungrow/iSolarCloud/Common"
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/Common"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -14,8 +15,8 @@ const Disabled = false
 const EndPointName = "AppService.queryPowerStationInfo"
 
 type RequestData struct {
-	PsId valueTypes.PsId `json:"ps_id"`
-	Sn   valueTypes.String  `json:"sn"`
+	PsId valueTypes.PsId   `json:"ps_id"`
+	Sn   valueTypes.String `json:"sn"`
 }
 
 func (rd RequestData) IsValid() error {

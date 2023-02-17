@@ -1,10 +1,11 @@
 package getUpTimePoint
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -32,8 +33,8 @@ type ResultData struct {
 		PointList []struct {
 			PointId  valueTypes.Integer `json:"point_id"`
 			TimeType valueTypes.Integer `json:"time_type"`
-		} `json:"point_list" DataTable:"true"`	// DataTablePivot:"true"`
-	} `json:"point_time_relation"`	// DataTable:"true"`
+		} `json:"point_list" DataTable:"true"` // DataTablePivot:"true"`
+	} `json:"point_time_relation"` // DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {

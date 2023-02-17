@@ -1,10 +1,11 @@
 package tablib
 
 import (
-	"GoSungrow/tablib/gotabulate"
 	"regexp"
 	"strings"
 	"unicode/utf8"
+
+	"github.com/MickMake/GoSungrow/tablib/gotabulate"
 )
 
 var (
@@ -21,7 +22,7 @@ var (
 	// as ASCII table with Markdown format
 	TabularMarkdown = "markdown"
 
-	TabularUtf8 = "utf8"
+	TabularUtf8     = "utf8"
 	TabularMickMake = "mickmake"
 )
 

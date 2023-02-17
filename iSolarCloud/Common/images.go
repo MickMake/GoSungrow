@@ -1,8 +1,8 @@
 package Common
 
 import (
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
 type Device struct {
@@ -80,24 +80,24 @@ type Device struct {
 	ZipCode                   valueTypes.String    `json:"zip_code"`
 	Images                    PowerStationImages   `json:"images" PointArrayFlatten:"false"`
 
-	P83022y                valueTypes.String    `json:"p83022y" PointId:"p83022" PointUpdateFreq:"UpdateFreq5Mins" PointUnit:"Wh" PointVirtual:"true"`
-	P83046                 valueTypes.Float     `json:"p83046" PointUpdateFreq:"UpdateFreq5Mins" PointUnit:"kW" PointVirtual:"true"`
-	P83048                 valueTypes.Float     `json:"p83048" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
-	P83049                 valueTypes.Float     `json:"p83049" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
-	P83050                 valueTypes.Float     `json:"p83050" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
-	P83051                 valueTypes.Float     `json:"p83051" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
-	P83054                 valueTypes.Float     `json:"p83054" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
-	P83055                 valueTypes.Float     `json:"p83055" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
-	P83067                 valueTypes.Float     `json:"p83067" PointUpdateFreq:"UpdateFreq5Mins" PointUnit:"kW" PointVirtual:"true"`
-	P83070                 valueTypes.Float     `json:"p83070" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
-	P83076                 valueTypes.Float     `json:"p83076" PointId:"_p83076" PointName:"Pv Power" PointIgnore:"true"`                  // Dupe of PvPower
-	P83077                 valueTypes.Float     `json:"p83077" PointId:"_p83077" PointName:"Pv Energy" PointIgnore:"true"`                 // Dupe of PvEnergy
-	P83081                 valueTypes.Float     `json:"p83081" PointId:"_p83081" PointName:"Es Power" PointIgnore:"true"`                  // Dupe of EsPower
-	P83089                 valueTypes.Float     `json:"p83089" PointId:"_p83089" PointName:"Es Discharge Energy" PointIgnore:"true"`       // Dupe of EsDischargeEnergy
-	P83095                 valueTypes.Float     `json:"p83095" PointId:"_p83095" PointName:"Es Total Discharge Energy" PointIgnore:"true"` // Dupe of EsTotalDischargeEnergy
-	P83118                 valueTypes.Float     `json:"p83118" PointId:"_p83118" PointName:"Use Energy" PointIgnore:"true"`                // Dupe of UseEnergy
-	P83120                 valueTypes.Float     `json:"p83120" PointId:"_p83120" PointName:"Es Energy" PointIgnore:"true"`                 // Dupe of EsEnergy
-	P83127                 valueTypes.Float     `json:"p83127" PointId:"_p83127" PointName:"Es Total Energy" PointIgnore:"true"`           // Dupe of EsTotalEnergy
+	P83022y valueTypes.String `json:"p83022y" PointId:"p83022" PointUpdateFreq:"UpdateFreq5Mins" PointUnit:"Wh" PointVirtual:"true"`
+	P83046  valueTypes.Float  `json:"p83046" PointUpdateFreq:"UpdateFreq5Mins" PointUnit:"kW" PointVirtual:"true"`
+	P83048  valueTypes.Float  `json:"p83048" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
+	P83049  valueTypes.Float  `json:"p83049" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
+	P83050  valueTypes.Float  `json:"p83050" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
+	P83051  valueTypes.Float  `json:"p83051" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
+	P83054  valueTypes.Float  `json:"p83054" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
+	P83055  valueTypes.Float  `json:"p83055" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
+	P83067  valueTypes.Float  `json:"p83067" PointUpdateFreq:"UpdateFreq5Mins" PointUnit:"kW" PointVirtual:"true"`
+	P83070  valueTypes.Float  `json:"p83070" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
+	P83076  valueTypes.Float  `json:"p83076" PointId:"_p83076" PointName:"Pv Power" PointIgnore:"true"`                  // Dupe of PvPower
+	P83077  valueTypes.Float  `json:"p83077" PointId:"_p83077" PointName:"Pv Energy" PointIgnore:"true"`                 // Dupe of PvEnergy
+	P83081  valueTypes.Float  `json:"p83081" PointId:"_p83081" PointName:"Es Power" PointIgnore:"true"`                  // Dupe of EsPower
+	P83089  valueTypes.Float  `json:"p83089" PointId:"_p83089" PointName:"Es Discharge Energy" PointIgnore:"true"`       // Dupe of EsDischargeEnergy
+	P83095  valueTypes.Float  `json:"p83095" PointId:"_p83095" PointName:"Es Total Discharge Energy" PointIgnore:"true"` // Dupe of EsTotalDischargeEnergy
+	P83118  valueTypes.Float  `json:"p83118" PointId:"_p83118" PointName:"Use Energy" PointIgnore:"true"`                // Dupe of UseEnergy
+	P83120  valueTypes.Float  `json:"p83120" PointId:"_p83120" PointName:"Es Energy" PointIgnore:"true"`                 // Dupe of EsEnergy
+	P83127  valueTypes.Float  `json:"p83127" PointId:"_p83127" PointName:"Es Total Energy" PointIgnore:"true"`           // Dupe of EsTotalEnergy
 
 	Co2Reduce              valueTypes.UnitValue `json:"co2_reduce" PointVirtual:"true"`
 	Co2ReduceTotal         valueTypes.UnitValue `json:"co2_reduce_total" PointUpdateFreq:"UpdateFreqTotal" PointVirtual:"true"`
@@ -113,15 +113,15 @@ type Device struct {
 	EsEnergy               valueTypes.UnitValue `json:"es_energy" PointId:"p83120" PointName:"ES Energy" PointUpdateFreq:"UpdateFreq5Mins" PointVirtual:"true"`
 	EsTotalEnergy          valueTypes.UnitValue `json:"es_total_energy" PointId:"p83127" PointName:"ES Total Energy" PointUpdateFreq:"UpdateFreqTotal" PointVirtual:"true"`
 
-	ParamCo2               valueTypes.Float     `json:"param_co2" PointVirtual:"true"`
-	ParamCoal              valueTypes.Float     `json:"param_coal" PointVirtual:"true"`
-	ParamIncome            valueTypes.Float     `json:"param_income" PointVirtual:"true"`
-	ParamMeter             valueTypes.Float     `json:"param_meter" PointVirtual:"true"`
-	ParamNox               valueTypes.Float     `json:"param_nox" PointVirtual:"true"`
-	ParamPowder            valueTypes.Float     `json:"param_powder" PointVirtual:"true"`
-	ParamSo2               valueTypes.Float     `json:"param_so2" PointVirtual:"true"`
-	ParamTree              valueTypes.Float     `json:"param_tree" PointVirtual:"true"`
-	ParamWater             valueTypes.Float     `json:"param_water" PointVirtual:"true"`
+	ParamCo2    valueTypes.Float `json:"param_co2" PointVirtual:"true"`
+	ParamCoal   valueTypes.Float `json:"param_coal" PointVirtual:"true"`
+	ParamIncome valueTypes.Float `json:"param_income" PointVirtual:"true"`
+	ParamMeter  valueTypes.Float `json:"param_meter" PointVirtual:"true"`
+	ParamNox    valueTypes.Float `json:"param_nox" PointVirtual:"true"`
+	ParamPowder valueTypes.Float `json:"param_powder" PointVirtual:"true"`
+	ParamSo2    valueTypes.Float `json:"param_so2" PointVirtual:"true"`
+	ParamTree   valueTypes.Float `json:"param_tree" PointVirtual:"true"`
+	ParamWater  valueTypes.Float `json:"param_water" PointVirtual:"true"`
 
 	PrScale                valueTypes.String    `json:"pr_scale"`
 	Radiation              valueTypes.UnitValue `json:"radiation" PointVirtual:"true"`

@@ -1,10 +1,11 @@
 package getReportPsTree
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -14,7 +15,7 @@ const EndPointName = "WebAppService.getReportPsTree"
 
 type RequestData struct {
 	DeviceType valueTypes.Integer `json:"device_type" required:"true"`
-	PsId       valueTypes.PsId   `json:"ps_id" required:"true"`
+	PsId       valueTypes.PsId    `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -27,7 +28,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"PsKey"`
+	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"PsKey"`
 
 	PsId          valueTypes.Integer `json:"ps_id"`
 	PsKey         valueTypes.String  `json:"ps_key"`

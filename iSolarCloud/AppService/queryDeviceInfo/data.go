@@ -1,10 +1,11 @@
 package queryDeviceInfo
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
 const Url = "/v1/devService/queryDeviceInfo"
@@ -44,11 +45,11 @@ type ResultData struct {
 		UUID           valueTypes.String  `json:"uuid"`
 	} `json:"devicePropertyValueList" PointId:"device_property_value_list" DataTable:"true"`
 
-	PsKey                   valueTypes.String  `json:"ps_key"`
-	PsId                    valueTypes.PsId    `json:"ps_id"`
-	DeviceType              valueTypes.Integer `json:"device_type"`
-	DeviceCode              valueTypes.Integer `json:"device_code"`
-	ChannelId               valueTypes.Integer `json:"chnnl_id" PointId:"channel_id"`
+	PsKey      valueTypes.String  `json:"ps_key"`
+	PsId       valueTypes.PsId    `json:"ps_id"`
+	DeviceType valueTypes.Integer `json:"device_type"`
+	DeviceCode valueTypes.Integer `json:"device_code"`
+	ChannelId  valueTypes.Integer `json:"chnnl_id" PointId:"channel_id"`
 
 	PsName                  valueTypes.String  `json:"ps_name"`
 	PsShortName             valueTypes.String  `json:"ps_short_name"`
@@ -131,6 +132,6 @@ func (e *ResultData) IsValid() error {
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-	entries.StructToDataMap(*e,  e.Response.ResultData.PsId.String(), GoStruct.NewEndPointPath(e.Response.ResultData.PsId.String()))
+	entries.StructToDataMap(*e, e.Response.ResultData.PsId.String(), GoStruct.NewEndPointPath(e.Response.ResultData.PsId.String()))
 	return entries
 }

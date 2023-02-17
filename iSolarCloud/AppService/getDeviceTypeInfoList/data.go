@@ -1,11 +1,12 @@
 package getDeviceTypeInfoList
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/getDeviceTypeInfoList"
@@ -25,10 +26,10 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	DeviceType      valueTypes.Integer  `json:"device_type"`
-	IsRemoteUpgrade valueTypes.Bool     `json:"is_remote_upgrade"`
-	TypeCode        valueTypes.Integer  `json:"type_code"`
-	TypeName        valueTypes.String   `json:"type_name"`
+	DeviceType      valueTypes.Integer `json:"device_type"`
+	IsRemoteUpgrade valueTypes.Bool    `json:"is_remote_upgrade"`
+	TypeCode        valueTypes.Integer `json:"type_code"`
+	TypeName        valueTypes.String  `json:"type_name"`
 }
 
 func (e *ResultData) IsValid() error {

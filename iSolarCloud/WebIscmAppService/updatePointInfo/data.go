@@ -1,9 +1,9 @@
 package updatePointInfo
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 
 	"fmt"
 )
@@ -13,12 +13,12 @@ const Disabled = false
 const EndPointName = "WebIscmAppService.updatePointInfo"
 
 type RequestData struct {
-	PointName  valueTypes.String `json:"point_name"`
-	Id         valueTypes.String `json:"id" required:"true"`
-	DeviceType valueTypes.Integer `json:"device_type" required:"true"`
-	PointId    valueTypes.String `json:"point_id" required:"true"`
-	PointType valueTypes.String `json:"point_type"`
-	PointGroupId valueTypes.String `json:"point_group_id"`
+	PointName    valueTypes.String  `json:"point_name"`
+	Id           valueTypes.String  `json:"id" required:"true"`
+	DeviceType   valueTypes.Integer `json:"device_type" required:"true"`
+	PointId      valueTypes.String  `json:"point_id" required:"true"`
+	PointType    valueTypes.String  `json:"point_type"`
+	PointGroupId valueTypes.String  `json:"point_group_id"`
 }
 
 func (rd *RequestData) IsValid() error {

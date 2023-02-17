@@ -1,15 +1,14 @@
 package output
 
 import (
-	"GoSungrow/iSolarCloud/api/GoStruct/reflection"
 	"encoding/json"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/reflection"
 	"github.com/MickMake/GoUnify/Only"
 )
 
-
 type Json string
-
 
 func (req Json) String() string {
 	return string(req)

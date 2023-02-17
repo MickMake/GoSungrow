@@ -1,9 +1,9 @@
 package getSelfReportPoint
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 
 	"fmt"
 )
@@ -27,11 +27,11 @@ func (rd RequestData) Help() string {
 type ResultData []struct {
 	GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"PointId"`
 
-	PointId           valueTypes.PointId `json:"point_id" PointDevice:""`
-	PointName         valueTypes.String  `json:"point_name"`
-	Id                valueTypes.Integer `json:"id"`
-	DeviceType        valueTypes.Integer `json:"device_type"`
-	Period            valueTypes.Integer `json:"period"`
+	PointId    valueTypes.PointId `json:"point_id" PointDevice:""`
+	PointName  valueTypes.String  `json:"point_name"`
+	Id         valueTypes.Integer `json:"id"`
+	DeviceType valueTypes.Integer `json:"device_type"`
+	Period     valueTypes.Integer `json:"period"`
 }
 
 func (e *ResultData) IsValid() error {
