@@ -1,21 +1,22 @@
 package output
 
 import (
-	"GoSungrow/iSolarCloud/api/GoStruct/gojson"
-	"GoSungrow/tablib"
 	"errors"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 	"os"
 	"reflect"
 	"sort"
 	"strings"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/gojson"
+	"github.com/MickMake/GoSungrow/tablib"
+	"github.com/MickMake/GoUnify/Only"
 )
+
 // "go.pennock.tech/tabular/auto"
 // "github.com/olekukonko/tablewriter"
 // "github.com/agrison/go-tablib"
 // "github.com/jbub/tabular"
-
 
 type Tables map[string]Table
 
@@ -34,7 +35,6 @@ func (t *Tables) Sort() []string {
 	return sorted
 }
 
-
 type Table struct {
 	name        string
 	filePrefix  string
@@ -47,7 +47,7 @@ type Table struct {
 	graphFilter string
 	Error       error
 
-	tablib      *tablib.Dataset
+	tablib *tablib.Dataset
 	// tabular     tabular.RenderTable
 	// tablewriter *tablewriter.Table
 	// buf         *bytes.Buffer
@@ -57,17 +57,17 @@ type Table struct {
 
 func NewTable(headers ...string) Table {
 	// buf := new(bytes.Buffer)
-	t := Table {
-		filePrefix:  "",
-		title:       "",
-		tablib:      tablib.NewDataset(headers),
+	t := Table{
+		filePrefix: "",
+		title:      "",
+		tablib:     tablib.NewDataset(headers),
 		// tabular:     tabular.New("utf8-heavy"),
 		// tablewriter: tablewriter.NewWriter(buf),
 		// buf:         buf,
 		// headers:     []string{},
 		// method:      MethodTablib,
 
-		Error:       nil,
+		Error: nil,
 	}
 
 	t.tablib.SetAlign(tablib.AlignLeft)
@@ -431,7 +431,6 @@ func (t *Table) GetName() string {
 	return t.name
 }
 
-
 func (t *Table) Output() error {
 	for range Only.Once {
 		if t == nil {
@@ -439,40 +438,40 @@ func (t *Table) Output() error {
 		}
 
 		switch {
-			case t.OutputType.IsNone():
+		case t.OutputType.IsNone():
 
-			case t.OutputType.IsTable():
-				t.Error = t.WriteTable()
+		case t.OutputType.IsTable():
+			t.Error = t.WriteTable()
 
-			case t.OutputType.IsList():
-				t.Error = t.WriteList()
+		case t.OutputType.IsList():
+			t.Error = t.WriteList()
 
-			case t.OutputType.IsCsv():
-				t.Error = t.WriteCsv()
+		case t.OutputType.IsCsv():
+			t.Error = t.WriteCsv()
 
-			case t.OutputType.IsXML():
-				t.Error = t.WriteXml()
+		case t.OutputType.IsXML():
+			t.Error = t.WriteXml()
 
-			case t.OutputType.IsXLSX():
-				t.Error = t.WriteXLSX()
+		case t.OutputType.IsXLSX():
+			t.Error = t.WriteXLSX()
 
-			case t.OutputType.IsRaw():
-				t.Error = t.WriteRaw()
+		case t.OutputType.IsRaw():
+			t.Error = t.WriteRaw()
 
-			case t.OutputType.IsJson():
-				t.Error = t.WriteJson()
+		case t.OutputType.IsJson():
+			t.Error = t.WriteJson()
 
-			case t.OutputType.IsGraph():
-				t.Error = t.CreateGraph()
+		case t.OutputType.IsGraph():
+			t.Error = t.CreateGraph()
 
-			case t.OutputType.IsMarkDown():
-				t.Error = t.WriteMarkDown()
+		case t.OutputType.IsMarkDown():
+			t.Error = t.WriteMarkDown()
 
-			case t.OutputType.IsStruct():
-				t.Error = t.WriteStruct()
+		case t.OutputType.IsStruct():
+			t.Error = t.WriteStruct()
 
-			default:
-				t.Error = t.WriteTable()
+		default:
+			t.Error = t.WriteTable()
 		}
 	}
 
@@ -531,7 +530,6 @@ func (t *Table) WriteList() error {
 	return t.Error
 }
 
-
 func (t *Table) AsCsv() string {
 	var ret string
 	for range Only.Once {
@@ -572,7 +570,6 @@ func (t *Table) WriteCsv() error {
 	}
 	return t.Error
 }
-
 
 func (t *Table) AsXml() string {
 	var ret string
@@ -615,7 +612,6 @@ func (t *Table) WriteXml() error {
 	return t.Error
 }
 
-
 func (t *Table) AsXLSX() string {
 	var ret string
 	for range Only.Once {
@@ -657,7 +653,6 @@ func (t *Table) WriteXLSX() error {
 	return t.Error
 }
 
-
 func (t *Table) AsJson() string {
 	return string(t.raw)
 }
@@ -677,7 +672,6 @@ func (t *Table) WriteJson() error {
 	}
 	return t.Error
 }
-
 
 func (t *Table) AsRaw() string {
 	return string(t.json)
@@ -702,7 +696,6 @@ func (t *Table) WriteRaw() error {
 	}
 	return t.Error
 }
-
 
 func (t *Table) AsStruct() string {
 	return string(t.json)
@@ -739,7 +732,6 @@ func (t *Table) WriteStruct() error {
 	return t.Error
 }
 
-
 func (t *Table) AsMarkDown() string {
 	var ret string
 	for range Only.Once {
@@ -770,7 +762,7 @@ func (t *Table) WriteMarkDown() error {
 		}
 
 		if t.saveAsFile {
-			_, _ = fmt.Fprintf(os.Stderr,"# %s\n", t.title)
+			_, _ = fmt.Fprintf(os.Stderr, "# %s\n", t.title)
 			t.filePrefix += "." + StringTypeMarkDown
 			t.Error = t.writeFile(t.AsMarkDown(), DefaultFileMode)
 			break

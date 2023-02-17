@@ -1,11 +1,12 @@
 package getPsKpiForHoursByPsId
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"encoding/json"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -28,7 +29,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	Hours map[string]Hour `json:"hours" DataTable:"true" DataTableIndex:"true"`	// DataTableSortOn:"Index"`
+	Hours map[string]Hour `json:"hours" DataTable:"true" DataTableIndex:"true"` // DataTableSortOn:"Index"`
 }
 
 type Hour struct {

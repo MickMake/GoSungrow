@@ -1,10 +1,11 @@
 package queryUnitList
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -25,7 +26,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent      GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"UnitConvertId"`
+	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"UnitConvertId"`
 
 	UnitConvertId valueTypes.Integer `json:"unit_conver_id" PointId:"unit_convert_id"`
 	UnitName      valueTypes.String  `json:"unit_name"`

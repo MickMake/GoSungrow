@@ -1,10 +1,11 @@
 package getDeviceModel
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -81,7 +82,7 @@ type ResultData struct {
 	} `json:"sysTypeList" PointId:"sys_type_list" DataTable:"true" DataTableSortOn:"CodeValue"`
 
 	AllFactoryList []struct {
-		GoStruct       GoStruct.GoStruct  `json:"-" PointListFlatten:"true"`
+		GoStruct GoStruct.GoStruct `json:"-" PointListFlatten:"true"`
 
 		Id             valueTypes.Integer `json:"id"`
 		FactoryName    valueTypes.String  `json:"factory_name"`
@@ -92,7 +93,7 @@ type ResultData struct {
 		Remark         valueTypes.String  `json:"remark"`
 	} `json:"all_factory_list" DataTable:"true" DataTableSortOn:"Id"`
 	DeviceTypeList []struct {
-		GoStruct        GoStruct.GoStruct   `json:"-" PointListFlatten:"true"`
+		GoStruct GoStruct.GoStruct `json:"-" PointListFlatten:"true"`
 
 		TypeId          valueTypes.Integer  `json:"type_id"`
 		TypeCode        valueTypes.Integer  `json:"type_code"`

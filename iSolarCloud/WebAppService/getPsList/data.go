@@ -1,10 +1,11 @@
 package getPsList
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -25,8 +26,8 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent     GoStruct.GoStructParent  `json:"-" PointIdFromChild:"PsId" PointIdReplace:"true" DataTable:"true" DataTableSortOn:"PsId"`
-	GoStruct           GoStruct.GoStruct        `json:"-" PointDeviceFrom:"PsId"`
+	GoStructParent GoStruct.GoStructParent `json:"-" PointIdFromChild:"PsId" PointIdReplace:"true" DataTable:"true" DataTableSortOn:"PsId"`
+	GoStruct       GoStruct.GoStruct       `json:"-" PointDeviceFrom:"PsId"`
 
 	PsId               valueTypes.Integer  `json:"psid" PointId:"ps_id"`
 	PsName             valueTypes.String   `json:"psname" PointId:"ps_name"`
@@ -41,7 +42,7 @@ type ResultData []struct {
 	PsType             valueTypes.Integer  `json:"ps_type"`
 	ShareType          valueTypes.String   `json:"share_type"`
 
-	RowCount           valueTypes.Integer  `json:"rowCount"`
+	RowCount valueTypes.Integer `json:"rowCount"`
 }
 
 func (e *ResultData) IsValid() error {

@@ -1,10 +1,11 @@
 package getAreaList
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -26,7 +27,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		GoStruct.GoStructParent    `json:"-" PointIdFromChild:"OrgId" PointIdReplace:"true"`
+		GoStruct.GoStructParent `json:"-" PointIdFromChild:"OrgId" PointIdReplace:"true"`
 
 		OrgId             valueTypes.Integer   `json:"org_id"`
 		OrgName           valueTypes.String    `json:"org_name"`

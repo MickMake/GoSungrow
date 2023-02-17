@@ -1,10 +1,11 @@
 package orgPowerReport
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -13,7 +14,7 @@ const Disabled = false
 const EndPointName = "MttvScreenService.orgPowerReport"
 
 type RequestData struct {
-	Type valueTypes.Integer  `json:"type" required:"true"`
+	Type valueTypes.Integer `json:"type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -25,8 +26,7 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData   struct {
+type ResultData struct {
 	RespMsg valueTypes.String `json:"respMsg" PointId:"resp_msg"`
 }
 

@@ -1,13 +1,13 @@
 package getPowerDeviceTypeList
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
-
 
 const Url = "/v1/devService/getPowerDeviceTypeList"
 const Disabled = false
@@ -26,17 +26,17 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent        GoStruct.GoStructParent `json:"GoStruct" PointIdReplace:"true" DataTable:"true" DataTableSortOn:"UpdateDate"`
+	GoStructParent GoStruct.GoStructParent `json:"GoStruct" PointIdReplace:"true" DataTable:"true" DataTableSortOn:"UpdateDate"`
 
-	UpdateDate      valueTypes.DateTime     `json:"update_date" PointNameDateFormat:"DateTimeLayout"`
-	SysId           valueTypes.String       `json:"sys_id"`
-	SysName         valueTypes.String       `json:"sys_name"`
-	TypeId          valueTypes.Integer      `json:"type_id"`
-	TypeCode        valueTypes.Integer      `json:"type_code"`
-	TypeName        valueTypes.String       `json:"type_name"`
-	TypeNameEn      valueTypes.String       `json:"type_name_en"`
-	IsRemoteUpgrade valueTypes.Bool         `json:"is_remote_upgrade"`
-	ValidFlag       valueTypes.Bool         `json:"valid_flag"`
+	UpdateDate      valueTypes.DateTime `json:"update_date" PointNameDateFormat:"DateTimeLayout"`
+	SysId           valueTypes.String   `json:"sys_id"`
+	SysName         valueTypes.String   `json:"sys_name"`
+	TypeId          valueTypes.Integer  `json:"type_id"`
+	TypeCode        valueTypes.Integer  `json:"type_code"`
+	TypeName        valueTypes.String   `json:"type_name"`
+	TypeNameEn      valueTypes.String   `json:"type_name_en"`
+	IsRemoteUpgrade valueTypes.Bool     `json:"is_remote_upgrade"`
+	ValidFlag       valueTypes.Bool     `json:"valid_flag"`
 }
 
 func (e *ResultData) IsValid() error {

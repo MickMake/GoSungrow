@@ -1,11 +1,12 @@
 package getUserList
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/userService/getUserList"
@@ -25,11 +26,11 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	Email       string      `json:"email"`
-	Mobletel    interface{} `json:"mobletel"`
-	Useraccount string      `json:"useraccount"`
+	Email       string             `json:"email"`
+	Mobletel    interface{}        `json:"mobletel"`
+	Useraccount string             `json:"useraccount"`
 	Userid      valueTypes.Integer `json:"userid"`
-	Username    string      `json:"username"`
+	Username    string             `json:"username"`
 }
 
 func (e *ResultData) IsValid() error {

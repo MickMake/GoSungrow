@@ -1,10 +1,11 @@
 package getAllDevTypeList
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -24,19 +25,17 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData []struct {
-	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"DevTypeCode"`
+	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"DevTypeCode"`
 
 	DevTypeCode valueTypes.Integer `json:"devtypecode" PointId:"dev_type_code"`
-	DevTypeName valueTypes.String `json:"devtypename" PointId:"dev_type_name"`
+	DevTypeName valueTypes.String  `json:"devtypename" PointId:"dev_type_name"`
 }
 
 func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

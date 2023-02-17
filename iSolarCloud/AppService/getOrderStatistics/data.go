@@ -1,11 +1,12 @@
 package getOrderStatistics
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/faultService/getOrderStatistics"
@@ -24,8 +25,7 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData   struct {
+type ResultData struct {
 	ProcessedCount  valueTypes.Integer `json:"processed_count"`
 	ProcessingCount valueTypes.Integer `json:"processing_count"`
 	UnProcessCount  valueTypes.Integer `json:"un_process_count"`

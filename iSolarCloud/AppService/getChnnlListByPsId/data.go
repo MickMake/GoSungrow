@@ -1,10 +1,11 @@
 package getChnnlListByPsId
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
 const Url = "/v1/devService/getChnnlListByPsId"
@@ -26,7 +27,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		GoStruct       GoStruct.GoStruct   `json:"-" PointIdFrom:"PsId" PointIdReplace:"true" PointIdReplace:"true"`
+		GoStruct GoStruct.GoStruct `json:"-" PointIdFrom:"PsId" PointIdReplace:"true" PointIdReplace:"true"`
 
 		PsId           valueTypes.Integer  `json:"ps_id"`
 		Sn             valueTypes.String   `json:"sn"`

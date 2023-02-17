@@ -1,21 +1,20 @@
 package cmd
 
 import (
-	"GoSungrow/defaults"
+	"github.com/MickMake/GoSungrow/defaults"
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/Unify"
 	"github.com/spf13/cobra"
 )
 
-
 type Cmds struct {
-	Unify  *Unify.Unify
-	Api    *CmdApi
-	Data   *CmdData
-	Info   *CmdInfo
-	Show   *CmdShow
-	Mqtt   *CmdMqtt
-	Ha     *CmdHa
+	Unify *Unify.Unify
+	Api   *CmdApi
+	Data  *CmdData
+	Info  *CmdInfo
+	Show  *CmdShow
+	Mqtt  *CmdMqtt
+	Ha    *CmdHa
 
 	ConfigDir   string
 	CacheDir    string
@@ -36,14 +35,12 @@ type CmdDefault struct {
 	SelfCmd *cobra.Command
 }
 
-
 var cmds Cmds
-
 
 func init() {
 	for range Only.Once {
 		cmds.Unify = Unify.New(
-			Unify.Options {
+			Unify.Options{
 				Description:   defaults.Description,
 				BinaryName:    defaults.BinaryName,
 				BinaryVersion: defaults.BinaryVersion,
@@ -95,7 +92,6 @@ func Execute() error {
 
 	return err
 }
-
 
 func (ca *Cmds) ProcessArgs(_ *cobra.Command, args []string) error {
 	for range Only.Once {

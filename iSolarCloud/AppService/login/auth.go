@@ -1,13 +1,14 @@
 package login
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct/output"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"errors"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 	"time"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const (
@@ -23,12 +24,12 @@ type SunGrowAuth struct {
 	UserPassword string
 	TokenFile    string
 	// Token        string
-	Force        bool
+	Force bool
 
-	lastLogin    time.Time
-	newToken     bool
+	lastLogin time.Time
+	newToken  bool
 	// retry        int
-	err          error
+	err error
 }
 
 func (a *SunGrowAuth) Verify() error {
@@ -62,11 +63,11 @@ func (a *SunGrowAuth) Verify() error {
 func (e *EndPoint) Login(auth *SunGrowAuth) error {
 	for range Only.Once {
 		e.Auth = auth
-		e.Request.RequestData = RequestData {
+		e.Request.RequestData = RequestData{
 			UserAccount:  valueTypes.SetStringValue(auth.UserAccount),
 			UserPassword: valueTypes.SetStringValue(auth.UserPassword),
 		}
-		e.Request.RequestCommon = api.RequestCommon {
+		e.Request.RequestCommon = api.RequestCommon{
 			Appkey:  auth.AppKey,
 			SysCode: "900",
 		}
@@ -83,7 +84,7 @@ func (e *EndPoint) Login(auth *SunGrowAuth) error {
 
 		if auth.Force {
 			e.SetCacheTimeout(time.Second)
-			e.SetTokenInvalid()	// e.CacheFilename()
+			e.SetTokenInvalid() // e.CacheFilename()
 			// e.RemoveCache
 		}
 

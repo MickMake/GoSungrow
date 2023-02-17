@@ -1,11 +1,12 @@
 package getOrgListForUser
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/orgService/getOrgListForUser"
@@ -29,7 +30,7 @@ type ResultData []struct {
 	GcjLongitude   valueTypes.Float   `json:"gcj_longitude"`
 	Id             valueTypes.Integer `json:"id"`
 	IsLeaf         valueTypes.Bool    `json:"is_leaf"`
-	MapLevel       interface{} `json:"map_level"`
+	MapLevel       interface{}        `json:"map_level"`
 	OrgId          valueTypes.Integer `json:"org_id"`
 	OrgIndexCode   valueTypes.String  `json:"org_index_code"`
 	OrgIsShow      valueTypes.Integer `json:"org_is_show"`

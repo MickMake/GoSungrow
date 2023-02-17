@@ -1,10 +1,11 @@
 package getPowerStatistics
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -26,12 +27,12 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	City           valueTypes.String    `json:"city"`
-	PsName         valueTypes.String    `json:"ps_name"`
-	PsShortName    valueTypes.String    `json:"ps_short_name"`
-	Status1        valueTypes.Integer   `json:"status1"`
-	Status2        valueTypes.Integer   `json:"status2"`
-	Status3        valueTypes.Integer   `json:"status3"`
+	City        valueTypes.String  `json:"city"`
+	PsName      valueTypes.String  `json:"ps_name"`
+	PsShortName valueTypes.String  `json:"ps_short_name"`
+	Status1     valueTypes.Integer `json:"status1"`
+	Status2     valueTypes.Integer `json:"status2"`
+	Status3     valueTypes.Integer `json:"status3"`
 
 	DayPower       valueTypes.UnitValue `json:"dayPower" PointId:"day_power"`
 	DesignCapacity valueTypes.UnitValue `json:"design_capacity"`

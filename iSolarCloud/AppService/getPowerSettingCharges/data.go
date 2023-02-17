@@ -1,11 +1,12 @@
 package getPowerSettingCharges
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/powerStationService/getPowerSettingCharges"
@@ -24,8 +25,7 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData   struct {
+type ResultData struct {
 	CurrencyTypeList []struct {
 		CodeName  valueTypes.String `json:"code_name"`
 		CodeValue valueTypes.String `json:"code_value"`

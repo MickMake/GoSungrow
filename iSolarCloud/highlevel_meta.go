@@ -1,13 +1,12 @@
 package iSolarCloud
 
 import (
-	"GoSungrow/iSolarCloud/AppService/queryDeviceRealTimeDataByPsKeys"
-	"GoSungrow/iSolarCloud/AppService/queryUnitList"
-	"GoSungrow/iSolarCloud/WebAppService/getMqttConfigInfoByAppkey"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/queryDeviceRealTimeDataByPsKeys"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/queryUnitList"
+	"github.com/MickMake/GoSungrow/iSolarCloud/WebAppService/getMqttConfigInfoByAppkey"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
-
 
 func (sg *SunGrow) MetaUnitList() error {
 	for range Only.Once {

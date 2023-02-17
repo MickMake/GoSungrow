@@ -1,13 +1,14 @@
 package api
 
 import (
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/output"
-	"github.com/MickMake/GoUnify/Only"
-	"github.com/MickMake/GoUnify/cmdPath"
 	"io"
 	"path/filepath"
 	"time"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/MickMake/GoUnify/cmdPath"
 
 	"bytes"
 	"encoding/json"
@@ -15,7 +16,6 @@ import (
 	"fmt"
 	"net/http"
 )
-
 
 type Web struct {
 	ServerUrl EndPointUrl
@@ -29,7 +29,6 @@ type Web struct {
 	httpRequest  *http.Request
 	httpResponse *http.Response
 }
-
 
 func (w *Web) SetUrl(u string) error {
 	w.ServerUrl = SetUrl(u)
@@ -54,7 +53,6 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 			isCached = true
 		}
 
-
 		if isCached {
 			w.Body, w.Error = w.WebCacheRead(endpoint)
 			if w.Error != nil {
@@ -67,7 +65,6 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 				break
 			}
 		}
-
 
 		if len(w.Body) == 0 {
 			w.Error = errors.New("empty http response")
@@ -264,7 +261,6 @@ func (w *Web) WebCacheWrite(endpoint EndPoint, data []byte) error {
 	fn := filepath.Join(w.cacheDir, endpoint.CacheFilename())
 	return output.PlainFileWrite(fn, data, output.DefaultFileMode)
 }
-
 
 // PointCacheCheck Retrieves cache data from a local file.
 func (w *Web) PointCacheCheck(data DataMap) bool {

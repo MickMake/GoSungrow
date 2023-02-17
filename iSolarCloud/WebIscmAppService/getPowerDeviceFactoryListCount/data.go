@@ -1,9 +1,9 @@
 package getPowerDeviceFactoryListCount
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 
 	"fmt"
 )
@@ -24,8 +24,7 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData   struct {
+type ResultData struct {
 	Count valueTypes.Integer `json:"count"`
 }
 

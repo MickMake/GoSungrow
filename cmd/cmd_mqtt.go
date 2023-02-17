@@ -1,12 +1,17 @@
 package cmd
 
 import (
-	"GoSungrow/iSolarCloud/WebAppService/getDevicePointAttrs"
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct/output"
-	"GoSungrow/mmHa"
 	"errors"
 	"fmt"
+	"path/filepath"
+	"regexp"
+	"strings"
+	"time"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/WebAppService/getDevicePointAttrs"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/MickMake/GoSungrow/mmHa"
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/MickMake/GoUnify/cmdLog"
@@ -14,12 +19,7 @@ import (
 	"github.com/go-co-op/gocron"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"path/filepath"
-	"regexp"
-	"strings"
-	"time"
 )
-
 
 const (
 	DefaultServiceName = "GoSungrow"
@@ -31,22 +31,21 @@ const (
 	flagMqttPort       = "mqtt-port"
 )
 
-
 //goland:noinspection GoNameStartsWithPackageName
 type CmdMqtt struct {
 	CmdDefault
 
 	// HASSIO MQTT
-	MqttUsername   string
+	MqttUsername string
 
-	MqttPassword   string
-	MqttHost       string
-	MqttPort       string
+	MqttPassword string
+	MqttHost     string
+	MqttPort     string
 
-	Client         *mmHa.Mqtt
-	endpoints      MqttEndPoints
-	points         getDevicePointAttrs.PointsMap
-	previous       map[string]*api.DataEntries
+	Client    *mmHa.Mqtt
+	endpoints MqttEndPoints
+	points    getDevicePointAttrs.PointsMap
+	previous  map[string]*api.DataEntries
 
 	optionLogLevel      int
 	optionSleepDelay    time.Duration
@@ -58,15 +57,15 @@ func NewCmdMqtt() *CmdMqtt {
 	var ret *CmdMqtt
 
 	for range Only.Once {
-		ret = &CmdMqtt {
-			CmdDefault: CmdDefault {
+		ret = &CmdMqtt{
+			CmdDefault: CmdDefault{
 				Error:   nil,
 				cmd:     nil,
 				SelfCmd: nil,
 			},
 
 			optionLogLevel:      LogLevelInfo,
-			optionSleepDelay:    time.Second * 40,		// Takes up to 40 seconds for data to come in.
+			optionSleepDelay:    time.Second * 40, // Takes up to 40 seconds for data to come in.
 			optionFetchSchedule: time.Minute * 5,
 			previous:            make(map[string]*api.DataEntries, 0),
 		}
@@ -105,7 +104,7 @@ func (c *CmdMqtt) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Long:                  "One-off sync to a HASSIO broker.",
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
-			PreRunE:               func(cmd *cobra.Command, args []string) error {
+			PreRunE: func(cmd *cobra.Command, args []string) error {
 				cmds.Error = cmds.SunGrowArgs(cmd, args)
 				if cmds.Error != nil {
 					return cmds.Error
@@ -116,8 +115,8 @@ func (c *CmdMqtt) AttachCommand(cmd *cobra.Command) *cobra.Command {
 				}
 				return nil
 			},
-			RunE:                  cmds.Mqtt.CmdMqttRun,
-			Args:                  cobra.RangeArgs(0, 1),
+			RunE: cmds.Mqtt.CmdMqttRun,
+			Args: cobra.RangeArgs(0, 1),
 		}
 		cmdMqtt.AddCommand(cmdMqttRun)
 		cmdMqttRun.Example = cmdHelp.PrintExamples(cmdMqttRun, "")
@@ -130,7 +129,7 @@ func (c *CmdMqtt) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Long:                  "Sync to a HASSIO MQTT broker.",
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
-			PreRunE:               func(cmd *cobra.Command, args []string) error {
+			PreRunE: func(cmd *cobra.Command, args []string) error {
 				cmds.Error = cmds.SunGrowArgs(cmd, args)
 				if cmds.Error != nil {
 					return cmds.Error
@@ -141,8 +140,8 @@ func (c *CmdMqtt) AttachCommand(cmd *cobra.Command) *cobra.Command {
 				}
 				return nil
 			},
-			RunE:                  cmds.Mqtt.CmdMqttSync,
-			Args:                  cobra.RangeArgs(0, 1),
+			RunE: cmds.Mqtt.CmdMqttSync,
+			Args: cobra.RangeArgs(0, 1),
 		}
 		cmdMqtt.AddCommand(cmdMqttSync)
 		cmdMqttSync.Example = cmdHelp.PrintExamples(cmdMqttSync, "", "all")
@@ -166,7 +165,7 @@ func (c *CmdMqtt) AttachFlags(cmd *cobra.Command, viper *viper.Viper) {
 func (c *CmdMqtt) MqttArgs(_ *cobra.Command, _ []string) error {
 	for range Only.Once {
 		c.LogInfo("Connecting to MQTT HASSIO Service...\n")
-		c.Client = mmHa.New(mmHa.Mqtt {
+		c.Client = mmHa.New(mmHa.Mqtt{
 			ClientId:     DefaultServiceName,
 			EntityPrefix: DefaultServiceName,
 			Username:     c.MqttUsername,
@@ -330,7 +329,6 @@ func (c *CmdMqtt) CmdMqttSync(_ *cobra.Command, args []string) error {
 	return c.Error
 }
 
-
 // -------------------------------------------------------------------------------- //
 
 func (c *CmdMqtt) Cron() error {
@@ -431,7 +429,7 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 			}
 
 			_ = c.UpdatePoint(r)
-			r.Value.UnitValueFix()	// @TODO - Fix this up properly
+			r.Value.UnitValueFix() // @TODO - Fix this up properly
 
 			id := r.EndPoint
 			name := r.EndPoint
@@ -450,16 +448,16 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 			// 	r.Point.Unit = mmHa.LabelBinarySensor
 			// }
 
-			re := mmHa.EntityConfig {
-				Name:        name,	// mmHa.JoinStringsForName(" - ", id), // r.Point.Name, // PointName,
-				SubName:     "",
-				ParentId:    r.EndPoint,
-				ParentName:  r.Parent.Key,
-				UniqueId:    r.Point.Id,
+			re := mmHa.EntityConfig{
+				Name:       name, // mmHa.JoinStringsForName(" - ", id), // r.Point.Name, // PointName,
+				SubName:    "",
+				ParentId:   r.EndPoint,
+				ParentName: r.Parent.Key,
+				UniqueId:   r.Point.Id,
 				// UniqueId:    r.Id,
 				FullId: id, // string(r.FullId),	// WAS r.Point.FullId
 				// FullName:    r.Point.Name,
-				Units:       r.Point.Unit,
+				Units: r.Point.Unit,
 				// ValueName:   r.Point.Description,
 				// ValueName:   r.Point.Id,
 				DeviceClass: "",
@@ -535,7 +533,7 @@ func (c *CmdMqtt) GetEndPoints() error {
 		for name := range c.endpoints {
 			_, c.Error = c.Client.SetDeviceConfig(
 				DefaultServiceName, DefaultServiceName,
-				name, DefaultServiceName + "." + name, DefaultServiceName, DefaultVendor,
+				name, DefaultServiceName+"."+name, DefaultServiceName, DefaultVendor,
 				DefaultServiceArea,
 			)
 			if c.Error != nil {
@@ -795,7 +793,6 @@ func (c *CmdMqtt) UpdatePoint(entry *api.DataEntry) error {
 // 	}
 // }
 
-
 // -------------------------------------------------------------------------------- //
 
 const (
@@ -829,41 +826,41 @@ func (c *CmdMqtt) SetLogLevel(level string) {
 func (c *CmdMqtt) GetLogLevel() string {
 	var ret string
 	switch c.optionLogLevel {
-		case LogLevelDebug:
-			ret = LogLevelDebugStr
-		case LogLevelInfo:
-			ret = LogLevelInfoStr
-		case LogLevelWarning:
-			ret = LogLevelWarningStr
-		case LogLevelError:
-			ret = LogLevelErrorStr
-		default:
-			ret = LogLevelInfoStr
+	case LogLevelDebug:
+		ret = LogLevelDebugStr
+	case LogLevelInfo:
+		ret = LogLevelInfoStr
+	case LogLevelWarning:
+		ret = LogLevelWarningStr
+	case LogLevelError:
+		ret = LogLevelErrorStr
+	default:
+		ret = LogLevelInfoStr
 	}
 	return ret
 }
 
 func (c *CmdMqtt) LogDebug(format string, args ...interface{}) {
 	if LogLevelDebug >= c.optionLogLevel {
-		cmdLog.LogPrintDate("DEBUG: " + format, args...)
+		cmdLog.LogPrintDate("DEBUG: "+format, args...)
 	}
 }
 
 func (c *CmdMqtt) LogInfo(format string, args ...interface{}) {
 	if LogLevelInfo >= c.optionLogLevel {
-		cmdLog.LogPrintDate("INFO: " + format, args...)
+		cmdLog.LogPrintDate("INFO: "+format, args...)
 	}
 }
 
 func (c *CmdMqtt) LogWarning(format string, args ...interface{}) {
 	if LogLevelWarning >= c.optionLogLevel {
-		cmdLog.LogPrintDate("WARNING: " + format, args...)
+		cmdLog.LogPrintDate("WARNING: "+format, args...)
 	}
 }
 
 func (c *CmdMqtt) LogError(format string, args ...interface{}) {
 	if LogLevelError >= c.optionLogLevel {
-		cmdLog.LogPrintDate("ERROR: " + format, args...)
+		cmdLog.LogPrintDate("ERROR: "+format, args...)
 	}
 }
 
@@ -890,7 +887,6 @@ func (c *CmdMqtt) LogPlainError(format string, args ...interface{}) {
 		fmt.Print(cmdLog.LogSprintf(format, args...))
 	}
 }
-
 
 const (
 	OptionLogLevel      = "loglevel"
@@ -947,7 +943,6 @@ func (c *CmdMqtt) Options() error {
 	}
 	return c.Error
 }
-
 
 func (c *CmdMqtt) optionFuncLogLevel(_ mqtt.Client, msg mqtt.Message) {
 	for range Only.Once {
@@ -1013,9 +1008,9 @@ func (c *CmdMqtt) optionFuncServiceState(_ mqtt.Client, msg mqtt.Message) {
 		request := strings.ToLower(string(msg.Payload()))
 		c.LogInfo("Option[%s] set to '%s'\n", OptionServiceState, request)
 		switch request {
-			case "Run":
-			case "Restart":
-			case "Stop":
+		case "Run":
+		case "Restart":
+		case "Stop":
 		}
 
 		c.Error = c.Client.SetOptionValue(OptionServiceState, request)
@@ -1026,7 +1021,6 @@ func (c *CmdMqtt) optionFuncServiceState(_ mqtt.Client, msg mqtt.Message) {
 	}
 }
 
-
 // -------------------------------------------------------------------------------- //
 
 type MqttEndPoints map[string]MqttEndPoint
@@ -1034,6 +1028,7 @@ type MqttEndPoint struct {
 	Include []string `json:"include"`
 	Exclude []string `json:"exclude"`
 }
+
 func (c *MqttEndPoints) Names() []string {
 	var ret []string
 	for name := range *c {

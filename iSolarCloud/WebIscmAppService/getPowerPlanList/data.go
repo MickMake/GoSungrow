@@ -1,10 +1,11 @@
 package getPowerPlanList
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
 const Url = "/v1/powerStationService/getPowerPlanList"
@@ -24,9 +25,9 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"CodeId"`
+	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"CodeId"`
 
-	PsId      valueTypes.Float `json:"ps_id"`
+	PsId valueTypes.Float `json:"ps_id"`
 
 	January   valueTypes.Float `json:"one" PointId:"january"`
 	February  valueTypes.Float `json:"two" PointId:"february"`

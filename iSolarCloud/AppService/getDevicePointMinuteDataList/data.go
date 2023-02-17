@@ -1,11 +1,12 @@
 package getDevicePointMinuteDataList
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"encoding/json"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -29,7 +30,6 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
 	Data []DataPoint `json:"data" PointIdReplace:"false" DataTable:"true" DataTableSortOn:"TimeStamp"`
 }
@@ -51,14 +51,13 @@ func (e *ResultData) UnmarshalJSON(data []byte) error {
 	return err
 }
 
-
 type DataPoint struct {
-	GoStruct.GoStruct     `json:"-" PointIdReplace:"true" PointIdFrom:"TimeStamp" PointNameDateFormat:"DateTimeAltLayout" PointTimestampFrom:"TimeStamp"`
+	GoStruct.GoStruct `json:"-" PointIdReplace:"true" PointIdFrom:"TimeStamp" PointNameDateFormat:"DateTimeAltLayout" PointTimestampFrom:"TimeStamp"`
 
-	TimeStamp             valueTypes.DateTime             `json:"time_stamp" PointNameDateFormat:"DateTimeLayout"`
-	Points                map[string]valueTypes.UnitValue `json:"points"`
+	TimeStamp valueTypes.DateTime             `json:"time_stamp" PointNameDateFormat:"DateTimeLayout"`
+	Points    map[string]valueTypes.UnitValue `json:"points"`
 	// P13148                valueTypes.Integer          `json:"p13148"`
-	IsPlatformDefaultUnit valueTypes.Bool                `json:"is_platform_default_unit"`
+	IsPlatformDefaultUnit valueTypes.Bool `json:"is_platform_default_unit"`
 }
 
 func (e *DataPoint) UnmarshalJSON(data []byte) error {
@@ -83,7 +82,7 @@ func (e *DataPoint) UnmarshalJSON(data []byte) error {
 			break
 		}
 
-		d.Points = make(map[string]valueTypes.UnitValue)	// @TODO - change to UVS
+		d.Points = make(map[string]valueTypes.UnitValue) // @TODO - change to UVS
 		for k, v := range mp {
 			if k == "is_platform_default_unit" {
 				continue
@@ -108,7 +107,6 @@ func (e *DataPoint) UnmarshalJSON(data []byte) error {
 
 	return err
 }
-
 
 func (e *ResultData) IsValid() error {
 	var err error

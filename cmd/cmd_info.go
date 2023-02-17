@@ -1,13 +1,13 @@
 package cmd
 
 import (
-	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/spf13/cobra"
 )
-
 
 //goland:noinspection GoNameStartsWithPackageName
 type CmdInfo CmdDefault

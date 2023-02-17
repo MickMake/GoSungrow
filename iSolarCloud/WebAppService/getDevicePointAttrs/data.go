@@ -1,10 +1,11 @@
 package getDevicePointAttrs
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"encoding/json"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 
 	"fmt"
@@ -124,92 +125,91 @@ func (m *PointsMap) Get(point string) *Point {
 	return nil
 }
 
-
 type UnitTypes map[string]string
 
-var unitTypes = UnitTypes {
-	"":       "Unknown",              //
-	"NULL":   "Unknown",              //
+var unitTypes = UnitTypes{
+	"":     "Unknown", //
+	"NULL": "Unknown", //
 
-	"%":      "Percent",              // 10
-	"%RH":    "Humidity",             // 12
+	"%":   "Percent",  // 10
+	"%RH": "Humidity", // 12
 
-	"A":      "Current",              //
-	"Ah":     "Current Capacity",     //
-	"mA":     "Current",              //
+	"A":  "Current",          //
+	"Ah": "Current Capacity", //
+	"mA": "Current",          //
 
-	"Bar":    "Pressure",             //
-	"hPa":    "Pressure",             // 19
+	"Bar": "Pressure", //
+	"hPa": "Pressure", // 19
 
-	"Day":    "Date/Time",            // 15
-	"H":      "Date/Time",            // 15
-	"Hour":   "Date/Time",            // 15
-	"h":      "Date/Time",            // 15
-	"Year":   "Date/Time",            // 15
-	"Min":    "Date/Time",            // 15
-	"Mon":    "Date/Time",            // 15
-	"min":    "Date/Time",            // 15
-	"s":      "Date/Time",            // 15
+	"Day":  "Date/Time", // 15
+	"H":    "Date/Time", // 15
+	"Hour": "Date/Time", // 15
+	"h":    "Date/Time", // 15
+	"Year": "Date/Time", // 15
+	"Min":  "Date/Time", // 15
+	"Mon":  "Date/Time", // 15
+	"min":  "Date/Time", // 15
+	"s":    "Date/Time", // 15
 
-	"Hz":     "Frequency",            //
+	"Hz": "Frequency", //
 
-	"KV":     "Voltage",              //
-	"kV ":    "Voltage",              //
-	"kV":     "Voltage",              //
-	"V":      "Voltage",              //
-	"mV":     "Voltage",              //
+	"KV":  "Voltage", //
+	"kV ": "Voltage", //
+	"kV":  "Voltage", //
+	"V":   "Voltage", //
+	"mV":  "Voltage", //
 
-	"MAh":    "Energy",               // 13
-	"MWh":    "Energy",               //
-	"MWp":    "Energy",               //
-	"Wh":     "Energy",               //
-	"kWh":    "Energy",               //
+	"MAh": "Energy", // 13
+	"MWh": "Energy", //
+	"MWp": "Energy", //
+	"Wh":  "Energy", //
+	"kWh": "Energy", //
 
-	"MW":     "Power",                //
-	"kW":     "Power",                // 0 / 21
-	"W":      "Power",                //
+	"MW": "Power", //
+	"kW": "Power", // 0 / 21
+	"W":  "Power", //
 
-	"Mvar":   "Reactive Power",       //
-	"kVar":   "Reactive Power",       //
-	"kvar":   "Reactive Power",       //
-	"Var":    "Reactive Power",       //
+	"Mvar": "Reactive Power", //
+	"kVar": "Reactive Power", //
+	"kvar": "Reactive Power", //
+	"Var":  "Reactive Power", //
 
-	"VA":     "Apparent Power",       // 21
-	"kVA":    "Apparent Power",       // 21
+	"VA":  "Apparent Power", // 21
+	"kVA": "Apparent Power", // 21
 
-	"kW/kWp": "Power Normalization",  //
+	"kW/kWp": "Power Normalization", //
 
-	"kVarh":  "Reactive Electricity", //
-	"kvarh":  "Reactive Electricity", //
+	"kVarh": "Reactive Electricity", //
+	"kvarh": "Reactive Electricity", //
 
-	"PCS":    "PCS",                  //
+	"PCS": "PCS", //
 
-	"V/mA":   "Output",               // 0
+	"V/mA": "Output", // 0
 
-	"W/㎡":    "Irradiation",          //
-	"Wh/㎡":   "Irradiation",          // 1
+	"W/㎡":  "Irradiation", //
+	"Wh/㎡": "Irradiation", // 1
 
-	"dec":    "dec",                  //
+	"dec": "dec", //
 
-	"g":      "Weight",               // 17
-	"kg":     "Weight",               // 17
+	"g":  "Weight", // 17
+	"kg": "Weight", // 17
 
-	"kΩ":     "Resistance",           //
+	"kΩ": "Resistance", //
 
-	"m/s":    "Speed",                //
-	"r/min":  "Speed",                //
+	"m/s":   "Speed", //
+	"r/min": "Speed", //
 
-	"mm":     "Length",               //
+	"mm": "Length", //
 
-	"°":      "Angle",                //
+	"°": "Angle", //
 
-	"℃":      "Temperature",          // 2
+	"℃": "Temperature", // 2
 
-	"时":     "Date/Time",                   //  15
-	"分":     "Date/Time",                 // Operation Minutes
-	"台":     "Count",                   // Number of Online PCSs
-	"排":     "Count",                   //
-	"次":     "Count",                   // Discharging Count
+	"时": "Date/Time", //  15
+	"分": "Date/Time", // Operation Minutes
+	"台": "Count",     // Number of Online PCSs
+	"排": "Count",     //
+	"次": "Count",     // Discharging Count
 }
 
 // 21 = kW
@@ -281,7 +281,6 @@ func (ut *UnitTypes) Get(name string) string {
 	}
 	return name
 }
-
 
 type PointGroupNames map[string]string
 

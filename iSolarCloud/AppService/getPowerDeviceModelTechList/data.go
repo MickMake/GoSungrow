@@ -1,11 +1,12 @@
 package getPowerDeviceModelTechList
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/getPowerDeviceModelTechList"
@@ -63,10 +64,10 @@ func (rd RequestData) Help() string {
 
 type ResultData []struct {
 	CodeId          valueTypes.Integer `json:"code_id"`
-	CodeName        string      `json:"code_name"`
-	CodeValue       string      `json:"code_value"`
-	DefaultValue    interface{} `json:"default_value"`
-	TechDescription string      `json:"tech_description"`
+	CodeName        string             `json:"code_name"`
+	CodeValue       string             `json:"code_value"`
+	DefaultValue    interface{}        `json:"default_value"`
+	TechDescription string             `json:"tech_description"`
 }
 
 func (e *ResultData) IsValid() error {

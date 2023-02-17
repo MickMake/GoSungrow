@@ -1,11 +1,12 @@
 package queryDeviceListByUserId
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/devService/queryDeviceListByUserId"
@@ -25,8 +26,8 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	List     []interface{} `json:"list"`
-	RowCount valueTypes.Integer   `json:"rowCount" PointId:"row_count"`
+	List     []interface{}      `json:"list"`
+	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 }
 
 func (e *ResultData) IsValid() error {

@@ -1,9 +1,9 @@
 package getParamSetTemplatePointInfo
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 
 	"fmt"
 )
@@ -13,8 +13,8 @@ const Disabled = false
 const EndPointName = "AppService.getParamSetTemplatePointInfo"
 
 type RequestData struct {
-	UuidList          valueTypes.String  `json:"uuid_list" required:"true"`
-	SetType           valueTypes.String  `json:"set_type" required:"true"`
+	UuidList valueTypes.String `json:"uuid_list" required:"true"`
+	SetType  valueTypes.String `json:"set_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -29,7 +29,6 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
 }
 
@@ -37,7 +36,6 @@ func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

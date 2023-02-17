@@ -1,8 +1,8 @@
 package getApiCallsForAppkeys
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
 
 	"fmt"
 )
@@ -23,7 +23,6 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData []struct {
 }
 
@@ -31,7 +30,6 @@ func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

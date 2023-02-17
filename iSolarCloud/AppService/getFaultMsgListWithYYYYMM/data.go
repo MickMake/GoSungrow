@@ -1,11 +1,12 @@
 package getFaultMsgListWithYYYYMM
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const Url = "/v1/faultService/getFaultMsgListWithYYYYMM"
@@ -24,18 +25,17 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData   []struct {
-	CreateTime    valueTypes.Integer  `json:"create_time"`
-	FaultCode     valueTypes.String   `json:"fault_code"`
-	FaultLevel    valueTypes.Integer  `json:"fault_level"`
-	FaultReason   valueTypes.String   `json:"fault_reason"`
-	FaultType     valueTypes.Integer  `json:"fault_type"`
-	FaultTypeCode valueTypes.Integer  `json:"fault_type_code"`
-	Id            valueTypes.Integer  `json:"id"`
-	PsId          valueTypes.PsId  `json:"ps_id"`
-	PsKey         valueTypes.PsKey    `json:"ps_key"`
-	UUID          valueTypes.Integer  `json:"uuid"`
+type ResultData []struct {
+	CreateTime    valueTypes.Integer `json:"create_time"`
+	FaultCode     valueTypes.String  `json:"fault_code"`
+	FaultLevel    valueTypes.Integer `json:"fault_level"`
+	FaultReason   valueTypes.String  `json:"fault_reason"`
+	FaultType     valueTypes.Integer `json:"fault_type"`
+	FaultTypeCode valueTypes.Integer `json:"fault_type_code"`
+	Id            valueTypes.Integer `json:"id"`
+	PsId          valueTypes.PsId    `json:"ps_id"`
+	PsKey         valueTypes.PsKey   `json:"ps_key"`
+	UUID          valueTypes.Integer `json:"uuid"`
 }
 
 func (e *ResultData) IsValid() error {

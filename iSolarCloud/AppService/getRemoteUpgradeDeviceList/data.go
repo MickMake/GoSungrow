@@ -1,10 +1,11 @@
 package getRemoteUpgradeDeviceList
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -28,7 +29,7 @@ func (rd RequestData) Help() string {
 type ResultData struct {
 	MModuleNameList []valueTypes.String `json:"m_module_name_list" PointId:"module_names"`
 	PageList        []struct {
-		GoStruct.GoStructParent  `json:"-" PointIdFromChild:"PsKey" PointIdReplace:"true"`
+		GoStruct.GoStructParent `json:"-" PointIdFromChild:"PsKey" PointIdReplace:"true"`
 
 		PsKey                valueTypes.PsKey   `json:"ps_key"`
 		PsId                 valueTypes.PsId    `json:"ps_id"`

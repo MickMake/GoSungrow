@@ -1,10 +1,11 @@
 package getTheoryAndActualPower
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -16,7 +17,7 @@ type RequestData struct {
 	// ws.missing-parameter:user_id or ps_id
 	// @TODO - Figure out why duplicate UserId entries in the structure causes json.Marshall to bork in iSolarCloud/api/web.go:128
 	PsId   valueTypes.PsId   `json:"ps_id" required:"true"`
-	UserId valueTypes.String `json:"user_id"`	// required:"true"`
+	UserId valueTypes.String `json:"user_id"` // required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -27,7 +28,6 @@ func (rd RequestData) Help() string {
 	ret := fmt.Sprintf("")
 	return ret
 }
-
 
 type ResultData struct {
 	// Dummy valueTypes.String `json:"dummy"`

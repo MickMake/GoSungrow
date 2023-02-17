@@ -1,14 +1,14 @@
 package cmd
 
 import (
-	"GoSungrow/iSolarCloud"
-	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/spf13/cobra"
 )
-
 
 //goland:noinspection GoNameStartsWithPackageName
 type CmdData CmdDefault
@@ -44,10 +44,10 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               cmds.SunGrowArgs,
-			RunE:                  func(cmd *cobra.Command, args []string) error {
+			RunE: func(cmd *cobra.Command, args []string) error {
 				return cmd.Help()
 			},
-			Args:                  cobra.MinimumNArgs(0),
+			Args: cobra.MinimumNArgs(0),
 		}
 		cmd.AddCommand(c.SelfCmd)
 		c.SelfCmd.Example = cmdHelp.PrintExamples(c.SelfCmd, "get <endpoint>", "put <endpoint>")
@@ -214,7 +214,6 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 	}
 	return c.SelfCmd
 }
-
 
 func (c *CmdData) GetEndpoints(cmd *cobra.Command, args []string) error {
 	// endpoints string, psIds string, date string

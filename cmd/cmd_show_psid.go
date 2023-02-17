@@ -1,16 +1,16 @@
 package cmd
 
 import (
-	"GoSungrow/iSolarCloud"
-	"GoSungrow/iSolarCloud/AppService/getPsDetail"
-	"GoSungrow/iSolarCloud/AppService/getPsDetailWithPsType"
 	"fmt"
+	"strings"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPsDetail"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPsDetailWithPsType"
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/spf13/cobra"
-	"strings"
 )
-
 
 func (c *CmdShow) AttachPs(cmd *cobra.Command) *cobra.Command {
 	for range Only.Once {
@@ -40,7 +40,6 @@ func (c *CmdShow) AttachPs(cmd *cobra.Command) *cobra.Command {
 	}
 	return c.SelfCmd
 }
-
 
 func (c *CmdShow) AttachPsList(cmd *cobra.Command) *cobra.Command {
 	var self = &cobra.Command{

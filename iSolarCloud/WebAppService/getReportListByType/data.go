@@ -1,10 +1,11 @@
 package getReportListByType
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 )
 
@@ -24,9 +25,8 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData []struct {
-	GoStructParent   GoStruct.GoStructParent   `json:"GoStruct" DataTable:"true" DataTableSortOn:"CreateTime"`
+	GoStructParent GoStruct.GoStructParent `json:"GoStruct" DataTable:"true" DataTableSortOn:"CreateTime"`
 
 	CreateTime valueTypes.DateTime `json:"create_time" PointNameDateFormat:"DateTimeLayout"`
 	Cycle      valueTypes.Integer  `json:"cycle"`

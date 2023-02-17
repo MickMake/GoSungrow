@@ -1,11 +1,11 @@
 package main
 
 import (
-	"GoSungrow/cmd"
 	"fmt"
 	"os"
-)
 
+	"github.com/MickMake/GoSungrow/cmd"
+)
 
 func main() {
 	err := cmd.Execute()

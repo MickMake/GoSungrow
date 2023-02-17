@@ -1,19 +1,19 @@
 package cmd
 
 import (
-	"GoSungrow/iSolarCloud"
-	"GoSungrow/iSolarCloud/AppService/login"
-	"GoSungrow/iSolarCloud/api/GoStruct/output"
 	"errors"
 	"fmt"
+	"time"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/login"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdConfig"
 	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"time"
 )
-
 
 const (
 	flagApiUrl        = "host"
@@ -31,27 +31,26 @@ type CmdApi struct {
 	CmdDefault
 
 	// iSolarCloud api
-	ApiTimeout  time.Duration
-	Url      string
-	Username string
-	Password string
-	AppKey      string
-	LastLogin   string
-	ApiToken  string
+	ApiTimeout   time.Duration
+	Url          string
+	Username     string
+	Password     string
+	AppKey       string
+	LastLogin    string
+	ApiToken     string
 	ApiTokenFile string
-	OutputType string
-	SaveFile   bool
+	OutputType   string
+	SaveFile     bool
 
 	SunGrow *iSolarCloud.SunGrow
 }
-
 
 func NewCmdApi() *CmdApi {
 	var ret *CmdApi
 
 	for range Only.Once {
-		ret = &CmdApi {
-			CmdDefault: CmdDefault {
+		ret = &CmdApi{
+			CmdDefault: CmdDefault{
 				Error:   nil,
 				cmd:     nil,
 				SelfCmd: nil,
@@ -121,7 +120,7 @@ func (c *CmdApi) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               cmds.SunGrowArgs,
-			RunE:                  func(cmd *cobra.Command, args []string) error {
+			RunE: func(cmd *cobra.Command, args []string) error {
 				c.Error = c.ApiLogin(true)
 				if c.Error != nil {
 					return c.Error
@@ -130,7 +129,7 @@ func (c *CmdApi) AttachCommand(cmd *cobra.Command) *cobra.Command {
 				c.SunGrow.Auth.Print()
 				return nil
 			},
-			Args:                  cobra.MinimumNArgs(0),
+			Args: cobra.MinimumNArgs(0),
 		}
 		cmdApi.AddCommand(cmdApiLogin)
 		cmdApiLogin.Example = cmdHelp.PrintExamples(cmdApiLogin, "")
@@ -145,12 +144,12 @@ func (c *CmdApi) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               cmds.SunGrowArgs,
-			RunE:                  func(cmd *cobra.Command, args []string) error {
+			RunE: func(cmd *cobra.Command, args []string) error {
 				c.SunGrow.SaveAsFile = false
 				c.SunGrow.OutputType.SetJson()
 				return c.CmdApiGet(cmd, args)
 			},
-			Args:                  cobra.MinimumNArgs(1),
+			Args: cobra.MinimumNArgs(1),
 		}
 		cmdApi.AddCommand(cmdApiGet)
 		cmdApiGet.Example = cmdHelp.PrintExamples(cmdApiGet, "[area].<endpoint>")
@@ -165,12 +164,12 @@ func (c *CmdApi) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               cmds.SunGrowArgs,
-			RunE:                  func(cmd *cobra.Command, args []string) error {
+			RunE: func(cmd *cobra.Command, args []string) error {
 				c.SunGrow.SaveAsFile = false
 				c.SunGrow.OutputType.SetRaw()
 				return c.CmdApiGet(cmd, args)
 			},
-			Args:                  cobra.MinimumNArgs(1),
+			Args: cobra.MinimumNArgs(1),
 		}
 		cmdApi.AddCommand(cmdApiRaw)
 		cmdApiRaw.Example = cmdHelp.PrintExamples(cmdApiRaw, "[area].<endpoint>")
@@ -185,12 +184,12 @@ func (c *CmdApi) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               cmds.SunGrowArgs,
-			RunE:                  func(cmd *cobra.Command, args []string) error {
+			RunE: func(cmd *cobra.Command, args []string) error {
 				c.SunGrow.SaveAsFile = true
 				c.SunGrow.OutputType.SetJson()
 				return c.CmdApiGet(cmd, args)
 			},
-			Args:                  cobra.MinimumNArgs(1),
+			Args: cobra.MinimumNArgs(1),
 		}
 		cmdApi.AddCommand(cmdApiSave)
 		cmdApiSave.Example = cmdHelp.PrintExamples(cmdApiSave, "[area].<endpoint>")
@@ -205,12 +204,12 @@ func (c *CmdApi) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               cmds.SunGrowArgs,
-			RunE:                  func(cmd *cobra.Command, args []string) error {
+			RunE: func(cmd *cobra.Command, args []string) error {
 				// c.SunGrow.SaveAsFile = true
 				c.SunGrow.OutputType.SetStruct()
 				return c.CmdApiGet(cmd, args)
 			},
-			Args:                  cobra.MinimumNArgs(1),
+			Args: cobra.MinimumNArgs(1),
 		}
 		cmdApi.AddCommand(cmdApiStruct)
 		cmdApiStruct.Example = cmdHelp.PrintExamples(cmdApiStruct, "[area].<endpoint>")
@@ -257,7 +256,6 @@ func (c *CmdApi) AttachFlags(cmd *cobra.Command, viper *viper.Viper) {
 		viper.SetDefault(flagApiSaveFile, false)
 	}
 }
-
 
 func (ca *Cmds) SunGrowArgs(cmd *cobra.Command, args []string) error {
 	for range Only.Once {
@@ -307,7 +305,6 @@ func (ca *Cmds) SetOutputType(cmd *cobra.Command) error {
 	return err
 }
 
-
 func (c *CmdApi) CmdApi(cmd *cobra.Command, args []string) {
 	for range Only.Once {
 		if len(args) == 0 {
@@ -320,18 +317,18 @@ func (c *CmdApi) CmdApi(cmd *cobra.Command, args []string) {
 func (c *CmdApi) CmdApiList(cmd *cobra.Command, args []string) {
 	for range Only.Once {
 		switch {
-			case len(args) == 0:
-				fmt.Println("Unknown sub-command.")
-				_ = cmd.Help()
+		case len(args) == 0:
+			fmt.Println("Unknown sub-command.")
+			_ = cmd.Help()
 
-			case args[0] == "endpoints":
-				c.Error = c.SunGrow.ListEndpoints("")
+		case args[0] == "endpoints":
+			c.Error = c.SunGrow.ListEndpoints("")
 
-			case args[0] == "areas":
-				c.SunGrow.ListAreas()
+		case args[0] == "areas":
+			c.SunGrow.ListAreas()
 
-			default:
-				c.Error = c.SunGrow.ListEndpoints(args[0])
+		default:
+			c.Error = c.SunGrow.ListEndpoints(args[0])
 		}
 	}
 }
@@ -374,15 +371,14 @@ func (c *CmdApi) CmdApiPut(_ *cobra.Command, _ []string) {
 	}
 }
 
-
-func (c *CmdApi) ApiLogin(force bool)	error {
+func (c *CmdApi) ApiLogin(force bool) error {
 	for range Only.Once {
 		if c.SunGrow == nil {
 			c.Error = errors.New("sungrow instance not configured")
 			break
 		}
 
-		auth := login.SunGrowAuth {
+		auth := login.SunGrowAuth{
 			AppKey:       c.AppKey,
 			UserAccount:  c.Username,
 			UserPassword: c.Password,
@@ -399,14 +395,13 @@ func (c *CmdApi) ApiLogin(force bool)	error {
 			c.ApiToken = c.SunGrow.GetToken()
 
 			sf := cmds.Api.SaveFile
-			cmds.Api.SaveFile = false	// We don't want to lock this in the config.
+			cmds.Api.SaveFile = false // We don't want to lock this in the config.
 			c.Error = cmds.Unify.WriteConfig()
 			cmds.Api.SaveFile = sf
 		}
 	}
 	return c.Error
 }
-
 
 func MinimumArraySize(count int, args []string) []string {
 	var ret []string
