@@ -399,9 +399,10 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 			entries := data.Map[o]
 			r := entries.GetEntry(api.LastEntry) // Gets the last entry
 
-			//if strings.Contains(r.EndPoint, "pv_to_grid_energy") {
-			//	fmt.Printf("EMPTY[%s] -> %s\n", r.EndPoint, r.Value.String())
-			//}
+			// if strings.Contains(r.EndPoint, "active") {
+			// 	fmt.Printf("EMPTY[%s] -> %s\n", r.EndPoint, r.Value.String())
+			// }
+
 			if _, ok := c.previous[o]; ok {
 				previous := c.previous[o].GetEntry(api.LastEntry)
 				if r.Value.String() != previous.Value.String() {
@@ -478,10 +479,9 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 				re.LastReset = r.Point.WhenReset(r.Date)
 			}
 
-			// if strings.Contains(r.EndPoint, "pv_to_grid_energy") {
+			// if strings.Contains(r.EndPoint, "active") {
 			// 	fmt.Printf("EMPTY[%s] -> %s\n", r.EndPoint, r.Value.String())
 			// }
-			// fmt.Printf("UNIT[%s] -> %s / %s / %s / %s /\n", id, r.Point.GroupName, r.Point.Unit, r.Point.ValueType, r.Point.Description)
 
 			if refreshConfig {
 				c.LogPlainInfo("C")
@@ -595,12 +595,15 @@ func (c *CmdMqtt) UpdatePoint(entry *api.DataEntry) error {
 		if entry.Point.Unit == "" {
 			entry.Point.Unit = entry.Point.ValueType
 		}
-		if entry.Point.Unit == "Bool" {
-			entry.Point.Unit = mmHa.LabelBinarySensor
-		}
-		if entry.Point.ValueType == "Bool" {
-			entry.Point.Unit = mmHa.LabelBinarySensor
-		}
+		// if entry.Point.Unit == "Bool" {
+		// 	entry.Point.Unit = mmHa.LabelBinarySensor
+		// }
+		// if entry.Point.ValueType == "Bool" {
+		// 	entry.Point.Unit = mmHa.LabelBinarySensor
+		// }
+		// if entry.Value.TypeValue == "Bool" {
+		// 	entry.Value.UnitValue = mmHa.LabelBinarySensor
+		// }
 
 		// Parent
 		if len(entry.Point.Parents.Map) == 0 {

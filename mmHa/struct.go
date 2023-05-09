@@ -481,50 +481,15 @@ func (config *EntityConfig) FixConfig() {
 		// mdi:check-circle-outline | mdi:arrow-right-bold
 		// mdi:transmission-tower
 
-		// Set ValueTemplate
+		// Set default ValueTemplate
 		switch {
-			// 	fallthrough
-			//
-			// case config.Value.TypeValue == "Energy":
-			// 	fallthrough
-			//
-			// case config.Units == "MW":
-			// 	fallthrough
-			// case config.Units == "kW":
-			// 	fallthrough
-			// case config.Units == "W":
-			// 	fallthrough
-			//
-			// case config.Units == "kWp":
-			// 	fallthrough
-			// case config.Units == "MWh":
-			// 	fallthrough
-			// case config.Units == "kWh":
-			// 	fallthrough
-			// case config.Units == "Wh":
-			// 	fallthrough
-			//
-			// case config.Units == "kvar":
-			// 	fallthrough
-			// case config.Units == "Hz":
-			// 	fallthrough
-			// case config.Units == "V":
-			// 	fallthrough
-			// case config.Units == "A":
-			// 	fallthrough
-			// case config.Units == "°F":
-			// 	fallthrough
-			// case config.Units == "F":
-			// 	fallthrough
-			// case config.Units == "℉":
-			// 	fallthrough
-			// case config.Units == "°C":
-			// 	fallthrough
-			// case config.Units == "C":
-			// 	fallthrough
-			// case config.Units == "℃":
-			// 	fallthrough
-			// case config.Units == "%":
+			case config.Point.IsBool():
+				fallthrough
+			case config.Value.IsBool():
+				fallthrough
+			case config.IsBinarySensor():
+				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value }}")
+
 			case config.Value.IsFloat():
 				if !config.Value.Valid {
 					config.IgnoreUpdate = true
@@ -533,44 +498,44 @@ func (config *EntityConfig) FixConfig() {
 				if config.Value.String() == "" {
 					cnv = ""
 				}
-				if config.ValueName == "" {
-					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.value %s }}", cnv))
-				} else {
-					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s %s }}", config.ValueName, cnv))
+				vj := "value"
+				if config.ValueName != "" {
+					vj = config.ValueName
 				}
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s %s }}", vj, cnv))
 
-			case config.Value.IsBool():
-				fallthrough
-			case config.Value.Unit() == LabelBinarySensor:
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value }}")
-
-			case config.Value.Unit() == "DateTime":
-				fallthrough
-			case config.Value.TypeValue == "DateTime":
+			case config.Value.IsTypeDateTime():
+				vj := "value"
+				if config.ValueName != "" {
+					vj = config.ValueName
+				}
 				value, _, err := valueTypes.ParseDateTime(config.Value.String())
 				if err == nil {
 					config.Value.SetString(value.Local().Format(valueTypes.DateTimeFullLayout))
-					config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value | as_datetime }}")
+					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | as_datetime }}", vj))
 				} else {
-					config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value }}")
+					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s }}", vj))
 				}
 
 			case config.Value.IsInt():
 				fallthrough
 			default:
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value }}")
+				vj := "value"
+				if config.ValueName != "" {
+					vj = config.ValueName
+				}
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | int }}", vj))
 		}
 
 		// Set DeviceClass & Icon
 		switch {
-			case config.Units == "Bool":
+			case config.Point.IsBool():
 				fallthrough
-			case config.Units == LabelBinarySensor:
+			case config.Value.IsBool():
+				fallthrough
+			case config.IsBinarySensor():
 				config.DeviceClass = SetDefault(config.DeviceClass, "power")
 				config.Icon = SetDefault(config.Icon, "mdi:check-circle-outline")
-				// if !config.Value.Valid {
-				// 	config.Value = "false"
-				// }
 
 			case config.Value.TypeValue == "Power":
 				fallthrough

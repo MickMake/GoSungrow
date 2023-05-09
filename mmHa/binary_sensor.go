@@ -278,6 +278,14 @@ func (config *EntityConfig) IsBinarySensor() bool {
 	var ok bool
 
 	for range Only.Once {
+		if config.Value.IsBool() {
+			ok = true
+			break
+		}
+		if config.Point.IsBool() {
+			ok = true
+			break
+		}
 		if config.Units == LabelBinarySensor {
 			ok = true
 			break
