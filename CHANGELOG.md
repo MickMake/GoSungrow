@@ -1,3 +1,31 @@
+## [3.0.6] - 2023-05-10
+### Features
+
+- Added extra sub-commands:
+```
+show ps save
+show device save
+show template save
+show point save
+show point ps-save
+show point device-save
+show point template-save
+```
+
+### Fixes
+
+- HA binary_sensor not being set correctly.
+
+
+## [3.0.5] - Not released
+
+
+## [3.0.4] - 2023-01-10
+### Features
+
+- Now supports the Energy Dashboard of HA!
+
+
 ## [3.0.3] - 2022-12-23
 ### Features
 

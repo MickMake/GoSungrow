@@ -121,7 +121,7 @@ func (c *CmdShow) AttachPointPsGraph(cmd *cobra.Command) *cobra.Command {
 
 func (c *CmdShow) AttachPointPsSave(cmd *cobra.Command) *cobra.Command {
 	var self = &cobra.Command{
-		Use:                   "ps-graph <ps_ids | .> <device_type | .> " + ArgsDateInterval,
+		Use:                   "ps-save <ps_ids | .> <device_type | .> " + ArgsDateInterval,
 		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "Point"},
 		Short:                 fmt.Sprintf("Generate and save data points for a given ps_id."),
@@ -216,7 +216,7 @@ func (c *CmdShow) AttachPointDeviceGraph(cmd *cobra.Command) *cobra.Command {
 
 func (c *CmdShow) AttachPointDeviceSave(cmd *cobra.Command) *cobra.Command {
 	var self = &cobra.Command{
-		Use:                   "device-graph <template_id> " + ArgsDateInterval,
+		Use:                   "device-save <template_id> " + ArgsDateInterval,
 		Annotations:           map[string]string{"group": "Point"},
 		Short:                 fmt.Sprintf("Generate and save data points for a given device."),
 		Long:                  fmt.Sprintf("Generate and save data points for a given device."),
@@ -311,7 +311,7 @@ func (c *CmdShow) AttachPointTemplateGraph(cmd *cobra.Command) *cobra.Command {
 
 func (c *CmdShow) AttachPointTemplateSave(cmd *cobra.Command) *cobra.Command {
 	var self = &cobra.Command{
-		Use:                   "template-graph <template_id> " + ArgsDateInterval,
+		Use:                   "template-save <template_id> " + ArgsDateInterval,
 		Annotations:           map[string]string{"group": "Point"},
 		Short:                 fmt.Sprintf("Generate and save data points for a given report template."),
 		Long:                  fmt.Sprintf("Generate and save data points for a given report template."),
@@ -407,8 +407,8 @@ func (c *CmdShow) AttachPointSave(cmd *cobra.Command) *cobra.Command {
 		Use:                   "save  " + ArgsDateInterval + " <points ...>",
 		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "Point"},
-		Short:                 fmt.Sprintf("Get data points."),
-		Long:                  fmt.Sprintf("Get data points."),
+		Short:                 fmt.Sprintf("Get data points and save as files."),
+		Long:                  fmt.Sprintf("Get data points and save as files."),
 		DisableFlagParsing:    false,
 		DisableFlagsInUseLine: false,
 		PreRunE:               cmds.SunGrowArgs,
