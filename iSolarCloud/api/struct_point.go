@@ -165,6 +165,13 @@ func (p Point) IsTotal() bool {
 	return false
 }
 
+func (p Point) IsBool() bool {
+	if p.ValueType == "Bool" {
+		return true
+	}
+	return false
+}
+
 func (p *Point) SetName(name string) {
 	if name == "" {
 		name = valueTypes.PointToName(p.Id)

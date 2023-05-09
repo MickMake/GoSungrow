@@ -200,6 +200,43 @@ func (sg *SunGrow) PsPointsData(psIds []string, deviceType string, startDate str
 		// _, _ = fmt.Fprintf(os.Stderr, "Found points: %s\n", strings.Join(ps, " "))
 
 		sg.Error = sg.PointData(startDate, endDate, interval, ps...)
+		if sg.Error != nil {
+			break
+		}
+	}
+
+	return sg.Error
+}
+
+// PsPointsDataSave - Return all points associated with psIds and device_type filter and save to files.
+func (sg *SunGrow) PsPointsDataSave(psIds []string, deviceType string, startDate string, endDate string, interval string) error {
+	for range Only.Once {
+		var pskeys valueTypes.PsKeys
+		pskeys, sg.Error = sg.GetPsKeys()
+		if sg.Error != nil {
+			break
+		}
+		_, _ = fmt.Fprintf(os.Stderr, "Found ps_keys: %s\n", pskeys)
+
+		var points getDevicePointAttrs.Points
+		points, sg.Error = sg.DevicePointAttrs(psIds, deviceType)
+		if sg.Error != nil {
+			break
+		}
+
+		var ps []string
+		for _, pid := range points {
+			match := pskeys.MatchPsIdDeviceType(pid.PsId.String(), pid.DeviceType.String())
+			if match.Valid {
+				ps = append(ps, fmt.Sprintf("%s.%s", match, pid.Id))
+			}
+		}
+		// _, _ = fmt.Fprintf(os.Stderr, "Found points: %s\n", strings.Join(ps, " "))
+
+		sg.Error = sg.PointDataSave(startDate, endDate, interval, ps...)
+		if sg.Error != nil {
+			break
+		}
 	}
 
 	return sg.Error

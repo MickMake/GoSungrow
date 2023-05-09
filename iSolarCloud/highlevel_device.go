@@ -189,6 +189,40 @@ func (sg *SunGrow) DeviceTypeData(deviceType string, startDate string, endDate s
 	return sg.Error
 }
 
+// DeviceTypeSave - Return all point data associated a device_type and save as files.
+func (sg *SunGrow) DeviceTypeSave(deviceType string, startDate string, endDate string, interval string) error {
+	for range Only.Once {
+		if deviceType == "" {
+			sg.Error = errors.New("no template defined")
+			break
+		}
+
+		fmt.Println("NOT YET IMPLEMENTED.")
+
+		// data := sg.QueryUserCurveDeviceData(deviceType)
+		// if sg.IsError() {
+		// 	break
+		// }
+		//
+		// var points []string
+		// for an := range data.PointsData.Devices {
+		// 	// fmt.Println(an)
+		// 	for _, b := range data.PointsData.Devices[an].Points {
+		// 		points = append(points, b.PointId.Full())
+		// 		// fmt.Println(bn)
+		// 		// fmt.Printf("%v\n", b)
+		// 	}
+		// }
+		//
+		// sg.PointData(startDate, endDate, interval, points...)
+		// if sg.Error != nil {
+		// 	break
+		// }
+	}
+
+	return sg.Error
+}
+
 
 // GetDeviceList - AppService.getDeviceList
 func (sg *SunGrow) GetDeviceList(psIds ...string) ([]getDeviceList.Device, error) {

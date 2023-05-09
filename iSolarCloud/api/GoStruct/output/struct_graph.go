@@ -9,6 +9,7 @@ import (
 	"github.com/wcharczuk/go-chart/v2"
 	"github.com/wcharczuk/go-chart/v2/drawing"
 	"os"
+	"path"
 	"strings"
 	"time"
 )
@@ -518,7 +519,7 @@ func (c *Chart) ProcessGraphData(table *Table) error {
 			// }
 		}
 
-		c.Error = c.SetFilename(table.filePrefix)
+		c.Error = c.SetFilename(path.Join(table.directory, table.filePrefix))
 		if c.Error != nil {
 			break
 		}

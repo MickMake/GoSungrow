@@ -6,6 +6,7 @@ import (
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"errors"
 	"github.com/MickMake/GoUnify/Only"
+	"strings"
 	"time"
 )
 
@@ -49,7 +50,7 @@ func (sg *SunGrow) TemplateList() error {
 	return sg.Error
 }
 
-// TemplatePoints - Return all points associated a template_id.
+// TemplatePoints - Return all points associated with a template_id.
 func (sg *SunGrow) TemplatePoints(template string) error {
 	for range Only.Once {
 		if template == "" {
@@ -121,7 +122,7 @@ func (sg *SunGrow) TemplatePoints(template string) error {
 	return sg.Error
 }
 
-// TemplateData - Return all point data associated a template_id.
+// TemplateData - Return all point data associated with a template_id.
 func (sg *SunGrow) TemplateData(template string, startDate string, endDate string, interval string) error {
 	for range Only.Once {
 		if template == "" {
@@ -136,14 +137,14 @@ func (sg *SunGrow) TemplateData(template string, startDate string, endDate strin
 		}
 
 		var points []string
-		for an := range data.PointsData.Devices {
-			// fmt.Println(an)
-			for _, b := range data.PointsData.Devices[an].Points {
-				points = append(points, b.PointId.Full())
-				// fmt.Println(bn)
-				// fmt.Printf("%v\n", b)
-			}
-		}
+		// for an := range data.PointsData.Devices {
+		// 	for _, b := range data.PointsData.Devices[an].Points {
+		// 		points = append(points, b.PointId.Full())
+		// 	}
+		// }
+		// Alternative - this maintains the original order defined in the template.
+		ps := strings.ReplaceAll(data.PointsData.Order.String(), "&", ".p")
+		points = strings.Split(ps, ",")
 
 		// data2 := sg.NewSunGrowData()
 		// data2.SetEndpoints(queryMutiPointDataList.EndPointName)
@@ -190,6 +191,83 @@ func (sg *SunGrow) TemplateData(template string, startDate string, endDate strin
 		// @TODO - Maybe use a point cache?!
 
 		sg.Error = sg.PointData(startDate, endDate, interval, points...)
+		if sg.Error != nil {
+			break
+		}
+	}
+
+	return sg.Error
+}
+
+// TemplateDataSave - Return all point data associated with a template_id and save to files.
+func (sg *SunGrow) TemplateDataSave(template string, startDate string, endDate string, interval string) error {
+	for range Only.Once {
+		if template == "" {
+			sg.Error = errors.New("no template defined")
+			break
+		}
+
+		var data queryUserCurveTemplateData.ResultData
+		data, sg.Error = sg.QueryUserCurveTemplateData(template)
+		if sg.IsError() {
+			break
+		}
+
+		var points []string
+		// for an := range data.PointsData.Devices {
+		// 	for _, b := range data.PointsData.Devices[an].Points {
+		// 		points = append(points, b.PointId.Full())
+		// 	}
+		// }
+		// Alternative - this maintains the original order defined in the template.
+		ps := strings.ReplaceAll(data.PointsData.Order.String(), "&", ".p")
+		points = strings.Split(ps, ",")
+
+		// data2 := sg.NewSunGrowData()
+		// data2.SetEndpoints(queryMutiPointDataList.EndPointName)
+		// // req := iSolarCloud.RequestArgs{
+		// // 	StartTimeStamp:           startDate,
+		// // 	EndTimeStamp:   endDate,
+		// // }
+		// // var req iSolarCloud.RequestArgs
+		// // data.Request.SetPoints(points)
+		//
+		// startDate = valueTypes.NewDateTime(startDate).Format(valueTypes.DateTimeLayoutSecond)
+		// endDate = valueTypes.NewDateTime(endDate).Format(valueTypes.DateTimeLayoutSecond)
+		//
+		// data2.SetArgs(
+		// 	"StartTimeStamp:" + startDate,
+		// 	"EndTimeStamp:" + endDate,
+		// 	"MinuteInterval:" + interval,
+		// 	"Points:" + strings.Join(points, ","),
+		// )
+		//
+		// sg.Error = data2.GetData()
+		// if sg.Error != nil {
+		// 	break
+		// }
+		//
+		// sg.Error = data2.Process()
+		// if sg.Error != nil {
+		// 	break
+		// }
+		//
+		// // @TODO - Figure out a way to push the Unit values from QueryUserCurveTemplateData to this table.
+		// // result := queryMutiPointDataList.Assert(data2.Results["queryMutiPointDataList/1129147"].EndPoint)
+		// // for nr, r := range result.Response.ResultData.Data {
+		// // 	for nr2, r2 := range r.Points {
+		// // 		result.Response.ResultData.Data[nr].Points[r2].
+		// // 	}
+		// // }
+		// sg.Error = data2.OutputDataTables()
+		// if sg.Error != nil {
+		// 	break
+		// }
+
+		// @TODO - Figure out a way to push the Unit values from QueryUserCurveTemplateData to this table.
+		// @TODO - Maybe use a point cache?!
+
+		sg.Error = sg.PointDataSave(startDate, endDate, interval, points...)
 		if sg.Error != nil {
 			break
 		}

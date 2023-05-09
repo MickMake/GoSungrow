@@ -66,6 +66,8 @@ const (
 
 	DateLayout            = "2006-01-02"
 	DateHumanLayout       = "2006/01/02"
+	DateHumanMonth        = "2006/01"
+	DateHumanYear         = "2006"
 	DateLayoutDay         = "20060102"
 	DateLayoutMonth       = "200601"
 	DateLayoutYear        = "2006"
@@ -278,14 +280,14 @@ func (dt *DateTime) SetDayStart() {
 
 func (dt *DateTime) GetDayEndTimestamp() string {
 	var ret string
-	f1 := dt.Time.Round(time.Hour * 24).Add(time.Hour * 24)
+	f1 := dt.Time.Round(time.Hour * 24).Add(time.Hour * 24).Add(-time.Second)
 	ret = f1.Format(DateTimeLayoutSecond)
 	return ret
 	// return fmt.Sprintf("%s235900", dt.Time.Format(DtLayoutDay))
 }
 
 func (dt *DateTime) SetDayEnd() {
-	dt.Time = dt.Time.Truncate(time.Hour * 24).Add(time.Hour * 24)
+	dt.Time = dt.Time.Truncate(time.Hour * 24).Add(time.Hour * 24).Add(-time.Second)
 	dt.string = dt.Time.Format(dt.format)
 }
 

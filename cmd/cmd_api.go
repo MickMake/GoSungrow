@@ -24,6 +24,7 @@ const (
 	flagApiLastLogin  = "token-expiry"
 	flagApiOutputType = "out"
 	flagApiSaveFile   = "save"
+	flagApiDirectory  = "dir"
 )
 
 //goland:noinspection GoNameStartsWithPackageName
@@ -31,18 +32,19 @@ type CmdApi struct {
 	CmdDefault
 
 	// iSolarCloud api
-	ApiTimeout  time.Duration
-	Url      string
-	Username string
-	Password string
-	AppKey      string
-	LastLogin   string
-	ApiToken  string
+	ApiTimeout   time.Duration
+	Url          string
+	Username     string
+	Password     string
+	AppKey       string
+	LastLogin    string
+	ApiToken     string
 	ApiTokenFile string
-	OutputType string
-	SaveFile   bool
+	OutputType   string
+	SaveFile     bool
+	Directory    string
 
-	SunGrow *iSolarCloud.SunGrow
+	SunGrow      *iSolarCloud.SunGrow
 }
 
 
@@ -255,6 +257,8 @@ func (c *CmdApi) AttachFlags(cmd *cobra.Command, viper *viper.Viper) {
 		_ = cmd.PersistentFlags().MarkHidden(flagApiOutputType)
 		cmd.PersistentFlags().BoolVarP(&c.SaveFile, flagApiSaveFile, "s", false, "Save output as a file.")
 		viper.SetDefault(flagApiSaveFile, false)
+		cmd.PersistentFlags().StringVarP(&c.Directory, flagApiDirectory, "", "", "Save output base directory.")
+		viper.SetDefault(flagApiDirectory, "")
 	}
 }
 

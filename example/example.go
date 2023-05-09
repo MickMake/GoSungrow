@@ -183,7 +183,7 @@ func Example2(startDate string, endDate string, interval string, points []string
 			break
 		}
 
-		table := response.Data.CreateResultTable(false)
+		table := response.Data.CreateResultTable(false, "")
 		table.OutputType = output.TypeTable
 		table.SetSaveFile(false)
 		sg.Error = table.Output()
@@ -197,7 +197,7 @@ func Example2(startDate string, endDate string, interval string, points []string
 			GraphRequest: output.GraphRequest{},
 		}
 
-		sg.Error = response.OutputDataTables()
+		sg.Error = response.OutputDataTables("")
 		if sg.IsError() {
 			break
 		}

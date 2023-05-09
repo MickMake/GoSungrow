@@ -37,6 +37,7 @@ func (c *CmdShow) AttachPs(cmd *cobra.Command) *cobra.Command {
 		c.AttachPsPoints(self)
 		c.AttachPsData(self)
 		c.AttachPsGraph(self)
+		c.AttachPsSave(self)
 	}
 	return c.SelfCmd
 }
@@ -168,7 +169,7 @@ func (c *CmdShow) funcPsPoints(_ *cobra.Command, args []string) error {
 
 func (c *CmdShow) AttachPsData(cmd *cobra.Command) *cobra.Command {
 	var self = &cobra.Command{
-		Use:                   "data <ps_ids | .> [device_type | .] [start date] [end date] [interval]",
+		Use:                   "data <ps_ids | .> [device_type | .] " + ArgsDateInterval,
 		Aliases:               []string{"point"},
 		Annotations:           map[string]string{"group": "PsId"},
 		Short:                 fmt.Sprintf("Generate points table for a given ps_id."),
@@ -198,7 +199,7 @@ func (c *CmdShow) funcPsData(_ *cobra.Command, args []string) error {
 
 func (c *CmdShow) AttachPsGraph(cmd *cobra.Command) *cobra.Command {
 	var self = &cobra.Command{
-		Use:                   "graph <ps_ids | .> [device_type]",
+		Use:                   "graph <ps_ids | .> [device_type | .] " + ArgsDateInterval,
 		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "PsId"},
 		Short:                 fmt.Sprintf("Generate graphs of points for a given ps_id."),
@@ -219,6 +220,35 @@ func (c *CmdShow) funcPsGraph(_ *cobra.Command, args []string) error {
 		cmds.Api.SunGrow.OutputType.SetGraph()
 		args = MinimumArraySize(5, args)
 		c.Error = cmds.Api.SunGrow.PsPointsData(strings.Split(args[0], ","), args[1], args[2], args[3], args[4])
+		if c.Error != nil {
+			break
+		}
+	}
+	return c.Error
+}
+
+func (c *CmdShow) AttachPsSave(cmd *cobra.Command) *cobra.Command {
+	var self = &cobra.Command{
+		Use:                   "save <ps_ids | .> [device_type | .] " + ArgsDateInterval,
+		Aliases:               []string{},
+		Annotations:           map[string]string{"group": "PsId"},
+		Short:                 fmt.Sprintf("Generate and save data points for a given ps_id."),
+		Long:                  fmt.Sprintf("Generate and save data points for a given ps_id."),
+		DisableFlagParsing:    false,
+		DisableFlagsInUseLine: false,
+		PreRunE:               cmds.SunGrowArgs,
+		RunE:                  c.funcPsSave,
+		Args:                  cobra.MinimumNArgs(1),
+	}
+	cmd.AddCommand(self)
+	self.Example = cmdHelp.PrintExamples(self, "")
+
+	return cmd
+}
+func (c *CmdShow) funcPsSave(_ *cobra.Command, args []string) error {
+	for range Only.Once {
+		args = MinimumArraySize(5, args)
+		c.Error = cmds.Api.SunGrow.PsPointsDataSave(strings.Split(args[0], ","), args[1], args[2], args[3], args[4])
 		if c.Error != nil {
 			break
 		}

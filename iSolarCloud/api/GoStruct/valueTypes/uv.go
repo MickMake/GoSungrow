@@ -332,7 +332,10 @@ func (t *UnitValue) IsNumber() bool {
 }
 
 func (t *UnitValue) IsBool() bool {
-	if t.float64 != nil {
+	if t.bool != nil {
+		return true
+	}
+	if t.TypeValue == "Bool" {
 		return true
 	}
 	return false
@@ -397,6 +400,9 @@ func (t *UnitValue) Type() string {
 
 func (t *UnitValue) IsTypeDateTime() bool {
 	if t.TypeValue == "DateTime" {
+		return true
+	}
+	if t.UnitValue == "DateTime" {
 		return true
 	}
 	return false

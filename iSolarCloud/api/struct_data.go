@@ -340,6 +340,8 @@ func (dm *DataMap) CreateDataTables() Tables {
 				break
 			}
 
+			ret.Table.SetFilePrefix("%s.%s", dm.EndPoint.GetArea(), dm.StructMap.Name.String())
+
 			_, dm.Error = ret.CreateTable()
 			if dm.Error != nil {
 				break
@@ -419,6 +421,7 @@ func (dm *DataMap) CreateResultTable(full bool) output.Table {
 				}
 			}
 		}
+
 		table.SetTitle("EndPoint Data %s.%s", dm.EndPoint.GetArea(), dm.StructMap.Name.String()) // endpoint.GetArea(), endpoint.GetName()
 		if dm.StructMap.Start.DataStructure.DataTableName != "" {
 			table.AppendTitle(" - %s", dm.StructMap.Start.DataStructure.DataTableName)

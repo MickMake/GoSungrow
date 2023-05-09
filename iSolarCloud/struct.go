@@ -33,6 +33,7 @@ type SunGrow struct {
 	NeedLogin  bool
 	AuthDetails *login.SunGrowAuth
 
+	Directory  string
 	OutputType output.OutputType
 	SaveAsFile bool
 }

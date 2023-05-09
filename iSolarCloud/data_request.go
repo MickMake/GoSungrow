@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
+	"hash/fnv"
+	"sort"
 	"strings"
 	"time"
 )
@@ -755,10 +757,17 @@ func (sgd *SunGrowDataRequest) Validate(endpoint api.EndPoint) bool {
 
 func (sgd *SunGrowDataRequest) GetArgs(endpoint api.EndPoint) string {
 	var ret string
+
 	for range Only.Once {
 		args := endpoint.GetRequestArgNames()
-		for key, value := range args {
-			if value != "true" {
+		var sorted []string
+		for key := range args {
+			sorted = append(sorted, key)
+		}
+		sort.Strings(sorted)
+
+		for _, key := range sorted {
+			if args[key] != "true" {
 				continue
 			}
 
@@ -773,6 +782,20 @@ func (sgd *SunGrowDataRequest) GetArgs(endpoint api.EndPoint) string {
 			ret += fmt.Sprintf("%s:%s ", key, sgd.Get(key))
 		}
 	}
+
+	return ret
+}
+
+func (sgd *SunGrowDataRequest) GetArgsHash(endpoint api.EndPoint) string {
+	var ret string
+
+	for range Only.Once {
+		ret = sgd.GetArgs(endpoint)
+		h := fnv.New32a()
+		_, _ = h.Write([]byte(ret))
+		ret = fmt.Sprintf("%X", h.Sum32())
+	}
+
 	return ret
 }
 

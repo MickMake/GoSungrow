@@ -244,7 +244,7 @@ func (e *EndPoint) GetData() api.DataMap {
 				foo := entries.CopyPointFromName(name, epp, name, point.PointName.String())
 				foo.Value.Reset()
 				foo.Value.AddFloat("", point.Unit.String(), "", point.Value.Value())
-				// foo.Value.SetUnit(point.Unit.String())
+				// foo.SetUnit(point.Unit.String())
 				foo.Value.SetDeviceId(deviceId)
 				foo.DataStructure.PointGroupName = point.PointGroupName.String()
 				foo.DataStructure.PointDevice = deviceId
@@ -347,9 +347,9 @@ func (e *EndPoint) SetBatteryPoints(epp GoStruct.EndPointPath, entries api.DataM
 
 		dailyPvEnergy := entries.GetReflect(epp.AddString("p13112"))
 		batteryChargeEnergyPercent := entries.CopyPoint(dailyPvEnergy, epp, "battery_charge_energy_percent", "Battery Charge Percent (Calc)")
-		batteryChargeEnergyPercent.SetValue(entries.GetPercent(batteryChargeEnergy, dailyPvEnergy, 1))
 		batteryChargeEnergyPercent.DataStructure.PointUpdateFreq = GoStruct.UpdateFreqDay
-		batteryChargeEnergyPercent.Value.SetUnit("%")
+		batteryChargeEnergyPercent.SetValue(entries.GetPercent(batteryChargeEnergy, dailyPvEnergy, 1))
+		batteryChargeEnergyPercent.SetUnit("%")
 		// batteryChargeEnergyPercent.DataStructure.PointIcon = "mdi:battery"
 
 
@@ -410,7 +410,7 @@ func (e *EndPoint) SetPvPoints(epp GoStruct.EndPointPath, entries api.DataMap) {
 		pvToGridEnergyPercent := entries.CopyPoint(pvDailyEnergy, epp, "pv_to_grid_energy_percent", "Pv To Grid Energy Percent (Calc)")
 		pvToGridEnergyPercent.DataStructure.PointUpdateFreq = GoStruct.UpdateFreqDay
 		pvToGridEnergyPercent.SetValue(entries.GetPercent(pvToGridEnergy, pvDailyEnergy, 1))
-		pvToGridEnergyPercent.Value.SetUnit("%")
+		pvToGridEnergyPercent.SetUnit("%")
 
 		pvToBatteryEnergy := entries.CopyPointFromName(epp.AddString("p13174"), epp, "pv_to_battery_energy", "Pv To Battery Energy (p13174)")
 		pvToBatteryEnergy.DataStructure.PointUpdateFreq = GoStruct.UpdateFreqDay
@@ -431,7 +431,7 @@ func (e *EndPoint) SetPvPoints(epp GoStruct.EndPointPath, entries api.DataMap) {
 		selfConsumptionOfPvPercent := entries.CopyPointFromName(epp.AddString("p13116"), epp, "pv_consumption_energy_percent", "Pv Consumption Energy Percent (Calc)")
 		selfConsumptionOfPvPercent.DataStructure.PointUpdateFreq = GoStruct.UpdateFreqDay
 		selfConsumptionOfPvPercent.SetValue(entries.GetPercent(selfConsumptionOfPv, pvDailyEnergy, 1))
-		selfConsumptionOfPvPercent.Value.SetUnit("%")
+		selfConsumptionOfPvPercent.SetUnit("%")
 
 		// WRONG!!! - pvToLoadPercent := entries.CopyPointFromName(epp.AddString("p13144"), epp, "pv_to_load_energy_percent", "Pv To Load Energy Percent (p13144)")
 		// WRONG!!! - pvToLoadEnergy := entries.CopyPointFromName(epp.AddString("p13116"), epp, "pv_to_load_energy", "Pv To Load Energy (p13116)")
@@ -445,14 +445,14 @@ func (e *EndPoint) SetPvPoints(epp GoStruct.EndPointPath, entries api.DataMap) {
 		pvToLoadEnergyPercent := entries.CopyPoint(pvDailyEnergy, epp, "pv_to_load_energy_percent", "Pv To Load Energy Percent (Calc)")
 		pvToLoadEnergyPercent.DataStructure.PointUpdateFreq = GoStruct.UpdateFreqDay
 		pvToLoadEnergyPercent.SetValue(entries.GetPercent(pvToLoadEnergy, totalDailyEnergy, 1))
-		pvToLoadEnergyPercent.Value.SetUnit("%")
+		pvToLoadEnergyPercent.SetUnit("%")
 
 		gridToLoadDailyEnergy := entries.GetReflect(epp.AddString("p13147"))
 		pvDailyEnergyPercent := entries.CopyPoint(totalDailyEnergy, epp, "pv_daily_energy_percent", "Pv Daily Energy Percent (Calc)")
 		pvDailyEnergyPercent.DataStructure.PointUpdateFreq = GoStruct.UpdateFreqDay
 		dpe := totalDailyEnergy.GetValueFloat() - gridToLoadDailyEnergy.GetValueFloat()
 		pvDailyEnergyPercent.SetValue(api.GetPercent(dpe, totalDailyEnergy.GetValueFloat(), 1))
-		pvDailyEnergyPercent.Value.SetUnit("%")
+		pvDailyEnergyPercent.SetUnit("%")
 
 		pvEnergy := entries.CopyPointFromName(pvToLoadEnergy.PointId(), epp, "pv_energy", "Pv Energy (Calc)")
 		// pvDailyYield := entries.GetReflect(pvSelfConsumption.PointId())
@@ -482,7 +482,7 @@ func (e *EndPoint) SetGridPoints(epp GoStruct.EndPointPath, entries api.DataMap)
 		gridToLoadEnergyPercent := entries.CopyPoint(totalLoadEnergy, epp, "grid_to_load_energy_percent", "")
 		gridToLoadEnergyPercent.DataStructure.PointUpdateFreq = GoStruct.UpdateFreqDay
 		gridToLoadEnergyPercent.SetValue(entries.GetPercent(gridToLoadEnergy, totalLoadEnergy, 1))
-		gridToLoadEnergyPercent.Value.SetUnit("%")
+		gridToLoadEnergyPercent.SetUnit("%")
 
 		pvToGridPower := entries.CopyPointFromName(epp.AddString("p13121"), epp, "pv_to_grid_power", "Pv To Grid Power (p13121)")
 		gridPower := entries.CopyPoint(gridToLoadPower, epp, "grid_power", "Grid Power (Calc)")

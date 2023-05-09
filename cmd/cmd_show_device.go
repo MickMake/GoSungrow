@@ -106,7 +106,7 @@ func (c *CmdShow) funcDevicePoints(_ *cobra.Command, args []string) error {
 
 func (c *CmdShow) AttachDeviceData(cmd *cobra.Command) *cobra.Command {
 	var self = &cobra.Command{
-		Use:                   "data <device_type> [start date] [end date] [interval]",
+		Use:                   "data <device_type> " + ArgsDateInterval,
 		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "Device"},
 		Short:                 fmt.Sprintf("Generate points table for a given device_type."),
@@ -139,7 +139,7 @@ func (c *CmdShow) funcDeviceData(_ *cobra.Command, args []string) error {
 
 func (c *CmdShow) AttachDeviceGraph(cmd *cobra.Command) *cobra.Command {
 	var self = &cobra.Command{
-		Use:                   "graph <device_type> [start date] [end date] [interval]",
+		Use:                   "graph <device_type> " + ArgsDateInterval,
 		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "Device"},
 		Short:                 fmt.Sprintf("Generate graphs of points for a given device_type."),
@@ -166,6 +166,39 @@ func (c *CmdShow) funcDeviceGraph(_ *cobra.Command, args []string) error {
 		cmds.Api.SunGrow.OutputType.SetGraph()
 		args = MinimumArraySize(4, args)
 		c.Error = cmds.Api.SunGrow.DeviceTypeData(args[0], args[1], args[2], args[3])
+	}
+	return c.Error
+}
+
+func (c *CmdShow) AttachDeviceSave(cmd *cobra.Command) *cobra.Command {
+	var self = &cobra.Command{
+		Use:                   "save <device_type> " + ArgsDateInterval,
+		Aliases:               []string{},
+		Annotations:           map[string]string{"group": "Device"},
+		Short:                 fmt.Sprintf("Generate points table for a given device_type."),
+		Long:                  fmt.Sprintf("Generate points table for a given device_type."),
+		DisableFlagParsing:    false,
+		DisableFlagsInUseLine: false,
+		PreRunE:               cmds.SunGrowArgs,
+		RunE:                  c.funcDeviceSave,
+		Args:                  cobra.MinimumNArgs(1),
+	}
+	cmd.AddCommand(self)
+	self.Example = cmdHelp.PrintExamples(self,
+		"11 20221201 20221202 30",
+		"11 20221201 20221202 5",
+		"11 20221201 20221202",
+		"11 20221201",
+		"11",
+	)
+
+	return cmd
+}
+func (c *CmdShow) funcDeviceSave(_ *cobra.Command, args []string) error {
+	for range Only.Once {
+		cmds.Api.SunGrow.OutputType.SetTable()
+		args = MinimumArraySize(4, args)
+		c.Error = cmds.Api.SunGrow.DeviceTypeSave(args[0], args[1], args[2], args[3])
 	}
 	return c.Error
 }

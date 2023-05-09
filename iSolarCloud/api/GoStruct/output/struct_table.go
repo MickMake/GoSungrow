@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 	"os"
+	"path"
 	"reflect"
 	"sort"
 	"strings"
@@ -37,6 +38,7 @@ func (t *Tables) Sort() []string {
 
 type Table struct {
 	name        string
+	directory   string
 	filePrefix  string
 	title       string
 	graph       *Chart
@@ -58,6 +60,7 @@ type Table struct {
 func NewTable(headers ...string) Table {
 	// buf := new(bytes.Buffer)
 	t := Table {
+		directory:   "",
 		filePrefix:  "",
 		title:       "",
 		tablib:      tablib.NewDataset(headers),
@@ -342,10 +345,16 @@ func (t *Table) AddRow(row ...interface{}) error {
 
 func (t *Table) writeFile(data string, perm os.FileMode) error {
 	for range Only.Once {
-		fmt.Printf("Writing file '%s'\n", t.filePrefix)
-		t.Error = os.WriteFile(t.filePrefix, []byte(data), perm)
+		Mkdir(t.directory)
+		// if !DirExists(t.directory) {
+		// 	Mkdir(t.directory)
+		// }
+
+		fn := path.Join(t.directory, t.filePrefix)
+		fmt.Printf("Writing file '%s'\n", fn)
+		t.Error = os.WriteFile(fn, []byte(data), perm)
 		if t.Error != nil {
-			t.Error = errors.New(fmt.Sprintf("Unable to write to file %s - %v", t.filePrefix, t.Error))
+			t.Error = errors.New(fmt.Sprintf("Unable to write to file %s - %v", fn, t.Error))
 			break
 		}
 	}
@@ -366,7 +375,7 @@ func (t *Table) GetTitle() string {
 }
 
 func (t *Table) GetFilePrefix() string {
-	return t.filePrefix
+	return path.Join(t.directory, t.filePrefix)
 }
 
 func (t *Table) SetRaw(data []byte) {
@@ -406,16 +415,44 @@ func (t *Table) SetFilePrefix(prefix string, args ...interface{}) {
 	}
 }
 
-func (t *Table) AppendFilePrefix(prefix string, args ...interface{}) {
+func (t *Table) SetDirectory(prefix string, args ...interface{}) {
 	for range Only.Once {
 		if prefix == "" {
 			break
 		}
 		if len(args) == 0 {
-			t.filePrefix += "-" + prefix
+			t.directory = prefix
+			t.directory = strings.ReplaceAll(t.directory, "[", "")
+			t.directory = strings.ReplaceAll(t.directory, "]", "")
 			break
 		}
-		t.filePrefix += "-" + fmt.Sprintf(prefix, args...)
+		t.directory = fmt.Sprintf(prefix, args...)
+		t.directory = strings.ReplaceAll(t.directory, "[", "")
+		t.directory = strings.ReplaceAll(t.directory, "]", "")
+	}
+}
+
+func (t *Table) AppendFilePrefix(prefix string, args ...interface{}) {
+	for range Only.Once {
+		if prefix == "" {
+			break
+		}
+		if len(args) > 0 {
+			prefix = fmt.Sprintf(prefix, args...)
+		}
+		t.filePrefix += "-" + prefix
+	}
+}
+
+func (t *Table) PrependFilePrefix(prefix string, args ...interface{}) {
+	for range Only.Once {
+		if prefix == "" {
+			break
+		}
+		if len(args) > 0 {
+			prefix = fmt.Sprintf(prefix, args...)
+		}
+		t.filePrefix =  prefix + "-" + t.filePrefix
 	}
 }
 

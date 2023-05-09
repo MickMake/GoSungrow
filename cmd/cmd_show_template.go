@@ -31,6 +31,7 @@ func (c *CmdShow) AttachTemplate(cmd *cobra.Command) *cobra.Command {
 		c.AttachTemplatePoints(self)
 		c.AttachTemplateData(self)
 		c.AttachTemplateGraph(self)
+		c.AttachTemplateSave(self)
 	}
 	return c.SelfCmd
 }
@@ -90,7 +91,7 @@ func (c *CmdShow) funcTemplatePoints(_ *cobra.Command, args []string) error {
 
 func (c *CmdShow) AttachTemplateData(cmd *cobra.Command) *cobra.Command {
 	var self = &cobra.Command{
-		Use:                   "data <template_id> [start date] [end date] [interval]",
+		Use:                   "data <template_id> " + ArgsDateInterval,
 		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "Template"},
 		Short:                 fmt.Sprintf("Generate points table for a given template_id."),
@@ -114,16 +115,19 @@ func (c *CmdShow) AttachTemplateData(cmd *cobra.Command) *cobra.Command {
 }
 func (c *CmdShow) funcTemplateData(_ *cobra.Command, args []string) error {
 	for range Only.Once {
-		cmds.Api.SunGrow.OutputType.SetTable()
 		args = MinimumArraySize(4, args)
+		cmds.Api.SunGrow.OutputType.SetTable()
 		c.Error = cmds.Api.SunGrow.TemplateData(args[0], args[1], args[2], args[3])
+		if c.Error != nil {
+			break
+		}
 	}
 	return c.Error
 }
 
 func (c *CmdShow) AttachTemplateGraph(cmd *cobra.Command) *cobra.Command {
 	var self = &cobra.Command{
-		Use:                   "graph <template_id> [start date] [end date] [interval]",
+		Use:                   "graph <template_id> " + ArgsDateInterval,
 		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "Template"},
 		Short:                 fmt.Sprintf("Generate graphs of points for a given template_id."),
@@ -147,9 +151,47 @@ func (c *CmdShow) AttachTemplateGraph(cmd *cobra.Command) *cobra.Command {
 }
 func (c *CmdShow) funcTemplateGraph(_ *cobra.Command, args []string) error {
 	for range Only.Once {
-		cmds.Api.SunGrow.OutputType.SetGraph()
 		args = MinimumArraySize(4, args)
+		cmds.Api.SunGrow.OutputType.SetGraph()
 		c.Error = cmds.Api.SunGrow.TemplateData(args[0], args[1], args[2], args[3])
+		if c.Error != nil {
+			break
+		}
+	}
+	return c.Error
+}
+
+func (c *CmdShow) AttachTemplateSave(cmd *cobra.Command) *cobra.Command {
+	var self = &cobra.Command{
+		Use:                   "save <template_id> " + ArgsDateInterval,
+		Aliases:               []string{},
+		Annotations:           map[string]string{"group": "Template"},
+		Short:                 fmt.Sprintf("Generate and save data points for a given template_id."),
+		Long:                  fmt.Sprintf("Generate and save data points for a given template_id."),
+		DisableFlagParsing:    false,
+		DisableFlagsInUseLine: false,
+		PreRunE:               cmds.SunGrowArgs,
+		RunE:                  c.funcTemplateSave,
+		Args:                  cobra.MinimumNArgs(1),
+	}
+	cmd.AddCommand(self)
+	self.Example = cmdHelp.PrintExamples(self,
+		"8092 20221201 20221202 30",
+		"8092 20221201 20221202 5",
+		"8092 20221201 20221202",
+		"8092 20221201",
+		"8092",
+	)
+
+	return cmd
+}
+func (c *CmdShow) funcTemplateSave(_ *cobra.Command, args []string) error {
+	for range Only.Once {
+		args = MinimumArraySize(4, args)
+		c.Error = cmds.Api.SunGrow.TemplateDataSave(args[0], args[1], args[2], args[3])
+		if c.Error != nil {
+			break
+		}
 	}
 	return c.Error
 }

@@ -658,7 +658,7 @@ func (r *Reflect) Init(parent interface{}, current interface{}, name EndPointPat
 				r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
 					r.InterfaceValue, "", r.DataStructure.PointUnit,
 					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
-				r.SetUnit()
+				r.UpdateUnit()
 				r.Value.SetDeviceId(r.DataStructure.PointDevice)
 
 			case reflect.Slice:
@@ -680,7 +680,7 @@ func (r *Reflect) Init(parent interface{}, current interface{}, name EndPointPat
 				r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
 					r.InterfaceValue, "", r.DataStructure.PointUnit,
 					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
-				r.SetUnit()
+				r.UpdateUnit()
 				r.Value.SetDeviceId(r.DataStructure.PointDevice)
 
 			case reflect.Map:
@@ -702,7 +702,7 @@ func (r *Reflect) Init(parent interface{}, current interface{}, name EndPointPat
 				r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
 					r.InterfaceValue, "", r.DataStructure.PointUnit,
 					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
-				r.SetUnit()
+				r.UpdateUnit()
 				r.Value.SetDeviceId(r.DataStructure.PointDevice)
 		}
 
@@ -810,7 +810,7 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 				r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
 					r.InterfaceValue, "", r.DataStructure.PointUnit,
 					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
-				r.SetUnit()
+				r.UpdateUnit()
 				r.Value.SetDeviceId(r.DataStructure.PointDevice)
 
 			case reflect.Slice:
@@ -864,7 +864,7 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 				r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
 					r.InterfaceValue, "", r.DataStructure.PointUnit,
 					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
-				r.SetUnit()
+				r.UpdateUnit()
 				r.Value.SetDeviceId(r.DataStructure.PointDevice)
 
 			case reflect.Map:
@@ -911,7 +911,7 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 					// map[string]interface{}{ indexName.String(): r.InterfaceValue }, r.DataStructure.PointUnit,
 					r.InterfaceValue, "", r.DataStructure.PointUnit,
 					r.DataStructure.PointValueType, r.DataStructure.PointNameDateFormat)
-				r.SetUnit()
+				r.UpdateUnit()
 				r.Value.SetDeviceId(r.DataStructure.PointDevice)
 
 
@@ -934,13 +934,17 @@ func (r *Reflect) SetValue(value interface{}) {
 	}
 }
 
+func (r *Reflect) SetUnit(unit string) {
+	r.Value.SetUnit(unit)
+}
+
 func (r *Reflect) SetValuePrecision(precision int) {
 	for range Only.Once {
 		r.Value.SetPrecision(precision)
 	}
 }
 
-func (r *Reflect) SetUnit() {
+func (r *Reflect) UpdateUnit() {
 	for range Only.Once {
 		switch {
 			case r.Value.GetUnit() == "":
@@ -981,6 +985,10 @@ func (r *Reflect) SetUnitValues(value valueTypes.UnitValues) {
 func (r *Reflect) GetValueFloat() float64 {
 	var ret float64
 	for range Only.Once {
+		if r == nil {
+			break
+		}
+
 		v := r.Value.First()
 		if v == nil {
 			break

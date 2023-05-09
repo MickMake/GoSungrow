@@ -356,7 +356,9 @@ func (sg *SunGrow) GetDevicePointAttrs(psId valueTypes.PsId) (getDevicePointAttr
 }
 
 
-func (sg *SunGrow) PointData(startDate string, endDate string, interval string, points ...string) error {
+func (sg *SunGrow) getPointData(startDate string, endDate string, interval string, points ...string) (SunGrowData, error) {
+	var data SunGrowData
+
 	for range Only.Once {
 		// _, _ = sg.QueryMultiPointDataList(
 		// 	valueTypes.SetDateTimeString(startDate),
@@ -365,7 +367,7 @@ func (sg *SunGrow) PointData(startDate string, endDate string, interval string, 
 		// 	valueTypes.SetPointIdsString(points...),
 		// )
 
-		data := sg.NewSunGrowData()
+		data = sg.NewSunGrowData()
 		// req := iSolarCloud.RequestArgs {
 		// 	StartTimeStamp:           startDate,
 		// 	EndTimeStamp:   endDate,
@@ -373,6 +375,7 @@ func (sg *SunGrow) PointData(startDate string, endDate string, interval string, 
 		// var req iSolarCloud.RequestArgs
 		// data.Request.SetPoints(points)
 
+		// Also set the startDate based on the ps_id deployment endDate if not set.
 		sd := valueTypes.NewDateTime(startDate)
 		var ed valueTypes.DateTime
 		if endDate == "" {
@@ -380,6 +383,10 @@ func (sg *SunGrow) PointData(startDate string, endDate string, interval string, 
 			ed.SetDayEnd()
 		} else {
 			ed = valueTypes.NewDateTime(endDate)
+		}
+
+		if interval == "" {
+			interval = "5"
 		}
 
 		// _, _ = fmt.Fprintf(os.Stderr,"Points: %s\n", strings.Join(points, " "))
@@ -395,12 +402,88 @@ func (sg *SunGrow) PointData(startDate string, endDate string, interval string, 
 		if sg.Error != nil {
 			break
 		}
+	}
+
+	return data, sg.Error
+}
+
+func (sg *SunGrow) PointData(startDate string, endDate string, interval string, points ...string) error {
+	for range Only.Once {
+		var data SunGrowData
+		data, sg.Error = sg.getPointData(startDate, endDate, interval, points...)
+		if sg.Error != nil {
+			break
+		}
 
 		sg.Error = data.OutputDataTables()
 		if sg.Error != nil {
 			break
 		}
 	}
+
+	return sg.Error
+}
+
+func (sg *SunGrow) PointDataSave(startDate string, endDate string, interval string, points ...string) error {
+	// sot := sg.OutputType
+	for range Only.Once {
+		var data SunGrowData
+		data, sg.Error = sg.getPointData(startDate, endDate, interval, points...)
+		if sg.Error != nil {
+			break
+		}
+
+		for _, d := range data.Args {
+			if strings.HasPrefix(d, "StartTimeStamp:") {
+				startDate = strings.TrimPrefix(d, "StartTimeStamp:")
+			}
+			if strings.HasPrefix(d, "EndTimeStamp:") {
+				endDate = strings.TrimPrefix(d, "EndTimeStamp:")
+			}
+		}
+		sd := valueTypes.NewDateTime(startDate)
+		ed := valueTypes.NewDateTime(endDate)
+		switch {
+			case sd.Day() == ed.Day():
+				// Within the same day.
+				data.sunGrow.Directory = sd.Format(valueTypes.DateHumanLayout)
+			case sd.Month() == ed.Month():
+				// Within the same month.
+				data.sunGrow.Directory = sd.Format(valueTypes.DateHumanMonth)
+			default:
+				data.sunGrow.Directory = sd.Format(valueTypes.DateLayoutDay) + "-" + ed.Format(valueTypes.DateLayoutDay)
+		}
+
+		data.sunGrow.SaveAsFile = true
+		data.sunGrow.OutputType.SetJson()
+		// table.SetFilePrefix(data.SetFilenamePrefix(""))
+		// for _, r := range data.Results {
+		// 	r.Response.Output()
+		// }
+		sg.Error = data.Output()
+		if sg.Error != nil {
+			break
+		}
+
+		data.sunGrow.OutputType.SetTable()
+		sg.Error = data.Output()
+		if sg.Error != nil {
+			break
+		}
+
+		data.sunGrow.OutputType.SetCsv()
+		sg.Error = data.Output()
+		if sg.Error != nil {
+			break
+		}
+
+		data.sunGrow.OutputType.SetRaw()
+		sg.Error = data.Output()
+		if sg.Error != nil {
+			break
+		}
+	}
+	// sg.OutputType = sot
 
 	return sg.Error
 }
@@ -568,7 +651,6 @@ func (sg *SunGrow) QueryMultiPointDataList(startDate valueTypes.DateTime, endDat
 		if sg.IsError() {
 			break
 		}
-
 	}
 
 	return ret, sg.Error
