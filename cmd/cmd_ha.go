@@ -76,18 +76,6 @@ func (c *CmdHa) AttachCommand(cmd *cobra.Command) *cobra.Command {
 
 func (c *CmdHa) CmdLovelace(cmd *cobra.Command, args []string) error {
 	for range Only.Once {
-		// if len(args) == 0 {
-		// 	fmt.Println("One of: basic graphs stats")
-		// 	_ = cmd.Help()
-		// 	break
-		// }
-		//
-		// var pids valueTypes.PsIds
-		// pids, c.Error = cmds.Api.SunGrow.GetPsIds()
-		// if c.Error != nil {
-		// 	break
-		// }
-
 		pids := cmds.Api.SunGrow.SetPsIds(args...)
 		if cmds.Api.SunGrow.Error != nil {
 			c.Error = cmds.Api.SunGrow.Error
@@ -95,8 +83,8 @@ func (c *CmdHa) CmdLovelace(cmd *cobra.Command, args []string) error {
 		}
 
 		for _, pid := range pids {
-			var tree iSolarCloud.PsTree
-			tree, c.Error = cmds.Api.SunGrow.PsTreeMenu(pid.String())
+			var trees iSolarCloud.PsTrees
+			trees, c.Error = cmds.Api.SunGrow.PsTreeMenu(pid.String())
 			if c.Error != nil {
 				break
 			}
@@ -105,18 +93,20 @@ func (c *CmdHa) CmdLovelace(cmd *cobra.Command, args []string) error {
 			var DeviceType22 string
 			var DeviceType43 string
 
-			for _, device := range tree.Devices {
-				if device.DeviceType.Match(14) {
-					DeviceType14 = device.PsKey.String()
-					continue
-				}
-				if device.DeviceType.Match(22) {
-					DeviceType22 = device.PsKey.String()
-					continue
-				}
-				if device.DeviceType.Match(43) {
-					DeviceType43 = device.PsKey.String()
-					continue
+			for pid2 := range trees {
+				for _, device := range trees[pid2].Devices {
+					if device.DeviceType.Match(14) {
+						DeviceType14 = device.PsKey.String()
+						continue
+					}
+					if device.DeviceType.Match(22) {
+						DeviceType22 = device.PsKey.String()
+						continue
+					}
+					if device.DeviceType.Match(43) {
+						DeviceType43 = device.PsKey.String()
+						continue
+					}
 				}
 			}
 
@@ -176,6 +166,7 @@ func (c *CmdHa) CmdLovelace(cmd *cobra.Command, args []string) error {
 
 	return c.Error
 }
+
 
 const lovelaceBasic = `views:
   - theme: Backend-selected

@@ -267,27 +267,29 @@ func SetDateTimeValue(value time.Time) DateTime {
 
 func (dt *DateTime) GetDayStartTimestamp() string {
 	var ret string
-	f1 := dt.Time.Round(time.Hour * 24)
+	f1 := time.Date(dt.Time.Year(), dt.Time.Month(), dt.Time.Day(), 0, 0, 0, 0, dt.Time.Location())
 	ret = f1.Format(DateTimeLayoutSecond)
 	return ret
 	// return fmt.Sprintf("%s000000", dt.Time.Format(DtLayoutDay))
 }
 
 func (dt *DateTime) SetDayStart() {
-	dt.Time = dt.Time.Round(time.Hour * 24)
+	// dt.Time = dt.Time.Truncate(time.Hour * 24)
+	dt.Time = time.Date(dt.Time.Year(), dt.Time.Month(), dt.Time.Day(), 0, 0, 0, 0, dt.Time.Location())
 	dt.string = dt.Time.Format(dt.format)
 }
 
 func (dt *DateTime) GetDayEndTimestamp() string {
 	var ret string
-	f1 := dt.Time.Round(time.Hour * 24).Add(time.Hour * 24).Add(-time.Second)
+	f1 := time.Date(dt.Time.Year(), dt.Time.Month(), dt.Time.Day(), 23, 59, 59, 0, dt.Time.Location())
 	ret = f1.Format(DateTimeLayoutSecond)
 	return ret
 	// return fmt.Sprintf("%s235900", dt.Time.Format(DtLayoutDay))
 }
 
 func (dt *DateTime) SetDayEnd() {
-	dt.Time = dt.Time.Truncate(time.Hour * 24).Add(time.Hour * 24).Add(-time.Second)
+	// dt.Time = dt.Time.Truncate(time.Hour * 24).Add(time.Hour * 24).Add(-time.Second)
+	dt.Time = time.Date(dt.Time.Year(), dt.Time.Month(), dt.Time.Day(), 23, 59, 59, 0, dt.Time.Location())
 	dt.string = dt.Time.Format(dt.format)
 }
 

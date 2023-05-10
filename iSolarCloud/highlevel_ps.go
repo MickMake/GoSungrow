@@ -274,14 +274,16 @@ func (sg *SunGrow) GetPsKeys() (valueTypes.PsKeys, error) {
 
 		// -------------------------------------------------------------------------------- //
 		// Method 2: PsTreeMenu
-		var tree PsTree
-		tree, sg.Error = sg.PsTreeMenu()
+		var trees PsTrees
+		trees, sg.Error = sg.PsTreeMenu()
 		if sg.Error != nil {
 			break
 		}
-		for _, pid := range tree.Devices {
-			// pskey := fmt.Sprintf("%s_%s_%s_%s", pid.PsId, pid.DeviceType, pid.PsKey.DeviceCode, pid.PsKey.ChannelId)
-			pskeys = append(pskeys, pid.PsKey.String())
+		for pid := range trees {
+			for _, tree := range trees[pid].Devices {
+				// pskey := fmt.Sprintf("%s_%s_%s_%s", pid.PsId, pid.DeviceType, pid.PsKey.DeviceCode, pid.PsKey.ChannelId)
+				pskeys = append(pskeys, tree.PsKey.String())
+			}
 		}
 		if len(pskeys) > 0 {
 			ret.Set(pskeys...)
@@ -449,8 +451,8 @@ func (sg *SunGrow) GetPsIds() (valueTypes.PsIds, error) {
 
 
 // PsTreeMenu - WebIscmAppService.getPsTreeMenu
-func (sg *SunGrow) PsTreeMenu(psIds ...string) (PsTree, error) {
-	var ret PsTree
+func (sg *SunGrow) PsTreeMenu(psIds ...string) (PsTrees, error) {
+	ret := make(PsTrees)
 
 	for range Only.Once {
 		pids := sg.SetPsIds(psIds...)
@@ -469,7 +471,9 @@ func (sg *SunGrow) PsTreeMenu(psIds ...string) (PsTree, error) {
 
 			data := getPsTreeMenu.Assert(ep)
 
-			ret.Scan(data.Response.ResultData.List, false)
+			var p PsTree
+			p.Scan(data.Response.ResultData.List, false)
+			ret[psId.String()] = p
 		}
 	}
 
@@ -515,6 +519,10 @@ func (p *PsTree) Scan(devices []getPsTreeMenu.Ps, print bool) {
 	p.Map = make(map[string]*Ps)
 	for _, ps := range p.Devices {
 		name := ps.UpUUID.String()
+		// if name == "0" {
+		// 	// name = ps.PsId.String()
+		// }
+
 		// fmt.Printf("[%s]\tParent:%s\tSelf: - %s\t%s\t%s\t%s\n", name, ps.UpUUID, ps.UUID, ps.PsId, ps.PsKey, ps.DeviceName)
 		if _, ok := p.Map[name]; !ok {
 			p.Map[name] = &Ps {
@@ -550,6 +558,17 @@ func (p *PsTree) loop(current string, count int, depth int) {
 		p.loop(name, count, depth)
 		depth--
 	}
+}
+
+
+type PsTrees map[string]PsTree
+
+func (p PsTrees) String() string {
+	var ret string
+	for i := range p {
+		ret += p[i].String()
+	}
+	return ret
 }
 
 

@@ -327,28 +327,30 @@ func (sg *SunGrow) GetDevicePointAttrs(psId valueTypes.PsId) (getDevicePointAttr
 	var ret getDevicePointAttrs.Points
 
 	for range Only.Once {
-		var tree PsTree
-		tree, sg.Error = sg.PsTreeMenu(psId.String())
+		var trees PsTrees
+		trees, sg.Error = sg.PsTreeMenu(psId.String())
 		if sg.Error != nil {
 			break
 		}
 
-		for _, pid := range tree.Devices {
-			ep := sg.GetByStruct(getDevicePointAttrs.EndPointName,
-				getDevicePointAttrs.RequestData {
-					Uuid:        pid.UUID,
-					PsId2:       pid.PsId,
-					DeviceType2: pid.DeviceType,
-				},
-				time.Hour * 24,
-			)
-			if sg.IsError() {
-				break
-			}
+		for pid := range trees {
+			for _, tree := range trees[pid].Devices {
+				ep := sg.GetByStruct(getDevicePointAttrs.EndPointName,
+					getDevicePointAttrs.RequestData{
+						Uuid:        tree.UUID,
+						PsId2:       tree.PsId,
+						DeviceType2: tree.DeviceType,
+					},
+					time.Hour*24,
+				)
+				if sg.IsError() {
+					break
+				}
 
-			data := getDevicePointAttrs.Assert(ep)
-			ret = append(ret, data.Points()...)
-			// more := sg.GetDevicePointNames(pid.DeviceType)
+				data := getDevicePointAttrs.Assert(ep)
+				ret = append(ret, data.Points()...)
+				// more := sg.GetDevicePointNames(pid.DeviceType)
+			}
 		}
 	}
 
@@ -377,6 +379,9 @@ func (sg *SunGrow) getPointData(startDate string, endDate string, interval strin
 
 		// Also set the startDate based on the ps_id deployment endDate if not set.
 		sd := valueTypes.NewDateTime(startDate)
+		if startDate == "" {
+			sd.SetDayStart()
+		}
 		var ed valueTypes.DateTime
 		if endDate == "" {
 			ed = sd

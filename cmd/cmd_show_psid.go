@@ -124,7 +124,7 @@ func (c *CmdShow) AttachPsTree(cmd *cobra.Command) *cobra.Command {
 }
 func (c *CmdShow) funcPsTree(_ *cobra.Command, args []string) error {
 	for range Only.Once {
-		var pids iSolarCloud.PsTree
+		var pids iSolarCloud.PsTrees
 		pids, c.Error = cmds.Api.SunGrow.PsTreeMenu(args...)
 		if c.Error != nil {
 			break
