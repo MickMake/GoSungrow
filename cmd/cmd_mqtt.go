@@ -1,10 +1,10 @@
 package cmd
 
 import (
+	"GoSungrow/cmdHassio"
 	"GoSungrow/iSolarCloud/WebAppService/getDevicePointAttrs"
 	"GoSungrow/iSolarCloud/api"
 	"GoSungrow/iSolarCloud/api/GoStruct/output"
-	"GoSungrow/mmHa"
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
@@ -42,7 +42,7 @@ type CmdMqtt struct {
 	MqttHost       string
 	MqttPort       string
 
-	Client         *mmHa.Mqtt
+	Client         *cmdHassio.Mqtt
 	endpoints      MqttEndPoints
 	points         getDevicePointAttrs.PointsMap
 	previous       map[string]*api.DataEntries
@@ -168,7 +168,7 @@ func (c *CmdMqtt) AttachFlags(cmd *cobra.Command, viper *viper.Viper) {
 func (c *CmdMqtt) MqttArgs(_ *cobra.Command, _ []string) error {
 	for range Only.Once {
 		c.log.Info("Connecting to MQTT HASSIO Service...\n")
-		c.Client = mmHa.New(mmHa.Mqtt {
+		c.Client = cmdHassio.New(cmdHassio.Mqtt {
 			ClientId:     DefaultServiceName,
 			EntityPrefix: DefaultServiceName,
 			Username:     c.MqttUsername,
@@ -440,7 +440,7 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 			name := r.EndPoint
 			if r.Point.GroupName != "" {
 				id = r.EndPoint
-				name = mmHa.JoinStringsForName(" - ", r.Parent.Key, r.Point.Id, r.Point.GroupName, r.Point.Description)
+				name = cmdHassio.JoinStringsForName(" - ", r.Parent.Key, r.Point.Id, r.Point.GroupName, r.Point.Description)
 			}
 
 			// if r.Point.Unit == "" {
@@ -453,7 +453,7 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 			// 	r.Point.Unit = mmHa.LabelBinarySensor
 			// }
 
-			re := mmHa.EntityConfig {
+			re := cmdHassio.EntityConfig {
 				Name:        name,	// mmHa.JoinStringsForName(" - ", id), // r.Point.Name, // PointName,
 				SubName:     "",
 				ParentId:    r.EndPoint,

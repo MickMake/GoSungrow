@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="76adadc9-ae71-42a6-82a1-66dbc8ecb14c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/cmd/cmd_logging.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/cmd_mqtt.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/cmd_mqtt.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/commands.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/commands.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -588,27 +582,27 @@
           <option name="timeStamp" value="8398" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/mmHa/struct.go</url>
+          <url>file://$PROJECT_DIR$/cmdHassio/struct.go</url>
           <line>361</line>
           <option name="timeStamp" value="8430" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/mmHa/struct.go</url>
+          <url>file://$PROJECT_DIR$/cmdHassio/struct.go</url>
           <line>264</line>
           <option name="timeStamp" value="8445" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/mmHa/struct.go</url>
+          <url>file://$PROJECT_DIR$/cmdHassio/struct.go</url>
           <line>290</line>
           <option name="timeStamp" value="8546" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/mmHa/struct.go</url>
+          <url>file://$PROJECT_DIR$/cmdHassio/struct.go</url>
           <line>296</line>
           <option name="timeStamp" value="8547" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/mmHa/struct.go</url>
+          <url>file://$PROJECT_DIR$/cmdHassio/struct.go</url>
           <line>263</line>
           <option name="timeStamp" value="8548" />
         </line-breakpoint>
@@ -838,7 +832,7 @@
           <option name="timeStamp" value="8931" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/mmHa/struct.go</url>
+          <url>file://$PROJECT_DIR$/cmdHassio/struct.go</url>
           <line>520</line>
           <option name="timeStamp" value="8938" />
         </line-breakpoint>
