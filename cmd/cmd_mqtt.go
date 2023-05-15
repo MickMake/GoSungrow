@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdHelp"
-	"github.com/MickMake/GoUnify/cmdLog"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/go-co-op/gocron"
 	"github.com/spf13/cobra"
@@ -48,7 +47,7 @@ type CmdMqtt struct {
 	points         getDevicePointAttrs.PointsMap
 	previous       map[string]*api.DataEntries
 
-	optionLogLevel      int
+	log                 Logging
 	optionSleepDelay    time.Duration
 	optionFetchSchedule time.Duration
 	// optionCacheTimeout  time.Duration
@@ -65,7 +64,7 @@ func NewCmdMqtt() *CmdMqtt {
 				SelfCmd: nil,
 			},
 
-			optionLogLevel:      LogLevelInfo,
+			log:                 NewLogging(""),
 			optionSleepDelay:    time.Second * 40,		// Takes up to 40 seconds for data to come in.
 			optionFetchSchedule: time.Minute * 5,
 			previous:            make(map[string]*api.DataEntries, 0),
@@ -86,6 +85,7 @@ func (c *CmdMqtt) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		var cmdMqtt = &cobra.Command{
 			Use:                   "mqtt",
 			Aliases:               []string{""},
+			Annotations:           map[string]string{"group": "MQTT"},
 			Short:                 "Connect to a HASSIO broker.",
 			Long:                  "Connect to a HASSIO broker.",
 			DisableFlagParsing:    false,
@@ -101,6 +101,7 @@ func (c *CmdMqtt) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		var cmdMqttRun = &cobra.Command{
 			Use:                   "run",
 			Aliases:               []string{""},
+			Annotations:           map[string]string{"group": "MQTT"},
 			Short:                 "One-off sync to a HASSIO broker.",
 			Long:                  "One-off sync to a HASSIO broker.",
 			DisableFlagParsing:    false,
@@ -126,6 +127,7 @@ func (c *CmdMqtt) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		var cmdMqttSync = &cobra.Command{
 			Use:                   "sync",
 			Aliases:               []string{""},
+			Annotations:           map[string]string{"group": "MQTT"},
 			Short:                 "Sync to a HASSIO MQTT broker.",
 			Long:                  "Sync to a HASSIO MQTT broker.",
 			DisableFlagParsing:    false,
@@ -165,7 +167,7 @@ func (c *CmdMqtt) AttachFlags(cmd *cobra.Command, viper *viper.Viper) {
 
 func (c *CmdMqtt) MqttArgs(_ *cobra.Command, _ []string) error {
 	for range Only.Once {
-		c.LogInfo("Connecting to MQTT HASSIO Service...\n")
+		c.log.Info("Connecting to MQTT HASSIO Service...\n")
 		c.Client = mmHa.New(mmHa.Mqtt {
 			ClientId:     DefaultServiceName,
 			EntityPrefix: DefaultServiceName,
@@ -179,13 +181,13 @@ func (c *CmdMqtt) MqttArgs(_ *cobra.Command, _ []string) error {
 			break
 		}
 
-		c.LogInfo("Connecting to SunGrow...\n")
+		c.log.Info("Connecting to SunGrow...\n")
 		c.Client.SungrowDevices, c.Error = cmds.Api.SunGrow.GetDeviceList()
 		if c.Error != nil {
 			break
 		}
 
-		c.LogInfo("Found SunGrow %d devices\n", len(c.Client.SungrowDevices))
+		c.log.Info("Found SunGrow %d devices\n", len(c.Client.SungrowDevices))
 		c.Client.DeviceName = DefaultServiceName
 		_, c.Error = c.Client.SetDeviceConfig(
 			c.Client.DeviceName, c.Client.DeviceName,
@@ -243,7 +245,7 @@ func (c *CmdMqtt) MqttArgs(_ *cobra.Command, _ []string) error {
 			break
 		}
 
-		c.LogInfo("Caching Sungrow metadata...\n")
+		c.log.Info("Caching Sungrow metadata...\n")
 		c.Error = c.GetEndPoints()
 		if c.Error != nil {
 			break
@@ -253,7 +255,7 @@ func (c *CmdMqtt) MqttArgs(_ *cobra.Command, _ []string) error {
 		if c.Error != nil {
 			break
 		}
-		c.LogInfo("Cached %d Sungrow data points...\n", len(c.points))
+		c.log.Info("Cached %d Sungrow data points...\n", len(c.points))
 	}
 
 	return c.Error
@@ -270,21 +272,21 @@ func (c *CmdMqtt) CmdMqttRun(_ *cobra.Command, _ []string) error {
 			break
 		}
 
-		c.LogInfo("Starting ticker...\n")
-		c.LogInfo("Fetch Schedule: %s\n", c.GetFetchSchedule())
-		c.LogInfo("Sleep Delay:    %s\n", c.GetSleepDelay())
+		c.log.Info("Starting ticker...\n")
+		c.log.Info("Fetch Schedule: %s\n", c.GetFetchSchedule())
+		c.log.Info("Sleep Delay:    %s\n", c.GetSleepDelay())
 		resolution := time.Second * 10
 		updateCounter := int(c.optionFetchSchedule / resolution)
 		timer := time.NewTicker(resolution)
 		for t := range timer.C {
 			if updateCounter >= 0 {
 				updateCounter--
-				c.LogDebug("Sleeping: %d\n", updateCounter)
+				c.log.Debug("Sleeping: %d\n", updateCounter)
 				continue
 			}
 
 			updateCounter = int(c.optionFetchSchedule / resolution)
-			c.LogDebug("Update: %s\n", t.String())
+			c.log.Debug("Update: %s\n", t.String())
 			c.Error = c.Cron()
 			if c.Error != nil {
 				break
@@ -320,7 +322,7 @@ func (c *CmdMqtt) CmdMqttSync(_ *cobra.Command, args []string) error {
 		}
 		job.IsRunning()
 
-		c.LogInfo("Created job schedule using '%s'\n", cronString)
+		c.log.Info("Created job schedule using '%s'\n", cronString)
 		cron.StartBlocking()
 		if c.Error != nil {
 			break
@@ -348,7 +350,7 @@ func (c *CmdMqtt) Cron() error {
 		if c.Client.IsFirstRun() {
 			c.Client.UnsetFirstRun()
 		} else {
-			c.LogDebug("Sleeping for %s...\n", c.GetSleepDelay())
+			c.log.Debug("Sleeping for %s...\n", c.GetSleepDelay())
 			time.Sleep(c.optionSleepDelay)
 		}
 
@@ -383,7 +385,7 @@ func (c *CmdMqtt) Cron() error {
 	}
 
 	if c.Error != nil {
-		c.LogError("%s\n", c.Error)
+		c.log.Error("%s\n", c.Error)
 	}
 	return c.Error
 }
@@ -391,7 +393,7 @@ func (c *CmdMqtt) Cron() error {
 func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 	for range Only.Once {
 		// Also getPowerStatistics, getHouseholdStoragePsReport, getPsList, getUpTimePoint,
-		c.LogInfo("Syncing %d entries with HASSIO from %s.\n", len(data.Map), endpoint)
+		c.log.Info("Syncing %d entries with HASSIO from %s.\n", len(data.Map), endpoint)
 
 		for o := range data.Map {
 			refreshConfig := newDay
@@ -414,8 +416,8 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 			if !r.Point.Valid {
 				// Any point that shouldn't be passed through to MQTT is ignored
 				// - includes child points of an aggregate of several points.
-				c.LogPlainInfo("-")
-				c.LogDebug("Ignored: [%s] = '%s'\n", r.EndPoint, r.Value.String())
+				c.log.PlainInfo("-")
+				c.log.Debug("Ignored: [%s] = '%s'\n", r.EndPoint, r.Value.String())
 				continue
 			}
 
@@ -426,8 +428,8 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 			if !r.Value.Valid {
 				// Point doesn't have a valid value.
 				// Usually a float or int that cannot be converted or is empty.
-				c.LogPlainInfo("?")
-				c.LogDebug("Invalid: [%s] = '%s'\n", r.EndPoint, r.Value.String())
+				c.log.PlainInfo("?")
+				c.log.Debug("Invalid: [%s] = '%s'\n", r.EndPoint, r.Value.String())
 				continue
 			}
 
@@ -484,8 +486,8 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 			// }
 
 			if refreshConfig {
-				c.LogPlainInfo("C")
-				c.LogDebug("Config: [%s]\n", r.EndPoint)
+				c.log.PlainInfo("C")
+				c.log.Debug("Config: [%s]\n", r.EndPoint)
 				c.Error = c.Client.BinarySensorPublishConfig(re)
 				if c.Error != nil {
 					break
@@ -497,8 +499,8 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 				}
 			}
 
-			c.LogPlainInfo("U")
-			c.LogDebug("Update: [%s] = '%s' %s\n", r.EndPoint, r.Value.String(), r.Value.Unit())
+			c.log.PlainInfo("U")
+			c.log.Debug("Update: [%s] = '%s' %s\n", r.EndPoint, r.Value.String(), r.Value.Unit())
 			c.Error = c.Client.BinarySensorPublishValue(re)
 			if c.Error != nil {
 				break
@@ -509,7 +511,7 @@ func (c *CmdMqtt) Update(endpoint string, data api.DataMap, newDay bool) error {
 				break
 			}
 		}
-		c.LogPlainInfo("\n")
+		c.log.PlainInfo("\n")
 	}
 	return c.Error
 }
@@ -555,7 +557,7 @@ func (c *CmdMqtt) UpdatePoint(entry *api.DataEntry) error {
 		// }
 		p := c.points.Get(entry.Point.Id)
 		if p == nil {
-			c.LogDebug("Point Meta: %s - Not found.\n", entry.Point.Id)
+			c.log.Debug("Point Meta: %s - Not found.\n", entry.Point.Id)
 			break
 		}
 
@@ -627,102 +629,6 @@ func (c *CmdMqtt) UpdatePoint(entry *api.DataEntry) error {
 }
 
 
-// -------------------------------------------------------------------------------- //
-
-const (
-	LogLevelDebug   = 0
-	LogLevelInfo    = iota
-	LogLevelWarning = iota
-	LogLevelError   = iota
-
-	LogLevelDebugStr   = "debug"
-	LogLevelInfoStr    = "info"
-	LogLevelWarningStr = "warning"
-	LogLevelErrorStr   = "error"
-)
-
-func (c *CmdMqtt) SetLogLevel(level string) {
-	switch strings.ToLower(level) {
-	case LogLevelDebugStr:
-		c.optionLogLevel = LogLevelDebug
-	case LogLevelInfoStr:
-		c.optionLogLevel = LogLevelInfo
-	case LogLevelWarningStr:
-		c.optionLogLevel = LogLevelWarning
-	case LogLevelErrorStr:
-		c.optionLogLevel = LogLevelError
-	default:
-		cmdLog.LogPrintDate("Unknown log level, setting to default.")
-		c.optionLogLevel = LogLevelInfo
-	}
-}
-
-func (c *CmdMqtt) GetLogLevel() string {
-	var ret string
-	switch c.optionLogLevel {
-		case LogLevelDebug:
-			ret = LogLevelDebugStr
-		case LogLevelInfo:
-			ret = LogLevelInfoStr
-		case LogLevelWarning:
-			ret = LogLevelWarningStr
-		case LogLevelError:
-			ret = LogLevelErrorStr
-		default:
-			ret = LogLevelInfoStr
-	}
-	return ret
-}
-
-func (c *CmdMqtt) LogDebug(format string, args ...interface{}) {
-	if LogLevelDebug >= c.optionLogLevel {
-		cmdLog.LogPrintDate("DEBUG: " + format, args...)
-	}
-}
-
-func (c *CmdMqtt) LogInfo(format string, args ...interface{}) {
-	if LogLevelInfo >= c.optionLogLevel {
-		cmdLog.LogPrintDate("INFO: " + format, args...)
-	}
-}
-
-func (c *CmdMqtt) LogWarning(format string, args ...interface{}) {
-	if LogLevelWarning >= c.optionLogLevel {
-		cmdLog.LogPrintDate("WARNING: " + format, args...)
-	}
-}
-
-func (c *CmdMqtt) LogError(format string, args ...interface{}) {
-	if LogLevelError >= c.optionLogLevel {
-		cmdLog.LogPrintDate("ERROR: " + format, args...)
-	}
-}
-
-func (c *CmdMqtt) LogPlainDebug(format string, args ...interface{}) {
-	if LogLevelDebug >= c.optionLogLevel {
-		fmt.Print(cmdLog.LogSprintf(format, args...))
-	}
-}
-
-func (c *CmdMqtt) LogPlainInfo(format string, args ...interface{}) {
-	if LogLevelInfo >= c.optionLogLevel {
-		fmt.Print(cmdLog.LogSprintf(format, args...))
-	}
-}
-
-func (c *CmdMqtt) LogPlainWarning(format string, args ...interface{}) {
-	if LogLevelWarning >= c.optionLogLevel {
-		fmt.Print(cmdLog.LogSprintf(format, args...))
-	}
-}
-
-func (c *CmdMqtt) LogPlainError(format string, args ...interface{}) {
-	if LogLevelError >= c.optionLogLevel {
-		fmt.Print(cmdLog.LogSprintf(format, args...))
-	}
-}
-
-
 const (
 	OptionLogLevel      = "loglevel"
 	OptionFetchSchedule = "fetchschedule"
@@ -738,7 +644,7 @@ func (c *CmdMqtt) Options() error {
 		if c.Error != nil {
 			break
 		}
-		c.Error = c.Client.SetOptionValue(OptionLogLevel, c.GetLogLevel())
+		c.Error = c.Client.SetOptionValue(OptionLogLevel, c.log.GetLogLevel())
 		if c.Error != nil {
 			break
 		}
@@ -783,11 +689,11 @@ func (c *CmdMqtt) Options() error {
 func (c *CmdMqtt) optionFuncLogLevel(_ mqtt.Client, msg mqtt.Message) {
 	for range Only.Once {
 		request := strings.ToLower(string(msg.Payload()))
-		c.LogInfo("Option[%s] set to '%s'\n", OptionLogLevel, request)
-		c.SetLogLevel(request)
+		c.log.Info("Option[%s] set to '%s'\n", OptionLogLevel, request)
+		c.log.SetLogLevel(request)
 		c.Error = c.Client.SetOptionValue(OptionLogLevel, request)
 		if c.Error != nil {
-			c.LogError("%s\n", c.Error)
+			c.log.Error("%s\n", c.Error)
 			break
 		}
 	}
@@ -796,16 +702,16 @@ func (c *CmdMqtt) optionFuncLogLevel(_ mqtt.Client, msg mqtt.Message) {
 func (c *CmdMqtt) optionFuncFetchSchedule(_ mqtt.Client, msg mqtt.Message) {
 	for range Only.Once {
 		request := strings.ToLower(string(msg.Payload()))
-		c.LogInfo("Option[%s] set to '%s'\n", OptionFetchSchedule, request)
+		c.log.Info("Option[%s] set to '%s'\n", OptionFetchSchedule, request)
 		c.optionFetchSchedule, c.Error = time.ParseDuration(request)
 		if c.Error != nil {
-			c.LogError("%s\n", c.Error)
+			c.log.Error("%s\n", c.Error)
 			break
 		}
 
 		c.Error = c.Client.SetOptionValue(OptionFetchSchedule, c.GetFetchSchedule())
 		if c.Error != nil {
-			c.LogError("%s\n", c.Error)
+			c.log.Error("%s\n", c.Error)
 			break
 		}
 
@@ -820,16 +726,16 @@ func (c *CmdMqtt) GetFetchSchedule() string {
 func (c *CmdMqtt) optionFuncSleepDelay(_ mqtt.Client, msg mqtt.Message) {
 	for range Only.Once {
 		request := strings.ToLower(string(msg.Payload()))
-		c.LogInfo("Option[%s] set to '%s'\n", OptionSleepDelay, request)
+		c.log.Info("Option[%s] set to '%s'\n", OptionSleepDelay, request)
 		c.optionSleepDelay, c.Error = time.ParseDuration(request)
 		if c.Error != nil {
-			c.LogError("%s\n", c.Error)
+			c.log.Error("%s\n", c.Error)
 			break
 		}
 
 		c.Error = c.Client.SetOptionValue(OptionSleepDelay, request)
 		if c.Error != nil {
-			c.LogError("%s\n", c.Error)
+			c.log.Error("%s\n", c.Error)
 			break
 		}
 	}
@@ -842,7 +748,7 @@ func (c *CmdMqtt) GetSleepDelay() string {
 func (c *CmdMqtt) optionFuncServiceState(_ mqtt.Client, msg mqtt.Message) {
 	for range Only.Once {
 		request := strings.ToLower(string(msg.Payload()))
-		c.LogInfo("Option[%s] set to '%s'\n", OptionServiceState, request)
+		c.log.Info("Option[%s] set to '%s'\n", OptionServiceState, request)
 		switch request {
 			case "Run":
 			case "Restart":
@@ -851,7 +757,7 @@ func (c *CmdMqtt) optionFuncServiceState(_ mqtt.Client, msg mqtt.Message) {
 
 		c.Error = c.Client.SetOptionValue(OptionServiceState, request)
 		if c.Error != nil {
-			c.LogError("%s\n", c.Error)
+			c.log.Error("%s\n", c.Error)
 			break
 		}
 	}

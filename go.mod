@@ -22,13 +22,20 @@ require (
 	github.com/MickMake/GoUnify/cmdHelp v0.0.0-20221125023651-ff4a37b1928a
 	github.com/MickMake/GoUnify/cmdLog v0.0.0-20221125023651-ff4a37b1928a
 	github.com/MickMake/GoUnify/cmdPath v0.0.0-20221125023651-ff4a37b1928a
+	github.com/agrison/go-tablib v0.0.0-20160310143025-4930582c22ee
+	github.com/agrison/mxj v0.0.0-20160310142625-1269f8afb3b4
 	github.com/eclipse/paho.mqtt.golang v1.4.2
 	github.com/go-co-op/gocron v1.18.0
+	github.com/mattn/go-runewidth v0.0.13
 	github.com/olekukonko/tablewriter v0.0.5
+	github.com/simonvetter/modbus v1.6.0
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.14.0
+	github.com/stretchr/testify v1.8.1
+	github.com/tealeg/xlsx v1.0.5
 	github.com/wcharczuk/go-chart/v2 v2.1.0
 	go.pennock.tech/tabular v1.1.3
+	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15
 	gopkg.in/yaml.v2 v2.4.0
 )
 
@@ -43,12 +50,13 @@ require (
 	github.com/abiosoft/ishell v2.0.0+incompatible // indirect
 	github.com/abiosoft/ishell/v2 v2.0.2 // indirect
 	github.com/abiosoft/readline v0.0.0-20180607040430-155bce2042db // indirect
-	github.com/agrison/mxj v0.0.0-20160310142625-1269f8afb3b4 // indirect
 	github.com/alecthomas/chroma v0.7.1 // indirect
 	github.com/blang/semver v3.5.1+incompatible // indirect
+	github.com/bndr/gotabulate v1.1.2 // indirect
 	github.com/briandowns/spinner v1.19.0 // indirect
 	github.com/clbanning/mxj v1.8.4 // indirect
 	github.com/danwakefield/fnmatch v0.0.0-20160403171240-cbb64ac3d964 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/disintegration/imaging v1.6.2 // indirect
 	github.com/dlclark/regexp2 v1.1.6 // indirect
 	github.com/eliukblau/pixterm/pkg/ansimage v0.0.0-20191210081756-9fb6cf8c2f75 // indirect
@@ -56,6 +64,7 @@ require (
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/flynn-archive/go-shlex v0.0.0-20150515145356-3f9db97f8568 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
+	github.com/goburrow/serial v0.1.0 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/gomarkdown/markdown v0.0.0-20191123064959-2c17d62f5098 // indirect
@@ -67,19 +76,22 @@ require (
 	github.com/inconshreveable/mousetrap v1.0.1 // indirect
 	github.com/ivanpirog/coloredcobra v1.0.1 // indirect
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
+	github.com/kr/pretty v0.3.0 // indirect
+	github.com/kr/text v0.2.0 // indirect
 	github.com/kyokomi/emoji/v2 v2.2.8 // indirect
 	github.com/logrusorgru/aurora v2.0.3+incompatible // indirect
 	github.com/lucasb-eyer/go-colorful v1.0.3 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
-	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rhysd/go-github-selfupdate v1.2.3 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
+	github.com/rogpeppe/go-internal v1.6.1 // indirect
 	github.com/sevlyar/go-daemon v0.1.6 // indirect
 	github.com/spf13/afero v1.9.2 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
@@ -87,7 +99,6 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.4.1 // indirect
 	github.com/tcnksm/go-gitconfig v0.1.2 // indirect
-	github.com/tealeg/xlsx v1.0.5 // indirect
 	github.com/ulikunitz/xz v0.5.9 // indirect
 	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e // indirect
 	golang.org/x/image v0.0.0-20200927104501-e162460cd6b5 // indirect

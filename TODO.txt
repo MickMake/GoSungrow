@@ -7,6 +7,19 @@ Next up:
   - Maybe add all known endpoints to mqtt as an option for regular polling instead of using a json file.
 
 
+---
+2023-05-15 21:22:24.895 ERROR (MainThread) [homeassistant.util.logging] Exception in message_received when handling msg on 'homeassistant/sensor/GoSungrow/GoSungrow-getPsDetail-1129147-p83072/state': '{"value":""}'
+ValueError: could not convert string to float: ''
+ValueError: Template error: float got invalid input '' when rendering template '{{ value_json.value | float }}' but no default was specified
+2023-05-15 21:22:25.216 ERROR (MainThread) [homeassistant.util.logging] Exception in message_received when handling msg on 'homeassistant/sensor/GoSungrow/GoSungrow-virtual-1129147-p83097/state': '{"value":""}'
+ValueError: could not convert string to float: ''
+ValueError: Template error: float got invalid input '' when rendering template '{{ value_json.value | float }}' but no default was specified
+2023-05-15 21:22:25.290 ERROR (MainThread) [homeassistant.util.logging] Exception in message_received when handling msg on 'homeassistant/sensor/GoSungrow/GoSungrow-getPsDetail-1129147-p83118/state': '{"value":""}'
+ValueError: could not convert string to float: ''
+ValueError: Template error: float got invalid input '' when rendering template '{{ value_json.value | float }}' but no default was specified
+ValueError: could not convert string to float: 'unknown'
+
+
 Formatting issues:
 	- getUpTimePoint		<- map[string]
 	- AppService.getKpiInfo		<- map[string]
