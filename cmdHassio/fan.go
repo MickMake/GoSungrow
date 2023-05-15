@@ -1,4 +1,4 @@
-package mmHa
+package cmdHassio
 
 import (
 	"encoding/json"
@@ -6,13 +6,13 @@ import (
 	"strings"
 )
 
-const LabelHumidifier = "humidifier"
+const LabelFan = "fan"
 
 
-func (m *Mqtt) HumidifierPublishConfig(config EntityConfig) error {
+func (m *Mqtt) FanPublishConfig(config EntityConfig) error {
 
 	for range Only.Once {
-		if !config.IsHumidifier() {
+		if !config.IsFan() {
 			break
 		}
 
@@ -23,11 +23,11 @@ func (m *Mqtt) HumidifierPublishConfig(config EntityConfig) error {
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
 
-		payload := Humidifier {
+		payload := Fan {
 			Device:       newDevice,
 			Name:         String(JoinStrings(m.DeviceName, config.Name)),
 			// StateTopic:   JoinStringsForTopic(m.switchPrefix, id, "state"),
-			CommandTopic: String(JoinStringsForTopic(m.Prefix, LabelHumidifier, m.ClientId, id, "cmd")),
+			CommandTopic: String(JoinStringsForTopic(m.Prefix, LabelFan, m.ClientId, id, "cmd")),
 			ObjectId:     String(id),
 			UniqueId:     String(id),
 			Qos:          0,
@@ -41,17 +41,17 @@ func (m *Mqtt) HumidifierPublishConfig(config EntityConfig) error {
 			Icon:          Icon(config.Icon),
 		}
 
-		tag := JoinStringsForTopic(m.Prefix, LabelHumidifier, m.ClientId, id, "config")
+		tag := JoinStringsForTopic(m.Prefix, LabelFan, m.ClientId, id, "config")
 		m.err = m.Publish(tag, 0, true, payload.Json())
 	}
 
 	return m.err
 }
 
-func (m *Mqtt) HumidifierPublishValue(config EntityConfig) error {
+func (m *Mqtt) FanPublishValue(config EntityConfig) error {
 
 	for range Only.Once {
-		if !config.IsHumidifier() {
+		if !config.IsFan() {
 			break
 		}
 
@@ -60,7 +60,7 @@ func (m *Mqtt) HumidifierPublishValue(config EntityConfig) error {
 		}
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
-		tag := JoinStringsForTopic(m.Prefix, LabelHumidifier, m.ClientId, id, "state")
+		tag := JoinStringsForTopic(m.Prefix, LabelFan, m.ClientId, id, "state")
 
 		value := config.Value.String()
 		if value == "--" {
@@ -83,7 +83,7 @@ func (m *Mqtt) HumidifierPublishValue(config EntityConfig) error {
 	return m.err
 }
 
-type Humidifier struct {
+type Fan struct {
 	// A list of MQTT topics subscribed to receive availability (online/offline) updates. Must not be used together with availability_topic.
 	Availability *Availability `json:"availability,omitempty"`
 
@@ -99,14 +99,11 @@ type Humidifier struct {
 	// Defines a template to generate the payload to send to command_topic.
 	CommandTemplate Template `json:"command_template,omitempty"`
 
-	// The MQTT topic to publish commands to change the humidifier state.
+	// The MQTT topic to publish commands to change the fan state.
 	CommandTopic String `json:"command_topic,omitempty" required:"true"`
 
-	// Information about the device this humidifier is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set. At least one of identifiers or connections must be present to identify the device.
+	// Information about the device this fan is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set. At least one of identifiers or connections must be present to identify the device.
 	Device Device `json:"device,omitempty"`
-
-	// The device class of the MQTT device. Must be either humidifier or dehumidifier.
-	DeviceClass String `json:"device_class,omitempty" default:"humidifier"`
 
 	// Flag which defines if the entity should be enabled when first added.
 	EnabledByDefault Boolean `json:"enabled_by_default,omitempty" default:"true"`
@@ -126,22 +123,28 @@ type Humidifier struct {
 	// The MQTT topic subscribed to receive a JSON dictionary payload and then set as sensor attributes. Usage example can be found in MQTT sensor documentation.
 	JsonAttributesTopic String `json:"json_attributes_topic,omitempty"`
 
-	// The minimum target humidity percentage that can be set.
-	MaxHumidity Integer `json:"max_humidity,omitempty" default:"100"`
-
-	// The maximum target humidity percentage that can be set.
-	MinHumidity Integer `json:"min_humidity,omitempty" default:"0"`
-
-	// The name of the humidifier.
+	// The name of the fan.
 	Name String `json:"name,omitempty" default:"MQTT"`
 
 	// Used instead of name for automatic generation of entity_id
 	ObjectId String `json:"object_id,omitempty"`
 
-	// Flag that defines if humidifier works in optimistic mode
+	// Flag that defines if fan works in optimistic mode
 	Optimistic Boolean `json:"optimistic,omitempty"`
 
 	// Default: true if no state topic defined, else false.
+	// Defines a template to generate the payload to send to oscillation_command_topic.
+	OscillationCommandTemplate Template `json:"oscillation_command_template,omitempty"`
+
+	// The MQTT topic to publish commands to change the oscillation state.
+	OscillationCommandTopic String `json:"oscillation_command_topic,omitempty"`
+
+	// The MQTT topic subscribed to receive oscillation state updates.
+	OscillationStateTopic String `json:"oscillation_state_topic,omitempty"`
+
+	// Defines a template to extract a value from the oscillation.
+	OscillationValueTemplate String `json:"oscillation_value_template,omitempty"`
+
 	// The payload that represents the available state.
 	PayloadAvailable String `json:"payload_available,omitempty" default:"online"`
 
@@ -154,38 +157,44 @@ type Humidifier struct {
 	// The payload that represents the running state.
 	PayloadOn String `json:"payload_on,omitempty" default:"ON"`
 
-	// A special payload that resets the target_humidity state attribute to None when received at the target_humidity_state_topic.
-	PayloadResetHumidity String `json:"payload_reset_humidity,omitempty" default:"None"`
+	// The payload that represents the oscillation off state.
+	PayloadOscillationOff String `json:"payload_oscillation_off,omitempty" default:"oscillate_off"`
 
-	// A special payload that resets the mode state attribute to None when received at the mode_state_topic.
-	PayloadResetMode String `json:"payload_reset_mode,omitempty" default:"None"`
+	// The payload that represents the oscillation on state.
+	PayloadOscillationOn String `json:"payload_oscillation_on,omitempty" default:"oscillate_on"`
 
-	// Defines a template to generate the payload to send to target_humidity_command_topic.
-	TargetHumidityCommandTemplate Template `json:"target_humidity_command_template,omitempty"`
+	// A special payload that resets the percentage state attribute to None when received at the percentage_state_topic.
+	PayloadResetPercentage String `json:"payload_reset_percentage,omitempty" default:"None"`
 
-	// The MQTT topic to publish commands to change the humidifier target humidity state based on a percentage.
-	TargetHumidityCommandTopic String `json:"target_humidity_command_topic,omitempty" required:"true"`
+	// A special payload that resets the preset_mode state attribute to None when received at the preset_mode_state_topic.
+	PayloadResetPresetMode String `json:"payload_reset_preset_mode,omitempty" default:"None"`
 
-	// The MQTT topic subscribed to receive humidifier target humidity.
-	TargetHumidityStateTopic String `json:"target_humidity_state_topic,omitempty"`
+	// Defines a template to generate the payload to send to percentage_command_topic.
+	PercentageCommandTemplate Template `json:"percentage_command_template,omitempty"`
 
-	// Defines a template to extract a value for the humidifier target_humidity state.
-	TargetHumidityStateTemplate String `json:"target_humidity_state_template,omitempty"`
+	// The MQTT topic to publish commands to change the fan speed state based on a percentage.
+	PercentageCommandTopic String `json:"percentage_command_topic,omitempty"`
 
-	// Defines a template to generate the payload to send to mode_command_topic.
-	ModeCommandTemplate Template `json:"mode_command_template,omitempty"`
+	// The MQTT topic subscribed to receive fan speed based on percentage.
+	PercentageStateTopic String `json:"percentage_state_topic,omitempty"`
 
-	// The MQTT topic to publish commands to change the mode on the humidifier. This attribute ust be configured together with the modes attribute.
-	ModeCommandTopic String `json:"mode_command_topic,omitempty"`
+	// Defines a template to extract the percentage value from the payload received on percentage_state_topic.
+	PercentageValueTemplate String `json:"percentage_value_template,omitempty"`
 
-	// The MQTT topic subscribed to receive the humidifier mode.
-	ModeStateTopic String `json:"mode_state_topic,omitempty"`
+	// Defines a template to generate the payload to send to preset_mode_command_topic.
+	PresetModeCommandTemplate Template `json:"preset_mode_command_template,omitempty"`
 
-	// Defines a template to extract a value for the humidifier mode state.
-	ModeStateTemplate String `json:"mode_state_template,omitempty"`
+	// The MQTT topic to publish commands to change the preset mode.
+	PresetModeCommandTopic String `json:"preset_mode_command_topic,omitempty"`
 
-	// List of available modes this humidifier is capable of running at. Common examples include normal, eco, away, boost, comfort, home, sleep, auto and baby. These examples offer built-in translations but other custom modes are allowed as well. This attribute ust be configured together with the mode_command_topic attribute.
-	Modes List `json:"modes,omitempty"(optional, default: [])`
+	// The MQTT topic subscribed to receive fan speed based on presets.
+	PresetModeStateTopic String `json:"preset_mode_state_topic,omitempty"`
+
+	// Defines a template to extract the preset_mode value from the payload received on preset_mode_state_topic.
+	PresetModeValueTemplate String `json:"preset_mode_value_template,omitempty"`
+
+	// List of preset modes this fan is capable of running at. Common examples include auto, smart, whoosh, eco and breeze.
+	PresetModes List `json:"preset_modes,omitempty"(optional, default: [])`
 
 	// The maximum QoS level of the state topic.
 	Qos Integer `json:"qos,omitempty" default:"0"`
@@ -193,27 +202,33 @@ type Humidifier struct {
 	// If the published message should have the retain flag on or not.
 	Retain Boolean `json:"retain,omitempty" default:"true"`
 
+	// The maximum of numeric output range (representing 100 %). The number of speeds within the speed_range / 100 will determine the percentage_step.
+	SpeedRangeMax Integer `json:"speed_range_max,omitempty" default:"100"`
+
+	// The minimum of numeric output range (off not included, so speed_range_min - 1 represents 0 %). The number of speeds within the speed_range / 100 will determine the percentage_step.
+	SpeedRangeMin Integer `json:"speed_range_min,omitempty" default:"1"`
+
 	// The MQTT topic subscribed to receive state updates.
 	StateTopic String `json:"state_topic,omitempty"`
 
 	// Defines a template to extract a value from the state.
 	StateValueTemplate String `json:"state_value_template,omitempty"`
 
-	// An ID that uniquely identifies this humidifier. If two humidifiers have the same unique ID, Home Assistant will raise an exception.
+	// An ID that uniquely identifies this fan. If two fans have the same unique ID, Home Assistant will raise an exception.
 	UniqueId String `json:"unique_id,omitempty"`
 }
 
 
-func (c *Humidifier) Json() string {
+func (c *Fan) Json() string {
 	j, _ := json.Marshal(*c)
 	return string(j)
 }
 
-func (config *EntityConfig) IsHumidifier() bool {
+func (config *EntityConfig) IsFan() bool {
 	var ok bool
 
 	for range Only.Once {
-		if config.Units == LabelHumidifier {
+		if config.Units == LabelFan {
 			ok = true
 			break
 		}

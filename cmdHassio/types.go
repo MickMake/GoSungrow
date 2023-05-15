@@ -1,4 +1,4 @@
-package mmHa
+package cmdHassio
 
 
 // Device - device map (optional)

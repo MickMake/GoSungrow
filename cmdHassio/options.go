@@ -1,4 +1,4 @@
-package mmHa
+package cmdHassio
 
 import (
 	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"

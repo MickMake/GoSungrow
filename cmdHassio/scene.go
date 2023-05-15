@@ -1,4 +1,4 @@
-package mmHa
+package cmdHassio
 
 import (
 	"encoding/json"
@@ -6,32 +6,32 @@ import (
 	"strings"
 )
 
-const LabelDeviceTracker = "device_tracker"
+const LabelScene = "scene"
 
 
-func (m *Mqtt) DeviceTrackerPublishConfig(config EntityConfig) error {
+func (m *Mqtt) ScenePublishConfig(config EntityConfig) error {
 
 	for range Only.Once {
-		if !config.IsDeviceTracker() {
+		if !config.IsScene() {
 			break
 		}
 
-		ok, newDevice := m.NewDevice(config)
-		if !ok {
-			break
-		}
+		// ok, newDevice := m.NewDevice(config)
+		// if !ok {
+		// 	break
+		// }
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
 
-		payload := DeviceTracker {
-			Device:       newDevice,
+		payload := Scene {
+			// Device:       newDevice,
 			Name:         String(JoinStrings(m.DeviceName, config.Name)),
 			// StateTopic:   JoinStringsForTopic(m.switchPrefix, id, "state"),
-			// CommandTopic: String(JoinStringsForTopic(m.switchPrefix, id, "cmd")),
+			CommandTopic: String(JoinStringsForTopic(m.Prefix, LabelScene, m.ClientId, id, "cmd")),
 			ObjectId:     String(id),
 			UniqueId:     String(id),
 			Qos:          0,
-			// Retain:       true,
+			Retain:       true,
 
 			// PayloadOn:     "true",
 			// PayloadOff:    "false",
@@ -41,17 +41,17 @@ func (m *Mqtt) DeviceTrackerPublishConfig(config EntityConfig) error {
 			Icon:          Icon(config.Icon),
 		}
 
-		tag := JoinStringsForTopic(m.Prefix, LabelDeviceTracker, m.ClientId, id, "config")
+		tag := JoinStringsForTopic(m.Prefix, LabelScene, m.ClientId, id, "config")
 		m.err = m.Publish(tag, 0, true, payload.Json())
 	}
 
 	return m.err
 }
 
-func (m *Mqtt) DeviceTrackerPublishValue(config EntityConfig) error {
+func (m *Mqtt) ScenePublishValue(config EntityConfig) error {
 
 	for range Only.Once {
-		if !config.IsDeviceTracker() {
+		if !config.IsScene() {
 			break
 		}
 
@@ -60,7 +60,7 @@ func (m *Mqtt) DeviceTrackerPublishValue(config EntityConfig) error {
 		}
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
-		tag := JoinStringsForTopic(m.Prefix, LabelDeviceTracker, m.ClientId, id, "state")
+		tag := JoinStringsForTopic(m.Prefix, LabelScene, m.ClientId, id, "state")
 
 		value := config.Value.String()
 		if value == "--" {
@@ -83,7 +83,7 @@ func (m *Mqtt) DeviceTrackerPublishValue(config EntityConfig) error {
 	return m.err
 }
 
-type DeviceTracker struct {
+type Scene struct {
 	// A list of MQTT topics subscribed to receive availability (online/offline) updates. Must not be used together with availability_topic.
 	Availability *Availability `json:"availability,omitempty"`
 
@@ -96,20 +96,20 @@ type DeviceTracker struct {
 	// The MQTT topic subscribed to receive availability (online/offline) updates. Must not be used together with availability.
 	AvailabilityTopic String `json:"availability_topic,omitempty"`
 
-	// Information about the device this device tracker is a part of that ties it into the device registry. At least one of identifiers or connections must be present to identify the device.
-	Device Device `json:"device,omitempty"`
+	// The MQTT topic to publish payload_on to activate the scene.
+	CommandTopic String `json:"command_topic,omitempty"`
 
-	// Icon for the entity.
+	// Flag which defines if the entity should be enabled when first added.
+	EnabledByDefault Boolean `json:"enabled_by_default,omitempty" default:"true"`
+
+	// The category of the entity.
+	EntityCategory String `json:"entity_category,omitempty" default:"None"`
+
+	// Icon for the scene.
 	Icon Icon `json:"icon,omitempty"`
 
-	// Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic. Usage example can be found in MQTT sensor documentation.
-	JsonAttributesTemplate Template `json:"json_attributes_template,omitempty"`
-
-	// The MQTT topic subscribed to receive a JSON dictionary payload and then set as device_tracker attributes. Usage example can be found in MQTT sensor documentation.
-	JsonAttributesTopic String `json:"json_attributes_topic,omitempty"`
-
-	// The name of the MQTT device_tracker.
-	Name String `json:"name,omitempty"`
+	// The name to use when displaying this scene.
+	Name String `json:"name,omitempty" default:"MQTT"`
 
 	// Used instead of name for automatic generation of entity_id
 	ObjectId String `json:"object_id,omitempty"`
@@ -117,42 +117,33 @@ type DeviceTracker struct {
 	// The payload that represents the available state.
 	PayloadAvailable String `json:"payload_available,omitempty" default:"online"`
 
-	// The payload value that represents the ‘home’ state for the device.
-	PayloadHome String `json:"payload_home,omitempty" default:"home"`
-
 	// The payload that represents the unavailable state.
 	PayloadNotAvailable String `json:"payload_not_available,omitempty" default:"offline"`
 
-	// The payload value that represents the ‘not_home’ state for the device.
-	PayloadNotHome String `json:"payload_not_home,omitempty" default:"not_home"`
+	// The payload that will be sent to command_topic when activating the MQTT scene.
+	PayloadOn String `json:"payload_on,omitempty" default:"ON"`
 
-	// The maximum QoS level of the state topic.
+	// The maximum QoS level of the state topic. Default is 0 and will also be used to publishing messages.
 	Qos Integer `json:"qos,omitempty" default:"0"`
 
-	// Attribute of a device tracker that affects state when being used to track a person. Valid options are gps, router, bluetooth, or bluetooth_le.
-	SourceType String `json:"source_type,omitempty"`
+	// If the published message should have the retain flag on or not.
+	Retain Boolean `json:"retain,omitempty" default:"false"`
 
-	// The MQTT topic subscribed to receive device tracker state changes.
-	StateTopic String `json:"state_topic,omitempty" required:"true"`
-
-	// An ID that uniquely identifies this device_tracker. If two device_trackers have the same unique ID, Home Assistant will raise an exception.
+	// An ID that uniquely identifies this scene entity. If two scenes have the same unique ID, Home Assistant will raise an exception.
 	UniqueId String `json:"unique_id,omitempty"`
-
-	// Defines a template that returns a device tracker state.
-	ValueTemplate Template `json:"value_template,omitempty"`
 }
 
 
-func (c *DeviceTracker) Json() string {
+func (c *Scene) Json() string {
 	j, _ := json.Marshal(*c)
 	return string(j)
 }
 
-func (config *EntityConfig) IsDeviceTracker() bool {
+func (config *EntityConfig) IsScene() bool {
 	var ok bool
 
 	for range Only.Once {
-		if config.Units == LabelDeviceTracker {
+		if config.Units == LabelScene {
 			ok = true
 			break
 		}

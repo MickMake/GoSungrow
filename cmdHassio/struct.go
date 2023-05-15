@@ -1,4 +1,4 @@
-package mmHa
+package cmdHassio
 
 import (
 	"GoSungrow/iSolarCloud/AppService/getDeviceList"
