@@ -581,6 +581,14 @@ func (t *PsKeys) Strings() []string {
 	return ret
 }
 
+func (t *PsKeys) PsIds() []string {
+	var ret []string
+	for _, pskey := range t.PsKeys {
+		ret = append(ret, pskey.PsId)
+	}
+	return ret
+}
+
 func (t *PsKeys) Set(values ...string) PsKeys {
 	for _, value := range values {
 		for _, v := range strings.Split(value, ",") {

@@ -258,7 +258,7 @@ func (sg *SunGrow) GetAllPointsData(psIds ...string) error {
 
 
 // DevicePointAttrs - Return all points associated with psIds and device_type filter.
-func (sg *SunGrow) DevicePointAttrs(psIds []string, deviceType string) (getDevicePointAttrs.Points, error) {
+func (sg *SunGrow) DevicePointAttrs(deviceType string, psIds ...string) (getDevicePointAttrs.Points, error) {
 	var points getDevicePointAttrs.Points
 
 	for range Only.Once {
@@ -304,12 +304,12 @@ func (sg *SunGrow) DevicePointAttrs(psIds []string, deviceType string) (getDevic
 }
 
 // DevicePointAttrsMap - Return all points associated with psIds and device_type filter.
-func (sg *SunGrow) DevicePointAttrsMap(psIds []string, deviceType string) (getDevicePointAttrs.PointsMap, error) {
+func (sg *SunGrow) DevicePointAttrsMap(deviceType string, psIds ...string) (getDevicePointAttrs.PointsMap, error) {
 	points := make(getDevicePointAttrs.PointsMap)
 
 	for range Only.Once {
 		var pa getDevicePointAttrs.Points
-		pa, sg.Error = sg.DevicePointAttrs(psIds, deviceType)
+		pa, sg.Error = sg.DevicePointAttrs(deviceType, psIds...)
 		if sg.Error != nil {
 			break
 		}

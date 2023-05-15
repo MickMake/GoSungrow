@@ -87,7 +87,7 @@ func (sg *SunGrow) PsPoints(psIds []string, deviceType string) (string, error) {
 
 	for range Only.Once {
 		var points getDevicePointAttrs.Points
-		points, sg.Error = sg.DevicePointAttrs(psIds, deviceType)
+		points, sg.Error = sg.DevicePointAttrs(deviceType, psIds...)
 		if sg.Error != nil {
 			break
 		}
@@ -174,34 +174,70 @@ func (sg *SunGrow) PsPoints(psIds []string, deviceType string) (string, error) {
 	return ret, sg.Error
 }
 
+func IsInArray(find string, array ...string) bool {
+	var yes bool
+	for range Only.Once {
+		if len(array) == 0 {
+			yes = true
+			break
+		}
+
+		if find == "" {
+			break
+		}
+
+		for _, s := range array {
+			if s == find {
+				yes = true
+				break
+			}
+		}
+	}
+	return yes
+}
+
 // PsPointsData - Return all points associated with psIds and device_type filter.
 func (sg *SunGrow) PsPointsData(psIds []string, deviceType string, startDate string, endDate string, interval string) error {
 	for range Only.Once {
+		var tp []string
+		for _, i := range psIds {
+			if i != "" {
+				tp = append(tp, i)
+			}
+		}
+		psIds = tp
+
 		var pskeys valueTypes.PsKeys
 		pskeys, sg.Error = sg.GetPsKeys()
 		if sg.Error != nil {
 			break
 		}
+		if len(psIds) == 0 {
+			psIds = pskeys.PsIds()
+		}
+		_, _ = fmt.Fprintf(os.Stderr, "Using ps_ids: %s\n", psIds)
 		_, _ = fmt.Fprintf(os.Stderr, "Found ps_keys: %s\n", pskeys)
 
-		var points getDevicePointAttrs.Points
-		points, sg.Error = sg.DevicePointAttrs(psIds, deviceType)
-		if sg.Error != nil {
-			break
-		}
-
-		var ps []string
-		for _, pid := range points {
-			match := pskeys.MatchPsIdDeviceType(pid.PsId.String(), pid.DeviceType.String())
-			if match.Valid {
-				ps = append(ps, fmt.Sprintf("%s.%s", match, pid.Id))
+		for _, psId := range psIds {
+			var points getDevicePointAttrs.Points
+			points, sg.Error = sg.DevicePointAttrs(deviceType, psId)
+			if sg.Error != nil {
+				break
 			}
-		}
-		// _, _ = fmt.Fprintf(os.Stderr, "Found points: %s\n", strings.Join(ps, " "))
 
-		sg.Error = sg.PointData(startDate, endDate, interval, ps...)
-		if sg.Error != nil {
-			break
+			var ps []string
+			for _, pid := range points {
+				match := pskeys.MatchPsIdDeviceType(pid.PsId.String(), pid.DeviceType.String())
+				if match.Valid {
+					ps = append(ps, fmt.Sprintf("%s.%s", match, pid.Id))
+				}
+				_, _ = fmt.Fprintf(os.Stderr, "Found points: %s\n", strings.Join(ps, " "))
+
+				sg.Error = sg.PointData(startDate, endDate, interval, ps...)
+				if sg.Error != nil {
+					break
+				}
+			}
 		}
 	}
 
@@ -219,7 +255,7 @@ func (sg *SunGrow) PsPointsDataSave(psIds []string, deviceType string, startDate
 		_, _ = fmt.Fprintf(os.Stderr, "Found ps_keys: %s\n", pskeys)
 
 		var points getDevicePointAttrs.Points
-		points, sg.Error = sg.DevicePointAttrs(psIds, deviceType)
+		points, sg.Error = sg.DevicePointAttrs(deviceType, psIds...)
 		if sg.Error != nil {
 			break
 		}

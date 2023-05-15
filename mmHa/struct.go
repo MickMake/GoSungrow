@@ -518,13 +518,18 @@ func (config *EntityConfig) FixConfig() {
 				}
 
 			case config.Value.IsInt():
-				fallthrough
-			default:
 				vj := "value"
 				if config.ValueName != "" {
 					vj = config.ValueName
 				}
 				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | int }}", vj))
+
+			default:
+				vj := "value"
+				if config.ValueName != "" {
+					vj = config.ValueName
+				}
+				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s }}", vj))
 		}
 
 		// Set DeviceClass & Icon
