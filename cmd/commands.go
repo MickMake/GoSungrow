@@ -16,6 +16,7 @@ type Cmds struct {
 	Show   *CmdShow
 	Mqtt   *CmdMqtt
 	Ha     *CmdHa
+	Modbus *CmdModbus
 
 	ConfigDir   string
 	CacheDir    string
@@ -75,6 +76,9 @@ func init() {
 		cmds.Mqtt = NewCmdMqtt()
 		cmds.Mqtt.AttachCommand(cmdRoot)
 		cmds.Mqtt.AttachFlags(cmdRoot, cmds.Unify.GetViper())
+
+		cmds.Modbus = NewCmdModbus()
+		cmds.Modbus.AttachCommand(cmdRoot)
 
 		cmds.Ha = NewCmdHa()
 		cmds.Ha.AttachCommand(cmdRoot)
