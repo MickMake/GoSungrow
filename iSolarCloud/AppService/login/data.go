@@ -75,7 +75,7 @@ type ResultData struct {
 	MapType                string      `json:"map_type"`
 	MinDate                valueTypes.DateTime      `json:"min_date" PointNameDateFormat:"DateTimeLayout"`
 	MobileTel              interface{} `json:"mobile_tel"`
-	OrgId                  string      `json:"org_id"`
+	OrgId                  valueTypes.Integer      `json:"org_id"`
 	OrgName                string      `json:"org_name"`
 	OrgTimezone            string      `json:"org_timezone"`
 	PasswordIsSimple       valueTypes.Integer `json:"password_is_simple"`
