@@ -1,8 +1,12 @@
 # GoSungrow - iSolarCloud API written in GoLang.
 
-Note: The next major release, (v3.0.0), is here! Check out the [Latest releases here](https://github.com/MickMake/GoSungrow/releases).
+Note: The next major release, (v3.0.x), is here! Check out the [Latest releases here](https://github.com/MickMake/GoSungrow/releases).
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/MickMake/GoSungrow.svg)](https://pkg.go.dev/github.com/MickMake/GoSungrow)
+
+Find this useful? [You can support development of this app](https://paypal.me/MickMake)
+
+![image](https://github.com/MickMake/GoSungrow/assets/17118367/c015b207-9aed-4aab-b521-57408bba85f5)
 
 
 ## What is it?
@@ -81,7 +85,7 @@ This GoLang package does several things:
 
 ## What is the roadmap?
 
-I've implemented most of the features I've wanted to, except for... 
+I've implemented most of the features I've wanted to, except for...
 1. IFTTT support.
 
 The most recent version has changed the code-base substantially, making it a lot more robust to changes in the API JSON schema.
