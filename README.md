@@ -93,18 +93,27 @@ The most recent version has changed the code-base substantially, making it a lot
 
 ## Using GoSungrow:
 
+### Setup
+
+Clone the repo:
+`gh repo clone MickMake/GoSungrow`
+Navigate to the repo:
+`cd GoSungrow`
+Build the go app:
+`go build`
+
 ### Config and login.
 
 Add your username and password to the config. (See [the website](https://portalau.isolarcloud.com/))
 Once done, it's a case of set and forget. GoSungrow will handle the re-authentication for you.
 ```
-% ./bin/GoSungrow config write --user=USERNAME --password=PASSWORD
+% ./GoSungrow config write --user=USERNAME --password=PASSWORD
 Using config file '/Users/mick/.GoSungrow/config.json'
 ```
 
 Login to SunGrow website.
 ```
-% ./bin/GoSungrow api login
+% ./GoSungrow api login
 Email:	your@email.address
 Create Date:	Tue Nov 16 23:30:12 CST 2021
 Login Last Date:	2022-03-10 17:14:49
@@ -127,7 +136,7 @@ For more examples see the EXAMPLES.md and examples.txt files.
 
 Show all devices on your iSolarCloud account.
 ```
-% ./bin/GoSungrow show ps list
+% ./GoSungrow show ps list
 ┏━━━━━━━━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┓
 ┃ Ps Key           ┃ Ps Id   ┃ Device Type ┃ Device Code ┃ Channel Id ┃ Serial #    ┃ Factory Name ┃ Device Model ┃
 ┣━━━━━━━━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━┫
@@ -143,7 +152,7 @@ Show all devices on your iSolarCloud account.
 
 Show the device tree on your iSolarCloud account.
 ```
-% ./bin/GoSungrow show ps tree
+% ./GoSungrow show ps tree
 +	PsId:1129147	PsName:MickMake	PsKey:1129147_11_0_0	DeviceName:MickMake	Uuid:844763
 +--	PsId:1129147	PsName:MickMake	PsKey:1129147_14_1_1	DeviceName:SH10RT	Uuid:844775
 +----	PsId:1129147	PsName:MickMake	PsKey:1129147_43_2_1	DeviceName:Battery_001_002	Uuid:1155386
@@ -157,7 +166,7 @@ Show the device tree on your iSolarCloud account.
 
 List all known data points for all PS on your account.
 ```
-% ./bin/GoSungrow show ps points 
+% ./GoSungrow show ps points 
 # Available points:
 ┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃ Id       ┃ Name                                                     ┃ Unit   ┃ Unit Type ┃ Ps Id   ┃ Device Type ┃ Device Name                 ┃
@@ -186,7 +195,7 @@ List all known data points for all PS on your account.
 
 Produce data table of device_type 22 on ps_id 1171348 between 20221001 and 20221002 at 60 minute increments.
 ```
-% ./bin/GoSungrow show ps data 1171348 22 20221001 20221002 60
+% ./GoSungrow show ps data 1171348 22 20221001 20221002 60
 
 # DataTable AppService.queryMutiPointDataList.ResultData.Data - PsKeys:1171348_22_247_2,1171348_22_247_2,1171348_22_247_2,1171348_22_247_2,1171348_22_247_2,1171348_22_247_2,1171348_22_247_2,1171348_22_247_2 Points:p23001,p23014,p23019,p23020,p23021,p23022,p23023,p23024 PsId:1171348 StartTimeStamp:20221001000000 EndTimeStamp:20221002000000 MinuteInterval:60 
 ┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -223,7 +232,7 @@ Produce data table of device_type 22 on ps_id 1171348 between 20221001 and 20221
 
 Do the same, but with a graph!
 ```
-% ./bin/GoSungrow show ps graph 1171348 22 20221001 20221002 60
+% ./GoSungrow show ps graph 1171348 22 20221001 20221002 60
 Found ps_keys: 1129147_14_1_1,1129147_22_247_1,1129147_43_2_1,1171348_14_1_2,1171348_22_247_2,1171348_43_2_2
 Finding points to graph...
 Table Headers: Timestamp, Ps Key, 1171348_22_247_2.p23014
@@ -236,7 +245,7 @@ Creating graph file 'AppService.queryMutiPointDataList.ResultData.Data-1171348-1
 
 Get all defined report templates.
 ```
-% ./bin/GoSungrow show template list
+% ./GoSungrow show template list
 
 # DataTable AppService.getTemplateList.ResultData.PageList - DataTable AppService.getTemplateList.ResultData.PageList
 ┏━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -270,7 +279,7 @@ Get all defined report templates.
 
 Show all data points used in a report template.
 ```
-% ./bin/GoSungrow show template points 8040
+% ./GoSungrow show template points 8040
 
 # DataTable WebAppService.queryUserCurveTemplateData.8040.ResultData.PointsData.Devices.[1129147_14_1_1].Points - TemplateId:8040 
 ┏━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━━━┓
@@ -293,7 +302,7 @@ Show all data points used in a report template.
 
 Produce daily report for template 8040 for date 2022/02/24 display on STDOUT.
 ```
-% ./bin/GoSungrow show template data 8040 20220204 20220205 120
+% ./GoSungrow show template data 8040 20220204 20220205 120
 
 # DataTable AppService.queryMutiPointDataList.ResultData.Data - MinuteInterval:120 PsKeys:1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1 Points:p13008,p13010,p13162,p18062,p13009,p18064,p13106,p13139,p13163,p18063,p13002 PsId:1129147 StartTimeStamp:20220204000000 EndTimeStamp:20220205000000 
 ┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -318,7 +327,7 @@ Produce daily report for template 8040 for date 2022/02/24 display on STDOUT.
 
 And now graph it!
 ```
-% ./bin/GoSungrow show template graph 8040 20220204 20220205 120
+% ./GoSungrow show template graph 8040 20220204 20220205 120
 Finding points to graph...
 Table Headers: Timestamp, Ps Key, 1129147_14_1_1.p13002, 1129147_14_1_1.p13008, 1129147_14_1_1.p13009, 1129147_14_1_1.p13010, 1129147_14_1_1.p13106, 1129147_14_1_1.p13139, 1129147_14_1_1.p13162, 1129147_14_1_1.p13163, 1129147_14_1_1.p18062, 1129147_14_1_1.p18063, 1129147_14_1_1.p18064
 Table rows: 13
@@ -338,7 +347,7 @@ Creating graph file 'AppService.queryMutiPointDataList.ResultData.Data-1129147-1
 
 List all possible devices
 ```
-% ./bin/GoSungrow show device list
+% ./GoSungrow show device list
 # Available points:
 ┏━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃ Device Type ┃ Name                                           ┃
@@ -398,7 +407,7 @@ List all possible devices
 
 Get mains power frequency variation graph from template id 8041 on date 2022/02/28
 ```
-% ./bin/GoSungrow show point data 20220301 20220302 120 1129147_14_1_1.p13007
+% ./GoSungrow show point data 20220301 20220302 120 1129147_14_1_1.p13007
 
 # DataTable AppService.queryMutiPointDataList.ResultData.Data - PsId:1129147 StartTimeStamp:20220301000000 EndTimeStamp:20220302000000 MinuteInterval:120 PsKeys:1129147_14_1_1 Points:p13007 
 ┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -419,7 +428,7 @@ Get mains power frequency variation graph from template id 8041 on date 2022/02/
 ┃ 2022-03-02 00:00:00    ┃ 1129147_14_1_1    ┃ 50.01                    ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-% ./bin/GoSungrow show point graph 20220301 20220302 120 1129147_14_1_1.p13007
+% ./GoSungrow show point graph 20220301 20220302 120 1129147_14_1_1.p13007
 Finding points to graph...
 Table Headers: Timestamp, Ps Key, 1129147_14_1_1.p13007
 Table rows: 13
@@ -434,48 +443,48 @@ Want to get your hands dirty?
 
 Get basic inverter information for inverter id 1129147
 ```
-% ./bin/GoSungrow api get findPsType '{"ps_id":"1129147"}'
+% ./GoSungrow api get findPsType '{"ps_id":"1129147"}'
 ```
 
 ```
-% ./bin/GoSungrow api get getPsDetailWithPsType '{"ps_id":"1129147"}'
+% ./GoSungrow api get getPsDetailWithPsType '{"ps_id":"1129147"}'
 ```
 
 Get basic power stats for inverter
 ```
-% ./bin/GoSungrow api get getPowerStatistics '{"ps_id":"1129147"}'
+% ./GoSungrow api get getPowerStatistics '{"ps_id":"1129147"}'
 ```
 
 Get point_id to point names for different device types
 ```
-% ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"1"}'
+% ./GoSungrow api get getPowerDevicePointNames '{"device_type":"1"}'
 ```
 
 ```
-% ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"2"}'
+% ./GoSungrow api get getPowerDevicePointNames '{"device_type":"2"}'
 ```
 
 ```
-% ./bin/GoSungrow api get getPowerDevicePointNames '{"device_type":"7"}'
+% ./GoSungrow api get getPowerDevicePointNames '{"device_type":"7"}'
 ```
 
 Get all inverters
 ```
-% ./bin/GoSungrow api get getPsList
+% ./GoSungrow api get getPsList
 ```
 
 ```
-% ./bin/GoSungrow api get WebAppService.showPSView '{"ps_id":"1129147"}'
+% ./GoSungrow api get WebAppService.showPSView '{"ps_id":"1129147"}'
 ```
 
 Produce basic storage report
 ```
-% ./bin/GoSungrow api get queryMutiPointDataList '{"ps_key":"1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_11_0_0","points":"p13150,p13126,p13142,p13143,p13019,p13141,p13121,p13003,p13149,p83106","minute_interval":"5","start_time_stamp":"20220215000000","end_time_stamp":"20220215235900", "ps_id":"1129147"}'
+% ./GoSungrow api get queryMutiPointDataList '{"ps_key":"1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_14_1_1,1129147_11_0_0","points":"p13150,p13126,p13142,p13143,p13019,p13141,p13121,p13003,p13149,p83106","minute_interval":"5","start_time_stamp":"20220215000000","end_time_stamp":"20220215235900", "ps_id":"1129147"}'
 ```
 
 Get the household storage report
 ```
-% ./bin/GoSungrow api get getHouseholdStoragePsReport '{"date_id":"2022","date_type":"4","ps_id":"1129147"}'
+% ./GoSungrow api get getHouseholdStoragePsReport '{"date_id":"2022","date_type":"4","ps_id":"1129147"}'
 ```
 
 
@@ -499,7 +508,7 @@ Change iSolarCloud API token.
 
 ## Flags available for all commands:
 ```
-% ./bin/GoSungrow help flags
+% ./GoSungrow help flags
 +-----------------+------------+-------------------------+--------------------------------+------------------------------------+
 |      FLAG       | SHORT FLAG |       ENVIRONMENT       |          DESCRIPTION           |        VALUE (* = DEFAULT)         |
 +-----------------+------------+-------------------------+--------------------------------+------------------------------------+
