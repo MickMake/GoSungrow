@@ -101,6 +101,8 @@ Once done, it's a case of set and forget. GoSungrow will handle the re-authentic
 % ./bin/GoSungrow config write --user=USERNAME --password=PASSWORD
 Using config file '/Users/mick/.GoSungrow/config.json'
 ```
+To change to the EU server for EU based accounts
+% ./bin/GoSungrow config write --host=https://gateway.isolarcloud.eu 
 
 Login to SunGrow website.
 ```
