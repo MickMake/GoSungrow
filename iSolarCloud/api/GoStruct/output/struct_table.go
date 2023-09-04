@@ -1,8 +1,8 @@
 package output
 
 import (
-	"GoSungrow/iSolarCloud/api/GoStruct/gojson"
-	"GoSungrow/tablib"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/gojson"
+	"github.com/MickMake/GoSungrow/tablib"
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"

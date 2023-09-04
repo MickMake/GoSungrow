@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/MickMake/GoUnify/Only"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
 	"strings"
 )

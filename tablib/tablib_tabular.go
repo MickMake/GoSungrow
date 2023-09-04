@@ -1,7 +1,7 @@
 package tablib
 
 import (
-	"GoSungrow/tablib/gotabulate"
+	"github.com/MickMake/GoSungrow/tablib/gotabulate"
 	"regexp"
 	"strings"
 	"unicode/utf8"

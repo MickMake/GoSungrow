@@ -1,10 +1,8 @@
 package cmdHassio
 
 import (
-	"GoSungrow/iSolarCloud/AppService/getDeviceList"
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"encoding/json"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getDeviceList"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
@@ -41,48 +39,54 @@ type Mqtt struct {
 	token    mqtt.Token
 	firstRun bool
 	err      error
-	debug    bool
+	logger   cmdLog.Log
 }
 
+const OptionLogLevel = "mqtt_loglevel"
+const OptionDebug    = "mqtt_debug"
 
 func New(req Mqtt) *Mqtt {
 	var ret Mqtt
 
 	for range Only.Once {
-		ret.err = ret.setUrl(req)
+		ret = Mqtt {
+			ClientId:       req.ClientId,
+			Username:       req.Username,
+			Password:       req.Password,
+			Host:           req.Host,
+			Port:           req.Port,
+			Timeout:        time.Second * 5,
+			EntityPrefix:   req.EntityPrefix,
+			url:            nil,
+			client:         nil,
+			pubClient:      nil,
+			clientOptions:  nil,
+			DeviceName:     "",
+			LastRefresh:    time.Time{},
+			SungrowDevices: nil,
+			SungrowPsIds:   make(map[valueTypes.PsId]bool),
+			MqttDevices:    make(map[string]Device),
+			Prefix:         "homeassistant",
+			UserOptions:    Options{},
+			token:          nil,
+			firstRun:       true,
+			err:            nil,
+			logger:         cmdLog.New(cmdLog.LogLevelInfoStr),
+			// logger:         cmdLog.New(req.UserOptions.Get(OptionLogLevel)),
+		}
+
+		ret.err = ret.setUrl()
 		if ret.err != nil {
 			break
 		}
-		ret.firstRun = true
-		ret.EntityPrefix = req.EntityPrefix
-		ret.Prefix = "homeassistant"
 
-		// ret.selectPrefix = fmt.Sprintf("homeassistant/%s/%s", LabelSelect, req.ClientId)
-		// ret.servicePrefix = fmt.Sprintf("homeassistant/%s/%s", LabelSensor, req.ClientId)
-		// ret.sensorPrefix = fmt.Sprintf("homeassistant/%s/%s", LabelSensor, req.ClientId)
-		// ret.lightPrefix = fmt.Sprintf("homeassistant/%s/%s", LabelLight, req.ClientId)
-		// ret.switchPrefix = fmt.Sprintf("homeassistant/%s/%s", LabelSwitch, req.ClientId)
-		// ret.binarySensorPrefix = fmt.Sprintf("homeassistant/%s/%s", LabelBinarySensor, req.ClientId)
-
-		ret.MqttDevices = make(map[string]Device)
-		ret.SungrowPsIds = make(map[valueTypes.PsId]bool)
-		ret.Timeout = time.Second * 5
 		ret.UserOptions.New()
+		// ret.logger = cmdLog.New(req.UserOptions.Get(OptionLogLevel))
 	}
 
 	return &ret
 }
 
-func (m *Mqtt) IsDebug() bool {
-	return m.debug
-}
-
-func (m *Mqtt) LogDebug(format string, args ...interface{})  {
-	if !m.debug {
-		return
-	}
-	cmdLog.LogPrintDate(format, args...)
-}
 
 func (m *Mqtt) IsFirstRun() bool {
 	return m.firstRun
@@ -121,39 +125,65 @@ func (m *Mqtt) IsNewDay() bool {
 	return yes
 }
 
-func (m *Mqtt) setUrl(req Mqtt) error {
+func (m *Mqtt) setUrl() error {
 
 	for range Only.Once {
-		// if req.Username == "" {
-		// 	m.err = errors.New("username empty")
-		// 	break
-		// }
-		m.Username = req.Username
+		var u string
 
-		// if req.Password == "" {
-		// 	m.err = errors.New("password empty")
-		// 	break
-		// }
-		m.Password = req.Password
-
-		if req.Host == "" {
+		if m.Host == "" {
 			m.err = errors.New("HASSIO mqtt host not defined")
 			break
 		}
-		m.Host = req.Host
+		u = m.Host
 
-		if req.Port == "" {
-			req.Port = "1883"
+		if m.Port == "" {
+			m.Port = "1883"
 		}
-		m.Port = req.Port
+		u = m.Host + ":" + m.Port
 
-		u := fmt.Sprintf("tcp://%s:%s@%s:%s",
-			m.Username,
-			m.Password,
-			m.Host,
-			m.Port,
-			)
+		if m.Username != "" {
+			u = m.Username + "@" + m.Host + ":" + m.Port
+		}
+
+		if m.Password != "" {
+			u = m.Username + ":" + m.Password + "@" + m.Host + ":" + m.Port
+		}
+
+		// if (m.ClientCert != "") && (m.ClientKey != "") && (m.ServerCert != "") {
+		// 	// load the client certificate and its associated private key, which
+		// 	// are used to authenticate the client to the server
+		// 	// 				"certs/client.cert.pem", "certs/client.key.pem")
+		// 	m.clientKeyPair, m.err = tls.LoadX509KeyPair(m.ClientCert, m.ClientKey)
+		// 	if m.err != nil {
+		// 		fmt.Printf("failed to load client key pair: %v\n", m.err)
+		// 		break
+		// 	}
+		//
+		// 	// load either the server certificate or the certificate of the CA
+		// 	// (Certificate Authority) which signed the server certificate
+		// 	// "certs/server.cert.pem"
+		// 	m.serverCertPool, m.err = modbus.LoadCertPool(m.ServerCert)
+		// 	if m.err != nil {
+		// 		fmt.Printf("failed to load server certificate/CA: %v\n", m.err)
+		// 		break
+		// 	}
+		//
+		// 	// tcp+tls is the moniker for MBAPS (modbus/tcp encapsulated in TLS),
+		// 	// 802/tcp is the IANA-registered port for MBAPS.
+		// 	// set the client-side cert and key
+		// 	u = "tcp+tls://" + u
+		//
+		// 	m.config.TLSClientCert = &m.clientKeyPair
+		// 	// set the server/CA certificate
+		// 	m.config.TLSRootCAs = m.serverCertPool
+		// } else {
+			u = "tcp://" + u
+		// }
+
 		m.url, m.err = url.Parse(u)
+		if m.err != nil {
+			break
+		}
 	}
 
 	return m.err
@@ -214,7 +244,7 @@ func (m *Mqtt) Connect() error {
 		if m.err != nil {
 			break
 		}
-		m.err = m.Publish(JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, "state"), 0, true, "ON")
+		m.err = m.Publish(JoinStringsForTopic(m.Prefix, LabelBinarySensor, m.ClientId, "state"), 0, true, "ON")
 		if m.err != nil {
 			break
 		}
@@ -228,16 +258,16 @@ func (m *Mqtt) Connect() error {
 			break
 		}
 
-		m.err = m.SetOption("mqtt_debug", "Mqtt Debug", m.funcMqttDebug)
+		m.err = m.CreateOption(OptionLogLevel, "Mqtt LogLevel", m.funcMqttLogLevel)
 		if m.err != nil {
 			break
 		}
 
-		v := OptionDisabled
-		if m.debug {
-			v = OptionEnabled
-		}
-		m.err = m.SetOptionValue("mqtt_debug", v)
+		// v := OptionDisabled
+		// if m.logger.IsDebug() {
+		// 	v = OptionEnabled
+		// }
+		m.err = m.SetOption(OptionLogLevel, m.logger.GetLogLevel())
 		if m.err != nil {
 			break
 		}
@@ -246,19 +276,31 @@ func (m *Mqtt) Connect() error {
 	return m.err
 }
 
-func (m *Mqtt) funcMqttDebug(_ mqtt.Client, msg mqtt.Message) {
+func (m *Mqtt) funcMqttLogLevel(_ mqtt.Client, msg mqtt.Message) {
 	for range Only.Once {
 		request := strings.ToLower(string(msg.Payload()))
-		cmdLog.LogPrintDate("Option[%s] set to '%s'\n", msg.Topic(), request)
-		if request == strings.ToLower(OptionEnabled) {
-			m.err = m.SetOptionValue("mqtt_debug", OptionEnabled)
-			m.debug = true
+		m.logger.Info("Option[%s] set to '%s'\n", msg.Topic(), request)
+		m.err = m.SetOption(OptionLogLevel, request)
+		if m.err != nil {
 			break
 		}
-		m.err = m.SetOptionValue("mqtt_debug", OptionDisabled)
-		m.debug = false
+		m.logger.SetLogLevel(request)
 	}
 }
+
+// func (m *Mqtt) funcMqttDebug(_ mqtt.Client, msg mqtt.Message) {
+// 	for range Only.Once {
+// 		request := strings.ToLower(string(msg.Payload()))
+// 		cmdLog.LogPrintDate("Option[%s] set to '%s'\n", msg.Topic(), request)
+// 		if request == strings.ToLower(OptionEnabled) {
+// 			m.err = m.SetOption("mqtt_debug", OptionEnabled)
+// 			m.debug = true
+// 			break
+// 		}
+// 		m.err = m.SetOption("mqtt_debug", OptionDisabled)
+// 		m.debug = false
+// 	}
+// }
 
 func (m *Mqtt) Disconnect() error {
 	for range Only.Once {
@@ -288,7 +330,7 @@ func (m *Mqtt) createClientOptions() error {
 
 // type SubscribeFunc func(client mqtt.Client, msg mqtt.Message)
 func (m *Mqtt) subscribeDefault(client mqtt.Client, msg mqtt.Message) {
-	fmt.Printf("*%t> [%s] %s\n", client.IsConnected(), msg.Topic(), string(msg.Payload()))
+	m.logger.Debug("*%t> [%s] %s\n", client.IsConnected(), msg.Topic(), string(msg.Payload()))
 }
 
 func (m *Mqtt) Subscribe(topic string, fn mqtt.MessageHandler) error {
@@ -307,7 +349,7 @@ func (m *Mqtt) Subscribe(topic string, fn mqtt.MessageHandler) error {
 
 func (m *Mqtt) Publish(topic string, qos byte, retained bool, payload string) error {
 	for range Only.Once {
-		m.LogDebug("MQTT[%s] -> %v\n", topic, payload)
+		m.logger.Debug("MQTT[%s] -> %v\n", topic, payload)
 		t := m.client.Publish(topic, qos, retained, payload)
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
@@ -356,7 +398,7 @@ func (m *Mqtt) PublishValue(Type string, subtopic string, value string) error {
 				topic = JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, subtopic, "state")
 		}
 
-		m.LogDebug("PublishValue - topic: '%s'\tpayload: '%s'\n", topic, value)
+		m.logger.Debug("PublishValue - topic: '%s'\tpayload: '%s'\n", topic, value)
 		t := m.client.Publish(topic, 0, true, value)
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
@@ -414,300 +456,3 @@ func (m *Mqtt) SetDeviceConfig(swname string, parentId string, id string, name s
 //
 // 	return ret
 // }
-
-
-type MqttState struct {
-	LastReset string `json:"last_reset,omitempty"`
-	Value string `json:"value"`
-}
-
-func (mq *MqttState) Json() string {
-	var ret string
-	for range Only.Once {
-		j, err := json.Marshal(*mq)
-		if err != nil {
-			ret = fmt.Sprintf("{ \"error\": \"%s\"", err)
-			break
-		}
-		ret = string(j)
-	}
-	return ret
-}
-
-type SensorState string
-
-type EntityConfig struct {
-	// Type          string
-	Name          string
-	SubName       string
-
-	ParentId      string
-	ParentName    string
-
-	UniqueId      string
-	FullId        string
-	Units         string
-	ValueName     string
-	DeviceClass   string
-	StateClass    string
-	Icon          string
-
-	Value         *valueTypes.UnitValue
-	Point         *api.Point
-	ValueTemplate string
-
-	UpdateFreq    string
-	LastReset     string
-	LastResetValueTemplate string
-
-	IgnoreUpdate  bool
-
-	haType        string
-	Options       []string
-}
-
-func (config *EntityConfig) FixConfig() {
-
-	for range Only.Once {
-		// mdi:power-socket-au
-		// mdi:solar-power
-		// mdi:home-lightning-bolt-outline
-		// mdi:transmission-tower
-		// mdi:transmission-tower-export
-		// mdi:transmission-tower-import
-		// mdi:transmission-tower-off
-		// mdi:home-battery-outline
-		// mdi:lightning-bolt
-		// mdi:check-circle-outline | mdi:arrow-right-bold
-		// mdi:transmission-tower
-
-		// Set default ValueTemplate
-		switch {
-			case config.Point.IsBool():
-				fallthrough
-			case config.Value.IsBool():
-				fallthrough
-			case config.IsBinarySensor():
-				config.ValueTemplate = SetDefault(config.ValueTemplate, "{{ value_json.value }}")
-
-			case config.Value.IsFloat():
-				if !config.Value.Valid {
-					config.IgnoreUpdate = true
-				}
-				cnv := "| float"
-				if config.Value.String() == "" {
-					cnv = ""
-				}
-				vj := "value"
-				if config.ValueName != "" {
-					vj = config.ValueName
-				}
-				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s %s }}", vj, cnv))
-
-			case config.Value.IsTypeDateTime():
-				vj := "value"
-				if config.ValueName != "" {
-					vj = config.ValueName
-				}
-				value, _, err := valueTypes.ParseDateTime(config.Value.String())
-				if err == nil {
-					config.Value.SetString(value.Local().Format(valueTypes.DateTimeFullLayout))
-					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | as_datetime }}", vj))
-				} else {
-					config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s }}", vj))
-				}
-
-			case config.Value.IsInt():
-				vj := "value"
-				if config.ValueName != "" {
-					vj = config.ValueName
-				}
-				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s | int }}", vj))
-
-			default:
-				vj := "value"
-				if config.ValueName != "" {
-					vj = config.ValueName
-				}
-				config.ValueTemplate = SetDefault(config.ValueTemplate, fmt.Sprintf("{{ value_json.%s }}", vj))
-		}
-
-		// Set DeviceClass & Icon
-		switch {
-			case config.Point.IsBool():
-				fallthrough
-			case config.Value.IsBool():
-				fallthrough
-			case config.IsBinarySensor():
-				config.DeviceClass = SetDefault(config.DeviceClass, "power")
-				config.Icon = SetDefault(config.Icon, "mdi:check-circle-outline")
-
-			case config.Value.TypeValue == "Power":
-				fallthrough
-			case config.Units == "MW":
-				fallthrough
-			case config.Units == "kW":
-				fallthrough
-			case config.Units == "W":
-				config.DeviceClass = SetDefault(config.DeviceClass, "power")
-				config.Icon = SetDefault(config.Icon, "mdi:lightning-bolt")
-
-			case config.Value.TypeValue == "Energy":
-				fallthrough
-			case config.Units == "MWh":
-				fallthrough
-			case config.Units == "kWh":
-				fallthrough
-			case config.Units == "Wh":
-				config.DeviceClass = SetDefault(config.DeviceClass, "energy")
-				config.Icon = SetDefault(config.Icon, "mdi:transmission-tower")
-
-			case config.Units == "var":
-				fallthrough
-			case config.Units == "kvar":
-				config.DeviceClass = SetDefault(config.DeviceClass, "reactive_power")
-				config.Icon = SetDefault(config.Icon, "mdi:lightning-bolt")
-
-			case config.Units == "VA":
-				config.DeviceClass = SetDefault(config.DeviceClass, "apparent_power")
-				config.Icon = SetDefault(config.Icon, "mdi:lightning-bolt")
-
-			case config.Units == "Hz":
-				config.DeviceClass = SetDefault(config.DeviceClass, "frequency")
-				config.Icon = SetDefault(config.Icon, "mdi:sine-wave")
-
-			case config.Units == "V":
-				config.DeviceClass = SetDefault(config.DeviceClass, "voltage")
-				config.Icon = SetDefault(config.Icon, "mdi:current-dc")
-
-			case config.Units == "A":
-				config.DeviceClass = SetDefault(config.DeviceClass, "current")
-				config.Icon = SetDefault(config.Icon, "mdi:current-ac")
-
-			case config.Units == "°F":
-				fallthrough
-			case config.Units == "F":
-				fallthrough
-			case config.Units == "℉":
-				config.DeviceClass = SetDefault(config.DeviceClass, "temperature")
-				config.Units = "℉"
-				config.Icon = SetDefault(config.Icon, "mdi:thermometer")
-
-			case config.Units == "°C":
-				fallthrough
-			case config.Units == "C":
-				fallthrough
-			case config.Units == "℃":
-				config.DeviceClass = SetDefault(config.DeviceClass, "temperature")
-				config.Units = "°C"
-				config.Icon = SetDefault(config.Icon, "mdi:thermometer")
-
-			case config.Icon == "mdi:home-battery-outline":
-				fallthrough
-			case config.Icon == "mdi:battery":
-				config.DeviceClass = SetDefault(config.DeviceClass, "battery")
-				// config.Icon = SetDefault(config.Icon, "mdi:percent") // mdi:home-battery-outline
-
-			case config.Value.TypeValue == "Percent":
-				fallthrough
-			case config.Units == "%":
-				// @TODO - Not supported in older versions of HA.
-				// config.DeviceClass = SetDefault(config.DeviceClass, "battery")
-				config.Icon = SetDefault(config.Icon, "mdi:percent") // mdi:home-battery-outline
-
-			case config.Value.TypeValue == "DateTime":
-				config.DeviceClass = SetDefault(config.DeviceClass, "timestamp") // date
-				config.Icon = SetDefault(config.Icon, "mdi:clock-outline")
-
-			case config.Units == "h":
-				// config.DeviceClass = SetDefault(config.DeviceClass, "timestamp") // date
-				config.Icon = SetDefault(config.Icon, "mdi:clock-outline")
-
-			case config.Units == "kg":
-				config.DeviceClass = SetDefault(config.DeviceClass, "weight")
-				config.Icon = SetDefault(config.Icon, "mdi:weight")
-
-			case config.Units == "km":
-				config.DeviceClass = SetDefault(config.DeviceClass, "distance")
-				config.Icon = SetDefault(config.Icon, "mdi:map-marker-distance")
-
-			case config.Units == "Wh/㎡":
-				fallthrough
-			case config.Units == "W/㎡":
-				// @TODO - Not supported in older versions of HA.
-				config.DeviceClass = SetDefault(config.DeviceClass, "irradiance")
-				config.Icon = SetDefault(config.Icon, "mdi:weather-sunny")
-
-			case config.Value.TypeValue == "Currency":
-				fallthrough
-			case config.Units == "AUD":
-				fallthrough
-			case config.Units == "$":
-				config.DeviceClass = SetDefault(config.DeviceClass, "monetary")
-				config.Icon = SetDefault(config.Icon, "mdi:currency-usd")
-
-				// p13013 - power_factor
-
-			case config.Units == "GPS":
-				// config.DeviceClass = SetDefault(config.DeviceClass, "")
-				config.Icon = SetDefault(config.Icon, "mdi:crosshairs-gps")
-
-			default:
-				config.DeviceClass = SetDefault(config.DeviceClass, "")
-				config.Icon = SetDefault(config.Icon, "")
-		}
-
-		switch {
-			case config.Point.IsBoot():
-				config.StateClass = "measurement"
-				config.LastReset = ""
-				config.LastResetValueTemplate = ""
-
-			case config.Point.IsDaily():
-				fallthrough
-			case config.Point.IsMonthly():
-				fallthrough
-			case config.Point.IsYearly():
-				fallthrough
-			case config.Point.IsTotal():
-				config.StateClass = "total"
-				config.LastResetValueTemplate = SetDefault(config.LastResetValueTemplate, "{{ value_json.last_reset | as_datetime }}")
-				// config.LastReset = config.Point.WhenReset(config.Date)
-
-			case config.Point.Is5Minute():
-				fallthrough
-			case config.Point.Is15Minute():
-				fallthrough
-			case config.Point.Is30Minute():
-				fallthrough
-			case config.Point.IsInstant():
-				fallthrough
-			default:
-				config.StateClass = "measurement"
-				config.LastReset = ""
-				config.LastResetValueTemplate = ""
-		}
-
-		// if config.LastReset == "" {
-		// 	break
-		// }
-		//
-		// pt := api.GetDevicePoint(config.FullId)
-		// if !pt.Valid {
-		// 	break
-		// }
-		//
-		// config.LastReset = pt.WhenReset()
-		// config.LastResetValueTemplate = SetDefault(config.LastResetValueTemplate, "{{ value_json.last_reset | as_datetime }}")
-		// config.LastResetValueTemplate = SetDefault(config.LastResetValueTemplate, "{{ value_json.last_reset | int | timestamp_local | as_datetime }}")
-		// config.StateClass = "total"
-		// config.StateClass = "measurement"
-	}
-}
-
-func SetDefault(value string, def string) string {
-	if value == "" {
-		value = def
-	}
-	return value
-}

@@ -1,12 +1,11 @@
 package cmd
 
 import (
-	"GoSungrow/defaults"
+	"github.com/MickMake/GoSungrow/defaults"
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/Unify"
 	"github.com/spf13/cobra"
 )
-
 
 type Cmds struct {
 	Unify  *Unify.Unify
@@ -37,14 +36,12 @@ type CmdDefault struct {
 	SelfCmd *cobra.Command
 }
 
-
 var cmds Cmds
-
 
 func init() {
 	for range Only.Once {
 		cmds.Unify = Unify.New(
-			Unify.Options {
+			Unify.Options{
 				Description:   defaults.Description,
 				BinaryName:    defaults.BinaryName,
 				BinaryVersion: defaults.BinaryVersion,
@@ -55,7 +52,9 @@ func init() {
 				ReadMe:        defaults.Readme,
 				Examples:      defaults.Examples,
 			},
-			Unify.Flags{},
+			Unify.Flags{
+				MergeRun: true,
+			},
 		)
 
 		cmdRoot := cmds.Unify.GetCmd()
@@ -73,12 +72,13 @@ func init() {
 		cmds.Show = NewCmdShow()
 		cmds.Show.AttachCommand(cmdRoot)
 
-		cmds.Mqtt = NewCmdMqtt()
+		cmds.Mqtt = NewCmdMqtt("")
 		cmds.Mqtt.AttachCommand(cmdRoot)
 		cmds.Mqtt.AttachFlags(cmdRoot, cmds.Unify.GetViper())
 
-		cmds.Modbus = NewCmdModbus()
+		cmds.Modbus = NewCmdModbus("")
 		cmds.Modbus.AttachCommand(cmdRoot)
+		cmds.Modbus.AttachFlags(cmdRoot, cmds.Unify.GetViper())
 
 		cmds.Ha = NewCmdHa()
 		cmds.Ha.AttachCommand(cmdRoot)
@@ -99,7 +99,6 @@ func Execute() error {
 
 	return err
 }
-
 
 func (ca *Cmds) ProcessArgs(_ *cobra.Command, args []string) error {
 	for range Only.Once {

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"GoSungrow/cmd"
+	"github.com/MickMake/GoSungrow/cmd"
 	"fmt"
 	"os"
 )

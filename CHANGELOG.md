@@ -1,3 +1,14 @@
+## [3.0.7] - 2023-05-10
+### Features
+
+- Alpha support for Modbus, (direct connect to your Sungrow inverter).
+
+
+### Fixes
+
+- Fixup ResultData.result_data.org_id error.
+
+
 ## [3.0.6] - 2023-05-10
 ### Features
 

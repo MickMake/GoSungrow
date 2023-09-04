@@ -1,9 +1,9 @@
 package getInstallInfoList
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
 	"fmt"
 )
@@ -29,7 +29,7 @@ type ResultData []struct {
 	Installer      string   `json:"installer"`
 	InstallerEmail string   `json:"installer_email"`
 	InstallerPhone string   `json:"installer_phone"`
-	OrgId          string   `json:"org_id"`
+	OrgId          valueTypes.Integer   `json:"org_id"`
 	PsNames        []valueTypes.String `json:"ps_names" DataTable:"true"`
 }
 

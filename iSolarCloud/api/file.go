@@ -2,8 +2,8 @@ package api
 
 import (
 	"github.com/MickMake/GoUnify/Only"
-	"GoSungrow/iSolarCloud/api/GoStruct/output"
-	"GoSungrow/iSolarCloud/api/GoStruct/reflection"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/reflection"
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoUnify/cmdPath"

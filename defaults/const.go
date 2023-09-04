@@ -19,13 +19,13 @@ var Examples string
 const (
 	Description   = "GoSungrow - GoLang implementation to access the iSolarCloud API updated by SunGrow inverters"
 	BinaryName    = "GoSungrow"
-	BinaryVersion = "3.0.6"
+	BinaryVersion = "3.0.7"
 	SourceRepo    = "github.com/MickMake/" + BinaryName
 	BinaryRepo    = "github.com/MickMake/" + BinaryName
 
-	EnvPrefix     = "GOSUNGROW"
+	EnvPrefix = "GOSUNGROW"
 
-	HelpSummary   = `
+	HelpSummary = `
 # GoSungrow - GoLang implementation to access the iSolarCloud API updated by SunGrow inverters.
 
 This GoLang package has a complete implementation of the iSolarCloud API.

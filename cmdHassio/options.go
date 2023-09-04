@@ -1,8 +1,9 @@
 package cmdHassio
 
 import (
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"errors"
+	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"sync"
@@ -21,9 +22,9 @@ type Option struct {
 }
 
 
-func (m *Mqtt) SetOption(id string, name string, fn mqtt.MessageHandler, options ...string) error {
+func (m *Mqtt) CreateOption(id string, name string, fn mqtt.MessageHandler, options ...string) error {
 	for range Only.Once {
-		m.err = m.UserOptions.SetOption(id, name, fn, options...)
+		m.err = m.UserOptions.Create(id, name, fn, options...)
 		if m.err != nil {
 			break
 		}
@@ -38,9 +39,9 @@ func (m *Mqtt) SetOption(id string, name string, fn mqtt.MessageHandler, options
 	return m.err
 }
 
-func (m *Mqtt) SetOptionValue(id string, value string) error {
+func (m *Mqtt) SetOption(id string, value string) error {
 	for range Only.Once {
-		m.err = m.UserOptions.SetOptionValue(id, value)
+		m.err = m.UserOptions.Set(id, value)
 		if m.err != nil {
 			break
 		}
@@ -56,7 +57,7 @@ func (m *Mqtt) SetOptionValue(id string, value string) error {
 }
 
 func (m *Mqtt) GetOption(id string) string {
-	return m.UserOptions.GetOption(id)
+	return m.UserOptions.Get(id)
 }
 
 
@@ -73,7 +74,7 @@ func (m *Options) New() {
 	}
 }
 
-func (m *Options) SetOption(id string, name string, handler mqtt.MessageHandler, values ...string) error {
+func (m *Options) Create(id string, name string, handler mqtt.MessageHandler, values ...string) error {
 	var err error
 	for range Only.Once {
 		if len(values) == 0 {
@@ -103,7 +104,7 @@ func (m *Options) SetOption(id string, name string, handler mqtt.MessageHandler,
 	return err
 }
 
-func (m *Options) SetOptionValue(id string, value string) error {
+func (m *Options) Set(id string, value string) error {
 	var err error
 	for range Only.Once {
 		m.mu.Lock()
@@ -111,7 +112,7 @@ func (m *Options) SetOptionValue(id string, value string) error {
 		defer m.mu.Unlock()
 
 		if _, ok := m.Map[id]; !ok {
-			err = errors.New("not exist")
+			err = errors.New(fmt.Sprintf("mqtt config id '%s' doesn't exist", id))
 			break
 		}
 
@@ -126,7 +127,7 @@ func (m *Options) SetOptionValue(id string, value string) error {
 	return err
 }
 
-func (m *Options) GetOption(id string) string {
+func (m *Options) Get(id string) string {
 	var ret string
 	for range Only.Once {
 		m.mu.Lock()

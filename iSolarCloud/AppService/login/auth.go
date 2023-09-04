@@ -1,13 +1,14 @@
 package login
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct/output"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"errors"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 	"time"
+
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const (
@@ -23,12 +24,12 @@ type SunGrowAuth struct {
 	UserPassword string
 	TokenFile    string
 	// Token        string
-	Force        bool
+	Force bool
 
-	lastLogin    time.Time
-	newToken     bool
+	lastLogin time.Time
+	newToken  bool
 	// retry        int
-	err          error
+	err error
 }
 
 func (a *SunGrowAuth) Verify() error {
@@ -62,11 +63,11 @@ func (a *SunGrowAuth) Verify() error {
 func (e *EndPoint) Login(auth *SunGrowAuth) error {
 	for range Only.Once {
 		e.Auth = auth
-		e.Request.RequestData = RequestData {
+		e.Request.RequestData = RequestData{
 			UserAccount:  valueTypes.SetStringValue(auth.UserAccount),
 			UserPassword: valueTypes.SetStringValue(auth.UserPassword),
 		}
-		e.Request.RequestCommon = api.RequestCommon {
+		e.Request.RequestCommon = api.RequestCommon{
 			Appkey:  auth.AppKey,
 			SysCode: "900",
 		}
@@ -83,7 +84,7 @@ func (e *EndPoint) Login(auth *SunGrowAuth) error {
 
 		if auth.Force {
 			e.SetCacheTimeout(time.Second)
-			e.SetTokenInvalid()	// e.CacheFilename()
+			e.SetTokenInvalid() // e.CacheFilename()
 			// e.RemoveCache
 		}
 
@@ -120,7 +121,7 @@ func (e *EndPoint) Login(auth *SunGrowAuth) error {
 func (e *EndPoint) SetTokenInvalid() {
 	for range Only.Once {
 		// e.Auth.Token = ""
-		e.Response.ResultData.Token = ""
+		e.Response.ResultData.Token = valueTypes.SetStringValue("")
 		e.Auth.newToken = true
 		// e.Error = os.Remove(filepath.Join(e.ApiRoot.GetCacheDir(), e.CacheFilename()))
 		// if e.Error != nil {
@@ -129,12 +130,6 @@ func (e *EndPoint) SetTokenInvalid() {
 	}
 }
 
-// func (e *EndPoint) SetTokenValid(t string) {
-// 	// e.Auth.Token = t
-// 	e.Response.ResultData.Token = t
-// 	e.Auth.newToken = true
-// }
-
 func (e *EndPoint) IsTokenValid() bool {
 	for range Only.Once {
 		if e.Response.ResponseCommon.IsTokenInvalid() {
@@ -142,7 +137,7 @@ func (e *EndPoint) IsTokenValid() bool {
 			break
 		}
 
-		if e.Response.ResultData.Token == "" {
+		if e.Response.ResultData.Token.Match("") {
 			e.SetTokenInvalid()
 			break
 		}
@@ -159,22 +154,6 @@ func (e *EndPoint) IsTokenValid() bool {
 
 func (e *EndPoint) IsTokenInvalid() bool {
 	return !e.IsTokenValid()
-	// for range Only.Once {
-	// 	if e.Response.ResponseCommon.IsTokenInvalid() {
-	// 		e.Auth.newToken = true
-	// 		break
-	// 	}
-	// 	if e.Response.ResultData.Token == "" {
-	// 		e.Auth.newToken = true
-	// 		break
-	// 	}
-	// 	if e.HoursFromLastLogin() > TokenValidHours {
-	// 		e.Auth.newToken = true
-	// 		break
-	// 	}
-	// 	e.Auth.newToken = false
-	// }
-	// return e.Auth.newToken
 }
 
 func (e *EndPoint) HoursFromLastLogin() float64 {
@@ -212,7 +191,6 @@ func (e *EndPoint) readTokenFile() error {
 	for range Only.Once {
 		e.Auth.TokenFile = e.GetFilePath()
 
-		// e.Error = e.ApiReadDataFile(e.Auth.TokenFile, &e.Response.ResultData)
 		e.Error = output.FileRead(e.Auth.TokenFile, &e.Response)
 		if e.Error != nil {
 			break
@@ -243,7 +221,6 @@ func (e *EndPoint) saveToken() error {
 		e.Auth.TokenFile = e.GetFilePath()
 
 		e.Error = output.FileWrite(e.Auth.TokenFile, e.Response, output.DefaultFileMode)
-		// e.Error = e.ApiWriteDataFile(e.Auth.TokenFile, e.Response.ResultData, 0644)
 		if e.Error != nil {
 			break
 		}
@@ -258,7 +235,6 @@ func (e *EndPoint) RemoveToken() error {
 		e.Auth.TokenFile = e.GetFilePath()
 
 		e.Error = output.FileRemove(e.Auth.TokenFile)
-		// e.Error = e.ApiWriteDataFile(e.Auth.TokenFile, e.Response.ResultData, 0644)
 		if e.Error != nil {
 			break
 		}

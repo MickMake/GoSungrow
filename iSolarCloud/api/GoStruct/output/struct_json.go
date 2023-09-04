@@ -1,7 +1,7 @@
 package output
 
 import (
-	"GoSungrow/iSolarCloud/api/GoStruct/reflection"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/reflection"
 	"encoding/json"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"

@@ -1,14 +1,15 @@
 package cmd
 
 import (
-	"GoSungrow/cmdHassio"
-	"GoSungrow/iSolarCloud/WebAppService/getDevicePointAttrs"
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/MickMake/GoSungrow/cmdHassio"
+	"github.com/MickMake/GoSungrow/iSolarCloud/WebAppService/getDevicePointAttrs"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
 	"errors"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdHelp"
+	"github.com/MickMake/GoUnify/cmdLog"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/go-co-op/gocron"
 	"github.com/spf13/cobra"
@@ -36,27 +37,29 @@ type CmdMqtt struct {
 	CmdDefault
 
 	// HASSIO MQTT
-	MqttUsername   string
-
-	MqttPassword   string
-	MqttHost       string
-	MqttPort       string
+	Username string
+	Password string
+	Host     string
+	Port     string
 
 	Client         *cmdHassio.Mqtt
 	endpoints      MqttEndPoints
 	points         getDevicePointAttrs.PointsMap
 	previous       map[string]*api.DataEntries
 
-	log                 Logging
+	log                 cmdLog.Log
 	optionSleepDelay    time.Duration
 	optionFetchSchedule time.Duration
-	// optionCacheTimeout  time.Duration
 }
 
-func NewCmdMqtt() *CmdMqtt {
+func NewCmdMqtt(logLevel string) *CmdMqtt {
 	var ret *CmdMqtt
 
 	for range Only.Once {
+		if logLevel == "" {
+			logLevel = cmdLog.LogLevelInfoStr
+		}
+
 		ret = &CmdMqtt {
 			CmdDefault: CmdDefault {
 				Error:   nil,
@@ -64,7 +67,7 @@ func NewCmdMqtt() *CmdMqtt {
 				SelfCmd: nil,
 			},
 
-			log:                 NewLogging(""),
+			log:                 cmdLog.New(logLevel),
 			optionSleepDelay:    time.Second * 40,		// Takes up to 40 seconds for data to come in.
 			optionFetchSchedule: time.Minute * 5,
 			previous:            make(map[string]*api.DataEntries, 0),
@@ -82,7 +85,7 @@ func (c *CmdMqtt) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		c.cmd = cmd
 
 		// ******************************************************************************** //
-		var cmdMqtt = &cobra.Command{
+		var cmdRoot = &cobra.Command{
 			Use:                   "mqtt",
 			Aliases:               []string{""},
 			Annotations:           map[string]string{"group": "MQTT"},
@@ -94,8 +97,8 @@ func (c *CmdMqtt) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			RunE:                  c.CmdMqtt,
 			Args:                  cobra.MinimumNArgs(1),
 		}
-		cmd.AddCommand(cmdMqtt)
-		cmdMqtt.Example = cmdHelp.PrintExamples(cmdMqtt, "run", "sync")
+		cmd.AddCommand(cmdRoot)
+		cmdRoot.Example = cmdHelp.PrintExamples(cmdRoot, "run", "sync")
 
 		// ******************************************************************************** //
 		var cmdMqttRun = &cobra.Command{
@@ -120,7 +123,7 @@ func (c *CmdMqtt) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			RunE:                  cmds.Mqtt.CmdMqttRun,
 			Args:                  cobra.RangeArgs(0, 1),
 		}
-		cmdMqtt.AddCommand(cmdMqttRun)
+		cmdRoot.AddCommand(cmdMqttRun)
 		cmdMqttRun.Example = cmdHelp.PrintExamples(cmdMqttRun, "")
 
 		// ******************************************************************************** //
@@ -146,7 +149,7 @@ func (c *CmdMqtt) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			RunE:                  cmds.Mqtt.CmdMqttSync,
 			Args:                  cobra.RangeArgs(0, 1),
 		}
-		cmdMqtt.AddCommand(cmdMqttSync)
+		cmdRoot.AddCommand(cmdMqttSync)
 		cmdMqttSync.Example = cmdHelp.PrintExamples(cmdMqttSync, "", "all")
 	}
 	return c.SelfCmd
@@ -154,13 +157,13 @@ func (c *CmdMqtt) AttachCommand(cmd *cobra.Command) *cobra.Command {
 
 func (c *CmdMqtt) AttachFlags(cmd *cobra.Command, viper *viper.Viper) {
 	for range Only.Once {
-		cmd.PersistentFlags().StringVarP(&c.MqttUsername, flagMqttUsername, "", "", "HASSIO: mqtt username.")
+		cmd.PersistentFlags().StringVarP(&c.Username, flagMqttUsername, "", "", "HASSIO: mqtt username.")
 		viper.SetDefault(flagMqttUsername, "")
-		cmd.PersistentFlags().StringVarP(&c.MqttPassword, flagMqttPassword, "", "", "HASSIO: mqtt password.")
+		cmd.PersistentFlags().StringVarP(&c.Password, flagMqttPassword, "", "", "HASSIO: mqtt password.")
 		viper.SetDefault(flagMqttPassword, "")
-		cmd.PersistentFlags().StringVarP(&c.MqttHost, flagMqttHost, "", "", "HASSIO: mqtt host.")
+		cmd.PersistentFlags().StringVarP(&c.Host, flagMqttHost, "", "", "HASSIO: mqtt host.")
 		viper.SetDefault(flagMqttHost, "")
-		cmd.PersistentFlags().StringVarP(&c.MqttPort, flagMqttPort, "", "", "HASSIO: mqtt port.")
+		cmd.PersistentFlags().StringVarP(&c.Port, flagMqttPort, "", "", "HASSIO: mqtt port.")
 		viper.SetDefault(flagMqttPort, "")
 	}
 }
@@ -171,10 +174,10 @@ func (c *CmdMqtt) MqttArgs(_ *cobra.Command, _ []string) error {
 		c.Client = cmdHassio.New(cmdHassio.Mqtt {
 			ClientId:     DefaultServiceName,
 			EntityPrefix: DefaultServiceName,
-			Username:     c.MqttUsername,
-			Password:     c.MqttPassword,
-			Host:         c.MqttHost,
-			Port:         c.MqttPort,
+			Username:     c.Username,
+			Password:     c.Password,
+			Host:         c.Host,
+			Port:         c.Port,
 		})
 		c.Error = c.Client.GetError()
 		if c.Error != nil {
@@ -638,46 +641,46 @@ const (
 
 func (c *CmdMqtt) Options() error {
 	for range Only.Once {
-		c.Error = c.Client.SetOption(OptionLogLevel, "Log Level",
+		c.Error = c.Client.CreateOption(OptionLogLevel, "Log Level",
 			c.optionFuncLogLevel,
-			LogLevelErrorStr, LogLevelWarningStr, LogLevelInfoStr, LogLevelDebugStr)
+			cmdLog.LogLevelErrorStr, cmdLog.LogLevelWarningStr, cmdLog.LogLevelInfoStr, cmdLog.LogLevelDebugStr)
 		if c.Error != nil {
 			break
 		}
-		c.Error = c.Client.SetOptionValue(OptionLogLevel, c.log.GetLogLevel())
+		c.Error = c.Client.SetOption(OptionLogLevel, c.log.GetLogLevel())
 		if c.Error != nil {
 			break
 		}
 
-		c.Error = c.Client.SetOption(OptionFetchSchedule, "Fetch Schedule",
+		c.Error = c.Client.CreateOption(OptionFetchSchedule, "Fetch Schedule",
 			c.optionFuncFetchSchedule,
 			"2m", "3m", "4m", "5m", "6m", "7m", "8m", "9m", "10m")
 		if c.Error != nil {
 			break
 		}
-		c.Error = c.Client.SetOptionValue(OptionFetchSchedule, c.GetFetchSchedule())
+		c.Error = c.Client.SetOption(OptionFetchSchedule, c.GetFetchSchedule())
 		if c.Error != nil {
 			break
 		}
 
-		c.Error = c.Client.SetOption(OptionSleepDelay, "Sleep Delay After Schedule",
+		c.Error = c.Client.CreateOption(OptionSleepDelay, "Sleep Delay After Schedule",
 			c.optionFuncSleepDelay,
 			"0s", "10s", "20s", "30s", "40s", "50s", "60s")
 		if c.Error != nil {
 			break
 		}
-		c.Error = c.Client.SetOptionValue(OptionSleepDelay, c.GetSleepDelay())
+		c.Error = c.Client.SetOption(OptionSleepDelay, c.GetSleepDelay())
 		if c.Error != nil {
 			break
 		}
 
-		c.Error = c.Client.SetOption(OptionServiceState, "Service State",
+		c.Error = c.Client.CreateOption(OptionServiceState, "Service State",
 			c.optionFuncServiceState,
 			"Run", "Restart", "Stop")
 		if c.Error != nil {
 			break
 		}
-		c.Error = c.Client.SetOptionValue(OptionServiceState, "Run")
+		c.Error = c.Client.SetOption(OptionServiceState, "Run")
 		if c.Error != nil {
 			break
 		}
@@ -691,7 +694,7 @@ func (c *CmdMqtt) optionFuncLogLevel(_ mqtt.Client, msg mqtt.Message) {
 		request := strings.ToLower(string(msg.Payload()))
 		c.log.Info("Option[%s] set to '%s'\n", OptionLogLevel, request)
 		c.log.SetLogLevel(request)
-		c.Error = c.Client.SetOptionValue(OptionLogLevel, request)
+		c.Error = c.Client.SetOption(OptionLogLevel, request)
 		if c.Error != nil {
 			c.log.Error("%s\n", c.Error)
 			break
@@ -709,7 +712,7 @@ func (c *CmdMqtt) optionFuncFetchSchedule(_ mqtt.Client, msg mqtt.Message) {
 			break
 		}
 
-		c.Error = c.Client.SetOptionValue(OptionFetchSchedule, c.GetFetchSchedule())
+		c.Error = c.Client.SetOption(OptionFetchSchedule, c.GetFetchSchedule())
 		if c.Error != nil {
 			c.log.Error("%s\n", c.Error)
 			break
@@ -733,7 +736,7 @@ func (c *CmdMqtt) optionFuncSleepDelay(_ mqtt.Client, msg mqtt.Message) {
 			break
 		}
 
-		c.Error = c.Client.SetOptionValue(OptionSleepDelay, request)
+		c.Error = c.Client.SetOption(OptionSleepDelay, request)
 		if c.Error != nil {
 			c.log.Error("%s\n", c.Error)
 			break
@@ -755,7 +758,7 @@ func (c *CmdMqtt) optionFuncServiceState(_ mqtt.Client, msg mqtt.Message) {
 			case "Stop":
 		}
 
-		c.Error = c.Client.SetOptionValue(OptionServiceState, request)
+		c.Error = c.Client.SetOption(OptionServiceState, request)
 		if c.Error != nil {
 			c.log.Error("%s\n", c.Error)
 			break

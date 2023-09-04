@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"GoSungrow/iSolarCloud"
-	"GoSungrow/iSolarCloud/AppService/getPsDetail"
-	"GoSungrow/iSolarCloud/AppService/getPsDetailWithPsType"
+	"github.com/MickMake/GoSungrow/iSolarCloud"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPsDetail"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPsDetailWithPsType"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdHelp"
@@ -77,7 +77,7 @@ func (c *CmdShow) funcPsList(_ *cobra.Command, args []string) error {
 func (c *CmdShow) AttachPsIdList2(cmd *cobra.Command) *cobra.Command {
 	var self = &cobra.Command{
 		Use:                   "list2",
-		Aliases:               []string{"ls"},
+		Aliases:               []string{"ls2"},
 		Annotations:           map[string]string{"group": "PsId"},
 		Short:                 fmt.Sprintf("Show all available PS."),
 		Long:                  fmt.Sprintf("Show all available PS."),

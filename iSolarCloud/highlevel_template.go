@@ -1,9 +1,9 @@
 package iSolarCloud
 
 import (
-	"GoSungrow/iSolarCloud/AppService/getTemplateList"
-	"GoSungrow/iSolarCloud/WebAppService/queryUserCurveTemplateData"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getTemplateList"
+	"github.com/MickMake/GoSungrow/iSolarCloud/WebAppService/queryUserCurveTemplateData"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"errors"
 	"github.com/MickMake/GoUnify/Only"
 	"strings"

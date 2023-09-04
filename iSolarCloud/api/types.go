@@ -1,7 +1,7 @@
 package api
 
 import (
-	"GoSungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
 )
 
 

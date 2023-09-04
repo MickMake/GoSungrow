@@ -1,9 +1,9 @@
 package getInstallerInfoByDealerOrgCodeOrId
 
 import (
-	"GoSungrow/iSolarCloud/api"
-	"GoSungrow/iSolarCloud/api/GoStruct"
-	"GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
 	"github.com/MickMake/GoUnify/Only"
 )
@@ -14,7 +14,7 @@ const EndPointName = "AppService.getInstallerInfoByDealerOrgCodeOrId"
 
 type RequestData struct {
 	DealerOrgCode valueTypes.String `json:"dealer_org_code"` // required:"true"`
-	OrgId         valueTypes.String `json:"org_id"`          // required:"true"`
+	OrgId         valueTypes.Integer `json:"org_id"`          // required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
