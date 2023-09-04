@@ -85,7 +85,7 @@ This GoLang package does several things:
 
 ## What is the roadmap?
 
-I've implemented most of the features I've wanted to, except for...
+I've implemented most of the features I've wanted to, except for... 
 1. IFTTT support.
 
 The most recent version has changed the code-base substantially, making it a lot more robust to changes in the API JSON schema.
