@@ -12,11 +12,11 @@ builds:
 - env:
   - CGO_ENABLED=0
   binary: GoSungrow
-  goos:
+  goos:	# openbsd_amd64_v1
     - linux
     - darwin
     - windows
-    - openbsd
+    # openbsd
   goarch:
     # 386
     - amd64

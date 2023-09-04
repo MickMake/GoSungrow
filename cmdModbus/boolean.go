@@ -1,3 +1,4 @@
+//go:build !(freebsd && amd64)
 package cmdModbus
 
 import (
