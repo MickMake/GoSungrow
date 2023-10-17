@@ -111,8 +111,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/MickMake/GoUnify/Only"
-
+	"github.com/anicoll/gosungrow/pkg/only"
 	"gopkg.in/yaml.v2"
 )
 
@@ -517,7 +516,7 @@ func lintFieldName(name string) string {
 // generate an appropriate struct type entry
 func typeForValue(value interface{}, structName string, tags []string, subStructMap map[string]string, convertFloats bool) string {
 	var v string
-	for range Only.Once {
+	for range only.Once {
 		// Check if this is an array
 		if objects, ok := value.([]interface{}); ok {
 			types := make(map[reflect.Type]bool, 0)

@@ -7,7 +7,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/AppService/getHouseholdStoragePsReport"
 	"github.com/anicoll/gosungrow/iSolarCloud/AppService/getKpiInfo"
 	"github.com/anicoll/gosungrow/iSolarCloud/AppService/getPowerDevicePointInfo"
@@ -21,12 +20,13 @@ import (
 	"github.com/anicoll/gosungrow/iSolarCloud/api"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 // GetPowerDevicePointInfo - AppService.getPowerDevicePointInfo
 func (sg *SunGrow) GetPowerDevicePointInfo(min valueTypes.Integer, max valueTypes.Integer) ([]getPowerDevicePointInfo.ResultData, error) {
 	var ret []getPowerDevicePointInfo.ResultData
-	for range Only.Once {
+	for range only.Once {
 		_, _ = fmt.Fprintf(os.Stderr, "Scanning from %s to %s.", min, max)
 		for id := min.Value(); id < max.Value(); id++ {
 			PrintPause(id, 20)
@@ -51,7 +51,7 @@ func (sg *SunGrow) GetPowerDevicePointInfo(min valueTypes.Integer, max valueType
 }
 
 func (sg *SunGrow) GetAllPointsData(psIds ...string) error {
-	for range Only.Once {
+	for range only.Once {
 		var points api.DataMap
 
 		pids := sg.SetPsIds(psIds...)
@@ -253,7 +253,7 @@ func (sg *SunGrow) GetAllPointsData(psIds ...string) error {
 func (sg *SunGrow) DevicePointAttrs(deviceType string, psIds ...string) (getDevicePointAttrs.Points, error) {
 	var points getDevicePointAttrs.Points
 
-	for range Only.Once {
+	for range only.Once {
 		var pids valueTypes.PsIds
 		pids = sg.SetPsIds(psIds...)
 		if sg.Error != nil {
@@ -299,7 +299,7 @@ func (sg *SunGrow) DevicePointAttrs(deviceType string, psIds ...string) (getDevi
 func (sg *SunGrow) DevicePointAttrsMap(deviceType string, psIds ...string) (getDevicePointAttrs.PointsMap, error) {
 	points := make(getDevicePointAttrs.PointsMap)
 
-	for range Only.Once {
+	for range only.Once {
 		var pa getDevicePointAttrs.Points
 		pa, sg.Error = sg.DevicePointAttrs(deviceType, psIds...)
 		if sg.Error != nil {
@@ -318,7 +318,7 @@ func (sg *SunGrow) DevicePointAttrsMap(deviceType string, psIds ...string) (getD
 func (sg *SunGrow) GetDevicePointAttrs(psId valueTypes.PsId) (getDevicePointAttrs.Points, error) {
 	var ret getDevicePointAttrs.Points
 
-	for range Only.Once {
+	for range only.Once {
 		var trees PsTrees
 		trees, sg.Error = sg.PsTreeMenu(psId.String())
 		if sg.Error != nil {
@@ -352,7 +352,7 @@ func (sg *SunGrow) GetDevicePointAttrs(psId valueTypes.PsId) (getDevicePointAttr
 func (sg *SunGrow) getPointData(startDate string, endDate string, interval string, points ...string) (SunGrowData, error) {
 	var data SunGrowData
 
-	for range Only.Once {
+	for range only.Once {
 		// _, _ = sg.QueryMultiPointDataList(
 		// 	valueTypes.SetDateTimeString(startDate),
 		// 	valueTypes.SetDateTimeString(endDate),
@@ -404,7 +404,7 @@ func (sg *SunGrow) getPointData(startDate string, endDate string, interval strin
 }
 
 func (sg *SunGrow) PointData(startDate string, endDate string, interval string, points ...string) error {
-	for range Only.Once {
+	for range only.Once {
 		var data SunGrowData
 		data, sg.Error = sg.getPointData(startDate, endDate, interval, points...)
 		if sg.Error != nil {
@@ -422,7 +422,7 @@ func (sg *SunGrow) PointData(startDate string, endDate string, interval string, 
 
 func (sg *SunGrow) PointDataSave(startDate string, endDate string, interval string, points ...string) error {
 	// sot := sg.OutputType
-	for range Only.Once {
+	for range only.Once {
 		var data SunGrowData
 		data, sg.Error = sg.getPointData(startDate, endDate, interval, points...)
 		if sg.Error != nil {
@@ -487,7 +487,7 @@ func (sg *SunGrow) PointDataSave(startDate string, endDate string, interval stri
 func (sg *SunGrow) PointScan(min string, max string) (string, error) {
 	var ret string
 
-	for range Only.Once {
+	for range only.Once {
 		if min == "" || max == "" {
 			min = "0"
 			max = "1000"
@@ -545,7 +545,7 @@ func (sg *SunGrow) PointScan(min string, max string) (string, error) {
 }
 
 func PrintPause(index int64, max int) {
-	for range Only.Once {
+	for range only.Once {
 		if index == 0 {
 			_, _ = fmt.Fprintf(os.Stderr, "\n%.3d ", index)
 			break
@@ -567,7 +567,7 @@ func PrintPause(index int64, max int) {
 // QueryMultiPointDataList - AppService.queryMutiPointDataList MinuteInterval:5 StartTimeStamp:20221001000000 EndTimeStamp:20221001235900 PsId:1129147 Points:1129147_14_1_1.p13148,1129147_14_1_1.p13147,1129147_14_1_1.p13146,1129147_14_1_1.p13145,1129147_14_1_1.p13144,1129147_14_1_1.p13143
 func (sg *SunGrow) QueryMultiPointDataList(startDate valueTypes.DateTime, endDate valueTypes.DateTime, interval valueTypes.Integer, points valueTypes.PointIds) (queryMutiPointDataList.Data, error) {
 	var ret queryMutiPointDataList.Data
-	for range Only.Once {
+	for range only.Once {
 		if len(points.PointIds) == 0 {
 			break
 		}

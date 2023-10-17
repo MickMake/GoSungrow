@@ -3,7 +3,7 @@
 package cmdModbus
 
 import (
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 	"github.com/simonvetter/modbus"
 )
 
@@ -27,7 +27,7 @@ const (
 func (m *Modbus) Read(address Address, quantity Quantity, valueType string) string {
 	var ret string
 
-	for range Only.Once {
+	for range only.Once {
 		width := 8
 
 		switch valueType {
@@ -103,7 +103,7 @@ func (m *Modbus) Read(address Address, quantity Quantity, valueType string) stri
 func (m *Modbus) ReadHolding(address Address, quantity Quantity, valueType string) string {
 	var ret string
 
-	for range Only.Once {
+	for range only.Once {
 		width := 8
 
 		switch valueType {

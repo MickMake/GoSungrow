@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const LabelScene = "scene"
 
 func (m *Mqtt) ScenePublishConfig(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsScene() {
 			break
 		}
@@ -48,7 +48,7 @@ func (m *Mqtt) ScenePublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) ScenePublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsScene() {
 			break
 		}
@@ -139,7 +139,7 @@ func (c *Scene) Json() string {
 func (config *EntityConfig) IsScene() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.Units == LabelScene {
 			ok = true
 			break

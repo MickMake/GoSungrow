@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type MqttState struct {
@@ -14,7 +14,7 @@ type MqttState struct {
 
 func (mq *MqttState) Json() string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		j, err := json.Marshal(*mq)
 		if err != nil {
 			ret = fmt.Sprintf("{ \"error\": \"%s\"", err)

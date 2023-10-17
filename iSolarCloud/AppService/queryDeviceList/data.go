@@ -3,10 +3,10 @@ package queryDeviceList
 import (
 	"fmt"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const (
@@ -186,7 +186,7 @@ func (e *ResultData) IsValid() error {
 
 func (e *ResultData) GetDataByName(name string) []PointStruct {
 	var ret []PointStruct
-	for range Only.Once {
+	for range only.Once {
 		i := len(e.PageList)
 		if i == 0 {
 			break
@@ -205,7 +205,7 @@ func (e *ResultData) GetDataByName(name string) []PointStruct {
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
-	for range Only.Once {
+	for range only.Once {
 		entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))
 
 		// // Used for virtual entries.
@@ -268,7 +268,7 @@ func (e *EndPoint) GetData() api.DataMap {
 }
 
 func (e *EndPoint) GetEnergyStorageSystem(entries api.DataMap) {
-	for range Only.Once {
+	for range only.Once {
 		/*
 			PVPower				- TotalDcPower
 			PVPowerToBattery	- BatteryChargingPower
@@ -307,7 +307,7 @@ func (e *EndPoint) GetEnergyStorageSystem(entries api.DataMap) {
 }
 
 func (e *EndPoint) SetBatteryPoints(epp GoStruct.EndPointPath, entries api.DataMap) {
-	for range Only.Once {
+	for range only.Once {
 		// /////////////////////////////////////////////////////// //
 		// Battery Power
 		batteryChargePower := entries.CopyPointFromName(epp.AddString("p13126"), epp, "battery_charge_power", "Battery Charge Power (p13126)")
@@ -373,7 +373,7 @@ func (e *EndPoint) SetBatteryPoints(epp GoStruct.EndPointPath, entries api.DataM
 }
 
 func (e *EndPoint) SetPvPoints(epp GoStruct.EndPointPath, entries api.DataMap) {
-	for range Only.Once {
+	for range only.Once {
 		// /////////////////////////////////////////////////////// //
 		// PV Power
 		pvPower := entries.CopyPointFromName(epp.AddString("p13003"), epp, "pv_power", "Pv Power (p13003)")
@@ -470,7 +470,7 @@ func (e *EndPoint) SetPvPoints(epp GoStruct.EndPointPath, entries api.DataMap) {
 }
 
 func (e *EndPoint) SetGridPoints(epp GoStruct.EndPointPath, entries api.DataMap) {
-	for range Only.Once {
+	for range only.Once {
 		gridToLoadPower := entries.CopyPointFromName(epp.AddString("p13149"), epp, "grid_to_load_power", "Grid To Load Power (p13149)")
 
 		gridToLoadPowerActive := entries.CopyPoint(gridToLoadPower, epp, "grid_to_load_power_active", "Grid To Load Power Active (p13149)")
@@ -506,7 +506,7 @@ func (e *EndPoint) SetGridPoints(epp GoStruct.EndPointPath, entries api.DataMap)
 }
 
 func (e *EndPoint) SetLoadPoints(epp GoStruct.EndPointPath, entries api.DataMap) {
-	for range Only.Once {
+	for range only.Once {
 		// Daily Load Energy Consumption
 		dailyTotalEnergy := entries.CopyPointFromName(epp.AddString("p13199"), epp, "daily_total_energy", "Daily Total Energy (p13199)")
 		dailyTotalEnergy.DataStructure.PointUpdateFreq = GoStruct.UpdateFreqDay

@@ -5,9 +5,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type Point struct {
@@ -33,7 +33,7 @@ func (p *Point) FixUnitType() Point {
 func (p *Point) WhenReset(date valueTypes.DateTime) string {
 	var ret string
 
-	for range Only.Once {
+	for range only.Once {
 		var err error
 		var now time.Time
 		// now := time.Now()
@@ -211,7 +211,7 @@ func GetDevicePoint(devicePoint string) *Point {
 // }
 //
 // func SetPoint(point valueTypes.DataPoint) valueTypes.DataPoint {
-// 	// for range Only.Once {
+// 	// for range only.Once {
 // 	// 	p := strings.TrimPrefix(string(point), "p")
 // 	// 	_, err := strconv.ParseInt(p, 10, 64)
 // 	// 	if err == nil {
@@ -237,13 +237,13 @@ func NewParentDevice(key string) ParentDevice {
 }
 
 func (pd *ParentDevice) Set(key string) {
-	for range Only.Once {
+	for range only.Once {
 		pd.Key = key
 	}
 }
 
 func (pd *ParentDevice) Split() {
-	for range Only.Once {
+	for range only.Once {
 		// if pd.Key == "virtual" {
 		// 	break
 		// }
@@ -275,7 +275,7 @@ type ParentDevices struct {
 }
 
 func (pd *ParentDevices) Add(device ParentDevice) {
-	for range Only.Once {
+	for range only.Once {
 		if len(pd.Map) == 0 {
 			pd.Map = make(map[string]*ParentDevice)
 		}
@@ -319,7 +319,7 @@ func (pd *ParentDevices) PsIds() string {
 
 // func (pd *ParentDevices) Get() ParentDevice {
 // 	var ret ParentDevice
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		if len(pd.Map) == 0 {
 // 			break
 // 		}
@@ -403,7 +403,7 @@ func (pd *ParentDevices) Types() string {
 // }
 //
 // func (pd *ParentDevice) Split() ParentDevice {
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		if pd.Key == "" {
 // 			pd.Key = "virtual"
 // 			break

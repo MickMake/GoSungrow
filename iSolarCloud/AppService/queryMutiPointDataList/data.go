@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const (
@@ -58,7 +58,7 @@ func (e *ResultData) IsValid() error {
 // func (e *ResultData) String() string {
 // 	var ret string
 //
-// 	// for range Only.Once {
+// 	// for range only.Once {
 // 	// 	if len(data) == 0 {
 // 	// 		break
 // 	// 	}
@@ -107,7 +107,7 @@ func (e *ResultData) IsValid() error {
 func (e *ResultData) UnmarshalJSON(data []byte) error {
 	var err error
 
-	for range Only.Once {
+	for range only.Once {
 		if len(data) == 0 {
 			break
 		}
@@ -153,7 +153,7 @@ type scanDevices map[string]scanPoints
 func (e *scanDevices) UnmarshalJSON(data []byte) error {
 	var err error
 
-	for range Only.Once {
+	for range only.Once {
 		if len(data) == 0 {
 			break
 		}
@@ -176,7 +176,7 @@ type scanPoints map[string]scanValues
 func (e *scanPoints) UnmarshalJSON(data []byte) error {
 	var err error
 
-	for range Only.Once {
+	for range only.Once {
 		if len(data) == 0 {
 			break
 		}
@@ -204,7 +204,7 @@ type scanValues []scanValue
 func (e *scanValues) UnmarshalJSON(data []byte) error {
 	var err error
 
-	for range Only.Once {
+	for range only.Once {
 		if len(data) == 0 {
 			break
 		}
@@ -239,7 +239,7 @@ type scanValue struct {
 // func (e *EndPoint) GetPointDataTable(points api.TemplatePoints) output.Table {
 // 	var table output.Table
 //
-// 	// for range Only.Once {
+// 	// for range only.Once {
 // 	// 	table = output.NewTable(
 // 	// 		"Date/Time",
 // 	// 		"Point Id",

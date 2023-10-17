@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"strconv"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type Generic struct {
@@ -17,7 +17,7 @@ type Generic struct {
 
 // UnmarshalJSON - Convert JSON to value
 func (t *Generic) UnmarshalJSON(data []byte) error {
-	for range Only.Once {
+	for range only.Once {
 		t.Valid = false
 
 		if len(data) == 0 {
@@ -49,7 +49,7 @@ func (t *Generic) UnmarshalJSON(data []byte) error {
 func (t Generic) MarshalJSON() ([]byte, error) {
 	var data []byte
 
-	for range Only.Once {
+	for range only.Once {
 		t.Valid = false
 
 		data, t.Error = json.Marshal(t.float64)
@@ -79,7 +79,7 @@ func (t Generic) String() string {
 }
 
 func (t *Generic) SetString(value string) Generic {
-	for range Only.Once {
+	for range only.Once {
 		t.string = value
 		t.float64 = 0
 		t.Valid = false
@@ -112,7 +112,7 @@ func (t *Generic) SetString(value string) Generic {
 }
 
 func (t *Generic) SetFloat(value float64) Generic {
-	for range Only.Once {
+	for range only.Once {
 		t.float64 = value
 		t.Valid = true
 		t.string = strconv.FormatFloat(t.float64, 'f', -1, 64)
@@ -122,7 +122,7 @@ func (t *Generic) SetFloat(value float64) Generic {
 }
 
 func (t *Generic) SetInteger(value int64) Generic {
-	for range Only.Once {
+	for range only.Once {
 		t.float64 = float64(value)
 		t.Valid = true
 		t.string = strconv.FormatFloat(t.float64, 'f', -1, 64)

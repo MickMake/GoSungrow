@@ -10,10 +10,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/reflection"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 // api.EndPoint - Import API endpoint interface
@@ -172,7 +172,7 @@ func (e EndPoint) WriteDataFile() error {
 
 // SetRequest - Save an interface reference as either api.RequestCommon or RequestData.
 func (e EndPoint) SetRequest(ref interface{}) api.EndPoint {
-	for range Only.Once {
+	for range only.Once {
 		if reflection.GetPkgType(ref) == "api.RequestCommon" {
 			e.Request.RequestCommon = ref.(api.RequestCommon)
 			break
@@ -196,7 +196,7 @@ func (e EndPoint) SetRequest(ref interface{}) api.EndPoint {
 
 // SetRequestByJson - Save RequestData from a JSON string.
 func (e EndPoint) SetRequestByJson(j output.Json) api.EndPoint {
-	for range Only.Once {
+	for range only.Once {
 		e.Error = json.Unmarshal([]byte(j), &e.Request.RequestData)
 		if e.Error != nil {
 			break
@@ -226,7 +226,7 @@ func (e EndPoint) GetRequestJson() output.Json {
 
 // IsRequestValid - Is api.RequestCommon and RequestData valid?
 func (e EndPoint) IsRequestValid() error {
-	for range Only.Once {
+	for range only.Once {
 		// req := e.GetRequest()
 		// req := e.Request.RequestCommon
 		e.Error = e.Request.RequestCommon.IsValid()
@@ -246,7 +246,7 @@ func (e EndPoint) IsRequestValid() error {
 // SetResponse - Save a JSON string to the Response structure.
 // (Used by the web call method.)
 func (e EndPoint) SetResponse(ref []byte) api.EndPoint {
-	for range Only.Once {
+	for range only.Once {
 		e.RawResponse = ref
 		e.Error = json.Unmarshal(ref, &e.Response)
 		if e.Error != nil {
@@ -268,7 +268,7 @@ func (e EndPoint) ResponseRef() interface{} {
 
 // IsResponseValid - Is api.ResponseCommon and ResultData valid?
 func (e EndPoint) IsResponseValid() error {
-	for range Only.Once {
+	for range only.Once {
 		e.Error = e.Response.ResponseCommon.IsValid()
 		if e.Error != nil {
 			break

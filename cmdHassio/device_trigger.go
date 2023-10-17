@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const LabelDeviceTrigger = "device_trigger"
 
 func (m *Mqtt) DeviceTriggerPublishConfig(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsDeviceTrigger() {
 			break
 		}
@@ -48,7 +48,7 @@ func (m *Mqtt) DeviceTriggerPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) DeviceTriggerPublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsDeviceTrigger() {
 			break
 		}
@@ -115,7 +115,7 @@ func (c *DeviceTrigger) Json() string {
 func (config *EntityConfig) IsDeviceTrigger() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.Units == LabelDeviceTrigger {
 			ok = true
 			break

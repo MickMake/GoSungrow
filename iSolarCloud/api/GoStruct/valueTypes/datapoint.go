@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type DataPoint struct {
@@ -16,7 +16,7 @@ type DataPoint struct {
 
 // UnmarshalJSON - Convert JSON to value
 func (t *DataPoint) UnmarshalJSON(data []byte) error {
-	for range Only.Once {
+	for range only.Once {
 		t.Valid = false
 
 		if len(data) == 0 {
@@ -41,7 +41,7 @@ func (t *DataPoint) UnmarshalJSON(data []byte) error {
 func (t DataPoint) MarshalJSON() ([]byte, error) {
 	var data []byte
 
-	for range Only.Once {
+	for range only.Once {
 		t.Valid = false
 
 		data, t.Error = json.Marshal(t.String())
@@ -76,7 +76,7 @@ func (t DataPoint) last() string {
 }
 
 func (t *DataPoint) Set(endPoint string, pointId string) DataPoint {
-	for range Only.Once {
+	for range only.Once {
 		t.endPoint = endPoint
 		if pointId == "" {
 			pointId = t.last()
@@ -89,7 +89,7 @@ func (t *DataPoint) Set(endPoint string, pointId string) DataPoint {
 }
 
 func (t *DataPoint) SetPointId(pointId string) DataPoint {
-	for range Only.Once {
+	for range only.Once {
 		if pointId == "" {
 			t.Valid = false
 			break
@@ -103,7 +103,7 @@ func (t *DataPoint) SetPointId(pointId string) DataPoint {
 }
 
 func (t *DataPoint) SetEndPoint(endPoint string) DataPoint {
-	for range Only.Once {
+	for range only.Once {
 		t.endPoint = endPoint
 		if t.pointId.String() == "" {
 			t.SetPointId(t.last())

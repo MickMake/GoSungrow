@@ -3,8 +3,8 @@ package cmdHassio
 import (
 	"encoding/json"
 
-	"github.com/MickMake/GoUnify/Only"
-	"github.com/MickMake/GoUnify/cmdLog"
+	"github.com/anicoll/gosungrow/pkg/cmdlog"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type Config struct {
@@ -31,10 +31,10 @@ func (m *Mqtt) NewDevice(config EntityConfig) (bool, Device) {
 	var ok bool
 	var ret Device
 
-	for range Only.Once {
+	for range only.Once {
 		var parent Device
 		if parent, ok = m.MqttDevices[config.ParentName]; !ok {
-			cmdLog.LogPrintDate("Unknown parentDevice: %s - will ignore.\n", config.ParentName)
+			cmdlog.LogPrintDate("Unknown parentDevice: %s - will ignore.\n", config.ParentName)
 			break
 		}
 

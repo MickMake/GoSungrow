@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const LabelHumidifier = "humidifier"
 
 func (m *Mqtt) HumidifierPublishConfig(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsHumidifier() {
 			break
 		}
@@ -48,7 +48,7 @@ func (m *Mqtt) HumidifierPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) HumidifierPublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsHumidifier() {
 			break
 		}
@@ -209,7 +209,7 @@ func (c *Humidifier) Json() string {
 func (config *EntityConfig) IsHumidifier() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.Units == LabelHumidifier {
 			ok = true
 			break

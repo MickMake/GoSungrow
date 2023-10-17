@@ -3,9 +3,9 @@ package cmdHassio
 import (
 	"fmt"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type EntityConfig struct {
@@ -39,7 +39,7 @@ type EntityConfig struct {
 }
 
 func (config *EntityConfig) FixConfig() {
-	for range Only.Once {
+	for range only.Once {
 		// mdi:power-socket-au
 		// mdi:solar-power
 		// mdi:home-lightning-bolt-outline

@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const LabelBinarySensor = "binary_sensor"
 
 func (m *Mqtt) BinarySensorPublishConfig(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsBinarySensor() {
 			break
 		}
@@ -89,7 +89,7 @@ func (m *Mqtt) BinarySensorPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) BinarySensorPublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsBinarySensor() {
 			break
 		}
@@ -275,7 +275,7 @@ func (c *BinarySensor) Json() string {
 func (config *EntityConfig) IsBinarySensor() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.Value.IsBool() {
 			ok = true
 			break

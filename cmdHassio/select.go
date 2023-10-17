@@ -4,14 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
 const LabelSelect = "select"
 
 func (m *Mqtt) SelectPublishConfig(config EntityConfig, fn mqtt.MessageHandler) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsSelect() {
 			break
 		}
@@ -59,7 +59,7 @@ func (m *Mqtt) SelectPublishConfig(config EntityConfig, fn mqtt.MessageHandler) 
 }
 
 func (m *Mqtt) SelectPublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsSelect() {
 			break
 		}
@@ -169,7 +169,7 @@ func (c *Select) Json() string {
 func (config *EntityConfig) IsSelect() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.Units == LabelSelect {
 			ok = true
 			break

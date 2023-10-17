@@ -1,15 +1,15 @@
 package iSolarCloud
 
 import (
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/AppService/queryDeviceRealTimeDataByPsKeys"
 	"github.com/anicoll/gosungrow/iSolarCloud/AppService/queryUnitList"
 	"github.com/anicoll/gosungrow/iSolarCloud/WebAppService/getMqttConfigInfoByAppkey"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 func (sg *SunGrow) MetaUnitList() error {
-	for range Only.Once {
+	for range only.Once {
 		data := sg.NewSunGrowData()
 		data.SetArgs()
 		data.SetEndpoints(queryUnitList.EndPointName)
@@ -29,7 +29,7 @@ func (sg *SunGrow) MetaUnitList() error {
 }
 
 func (sg *SunGrow) GetIsolarcloudMqtt(appKey string) error {
-	for range Only.Once {
+	for range only.Once {
 		if appKey == "" {
 			appKey = sg.GetAppKey()
 		}
@@ -78,7 +78,7 @@ func (sg *SunGrow) GetIsolarcloudMqtt(appKey string) error {
 }
 
 func (sg *SunGrow) GetRealTimeData(psKey string) error {
-	for range Only.Once {
+	for range only.Once {
 		if psKey == "" {
 			// var psKeys []string
 			// psKeys, sg.Error = sg.GetPsKeys()

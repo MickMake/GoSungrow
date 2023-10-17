@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"strconv"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type Uuid struct {
@@ -16,7 +16,7 @@ type Uuid struct {
 
 // UnmarshalJSON - Convert JSON to value
 func (t *Uuid) UnmarshalJSON(data []byte) error {
-	for range Only.Once {
+	for range only.Once {
 		t.Valid = false
 
 		if len(data) == 0 {
@@ -45,7 +45,7 @@ func (t *Uuid) UnmarshalJSON(data []byte) error {
 func (t Uuid) MarshalJSON() ([]byte, error) {
 	var data []byte
 
-	for range Only.Once {
+	for range only.Once {
 		t.Valid = false
 
 		data, t.Error = json.Marshal(t.int64)
@@ -75,7 +75,7 @@ func (t Uuid) Match(comp int64) bool {
 }
 
 func (t *Uuid) SetString(value string) Uuid {
-	for range Only.Once {
+	for range only.Once {
 		t.string = value
 		t.int64 = 0
 		t.Valid = false
@@ -102,7 +102,7 @@ func (t *Uuid) SetString(value string) Uuid {
 }
 
 func (t *Uuid) SetValue(value int64) Uuid {
-	for range Only.Once {
+	for range only.Once {
 		t.string = ""
 		t.int64 = value
 		t.Valid = true

@@ -9,17 +9,17 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 // ****************************************************** //
 
 func (sg *SunGrow) NewSunGrowData() SunGrowData {
 	var data SunGrowData
-	for range Only.Once {
+	for range only.Once {
 		data.New(sg)
 
 		data.SetOutputType(sg.OutputType)
@@ -30,7 +30,7 @@ func (sg *SunGrow) NewSunGrowData() SunGrowData {
 
 func SplitArg(arg string) []string {
 	var ret []string
-	for range Only.Once {
+	for range only.Once {
 		ret = []string{arg}
 		for _, s := range []string{",", "/", " "} {
 			if strings.Contains(arg, s) {
@@ -72,7 +72,7 @@ func (sgd *SunGrowData) PrintDebug(format string, args ...interface{}) {
 }
 
 func (sgd *SunGrowData) New(ref *SunGrow) {
-	for range Only.Once {
+	for range only.Once {
 		sgd.sunGrow = ref
 		sgd.Results = make(SunGrowDataResults)
 		sgd.cacheTimeout = time.Minute * 5
@@ -104,7 +104,7 @@ func (sgd *SunGrowData) SetArgs(args ...string) {
 }
 
 func (sgd *SunGrowData) SetPsIds(psids ...string) {
-	for range Only.Once {
+	for range only.Once {
 		var pids valueTypes.PsIds
 		pids = sgd.sunGrow.SetPsIds(psids...)
 		if sgd.Error != nil {
@@ -117,7 +117,7 @@ func (sgd *SunGrowData) SetPsIds(psids ...string) {
 
 func (sgd *SunGrowData) CallEndpoint(endpoint api.EndPoint, request SunGrowDataRequest) SunGrowDataResponse {
 	var response SunGrowDataResponse
-	for range Only.Once {
+	for range only.Once {
 		if !request.Validate(endpoint) {
 			request.Help(endpoint)
 			sgd.Error = errors.New("missing argument")
@@ -200,7 +200,7 @@ func (sgd *SunGrowData) CallEndpoint(endpoint api.EndPoint, request SunGrowDataR
 }
 
 func (sgd *SunGrowData) GetData() error {
-	for range Only.Once {
+	for range only.Once {
 		if len(sgd.endPoints) == 0 {
 			sgd.Error = errors.New("need an endpoint")
 			break
@@ -218,7 +218,7 @@ func (sgd *SunGrowData) GetData() error {
 }
 
 func (sgd *SunGrowData) GetDataSingle(endpoint string) error {
-	for range Only.Once {
+	for range only.Once {
 		// Lookup endpoint interface from string.
 		ep := sgd.sunGrow.GetEndpoint(endpoint)
 		if sgd.sunGrow.IsError() {
@@ -245,7 +245,7 @@ func (sgd *SunGrowData) GetDataSingle(endpoint string) error {
 }
 
 func (sgd *SunGrowData) getDataSinglePsIdNotRequired(ep api.EndPoint) error {
-	for range Only.Once {
+	for range only.Once {
 		var result SunGrowDataResult
 		result.EndPointArea = ep.GetArea()
 		result.EndPointName = ep.GetName()
@@ -268,7 +268,7 @@ func (sgd *SunGrowData) getDataSinglePsIdNotRequired(ep api.EndPoint) error {
 }
 
 func (sgd *SunGrowData) getDataSinglePsIdRequired(ep api.EndPoint) error {
-	for range Only.Once {
+	for range only.Once {
 		if sgd.Request.aPsId == nil {
 			sgd.SetPsIds()
 		}
@@ -301,7 +301,7 @@ func (sgd *SunGrowData) getDataSinglePsIdRequired(ep api.EndPoint) error {
 }
 
 func (sgd *SunGrowData) Process() error {
-	for range Only.Once {
+	for range only.Once {
 		if len(sgd.Results) == 0 {
 			fmt.Println("No results found.")
 			break
@@ -322,7 +322,7 @@ func (sgd *SunGrowData) Process() error {
 }
 
 func (sgd *SunGrowData) Output() error {
-	for range Only.Once {
+	for range only.Once {
 		if len(sgd.Results) == 0 {
 			fmt.Println("No results found.")
 			break
@@ -343,7 +343,7 @@ func (sgd *SunGrowData) Output() error {
 }
 
 func (sgd *SunGrowData) OutputDataTables() error {
-	for range Only.Once {
+	for range only.Once {
 		if len(sgd.Results) == 0 {
 			fmt.Println("No results found.")
 			break
@@ -415,7 +415,7 @@ type (
 )
 
 func (sgd *SunGrowDataResponse) Output() error {
-	for range Only.Once {
+	for range only.Once {
 		// Outputs that don't drop through.
 		if sgd.Options.OutputType.IsStruct() || sgd.Options.OutputType.IsList() || sgd.Options.OutputType.IsRaw() || sgd.Options.OutputType.IsJson() {
 			table := sgd.Data.CreateResultTable(true)
@@ -452,7 +452,7 @@ func (sgd *SunGrowDataResponse) Output() error {
 }
 
 func (sgd *SunGrowDataResponse) OutputDataTables() error {
-	for range Only.Once {
+	for range only.Once {
 		tables := sgd.Data.CreateDataTables()
 		if sgd.Data.Error != nil {
 			sgd.Error = sgd.Data.Error

@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 	"github.com/simonvetter/modbus"
 )
 
@@ -38,7 +38,7 @@ func (m Float32) Table(width int) string {
 func (m *Modbus) ReadFloat32(address Address, quantity Quantity, regType modbus.RegType) Float32 {
 	var ret Float32
 
-	for range Only.Once {
+	for range only.Once {
 		if quantity == 1 {
 			var r float32
 			r, m.err = m.client.ReadFloat32(uint16(address), regType)
@@ -93,7 +93,7 @@ func (m Float64) Table(width int) string {
 func (m *Modbus) ReadFloat64(address Address, quantity Quantity, regType modbus.RegType) Float64 {
 	var ret Float64
 
-	for range Only.Once {
+	for range only.Once {
 		if quantity == 1 {
 			var r float64
 			r, m.err = m.client.ReadFloat64(uint16(address), regType)

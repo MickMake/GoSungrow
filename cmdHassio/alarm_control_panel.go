@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const LabelAlarmControlPanel = "alarm_control_panel"
 
 func (m *Mqtt) AlarmControlPanelPublishConfig(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsAlarmControlPanel() {
 			break
 		}
@@ -64,7 +64,7 @@ func (m *Mqtt) AlarmControlPanelPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) AlarmControlPanelPublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsAlarmControlPanel() {
 			break
 		}
@@ -206,7 +206,7 @@ func (c *AlarmControlPanel) Json() string {
 func (config *EntityConfig) IsAlarmControlPanel() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.Units == LabelAlarmControlPanel {
 			ok = true
 			break

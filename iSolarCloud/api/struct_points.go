@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const (
@@ -60,7 +60,7 @@ func (pm *PointsMap) Get(point string) *Point {
 
 func (pm *PointsMap) GetDevicePoint(devicePoint string) *Point {
 	ret := &Point{}
-	for range Only.Once {
+	for range only.Once {
 		s := strings.Split(devicePoint, ".")
 		if len(s) < 2 {
 			ret = pm.Get(s[0])
@@ -73,7 +73,7 @@ func (pm *PointsMap) GetDevicePoint(devicePoint string) *Point {
 
 func (pm *PointsMap) Exists(pid string) bool {
 	var ok bool
-	for range Only.Once {
+	for range only.Once {
 		if _, ok = Points.Map[pid]; !ok {
 			break
 		}
@@ -83,7 +83,7 @@ func (pm *PointsMap) Exists(pid string) bool {
 }
 
 func (pm *PointsMap) Print() {
-	for range Only.Once {
+	for range only.Once {
 		for k, v := range pm.Map {
 			fmt.Printf("[%s] => %s\n", k, v)
 		}
@@ -95,7 +95,7 @@ func (pm *PointsMap) Print() {
 
 func (pm *PointsMap) Add(point Point) bool {
 	var ok bool
-	for range Only.Once {
+	for range only.Once {
 		point.Parents = ParentDevices{}
 
 		if !pm.Exists(point.Id) {
@@ -147,7 +147,7 @@ func (pm *PointsMap) Add(point Point) bool {
 
 func (pd *ParentDevice) HasChanged(comp ParentDevice) bool {
 	ok := true
-	for range Only.Once {
+	for range only.Once {
 		// if pd.Key != comp.Key {
 		// 	break
 		// }
@@ -167,7 +167,7 @@ func (pd *ParentDevice) HasChanged(comp ParentDevice) bool {
 
 func (p *Point) HasChanged(comp Point) bool {
 	ok := true
-	for range Only.Once {
+	for range only.Once {
 		// Can also use Marshal method
 		// jep, _ := json.Marshal(pm.Map[point.Id])
 		// jep2, _ := json.Marshal(ep)

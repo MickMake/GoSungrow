@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type Response struct {
@@ -20,7 +20,7 @@ type ResponseCommon struct {
 
 func (req ResponseCommon) IsValid() error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		err = req.CheckResultMessage()
 		if err != nil {
 			break
@@ -46,7 +46,7 @@ func (req ResponseCommon) IsValid() error {
 
 func (req ResponseCommon) IsTokenValid() bool {
 	var ok bool
-	for range Only.Once {
+	for range only.Once {
 		switch {
 		case req.ResultMsg == "success":
 			ok = true
@@ -73,7 +73,7 @@ func (req ResponseCommon) String() string {
 
 func (req ResponseCommon) CheckResultCode() error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		switch req.ResultCode {
 		case "1":
 			err = nil
@@ -96,7 +96,7 @@ func (req ResponseCommon) CheckResultCode() error {
 
 func (req ResponseCommon) CheckResultMessage() error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		switch {
 		case req.ResultMsg == "success":
 			err = nil

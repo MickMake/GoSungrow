@@ -3,7 +3,6 @@ package iSolarCloud
 import (
 	"fmt"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/AppService/getPowerStatistics"
 	"github.com/anicoll/gosungrow/iSolarCloud/AppService/getPsDetail"
 	"github.com/anicoll/gosungrow/iSolarCloud/AppService/getPsDetailWithPsType"
@@ -17,11 +16,12 @@ import (
 	"github.com/anicoll/gosungrow/iSolarCloud/WebAppService/showPSView"
 	"github.com/anicoll/gosungrow/iSolarCloud/api"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 func (sg *SunGrow) AllCritical() error {
 	var ep api.EndPoint
-	for range Only.Once {
+	for range only.Once {
 		ep = sg.GetByJson(powerDevicePointList.EndPointName, "")
 		if sg.IsError() {
 			break
@@ -108,7 +108,7 @@ func (sg *SunGrow) AllCritical() error {
 
 // func (sg *SunGrow) PrintCurrentStats() error {
 // 	var ep api.EndPoint
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep = sg.GetByStruct(getPsList.EndPointName, nil, DefaultCacheTimeout)
 // 		if sg.IsError() {
 // 			break
@@ -167,7 +167,7 @@ func (sg *SunGrow) AllCritical() error {
 func (sg *SunGrow) GetPsNames() ([]string, error) {
 	var ret []string
 
-	for range Only.Once {
+	for range only.Once {
 		ep := sg.GetByStruct(getPsList.EndPointName, nil, DefaultCacheTimeout)
 		if sg.IsError() {
 			break
@@ -183,7 +183,7 @@ func (sg *SunGrow) GetPsNames() ([]string, error) {
 func (sg *SunGrow) GetPsModels() ([]string, error) {
 	var ret []string
 
-	for range Only.Once {
+	for range only.Once {
 		var psIds valueTypes.PsIds
 		psIds, sg.Error = sg.GetPsIds()
 		if sg.Error != nil {
@@ -210,7 +210,7 @@ func (sg *SunGrow) GetPsModels() ([]string, error) {
 func (sg *SunGrow) GetPsSerials() ([]string, error) {
 	var ret []string
 
-	for range Only.Once {
+	for range only.Once {
 		var psIds valueTypes.PsIds
 		psIds, sg.Error = sg.GetPsIds()
 		if sg.Error != nil {

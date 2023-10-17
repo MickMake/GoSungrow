@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/anicoll/gosungrow/iSolarCloud"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/anicoll/gosungrow/pkg/cmdhelp"
 	"github.com/spf13/cobra"
 )
 
@@ -52,7 +52,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args: cobra.MinimumNArgs(0),
 		}
 		cmd.AddCommand(c.SelfCmd)
-		c.SelfCmd.Example = cmdHelp.PrintExamples(c.SelfCmd, "get <endpoint>", "put <endpoint>")
+		c.SelfCmd.Example = cmdhelp.PrintExamples(c.SelfCmd, "get <endpoint>", "put <endpoint>")
 
 		// ******************************************************************************** //
 		cmdDataGet := &cobra.Command{
@@ -68,7 +68,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args:                  cobra.MinimumNArgs(0),
 		}
 		c.SelfCmd.AddCommand(cmdDataGet)
-		cmdDataGet.Example = cmdHelp.PrintExamples(cmdDataGet, "queryDeviceList", "WebAppService.showPSView", "stats")
+		cmdDataGet.Example = cmdhelp.PrintExamples(cmdDataGet, "queryDeviceList", "WebAppService.showPSView", "stats")
 
 		// ******************************************************************************** //
 		cmdDataTable := &cobra.Command{
@@ -84,7 +84,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args:                  cobra.MinimumNArgs(0),
 		}
 		c.SelfCmd.AddCommand(cmdDataTable)
-		cmdDataGet.Example = cmdHelp.PrintExamples(cmdDataTable, "queryDeviceList", "WebAppService.showPSView", "stats")
+		cmdDataGet.Example = cmdhelp.PrintExamples(cmdDataTable, "queryDeviceList", "WebAppService.showPSView", "stats")
 
 		// ******************************************************************************** //
 		cmdDataRaw := &cobra.Command{
@@ -100,7 +100,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args:                  cobra.MinimumNArgs(0),
 		}
 		c.SelfCmd.AddCommand(cmdDataRaw)
-		cmdDataRaw.Example = cmdHelp.PrintExamples(cmdDataRaw, "queryDeviceList", "WebAppService.showPSView", "stats")
+		cmdDataRaw.Example = cmdhelp.PrintExamples(cmdDataRaw, "queryDeviceList", "WebAppService.showPSView", "stats")
 
 		// ******************************************************************************** //
 		cmdDataJson := &cobra.Command{
@@ -116,7 +116,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args:                  cobra.MinimumNArgs(0),
 		}
 		c.SelfCmd.AddCommand(cmdDataJson)
-		cmdDataJson.Example = cmdHelp.PrintExamples(cmdDataJson, "queryDeviceList", "WebAppService.showPSView", "stats")
+		cmdDataJson.Example = cmdhelp.PrintExamples(cmdDataJson, "queryDeviceList", "WebAppService.showPSView", "stats")
 
 		// ******************************************************************************** //
 		cmdDataCsv := &cobra.Command{
@@ -132,7 +132,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args:                  cobra.MinimumNArgs(0),
 		}
 		c.SelfCmd.AddCommand(cmdDataCsv)
-		cmdDataCsv.Example = cmdHelp.PrintExamples(cmdDataCsv, "queryDeviceList", "WebAppService.showPSView", "stats")
+		cmdDataCsv.Example = cmdhelp.PrintExamples(cmdDataCsv, "queryDeviceList", "WebAppService.showPSView", "stats")
 
 		// ******************************************************************************** //
 		cmdDataGraph := &cobra.Command{
@@ -148,7 +148,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args:                  cobra.MinimumNArgs(0),
 		}
 		c.SelfCmd.AddCommand(cmdDataGraph)
-		cmdDataGraph.Example = cmdHelp.PrintExamples(cmdDataGraph, "queryDeviceList", "WebAppService.showPSView", "stats")
+		cmdDataGraph.Example = cmdhelp.PrintExamples(cmdDataGraph, "queryDeviceList", "WebAppService.showPSView", "stats")
 
 		// ******************************************************************************** //
 		cmdApiXML := &cobra.Command{
@@ -164,7 +164,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args:                  cobra.MinimumNArgs(0),
 		}
 		c.SelfCmd.AddCommand(cmdApiXML)
-		cmdApiXML.Example = cmdHelp.PrintExamples(cmdApiXML, "queryDeviceList", "WebAppService.showPSView")
+		cmdApiXML.Example = cmdhelp.PrintExamples(cmdApiXML, "queryDeviceList", "WebAppService.showPSView")
 
 		// ******************************************************************************** //
 		cmdApiXLSX := &cobra.Command{
@@ -180,7 +180,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args:                  cobra.MinimumNArgs(0),
 		}
 		c.SelfCmd.AddCommand(cmdApiXLSX)
-		cmdApiXLSX.Example = cmdHelp.PrintExamples(cmdApiXLSX, "queryDeviceList", "WebAppService.showPSView")
+		cmdApiXLSX.Example = cmdhelp.PrintExamples(cmdApiXLSX, "queryDeviceList", "WebAppService.showPSView")
 
 		// ******************************************************************************** //
 		cmdApiMarkDown := &cobra.Command{
@@ -196,7 +196,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args:                  cobra.MinimumNArgs(0),
 		}
 		c.SelfCmd.AddCommand(cmdApiMarkDown)
-		cmdApiMarkDown.Example = cmdHelp.PrintExamples(cmdApiMarkDown, "queryDeviceList", "WebAppService.showPSView")
+		cmdApiMarkDown.Example = cmdhelp.PrintExamples(cmdApiMarkDown, "queryDeviceList", "WebAppService.showPSView")
 
 		// ******************************************************************************** //
 		cmdApiStruct := &cobra.Command{
@@ -212,7 +212,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args:                  cobra.MinimumNArgs(0),
 		}
 		c.SelfCmd.AddCommand(cmdApiStruct)
-		cmdApiStruct.Example = cmdHelp.PrintExamples(cmdApiStruct, "queryDeviceList", "WebAppService.showPSView")
+		cmdApiStruct.Example = cmdhelp.PrintExamples(cmdApiStruct, "queryDeviceList", "WebAppService.showPSView")
 	})
 	return c.SelfCmd
 }

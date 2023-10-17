@@ -6,7 +6,7 @@ import (
 
 func (w *Web) ApiGetEndPointResultTable(endpoint EndPoint) output.Table {
 	var table output.Table
-	// for range Only.Once {
+	// for range only.Once {
 	// 	// table = output.NewTable()
 	// 	data := endpoint.GetEndPointData()
 	// 	table = data.CreateEndPointResultTable()
@@ -32,7 +32,7 @@ func (w *Web) ApiGetEndPointResultTable(endpoint EndPoint) output.Table {
 
 func (w *Web) ApiGetEndPointDataTables(endpoint EndPoint) output.Tables {
 	table := output.NewTables()
-	// for range Only.Once {
+	// for range only.Once {
 	//
 	// 	var tp GoStruct.DataStructures
 	// 	tp.Debug = true

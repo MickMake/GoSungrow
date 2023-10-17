@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type DataEntries struct {
@@ -11,7 +11,7 @@ type DataEntries struct {
 const LastEntry = -1
 
 func (de *DataEntries) GetEntry(index int) *DataEntry {
-	for range Only.Once {
+	for range only.Once {
 		if de == nil {
 			return nil
 		}
@@ -39,7 +39,7 @@ func (de *DataEntries) Len() int {
 }
 
 func (de *DataEntries) Add(ref DataEntry) *DataEntries {
-	for range Only.Once {
+	for range only.Once {
 		if de == nil {
 			break
 		}

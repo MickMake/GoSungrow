@@ -1,8 +1,8 @@
 package gotabulate
 
 import (
-	"strconv"
 	"fmt"
+	"strconv"
 )
 
 // Create normalized Array from strings

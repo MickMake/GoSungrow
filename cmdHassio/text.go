@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const LabelText = "text"
 
 func (m *Mqtt) TextPublishConfig(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsText() {
 			break
 		}
@@ -48,7 +48,7 @@ func (m *Mqtt) TextPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) TextPublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsText() {
 			break
 		}
@@ -160,7 +160,7 @@ func (c *Text) Json() string {
 func (config *EntityConfig) IsText() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.Units == LabelText {
 			ok = true
 			break

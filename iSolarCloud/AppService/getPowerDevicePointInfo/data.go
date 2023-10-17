@@ -3,11 +3,11 @@ package getPowerDevicePointInfo
 import (
 	"fmt"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const (
@@ -48,7 +48,7 @@ func (e *ResultData) IsValid() error {
 }
 
 func (e *EndPoint) AddDataTable(table output.Table) output.Table {
-	for range Only.Once {
+	for range only.Once {
 		rd := e.Response.ResultData
 
 		if rd.Id.Value() == 0 {
@@ -68,7 +68,7 @@ func (e *EndPoint) AddDataTable(table output.Table) output.Table {
 
 func (e *EndPoint) GetPointDataTable() output.Table {
 	var table output.Table
-	for range Only.Once {
+	for range only.Once {
 		table = output.NewTable(
 			"DeviceType",
 			"Id",

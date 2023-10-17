@@ -1,9 +1,9 @@
 package api
 
 import (
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type DataEntry struct {
@@ -21,7 +21,7 @@ type DataEntry struct {
 
 func (de *DataEntry) IsValid() bool {
 	var ok bool
-	for range Only.Once {
+	for range only.Once {
 		if de == nil {
 			break
 		}

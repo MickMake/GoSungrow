@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const LabelSwitch = "switch"
 
 func (m *Mqtt) SwitchPublishConfig(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsSwitch() {
 			break
 		}
@@ -48,7 +48,7 @@ func (m *Mqtt) SwitchPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) SwitchPublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsSwitch() {
 			break
 		}
@@ -298,7 +298,7 @@ func (c *Switch) Json() string {
 func (config *EntityConfig) IsSwitch() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.Units == LabelSwitch {
 			ok = true
 			break

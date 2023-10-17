@@ -1,14 +1,14 @@
 package cmd
 
 import (
-	"github.com/MickMake/GoUnify/Only"
-	"github.com/MickMake/GoUnify/Unify"
 	"github.com/anicoll/gosungrow/defaults"
+	"github.com/anicoll/gosungrow/pkg/only"
+	"github.com/anicoll/gosungrow/pkg/unify"
 	"github.com/spf13/cobra"
 )
 
 type Cmds struct {
-	Unify  *Unify.Unify
+	Unify  *unify.Unify
 	Api    *CmdApi
 	Data   *CmdData
 	Info   *CmdInfo
@@ -39,9 +39,9 @@ type CmdDefault struct {
 var cmds Cmds
 
 func init() {
-	for range Only.Once {
-		cmds.Unify = Unify.New(
-			Unify.Options{
+	for range only.Once {
+		cmds.Unify = unify.New(
+			unify.Options{
 				Description:   defaults.Description,
 				BinaryName:    defaults.BinaryName,
 				BinaryVersion: defaults.BinaryVersion,
@@ -52,7 +52,7 @@ func init() {
 				ReadMe:        defaults.Readme,
 				Examples:      defaults.Examples,
 			},
-			Unify.Flags{
+			unify.Flags{
 				MergeRun: true,
 			},
 		)
@@ -88,7 +88,7 @@ func init() {
 func Execute() error {
 	var err error
 
-	for range Only.Once {
+	for range only.Once {
 		// Execute adds all child commands to the root command and sets flags appropriately.
 		// This is called by main.main(). It only needs to happen once to the rootCmd.
 		err = cmds.Unify.Execute()
@@ -101,7 +101,7 @@ func Execute() error {
 }
 
 func (ca *Cmds) ProcessArgs(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		ca.Args = args
 
 		ca.ConfigDir = cmds.Unify.GetConfigDir()

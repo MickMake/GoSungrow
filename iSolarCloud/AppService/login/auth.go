@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const (
@@ -34,7 +34,7 @@ type SunGrowAuth struct {
 
 func (a *SunGrowAuth) Verify() error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		if a == nil {
 			err = errors.New("no auth details")
 			break
@@ -61,7 +61,7 @@ func (a *SunGrowAuth) Verify() error {
 }
 
 func (e *EndPoint) Login(auth *SunGrowAuth) error {
-	for range Only.Once {
+	for range only.Once {
 		e.Auth = auth
 		e.Request.RequestData = RequestData{
 			UserAccount:  valueTypes.SetStringValue(auth.UserAccount),
@@ -119,7 +119,7 @@ func (e *EndPoint) Login(auth *SunGrowAuth) error {
 }
 
 func (e *EndPoint) SetTokenInvalid() {
-	for range Only.Once {
+	for range only.Once {
 		// e.Auth.Token = ""
 		e.Response.ResultData.Token = valueTypes.SetStringValue("")
 		e.Auth.newToken = true
@@ -131,7 +131,7 @@ func (e *EndPoint) SetTokenInvalid() {
 }
 
 func (e *EndPoint) IsTokenValid() bool {
-	for range Only.Once {
+	for range only.Once {
 		if e.Response.ResponseCommon.IsTokenInvalid() {
 			e.SetTokenInvalid()
 			break
@@ -188,7 +188,7 @@ func (e *EndPoint) Print() {
 
 // Retrieves a token from a local file.
 func (e *EndPoint) readTokenFile() error {
-	for range Only.Once {
+	for range only.Once {
 		e.Auth.TokenFile = e.GetFilePath()
 
 		e.Error = output.FileRead(e.Auth.TokenFile, &e.Response)
@@ -217,7 +217,7 @@ func (e *EndPoint) readTokenFile() error {
 
 // Saves a token to a file path.
 func (e *EndPoint) saveToken() error {
-	for range Only.Once {
+	for range only.Once {
 		e.Auth.TokenFile = e.GetFilePath()
 
 		e.Error = output.FileWrite(e.Auth.TokenFile, e.Response, output.DefaultFileMode)
@@ -231,7 +231,7 @@ func (e *EndPoint) saveToken() error {
 
 // RemoveToken - Removes a token from a file path.
 func (e *EndPoint) RemoveToken() error {
-	for range Only.Once {
+	for range only.Once {
 		e.Auth.TokenFile = e.GetFilePath()
 
 		e.Error = output.FileRemove(e.Auth.TokenFile)

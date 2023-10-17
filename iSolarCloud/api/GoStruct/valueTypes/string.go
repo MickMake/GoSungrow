@@ -3,7 +3,7 @@ package valueTypes
 import (
 	"encoding/json"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type String struct {
@@ -14,7 +14,7 @@ type String struct {
 
 // UnmarshalJSON - Convert JSON to value
 func (t *String) UnmarshalJSON(data []byte) error {
-	for range Only.Once {
+	for range only.Once {
 		t.Valid = false
 
 		if len(data) == 0 {
@@ -36,7 +36,7 @@ func (t *String) UnmarshalJSON(data []byte) error {
 func (t String) MarshalJSON() ([]byte, error) {
 	var data []byte
 
-	for range Only.Once {
+	for range only.Once {
 		t.Valid = false
 
 		data, t.Error = json.Marshal(t.string)
@@ -65,7 +65,7 @@ func (t String) Match(comp string) bool {
 }
 
 func (t *String) SetString(value string) String {
-	for range Only.Once {
+	for range only.Once {
 		t.string = value
 		t.Valid = true
 	}
@@ -74,7 +74,7 @@ func (t *String) SetString(value string) String {
 }
 
 func (t *String) SetValue(value string) String {
-	for range Only.Once {
+	for range only.Once {
 		t.string = value
 		t.Valid = true
 	}

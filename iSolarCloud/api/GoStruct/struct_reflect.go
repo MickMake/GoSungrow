@@ -11,9 +11,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/reflection"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type DataTags struct {
@@ -107,7 +107,7 @@ type tagStrings struct {
 //goland:noinspection GoMixedReceiverTypes
 func (ds DataTags) String() string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		j, err := json.Marshal(ds)
 		if err != nil {
 			break
@@ -122,7 +122,7 @@ func (ds *DataTags) GetTags(fieldTo reflect.StructField, fieldVo reflect.Value) 
 	// func (ds *DataTags) GetTags(parent *Reflect, current *Reflect, child *Reflect, fieldTo reflect.StructField, fieldVo reflect.Value) *DataTags {
 	var ret *DataTags
 	// , fieldTo reflect.StructField, fieldVo reflect.Value
-	for range Only.Once {
+	for range only.Once {
 		var valueType string
 		// if child == nil {
 		// 	fieldTo = child.FieldTo
@@ -209,7 +209,7 @@ func (ds *DataTags) GetTags(fieldTo reflect.StructField, fieldVo reflect.Value) 
 }
 
 func (ds *DataTags) UpdateTags(parent *Reflect, current *Reflect) *DataTags {
-	for range Only.Once {
+	for range only.Once {
 		ds.PointIgnore = false
 		if ds.StrBool.PointIgnore != "" {
 			ds.PointIgnore = true
@@ -374,7 +374,7 @@ func (ds *DataTags) UpdateTags(parent *Reflect, current *Reflect) *DataTags {
 // SetFrom - Copy DataTags structure from src to dst with zero/nil checking.
 func (ds *DataTags) SetFrom(from *DataTags) error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		// Don't overwrite important flags.
 		from.Json = ""
 		from.PointId = ""
@@ -514,7 +514,7 @@ type ReflectMap map[string]Reflect
 
 func (r Reflect) String() string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		fn := r.FieldName
 		if strings.HasPrefix(fn, "<struct {") {
 			fn = "struct {}"
@@ -594,7 +594,7 @@ func (r Reflect) String() string {
 
 func (r *Reflect) Name() string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		ret = r.DataStructure.DataTableId
 		if ret == "" {
 			ret = r.FieldPath.String()
@@ -608,7 +608,7 @@ func (r *Reflect) Name() string {
 
 func (r *Reflect) Copy() Reflect {
 	var ref Reflect
-	for range Only.Once {
+	for range only.Once {
 		ref = *r
 		ref.DataStructure.Endpoint = r.DataStructure.Endpoint.Copy()
 	}
@@ -624,7 +624,7 @@ func (r *Reflect) IsUnknown() bool {
 }
 
 func (r *Reflect) Init(parent interface{}, current interface{}, name EndPointPath) {
-	for range Only.Once {
+	for range only.Once {
 		r.ParentReflect = &Reflect{
 			ParentReflect:   nil,
 			CurrentReflect:  r,
@@ -740,7 +740,7 @@ func (r *Reflect) Init(parent interface{}, current interface{}, name EndPointPat
 }
 
 func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, indexName reflect.Value) {
-	for range Only.Once {
+	for range only.Once {
 		r.ParentReflect = parent
 		r.CurrentReflect = current
 		if current.ChildReflect == nil {
@@ -948,7 +948,7 @@ func (r *Reflect) SetByIndex(parent *Reflect, current *Reflect, index int, index
 // Operate on UnitValue
 
 func (r *Reflect) SetValue(value interface{}) {
-	for range Only.Once {
+	for range only.Once {
 		r.InterfaceValue = value
 		r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
 			value, "", r.Value.GetUnit(),
@@ -961,13 +961,13 @@ func (r *Reflect) SetUnit(unit string) {
 }
 
 func (r *Reflect) SetValuePrecision(precision int) {
-	for range Only.Once {
+	for range only.Once {
 		r.Value.SetPrecision(precision)
 	}
 }
 
 func (r *Reflect) UpdateUnit() {
-	for range Only.Once {
+	for range only.Once {
 		switch {
 		case r.Value.GetUnit() == "":
 			r.Value.SetUnit(r.DataStructure.PointUnit)
@@ -984,7 +984,7 @@ func (r *Reflect) ValuesRange() []valueTypes.UnitValue {
 }
 
 func (r *Reflect) SetUnitValue(value valueTypes.UnitValue) {
-	for range Only.Once {
+	for range only.Once {
 		r.InterfaceValue = value
 		r.Value.Reset()
 		r.Value.AddUnitValue(value.ValueKey(), value)
@@ -995,7 +995,7 @@ func (r *Reflect) SetUnitValue(value valueTypes.UnitValue) {
 }
 
 func (r *Reflect) SetUnitValues(value valueTypes.UnitValues) {
-	for range Only.Once {
+	for range only.Once {
 		r.InterfaceValue = value
 		r.Value = value
 		// r.Value, r.IsNil, r.IsOk = valueTypes.AnyToUnitValue(
@@ -1006,7 +1006,7 @@ func (r *Reflect) SetUnitValues(value valueTypes.UnitValues) {
 
 func (r *Reflect) GetValueFloat() float64 {
 	var ret float64
-	for range Only.Once {
+	for range only.Once {
 		if r == nil {
 			break
 		}
@@ -1025,7 +1025,7 @@ func (r *Reflect) GetValueFloat() float64 {
 
 // SetPointId - Sets the EndPointPath based off struct tags?
 func (r *Reflect) SetPointId() EndPointPath {
-	for range Only.Once {
+	for range only.Once {
 		r.DataStructure.Endpoint = r.CurrentReflect.CopyEndPointPath()
 		// fmt.Printf("EPP(BEFORE): %s\n", r.DataStructure.Endpoint.String())
 		// fmt.Printf("[                 ]	EPP: %s	- FP: %s\n", r.DataStructure.Endpoint, r.FieldPath)
@@ -1164,7 +1164,7 @@ func (r *Reflect) IsNotTable() bool {
 func (r *Reflect) IsTableChild() (bool, int) {
 	var yes bool
 	var safeIterate int
-	for range Only.Once {
+	for range only.Once {
 		yes = r.isTableChild(&safeIterate)
 	}
 	return yes, safeIterate
@@ -1172,7 +1172,7 @@ func (r *Reflect) IsTableChild() (bool, int) {
 
 func (r *Reflect) isTableChild(safeIterate *int) bool {
 	var yes bool
-	for range Only.Once {
+	for range only.Once {
 		*safeIterate++
 		if *safeIterate > 42 {
 			// Arbitrary limit of 42.
@@ -1258,7 +1258,7 @@ func (r *Reflect) SetDataTableIndexTitle(args string) {
 func (r *Reflect) CountChildren() (int, int) {
 	var rows int
 	var cols int
-	for range Only.Once {
+	for range only.Once {
 		rows = len(r.ChildReflect)
 		for row := range r.ChildReflect {
 			col := len(r.ChildReflect[row].ChildReflect)
@@ -1280,7 +1280,7 @@ func (r *Reflect) IsPointTimestampNotZero() bool {
 
 func (r *Reflect) AsJson() string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		j, err := json.Marshal(r.InterfaceValue)
 		if err != nil {
 			break
@@ -1295,7 +1295,7 @@ func (r *Reflect) SetGoStructOptions(limit int) bool {
 	var yes bool
 
 	// fmt.Printf("Current(enter): %s\n", r.DataStructure)
-	for range Only.Once {
+	for range only.Once {
 		r.GoStructs.Parent, r.GoStructs.Current = GetChildGoStruct(r.Interface, limit)
 		if r.GoStructs.Current == nil {
 			r.GoStructs.Current = r.GetGoStruct()
@@ -1382,7 +1382,7 @@ func (r *Reflect) SetGoStructOptions(limit int) bool {
 
 func (r *Reflect) IsGoStruct() bool {
 	var yes bool
-	for range Only.Once {
+	for range only.Once {
 		if r.FieldName == NameGoStruct {
 			yes = true
 			r.DataStructure.PointIgnore = true
@@ -1422,7 +1422,7 @@ func GetChildGoStruct(ref interface{}, limit int) (*DataTags, *DataTags) {
 	var parent *DataTags
 	var current *DataTags
 
-	for range Only.Once {
+	for range only.Once {
 		// Only scan the immediate children.
 		if limit < 0 {
 			break
@@ -1518,7 +1518,7 @@ func GetChildGoStruct(ref interface{}, limit int) (*DataTags, *DataTags) {
 func (r *Reflect) HasGoStruct() bool {
 	var yes bool
 
-	for range Only.Once {
+	for range only.Once {
 		if r.CurrentReflect.CurrentReflect.GoStructs.Current != nil {
 			yes = true
 			break
@@ -1535,7 +1535,7 @@ func (r *Reflect) HasGoStruct() bool {
 func (r *Reflect) GetGoStruct() *DataTags {
 	var tags *DataTags
 
-	for range Only.Once {
+	for range only.Once {
 		// if r.CurrentReflect.GoStruct != nil {
 		// 	fmt.Printf("GOSTRUCT r.CurrentReflect.GoStruct[%s] - %s\n", r.CurrentReflect.FieldPath, r.CurrentReflect.GoStruct)
 		// 	tags = r.CurrentReflect.GoStruct
@@ -1554,7 +1554,7 @@ func (r *Reflect) GetGoStruct() *DataTags {
 func (r *Reflect) GetGoStructCurrent() *Reflect {
 	var current *Reflect
 
-	for range Only.Once {
+	for range only.Once {
 		// if r.CurrentReflect.GoStruct != nil {
 		// 	fmt.Printf("GOSTRUCT r.CurrentReflect.GoStruct[%s] - %s\n", r.CurrentReflect.FieldPath, r.CurrentReflect.GoStruct)
 		// 	current = r.CurrentReflect
@@ -1573,7 +1573,7 @@ func (r *Reflect) GetGoStructCurrent() *Reflect {
 func (r *Reflect) IsGoStructForParent() bool {
 	var yes bool
 
-	for range Only.Once {
+	for range only.Once {
 		voSrc := reflect.ValueOf(*r)
 		t := voSrc.Type()
 		s := t.Kind().String()
@@ -1590,7 +1590,7 @@ func (r *Reflect) IsGoStructForParent() bool {
 
 func (r *Reflect) PointIgnoreIfChildFromNil() bool {
 	var yes bool
-	for range Only.Once {
+	for range only.Once {
 		if r.ParentReflect.DataStructure.PointIgnoreIfChildFromNil == "" {
 			// If parent doesn't care about a zero value.
 			yes = false
@@ -1671,7 +1671,7 @@ func (r *Reflect) ValueLength() int {
 func GetStructFields(ref interface{}) map[string]string {
 	ret := make(map[string]string)
 
-	for range Only.Once {
+	for range only.Once {
 		var Ref Reflect
 		Ref.Init(ref, ref, EndPointPath{})
 
@@ -1703,7 +1703,7 @@ func GetStructFields(ref interface{}) map[string]string {
 func GetStructFieldsAsArray(ref *Reflect) []string {
 	var ret []string
 
-	for range Only.Once {
+	for range only.Once {
 		var Ref Reflect
 		Ref.Init(ref, ref, EndPointPath{})
 
@@ -1734,7 +1734,7 @@ func GetStructFieldsAsArray(ref *Reflect) []string {
 func GetStructValuesAsArray(ref *Reflect) []string {
 	var ret []string
 
-	for range Only.Once {
+	for range only.Once {
 		var Ref Reflect
 		Ref.Init(ref, ref, EndPointPath{})
 
@@ -1802,7 +1802,7 @@ func (r *Required) IsNotRequired(field string) bool {
 func GetOptionsRequired(ref interface{}) Required {
 	var ret []string
 
-	for range Only.Once {
+	for range only.Once {
 		t := reflect.TypeOf(ref)
 		for i := 0; i < t.NumField(); i++ {
 			field := t.Field(i)
@@ -1822,7 +1822,7 @@ func GetOptionsRequired(ref interface{}) Required {
 func VerifyOptionsRequired(ref interface{}) error {
 	var err error
 
-	for range Only.Once {
+	for range only.Once {
 		// @TODO - Move over to using Reflect structure.
 		// required := GetOptionsRequired(ref)
 

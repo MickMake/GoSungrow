@@ -159,7 +159,7 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 	entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String())) // , e.Response.ResultData.PsKey.String()
 
-	// for range Only.Once {
+	// for range only.Once {
 	//
 	// 	// for _, device := range e.Response.ResultData.StorageInverterData {
 	// 	// 	if !device.DeviceType.Match(api.DeviceNameEnergyStorageSystem) {

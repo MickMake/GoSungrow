@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const LabelFan = "fan"
 
 func (m *Mqtt) FanPublishConfig(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsFan() {
 			break
 		}
@@ -48,7 +48,7 @@ func (m *Mqtt) FanPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) FanPublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsFan() {
 			break
 		}
@@ -224,7 +224,7 @@ func (c *Fan) Json() string {
 func (config *EntityConfig) IsFan() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.Units == LabelFan {
 			ok = true
 			break

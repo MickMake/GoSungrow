@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const LabelClimate = "climate"
 
 func (m *Mqtt) ClimatePublishConfig(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsClimate() {
 			break
 		}
@@ -48,7 +48,7 @@ func (m *Mqtt) ClimatePublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) ClimatePublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsClimate() {
 			break
 		}
@@ -295,7 +295,7 @@ func (c *Climate) Json() string {
 func (config *EntityConfig) IsClimate() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.Units == LabelClimate {
 			ok = true
 			break

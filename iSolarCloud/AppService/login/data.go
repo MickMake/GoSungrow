@@ -4,10 +4,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const (
@@ -140,7 +140,7 @@ type ResultData struct {
 
 func (e *ResultData) IsValid() error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		switch {
 		case e.Msg.String() == `账号不存在`:
 			err = errors.New(fmt.Sprintf("Account does not exist '%s'", e.Msg))
@@ -202,7 +202,7 @@ func (e *EndPoint) UserName() string {
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
 
-	for range Only.Once {
+	for range only.Once {
 		entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	}
 

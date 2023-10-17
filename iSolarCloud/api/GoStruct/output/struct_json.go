@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/reflection"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type Json string
@@ -16,7 +16,7 @@ func (req Json) String() string {
 
 func GetAsJson(r interface{}) Json {
 	var ret Json
-	for range Only.Once {
+	for range only.Once {
 		j, err := json.Marshal(r)
 		if err != nil {
 			ret = Json(fmt.Sprintf("{ \"error\": \"%s\"", err))
@@ -29,7 +29,7 @@ func GetAsJson(r interface{}) Json {
 
 func GetAsPrettyJson(r interface{}) Json {
 	var ret Json
-	for range Only.Once {
+	for range only.Once {
 		j, err := json.MarshalIndent(r, "", "\t")
 		if err != nil {
 			ret = Json(fmt.Sprintf("{ \"error\": \"%s\"", err))
@@ -43,7 +43,7 @@ func GetAsPrettyJson(r interface{}) Json {
 //goland:noinspection GoUnusedExportedFunction
 func GetAsString(r interface{}) string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		j, err := json.MarshalIndent(r, "", "\t")
 		if err != nil {
 			ret = fmt.Sprintf("Error: %s\n", err)
@@ -58,7 +58,7 @@ func GetAsString(r interface{}) string {
 
 func GetRequestString(r interface{}) string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		j, err := json.MarshalIndent(r, "", "\t")
 		if err != nil {
 			ret = fmt.Sprintf("Error: %s\n", err)
@@ -73,7 +73,7 @@ func GetRequestString(r interface{}) string {
 
 func GetEndPointString(r interface{}) string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		// endpoint := r.(EndPointStruct)
 		j, err := json.MarshalIndent(r, "", "\t")
 		// j, err := json.Marshal(r)

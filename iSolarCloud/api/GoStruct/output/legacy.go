@@ -2,7 +2,7 @@ package output
 
 // type SearchStrings map[string]int
 // func (t *Table) FindSearchStrings() error {
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		t.graph.otherSearch = make(SearchStrings)
 //
 // 		for row := 0; row < t.RowLength(); row++ {

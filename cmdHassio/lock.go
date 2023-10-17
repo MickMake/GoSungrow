@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const LabelLock = "lock"
 
 func (m *Mqtt) LockPublishConfig(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsLock() {
 			break
 		}
@@ -48,7 +48,7 @@ func (m *Mqtt) LockPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) LockPublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsLock() {
 			break
 		}
@@ -173,7 +173,7 @@ func (c *Lock) Json() string {
 func (config *EntityConfig) IsLock() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.Units == LabelLock {
 			ok = true
 			break

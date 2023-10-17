@@ -3,14 +3,14 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/MickMake/GoUnify/Only"
-	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/anicoll/gosungrow/pkg/cmdhelp"
+	"github.com/anicoll/gosungrow/pkg/only"
 	"github.com/spf13/cobra"
 )
 
 func (c *CmdShow) AttachMeta(cmd *cobra.Command) *cobra.Command {
-	for range Only.Once {
+	for range only.Once {
 		self := &cobra.Command{
 			Use:                   "meta",
 			Aliases:               []string{},
@@ -26,7 +26,7 @@ func (c *CmdShow) AttachMeta(cmd *cobra.Command) *cobra.Command {
 			Args: cobra.MinimumNArgs(1),
 		}
 		cmd.AddCommand(self)
-		self.Example = cmdHelp.PrintExamples(self, "")
+		self.Example = cmdhelp.PrintExamples(self, "")
 
 		c.AttachMetaUnitList(self)
 		c.AttachMetaMqtt(self)
@@ -49,13 +49,13 @@ func (c *CmdShow) AttachMetaUnitList(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self, "")
+	self.Example = cmdhelp.PrintExamples(self, "")
 
 	return cmd
 }
 
 func (c *CmdShow) funcMetaUnitList(_ *cobra.Command, _ []string) error {
-	for range Only.Once {
+	for range only.Once {
 		c.Error = cmds.Api.SunGrow.MetaUnitList()
 		if c.Error != nil {
 			break
@@ -78,13 +78,13 @@ func (c *CmdShow) AttachMetaMqtt(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self, "")
+	self.Example = cmdhelp.PrintExamples(self, "")
 
 	return cmd
 }
 
 func (c *CmdShow) funcMetaMqtt(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		cmds.Api.SunGrow.SetOutputType(output.StringTypeTable)
 		args = MinimumArraySize(1, args)
 		c.Error = cmds.Api.SunGrow.GetIsolarcloudMqtt(args[0])
@@ -109,13 +109,13 @@ func (c *CmdShow) AttachMetaRealTime(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self, "")
+	self.Example = cmdhelp.PrintExamples(self, "")
 
 	return cmd
 }
 
 func (c *CmdShow) funcMetaRealTime(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		cmds.Api.SunGrow.SetOutputType(output.StringTypeTable)
 		args = MinimumArraySize(1, args)
 		c.Error = cmds.Api.SunGrow.GetRealTimeData(args[0])

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 var (
@@ -21,7 +21,7 @@ type Bool struct {
 
 // UnmarshalJSON - Convert JSON to value
 func (t *Bool) UnmarshalJSON(data []byte) error {
-	for range Only.Once {
+	for range only.Once {
 		t.Valid = false
 
 		if len(data) == 0 {
@@ -62,7 +62,7 @@ func (t *Bool) UnmarshalJSON(data []byte) error {
 func (t Bool) MarshalJSON() ([]byte, error) {
 	var data []byte
 
-	for range Only.Once {
+	for range only.Once {
 		t.Valid = false
 
 		data, t.Error = json.Marshal(t.bool)
@@ -92,7 +92,7 @@ func (t Bool) String() string {
 }
 
 func (t *Bool) SetString(value string) Bool {
-	for range Only.Once {
+	for range only.Once {
 		t.string = value
 		t.Valid = false
 
@@ -129,7 +129,7 @@ func (t *Bool) SetString(value string) Bool {
 }
 
 func (t *Bool) SetValue(value bool) Bool {
-	for range Only.Once {
+	for range only.Once {
 		t.bool = value
 		t.Valid = true
 
@@ -145,7 +145,7 @@ func (t *Bool) SetValue(value bool) Bool {
 }
 
 func (t *Bool) SetInteger(value int64) Bool {
-	for range Only.Once {
+	for range only.Once {
 		t.Valid = true
 
 		if value == 0 {

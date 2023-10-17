@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/MickMake/GoUnify/Only"
-	"github.com/MickMake/GoUnify/cmdHelp"
+	"github.com/anicoll/gosungrow/pkg/cmdhelp"
+	"github.com/anicoll/gosungrow/pkg/only"
 	"github.com/spf13/cobra"
 )
 
@@ -19,7 +19,7 @@ func NewCmdShow() *CmdShow {
 }
 
 func (c *CmdShow) AttachCommand(cmd *cobra.Command) *cobra.Command {
-	for range Only.Once {
+	for range only.Once {
 		if cmd == nil {
 			break
 		}
@@ -50,7 +50,7 @@ func (c *CmdShow) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args: cobra.MinimumNArgs(1),
 		}
 		cmd.AddCommand(c.SelfCmd)
-		c.SelfCmd.Example = cmdHelp.PrintExamples(c.SelfCmd, "")
+		c.SelfCmd.Example = cmdhelp.PrintExamples(c.SelfCmd, "")
 
 		c.AttachPs(c.SelfCmd)
 		c.AttachDevice(c.SelfCmd)

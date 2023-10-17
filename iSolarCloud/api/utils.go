@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/reflection"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type Api struct{}
@@ -16,7 +16,7 @@ type Api struct{}
 var thisPackagePath string
 
 func init() {
-	for range Only.Once {
+	for range only.Once {
 		val := reflect.ValueOf(Api{})
 		if val.Kind() == reflect.Ptr {
 			thisPackagePath = val.Elem().Type().PkgPath()
@@ -29,7 +29,7 @@ func init() {
 //goland:noinspection GoUnusedExportedFunction
 func AppendUrl(host string, endpoint string) *url.URL {
 	var ret *url.URL
-	for range Only.Once {
+	for range only.Once {
 		endpoint = fmt.Sprintf("%s%s", host, endpoint)
 		ret, _ = url.Parse(endpoint)
 	}
@@ -46,7 +46,7 @@ func GetName(v interface{}) EndPointName {
 
 func GetUrl(u string) *url.URL {
 	var ret *url.URL
-	for range Only.Once {
+	for range only.Once {
 		var err error
 		ret, err = url.Parse(u)
 		if err != nil {

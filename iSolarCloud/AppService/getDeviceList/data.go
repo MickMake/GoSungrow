@@ -3,11 +3,11 @@ package getDeviceList
 import (
 	"fmt"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const (
@@ -121,7 +121,7 @@ func (e *EndPoint) GetDevices() Devices {
 
 func (e *EndPoint) GetDevicesTable() output.Table {
 	var table output.Table
-	for range Only.Once {
+	for range only.Once {
 		// table = output.NewTable()
 		// table.SetTitle("")
 		// table.SetJson([]byte(e.GetJsonData(false)))
@@ -168,7 +168,7 @@ func (e *EndPoint) GetDevicesTable() output.Table {
 
 func GetDevicesTable(data Devices) output.Table {
 	var table output.Table
-	for range Only.Once {
+	for range only.Once {
 		// table = output.NewTable()
 		// table.SetTitle("")
 		// table.SetJson([]byte(e.GetJsonData(false)))

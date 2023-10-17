@@ -8,11 +8,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/reflection"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type DataMap struct {
@@ -34,7 +34,7 @@ func NewDataMap() DataMap {
 }
 
 func (dm *DataMap) StructToDataMap(endpoint EndPoint, parentDeviceId string, name GoStruct.EndPointPath) DataMap {
-	for range Only.Once {
+	for range only.Once {
 		epName := GoStruct.NewEndPointPath(reflection.GetName("", endpoint))
 		epName.Append(name.Strings()...)
 		name = epName.Copy()
@@ -66,7 +66,7 @@ func (dm *DataMap) StructToDataMap(endpoint EndPoint, parentDeviceId string, nam
 }
 
 func (dm *DataMap) AddPointUnitValues(Current *GoStruct.Reflect, parentDeviceId string, date valueTypes.DateTime) {
-	for range Only.Once {
+	for range only.Once {
 		if parentDeviceId == "" {
 			parentDeviceId = "system"
 		}
@@ -120,7 +120,7 @@ func (dm *DataMap) AddPointUnitValues(Current *GoStruct.Reflect, parentDeviceId 
 
 func (dm *DataMap) CopyPoint(refEndpoint *GoStruct.Reflect, endpoint GoStruct.EndPointPath, pointId string, pointName string) *GoStruct.Reflect {
 	var Current *GoStruct.Reflect
-	for range Only.Once {
+	for range only.Once {
 		var tmp GoStruct.Reflect
 		tmp = *refEndpoint
 		Current = &tmp
@@ -151,7 +151,7 @@ func (dm *DataMap) CopyPoint(refEndpoint *GoStruct.Reflect, endpoint GoStruct.En
 
 func (dm *DataMap) CopyPointFromName(refEndpoint string, endpoint GoStruct.EndPointPath, pointId string, pointName string) *GoStruct.Reflect {
 	var Current *GoStruct.Reflect
-	for range Only.Once {
+	for range only.Once {
 		if ref, ok := dm.StructMap.Map[refEndpoint]; ok {
 			Current = dm.CopyPoint(ref, endpoint, pointId, pointName)
 			break
@@ -174,7 +174,7 @@ func (dm *DataMap) CopyPointFromName(refEndpoint string, endpoint GoStruct.EndPo
 
 func (dm *DataMap) GetReflect(refEndpoint string) *GoStruct.Reflect {
 	var Current *GoStruct.Reflect
-	for range Only.Once {
+	for range only.Once {
 		if ref, ok := dm.StructMap.Map[refEndpoint]; ok {
 			Current = ref
 			break
@@ -197,7 +197,7 @@ func (dm *DataMap) GetReflect(refEndpoint string) *GoStruct.Reflect {
 
 func (dm *DataMap) MakeState(Current *GoStruct.Reflect) *GoStruct.Reflect {
 	// func (dm *DataMap) MakeState(refEndpoint *GoStruct.Reflect, endpoint GoStruct.EndPointPath, pointId string, pointName string) *GoStruct.Reflect {
-	for range Only.Once {
+	for range only.Once {
 		// Current = dm.CopyPoint(refEndpoint, endpoint, pointId, pointName)
 		bv := Current.Value.First().IsNotZero()
 		Current.Value.Reset()
@@ -213,7 +213,7 @@ func (dm *DataMap) MakeState(Current *GoStruct.Reflect) *GoStruct.Reflect {
 
 func (dm *DataMap) LowerUpper(lowerEntry *GoStruct.Reflect, upperEntry *GoStruct.Reflect) float64 {
 	var ret float64
-	for range Only.Once {
+	for range only.Once {
 		if lowerEntry.Value.First().ValueFloat() > 0 {
 			ret = 0 - lowerEntry.Value.First().ValueFloat()
 			break
@@ -228,7 +228,7 @@ func (dm *DataMap) GetPercent(entry *GoStruct.Reflect, max *GoStruct.Reflect, pr
 }
 
 func (dm *DataMap) AppendMap(add DataMap) {
-	for range Only.Once {
+	for range only.Once {
 		if dm.Map == nil {
 			dm.Map = make(map[string]*DataEntries)
 		}
@@ -254,7 +254,7 @@ func (dm *DataMap) AppendMap(add DataMap) {
 }
 
 func (dm *DataMap) Add(des ...DataEntry) {
-	for range Only.Once {
+	for range only.Once {
 		for _, de := range des {
 			// fmt.Printf("DEBUG DataMap.Add() %s - Value(%s):'%s' Parent:'%s'\n", de.FullId(), de.Point.ValueType, de.Value, de.Parent)
 			// endpoint := de.EndPoint
@@ -279,7 +279,7 @@ func (dm *DataMap) Add(des ...DataEntry) {
 }
 
 func (dm *DataMap) ProcessMap() {
-	for range Only.Once {
+	for range only.Once {
 		// Convert Struct.Map to DataMap
 		for _, Child := range dm.StructMap.Map {
 			if Child.IsPointIgnore() {
@@ -329,7 +329,7 @@ type Tables GoStruct.StructTables
 func (dm *DataMap) CreateDataTables() Tables {
 	tables := make(Tables, 0)
 
-	for range Only.Once {
+	for range only.Once {
 		for name := range dm.StructMap.TableMap {
 			var ret GoStruct.StructTable
 			dm.Error = ret.Process(dm.EndPoint.GetArea().String(), name, dm.StructMap.TableMap[name])
@@ -354,7 +354,7 @@ func (dm *DataMap) CreateDataTables() Tables {
 func (dm *DataMap) CreateResultTable(full bool) output.Table {
 	var table output.Table
 
-	for range Only.Once {
+	for range only.Once {
 		table = output.NewTable(
 			"Date",
 			"Point Id",
@@ -437,7 +437,7 @@ func (dm *DataMap) CreateResultTable(full bool) output.Table {
 
 func (dm DataMap) String() string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		table := output.NewTable(
 			"Index",
 			"EndPoint",
@@ -540,7 +540,7 @@ func (dm DataMap) String() string {
 func (dm *DataMap) Sort() []string {
 	var sorted []string
 
-	for range Only.Once {
+	for range only.Once {
 		for p := range dm.Map {
 			sorted = append(sorted, p)
 		}
@@ -552,7 +552,7 @@ func (dm *DataMap) Sort() []string {
 func CreatePointDataEntry(Current *GoStruct.Reflect, parentDeviceId string, point Point, dateTime valueTypes.DateTime, uv valueTypes.UnitValue) DataEntry {
 	// CreatePointDataEntry(Current, Current.EndPointPath().String(), parentDeviceId, point, date, *Current.Value.First())
 	var ret DataEntry
-	for range Only.Once {
+	for range only.Once {
 		if uv.DeviceId() != "" {
 			parentDeviceId = uv.DeviceId()
 		} else {
@@ -577,7 +577,7 @@ func CreatePointDataEntry(Current *GoStruct.Reflect, parentDeviceId string, poin
 
 func CreatePointDataEntries(Current *GoStruct.Reflect, parentDeviceId string, point Point, dateTime valueTypes.DateTime) DataEntries {
 	var ret DataEntries
-	for range Only.Once {
+	for range only.Once {
 		if Current.Value.Length() <= 1 {
 			break
 		}
@@ -627,7 +627,7 @@ func CreatePoint(Current *GoStruct.Reflect, parentDeviceId string) Point {
 	// timeSpan string			- Current.DataStructure.PointUpdateFreq
 
 	var point Point
-	for range Only.Once {
+	for range only.Once {
 		// pid := valueTypes.SetPointIdString(parentDeviceId, Current.PointId())
 		// name := Current.DataStructure.PointName
 		// if name == "" {
@@ -667,7 +667,7 @@ func GetPercent(value float64, max float64, precision int) float64 {
 
 func JoinWithDots(intSize int, dateFormat string, args ...interface{}) string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		var a []string
 		for _, ref := range args {
 			v := valueTypes.AnyToValueString(ref, intSize, dateFormat)

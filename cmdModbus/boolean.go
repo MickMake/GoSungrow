@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type Boolean struct {
@@ -37,7 +37,7 @@ func (m Boolean) Table(width int) string {
 func (m *Modbus) ReadBool(address Address, quantity Quantity) Boolean {
 	var ret Boolean
 
-	for range Only.Once {
+	for range only.Once {
 		if quantity == 1 {
 			var r bool
 			r, m.err = m.client.ReadCoil(uint16(address))
@@ -59,7 +59,7 @@ func (m *Modbus) ReadBool(address Address, quantity Quantity) Boolean {
 func (m *Modbus) ReadDiscreteInput(address Address, quantity Quantity) Boolean {
 	var ret Boolean
 
-	for range Only.Once {
+	for range only.Once {
 		if quantity == 1 {
 			var r bool
 			r, m.err = m.client.ReadDiscreteInput(uint16(address))

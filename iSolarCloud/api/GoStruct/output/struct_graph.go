@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 	"github.com/wcharczuk/go-chart/v2"
 	"github.com/wcharczuk/go-chart/v2/drawing"
 )
@@ -40,7 +40,7 @@ type GraphRequest struct {
 
 func JsonToGraphRequest(j Json) GraphRequest {
 	var ret GraphRequest
-	for range Only.Once {
+	for range only.Once {
 		if j == "" {
 			break
 		}
@@ -63,7 +63,7 @@ func (t *Table) InitGraph(req GraphRequest) {
 }
 
 func (t *Table) SetGraph(req GraphRequest) error {
-	for range Only.Once {
+	for range only.Once {
 		if t.graph == nil {
 			t.graph = New()
 		}
@@ -108,7 +108,7 @@ func (t *Table) SetGraph(req GraphRequest) error {
 }
 
 func (t *Table) SetGraphFromJson(j Json) error {
-	for range Only.Once {
+	for range only.Once {
 		if j == "" {
 			break
 		}
@@ -132,7 +132,7 @@ func (t *Table) ProcessGraphData() error {
 	t.Error = t.graph.ProcessGraphData(t)
 	return t.Error
 
-	// for range Only.Once {
+	// for range only.Once {
 	// 	req := t.graph.req
 	//
 	// 	t.graph.searchName = ""
@@ -237,7 +237,7 @@ func (t *Table) ProcessGraphData() error {
 }
 
 func (t *Table) CreateGraph() error {
-	for range Only.Once {
+	for range only.Once {
 		t.Error = t.SetGraphFromJson(Json(t.graphFilter))
 		if t.Error != nil {
 			break
@@ -291,7 +291,7 @@ type Chart struct {
 func New() *Chart {
 	var c Chart
 
-	for range Only.Once {
+	for range only.Once {
 		c.timeSeries1 = chart.TimeSeries{
 			Name:    "",
 			Style:   chart.Style{},
@@ -342,7 +342,7 @@ func New() *Chart {
 }
 
 func (c *Chart) ProcessGraphData(table *Table) error {
-	for range Only.Once {
+	for range only.Once {
 		// req := c.req
 
 		c.searchName = ""
@@ -581,7 +581,7 @@ func (c *Chart) ProcessGraphData(table *Table) error {
 }
 
 func (c *Chart) SetWidth(v *int) {
-	for range Only.Once {
+	for range only.Once {
 		if v == nil {
 			c.graph.Width = 3840
 			break
@@ -595,7 +595,7 @@ func (c *Chart) SetWidth(v *int) {
 }
 
 func (c *Chart) SetHeight(v *int) {
-	for range Only.Once {
+	for range only.Once {
 		if v == nil {
 			c.graph.Height = 1080
 			break
@@ -609,7 +609,7 @@ func (c *Chart) SetHeight(v *int) {
 }
 
 func (c *Chart) SetFilename(fn string) error {
-	for range Only.Once {
+	for range only.Once {
 		if fn == "" {
 			c.Error = errors.New("empty filename")
 			break
@@ -631,7 +631,7 @@ func (c *Chart) SetTitle(title string) error {
 
 func (c *Chart) SetRangeY(min *float64, max *float64) bool {
 	var changed bool
-	for range Only.Once {
+	for range only.Once {
 		if min == nil {
 			min = c.req.DataMin
 		}
@@ -662,7 +662,7 @@ func (c *Chart) SetRangeY(min *float64, max *float64) bool {
 
 func (c *Chart) SetColumns(req GraphRequest) bool {
 	var changed bool
-	for range Only.Once {
+	for range only.Once {
 		// if req.SearchString != nil {
 		// 	c.req.SearchString = req.SearchString
 		// 	changed = true
@@ -693,7 +693,7 @@ func (c *Chart) SetColumns(req GraphRequest) bool {
 }
 
 func (c *Chart) SetX(name string, values ...time.Time) error {
-	for range Only.Once {
+	for range only.Once {
 		if len(values) == 0 {
 			c.Error = errors.New("no X values")
 			break
@@ -745,7 +745,7 @@ func (c *Chart) SetX(name string, values ...time.Time) error {
 }
 
 func (c *Chart) SetY(name string, values ...float64) error {
-	for range Only.Once {
+	for range only.Once {
 		if len(values) == 0 {
 			c.Error = errors.New("no Y values")
 			break
@@ -827,7 +827,7 @@ func (c *Chart) SetY(name string, values ...float64) error {
 }
 
 func (c *Chart) SetY2(name string, values ...float64) error {
-	for range Only.Once {
+	for range only.Once {
 		if len(values) == 0 {
 			c.Error = errors.New("no Y values")
 			break
@@ -869,7 +869,7 @@ func (c *Chart) SetY2(name string, values ...float64) error {
 }
 
 func (c *Chart) Generate() error {
-	for range Only.Once {
+	for range only.Once {
 		if c.filename == "" {
 			c.Error = errors.New("empty filename")
 			break

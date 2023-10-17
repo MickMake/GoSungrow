@@ -3,13 +3,13 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/MickMake/GoUnify/Only"
-	"github.com/MickMake/GoUnify/cmdHelp"
+	"github.com/anicoll/gosungrow/pkg/cmdhelp"
+	"github.com/anicoll/gosungrow/pkg/only"
 	"github.com/spf13/cobra"
 )
 
 func (c *CmdShow) AttachTemplate(cmd *cobra.Command) *cobra.Command {
-	for range Only.Once {
+	for range only.Once {
 		self := &cobra.Command{
 			Use:                   "template",
 			Aliases:               []string{},
@@ -25,7 +25,7 @@ func (c *CmdShow) AttachTemplate(cmd *cobra.Command) *cobra.Command {
 			Args: cobra.MinimumNArgs(1),
 		}
 		cmd.AddCommand(self)
-		self.Example = cmdHelp.PrintExamples(self, "")
+		self.Example = cmdhelp.PrintExamples(self, "")
 
 		c.AttachTemplateList(self)
 		c.AttachTemplatePoints(self)
@@ -50,13 +50,13 @@ func (c *CmdShow) AttachTemplateList(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.ExactArgs(0),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self, "")
+	self.Example = cmdhelp.PrintExamples(self, "")
 
 	return cmd
 }
 
 func (c *CmdShow) funcTemplateList(_ *cobra.Command, _ []string) error {
-	for range Only.Once {
+	for range only.Once {
 		cmds.Api.SunGrow.OutputType.SetTable()
 		c.Error = cmds.Api.SunGrow.TemplateList()
 	}
@@ -77,13 +77,13 @@ func (c *CmdShow) AttachTemplatePoints(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.ExactArgs(1),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self, "8092")
+	self.Example = cmdhelp.PrintExamples(self, "8092")
 
 	return cmd
 }
 
 func (c *CmdShow) funcTemplatePoints(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		cmds.Api.SunGrow.OutputType.SetTable()
 		c.Error = cmds.Api.SunGrow.TemplatePoints(args[0])
 	}
@@ -104,7 +104,7 @@ func (c *CmdShow) AttachTemplateData(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self,
+	self.Example = cmdhelp.PrintExamples(self,
 		"8092 20221201 20221202 30",
 		"8092 20221201 20221202 5",
 		"8092 20221201 20221202",
@@ -116,7 +116,7 @@ func (c *CmdShow) AttachTemplateData(cmd *cobra.Command) *cobra.Command {
 }
 
 func (c *CmdShow) funcTemplateData(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		args = MinimumArraySize(4, args)
 		cmds.Api.SunGrow.OutputType.SetTable()
 		c.Error = cmds.Api.SunGrow.TemplateData(args[0], args[1], args[2], args[3])
@@ -141,7 +141,7 @@ func (c *CmdShow) AttachTemplateGraph(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self,
+	self.Example = cmdhelp.PrintExamples(self,
 		"8092 20221201 20221202 30",
 		"8092 20221201 20221202 5",
 		"8092 20221201 20221202",
@@ -153,7 +153,7 @@ func (c *CmdShow) AttachTemplateGraph(cmd *cobra.Command) *cobra.Command {
 }
 
 func (c *CmdShow) funcTemplateGraph(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		args = MinimumArraySize(4, args)
 		cmds.Api.SunGrow.OutputType.SetGraph()
 		c.Error = cmds.Api.SunGrow.TemplateData(args[0], args[1], args[2], args[3])
@@ -178,7 +178,7 @@ func (c *CmdShow) AttachTemplateSave(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self,
+	self.Example = cmdhelp.PrintExamples(self,
 		"8092 20221201 20221202 30",
 		"8092 20221201 20221202 5",
 		"8092 20221201 20221202",
@@ -190,7 +190,7 @@ func (c *CmdShow) AttachTemplateSave(cmd *cobra.Command) *cobra.Command {
 }
 
 func (c *CmdShow) funcTemplateSave(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		args = MinimumArraySize(4, args)
 		c.Error = cmds.Api.SunGrow.TemplateDataSave(args[0], args[1], args[2], args[3])
 		if c.Error != nil {

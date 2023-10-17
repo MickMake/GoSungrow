@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const LabelSiren = "siren"
 
 func (m *Mqtt) SirenPublishConfig(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsSiren() {
 			break
 		}
@@ -48,7 +48,7 @@ func (m *Mqtt) SirenPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) SirenPublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsSiren() {
 			break
 		}
@@ -187,7 +187,7 @@ func (c *Siren) Json() string {
 func (config *EntityConfig) IsSiren() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.Units == LabelSiren {
 			ok = true
 			break

@@ -10,10 +10,10 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/MickMake/GoUnify/Only"
-	"github.com/MickMake/GoUnify/cmdPath"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/anicoll/gosungrow/pkg/cmdpath"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type Web struct {
@@ -39,7 +39,7 @@ func (w *Web) AppendUrl(endpoint string) EndPointUrl {
 }
 
 func (w *Web) Get(endpoint EndPoint) EndPoint {
-	for range Only.Once {
+	for range only.Once {
 		w.Error = w.ServerUrl.IsValid()
 		if w.Error != nil {
 			w.Error = errors.New("Sungrow API EndPoint not yet implemented")
@@ -99,7 +99,7 @@ func (w *Web) Get(endpoint EndPoint) EndPoint {
 }
 
 func (w *Web) getApi(endpoint EndPoint) ([]byte, error) {
-	for range Only.Once {
+	for range only.Once {
 		request := endpoint.RequestRef()
 		w.Error = GoStruct.VerifyOptionsRequired(request)
 		if w.Error != nil {
@@ -155,10 +155,10 @@ func (w *Web) getApi(endpoint EndPoint) ([]byte, error) {
 }
 
 func (w *Web) SetCacheDir(basedir string) error {
-	for range Only.Once {
+	for range only.Once {
 		w.cacheDir = filepath.Join(basedir)
 
-		p := cmdPath.NewPath(basedir)
+		p := cmdpath.NewPath(basedir)
 		if p.DirExists() {
 			break
 		}
@@ -200,7 +200,7 @@ func (w *Web) GetCacheTimeout() time.Duration {
 // WebCacheCheck Retrieves cache data from a local file.
 func (w *Web) WebCacheCheck(endpoint EndPoint) bool {
 	var ok bool
-	for range Only.Once {
+	for range only.Once {
 		// fn := filepath.Join(w.cacheDir, endpoint.CacheFilename())
 		//
 		// var f os.FileInfo
@@ -217,7 +217,7 @@ func (w *Web) WebCacheCheck(endpoint EndPoint) bool {
 		// 	break
 		// }
 
-		p := cmdPath.NewPath(w.cacheDir, endpoint.CacheFilename())
+		p := cmdpath.NewPath(w.cacheDir, endpoint.CacheFilename())
 		if p.DirExists() {
 			w.Error = errors.New("file is a directory")
 			ok = false
@@ -264,8 +264,8 @@ func (w *Web) WebCacheWrite(endpoint EndPoint, data []byte) error {
 // PointCacheCheck Retrieves cache data from a local file.
 func (w *Web) PointCacheCheck(data DataMap) bool {
 	var ok bool
-	for range Only.Once {
-		p := cmdPath.NewPath(w.cacheDir, "Points.json")
+	for range only.Once {
+		p := cmdpath.NewPath(w.cacheDir, "Points.json")
 		if p.DirExists() {
 			w.Error = errors.New("file is a directory")
 			ok = false

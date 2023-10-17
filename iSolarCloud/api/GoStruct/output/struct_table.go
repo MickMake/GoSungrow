@@ -9,8 +9,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/gojson"
+	"github.com/anicoll/gosungrow/pkg/only"
 	"github.com/anicoll/gosungrow/tablib"
 )
 
@@ -27,7 +27,7 @@ func NewTables() Tables {
 
 func (t *Tables) Sort() []string {
 	var sorted []string
-	for range Only.Once {
+	for range only.Once {
 		for p := range *t {
 			sorted = append(sorted, p)
 		}
@@ -120,7 +120,7 @@ func NewTable(headers ...string) Table {
 
 func (t Table) String() string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		// switch t.method {
 		// 	case 2:
 		// 		// Example: GoSungrow api ls endpoints / GoSungrow api ls areas
@@ -152,7 +152,7 @@ func (t Table) String() string {
 
 func (t *Table) IsValid() bool {
 	var yes bool
-	for range Only.Once {
+	for range only.Once {
 		if t.tablib == nil {
 			break
 		}
@@ -176,7 +176,7 @@ func (t *Table) IsNotValid() bool {
 
 func (t *Table) GetHeaders() []string {
 	var ret []string
-	for range Only.Once {
+	for range only.Once {
 		// switch t.method {
 		// case 2:
 		// 	if t.buf == nil {
@@ -208,7 +208,7 @@ func (t *Table) GetHeaders() []string {
 
 func (t *Table) GetSortedHeaders() []string {
 	var sorted []string
-	for range Only.Once {
+	for range only.Once {
 		sorted = t.GetHeaders()
 		sort.Strings(sorted)
 	}
@@ -216,7 +216,7 @@ func (t *Table) GetSortedHeaders() []string {
 }
 
 func (t *Table) Sort(sort string) {
-	for range Only.Once {
+	for range only.Once {
 		if t.IsNotValid() {
 			break
 		}
@@ -274,7 +274,7 @@ func (t *Table) RowLength() int {
 func (t *Table) GetCell(row int, colName string) (string, interface{}, error) {
 	var ret interface{}
 	var retType string
-	for range Only.Once {
+	for range only.Once {
 		// switch t.method {
 		// 	case 2:
 		// 		// @TODO -
@@ -344,7 +344,7 @@ func (t *Table) AddRow(row ...interface{}) error {
 }
 
 func (t *Table) writeFile(data string, perm os.FileMode) error {
-	for range Only.Once {
+	for range only.Once {
 		Mkdir(t.directory)
 		// if !DirExists(t.directory) {
 		// 	Mkdir(t.directory)
@@ -399,7 +399,7 @@ func (t *Table) SetGraphFilter(filter string) {
 }
 
 func (t *Table) SetFilePrefix(prefix string, args ...interface{}) {
-	for range Only.Once {
+	for range only.Once {
 		if prefix == "" {
 			break
 		}
@@ -416,7 +416,7 @@ func (t *Table) SetFilePrefix(prefix string, args ...interface{}) {
 }
 
 func (t *Table) SetDirectory(prefix string, args ...interface{}) {
-	for range Only.Once {
+	for range only.Once {
 		if prefix == "" {
 			break
 		}
@@ -433,7 +433,7 @@ func (t *Table) SetDirectory(prefix string, args ...interface{}) {
 }
 
 func (t *Table) AppendFilePrefix(prefix string, args ...interface{}) {
-	for range Only.Once {
+	for range only.Once {
 		if prefix == "" {
 			break
 		}
@@ -445,7 +445,7 @@ func (t *Table) AppendFilePrefix(prefix string, args ...interface{}) {
 }
 
 func (t *Table) PrependFilePrefix(prefix string, args ...interface{}) {
-	for range Only.Once {
+	for range only.Once {
 		if prefix == "" {
 			break
 		}
@@ -469,7 +469,7 @@ func (t *Table) GetName() string {
 }
 
 func (t *Table) Output() error {
-	for range Only.Once {
+	for range only.Once {
 		if t == nil {
 			break
 		}
@@ -520,7 +520,7 @@ func (t *Table) AsTable() string {
 }
 
 func (t *Table) WriteTable() error {
-	for range Only.Once {
+	for range only.Once {
 		if t.IsNotValid() {
 			msg := fmt.Sprintf("# %s - has no data.", t.name)
 			if t.saveAsFile {
@@ -544,7 +544,7 @@ func (t *Table) WriteTable() error {
 }
 
 func (t *Table) WriteList() error {
-	for range Only.Once {
+	for range only.Once {
 		if t.IsNotValid() {
 			msg := fmt.Sprintf("# %s - has no data.", t.name)
 			if t.saveAsFile {
@@ -569,7 +569,7 @@ func (t *Table) WriteList() error {
 
 func (t *Table) AsCsv() string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		if t.IsNotValid() {
 			break
 		}
@@ -585,7 +585,7 @@ func (t *Table) AsCsv() string {
 }
 
 func (t *Table) WriteCsv() error {
-	for range Only.Once {
+	for range only.Once {
 		if t.IsNotValid() {
 			msg := fmt.Sprintf("# %s - has no data.", t.name)
 			if t.saveAsFile {
@@ -610,7 +610,7 @@ func (t *Table) WriteCsv() error {
 
 func (t *Table) AsXml() string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		if t.IsNotValid() {
 			break
 		}
@@ -626,7 +626,7 @@ func (t *Table) AsXml() string {
 }
 
 func (t *Table) WriteXml() error {
-	for range Only.Once {
+	for range only.Once {
 		if t.IsNotValid() {
 			msg := fmt.Sprintf("# %s - has no data.", t.name)
 			if t.saveAsFile {
@@ -651,7 +651,7 @@ func (t *Table) WriteXml() error {
 
 func (t *Table) AsXLSX() string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		if t.IsNotValid() {
 			break
 		}
@@ -667,7 +667,7 @@ func (t *Table) AsXLSX() string {
 }
 
 func (t *Table) WriteXLSX() error {
-	for range Only.Once {
+	for range only.Once {
 		if t.IsNotValid() {
 			msg := fmt.Sprintf("# %s - has no data.", t.name)
 			if t.saveAsFile {
@@ -695,7 +695,7 @@ func (t *Table) AsJson() string {
 }
 
 func (t *Table) WriteJson() error {
-	for range Only.Once {
+	for range only.Once {
 		// Don't check for valid table data.
 
 		if t.saveAsFile {
@@ -719,7 +719,7 @@ func (t *Table) AsRawBytes() []byte {
 }
 
 func (t *Table) WriteRaw() error {
-	for range Only.Once {
+	for range only.Once {
 		// Don't check for valid table data.
 
 		if t.saveAsFile {
@@ -739,7 +739,7 @@ func (t *Table) AsStruct() string {
 }
 
 func (t *Table) WriteStruct() error {
-	for range Only.Once {
+	for range only.Once {
 		// Don't check for valid table data.
 
 		var data string
@@ -771,7 +771,7 @@ func (t *Table) WriteStruct() error {
 
 func (t *Table) AsMarkDown() string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		if t.IsNotValid() {
 			break
 		}
@@ -787,7 +787,7 @@ func (t *Table) AsMarkDown() string {
 }
 
 func (t *Table) WriteMarkDown() error {
-	for range Only.Once {
+	for range only.Once {
 		if t.IsNotValid() {
 			msg := fmt.Sprintf("# %s - has no data.", t.name)
 			if t.saveAsFile {

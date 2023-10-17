@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type UnitValue struct {
@@ -145,7 +145,7 @@ func UnitValueType(unit string) string {
 
 // UnmarshalJSON - Convert JSON to value
 func (t *UnitValue) UnmarshalJSON(data []byte) error {
-	for range Only.Once {
+	for range only.Once {
 		t.Valid = false
 
 		if len(data) == 0 {
@@ -201,7 +201,7 @@ func (t *UnitValue) UnmarshalJSON(data []byte) error {
 func (t UnitValue) MarshalJSON() ([]byte, error) {
 	var data []byte
 
-	for range Only.Once {
+	for range only.Once {
 		t.Valid = false
 
 		if t.float64 != nil {
@@ -259,7 +259,7 @@ func (t UnitValue) MarshalJSON() ([]byte, error) {
 
 func (t *UnitValue) Value() float64 {
 	var ret float64
-	for range Only.Once {
+	for range only.Once {
 		if t.float64 != nil {
 			ret = *t.float64
 			break
@@ -343,7 +343,7 @@ func (t *UnitValue) IsBool() bool {
 
 func (t UnitValue) String() string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		switch {
 		case t.float64 != nil:
 			ret = strconv.FormatFloat(*t.float64, 'f', -1, 64)
@@ -418,7 +418,7 @@ var (
 )
 
 func (t *UnitValue) SetString(value string) UnitValue {
-	for range Only.Once {
+	for range only.Once {
 		t.StringValue = value
 		t.float64 = nil
 		t.int64 = nil
@@ -471,7 +471,7 @@ func (t *UnitValue) SetString(value string) UnitValue {
 }
 
 func (t *UnitValue) SetInteger(value int64) UnitValue {
-	for range Only.Once {
+	for range only.Once {
 		t.int64 = &value
 		// fv := float64(value); t.float64 = &fv
 		t.float64 = nil
@@ -484,7 +484,7 @@ func (t *UnitValue) SetInteger(value int64) UnitValue {
 }
 
 func (t *UnitValue) SetFloat(value float64) UnitValue {
-	for range Only.Once {
+	for range only.Once {
 		t.int64 = nil
 		t.float64 = &value
 		t.bool = nil
@@ -498,7 +498,7 @@ func (t *UnitValue) SetFloat(value float64) UnitValue {
 }
 
 func (t *UnitValue) SetBool(value bool) UnitValue {
-	for range Only.Once {
+	for range only.Once {
 		t.Valid = true
 		t.float64 = nil
 		t.int64 = nil
@@ -510,7 +510,7 @@ func (t *UnitValue) SetBool(value bool) UnitValue {
 }
 
 func (t *UnitValue) SetBoolString(value string) UnitValue {
-	for range Only.Once {
+	for range only.Once {
 		t.Valid = true
 		t.float64 = nil
 		t.int64 = nil
@@ -551,7 +551,7 @@ func (t *UnitValue) SetBoolString(value string) UnitValue {
 }
 
 func (t *UnitValue) SetUnit(unit string) UnitValue {
-	for range Only.Once {
+	for range only.Once {
 		t.UnitValue = unit
 		t.SetType(UnitValueType(unit))
 	}
@@ -560,7 +560,7 @@ func (t *UnitValue) SetUnit(unit string) UnitValue {
 }
 
 func (t *UnitValue) SetType(Type string) UnitValue {
-	for range Only.Once {
+	for range only.Once {
 		if Type == "" {
 			break
 		}
@@ -571,7 +571,7 @@ func (t *UnitValue) SetType(Type string) UnitValue {
 }
 
 func (t *UnitValue) SetDeviceId(deviceId string) UnitValue {
-	for range Only.Once {
+	for range only.Once {
 		if deviceId == "" {
 			break
 		}
@@ -582,7 +582,7 @@ func (t *UnitValue) SetDeviceId(deviceId string) UnitValue {
 }
 
 func (t *UnitValue) SetKey(key string) UnitValue {
-	for range Only.Once {
+	for range only.Once {
 		t.key = key
 	}
 
@@ -590,7 +590,7 @@ func (t *UnitValue) SetKey(key string) UnitValue {
 }
 
 func (t *UnitValue) SetPrecision(precision int) UnitValue {
-	for range Only.Once {
+	for range only.Once {
 		if t.float64 != nil {
 			v := SetPrecision(*t.float64, precision)
 			t.SetFloat(v)
@@ -674,7 +674,7 @@ type UnitValues struct {
 
 func (t UnitValues) String() string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		if t.IsArray() {
 			f := fmt.Sprintf("%%.%dd", SizeOfInt(len(t.arrayValues)))
 			for k, v := range t.arrayValues {
@@ -721,7 +721,7 @@ func (t *UnitValues) IsMap() bool {
 
 // func (t UnitValues) firstKey() string {
 // 	var ret string
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		if len(t.values) == 0 {
 // 			break
 // 		}
@@ -735,7 +735,7 @@ func (t *UnitValues) IsMap() bool {
 
 func (t *UnitValues) GetUnit() string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		if t.IsArray() {
 			for _, v := range t.arrayValues {
 				ret = v.Unit()
@@ -770,7 +770,7 @@ const (
 
 func (t *UnitValues) Range(loadOrder bool) []UnitValue {
 	var ret []UnitValue
-	for range Only.Once {
+	for range only.Once {
 		if t.IsArray() {
 			for _, k := range t.arrayValues {
 				ret = append(ret, *k)
@@ -802,7 +802,7 @@ func (t *UnitValues) Range(loadOrder bool) []UnitValue {
 
 func (t *UnitValues) Keys(loadOrder bool) []string {
 	var ret []string
-	for range Only.Once {
+	for range only.Once {
 		if t.IsArray() {
 			for k := range t.arrayValues {
 				ret = append(ret, strconv.Itoa(k))
@@ -828,7 +828,7 @@ func (t *UnitValues) Keys(loadOrder bool) []string {
 
 func (t *UnitValues) Type() string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		if t.IsArray() {
 			for _, v := range t.arrayValues {
 				ret = v.Type()
@@ -847,7 +847,7 @@ func (t *UnitValues) Type() string {
 }
 
 func (t *UnitValues) SetType(Type string) *UnitValues {
-	for range Only.Once {
+	for range only.Once {
 		if Type == "" {
 			break
 		}
@@ -872,7 +872,7 @@ func (t *UnitValues) SetType(Type string) *UnitValues {
 }
 
 func (t *UnitValues) SetUnit(unit string) *UnitValues {
-	for range Only.Once {
+	for range only.Once {
 		t.Unit = unit
 
 		if t.IsArray() {
@@ -893,7 +893,7 @@ func (t *UnitValues) SetUnit(unit string) *UnitValues {
 }
 
 func (t *UnitValues) SetDeviceId(deviceId string) *UnitValues {
-	for range Only.Once {
+	for range only.Once {
 		if t.IsArray() {
 			for k := range t.arrayValues {
 				t.arrayValues[k].SetDeviceId(deviceId)
@@ -914,7 +914,7 @@ func (t *UnitValues) SetDeviceId(deviceId string) *UnitValues {
 
 func (t *UnitValues) GetIndex(index int) *UnitValue {
 	var ret *UnitValue
-	for range Only.Once {
+	for range only.Once {
 		if t.IsArray() {
 			if index >= len(t.arrayValues) {
 				break
@@ -937,7 +937,7 @@ func (t *UnitValues) GetIndex(index int) *UnitValue {
 
 func (t *UnitValues) GetKey(key string) *UnitValue {
 	var ret *UnitValue
-	for range Only.Once {
+	for range only.Once {
 		if t.IsArray() {
 			// Doesn't make sense to return anything.
 			break
@@ -955,7 +955,7 @@ func (t *UnitValues) GetKey(key string) *UnitValue {
 
 func (t *UnitValues) First() *UnitValue {
 	var ret *UnitValue
-	for range Only.Once {
+	for range only.Once {
 		if t.IsArray() {
 			if len(t.arrayValues) == 0 {
 				break
@@ -978,7 +978,7 @@ func (t *UnitValues) First() *UnitValue {
 
 func (t *UnitValues) Last() *UnitValue {
 	var ret *UnitValue
-	for range Only.Once {
+	for range only.Once {
 		if t.IsArray() {
 			if len(t.arrayValues) == 0 {
 				break
@@ -1000,7 +1000,7 @@ func (t *UnitValues) Last() *UnitValue {
 }
 
 func (t *UnitValues) SetPrecision(precision int) {
-	for range Only.Once {
+	for range only.Once {
 		if t.IsArray() {
 			for k := range t.arrayValues {
 				t.arrayValues[k].SetPrecision(precision)
@@ -1020,7 +1020,7 @@ func (t *UnitValues) SetPrecision(precision int) {
 // mapValuess.
 
 func (t *UnitValues) addMap(key string, value UnitValue) *UnitValues {
-	for range Only.Once {
+	for range only.Once {
 		t.setupMap()
 
 		if t.IsArray() {
@@ -1047,7 +1047,7 @@ func (t *UnitValues) addMap(key string, value UnitValue) *UnitValues {
 
 func (t *UnitValues) setupMap() bool {
 	var yes bool
-	for range Only.Once {
+	for range only.Once {
 		if !t.IsInit() {
 			break
 		}
@@ -1059,14 +1059,14 @@ func (t *UnitValues) setupMap() bool {
 }
 
 func (t *UnitValues) AddUnitValues(key string, uvs UnitValues) *UnitValues {
-	for range Only.Once {
+	for range only.Once {
 		t.AddUnitValue(key, uvs.Range(true)...)
 	}
 	return t
 }
 
 func (t *UnitValues) AddUnitValue(key string, uvs ...UnitValue) *UnitValues {
-	for range Only.Once {
+	for range only.Once {
 		t.setupMap()
 
 		if t.IsArray() {
@@ -1139,7 +1139,7 @@ func (t *UnitValues) AddInteger(key string, unit string, Type string, value ...i
 // arrayValuess.
 
 func (t *UnitValues) appendArray(value UnitValue) *UnitValues {
-	for range Only.Once {
+	for range only.Once {
 		t.setupArray()
 
 		if t.IsMap() {
@@ -1161,7 +1161,7 @@ func (t *UnitValues) appendArray(value UnitValue) *UnitValues {
 
 func (t *UnitValues) setupArray() bool {
 	var yes bool
-	for range Only.Once {
+	for range only.Once {
 		if !t.IsInit() {
 			break
 		}
@@ -1172,14 +1172,14 @@ func (t *UnitValues) setupArray() bool {
 }
 
 func (t *UnitValues) AppendUnitValues(uvs UnitValues) *UnitValues {
-	for range Only.Once {
+	for range only.Once {
 		t.AppendUnitValue(uvs.Range(true)...)
 	}
 	return t
 }
 
 func (t *UnitValues) AppendUnitValue(uvs ...UnitValue) *UnitValues {
-	for range Only.Once {
+	for range only.Once {
 		t.setupArray()
 
 		if t.IsArray() {
@@ -1198,7 +1198,7 @@ func (t *UnitValues) AppendUnitValue(uvs ...UnitValue) *UnitValues {
 }
 
 // func (t *UnitValues) Append(unit string, Type string, value string) *UnitValues {
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		t.Reset()
 // 		uv := SetUnitValueString(unit, Type, value)
 // 		t.addMap(key, uv)
@@ -1252,7 +1252,7 @@ func (t *UnitValues) Reset() *UnitValues {
 // }
 
 // func (t *UnitValues) SetUnitValue(uv UnitValue) *UnitValues {
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		t.values = map[string]UnitValue{}
 // 		t.order = []*UnitValue{}
 // 		t.UnitValue = uv.UnitValue
@@ -1264,7 +1264,7 @@ func (t *UnitValues) Reset() *UnitValues {
 
 func (t *UnitValues) Length() int {
 	var ret int
-	for range Only.Once {
+	for range only.Once {
 		if t.IsArray() {
 			ret = len(t.arrayValues)
 			break

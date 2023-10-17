@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 var inputTimeLayout = []string{
@@ -23,7 +23,7 @@ type Time struct {
 
 // UnmarshalJSON - Convert JSON to value
 func (dt *Time) UnmarshalJSON(data []byte) error {
-	for range Only.Once {
+	for range only.Once {
 		if len(data) == 0 {
 			break
 		}
@@ -52,7 +52,7 @@ func (dt *Time) UnmarshalJSON(data []byte) error {
 func (dt Time) MarshalJSON() ([]byte, error) {
 	var data []byte
 
-	for range Only.Once {
+	for range only.Once {
 		// data, dt.Error = json.Marshal(dt.string)
 		// if dt.Error != nil {
 		// 	break
@@ -72,7 +72,7 @@ func (dt Time) String() string {
 }
 
 func (dt *Time) SetString(value string) *Time {
-	for range Only.Once {
+	for range only.Once {
 		dt.string = value
 		dt.Time = time.Time{}
 
@@ -98,7 +98,7 @@ func (dt *Time) SetString(value string) *Time {
 }
 
 func (dt *Time) SetValue(value time.Time) *Time {
-	for range Only.Once {
+	for range only.Once {
 		dt.string = ""
 		dt.Time = value
 

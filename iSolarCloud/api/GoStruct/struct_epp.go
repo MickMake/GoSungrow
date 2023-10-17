@@ -3,7 +3,7 @@ package GoStruct
 import (
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type EndPointPath struct {
@@ -24,7 +24,7 @@ func (e EndPointPath) String() string {
 func (e EndPointPath) MarshalJSON() ([]byte, error) {
 	var data []byte
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		// data, err = json.Marshal(e.path)
 		// if err!= nil {
 		// 	break

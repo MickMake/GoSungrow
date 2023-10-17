@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const (
@@ -59,7 +59,7 @@ type Devices map[string]DeviceData
 func (p *PointsData) UnmarshalJSON(data []byte) error {
 	var err error
 
-	for range Only.Once {
+	for range only.Once {
 		if len(data) == 0 {
 			break
 		}
@@ -105,7 +105,7 @@ type DeviceData struct {
 func (p *DeviceData) UnmarshalJSON(data []byte) error {
 	var err error
 
-	for range Only.Once {
+	for range only.Once {
 		if len(data) == 0 {
 			break
 		}
@@ -147,7 +147,7 @@ type Points map[string]Point
 func (p *Points) UnmarshalJSON(data []byte) error {
 	var err error
 
-	for range Only.Once {
+	for range only.Once {
 		if len(data) == 0 {
 			break
 		}
@@ -188,7 +188,7 @@ type Point struct {
 func (p *Point) UnmarshalJSON(data []byte) error {
 	var err error
 
-	for range Only.Once {
+	for range only.Once {
 		if len(data) == 0 {
 			break
 		}

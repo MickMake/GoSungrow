@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const LabelSensor = "sensor"
 
 func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsSensor() {
 			break
 		}
@@ -51,7 +51,7 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) SensorPublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsSensor() {
 			break
 		}
@@ -288,7 +288,7 @@ func (c *Sensor) Json() string {
 func (config *EntityConfig) IsSensor() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.IsBinarySensor() {
 			break
 		}
@@ -311,7 +311,7 @@ func (config *EntityConfig) IsSensor() bool {
 type Fields map[string]string
 
 func (m *Mqtt) PublishSensorValues(configs []EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		cs := make(map[string]Fields)
 		topic := ""
 		for _, oid := range configs {

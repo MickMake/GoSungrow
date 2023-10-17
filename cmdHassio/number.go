@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const LabelNumber = "number"
 
 func (m *Mqtt) NumberPublishConfig(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsNumber() {
 			break
 		}
@@ -48,7 +48,7 @@ func (m *Mqtt) NumberPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) NumberPublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsNumber() {
 			break
 		}
@@ -173,7 +173,7 @@ func (c *Number) Json() string {
 func (config *EntityConfig) IsNumber() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.Units == LabelNumber {
 			ok = true
 			break

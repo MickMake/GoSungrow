@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type Request struct {
@@ -24,7 +24,7 @@ type RequestCommon struct {
 
 func (req RequestCommon) IsValid() error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		err = CheckString("Appkey", req.Appkey)
 		if err != nil {
 			break
@@ -67,7 +67,7 @@ func (req RequestCommon) String() string {
 // CheckString RequestCommon checks
 func CheckString(name string, rc string) error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		if rc == "" {
 			err = errors.New(name + ": empty string")
 			break

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 var inputDateLayout = []string{
@@ -94,7 +94,7 @@ type DateTime struct {
 
 // UnmarshalJSON - Convert JSON to value
 func (dt *DateTime) UnmarshalJSON(data []byte) error {
-	for range Only.Once {
+	for range only.Once {
 		if len(data) == 0 {
 			break
 		}
@@ -135,7 +135,7 @@ func (dt *DateTime) UnmarshalJSON(data []byte) error {
 func (dt DateTime) MarshalJSON() ([]byte, error) {
 	var data []byte
 
-	for range Only.Once {
+	for range only.Once {
 		// data = []byte("\"" + dt.Time.Format(DateTimeLayout) + "\"")
 		// data = []byte("\"" + dt.string + "\"")
 		// data = []byte("\"" + dt.Original() + "\"")
@@ -165,7 +165,7 @@ func (dt DateTime) Match(comp time.Time) bool {
 }
 
 func (dt *DateTime) SetString(value string) DateTime {
-	for range Only.Once {
+	for range only.Once {
 		dt.string = value
 		dt.Time = time.Time{}
 
@@ -204,7 +204,7 @@ func (dt *DateTime) SetString(value string) DateTime {
 }
 
 func (dt *DateTime) SetValue(value time.Time) DateTime {
-	for range Only.Once {
+	for range only.Once {
 		dt.string = ""
 		dt.Time = value
 
@@ -221,7 +221,7 @@ func (dt *DateTime) SetValue(value time.Time) DateTime {
 }
 
 func (dt *DateTime) SetDateType(value string) {
-	for range Only.Once {
+	for range only.Once {
 		l := len(value)
 		switch {
 		case l == len(DateTimeLayout):
@@ -312,7 +312,7 @@ func (dt DateTime) Original() string {
 
 func (dt *DateTime) GetRanges(count int, dur time.Duration, format string) []string {
 	var ret []string
-	for range Only.Once {
+	for range only.Once {
 		if format == "" {
 			format = DateTimeLayout
 		}
@@ -329,7 +329,7 @@ const Now = "now"
 
 func NewDateTime(value string) DateTime {
 	var ret DateTime
-	for range Only.Once {
+	for range only.Once {
 		if (value == Now) || (value == "") || (value == ".") {
 			// value = time.Now().Format(DateTimeLayout)
 			ret.SetValue(time.Now())
@@ -358,7 +358,7 @@ func ParseDateTime(value string) (time.Time, string, error) {
 	var format string
 	var err error
 
-	for range Only.Once {
+	for range only.Once {
 		if (value == Now) || (value == "") || (value == ".") {
 			ret = time.Now()
 			break

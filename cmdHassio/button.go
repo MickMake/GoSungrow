@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const LabelButton = "button"
 
 func (m *Mqtt) ButtonPublishConfig(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsButton() {
 			break
 		}
@@ -42,7 +42,7 @@ func (m *Mqtt) ButtonPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) ButtonPublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsButton() {
 			break
 		}
@@ -210,7 +210,7 @@ func (c *Button) Json() string {
 func (config *EntityConfig) IsButton() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.Units == LabelButton {
 			ok = true
 			break

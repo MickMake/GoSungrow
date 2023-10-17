@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/MickMake/GoUnify/Only"
-	"github.com/MickMake/GoUnify/cmdHelp"
-	"github.com/MickMake/GoUnify/cmdLog"
 	"github.com/anicoll/gosungrow/cmdModbus"
+	"github.com/anicoll/gosungrow/pkg/cmdhelp"
+	"github.com/anicoll/gosungrow/pkg/cmdlog"
+	"github.com/anicoll/gosungrow/pkg/only"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -35,7 +35,7 @@ type CmdModbus struct {
 	Port     string
 
 	Client              cmdModbus.Modbus
-	log                 cmdLog.Log
+	log                 cmdlog.Log
 	optionSleepDelay    time.Duration
 	optionFetchSchedule time.Duration
 	// optionCacheTimeout  time.Duration
@@ -44,9 +44,9 @@ type CmdModbus struct {
 func NewCmdModbus(logLevel string) *CmdModbus {
 	var ret *CmdModbus
 
-	for range Only.Once {
+	for range only.Once {
 		if logLevel == "" {
-			logLevel = cmdLog.LogLevelInfoStr
+			logLevel = cmdlog.LogLevelInfoStr
 		}
 
 		ret = &CmdModbus{
@@ -56,7 +56,7 @@ func NewCmdModbus(logLevel string) *CmdModbus {
 				SelfCmd: nil,
 			},
 
-			log:                 cmdLog.New(logLevel),
+			log:                 cmdlog.New(logLevel),
 			optionSleepDelay:    time.Second * 40, // Takes up to 40 seconds for data to come in.
 			optionFetchSchedule: time.Minute * 5,
 			// previous:            make(map[string]*api.DataEntries, 0),
@@ -67,7 +67,7 @@ func NewCmdModbus(logLevel string) *CmdModbus {
 }
 
 func (c *CmdModbus) AttachCommand(cmd *cobra.Command) *cobra.Command {
-	for range Only.Once {
+	for range only.Once {
 		if cmd == nil {
 			break
 		}
@@ -87,7 +87,7 @@ func (c *CmdModbus) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args:                  cobra.MinimumNArgs(1),
 		}
 		cmd.AddCommand(cmdRoot)
-		cmdRoot.Example = cmdHelp.PrintExamples(cmdRoot, "run", "sync")
+		cmdRoot.Example = cmdhelp.PrintExamples(cmdRoot, "run", "sync")
 
 		// ******************************************************************************** //
 		cmdRootGet := &cobra.Command{
@@ -113,7 +113,7 @@ func (c *CmdModbus) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args: cobra.RangeArgs(1, 3),
 		}
 		cmdRoot.AddCommand(cmdRootGet)
-		cmdRootGet.Example = cmdHelp.PrintExamples(cmdRootGet, "")
+		cmdRootGet.Example = cmdhelp.PrintExamples(cmdRootGet, "")
 
 		// ******************************************************************************** //
 		cmdRootScan := &cobra.Command{
@@ -139,13 +139,13 @@ func (c *CmdModbus) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args: cobra.RangeArgs(2, 3),
 		}
 		cmdRoot.AddCommand(cmdRootScan)
-		cmdRootScan.Example = cmdHelp.PrintExamples(cmdRootScan, "")
+		cmdRootScan.Example = cmdhelp.PrintExamples(cmdRootScan, "")
 	}
 	return c.SelfCmd
 }
 
 func (c *CmdModbus) AttachFlags(cmd *cobra.Command, viper *viper.Viper) {
-	for range Only.Once {
+	for range only.Once {
 		cmd.PersistentFlags().StringVarP(&c.Username, flagModbusUsername, "", "", "Modbus username.")
 		viper.SetDefault(flagModbusUsername, "")
 		cmd.PersistentFlags().StringVarP(&c.Password, flagModbusPassword, "", "", "Modbus password.")
@@ -158,7 +158,7 @@ func (c *CmdModbus) AttachFlags(cmd *cobra.Command, viper *viper.Viper) {
 }
 
 func (c *CmdModbus) ModbusArgs(_ *cobra.Command, _ []string) error {
-	for range Only.Once {
+	for range only.Once {
 		c.Client = cmdModbus.New(cmdModbus.Modbus{
 			ClientId: DefaultServiceName,
 			Username: c.Username,
@@ -196,7 +196,7 @@ func (c *CmdModbus) CmdModbus(cmd *cobra.Command, _ []string) error {
 }
 
 func (c *CmdModbus) CmdModbusGet(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		args = MinimumArraySize(3, args)
 
 		var address cmdModbus.Address
@@ -255,7 +255,7 @@ func (c *CmdModbus) CmdModbusGet(_ *cobra.Command, args []string) error {
 }
 
 func (c *CmdModbus) CmdModbusScan(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		args = MinimumArraySize(3, args)
 
 		var start cmdModbus.Address

@@ -2,7 +2,7 @@ package reflection
 
 // func GetStringFrom(ref interface{}, name string) string {
 // 	var ret string
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		vo := reflect.ValueOf(ref)
 //
 // 		switch vo.Kind() {
@@ -149,7 +149,7 @@ package reflection
 //
 // func PackageName(trim string, v interface{}) string {
 // 	var ret string
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		if v == nil {
 // 			break
 // 		}
@@ -245,7 +245,7 @@ package reflection
 // 	var j string
 // 	var err error
 //
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		var ret []byte
 // 		ret, err = json.MarshalIndent(ref, "", "\t")
 // 		if err != nil {
@@ -350,7 +350,7 @@ package reflection
 // func ReflectAsJson(ref interface{}) string {
 // 	var ret string
 //
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		switch reflect.TypeOf(ref).Kind() {
 // 			case reflect.Slice:
 // 				fallthrough
@@ -392,7 +392,7 @@ package reflection
 // func FindInStruct(ref interface{}, name string) interface{} {
 // 	var ret interface{}
 //
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		v := reflect.ValueOf(ref)
 // 		var e reflect.Value
 //

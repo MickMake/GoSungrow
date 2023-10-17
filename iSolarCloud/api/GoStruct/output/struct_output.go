@@ -3,7 +3,7 @@ package output
 import (
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const (
@@ -227,7 +227,7 @@ func (out *OutputType) IsStrMarkDown(t string) bool {
 }
 
 func (out *OutputType) Set(outputType string) {
-	for range Only.Once {
+	for range only.Once {
 		// re := regexp.MustCompile(`^(\w+)\s`)
 		// ot := re.FindStringSubmatch(outputType)
 		// if len(ot) == 0 {

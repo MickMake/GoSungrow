@@ -6,11 +6,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MickMake/GoUnify/cmdConfig"
-	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/anicoll/gosungrow/iSolarCloud"
 	"github.com/anicoll/gosungrow/iSolarCloud/AppService/login"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/anicoll/gosungrow/pkg/cmdconfig"
+	"github.com/anicoll/gosungrow/pkg/cmdhelp"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -96,7 +96,7 @@ func (c *CmdApi) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args:                  cobra.MinimumNArgs(1),
 		}
 		cmd.AddCommand(cmdApi)
-		cmdApi.Example = cmdHelp.PrintExamples(cmdApi, "get <endpoint>", "put <endpoint>")
+		cmdApi.Example = cmdhelp.PrintExamples(cmdApi, "get <endpoint>", "put <endpoint>")
 
 		// ******************************************************************************** //
 		cmdApiList := &cobra.Command{
@@ -112,7 +112,7 @@ func (c *CmdApi) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args:                  cobra.RangeArgs(0, 1),
 		}
 		cmdApi.AddCommand(cmdApiList)
-		cmdApiList.Example = cmdHelp.PrintExamples(cmdApiList, "", "areas", "endpoints", "<area name>")
+		cmdApiList.Example = cmdhelp.PrintExamples(cmdApiList, "", "areas", "endpoints", "<area name>")
 
 		// ******************************************************************************** //
 		cmdApiLogin := &cobra.Command{
@@ -136,7 +136,7 @@ func (c *CmdApi) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args: cobra.MinimumNArgs(0),
 		}
 		cmdApi.AddCommand(cmdApiLogin)
-		cmdApiLogin.Example = cmdHelp.PrintExamples(cmdApiLogin, "")
+		cmdApiLogin.Example = cmdhelp.PrintExamples(cmdApiLogin, "")
 
 		// ******************************************************************************** //
 		cmdApiGet := &cobra.Command{
@@ -156,7 +156,7 @@ func (c *CmdApi) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args: cobra.MinimumNArgs(1),
 		}
 		cmdApi.AddCommand(cmdApiGet)
-		cmdApiGet.Example = cmdHelp.PrintExamples(cmdApiGet, "[area].<endpoint>")
+		cmdApiGet.Example = cmdhelp.PrintExamples(cmdApiGet, "[area].<endpoint>")
 
 		// ******************************************************************************** //
 		cmdApiRaw := &cobra.Command{
@@ -176,7 +176,7 @@ func (c *CmdApi) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args: cobra.MinimumNArgs(1),
 		}
 		cmdApi.AddCommand(cmdApiRaw)
-		cmdApiRaw.Example = cmdHelp.PrintExamples(cmdApiRaw, "[area].<endpoint>")
+		cmdApiRaw.Example = cmdhelp.PrintExamples(cmdApiRaw, "[area].<endpoint>")
 
 		// ******************************************************************************** //
 		cmdApiSave := &cobra.Command{
@@ -196,7 +196,7 @@ func (c *CmdApi) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args: cobra.MinimumNArgs(1),
 		}
 		cmdApi.AddCommand(cmdApiSave)
-		cmdApiSave.Example = cmdHelp.PrintExamples(cmdApiSave, "[area].<endpoint>")
+		cmdApiSave.Example = cmdhelp.PrintExamples(cmdApiSave, "[area].<endpoint>")
 
 		// ******************************************************************************** //
 		cmdApiStruct := &cobra.Command{
@@ -216,7 +216,7 @@ func (c *CmdApi) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args: cobra.MinimumNArgs(1),
 		}
 		cmdApi.AddCommand(cmdApiStruct)
-		cmdApiStruct.Example = cmdHelp.PrintExamples(cmdApiStruct, "[area].<endpoint>")
+		cmdApiStruct.Example = cmdhelp.PrintExamples(cmdApiStruct, "[area].<endpoint>")
 
 		// ******************************************************************************** //
 		cmdApiPut := &cobra.Command{
@@ -232,7 +232,7 @@ func (c *CmdApi) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args:                  cobra.RangeArgs(0, 1),
 		}
 		cmdApi.AddCommand(cmdApiPut)
-		cmdApiPut.Example = cmdHelp.PrintExamples(cmdApiPut, "[area].<endpoint> <value>")
+		cmdApiPut.Example = cmdhelp.PrintExamples(cmdApiPut, "[area].<endpoint> <value>")
 	})
 	return c.SelfCmd
 }
@@ -421,7 +421,7 @@ func MinimumArraySize(count int, args []string) []string {
 	var ret []string
 	var once sync.Once
 	once.Do(func() {
-		ret = cmdConfig.FillArray(count, args)
+		ret = cmdconfig.FillArray(count, args)
 		for i, e := range args {
 			if e == "." {
 				e = ""

@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const LabelCamera = "camera"
 
 func (m *Mqtt) CameraPublishConfig(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsCamera() {
 			break
 		}
@@ -48,7 +48,7 @@ func (m *Mqtt) CameraPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) CameraPublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsCamera() {
 			break
 		}
@@ -140,7 +140,7 @@ func (c *Camera) Json() string {
 func (config *EntityConfig) IsCamera() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.Units == LabelCamera {
 			ok = true
 			break

@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const LabelUpdate = "update"
 
 func (m *Mqtt) UpdatePublishConfig(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsUpdate() {
 			break
 		}
@@ -48,7 +48,7 @@ func (m *Mqtt) UpdatePublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) UpdatePublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsUpdate() {
 			break
 		}
@@ -172,7 +172,7 @@ func (c *Update) Json() string {
 func (config *EntityConfig) IsUpdate() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.Units == LabelUpdate {
 			ok = true
 			break

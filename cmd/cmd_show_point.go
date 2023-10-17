@@ -3,13 +3,13 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/MickMake/GoUnify/Only"
-	"github.com/MickMake/GoUnify/cmdHelp"
+	"github.com/anicoll/gosungrow/pkg/cmdhelp"
+	"github.com/anicoll/gosungrow/pkg/only"
 	"github.com/spf13/cobra"
 )
 
 func (c *CmdShow) AttachPoint(cmd *cobra.Command) *cobra.Command {
-	for range Only.Once {
+	for range only.Once {
 		self := &cobra.Command{
 			Use:                   "point",
 			Aliases:               []string{},
@@ -25,7 +25,7 @@ func (c *CmdShow) AttachPoint(cmd *cobra.Command) *cobra.Command {
 			Args: cobra.MinimumNArgs(1),
 		}
 		cmd.AddCommand(self)
-		self.Example = cmdHelp.PrintExamples(self, "")
+		self.Example = cmdhelp.PrintExamples(self, "")
 
 		c.AttachPointPs(self)
 		c.AttachPointPsTable(self)
@@ -65,7 +65,7 @@ func (c *CmdShow) AttachPointPs(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self, "", "1171348", "1171348 14")
+	self.Example = cmdhelp.PrintExamples(self, "", "1171348", "1171348 14")
 
 	return cmd
 }
@@ -84,7 +84,7 @@ func (c *CmdShow) AttachPointPsTable(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self,
+	self.Example = cmdhelp.PrintExamples(self,
 		"1171348 43 20221201 20221202 10",
 		"1171348 43 20221201 20221202",
 		"1171348 43 20221201",
@@ -108,7 +108,7 @@ func (c *CmdShow) AttachPointPsGraph(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self,
+	self.Example = cmdhelp.PrintExamples(self,
 		"1171348 43 20221201 20221202 10",
 		"1171348 43 20221201 20221202",
 		"1171348 43 20221201",
@@ -132,7 +132,7 @@ func (c *CmdShow) AttachPointPsSave(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self,
+	self.Example = cmdhelp.PrintExamples(self,
 		"1171348 43 20221201 20221202 10",
 		"1171348 43 20221201 20221202",
 		"1171348 43 20221201",
@@ -156,7 +156,7 @@ func (c *CmdShow) AttachPointDevice(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.ExactArgs(1),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self,
+	self.Example = cmdhelp.PrintExamples(self,
 		"1",
 		"11",
 	)
@@ -177,7 +177,7 @@ func (c *CmdShow) AttachPointDeviceTable(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self,
+	self.Example = cmdhelp.PrintExamples(self,
 		"8092 20221201 20221202 30",
 		"8092 20221201 20221202 5",
 		"8092 20221201 20221202",
@@ -201,7 +201,7 @@ func (c *CmdShow) AttachPointDeviceGraph(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self,
+	self.Example = cmdhelp.PrintExamples(self,
 		"8092 20221201 20221202 30",
 		"8092 20221201 20221202 5",
 		"8092 20221201 20221202",
@@ -225,7 +225,7 @@ func (c *CmdShow) AttachPointDeviceSave(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self,
+	self.Example = cmdhelp.PrintExamples(self,
 		"8092 20221201 20221202 30",
 		"8092 20221201 20221202 5",
 		"8092 20221201 20221202",
@@ -250,7 +250,7 @@ func (c *CmdShow) AttachPointTemplate(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.ExactArgs(1),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self,
+	self.Example = cmdhelp.PrintExamples(self,
 		"8042",
 		"8040",
 	)
@@ -271,7 +271,7 @@ func (c *CmdShow) AttachPointTemplateTable(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self,
+	self.Example = cmdhelp.PrintExamples(self,
 		"8092 20221201 20221202 30",
 		"8092 20221201 20221202 5",
 		"8092 20221201 20221202",
@@ -295,7 +295,7 @@ func (c *CmdShow) AttachPointTemplateGraph(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self,
+	self.Example = cmdhelp.PrintExamples(self,
 		"8092 20221201 20221202 30",
 		"8092 20221201 20221202 5",
 		"8092 20221201 20221202",
@@ -319,7 +319,7 @@ func (c *CmdShow) AttachPointTemplateSave(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self,
+	self.Example = cmdhelp.PrintExamples(self,
 		"8092 20221201 20221202 30",
 		"8092 20221201 20221202 5",
 		"8092 20221201 20221202",
@@ -344,7 +344,7 @@ func (c *CmdShow) AttachPointData(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(4),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self,
+	self.Example = cmdhelp.PrintExamples(self,
 		"20221101 20221104 5 1171348_11_0_0.p83033,1171348_11_0_0.p83072,1171348_11_0_0.p83128",
 		"20221101 20221104 . 1171348_11_0_0.p83033 1171348_11_0_0.p83072 1171348_11_0_0.p83128",
 	)
@@ -353,7 +353,7 @@ func (c *CmdShow) AttachPointData(cmd *cobra.Command) *cobra.Command {
 }
 
 func (c *CmdShow) funcPointData(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		args = MinimumArraySize(4, args)
 		cmds.Api.SunGrow.OutputType.SetTable()
 
@@ -379,7 +379,7 @@ func (c *CmdShow) AttachPointGraph(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(4),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self,
+	self.Example = cmdhelp.PrintExamples(self,
 		"20221101 20221104 5 1171348_11_0_0.p83033,1171348_11_0_0.p83072,1171348_11_0_0.p83128",
 		"20221101 20221104 . 1171348_11_0_0.p83033 1171348_11_0_0.p83072 1171348_11_0_0.p83128",
 	)
@@ -388,7 +388,7 @@ func (c *CmdShow) AttachPointGraph(cmd *cobra.Command) *cobra.Command {
 }
 
 func (c *CmdShow) funcPointGraph(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		args = MinimumArraySize(4, args)
 		cmds.Api.SunGrow.OutputType.SetGraph()
 
@@ -414,7 +414,7 @@ func (c *CmdShow) AttachPointSave(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(4),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self,
+	self.Example = cmdhelp.PrintExamples(self,
 		"20221101 20221104 5 1171348_11_0_0.p83033,1171348_11_0_0.p83072,1171348_11_0_0.p83128",
 		"20221101 20221104 . 1171348_11_0_0.p83033 1171348_11_0_0.p83072 1171348_11_0_0.p83128",
 	)
@@ -423,7 +423,7 @@ func (c *CmdShow) AttachPointSave(cmd *cobra.Command) *cobra.Command {
 }
 
 func (c *CmdShow) funcPointSave(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		args = MinimumArraySize(4, args)
 		c.Error = cmds.Api.SunGrow.PointDataSave(args[0], args[1], args[2], args[3:]...)
 		if c.Error != nil {
@@ -447,7 +447,7 @@ func (c *CmdShow) AttachPointScan(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(2),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self,
+	self.Example = cmdhelp.PrintExamples(self,
 		"1 1000",
 	)
 
@@ -455,7 +455,7 @@ func (c *CmdShow) AttachPointScan(cmd *cobra.Command) *cobra.Command {
 }
 
 func (c *CmdShow) funcPointScan(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		cmds.Api.SunGrow.OutputType.SetTable()
 		args = MinimumArraySize(2, args)
 		var points string

@@ -8,9 +8,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 // SunGrowDataRequest - Collection of all possible request args.
@@ -245,7 +245,7 @@ func (sgd SunGrowDataRequest) MarshalJSON() ([]byte, error) {
 	var data []byte
 	var err error
 
-	for range Only.Once {
+	for range only.Once {
 		var dt *string
 		if sgd.args.DateId != nil {
 			dt = &sgd.args.DateId.DateType
@@ -332,7 +332,7 @@ func (sgd SunGrowDataRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (sgd *SunGrowDataRequest) Set(arg string, value string) {
-	for range Only.Once {
+	for range only.Once {
 		switch arg {
 		case NamePsId:
 			fallthrough
@@ -502,7 +502,7 @@ func (sgd *SunGrowDataRequest) Set(arg string, value string) {
 
 func (sgd *SunGrowDataRequest) Get(arg string) string {
 	var value string
-	for range Only.Once {
+	for range only.Once {
 		switch arg {
 		case NamePsId:
 			value = sgd.args.PsId.String()
@@ -623,7 +623,7 @@ func (sgd *SunGrowDataRequest) Get(arg string) string {
 
 func (sgd *SunGrowDataRequest) IsSet(arg string) bool {
 	var ok bool
-	for range Only.Once {
+	for range only.Once {
 		switch arg {
 		case NamePsId:
 			// Handled differently.
@@ -857,7 +857,7 @@ func (sgd *SunGrowDataRequest) IsNotSet(arg string) bool {
 }
 
 func (sgd *SunGrowDataRequest) SetArgs(args ...string) {
-	for range Only.Once {
+	for range only.Once {
 		for _, arg := range args {
 			a := strings.Split(arg, ":")
 			if len(a) == 0 {
@@ -875,7 +875,7 @@ func (sgd *SunGrowDataRequest) SetArgs(args ...string) {
 
 func (sgd *SunGrowDataRequest) Validate(endpoint api.EndPoint) bool {
 	ok := true
-	for range Only.Once {
+	for range only.Once {
 		args := endpoint.GetRequestArgNames()
 		for key, value := range args {
 			if value != "true" {
@@ -896,7 +896,7 @@ func (sgd *SunGrowDataRequest) Validate(endpoint api.EndPoint) bool {
 func (sgd *SunGrowDataRequest) GetArgs(endpoint api.EndPoint) string {
 	var ret string
 
-	for range Only.Once {
+	for range only.Once {
 		args := endpoint.GetRequestArgNames()
 		var sorted []string
 		for key := range args {
@@ -927,7 +927,7 @@ func (sgd *SunGrowDataRequest) GetArgs(endpoint api.EndPoint) string {
 func (sgd *SunGrowDataRequest) GetArgsHash(endpoint api.EndPoint) string {
 	var ret string
 
-	for range Only.Once {
+	for range only.Once {
 		ret = sgd.GetArgs(endpoint)
 		h := fnv.New32a()
 		_, _ = h.Write([]byte(ret))
@@ -938,7 +938,7 @@ func (sgd *SunGrowDataRequest) GetArgsHash(endpoint api.EndPoint) string {
 }
 
 func (sgd *SunGrowDataRequest) Help(endpoint api.EndPoint) {
-	for range Only.Once {
+	for range only.Once {
 		args := endpoint.GetRequestArgNames()
 		for key, value := range args {
 			if key == NamePsId {
@@ -966,7 +966,7 @@ func (sgd *SunGrowDataRequest) Help(endpoint api.EndPoint) {
 
 func (sgd *SunGrowDataRequest) RequestAsFilePrefix() string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		j, err := json.Marshal(*sgd)
 		if err != nil {
 			break
@@ -981,7 +981,7 @@ func (sgd *SunGrowDataRequest) RequestAsFilePrefix() string {
 }
 
 func (sgd *SunGrowDataRequest) SetDateId(date string) {
-	for range Only.Once {
+	for range only.Once {
 		// if sgd.IsNotRequired(NameDateId) {
 		// 	break
 		// }
@@ -1004,7 +1004,7 @@ func (sgd *SunGrowDataRequest) SetDateId(date string) {
 }
 
 func (sgd *SunGrowDataRequest) SetMonthDate(date string) {
-	for range Only.Once {
+	for range only.Once {
 		did := valueTypes.SetDateTimeString(date)
 		sgd.args.MonthDate = &did
 		if sgd.args.MonthDate.IsZero() {
@@ -1015,7 +1015,7 @@ func (sgd *SunGrowDataRequest) SetMonthDate(date string) {
 }
 
 func (sgd *SunGrowDataRequest) SetDay(date string) {
-	for range Only.Once {
+	for range only.Once {
 		// if sgd.IsNotRequired(NameDay) {
 		// 	break
 		// }
@@ -1030,7 +1030,7 @@ func (sgd *SunGrowDataRequest) SetDay(date string) {
 }
 
 func (sgd *SunGrowDataRequest) SetTimeStamp(date string) {
-	for range Only.Once {
+	for range only.Once {
 		// if sgd.IsNotRequired(NameDay) {
 		// 	break
 		// }
@@ -1046,7 +1046,7 @@ func (sgd *SunGrowDataRequest) SetTimeStamp(date string) {
 }
 
 func (sgd *SunGrowDataRequest) SetStartTime(date string) {
-	for range Only.Once {
+	for range only.Once {
 		did := valueTypes.SetDateTimeString(date)
 		sgd.args.StartTime = &did
 		if sgd.args.StartTime.IsZero() {
@@ -1068,7 +1068,7 @@ func (sgd *SunGrowDataRequest) SetStartTime(date string) {
 }
 
 func (sgd *SunGrowDataRequest) SetEndTime(date string) {
-	for range Only.Once {
+	for range only.Once {
 		did := valueTypes.SetDateTimeString(date)
 		sgd.args.EndTime = &did
 		if sgd.args.EndTime.IsZero() {
@@ -1090,7 +1090,7 @@ func (sgd *SunGrowDataRequest) SetEndTime(date string) {
 }
 
 func (sgd *SunGrowDataRequest) SetFaultTypeCode(ftc string) {
-	for range Only.Once {
+	for range only.Once {
 		// if sgd.IsNotRequired(NameFaultTypeCode) {
 		// 	break
 		// }
@@ -1100,7 +1100,7 @@ func (sgd *SunGrowDataRequest) SetFaultTypeCode(ftc string) {
 }
 
 func (sgd *SunGrowDataRequest) SetReportType(rt string) {
-	for range Only.Once {
+	for range only.Once {
 		// if sgd.IsNotRequired(NameReportType) {
 		// 	break
 		// }
@@ -1123,7 +1123,7 @@ func (sgd *SunGrowDataRequest) SetRequired(req map[string]string) {
 
 func (sgd *SunGrowDataRequest) IsRequiredAndNotSet(arg string) bool {
 	var yes bool
-	for range Only.Once {
+	for range only.Once {
 		if _, ok := sgd.Required[arg]; !ok {
 			yes = false
 			break
@@ -1143,7 +1143,7 @@ func (sgd *SunGrowDataRequest) IsRequiredAndNotSet(arg string) bool {
 
 func (sgd *SunGrowDataRequest) IsRequiredAndSet(arg string) bool {
 	var yes bool
-	for range Only.Once {
+	for range only.Once {
 		if _, ok := sgd.Required[arg]; !ok {
 			yes = false
 			break
@@ -1164,7 +1164,7 @@ func (sgd *SunGrowDataRequest) IsRequiredAndSet(arg string) bool {
 // GetPrimaryArg - Fetch the primary arg that's set. Typically used in filename generation.
 func (sgd *SunGrowDataRequest) GetPrimaryArg() string {
 	var yes string
-	for range Only.Once {
+	for range only.Once {
 		switch {
 		case sgd.IsRequiredAndSet(NamePsKey):
 			yes = sgd.Get(NamePsKey)
@@ -1198,7 +1198,7 @@ func (sgd *SunGrowDataRequest) GetPrimaryArg() string {
 }
 
 func (sgd *SunGrowDataRequest) SetIfRequired(arg string, value string) {
-	for range Only.Once {
+	for range only.Once {
 		if sgd.IsNotRequired(arg) {
 			break
 		}
@@ -1210,7 +1210,7 @@ func (sgd *SunGrowDataRequest) SetIfRequired(arg string, value string) {
 }
 
 func (sgd *SunGrowDataRequest) SetPsId(psId string) {
-	for range Only.Once {
+	for range only.Once {
 		// if sgd.IsNotRequired(NamePsId) {
 		// 	break
 		// }
@@ -1246,7 +1246,7 @@ func (sgd *SunGrowDataRequest) SetPsId(psId string) {
 }
 
 func (sgd *SunGrowDataRequest) SetPoints(points string) {
-	for range Only.Once {
+	for range only.Once {
 		pids := valueTypes.SetPointIdsString(points)
 		if pids.Error != nil {
 			fmt.Printf("Error: %s - %s\n", NamePsId, sgd.args.Points.Error)

@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const (
@@ -43,7 +43,7 @@ const (
 func IsUnknownStruct(ref interface{}, checkDepth bool) bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		fieldVo := reflect.ValueOf(ref)
 		// fieldTo := reflect.TypeOf(ref)
 		// fmt.Printf("fieldVo.Type().String(): %s\n", fieldVo.Type().String())
@@ -127,7 +127,7 @@ func IsKnownStruct(ref interface{}, checkDepth bool) bool {
 func IsTypeUnknown(fieldVo reflect.Value) bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		Type := fieldVo.Type().String()
 		Type = strings.ReplaceAll(Type, "valueTypes.", "")
 		switch Type {
@@ -168,7 +168,7 @@ func IsTypeUnknown(fieldVo reflect.Value) bool {
 
 func IsNil(i interface{}) bool {
 	var ok bool
-	for range Only.Once {
+	for range only.Once {
 		if i == nil {
 			ok = true
 			break
@@ -193,7 +193,7 @@ func IsNil(i interface{}) bool {
 
 func PrintInt(s int, i interface{}) string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		var val int64
 		Type := reflect.TypeOf(i).String()
 		Type = strings.ReplaceAll(Type, "valueTypes.", "")
@@ -224,7 +224,7 @@ func PrintInt(s int, i interface{}) string {
 
 func SizeOfInt(ref interface{}) int {
 	var ret int
-	for range Only.Once {
+	for range only.Once {
 		var val int64
 		Type := reflect.TypeOf(ref).String()
 		Type = strings.ReplaceAll(Type, "valueTypes.", "")
@@ -260,7 +260,7 @@ func SizeOfInt(ref interface{}) int {
 
 func GetIntFormatForPrintf(i interface{}) string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		s := SizeOfInt(i)
 		if s == 0 {
 			ret = "%d"
@@ -286,7 +286,7 @@ func AnyToUnitValue(ref interface{}, key string, unit string, typeString string,
 	isNil := false
 	ok := true
 
-	for range Only.Once {
+	for range only.Once {
 		if IsNil(ref) {
 			// fmt.Println("DEBUG: AnyToUnitValue(): NIL")
 			if key == "" {
@@ -507,7 +507,7 @@ func AnyToUnitValue(ref interface{}, key string, unit string, typeString string,
 func AnyToValueString(ref interface{}, intSize int, dateFormat string) string {
 	var ret string
 
-	for range Only.Once {
+	for range only.Once {
 		if IsNil(ref) {
 			break
 		}

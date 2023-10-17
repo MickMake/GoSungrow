@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/anicoll/gosungrow/pkg/cmdhelp"
 	"github.com/spf13/cobra"
 )
 
@@ -53,7 +53,7 @@ func (c *CmdInfo) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args: cobra.MinimumNArgs(1),
 		}
 		cmd.AddCommand(c.SelfCmd)
-		c.SelfCmd.Example = cmdHelp.PrintExamples(c.SelfCmd, "get <endpoint>", "put <endpoint>")
+		c.SelfCmd.Example = cmdhelp.PrintExamples(c.SelfCmd, "get <endpoint>", "put <endpoint>")
 
 		// ********************************************************************************
 		cmdInfoGet := &cobra.Command{
@@ -71,7 +71,7 @@ func (c *CmdInfo) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args: cobra.MinimumNArgs(1),
 		}
 		c.SelfCmd.AddCommand(cmdInfoGet)
-		cmdInfoGet.Example = cmdHelp.PrintExamples(cmdInfoGet, "[area.]<endpoint>")
+		cmdInfoGet.Example = cmdhelp.PrintExamples(cmdInfoGet, "[area.]<endpoint>")
 		// c.AttachCmdInfo(cmdInfoGet)
 
 		// ********************************************************************************
@@ -90,7 +90,7 @@ func (c *CmdInfo) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args: cobra.MinimumNArgs(1),
 		}
 		c.SelfCmd.AddCommand(cmdInfoRaw)
-		cmdInfoRaw.Example = cmdHelp.PrintExamples(cmdInfoRaw, "[area.]<endpoint>")
+		cmdInfoRaw.Example = cmdhelp.PrintExamples(cmdInfoRaw, "[area.]<endpoint>")
 		// c.AttachCmdInfo(cmdInfoRaw)
 
 		// ********************************************************************************
@@ -109,7 +109,7 @@ func (c *CmdInfo) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args: cobra.MinimumNArgs(1),
 		}
 		c.SelfCmd.AddCommand(cmdInfoJson)
-		cmdInfoJson.Example = cmdHelp.PrintExamples(cmdInfoJson, "[area.]<endpoint>")
+		cmdInfoJson.Example = cmdhelp.PrintExamples(cmdInfoJson, "[area.]<endpoint>")
 		// c.AttachCmdInfo(cmdInfoJson)
 
 		// ********************************************************************************
@@ -128,7 +128,7 @@ func (c *CmdInfo) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args: cobra.MinimumNArgs(1),
 		}
 		c.SelfCmd.AddCommand(cmdInfoCsv)
-		cmdInfoCsv.Example = cmdHelp.PrintExamples(cmdInfoCsv, "[area.]<endpoint>")
+		cmdInfoCsv.Example = cmdhelp.PrintExamples(cmdInfoCsv, "[area.]<endpoint>")
 		// c.AttachCmdInfo(cmdInfoCsv)
 
 		// ********************************************************************************
@@ -147,7 +147,7 @@ func (c *CmdInfo) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Args: cobra.MinimumNArgs(1),
 		}
 		c.SelfCmd.AddCommand(cmdInfoMarkDown)
-		cmdInfoMarkDown.Example = cmdHelp.PrintExamples(cmdInfoMarkDown, "[area.]<endpoint>")
+		cmdInfoMarkDown.Example = cmdhelp.PrintExamples(cmdInfoMarkDown, "[area.]<endpoint>")
 	})
 	return c.SelfCmd
 }

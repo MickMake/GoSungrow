@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type TemplatePoint struct {
@@ -51,7 +51,7 @@ func (t *TemplatePoints) GetPoint(pskey string, point valueTypes.PointId) Templa
 
 func CreatePoints(points []string) TemplatePoints {
 	var ret TemplatePoints
-	for range Only.Once {
+	for range only.Once {
 		// Feed in a string array and generate points data.
 		// strings can be either "pskey/point_id", "pskey.point_id", "pskey:point_id",
 		for _, p := range points {

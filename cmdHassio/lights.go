@@ -4,14 +4,14 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const LabelLight = "light"
 
 func (m *Mqtt) PublishLightConfig(config EntityConfig) error {
 	// func (m *Mqtt) PublishLightConfig(id string, name string, subName string, units string, valueName string, class string) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsLight() {
 			break
 		}
@@ -53,7 +53,7 @@ func (m *Mqtt) PublishLightConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) LightPublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsLight() {
 			break
 		}
@@ -578,7 +578,7 @@ func (c *Light) Json() string {
 func (config *EntityConfig) IsLight() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.Units == LabelLight {
 			ok = true
 			break

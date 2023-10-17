@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type EndPointUrl struct {
@@ -16,7 +16,7 @@ type EndPointUrl struct {
 
 func (u EndPointUrl) AppendPath(endpoint string) EndPointUrl {
 	var ret EndPointUrl
-	for range Only.Once {
+	for range only.Once {
 		endpoint = fmt.Sprintf("%s%s", u.String(), endpoint)
 		// ret.URL, ret.Error = url.Parse(endpoint)
 		// u, e := url.Parse(endpoint)
@@ -29,7 +29,7 @@ func (u EndPointUrl) AppendPath(endpoint string) EndPointUrl {
 
 func (u *EndPointUrl) IsValid() error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		if u == nil {
 			err = errors.New("empty url")
 			break
@@ -65,7 +65,7 @@ func (u *EndPointUrl) MarshalJSON() ([]byte, error) {
 func (u *EndPointUrl) UnmarshalJSON(data []byte) error {
 	// type Alias EndPointUrl
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		aux := &struct {
 			EndPoint string `json:"url"`
 			// Scheme string `json:"schema"`

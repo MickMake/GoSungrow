@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
@@ -22,7 +22,7 @@ type Option struct {
 }
 
 func (m *Mqtt) CreateOption(id string, name string, fn mqtt.MessageHandler, options ...string) error {
-	for range Only.Once {
+	for range only.Once {
 		m.err = m.UserOptions.Create(id, name, fn, options...)
 		if m.err != nil {
 			break
@@ -39,7 +39,7 @@ func (m *Mqtt) CreateOption(id string, name string, fn mqtt.MessageHandler, opti
 }
 
 func (m *Mqtt) SetOption(id string, value string) error {
-	for range Only.Once {
+	for range only.Once {
 		m.err = m.UserOptions.Set(id, value)
 		if m.err != nil {
 			break
@@ -65,7 +65,7 @@ const (
 )
 
 func (m *Options) New() {
-	for range Only.Once {
+	for range only.Once {
 		m.mu.Lock()
 		//goland:noinspection GoDeferInLoop
 		defer m.mu.Unlock()
@@ -76,7 +76,7 @@ func (m *Options) New() {
 
 func (m *Options) Create(id string, name string, handler mqtt.MessageHandler, values ...string) error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		if len(values) == 0 {
 			values = []string{OptionEnabled, OptionDisabled}
 		}
@@ -106,7 +106,7 @@ func (m *Options) Create(id string, name string, handler mqtt.MessageHandler, va
 
 func (m *Options) Set(id string, value string) error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		m.mu.Lock()
 		//goland:noinspection GoDeferInLoop
 		defer m.mu.Unlock()
@@ -129,7 +129,7 @@ func (m *Options) Set(id string, value string) error {
 
 func (m *Options) Get(id string) string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		m.mu.Lock()
 		//goland:noinspection GoDeferInLoop
 		defer m.mu.Unlock()
@@ -144,7 +144,7 @@ func (m *Options) Get(id string) string {
 
 func (m *Options) EntityConfig(id string) *EntityConfig {
 	var ret *EntityConfig
-	for range Only.Once {
+	for range only.Once {
 		m.mu.Lock()
 		//goland:noinspection GoDeferInLoop
 		defer m.mu.Unlock()

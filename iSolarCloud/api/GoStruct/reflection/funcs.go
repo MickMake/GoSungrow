@@ -8,15 +8,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const AnyIndex = -1
 
 func GetPointNameFrom(ref interface{}, name string, intSize int, dateFormat string) string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		if dateFormat == "" {
 			dateFormat = valueTypes.DateTimeAltLayout
 		}
@@ -55,7 +55,7 @@ func GetPointNameFrom(ref interface{}, name string, intSize int, dateFormat stri
 
 func GetStringFrom(ref interface{}, index int, name string, intSize int, dateFormat string) string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		kind := reflect.ValueOf(ref).Kind()
 		if kind == reflect.Struct {
 			ret = GetStringFromStruct(ref, name, intSize, dateFormat)
@@ -83,7 +83,7 @@ func GetStringFrom(ref interface{}, index int, name string, intSize int, dateFor
 
 func GetStringFromArray(ref interface{}, index int, name string, intSize int, dateFormat string) string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		vo := reflect.ValueOf(ref)
 		if (vo.Kind() != reflect.Slice) && (vo.Kind() != reflect.Array) {
 			break
@@ -136,7 +136,7 @@ func GetStringFromArray(ref interface{}, index int, name string, intSize int, da
 
 func GetStringFromStruct(ref interface{}, name string, intSize int, dateFormat string) string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		vo := reflect.ValueOf(ref)
 		if vo.Kind() != reflect.Struct {
 			break
@@ -159,7 +159,7 @@ func GetStringFromStruct(ref interface{}, name string, intSize int, dateFormat s
 
 func GetStringFromMap(ref interface{}, name string, intSize int, dateFormat string) string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		vo := reflect.ValueOf(ref)
 		if vo.Kind() != reflect.Map {
 			break
@@ -193,7 +193,7 @@ func GetStringFromMap(ref interface{}, name string, intSize int, dateFormat stri
 func GetJsonTag(fieldTo reflect.StructField) string {
 	var ret string
 
-	for range Only.Once {
+	for range only.Once {
 		ret = fieldTo.Tag.Get("json")
 		ret = strings.ReplaceAll(ret, "omitempty", "")
 		ret = strings.TrimSuffix(ret, ",")
@@ -204,7 +204,7 @@ func GetJsonTag(fieldTo reflect.StructField) string {
 
 func GetTimestampFrom(ref interface{}, name string, dateFormat string) time.Time {
 	var ret time.Time
-	for range Only.Once {
+	for range only.Once {
 		if dateFormat == "" {
 			dateFormat = valueTypes.DateTimeAltLayout
 		}
@@ -239,7 +239,7 @@ func GetTimestampFrom(ref interface{}, name string, dateFormat string) time.Time
 func GetFingerprint(ref interface{}) string {
 	var ret string
 
-	for range Only.Once {
+	for range only.Once {
 		// h := hash(GetRequestString(ref))
 		h := md5.Sum([]byte(GetRequestString(ref)))
 		ret = fmt.Sprintf("%x", h)
@@ -251,7 +251,7 @@ func GetFingerprint(ref interface{}) string {
 func GetRequestString(ref interface{}) string {
 	var ret string
 
-	for range Only.Once {
+	for range only.Once {
 		vo := reflect.ValueOf(ref)
 		// Iterate over all available fields and read the tag value
 		for i := 0; i < vo.NumField(); i++ {
@@ -269,7 +269,7 @@ func IsRefZero(x interface{}) bool {
 
 func SetFrom(to interface{}, from interface{}) error {
 	var err error
-	// for range Only.Once {
+	// for range only.Once {
 	// 	// to has to be a pointer!
 	// 	voSrc := reflect.ValueOf(to)
 	// 	for index := 0; index < reflect.ValueOf(to).NumField(); index++ {
@@ -331,7 +331,7 @@ func SetFrom(to interface{}, from interface{}) error {
 // GetArea Return an Area name if we are given an Area or EndPoint struct.
 func GetArea(trim string, v interface{}) string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		if v == nil {
 			break
 		}
@@ -361,7 +361,7 @@ func GetArea(trim string, v interface{}) string {
 // GetName Return an endpoint name if we are given an Area or EndPoint struct.
 func GetName(trim string, v interface{}) string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		val := reflect.ValueOf(v)
 		ret1 := val.Type().PkgPath()
 		sp := strings.Split(ret1, "/")
@@ -389,7 +389,7 @@ func GetName(trim string, v interface{}) string {
 func HelpOptions(ref interface{}) string {
 	var ret string
 
-	for range Only.Once {
+	for range only.Once {
 		t := reflect.TypeOf(ref)
 		for i := 0; i < t.NumField(); i++ {
 			field := t.Field(i)
@@ -409,7 +409,7 @@ func HelpOptions(ref interface{}) string {
 func GetStructName(v interface{}) (string, string) {
 	var area string
 	var endpoint string
-	for range Only.Once {
+	for range only.Once {
 		val := reflect.ValueOf(v)
 		// ret = val.Type().Name()		// Returns structure, (EndPoint name).
 		// ret = val.Type().PkgPath()	// Returns structure path.
@@ -435,7 +435,7 @@ func GetStructName(v interface{}) (string, string) {
 func FindRequestData(ref interface{}) string {
 	var ret string
 
-	for range Only.Once {
+	for range only.Once {
 		vo := reflect.ValueOf(ref)
 		to := reflect.TypeOf(ref)
 
@@ -468,7 +468,7 @@ func GetPkgType(v interface{}) string {
 
 func DoTypesMatch(a interface{}, b interface{}) error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		aName := GetType(a)
 		bName := GetType(b)
 		if aName == bName {
@@ -481,7 +481,7 @@ func DoTypesMatch(a interface{}, b interface{}) error {
 
 func DoPkgTypesMatch(a interface{}, b interface{}) error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		aName := GetPkgType(a)
 		bName := GetPkgType(b)
 		if aName == bName {

@@ -5,7 +5,7 @@ package api
 //
 // func (dm *DataMap) CopyDataEntries(dep DataEntries, endpoint string, pointId string, name string) *DataEntries {
 // 	var ret *DataEntries
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		var des DataEntries
 // 		des = dep.Copy()
 // 		for i := range des.Entries {
@@ -26,7 +26,7 @@ package api
 // func (dm *DataMap) TableSort() []string {
 // 	var sorted []string
 //
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		for p := range dm.DataTables {
 // 			sorted = append(sorted, p)
 // 		}
@@ -37,7 +37,7 @@ package api
 //
 // func (dm *DataMap) AddAny(endpoint string, parentDeviceId string, pid valueTypes.PointId, name string, groupName string, date valueTypes.DateTime, value interface{}, unit string, Type string, timeSpan string) {
 //
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		var point Point
 // 		p := GetPoint(parentDeviceId + "." + pid.String())
 // 		if p == nil {
@@ -76,7 +76,7 @@ package api
 //
 // func (dm *DataMap) AddUnitValue(endpoint string, parentDeviceId string, pid valueTypes.PointId, name string, groupName string, date valueTypes.DateTime, uv valueTypes.UnitValue, timeSpan string) {
 //
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		var point Point
 // 		p := GetPoint(parentDeviceId + "." + pid.String())
 // 		if p == nil {
@@ -125,7 +125,7 @@ package api
 //
 // func (de *DataEntry) MakeState(state bool) DataEntry {
 // 	var ret DataEntry
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		// uv := valueTypes.SetUnitValueBool(state)
 // 		// de.Value = uv.String()
 // 		// de.ValueFloat = uv.Value()
@@ -142,7 +142,7 @@ package api
 // }
 //
 // func (de *DataEntry) MakeFloat(value float64, unit string, Type string) {
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		if unit == "" {
 // 			unit = de.Point.Unit
 // 		}
@@ -178,7 +178,7 @@ package api
 // }
 //
 // func (de *DataEntries) Hide() {
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		for i := range de.Entries {
 // 			de.Entries[i].Hide = true
 // 		}
@@ -187,7 +187,7 @@ package api
 //
 // func (de *DataEntries) GetEntryValue(index int) valueTypes.UnitValue {
 // 	var ret valueTypes.UnitValue
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ref := de.GetEntry(index)
 // 		if ref == nil {
 // 			break
@@ -199,7 +199,7 @@ package api
 //
 // func (de *DataEntries) GetFloat() float64 {
 // 	var ret float64
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ref := de.GetEntry(0)
 // 		if ref == nil {
 // 			break
@@ -211,7 +211,7 @@ package api
 //
 // func (de *DataEntries) MatchPointId(pointId string) bool {
 // 	var yes bool
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		for _, v := range de.Entries {
 // 			if v.Point.Id.String() == pointId {
 // 				yes = true
@@ -224,7 +224,7 @@ package api
 //
 // func (de *DataEntries) GetUnits() string {
 // 	var unit string
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		for _, v := range de.Entries {
 // 			unit = v.Point.Unit
 // 			break
@@ -234,7 +234,7 @@ package api
 // }
 //
 // func (de *DataEntries) SetUnits(units string) *DataEntries {
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		for i := range de.Entries {
 // 			de.Entries[i].Point.Unit = units
 // 		}
@@ -243,7 +243,7 @@ package api
 // }
 //
 // func (de *DataEntries) SetGroupName(groupName string) *DataEntries {
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		for i := range de.Entries {
 // 			de.Entries[i].Point.GroupName = groupName
 // 		}
@@ -252,7 +252,7 @@ package api
 // }
 //
 // func (de *DataEntries) SetTimestamp(timeStamp valueTypes.DateTime) *DataEntries {
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		for i := range de.Entries {
 // 			// dt := valueTypes.SetDateTimeString(timeStamp)
 // 			de.Entries[i].Date = timeStamp
@@ -300,7 +300,7 @@ package api
 // func (dm *DataMap) CreateDataTables() Tables {
 // 	tables := make(Tables, 0)
 //
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		for name := range dm.StructMap.TableMap {
 // 			// values = make(GoStruct.StructValuesMap)
 //
@@ -405,7 +405,7 @@ package api
 //
 // func (dm *DataMap) GetEntry(entry string, index int) *DataEntry {
 // 	var ret *DataEntry
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		pe := dm.Map[entry]
 // 		if pe.Entries != nil {
 // 			ret = pe.GetEntry(index)
@@ -424,7 +424,7 @@ package api
 //
 // func (dm *DataMap) GetFloatValue(entry string, index int) float64 {
 // 	var ret float64
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		pe := dm.GetEntry(entry, index)
 // 		if pe.IsNotValid() {
 // 			fmt.Printf("ERROR: GetFloatValue('%s', '%d')\n", entry, index)
@@ -437,7 +437,7 @@ package api
 //
 // func (dm *DataMap) GetValue(entry string, index int) float64 {
 // 	var ret float64
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		v := dm.GetEntry(entry, index)
 // 		if v.IsNotValid() {
 // 			fmt.Printf("ERROR: GetValue('%s', %d)\n", entry, index)
@@ -451,7 +451,7 @@ package api
 //
 // func (dm *DataMap) GetEntryFromPointId(pointId string) *DataEntries {
 // 	var ret *DataEntries
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		for i, v := range dm.Map {
 // 			if v.MatchPointId(pointId) {
 // 				ret = dm.Map[i]
@@ -463,7 +463,7 @@ package api
 // }
 //
 // func (dm *DataMap) SetEntryUnits(pointId string, unit string) {
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		for i, v := range dm.Map {
 // 			if v.MatchPointId(pointId) {
 // 				// e := dm.Map[i]
@@ -476,7 +476,7 @@ package api
 // }
 //
 // func (dm *DataMap) SetEntryGroupName(pointId string, groupName string) {
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		for i, v := range dm.Map {
 // 			if v.MatchPointId(pointId) {
 // 				// e := dm.Map[i]
@@ -489,7 +489,7 @@ package api
 // }
 //
 // func (dm *DataMap) SetEntryTimestamp(pointId string, timeStamp valueTypes.DateTime) {
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		for i, v := range dm.Map {
 // 			if v.MatchPointId(pointId) {
 // 				// e := dm.Map[i]
@@ -502,7 +502,7 @@ package api
 // }
 //
 // func (dm *DataMap) FromRefAddAlias(ref string, parentId string, pid string, name string) {
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		pe := dm.GetEntry(ref, 0)
 // 		if pe.IsNotValid() {
 // 			fmt.Printf("ERROR: FromRefAddAlias('%s', '%s', '%s', '%s')\n", ref, parentId, pid, name)
@@ -515,7 +515,7 @@ package api
 // }
 //
 // func (dm *DataMap) FromRefAddState(ref string, parentId string, pid string, name string) {
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		pe := dm.GetEntry(ref, 0)
 // 		if pe.IsNotValid() {
 // 			fmt.Printf("ERROR: FromRefAddState('%s', '%s', '%s', '%s')\n", ref, parentId, pid, name)
@@ -530,7 +530,7 @@ package api
 // }
 //
 // func (dm *DataMap) FromRefAddFloat(ref string, parentId string, pid string, name string, value float64) {
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		pe := dm.GetEntry(ref, 0)
 // 		if pe.IsNotValid() {
 // 			fmt.Printf("ERROR: FromRefAddFloat('%s', '%s', '%s', '%s')\n", ref, parentId, pid, name)
@@ -546,7 +546,7 @@ package api
 //
 // func CopyDataEntry(ref DataEntry, endpoint string, parentId string, pid valueTypes.PointId, name string, groupName string, unit string, Type string) DataEntry {
 // 	var ret DataEntry
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		if name == "" {
 // 			name = pid.PointToName()
 // 		}
@@ -591,7 +591,7 @@ package api
 // }
 //
 // func CopyPoint(ref Point, parentId string, pid valueTypes.PointId, name string, groupName string, unit string, Type string) *Point {
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		if name == "" {
 // 			name = pid.PointToName()
 // 		}
@@ -615,14 +615,14 @@ package api
 // }
 //
 // func (dm *DataMap) HideEntry(pointId valueTypes.PointId) {
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		de := dm.GetEntryFromPointId(pointId)
 // 		de.Hide()
 // 	}
 // }
 //
 // func (dm *DataMap) AddEntry(endpoint string, parentId string, point Point, date valueTypes.DateTime, value string) {
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		unit := point.Unit	// Save unit.
 // 		vType := point.ValueType	// Save type.
 //
@@ -672,7 +672,7 @@ package api
 // }
 //
 // func (dm *DataMap) AddUnitValue(endpoint string, parentId string, pid valueTypes.PointId, name string, groupName string, date valueTypes.DateTime, ref valueTypes.UnitValue) {
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		if endpoint == "" {
 // 			endpoint = GoStruct.GetCallerPackage(2)
 // 		}
@@ -729,7 +729,7 @@ package api
 // }
 //
 // func (dm *DataMap) AddFloat(endpoint string, parentId string, pid PointId, name string, date valueTypes.DateTime, value float64) {
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		// fvs := Float64ToString(value)
 // 		point := GetPoint(parentId, pid)
 // 		if point == nil {
@@ -777,7 +777,7 @@ package api
 //
 // func (dm *DataMap) AddInt(endpoint string, parentId string, pid PointId, name string, date valueTypes.DateTime, value int64) {
 //
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		uvs, ok := valueTypes.AnyToUnitValue(value, "", "")
 // 		if !ok {
 // 			fmt.Printf("ERROR: AddInt(endpoint '%s', parentId '%s', pid '%s', name '%s', date '%s', value %d)",
@@ -802,7 +802,7 @@ package api
 //
 // func (dm *DataMap) AddAny(endpoint string, parentId string, pid valueTypes.PointId, name string, date valueTypes.DateTime, value interface{}) {
 //
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		uvs, isNil, ok := valueTypes.AnyToUnitValue(value, "", "")
 // 		if !ok {
 // 			fmt.Printf("ERROR: AddAny(endpoint '%s', parentId '%s', pid '%s', name '%s', date '%s', value '%v')",
@@ -872,7 +872,7 @@ package api
 //
 // func (de *DataEntry) CreateFloat(endpoint string, parentId string, pid valueTypes.PointId, name string, groupName string, unit string, Type string, value float64) DataEntry {
 // 	var ret DataEntry
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		if name == "" {
 // 			name = pid.PointToName()
 // 		}
@@ -889,7 +889,7 @@ package api
 //
 // func (de *DataEntry) CreateState(endpoint string, parentId string, pid valueTypes.PointId, name string) DataEntry {
 // 	var ret DataEntry
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		if name == "" {
 // 			name = pid.PointToName()
 // 		}
@@ -1048,7 +1048,7 @@ package api
 //
 // func JoinDevicePoint(endpoint string, pid valueTypes.PointId) valueTypes.PointId {
 // 	var ret valueTypes.PointId
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		if endpoint == "" {
 // 			endpoint = "virtual"
 // 		}

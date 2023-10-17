@@ -5,7 +5,7 @@ package cmdModbus
 import (
 	"strconv"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type Address uint16
@@ -17,7 +17,7 @@ type Address uint16
 func StringToAddress(address string) (Address, error) {
 	var ret Address
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		var i int64
 		i, err = strconv.ParseInt(address, 0, 64)
 		if err != nil {
@@ -37,7 +37,7 @@ type Value uint16
 func StringToValue(value string) (Value, error) {
 	var ret Value
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		var i int64
 		i, err = strconv.ParseInt(value, 0, 64)
 		if err != nil {
@@ -57,7 +57,7 @@ type Quantity uint16
 func StringToQuantity(quantity string) (Quantity, error) {
 	var ret Quantity
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		var i int64
 		i, err = strconv.ParseInt(quantity, 0, 64)
 		if err != nil {

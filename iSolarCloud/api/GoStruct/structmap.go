@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/reflection"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type StructMapOptions struct {
@@ -44,7 +44,7 @@ func (sm *StructMap) PrintDebug(format string, args ...interface{}) {
 }
 
 func (sm *StructMap) InitScan(current interface{}, options StructMapOptions) {
-	for range Only.Once {
+	for range only.Once {
 		sm.StructMapOptions = options
 
 		if sm.StructMapOptions.Name.IsZero() {
@@ -73,7 +73,7 @@ func (sm *StructMap) InitScan(current interface{}, options StructMapOptions) {
 }
 
 func (sm *StructMap) Scan(Parent *Reflect, Current *Reflect) *StructMap {
-	for range Only.Once {
+	for range only.Once {
 		sm.PrintDebug("# Scan() Current: %s\n", Current)
 
 		if Current.Kind == reflect.Pointer {
@@ -143,7 +143,7 @@ func (sm *StructMap) Scan(Parent *Reflect, Current *Reflect) *StructMap {
 func (sm *StructMap) ScanMap(Parent *Reflect, Current *Reflect) bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if Current.Kind != reflect.Map {
 			break
 		}
@@ -182,7 +182,7 @@ func (sm *StructMap) ScanMap(Parent *Reflect, Current *Reflect) bool {
 func (sm *StructMap) ScanSlice(Parent *Reflect, Current *Reflect) bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if Current.Kind != reflect.Slice {
 			break
 		}
@@ -212,7 +212,7 @@ func (sm *StructMap) ScanSlice(Parent *Reflect, Current *Reflect) bool {
 func (sm *StructMap) ScanStruct(Parent *Reflect, Current *Reflect) bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if Current.Kind != reflect.Struct {
 			break
 		}
@@ -242,7 +242,7 @@ func (sm *StructMap) ScanStruct(Parent *Reflect, Current *Reflect) bool {
 func (sm *StructMap) Process(Child *Reflect) bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		// fmt.Printf("[%s]\n", Child.FieldPath.String())
 		sm.PrintDebug("Check() Child: %s\n", Child)
 		if Child.Kind == reflect.Invalid {
@@ -352,7 +352,7 @@ func (sm *StructMap) Process(Child *Reflect) bool {
 
 func (sm *StructMap) Exists(Current *Reflect) bool {
 	var yes bool
-	for range Only.Once {
+	for range only.Once {
 		if Current.IsGoStruct() {
 			break
 		}
@@ -375,7 +375,7 @@ func (sm *StructMap) Exists(Current *Reflect) bool {
 }
 
 func (sm *StructMap) Add(Current *Reflect) {
-	for range Only.Once {
+	for range only.Once {
 		if Current.IsGoStruct() {
 			break
 		}
@@ -401,7 +401,7 @@ func (sm *StructMap) Add(Current *Reflect) {
 }
 
 func (sm *StructMap) AddTable(Current *Reflect) {
-	for range Only.Once {
+	for range only.Once {
 		if Current.IsGoStruct() {
 			break
 		}
@@ -425,7 +425,7 @@ func (sm *StructMap) AddTable(Current *Reflect) {
 }
 
 func (sm *StructMap) AddVirtual(Current *Reflect) {
-	for range Only.Once {
+	for range only.Once {
 		if Current.IsGoStruct() {
 			break
 		}
@@ -454,7 +454,7 @@ func (sm *StructMap) AddVirtual(Current *Reflect) {
 
 func (sm *StructMap) IsNil(Current *Reflect) bool {
 	var yes bool
-	for range Only.Once {
+	for range only.Once {
 		yes = Current.PointIgnoreIfChildFromNil() // true - Current is nil.
 
 		if sm.AddNil {
@@ -468,7 +468,7 @@ func (sm *StructMap) IsNil(Current *Reflect) bool {
 
 func (sm *StructMap) IsEmpty(Current *Reflect) bool {
 	var yes bool
-	for range Only.Once {
+	for range only.Once {
 		if Current.Length == valueTypes.IgnoreLength {
 			break
 		}
@@ -493,7 +493,7 @@ func (sm *StructMap) IsEmpty(Current *Reflect) bool {
 
 func (sm *StructMap) IsUnexported(Current *Reflect) bool {
 	var yes bool
-	for range Only.Once {
+	for range only.Once {
 		if Current.IsExported {
 			break
 		}
@@ -508,7 +508,7 @@ func (sm *StructMap) IsUnexported(Current *Reflect) bool {
 }
 
 func (sm *StructMap) IsUnsupported(Current *Reflect) {
-	for range Only.Once {
+	for range only.Once {
 		if !sm.AddUnsupported {
 			break
 		}
@@ -518,7 +518,7 @@ func (sm *StructMap) IsUnsupported(Current *Reflect) {
 }
 
 func (sm *StructMap) IsInvalid(Current *Reflect) {
-	for range Only.Once {
+	for range only.Once {
 		if !sm.AddInvalid {
 			break
 		}
@@ -529,7 +529,7 @@ func (sm *StructMap) IsInvalid(Current *Reflect) {
 
 func (sm *StructMap) IsTable(Current *Reflect) bool {
 	var yes bool
-	for range Only.Once {
+	for range only.Once {
 		// Primary table type, gets added to main map, but not table map.
 		if Current.IsTable() {
 			// fmt.Printf("Current[%s] - Current.IsTable\n", Current.FieldPath)
@@ -637,8 +637,8 @@ func (sm *StructMap) IsTable(Current *Reflect) bool {
 
 func (sm *StructMap) IsPointArrayFlatten(Current *Reflect) bool {
 	var yes bool
-	for range Only.Once {
-		for range Only.Once {
+	for range only.Once {
+		for range only.Once {
 			if Current.IsPointArrayFlatten() {
 				yes = true
 				break
@@ -694,7 +694,7 @@ func (sm *StructMap) IsPointArrayFlatten(Current *Reflect) bool {
 
 func (sm *StructMap) IsPointSplitOn(Current *Reflect) bool {
 	var yes bool
-	for range Only.Once {
+	for range only.Once {
 		if Current.DataStructure.PointSplitOn == "" {
 			break
 		}

@@ -4,16 +4,16 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
-	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/anicoll/gosungrow/iSolarCloud"
 	"github.com/anicoll/gosungrow/iSolarCloud/AppService/getPsDetail"
 	"github.com/anicoll/gosungrow/iSolarCloud/AppService/getPsDetailWithPsType"
+	"github.com/anicoll/gosungrow/pkg/cmdhelp"
+	"github.com/anicoll/gosungrow/pkg/only"
 	"github.com/spf13/cobra"
 )
 
 func (c *CmdShow) AttachPs(cmd *cobra.Command) *cobra.Command {
-	for range Only.Once {
+	for range only.Once {
 		self := &cobra.Command{
 			Use:                   "ps",
 			Aliases:               []string{},
@@ -29,7 +29,7 @@ func (c *CmdShow) AttachPs(cmd *cobra.Command) *cobra.Command {
 			Args: cobra.MinimumNArgs(1),
 		}
 		cmd.AddCommand(self)
-		self.Example = cmdHelp.PrintExamples(self, "")
+		self.Example = cmdhelp.PrintExamples(self, "")
 
 		c.AttachPsList(self)
 		c.AttachPsTree(self)
@@ -56,13 +56,13 @@ func (c *CmdShow) AttachPsList(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self, "")
+	self.Example = cmdhelp.PrintExamples(self, "")
 
 	return cmd
 }
 
 func (c *CmdShow) funcPsList(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		var devices string
 		devices, c.Error = cmds.Api.SunGrow.PsList(args...)
 		if c.Error != nil {
@@ -88,13 +88,13 @@ func (c *CmdShow) AttachPsIdList2(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self, "")
+	self.Example = cmdhelp.PrintExamples(self, "")
 
 	return cmd
 }
 
 func (c *CmdShow) funcPsIdList2(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		pids := cmds.Api.SunGrow.SetPsIds(args...)
 		if c.Error != nil {
 			break
@@ -119,13 +119,13 @@ func (c *CmdShow) AttachPsTree(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self, "")
+	self.Example = cmdhelp.PrintExamples(self, "")
 
 	return cmd
 }
 
 func (c *CmdShow) funcPsTree(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		var pids iSolarCloud.PsTrees
 		pids, c.Error = cmds.Api.SunGrow.PsTreeMenu(args...)
 		if c.Error != nil {
@@ -151,13 +151,13 @@ func (c *CmdShow) AttachPsPoints(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self, "")
+	self.Example = cmdhelp.PrintExamples(self, "")
 
 	return cmd
 }
 
 func (c *CmdShow) funcPsPoints(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		args = MinimumArraySize(2, args)
 		var points string
 		points, c.Error = cmds.Api.SunGrow.PsPoints(strings.Split(args[0], ","), args[1])
@@ -184,13 +184,13 @@ func (c *CmdShow) AttachPsData(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self, "")
+	self.Example = cmdhelp.PrintExamples(self, "")
 
 	return cmd
 }
 
 func (c *CmdShow) funcPsData(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		cmds.Api.SunGrow.OutputType.SetTable()
 		args = MinimumArraySize(5, args)
 		c.Error = cmds.Api.SunGrow.PsPointsData(strings.Split(args[0], ","), args[1], args[2], args[3], args[4])
@@ -215,13 +215,13 @@ func (c *CmdShow) AttachPsGraph(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self, "")
+	self.Example = cmdhelp.PrintExamples(self, "")
 
 	return cmd
 }
 
 func (c *CmdShow) funcPsGraph(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		cmds.Api.SunGrow.OutputType.SetGraph()
 		args = MinimumArraySize(5, args)
 		c.Error = cmds.Api.SunGrow.PsPointsData(strings.Split(args[0], ","), args[1], args[2], args[3], args[4])
@@ -246,13 +246,13 @@ func (c *CmdShow) AttachPsSave(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(1),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self, "")
+	self.Example = cmdhelp.PrintExamples(self, "")
 
 	return cmd
 }
 
 func (c *CmdShow) funcPsSave(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		args = MinimumArraySize(5, args)
 		c.Error = cmds.Api.SunGrow.PsPointsDataSave(strings.Split(args[0], ","), args[1], args[2], args[3], args[4])
 		if c.Error != nil {
@@ -276,13 +276,13 @@ func (c *CmdShow) AttachPsDetail(cmd *cobra.Command) *cobra.Command {
 		Args:                  cobra.MinimumNArgs(0),
 	}
 	cmd.AddCommand(self)
-	self.Example = cmdHelp.PrintExamples(self, "")
+	self.Example = cmdhelp.PrintExamples(self, "")
 
 	return cmd
 }
 
 func (c *CmdShow) funcPsDetail(_ *cobra.Command, args []string) error {
-	for range Only.Once {
+	for range only.Once {
 		pids := cmds.Api.SunGrow.SetPsIds(args...)
 		if c.Error != nil {
 			break

@@ -46,7 +46,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 	// . "github.com/ChimeraCoder/gojson"
 )
 
@@ -119,7 +119,7 @@ func Parse(options Options, data []byte) (string, error) {
 	var ret string
 	var err error
 
-	for range Only.Once {
+	for range only.Once {
 		if options.format == "" {
 			options.format = "json"
 		}
@@ -150,7 +150,7 @@ func Parse(options Options, data []byte) (string, error) {
 		}
 
 		var input io.Reader
-		for range Only.Once {
+		for range only.Once {
 			if options.inputName == nil {
 				input = bytes.NewReader(data)
 				break

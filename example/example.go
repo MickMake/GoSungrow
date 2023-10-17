@@ -7,18 +7,18 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud"
 	"github.com/anicoll/gosungrow/iSolarCloud/AppService/login"
 	"github.com/anicoll/gosungrow/iSolarCloud/AppService/queryMutiPointDataList"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 // Example1 - GoSungrow API example
 func Example1(startDate string, endDate string, interval string, points []string) error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 
 		// -------------------------------------------------------------------------------- //
 		// Initial setup.
@@ -87,7 +87,7 @@ func Example1(startDate string, endDate string, interval string, points []string
 // Example2 - GoSungrow API example
 func Example2(startDate string, endDate string, interval string, points []string) error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 
 		// -------------------------------------------------------------------------------- //
 		// Setup values.
@@ -180,7 +180,7 @@ func Example2(startDate string, endDate string, interval string, points []string
 			break
 		}
 
-		table := response.Data.CreateResultTable(false, "")
+		table := response.Data.CreateResultTable(false)
 		table.OutputType = output.TypeTable
 		table.SetSaveFile(false)
 		sg.Error = table.Output()
@@ -194,7 +194,7 @@ func Example2(startDate string, endDate string, interval string, points []string
 			GraphRequest: output.GraphRequest{},
 		}
 
-		sg.Error = response.OutputDataTables("")
+		sg.Error = response.OutputDataTables()
 		if sg.IsError() {
 			break
 		}
@@ -205,7 +205,7 @@ func Example2(startDate string, endDate string, interval string, points []string
 
 func Example3(startDate valueTypes.DateTime, endDate valueTypes.DateTime, interval valueTypes.Integer, points valueTypes.PointIds) error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 
 		// -------------------------------------------------------------------------------- //
 		// Setup values.

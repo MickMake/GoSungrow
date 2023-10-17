@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const LabelCover = "cover"
 
 func (m *Mqtt) CoverPublishConfig(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsCover() {
 			break
 		}
@@ -48,7 +48,7 @@ func (m *Mqtt) CoverPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) CoverPublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsCover() {
 			break
 		}
@@ -231,7 +231,7 @@ func (c *Cover) Json() string {
 func (config *EntityConfig) IsCover() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.Units == LabelCover {
 			ok = true
 			break

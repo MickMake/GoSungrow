@@ -7,9 +7,9 @@ import (
 	"sort"
 	"strconv"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type StructTables map[string]*StructTable
@@ -17,7 +17,7 @@ type StructTables map[string]*StructTable
 func (sm *StructTables) GetTableNames() []string {
 	var ret []string
 
-	for range Only.Once {
+	for range only.Once {
 		for name := range *sm {
 			ret = append(ret, name)
 		}
@@ -56,7 +56,7 @@ func (ta *StructTable) PrintDebug(format string, args ...interface{}) {
 }
 
 func (ta *StructTable) AddRow(refs ...*Reflect) {
-	for range Only.Once {
+	for range only.Once {
 		if ta.Reflects == nil {
 			ta.Reflects = make(ReflectArray, 0)
 		}
@@ -80,7 +80,7 @@ func (ta *StructTable) Get() ReflectArray {
 }
 
 func (ta *StructTable) Process(area string, name string, Current *Reflect) error {
-	for range Only.Once {
+	for range only.Once {
 		if Current == nil {
 			ta.Error = errors.New("*Reflect is nil")
 			break
@@ -208,7 +208,7 @@ func (ta *StructTable) Process(area string, name string, Current *Reflect) error
 }
 
 func (ta *StructTable) GetValues() StructValues {
-	for range Only.Once {
+	for range only.Once {
 		ta.Values = make(StructValues, 0)
 		if !ta.IsValid {
 			break
@@ -517,7 +517,7 @@ func (ta *StructTable) GetValues() StructValues {
 
 func (ta *StructTable) CreateTable() (output.Table, error) { // (output.Tables, GoStruct.StructValuesMap) {
 
-	for range Only.Once {
+	for range only.Once {
 		if ta.Current == nil {
 			ta.Error = errors.New("*Reflect is nil")
 			break
@@ -612,7 +612,7 @@ type (
 )
 
 func (ta *ReflectArray) AddRow(refs ...*Reflect) ReflectArray {
-	for range Only.Once {
+	for range only.Once {
 		if ta == nil {
 			*ta = make(ReflectArray, 0)
 		}
@@ -640,7 +640,7 @@ type StructValues []StructValue
 
 func (ta *StructValues) GetCell(row int, col string) valueTypes.UnitValue {
 	var ret valueTypes.UnitValue
-	for range Only.Once {
+	for range only.Once {
 		if row >= len(*ta) {
 			ret = valueTypes.SetUnitValueString("error", "error", "row > size")
 			break

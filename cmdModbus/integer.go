@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 	"github.com/simonvetter/modbus"
 )
 
@@ -38,7 +38,7 @@ func (m *Byte) Table(width int) string {
 func (m *Modbus) ReadByte(address Address, quantity Quantity, regType modbus.RegType) Byte {
 	var ret Byte
 
-	for range Only.Once {
+	for range only.Once {
 		ret.address = address
 		ret.values, m.err = m.client.ReadBytes(uint16(address), uint16(quantity), regType)
 		// ret, m.err = m.client.ReadRawBytes(uint16(address), uint16(quantity), regType)
@@ -88,7 +88,7 @@ func (m U16Bit) Table(width int) string {
 func (m *Modbus) Read16Bit(address Address, quantity Quantity, regType modbus.RegType) U16Bit {
 	var ret U16Bit
 
-	for range Only.Once {
+	for range only.Once {
 		if quantity == 1 {
 			var r uint16
 			r, m.err = m.client.ReadRegister(uint16(address), regType)
@@ -143,7 +143,7 @@ func (m U32Bit) Table(width int) string {
 func (m *Modbus) Read32Bit(address Address, quantity Quantity, regType modbus.RegType) U32Bit {
 	var ret U32Bit
 
-	for range Only.Once {
+	for range only.Once {
 		if quantity == 1 {
 			var r uint32
 			r, m.err = m.client.ReadUint32(uint16(address), regType)
@@ -198,7 +198,7 @@ func (m U64Bit) Table(width int) string {
 func (m *Modbus) Read64Bit(address Address, quantity Quantity, regType modbus.RegType) U64Bit {
 	var ret U64Bit
 
-	for range Only.Once {
+	for range only.Once {
 		if quantity == 1 {
 			var r uint64
 			r, m.err = m.client.ReadUint64(uint16(address), regType)

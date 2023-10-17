@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type EndPointName string
@@ -51,7 +51,7 @@ func (ep *EndPointStruct) Call() output.Json {
 }
 
 func (ep *EndPointStruct) SetRequest(ref interface{}) error {
-	for range Only.Once {
+	for range only.Once {
 		if ref == nil {
 			ep.Error = errors.New("endpoint has a nil request structure")
 			break
@@ -71,7 +71,7 @@ func (ep *EndPointStruct) GetResponse() output.Json {
 
 func (ep *EndPointStruct) IsValid() error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		if ep == nil {
 			ep.Error = errors.New("endpoint has a nil structure")
 			break
@@ -90,7 +90,7 @@ func (ep *EndPointStruct) IsValid() error {
 
 func (ep EndPointStruct) String() string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		if ep.Name == NullAreaName {
 			break
 		}
@@ -116,7 +116,7 @@ func (ep EndPointStruct) String() string {
 
 func (ep EndPointStruct) ResponseAsJson(raw bool, r interface{}) output.Json {
 	var ret output.Json
-	for range Only.Once {
+	for range only.Once {
 		if raw {
 			ret = output.GetAsPrettyJson(r)
 			break

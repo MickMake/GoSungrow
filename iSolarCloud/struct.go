@@ -7,7 +7,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MickMake/GoUnify/Only"
 	"github.com/anicoll/gosungrow/iSolarCloud/AliSmsService"
 	"github.com/anicoll/gosungrow/iSolarCloud/AppService"
 	"github.com/anicoll/gosungrow/iSolarCloud/AppService/getUserList"
@@ -19,6 +18,7 @@ import (
 	"github.com/anicoll/gosungrow/iSolarCloud/WebIscmAppService"
 	"github.com/anicoll/gosungrow/iSolarCloud/api"
 	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const (
@@ -41,7 +41,7 @@ type SunGrow struct {
 func NewSunGro(baseUrl string, cacheDir string) *SunGrow {
 	var p SunGrow
 
-	for range Only.Once {
+	for range only.Once {
 		p.Error = p.ApiRoot.SetUrl(baseUrl)
 		if p.Error != nil {
 			break
@@ -56,7 +56,7 @@ func NewSunGro(baseUrl string, cacheDir string) *SunGrow {
 }
 
 func (sg *SunGrow) Init() error {
-	for range Only.Once {
+	for range only.Once {
 		sg.Areas = make(api.Areas)
 
 		sg.Areas[api.GetArea(NullArea.Area{})] = api.AreaStruct(NullArea.Init(sg.ApiRoot))
@@ -92,7 +92,7 @@ func (sg *SunGrow) AppendUrl(endpoint string) api.EndPointUrl {
 func (sg *SunGrow) GetEndpoint(ae string) api.EndPoint {
 	var ep api.EndPoint
 
-	for range Only.Once {
+	for range only.Once {
 		area, endpoint := sg.SplitEndPoint(ae)
 		if sg.IsError() {
 			break
@@ -121,7 +121,7 @@ func (sg *SunGrow) GetEndpoint(ae string) api.EndPoint {
 
 func (sg *SunGrow) GetByJson(endpoint string, request string) api.EndPoint {
 	var ret api.EndPoint
-	for range Only.Once {
+	for range only.Once {
 		if sg.NeedLogin {
 			sg.Error = errors.New("currently logged out")
 			break
@@ -188,7 +188,7 @@ func (sg *SunGrow) GetByJson(endpoint string, request string) api.EndPoint {
 
 func (sg *SunGrow) GetByStruct(endpoint string, request interface{}, cache time.Duration) api.EndPoint {
 	var ret api.EndPoint
-	for range Only.Once {
+	for range only.Once {
 		if sg.NeedLogin {
 			sg.Error = errors.New("currently logged out")
 			break
@@ -229,7 +229,7 @@ func (sg *SunGrow) GetByStruct(endpoint string, request interface{}, cache time.
 
 func (sg *SunGrow) RequestRequiresArgs(ae string) bool {
 	var yes bool
-	for range Only.Once {
+	for range only.Once {
 		area, endpoint := sg.SplitEndPoint(ae)
 		if sg.IsError() {
 			break
@@ -243,7 +243,7 @@ func (sg *SunGrow) RequestRequiresArgs(ae string) bool {
 
 func (sg *SunGrow) RequestArgs(ae string) map[string]string {
 	var ret map[string]string
-	for range Only.Once {
+	for range only.Once {
 		area, endpoint := sg.SplitEndPoint(ae)
 		if sg.IsError() {
 			break
@@ -259,7 +259,7 @@ func (sg *SunGrow) SplitEndPoint(ae string) (api.AreaName, api.EndPointName) {
 	var area api.AreaName
 	var endpoint api.EndPointName
 
-	for range Only.Once {
+	for range only.Once {
 		s := strings.Split(ae, ".")
 		switch len(s) {
 		case 0:
@@ -298,7 +298,7 @@ func (sg *SunGrow) AreaNotExists(area string) bool {
 }
 
 func (sg *SunGrow) login() error {
-	for range Only.Once {
+	for range only.Once {
 		if sg.AuthDetails == nil {
 			break
 		}
@@ -317,11 +317,11 @@ func (sg *SunGrow) login() error {
 }
 
 func (sg *SunGrow) Login(auth login.SunGrowAuth) error {
-	for range Only.Once {
+	for range only.Once {
 		sg.AuthDetails = &auth
 
 		// Fetch a simple request.
-		for range Only.Twice {
+		for range only.Twice {
 			sg.Error = nil // Needed for looping twice.
 			sg.Error = sg.login()
 			if sg.Error == nil {
@@ -356,7 +356,7 @@ func (sg *SunGrow) Login(auth login.SunGrowAuth) error {
 }
 
 func (sg *SunGrow) IsLoggedOut() bool {
-	for range Only.Once {
+	for range only.Once {
 		if sg.IsNotError() {
 			sg.NeedLogin = false
 			break
@@ -371,7 +371,7 @@ func (sg *SunGrow) IsLoggedOut() bool {
 }
 
 func (sg *SunGrow) Logout() {
-	for range Only.Once {
+	for range only.Once {
 		_ = sg.ApiRoot.WebCacheRemove(sg.Auth)
 		_ = sg.Auth.RemoveToken()
 		// _ = sg.Auth.ApiRemoveDataFile()

@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const LabelVacuum = "vacuum"
 
 func (m *Mqtt) VacuumPublishConfig(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsVacuum() {
 			break
 		}
@@ -51,7 +51,7 @@ func (m *Mqtt) VacuumPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) VacuumPublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsVacuum() {
 			break
 		}
@@ -187,7 +187,7 @@ func (c *Vacuum) Json() string {
 func (config *EntityConfig) IsVacuum() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.Units == LabelVacuum {
 			ok = true
 			break

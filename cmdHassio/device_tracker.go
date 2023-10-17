@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 const LabelDeviceTracker = "device_tracker"
 
 func (m *Mqtt) DeviceTrackerPublishConfig(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsDeviceTracker() {
 			break
 		}
@@ -48,7 +48,7 @@ func (m *Mqtt) DeviceTrackerPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) DeviceTrackerPublishValue(config EntityConfig) error {
-	for range Only.Once {
+	for range only.Once {
 		if !config.IsDeviceTracker() {
 			break
 		}
@@ -148,7 +148,7 @@ func (c *DeviceTracker) Json() string {
 func (config *EntityConfig) IsDeviceTracker() bool {
 	var ok bool
 
-	for range Only.Once {
+	for range only.Once {
 		if config.Units == LabelDeviceTracker {
 			ok = true
 			break

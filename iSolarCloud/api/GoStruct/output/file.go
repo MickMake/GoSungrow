@@ -7,14 +7,14 @@ import (
 	"io"
 	"os"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 // FileRead Retrieves data from a local file.
 func FileRead(fn string, ref interface{}) error {
 	var err error
 
-	for range Only.Once {
+	for range only.Once {
 		if fn == "" {
 			err = errors.New("empty file")
 			break
@@ -41,7 +41,7 @@ func FileRead(fn string, ref interface{}) error {
 // FileWrite Saves data to a file path.
 func FileWrite(fn string, ref interface{}, perm os.FileMode) error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		if fn == "" {
 			err = errors.New("empty file")
 			break
@@ -66,7 +66,7 @@ func FileWrite(fn string, ref interface{}, perm os.FileMode) error {
 func PlainFileRead(fn string) ([]byte, error) {
 	var data []byte
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		if fn == "" {
 			err = errors.New("empty file")
 			break
@@ -93,7 +93,7 @@ func PlainFileRead(fn string) ([]byte, error) {
 // PlainFileWrite Saves data to a file path.
 func PlainFileWrite(fn string, data []byte, perm os.FileMode) error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		if fn == "" {
 			err = errors.New("empty file")
 			break
@@ -117,7 +117,7 @@ func PlainFileWrite(fn string, data []byte, perm os.FileMode) error {
 // FileRemove Removes a file path.
 func FileRemove(fn string) error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		if fn == "" {
 			err = errors.New("empty file")
 			break
@@ -146,7 +146,7 @@ func FileRemove(fn string) error {
 // FileExists - Checks if a file exists.
 func FileExists(fn string) bool {
 	var yes bool
-	for range Only.Once {
+	for range only.Once {
 		var err error
 		if fn == "" {
 			// err = errors.New("empty file")
@@ -175,7 +175,7 @@ func FileExists(fn string) bool {
 // DirExists - Checks if a directory exists.
 func DirExists(fn string) bool {
 	var yes bool
-	for range Only.Once {
+	for range only.Once {
 		var err error
 		if fn == "" {
 			// err = errors.New("empty file")
@@ -204,7 +204,7 @@ func DirExists(fn string) bool {
 // Mkdir - Create dir.
 func Mkdir(fn string) bool {
 	var yes bool
-	for range Only.Once {
+	for range only.Once {
 		var err error
 		if fn == "" {
 			// err = errors.New("empty file")

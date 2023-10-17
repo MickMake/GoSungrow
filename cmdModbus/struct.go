@@ -10,8 +10,8 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/MickMake/GoUnify/Only"
-	"github.com/MickMake/GoUnify/cmdLog"
+	"github.com/anicoll/gosungrow/pkg/cmdlog"
+	"github.com/anicoll/gosungrow/pkg/only"
 	"github.com/simonvetter/modbus"
 )
 
@@ -37,13 +37,13 @@ type Modbus struct {
 
 	firstRun bool
 	err      error
-	logger   cmdLog.Log
+	logger   cmdlog.Log
 }
 
 func New(req Modbus) Modbus {
 	var ret Modbus
 
-	for range Only.Once {
+	for range only.Once {
 		ret = Modbus{
 			ClientId:   req.ClientId,
 			Username:   req.Username,
@@ -67,7 +67,7 @@ func New(req Modbus) Modbus {
 			firstRun: true,
 
 			// err:            nil,
-			logger: cmdLog.New(req.LogLevel),
+			logger: cmdlog.New(req.LogLevel),
 		}
 
 		ret.err = ret.setUrl()
@@ -81,7 +81,7 @@ func New(req Modbus) Modbus {
 	return ret
 }
 
-func (m *Modbus) SetLog(log cmdLog.Log) {
+func (m *Modbus) SetLog(log cmdlog.Log) {
 	m.logger = log
 }
 
@@ -97,7 +97,7 @@ func (m *Modbus) IsError() bool {
 }
 
 func (m *Modbus) setUrl() error {
-	for range Only.Once {
+	for range only.Once {
 		if m.Host == "" {
 			m.err = errors.New("Modbus host not defined")
 			break
@@ -161,7 +161,7 @@ func (m *Modbus) setUrl() error {
 }
 
 func (m *Modbus) SetAuth(username string, password string) error {
-	for range Only.Once {
+	for range only.Once {
 		if username == "" {
 			m.err = errors.New("username empty")
 			break
@@ -179,7 +179,7 @@ func (m *Modbus) SetAuth(username string, password string) error {
 }
 
 func (m *Modbus) Connect() error {
-	for range Only.Once {
+	for range only.Once {
 		if m.config == nil {
 			m.logger.Debug("Modbus: failed to create modbus client: %v\n", m.err)
 			break
@@ -203,7 +203,7 @@ func (m *Modbus) Connect() error {
 }
 
 func (m *Modbus) Disconnect() error {
-	for range Only.Once {
+	for range only.Once {
 		// close the connection
 		m.err = m.client.Close()
 		if m.err != nil {

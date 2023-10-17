@@ -51,7 +51,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) getPsList(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.getPsList",
 // 			getPsList.RequestData{ },
@@ -77,7 +77,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) queryDeviceList(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.queryDeviceList",
 // 			queryDeviceList.RequestData{ PsId: request.PsId },
@@ -104,7 +104,7 @@ package iSolarCloud
 // @TODO - api get queryDeviceInfo '{"device_sn":"B2281302388","uuid":1179879}'
 // func (sgd *SunGrowData) queryDeviceInfo(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.queryDeviceInfo",
 // 			queryDeviceInfo.RequestData{ Uuid: "1179877", DeviceSn: "B2281302388" },
@@ -130,7 +130,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) queryDeviceListForApp(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.queryDeviceListForApp",
 // 			queryDeviceListForApp.RequestData{ PsId: request.PsId },
@@ -156,7 +156,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) getPsDetailWithPsType(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.getPsDetailWithPsType",
 // 			getPsDetailWithPsType.RequestData{ PsId: request.PsId },
@@ -182,7 +182,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) getPsDetail(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.getPsDetail",
 // 			getPsDetail.RequestData{ PsId: request.PsId },
@@ -208,7 +208,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) findPsType(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.findPsType",
 // 			findPsType.RequestData{ PsId: request.PsId },
@@ -235,7 +235,7 @@ package iSolarCloud
 // @TODO -
 // func (sgd *SunGrowData) getAllDeviceByPsId(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.getAllDeviceByPsId",
 // 			getAllDeviceByPsId.RequestData{ PsId: request.PsId },
@@ -261,7 +261,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) getDeviceList(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.getDeviceList",
 // 			getDeviceList.RequestData{ PsId: request.PsId },
@@ -287,7 +287,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) getIncomeSettingInfos(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.getIncomeSettingInfos",
 // 			getIncomeSettingInfos.RequestData{ PsId: request.PsId },
@@ -313,7 +313,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) getKpiInfo(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.getKpiInfo",
 // 			getKpiInfo.RequestData{ },
@@ -339,7 +339,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) getPowerChargeSettingInfo(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.getPowerChargeSettingInfo",
 // 			getPowerChargeSettingInfo.RequestData{ PsId: request.PsId },
@@ -365,7 +365,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) getHouseholdStoragePsReport(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		// fmt.Println(request.Date.Original())
 // 		// {"date_id":"20221001","date_type":"1","ps_id":"1129147"}
 // 		ep := sgd.SunGrow.GetByStruct(
@@ -394,7 +394,7 @@ package iSolarCloud
 // @TODO - Not working
 // func (sgd *SunGrowData) getPowerStationBasicInfo(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.getPowerStationBasicInfo",
 // 			getPowerStationBasicInfo.RequestData{ PsId: request.PsId },
@@ -418,7 +418,7 @@ package iSolarCloud
 // Return from this function is an array of 288 values.
 // func (sgd *SunGrowData) getPowerStationData(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.getPowerStationData",
 // 			getPowerStationData.RequestData{ PsId: request.PsId, DateType: request.Date.DateType, DateID: request.Date.Original() },
@@ -440,7 +440,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) getPowerStationForHousehold(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.getPowerStationForHousehold",
 // 			getPowerStationForHousehold.RequestData{ PsId: request.PsId },
@@ -463,7 +463,7 @@ package iSolarCloud
 // @TODO - Figure out how to properly flatten some of these "two field" arrays.
 // func (sgd *SunGrowData) getPowerStationInfo(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.getPowerStationInfo",
 // 			getPowerStationInfo.RequestData{ PsId: request.PsId },
@@ -485,7 +485,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) getPowerStatistics(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.getPowerStatistics",
 // 			getPowerStatistics.RequestData{ PsId: request.PsId },
@@ -507,7 +507,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) getPsHealthState(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.getPsHealthState",
 // 			getPsHealthState.RequestData{ PsId: request.PsId },
@@ -530,7 +530,7 @@ package iSolarCloud
 // @TODO - Figure out how to properly flatten some of these "two field" arrays.
 // func (sgd *SunGrowData) powerDevicePointList(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.powerDevicePointList",
 // 			powerDevicePointList.RequestData{ },
@@ -552,7 +552,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) getPsWeatherList(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.getPsWeatherList",
 // 			getPsWeatherList.RequestData{ PsId: request.PsId },
@@ -575,7 +575,7 @@ package iSolarCloud
 // @TODO - Not working
 // func (sgd *SunGrowData) getRemoteUpgradeTaskList(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.getRemoteUpgradeTaskList",
 // 			getRemoteUpgradeTaskList.RequestData{ PsIdList: "1171348,1121412"},	// PsId: request.PsId },
@@ -597,7 +597,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) reportList(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.reportList",
 // 			reportList.RequestData{ PsId: request.PsId, ReportType: request.ReportType },
@@ -619,7 +619,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) getReportData(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.getReportData",
 // 			getReportData.RequestData{ PsId: request.PsId, ReportType: request.ReportType },
@@ -641,7 +641,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) psForcastInfo(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.psForcastInfo",
 // 			psForcastInfo.RequestData{ PsId: request.PsId },
@@ -663,7 +663,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) queryPowerStationInfo(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.queryPowerStationInfo",
 // 			queryPowerStationInfo.RequestData{ PsId: request.PsId },
@@ -685,7 +685,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) getPsIdState(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"WebAppService.getPsIdState",
 // 			getPsIdState.RequestData{ PsId: request.PsId },
@@ -707,7 +707,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) queryPsProfit(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.queryPsProfit",
 // 			queryPsProfit.RequestData{ PsId: request.PsId, DateType: request.Date.DateType, DateID: request.Date.Original() },
@@ -729,7 +729,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) queryAllPsIdAndName(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.queryAllPsIdAndName",
 // 			queryAllPsIdAndName.RequestData{  },
@@ -751,7 +751,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) queryPsIdList(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.queryPsIdList",
 // 			queryPsIdList.RequestData{  },
@@ -774,7 +774,7 @@ package iSolarCloud
 // @TODO - Not working
 // func (sgd *SunGrowData) queryPsNameByPsId(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"AppService.queryPsNameByPsId",
 // 			queryPsNameByPsId.RequestData{ PsId: request.PsId },
@@ -796,7 +796,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) showPSView(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"WebAppService.showPSView",
 // 			showPSView.RequestData{ PsId: request.PsId },
@@ -818,7 +818,7 @@ package iSolarCloud
 
 // func (sgd *SunGrowData) getMaxDeviceIdByPsId(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.SunGrow.GetByStruct(
 // 			"WebIscmAppService.getMaxDeviceIdByPsId",
 // 			getMaxDeviceIdByPsId.RequestData{ PsId: request.PsId },
@@ -848,7 +848,7 @@ package iSolarCloud
 //
 // func (sgd *SunGrowData) GetByFunc(endpoint string, request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		dataEndPoint, ok := sgd.FuncExists(endpoint)
 // 		if !ok {
 // 			break
@@ -880,7 +880,7 @@ package iSolarCloud
 // func (sgd *SunGrowData) FuncExists(endpoint string) (EndPoint, bool) {
 // 	var dataFunc EndPoint
 // 	var yes bool
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		if dataFunc, yes = sgd.EndPoints[endpoint]; yes {
 // 			yes = true
 // 			break
@@ -892,7 +892,7 @@ package iSolarCloud
 //
 // func (sgd *SunGrowData) HasArgs(endpoint string) bool {
 // 	var yes bool
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		dataEndPoint, ok := sgd.FuncExists(endpoint)
 // 		if ok {
 // 			yes = dataEndPoint.HasArgs
@@ -907,7 +907,7 @@ package iSolarCloud
 //
 // func (sgd *SunGrowData) energyTrend(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.sunGrow.GetByStruct(
 // 			"AppService.energyTrend",
 // 			// energyTrend.RequestData{ PsId: request.PsId },
@@ -930,7 +930,7 @@ package iSolarCloud
 //
 // func (sgd *SunGrowData) getAreaList(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.sunGrow.GetByStruct(
 // 			"AppService.getAreaList",
 // 			// energyTrend.RequestData{ PsId: request.PsId },
@@ -955,7 +955,7 @@ package iSolarCloud
 // // @TODO - Need to support []string in ResultData
 // func (sgd *SunGrowData) getAllPsIdByOrgIds(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.sunGrow.GetByStruct(
 // 			"AppService.getAllPsIdByOrgIds",
 // 			// getAllPsIdByOrgIds.RequestData{ PsId: request.PsId },
@@ -979,7 +979,7 @@ package iSolarCloud
 // // @TODO - No data.
 // func (sgd *SunGrowData) findCodeValueList(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.sunGrow.GetByStruct(
 // 			"AppService.findCodeValueList",
 // 			// findCodeValueList.RequestData{ PsId: request.PsId },
@@ -1003,7 +1003,7 @@ package iSolarCloud
 // // @TODO - No data.
 // func (sgd *SunGrowData) queryFaultCodes(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.sunGrow.GetByStruct(
 // 			"WebAppService.queryFaultCodes",
 // 			// queryFaultCodes.RequestData{ PsId: request.PsId },
@@ -1026,7 +1026,7 @@ package iSolarCloud
 //
 // func (sgd *SunGrowData) queryNounList(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sgd.sunGrow.GetByStruct(
 // 			"WebAppService.queryNounList",
 // 			queryNounList.RequestData{ FaultTypeCode: valueTypes.SetStringValue("718") },
@@ -1049,7 +1049,7 @@ package iSolarCloud
 //
 // func (sg *SunGrowData) getChnnlListByPsId(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sg.SunGrow.GetByStruct(
 // 			"WebIscmAppService.getChnnlListByPsId",
 // 			getChnnlListByPsId.RequestData{ PsId: request.PsId },
@@ -1071,7 +1071,7 @@ package iSolarCloud
 //
 // func (sg *SunGrowData) getDevInstalledPowerByPsId(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sg.SunGrow.GetByStruct(
 // 			"WebIscmAppService.getDevInstalledPowerByPsId",
 // 			getDevInstalledPowerByPsId.RequestData{ PsId: request.PsId },
@@ -1093,7 +1093,7 @@ package iSolarCloud
 //
 // func (sg *SunGrowData) getPsIdByUserId(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sg.SunGrow.GetByStruct(
 // 			"WebIscmAppService.getPsIdByUserId",
 // 			getPsIdByUserId.RequestData{ PsId: request.PsId },
@@ -1115,7 +1115,7 @@ package iSolarCloud
 //
 // func (sg *SunGrowData) getPsInfoWithJoinGridByPsId(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sg.SunGrow.GetByStruct(
 // 			"WebIscmAppService.getPsInfoWithJoinGridByPsId",
 // 			getPsInfoWithJoinGridByPsId.RequestData{ PsId: request.PsId },
@@ -1137,7 +1137,7 @@ package iSolarCloud
 //
 // func (sg *SunGrowData) getPsInstallerByPsId(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sg.SunGrow.GetByStruct(
 // 			"WebIscmAppService.getPsInstallerByPsId",
 // 			getPsInstallerByPsId.RequestData{ PsId: request.PsId },
@@ -1159,7 +1159,7 @@ package iSolarCloud
 //
 // func (sg *SunGrowData) getPsInstallerOrgInfoByPsId(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sg.SunGrow.GetByStruct(
 // 			"WebIscmAppService.getPsInstallerOrgInfoByPsId",
 // 			getPsInstallerOrgInfoByPsId.RequestData{ PsId: request.PsId },
@@ -1181,7 +1181,7 @@ package iSolarCloud
 //
 // func (sg *SunGrowData) getPsKpiForHoursByPsId(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sg.SunGrow.GetByStruct(
 // 			"WebIscmAppService.getPsKpiForHoursByPsId",
 // 			getPsKpiForHoursByPsId.RequestData{ PsId: request.PsId },
@@ -1203,7 +1203,7 @@ package iSolarCloud
 //
 // func (sg *SunGrowData) getPsListForPsDataByPsId(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sg.SunGrow.GetByStruct(
 // 			"WebIscmAppService.getPsListForPsDataByPsId",
 // 			getPsListForPsDataByPsId.RequestData{ PsId: request.PsId },
@@ -1225,7 +1225,7 @@ package iSolarCloud
 //
 // func (sg *SunGrowData) queryPsTypeByPsId(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sg.SunGrow.GetByStruct(
 // 			"WebIscmAppService.queryPsTypeByPsId",
 // 			queryPsTypeByPsId.RequestData{ PsId: request.PsId },
@@ -1247,7 +1247,7 @@ package iSolarCloud
 //
 // func (sg *SunGrowData) selectDeviceTypeByPsId(request SunGrowDataRequest) SunGrowDataResponse {
 // 	var response SunGrowDataResponse
-// 	for range Only.Once {
+// 	for range only.Once {
 // 		ep := sg.SunGrow.GetByStruct(
 // 			"WebIscmAppService.selectDeviceTypeByPsId",
 // 			selectDeviceTypeByPsId.RequestData{ PsId: request.PsId },

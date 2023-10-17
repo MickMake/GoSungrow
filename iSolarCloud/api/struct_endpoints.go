@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 	"github.com/olekukonko/tablewriter"
 )
 
@@ -14,7 +14,7 @@ type TypeEndPoints map[EndPointName]EndPoint // Map of EndPoints by endpoint nam
 
 func (ps TypeEndPoints) Exists(name EndPointName) error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		if _, ok := ps[name]; !ok {
 			err = errors.New("unknown endpoint")
 			break
@@ -26,7 +26,7 @@ func (ps TypeEndPoints) Exists(name EndPointName) error {
 
 func (ps TypeEndPoints) String() string {
 	var ret string
-	for range Only.Once {
+	for range only.Once {
 		buf := new(bytes.Buffer)
 
 		ep := ps.GetEnabled()
@@ -72,7 +72,7 @@ func (ps TypeEndPoints) String() string {
 
 func (ps *TypeEndPoints) SortEndPoints() []EndPointName {
 	ret := make([]EndPointName, 0, len(*ps))
-	for range Only.Once {
+	for range only.Once {
 		keys := make([]string, 0, len(*ps))
 		for k := range *ps {
 			keys = append(keys, string(k))
@@ -88,7 +88,7 @@ func (ps *TypeEndPoints) SortEndPoints() []EndPointName {
 
 func (ps *TypeEndPoints) GetEnabled() TypeEndPoints {
 	ret := make(TypeEndPoints)
-	for range Only.Once {
+	for range only.Once {
 		s := ps.SortEndPoints()
 		if len(s) == 0 {
 			break
@@ -106,7 +106,7 @@ func (ps *TypeEndPoints) GetEnabled() TypeEndPoints {
 
 func (ps *TypeEndPoints) GetDisabled() TypeEndPoints {
 	ret := make(TypeEndPoints)
-	for range Only.Once {
+	for range only.Once {
 		s := ps.SortEndPoints()
 		if len(s) == 0 {
 			break

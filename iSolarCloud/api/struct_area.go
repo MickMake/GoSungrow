@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type AreaStruct struct {
@@ -16,7 +16,7 @@ type AreaStruct struct {
 
 func (as AreaStruct) Exists(name EndPointName) error {
 	var err error
-	for range Only.Once {
+	for range only.Once {
 		if _, ok := as.EndPoints[name]; !ok {
 			err = errors.New("unknown endpoint")
 			break
@@ -35,7 +35,7 @@ func (as *AreaStruct) GetEndPoint(name EndPointName) EndPoint {
 }
 
 func (as AreaStruct) ListEndpoints() {
-	for range Only.Once {
+	for range only.Once {
 		fmt.Printf("Listing all endpoints from area '%s':\n", as.Name)
 		// as.EndPoints.ListEndpoints()
 		fmt.Printf("%v", as.EndPoints)

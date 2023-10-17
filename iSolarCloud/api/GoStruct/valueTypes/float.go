@@ -5,7 +5,7 @@ import (
 	"math"
 	"strconv"
 
-	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/pkg/only"
 )
 
 type Float struct {
@@ -17,7 +17,7 @@ type Float struct {
 
 // UnmarshalJSON - Convert JSON to value
 func (t *Float) UnmarshalJSON(data []byte) error {
-	for range Only.Once {
+	for range only.Once {
 		t.Valid = false
 
 		if len(data) == 0 {
@@ -48,7 +48,7 @@ func (t *Float) UnmarshalJSON(data []byte) error {
 func (t Float) MarshalJSON() ([]byte, error) {
 	var data []byte
 
-	for range Only.Once {
+	for range only.Once {
 		t.Valid = false
 
 		data, t.Error = json.Marshal(t.float64)
@@ -78,7 +78,7 @@ func (t Float) String() string {
 }
 
 func (t *Float) SetString(value string) Float {
-	for range Only.Once {
+	for range only.Once {
 		t.string = value
 		t.float64 = 0
 		t.Valid = false
@@ -105,7 +105,7 @@ func (t *Float) SetString(value string) Float {
 }
 
 func (t *Float) SetValue(value float64) Float {
-	for range Only.Once {
+	for range only.Once {
 		t.string = ""
 		t.float64 = value
 		t.Valid = true
@@ -116,7 +116,7 @@ func (t *Float) SetValue(value float64) Float {
 }
 
 func (t *Float) SetPrecision(precision int) Float {
-	for range Only.Once {
+	for range only.Once {
 		t.float64 = SetPrecision(t.float64, precision)
 	}
 
