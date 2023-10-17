@@ -1,23 +1,22 @@
 package api
 
 import (
-	"github.com/MickMake/GoUnify/Only"
 	"errors"
 	"fmt"
 	"strings"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+)
 
 type Response struct {
 	ResponseCommon
 }
 
 type ResponseCommon struct {
-	ReqSerialNum string        `json:"req_serial_num"`
-	ResultCode   string        `json:"result_code"`
-	ResultMsg    string        `json:"result_msg"`
+	ReqSerialNum string `json:"req_serial_num"`
+	ResultCode   string `json:"result_code"`
+	ResultMsg    string `json:"result_msg"`
 }
-
 
 func (req ResponseCommon) IsValid() error {
 	var err error
@@ -49,12 +48,12 @@ func (req ResponseCommon) IsTokenValid() bool {
 	var ok bool
 	for range Only.Once {
 		switch {
-			case req.ResultMsg == "success":
-				ok = true
-			case req.ResultMsg == "er_token_login_invalid":
-				ok = false
-			default:
-				ok = false
+		case req.ResultMsg == "success":
+			ok = true
+		case req.ResultMsg == "er_token_login_invalid":
+			ok = false
+		default:
+			ok = false
 		}
 	}
 	return ok

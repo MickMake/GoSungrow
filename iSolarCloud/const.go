@@ -2,7 +2,6 @@ package iSolarCloud
 
 import "time"
 
-
 //goland:noinspection SpellCheckingInspection
 const (
 	DefaultHost      = "https://augateway.isolarcloud.com"

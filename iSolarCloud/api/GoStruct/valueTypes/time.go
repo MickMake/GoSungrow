@@ -2,10 +2,10 @@ package valueTypes
 
 import (
 	"encoding/json"
-	"github.com/MickMake/GoUnify/Only"
 	"time"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+)
 
 var inputTimeLayout = []string{
 	TimeLayout,
@@ -23,7 +23,6 @@ type Time struct {
 
 // UnmarshalJSON - Convert JSON to value
 func (dt *Time) UnmarshalJSON(data []byte) error {
-
 	for range Only.Once {
 		if len(data) == 0 {
 			break

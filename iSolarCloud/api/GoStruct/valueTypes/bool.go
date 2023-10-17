@@ -2,24 +2,25 @@ package valueTypes
 
 import (
 	"encoding/json"
-	"github.com/MickMake/GoUnify/Only"
 	"strings"
+
+	"github.com/MickMake/GoUnify/Only"
 )
 
-
-var VarTrue = true
-var VarFalse = false
+var (
+	VarTrue  = true
+	VarFalse = false
+)
 
 type Bool struct {
 	string `json:"string,omitempty"`
 	bool   `json:"bool,omitempty"`
-	Valid   bool `json:"valid"`
-	Error   error `json:"-"`
+	Valid  bool  `json:"valid"`
+	Error  error `json:"-"`
 }
 
 // UnmarshalJSON - Convert JSON to value
 func (t *Bool) UnmarshalJSON(data []byte) error {
-
 	for range Only.Once {
 		t.Valid = false
 
@@ -96,31 +97,31 @@ func (t *Bool) SetString(value string) Bool {
 		t.Valid = false
 
 		switch strings.ToLower(t.string) {
-			case "false":
-				fallthrough
-			case "no":
-				fallthrough
-			case "off":
-				fallthrough
-			case "0":
-				fallthrough
-			case "":
-				// 	fallthrough
-				// case "--":
-				t.bool = false
-				t.string = "false"
-				t.Valid = true
+		case "false":
+			fallthrough
+		case "no":
+			fallthrough
+		case "off":
+			fallthrough
+		case "0":
+			fallthrough
+		case "":
+			// 	fallthrough
+			// case "--":
+			t.bool = false
+			t.string = "false"
+			t.Valid = true
 
-			case "true":
-				fallthrough
-			case "yes":
-				fallthrough
-			case "on":
-				fallthrough
-			case "1":
-				t.bool = true
-				t.string = "true"
-				t.Valid = true
+		case "true":
+			fallthrough
+		case "yes":
+			fallthrough
+		case "on":
+			fallthrough
+		case "1":
+			t.bool = true
+			t.string = "true"
+			t.Valid = true
 		}
 	}
 

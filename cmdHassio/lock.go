@@ -2,15 +2,14 @@ package cmdHassio
 
 import (
 	"encoding/json"
-	"github.com/MickMake/GoUnify/Only"
 	"strings"
+
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const LabelLock = "lock"
 
-
 func (m *Mqtt) LockPublishConfig(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsLock() {
 			break
@@ -23,9 +22,9 @@ func (m *Mqtt) LockPublishConfig(config EntityConfig) error {
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
 
-		payload := Lock {
-			Device:       newDevice,
-			Name:         String(JoinStrings(m.DeviceName, config.Name)),
+		payload := Lock{
+			Device: newDevice,
+			Name:   String(JoinStrings(m.DeviceName, config.Name)),
 			// StateTopic:   JoinStringsForTopic(m.switchPrefix, id, "state"),
 			CommandTopic: String(JoinStringsForTopic(m.Prefix, LabelLock, m.ClientId, id, "cmd")),
 			ObjectId:     String(id),
@@ -38,7 +37,7 @@ func (m *Mqtt) LockPublishConfig(config EntityConfig) error {
 			// StateOn:       "true",
 			// StateOff:      "false",
 			// ValueTemplate: config.ValueTemplate,
-			Icon:          Icon(config.Icon),
+			Icon: Icon(config.Icon),
 		}
 
 		tag := JoinStringsForTopic(m.Prefix, LabelLock, m.ClientId, id, "config")
@@ -49,7 +48,6 @@ func (m *Mqtt) LockPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) LockPublishValue(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsLock() {
 			break
@@ -166,7 +164,6 @@ type Lock struct {
 	// Defines a template to extract a value from the payload.
 	ValueTemplate String `json:"value_template,omitempty"`
 }
-
 
 func (c *Lock) Json() string {
 	j, _ := json.Marshal(*c)

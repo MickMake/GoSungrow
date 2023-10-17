@@ -7,14 +7,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var HEADERS = []string{"Header 1", "Header 2", "Header 3", "Header 4", "Header 5"}
-var INT_ARRAY = []int{1, 2, 3, 1000, 200}
-var INT64_ARRAY = []int64{100, 500, 600, 1000, 10000}
-var FLOAT_ARRAY = []float64{10.01, 12.002, -123.5, 20.00005, 1.01}
-var STRING_ARRAY = []string{"test string", "test string 2", "test", "row", "bndr"}
-var MIXED_ARRAY = []interface{}{"string", 1, 1.005, "another string", -2}
-var EMPTY_ARRAY = []string{"4th element empty", "4th element empty", "4th element empty"}
-var MIXED_MAP = map[string][]interface{}{"header1": MIXED_ARRAY, "header2": MIXED_ARRAY}
+var (
+	HEADERS      = []string{"Header 1", "Header 2", "Header 3", "Header 4", "Header 5"}
+	INT_ARRAY    = []int{1, 2, 3, 1000, 200}
+	INT64_ARRAY  = []int64{100, 500, 600, 1000, 10000}
+	FLOAT_ARRAY  = []float64{10.01, 12.002, -123.5, 20.00005, 1.01}
+	STRING_ARRAY = []string{"test string", "test string 2", "test", "row", "bndr"}
+	MIXED_ARRAY  = []interface{}{"string", 1, 1.005, "another string", -2}
+	EMPTY_ARRAY  = []string{"4th element empty", "4th element empty", "4th element empty"}
+	MIXED_MAP    = map[string][]interface{}{"header1": MIXED_ARRAY, "header2": MIXED_ARRAY}
+)
 
 // Test Setters
 func TestSetFormat(t *testing.T) {
@@ -34,7 +36,6 @@ func TestPads(t *testing.T) {
 	assert.Equal(t, tabulate.Render("grid"), readTable("_tests/table_float"))
 	tabulate.SetAlign("center")
 	assert.Equal(t, tabulate.Render("grid"), readTable("_tests/table_float_center_pad"))
-
 }
 
 func TestSetHeaders(t *testing.T) {
@@ -168,26 +169,41 @@ func TestHideLineBelowHeader(t *testing.T) {
 	tabulate.SetHideLines([]string{"belowheader"})
 	assert.Equal(t, tabulate.Render("grid"), readTable("_tests/test_hide_lines"))
 }
+
 func TestWrapCells(t *testing.T) {
-	tabulate := Create([][]string{[]string{"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis",
-		"Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis", "zzLorem ipsum", " test", "test"}, []string{"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis",
-		"Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis", "zzLorem ipsum", " test", "test"}, STRING_ARRAY, []string{"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis",
-		"Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis", "zzLorem ipsum", " test", "test"}, STRING_ARRAY})
+	tabulate := Create([][]string{{
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis",
+		"Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis", "zzLorem ipsum", " test", "test",
+	}, {
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis",
+		"Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis", "zzLorem ipsum", " test", "test",
+	}, STRING_ARRAY, {
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis",
+		"Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis", "zzLorem ipsum", " test", "test",
+	}, STRING_ARRAY})
 	tabulate.SetHeaders([]string{"Header 1", "header 2", "header 3", "header 4"})
 	tabulate.SetMaxCellSize(16)
 	tabulate.SetWrapStrings(true)
 	assert.Equal(t, tabulate.Render("grid"), readTable("_tests/test_string_wrap_grid"))
 }
+
 func TestWrapCellsSimple(t *testing.T) {
-	tabulate := Create([][]string{[]string{"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis",
-		"Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis", "zzLorem ipsum", " test", "test"}, []string{"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis",
-		"Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis", "zzLorem ipsum", " test", "test"}, STRING_ARRAY, []string{"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis",
-		"Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis", "zzLorem ipsum", " test", "test"}, STRING_ARRAY})
+	tabulate := Create([][]string{{
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis",
+		"Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis", "zzLorem ipsum", " test", "test",
+	}, {
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis",
+		"Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis", "zzLorem ipsum", " test", "test",
+	}, STRING_ARRAY, {
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis",
+		"Vivamus laoreet vestibulum pretium. Nulla et ornare elit. Cum sociis natoque penatibus et magnis", "zzLorem ipsum", " test", "test",
+	}, STRING_ARRAY})
 	tabulate.SetHeaders([]string{"Header 1", "header 2", "header 3", "header 4"})
 	tabulate.SetMaxCellSize(16)
 	tabulate.SetWrapStrings(true)
 	assert.Equal(t, tabulate.Render("simple"), readTable("_tests/test_string_wrap_simple"))
 }
+
 func TestMultiByteString(t *testing.T) {
 	tabulate := Create([][]string{
 		{"朝", "おはようございます"},
@@ -199,6 +215,7 @@ func TestMultiByteString(t *testing.T) {
 	tabulate.SetWrapStrings(true)
 	assert.Equal(t, tabulate.Render("grid"), readTable("_tests/test_multibyte_string"))
 }
+
 func readTable(path string) string {
 	buf, err := ioutil.ReadFile(path)
 	if err != nil {

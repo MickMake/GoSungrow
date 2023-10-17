@@ -5,14 +5,13 @@ import (
 	"strings"
 )
 
-
 func JoinStrings(args ...string) string {
 	return strings.TrimSpace(strings.Join(args, " "))
 }
 
 func JoinStringsForName(sep string, args ...string) string {
 	var newargs []string
-	var re = regexp.MustCompile(`(\.)+`)
+	re := regexp.MustCompile(`(\.)+`)
 	for _, a := range args {
 		if a == "" {
 			continue
@@ -28,7 +27,7 @@ func JoinStringsForName(sep string, args ...string) string {
 
 func JoinStringsForId(args ...string) string {
 	var newargs []string
-	var re = regexp.MustCompile(`(/| |:|\.)+`)
+	re := regexp.MustCompile(`(/| |:|\.)+`)
 	for _, a := range args {
 		if a == "" {
 			continue
@@ -43,7 +42,7 @@ func JoinStringsForId(args ...string) string {
 
 func JoinStringsForTopic(args ...string) string {
 	var newargs []string
-	var re = regexp.MustCompile(`( |:)+`)
+	re := regexp.MustCompile(`( |:)+`)
 	for _, a := range args {
 		if a == "" {
 			continue
@@ -58,7 +57,6 @@ func JoinStringsForTopic(args ...string) string {
 	// ret := strings.ReplaceAll(strings.Join(args, "/"), "//", "/")
 	// return ret
 }
-
 
 // const DiscoveryPrefix = "homeassistant"
 //

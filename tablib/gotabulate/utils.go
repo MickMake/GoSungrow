@@ -1,7 +1,9 @@
 package gotabulate
 
-import "strconv"
-import "fmt"
+import (
+	"strconv"
+	"fmt"
+)
 
 // Create normalized Array from strings
 func createFromString(data [][]string) []*TabulateRow {
@@ -113,7 +115,6 @@ func createFromBool(data [][]bool) []*TabulateRow {
 // Create normalized array from a map of mixed elements (interface{})
 // Keys will be used as header
 func createFromMapMixed(data map[string][]interface{}, format byte) (headers []string, tData []*TabulateRow) {
-
 	var dataslice [][]interface{}
 	for key, value := range data {
 		headers = append(headers, key)

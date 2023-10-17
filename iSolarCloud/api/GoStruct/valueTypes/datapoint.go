@@ -2,16 +2,16 @@ package valueTypes
 
 import (
 	"encoding/json"
-	"github.com/MickMake/GoUnify/Only"
 	"strings"
+
+	"github.com/MickMake/GoUnify/Only"
 )
 
-
 type DataPoint struct {
-	endPoint string `json:"end_point,omitempty"`
+	endPoint string  `json:"end_point,omitempty"`
 	pointId  PointId `json:"point_id,omitempty"`
-	Valid   bool `json:"valid"`
-	Error   error `json:"-"`
+	Valid    bool    `json:"valid"`
+	Error    error   `json:"-"`
 }
 
 // UnmarshalJSON - Convert JSON to value
@@ -72,7 +72,7 @@ func (t DataPoint) Split() []string {
 
 func (t DataPoint) last() string {
 	a := strings.Split(t.String(), ".")
-	return a[len(a) - 1]
+	return a[len(a)-1]
 }
 
 func (t *DataPoint) Set(endPoint string, pointId string) DataPoint {
@@ -113,7 +113,6 @@ func (t *DataPoint) SetEndPoint(endPoint string) DataPoint {
 
 	return *t
 }
-
 
 func SetDataPoint(endPoint string, pointId string) DataPoint {
 	var t DataPoint

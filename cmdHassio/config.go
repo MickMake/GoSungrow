@@ -2,10 +2,10 @@ package cmdHassio
 
 import (
 	"encoding/json"
+
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdLog"
 )
-
 
 type Config struct {
 	Entry        string       `json:"~,omitempty" required:"false"`
@@ -47,19 +47,19 @@ func (m *Mqtt) NewDevice(config EntityConfig) (bool, Device) {
 			modl = m.DeviceName
 		}
 
-		ret = Device {
+		ret = Device{
 			ConfigurationUrl: parent.ConfigurationUrl,
-			Connections:      [][]string {
-				{ m.EntityPrefix, JoinStringsForId(m.EntityPrefix, config.ParentName) },
-				{ JoinStringsForId(m.EntityPrefix, config.ParentName), JoinStringsForId(m.EntityPrefix, config.ParentId) },
+			Connections: [][]string{
+				{m.EntityPrefix, JoinStringsForId(m.EntityPrefix, config.ParentName)},
+				{JoinStringsForId(m.EntityPrefix, config.ParentName), JoinStringsForId(m.EntityPrefix, config.ParentId)},
 			},
-			Identifiers:      []string{ JoinStringsForId(m.EntityPrefix, config.ParentId) },
-			Manufacturer:     manu,
-			Model:            modl,
-			Name:             JoinStrings(m.EntityPrefix, config.ParentName, "-", parent.Name),
-			SuggestedArea:    parent.SuggestedArea,
-			SwVersion:        parent.SwVersion,
-			ViaDevice:        parent.ViaDevice,
+			Identifiers:   []string{JoinStringsForId(m.EntityPrefix, config.ParentId)},
+			Manufacturer:  manu,
+			Model:         modl,
+			Name:          JoinStrings(m.EntityPrefix, config.ParentName, "-", parent.Name),
+			SuggestedArea: parent.SuggestedArea,
+			SwVersion:     parent.SwVersion,
+			ViaDevice:     parent.ViaDevice,
 		}
 		ok = true
 	}

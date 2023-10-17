@@ -1,6 +1,5 @@
 package reflection
 
-
 // func GetStringFrom(ref interface{}, name string) string {
 // 	var ret string
 // 	for range Only.Once {

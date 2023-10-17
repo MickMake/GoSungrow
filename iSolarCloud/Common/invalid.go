@@ -2,8 +2,7 @@ package Common
 
 type Unknown interface{}
 
-type UnknownStruct struct {
-}
+type UnknownStruct struct{}
 
 type UnknownArray []interface{}
 

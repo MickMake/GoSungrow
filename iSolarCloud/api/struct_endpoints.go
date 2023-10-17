@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"sort"
+
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/olekukonko/tablewriter"
-	"sort"
 )
-
 
 type TypeEndPoints map[EndPointName]EndPoint // Map of EndPoints by endpoint name.
 

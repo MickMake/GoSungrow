@@ -1,11 +1,12 @@
 //go:build !(freebsd && amd64)
+
 package cmdModbus
 
 import (
-	"github.com/MickMake/GoUnify/Only"
 	"strconv"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+)
 
 type Address uint16
 
@@ -27,7 +28,6 @@ func StringToAddress(address string) (Address, error) {
 	return ret, err
 }
 
-
 type Value uint16
 
 // func (m Value) String() string {
@@ -47,7 +47,6 @@ func StringToValue(value string) (Value, error) {
 	}
 	return ret, err
 }
-
 
 type Quantity uint16
 

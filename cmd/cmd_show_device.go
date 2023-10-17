@@ -2,15 +2,15 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/spf13/cobra"
 )
 
-
 func (c *CmdShow) AttachDevice(cmd *cobra.Command) *cobra.Command {
 	for range Only.Once {
-		var self = &cobra.Command{
+		self := &cobra.Command{
 			Use:                   "device",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Device"},
@@ -36,9 +36,8 @@ func (c *CmdShow) AttachDevice(cmd *cobra.Command) *cobra.Command {
 	return c.SelfCmd
 }
 
-
 func (c *CmdShow) AttachDeviceList(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "list",
 		Aliases:               []string{"ls"},
 		Annotations:           map[string]string{"group": "Device"},
@@ -55,6 +54,7 @@ func (c *CmdShow) AttachDeviceList(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcDeviceTypeList(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.OutputType.SetTable()
@@ -70,7 +70,7 @@ func (c *CmdShow) funcDeviceTypeList(_ *cobra.Command, args []string) error {
 }
 
 func (c *CmdShow) AttachDevicePoints(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "points <device_type ...>",
 		Aliases:               []string{"point"},
 		Annotations:           map[string]string{"group": "Device"},
@@ -90,6 +90,7 @@ func (c *CmdShow) AttachDevicePoints(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcDevicePoints(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.OutputType.SetTable()
@@ -105,7 +106,7 @@ func (c *CmdShow) funcDevicePoints(_ *cobra.Command, args []string) error {
 }
 
 func (c *CmdShow) AttachDeviceData(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "data <device_type> " + ArgsDateInterval,
 		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "Device"},
@@ -128,6 +129,7 @@ func (c *CmdShow) AttachDeviceData(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcDeviceData(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.OutputType.SetTable()
@@ -138,7 +140,7 @@ func (c *CmdShow) funcDeviceData(_ *cobra.Command, args []string) error {
 }
 
 func (c *CmdShow) AttachDeviceGraph(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "graph <device_type> " + ArgsDateInterval,
 		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "Device"},
@@ -161,6 +163,7 @@ func (c *CmdShow) AttachDeviceGraph(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcDeviceGraph(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.OutputType.SetGraph()
@@ -171,7 +174,7 @@ func (c *CmdShow) funcDeviceGraph(_ *cobra.Command, args []string) error {
 }
 
 func (c *CmdShow) AttachDeviceSave(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "save <device_type> " + ArgsDateInterval,
 		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "Device"},
@@ -194,6 +197,7 @@ func (c *CmdShow) AttachDeviceSave(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcDeviceSave(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.OutputType.SetTable()
@@ -204,7 +208,7 @@ func (c *CmdShow) funcDeviceSave(_ *cobra.Command, args []string) error {
 }
 
 func (c *CmdShow) AttachDeviceModels(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "models",
 		Aliases:               []string{"model"},
 		Annotations:           map[string]string{"group": "Device"},
@@ -221,6 +225,7 @@ func (c *CmdShow) AttachDeviceModels(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcDeviceModels(_ *cobra.Command, _ []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.OutputType.SetTable()

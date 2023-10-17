@@ -1,6 +1,5 @@
 package GoStruct
 
-
 // -------------------------------------------------------------------------------- //
 // From struct_reflect.go
 //
@@ -35,7 +34,6 @@ package GoStruct
 // 		}
 // 	}
 // }
-
 
 // func FindStart(fieldName string, Parent *Reflect, Current *Reflect, name EndPointPath) *Reflect {
 // 	var ret Reflect
@@ -413,4 +411,3 @@ package GoStruct
 // 	sm.GoStructOptions = nil
 // 	sm.GoStructOptionCurrent = nil
 // }
-

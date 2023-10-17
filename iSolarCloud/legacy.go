@@ -1,6 +1,5 @@
 package iSolarCloud
 
-
 // package printTable
 //
 // import (
@@ -47,7 +46,6 @@ package iSolarCloud
 // //func EntityFilename(entity string) string {
 // //	return strings.TrimSuffix(entity, ".json") + ".json"
 // //}
-
 
 // getPowerStationInfo - Contains state decoding.
 
@@ -839,7 +837,6 @@ package iSolarCloud
 // 	}
 // 	return response
 // }
-
 
 // func (sgd *SunGrowData) GetAllEndPoints() []string {
 // 	var ret []string

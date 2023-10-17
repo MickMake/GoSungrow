@@ -1,106 +1,107 @@
 // Package gojson - generates go struct definitions from JSON documents
 //
-// Reads from stdin and prints to stdout
+// # Reads from stdin and prints to stdout
 //
 // Example:
-// 	curl -s https://api.github.com/repos/chimeracoder/gojson | gojson -name=Repository
+//
+//	curl -s https://api.github.com/repos/chimeracoder/gojson | gojson -name=Repository
 //
 // Output:
-// 	package main
 //
-// 	type Repository struct {
-//     	ArchiveURL       string      `json:"archive_url"`
-//     	AssigneesURL     string      `json:"assignees_url"`
-//     	BlobsURL         string      `json:"blobs_url"`
-//     	BranchesURL      string      `json:"branches_url"`
-//     	CloneURL         string      `json:"clone_url"`
-//     	CollaboratorsURL string      `json:"collaborators_url"`
-//     	CommentsURL      string      `json:"comments_url"`
-//     	CommitsURL       string      `json:"commits_url"`
-//     	CompareURL       string      `json:"compare_url"`
-//     	ContentsURL      string      `json:"contents_url"`
-//     	ContributorsURL  string      `json:"contributors_url"`
-//     	CreatedAt        string      `json:"created_at"`
-//     	DefaultBranch    string      `json:"default_branch"`
-//     	Description      string      `json:"description"`
-//     	DownloadsURL     string      `json:"downloads_url"`
-//     	EventsURL        string      `json:"events_url"`
-//     	Fork             bool        `json:"fork"`
-//     	Forks            float64     `json:"forks"`
-//     	ForksCount       float64     `json:"forks_count"`
-//     	ForksURL         string      `json:"forks_url"`
-//     	FullName         string      `json:"full_name"`
-//     	GitCommitsURL    string      `json:"git_commits_url"`
-//     	GitRefsURL       string      `json:"git_refs_url"`
-//     	GitTagsURL       string      `json:"git_tags_url"`
-//     	GitURL           string      `json:"git_url"`
-//     	HasDownloads     bool        `json:"has_downloads"`
-//     	HasIssues        bool        `json:"has_issues"`
-//     	HasWiki          bool        `json:"has_wiki"`
-//     	Homepage         interface{} `json:"homepage"`
-//     	HooksURL         string      `json:"hooks_url"`
-//     	HtmlURL          string      `json:"html_url"`
-//     	ID               float64     `json:"id"`
-//     	IssueCommentURL  string      `json:"issue_comment_url"`
-//     	IssueEventsURL   string      `json:"issue_events_url"`
-//     	IssuesURL        string      `json:"issues_url"`
-//     	KeysURL          string      `json:"keys_url"`
-//     	LabelsURL        string      `json:"labels_url"`
-//     	Language         string      `json:"language"`
-//     	LanguagesURL     string      `json:"languages_url"`
-//     	MasterBranch     string      `json:"master_branch"`
-//     	MergesURL        string      `json:"merges_url"`
-//     	MilestonesURL    string      `json:"milestones_url"`
-//     	MirrorURL        interface{} `json:"mirror_url"`
-//     	Name             string      `json:"name"`
-//     	NetworkCount     float64     `json:"network_count"`
-//     	NotificationsURL string      `json:"notifications_url"`
-//     	OpenIssues       float64     `json:"open_issues"`
-//     	OpenIssuesCount  float64     `json:"open_issues_count"`
-//     	Owner            struct {
-//         	AvatarURL         string  `json:"avatar_url"`
-//         	EventsURL         string  `json:"events_url"`
-//         	FollowersURL      string  `json:"followers_url"`
-//         	FollowingURL      string  `json:"following_url"`
-//         	GistsURL          string  `json:"gists_url"`
-//         	GravatarID        string  `json:"gravatar_id"`
-//         	HtmlURL           string  `json:"html_url"`
-//         	ID                float64 `json:"id"`
-//         	Login             string  `json:"login"`
-//         	OrganizationsURL  string  `json:"organizations_url"`
-//         	ReceivedEventsURL string  `json:"received_events_url"`
-//         	ReposURL          string  `json:"repos_url"`
-//         	SiteAdmin         bool    `json:"site_admin"`
-//         	StarredURL        string  `json:"starred_url"`
-//         	SubscriptionsURL  string  `json:"subscriptions_url"`
-//         	Type              string  `json:"type"`
-//         	URL               string  `json:"url"`
-//     } `	json:"owner"`
-//     	Private         bool    `json:"private"`
-//     	PullsURL        string  `json:"pulls_url"`
-//     	PushedAt        string  `json:"pushed_at"`
-//     	Size            float64 `json:"size"`
-//     	SshURL          string  `json:"ssh_url"`
-//     	StargazersURL   string  `json:"stargazers_url"`
-//     	StatusesURL     string  `json:"statuses_url"`
-//     	SubscribersURL  string  `json:"subscribers_url"`
-//     	SubscriptionURL string  `json:"subscription_url"`
-//     	SvnURL          string  `json:"svn_url"`
-//     	TagsURL         string  `json:"tags_url"`
-//     	TeamsURL        string  `json:"teams_url"`
-//     	TreesURL        string  `json:"trees_url"`
-//     	UpdatedAt       string  `json:"updated_at"`
-//     	URL             string  `json:"url"`
-//     	Watchers        float64 `json:"watchers"`
-//     	WatchersCount   float64 `json:"watchers_count"`
-// 	}
+//		package main
+//
+//		type Repository struct {
+//	    	ArchiveURL       string      `json:"archive_url"`
+//	    	AssigneesURL     string      `json:"assignees_url"`
+//	    	BlobsURL         string      `json:"blobs_url"`
+//	    	BranchesURL      string      `json:"branches_url"`
+//	    	CloneURL         string      `json:"clone_url"`
+//	    	CollaboratorsURL string      `json:"collaborators_url"`
+//	    	CommentsURL      string      `json:"comments_url"`
+//	    	CommitsURL       string      `json:"commits_url"`
+//	    	CompareURL       string      `json:"compare_url"`
+//	    	ContentsURL      string      `json:"contents_url"`
+//	    	ContributorsURL  string      `json:"contributors_url"`
+//	    	CreatedAt        string      `json:"created_at"`
+//	    	DefaultBranch    string      `json:"default_branch"`
+//	    	Description      string      `json:"description"`
+//	    	DownloadsURL     string      `json:"downloads_url"`
+//	    	EventsURL        string      `json:"events_url"`
+//	    	Fork             bool        `json:"fork"`
+//	    	Forks            float64     `json:"forks"`
+//	    	ForksCount       float64     `json:"forks_count"`
+//	    	ForksURL         string      `json:"forks_url"`
+//	    	FullName         string      `json:"full_name"`
+//	    	GitCommitsURL    string      `json:"git_commits_url"`
+//	    	GitRefsURL       string      `json:"git_refs_url"`
+//	    	GitTagsURL       string      `json:"git_tags_url"`
+//	    	GitURL           string      `json:"git_url"`
+//	    	HasDownloads     bool        `json:"has_downloads"`
+//	    	HasIssues        bool        `json:"has_issues"`
+//	    	HasWiki          bool        `json:"has_wiki"`
+//	    	Homepage         interface{} `json:"homepage"`
+//	    	HooksURL         string      `json:"hooks_url"`
+//	    	HtmlURL          string      `json:"html_url"`
+//	    	ID               float64     `json:"id"`
+//	    	IssueCommentURL  string      `json:"issue_comment_url"`
+//	    	IssueEventsURL   string      `json:"issue_events_url"`
+//	    	IssuesURL        string      `json:"issues_url"`
+//	    	KeysURL          string      `json:"keys_url"`
+//	    	LabelsURL        string      `json:"labels_url"`
+//	    	Language         string      `json:"language"`
+//	    	LanguagesURL     string      `json:"languages_url"`
+//	    	MasterBranch     string      `json:"master_branch"`
+//	    	MergesURL        string      `json:"merges_url"`
+//	    	MilestonesURL    string      `json:"milestones_url"`
+//	    	MirrorURL        interface{} `json:"mirror_url"`
+//	    	Name             string      `json:"name"`
+//	    	NetworkCount     float64     `json:"network_count"`
+//	    	NotificationsURL string      `json:"notifications_url"`
+//	    	OpenIssues       float64     `json:"open_issues"`
+//	    	OpenIssuesCount  float64     `json:"open_issues_count"`
+//	    	Owner            struct {
+//	        	AvatarURL         string  `json:"avatar_url"`
+//	        	EventsURL         string  `json:"events_url"`
+//	        	FollowersURL      string  `json:"followers_url"`
+//	        	FollowingURL      string  `json:"following_url"`
+//	        	GistsURL          string  `json:"gists_url"`
+//	        	GravatarID        string  `json:"gravatar_id"`
+//	        	HtmlURL           string  `json:"html_url"`
+//	        	ID                float64 `json:"id"`
+//	        	Login             string  `json:"login"`
+//	        	OrganizationsURL  string  `json:"organizations_url"`
+//	        	ReceivedEventsURL string  `json:"received_events_url"`
+//	        	ReposURL          string  `json:"repos_url"`
+//	        	SiteAdmin         bool    `json:"site_admin"`
+//	        	StarredURL        string  `json:"starred_url"`
+//	        	SubscriptionsURL  string  `json:"subscriptions_url"`
+//	        	Type              string  `json:"type"`
+//	        	URL               string  `json:"url"`
+//	    } `	json:"owner"`
+//	    	Private         bool    `json:"private"`
+//	    	PullsURL        string  `json:"pulls_url"`
+//	    	PushedAt        string  `json:"pushed_at"`
+//	    	Size            float64 `json:"size"`
+//	    	SshURL          string  `json:"ssh_url"`
+//	    	StargazersURL   string  `json:"stargazers_url"`
+//	    	StatusesURL     string  `json:"statuses_url"`
+//	    	SubscribersURL  string  `json:"subscribers_url"`
+//	    	SubscriptionURL string  `json:"subscription_url"`
+//	    	SvnURL          string  `json:"svn_url"`
+//	    	TagsURL         string  `json:"tags_url"`
+//	    	TeamsURL        string  `json:"teams_url"`
+//	    	TreesURL        string  `json:"trees_url"`
+//	    	UpdatedAt       string  `json:"updated_at"`
+//	    	URL             string  `json:"url"`
+//	    	Watchers        float64 `json:"watchers"`
+//	    	WatchersCount   float64 `json:"watchers_count"`
+//		}
 package gojson
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 	"go/format"
 	"io"
 	"math"
@@ -110,9 +111,10 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/MickMake/GoUnify/Only"
+
 	"gopkg.in/yaml.v2"
 )
-
 
 var ForceFloats bool
 
@@ -214,22 +216,22 @@ func Generate(input io.Reader, parser Parser, structName, pkgName string, tags [
 	}
 
 	switch iresult := iresult.(type) {
-		case map[interface{}]interface{}:
-			result = convertKeysToStrings(iresult)
-		case map[string]interface{}:
-			result = iresult
-		case []interface{}:
-			src := fmt.Sprintf("package %s\n\ntype %s %s\n",
-				pkgName,
-				structName,
-				typeForValue(iresult, structName, tags, subStructMap, convertFloats))
-			formatted, err := format.Source([]byte(src))
-			if err != nil {
-				err = fmt.Errorf("error formatting: %s, was formatting\n%s", err, src)
-			}
-			return formatted, err
-		default:
-			return nil, fmt.Errorf("unexpected type: %T", iresult)
+	case map[interface{}]interface{}:
+		result = convertKeysToStrings(iresult)
+	case map[string]interface{}:
+		result = iresult
+	case []interface{}:
+		src := fmt.Sprintf("package %s\n\ntype %s %s\n",
+			pkgName,
+			structName,
+			typeForValue(iresult, structName, tags, subStructMap, convertFloats))
+		formatted, err := format.Source([]byte(src))
+		if err != nil {
+			err = fmt.Errorf("error formatting: %s, was formatting\n%s", err, src)
+		}
+		return formatted, err
+	default:
+		return nil, fmt.Errorf("unexpected type: %T", iresult)
 	}
 
 	src := fmt.Sprintf("package %s\ntype %s %s}",
@@ -283,61 +285,61 @@ func generateTypes(obj map[string]interface{}, structName string, tags []string,
 
 		// If a nested value, recurse
 		switch value := value.(type) {
-			case []interface{}:
-				if len(value) > 0 {
-					sub := ""
-					if v, ok := value[0].(map[interface{}]interface{}); ok {
-						sub = generateTypes(convertKeysToStrings(v), structName, tags, depth+1, subStructMap, convertFloats) + "}"
-					} else if v, ok := value[0].(map[string]interface{}); ok {
-						sub = generateTypes(v, structName, tags, depth+1, subStructMap, convertFloats) + "}"
-					}
+		case []interface{}:
+			if len(value) > 0 {
+				sub := ""
+				if v, ok := value[0].(map[interface{}]interface{}); ok {
+					sub = generateTypes(convertKeysToStrings(v), structName, tags, depth+1, subStructMap, convertFloats) + "}"
+				} else if v, ok := value[0].(map[string]interface{}); ok {
+					sub = generateTypes(v, structName, tags, depth+1, subStructMap, convertFloats) + "}"
+				}
 
-					if sub != "" {
-						subName := sub
+				if sub != "" {
+					subName := sub
 
-						if subStructMap != nil {
-							if val, ok := subStructMap[sub]; ok {
-								subName = val
-							} else {
-								subName = fmt.Sprintf("%v_sub%v", structName, len(subStructMap)+1)
-								subStructMap[sub] = subName
-							}
+					if subStructMap != nil {
+						if val, ok := subStructMap[sub]; ok {
+							subName = val
+						} else {
+							subName = fmt.Sprintf("%v_sub%v", structName, len(subStructMap)+1)
+							subStructMap[sub] = subName
 						}
-
-						valueType = "[]" + subName
 					}
+
+					valueType = "[]" + subName
 				}
+			}
 
-			case map[interface{}]interface{}:
-				sub := generateTypes(convertKeysToStrings(value), structName, tags, depth+1, subStructMap, convertFloats) + "}"
-				subName := sub
+		case map[interface{}]interface{}:
+			sub := generateTypes(convertKeysToStrings(value), structName, tags, depth+1, subStructMap, convertFloats) + "}"
+			subName := sub
 
-				if subStructMap != nil {
-					if val, ok := subStructMap[sub]; ok {
-						subName = val
-					} else {
-						subName = fmt.Sprintf("%v_sub%v", structName, len(subStructMap)+1)
+			if subStructMap != nil {
+				if val, ok := subStructMap[sub]; ok {
+					subName = val
+				} else {
+					subName = fmt.Sprintf("%v_sub%v", structName, len(subStructMap)+1)
 
-						subStructMap[sub] = subName
-					}
+					subStructMap[sub] = subName
 				}
-				valueType = subName
+			}
+			valueType = subName
 
-			case map[string]interface{}:
-				sub := generateTypes(value, structName, tags, depth+1, subStructMap, convertFloats) + "}"
-				subName := sub
+		case map[string]interface{}:
+			sub := generateTypes(value, structName, tags, depth+1, subStructMap, convertFloats) + "}"
+			subName := sub
 
-				if subStructMap != nil {
-					if val, ok := subStructMap[sub]; ok {
-						subName = val
-					} else {
-						subName = fmt.Sprintf("%v_sub%v", structName, len(subStructMap)+1)
+			if subStructMap != nil {
+				if val, ok := subStructMap[sub]; ok {
+					subName = val
+				} else {
+					subName = fmt.Sprintf("%v_sub%v", structName, len(subStructMap)+1)
 
-						subStructMap[sub] = subName
-					}
+					subStructMap[sub] = subName
 				}
+			}
 
-				valueType = subName
+			valueType = subName
 		}
 
 		fieldName := FmtFieldName(key)
@@ -358,37 +360,37 @@ func generateTypes(obj map[string]interface{}, structName string, tags []string,
 
 func TypeLookup(Type string) string {
 	switch Type {
-		case "string":
-			Type = "valueTypes.String"
+	case "string":
+		Type = "valueTypes.String"
 
-		case "bool":
-			Type = "valueTypes.Bool"
+	case "bool":
+		Type = "valueTypes.Bool"
 
-		case "int":
-			Type = "valueTypes.Integer"
-		case "int8":
-			Type = "valueTypes.Integer"
-		case "int16":
-			Type = "valueTypes.Integer"
-		case "int32":
-			Type = "valueTypes.Integer"
-		case "int64":
-			Type = "valueTypes.Integer"
-		case "uint":
-			Type = "valueTypes.Integer"
-		case "uint8":
-			Type = "valueTypes.Integer"
-		case "uint16":
-			Type = "valueTypes.Integer"
-		case "uint32":
-			Type = "valueTypes.Integer"
-		case "uint64":
-			Type = "valueTypes.Integer"
+	case "int":
+		Type = "valueTypes.Integer"
+	case "int8":
+		Type = "valueTypes.Integer"
+	case "int16":
+		Type = "valueTypes.Integer"
+	case "int32":
+		Type = "valueTypes.Integer"
+	case "int64":
+		Type = "valueTypes.Integer"
+	case "uint":
+		Type = "valueTypes.Integer"
+	case "uint8":
+		Type = "valueTypes.Integer"
+	case "uint16":
+		Type = "valueTypes.Integer"
+	case "uint32":
+		Type = "valueTypes.Integer"
+	case "uint64":
+		Type = "valueTypes.Integer"
 
-		case "float32":
-			Type = "valueTypes.Float"
-		case "float64":
-			Type = "valueTypes.Float"
+	case "float32":
+		Type = "valueTypes.Float"
+	case "float64":
+		Type = "valueTypes.Float"
 
 	}
 	return Type
@@ -397,7 +399,9 @@ func TypeLookup(Type string) string {
 // FmtFieldName formats a string as a struct key
 //
 // Example:
-// 	FmtFieldName("foo_id")
+//
+//	FmtFieldName("foo_id")
+//
 // Output: FooID
 func FmtFieldName(s string) string {
 	runes := []rune(s)
@@ -501,7 +505,6 @@ func lintFieldName(name string) string {
 			// All the common initialisms are ASCII,
 			// so we can replace the bytes exactly.
 			copy(runes[w:], []rune(u))
-
 		} else if strings.ToLower(word) == word {
 			// already all lowercase, and not the first word, so uppercase the first character.
 			runes[w] = unicode.ToUpper(runes[w])
@@ -553,8 +556,8 @@ func typeForValue(value interface{}, structName string, tags []string, subStruct
 }
 
 const (
-	NameFloat64 = "float64"
-	NameInterface = "interface{}"
+	NameFloat64        = "float64"
+	NameInterface      = "interface{}"
 	NameArrayInterface = "[]interface{}"
 )
 
@@ -575,7 +578,6 @@ func stringifyFirstChar(str string) string {
 	first := str[:1]
 
 	i, err := strconv.ParseInt(first, 10, 8)
-
 	if err != nil {
 		return str
 	}
@@ -585,17 +587,17 @@ func stringifyFirstChar(str string) string {
 
 func mergeElements(i interface{}) interface{} {
 	switch i := i.(type) {
-		default:
+	default:
+		return i
+	case []interface{}:
+		l := len(i)
+		if l == 0 {
 			return i
-		case []interface{}:
-			l := len(i)
-			if l == 0 {
-				return i
-			}
-			for j := 1; j < l; j++ {
-				i[0] = mergeObjects(i[0], i[j])
-			}
-			return i[0:1]
+		}
+		for j := 1; j < l; j++ {
+			i[0] = mergeObjects(i[0], i[j])
+		}
+		return i[0:1]
 	}
 }
 
@@ -613,29 +615,29 @@ func mergeObjects(o1, o2 interface{}) interface{} {
 	}
 
 	switch i := o1.(type) {
-		default:
-			return o1
+	default:
+		return o1
 
-		case []interface{}:
-			if i2, ok := o2.([]interface{}); ok {
-				i3 := append(i, i2...)
-				return mergeElements(i3)
-			}
-			return mergeElements(i)
+	case []interface{}:
+		if i2, ok := o2.([]interface{}); ok {
+			i3 := append(i, i2...)
+			return mergeElements(i3)
+		}
+		return mergeElements(i)
 
-		case map[string]interface{}:
-			if i2, ok := o2.(map[string]interface{}); ok {
-				for k, v := range i2 {
-					if v2, ok := i[k]; ok {
-						i[k] = mergeObjects(v2, v)
-					} else {
-						i[k] = v
-					}
+	case map[string]interface{}:
+		if i2, ok := o2.(map[string]interface{}); ok {
+			for k, v := range i2 {
+				if v2, ok := i[k]; ok {
+					i[k] = mergeObjects(v2, v)
+				} else {
+					i[k] = v
 				}
 			}
-			return i
+		}
+		return i
 
-		case map[interface{}]interface{}:
+	case map[interface{}]interface{}:
 		if i2, ok := o2.(map[interface{}]interface{}); ok {
 			for k, v := range i2 {
 				if v2, ok := i[k]; ok {

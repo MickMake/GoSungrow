@@ -2,15 +2,14 @@ package cmdHassio
 
 import (
 	"encoding/json"
-	"github.com/MickMake/GoUnify/Only"
 	"strings"
+
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const LabelAlarmControlPanel = "alarm_control_panel"
 
-
 func (m *Mqtt) AlarmControlPanelPublishConfig(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsAlarmControlPanel() {
 			break
@@ -23,9 +22,9 @@ func (m *Mqtt) AlarmControlPanelPublishConfig(config EntityConfig) error {
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
 
-		payload := AlarmControlPanel {
-			Device:       newDevice,
-			Name:         String(JoinStrings(m.DeviceName, config.Name)),
+		payload := AlarmControlPanel{
+			Device: newDevice,
+			Name:   String(JoinStrings(m.DeviceName, config.Name)),
 			// StateTopic:   JoinStringsForTopic(m.switchPrefix, id, "state"),
 			CommandTopic: String(JoinStringsForTopic(m.Prefix, LabelAlarmControlPanel, m.ClientId, id, "cmd")),
 			ObjectId:     String(id),
@@ -38,7 +37,7 @@ func (m *Mqtt) AlarmControlPanelPublishConfig(config EntityConfig) error {
 			// StateOn:       "true",
 			// StateOff:      "false",
 			// ValueTemplate: config.ValueTemplate,
-			Icon:          Icon(config.Icon),
+			Icon: Icon(config.Icon),
 
 			// Availability:           &Availability {
 			// 	PayloadAvailable:    "",
@@ -65,7 +64,6 @@ func (m *Mqtt) AlarmControlPanelPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) AlarmControlPanelPublishValue(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsAlarmControlPanel() {
 			break
@@ -89,7 +87,7 @@ func (m *Mqtt) AlarmControlPanelPublishValue(config EntityConfig) error {
 			break
 		}
 
-		payload := MqttState {
+		payload := MqttState{
 			LastReset: config.LastReset, // m.GetLastReset(config.FullId),
 			Value:     value,
 		}
@@ -199,7 +197,6 @@ type AlarmControlPanel struct {
 	// Defines a template to extract the value.
 	ValueTemplate Template `json:"value_template,omitempty"`
 }
-
 
 func (c *AlarmControlPanel) Json() string {
 	j, _ := json.Marshal(*c)

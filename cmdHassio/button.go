@@ -2,15 +2,14 @@ package cmdHassio
 
 import (
 	"encoding/json"
-	"github.com/MickMake/GoUnify/Only"
 	"strings"
+
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const LabelButton = "button"
 
-
 func (m *Mqtt) ButtonPublishConfig(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsButton() {
 			break
@@ -23,16 +22,16 @@ func (m *Mqtt) ButtonPublishConfig(config EntityConfig) error {
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
 
-		payload := Button {
-			Device:       newDevice,
-			Name:         String(JoinStrings(m.DeviceName, config.Name)),
+		payload := Button{
+			Device: newDevice,
+			Name:   String(JoinStrings(m.DeviceName, config.Name)),
 			// StateTopic:   JoinStringsForTopic(m.switchPrefix, id, "state"),
 			CommandTopic: String(JoinStringsForTopic(m.Prefix, LabelButton, m.ClientId, id, "cmd")),
 			ObjectId:     String(id),
 			UniqueId:     String(id),
 			Qos:          0,
 			Retain:       true,
-			Icon:          Icon(config.Icon),
+			Icon:         Icon(config.Icon),
 		}
 
 		tag := JoinStringsForTopic(m.Prefix, LabelButton, m.ClientId, id, "config")
@@ -43,7 +42,6 @@ func (m *Mqtt) ButtonPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) ButtonPublishValue(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsButton() {
 			break

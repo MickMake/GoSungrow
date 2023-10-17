@@ -2,22 +2,21 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/spf13/cobra"
 )
 
-
 type CmdShow CmdDefault
 
 func NewCmdShow() *CmdShow {
-	return &CmdShow {
-			Error:   nil,
-			cmd:     nil,
-			SelfCmd: nil,
+	return &CmdShow{
+		Error:   nil,
+		cmd:     nil,
+		SelfCmd: nil,
 	}
 }
-
 
 func (c *CmdShow) AttachCommand(cmd *cobra.Command) *cobra.Command {
 	for range Only.Once {
@@ -26,7 +25,7 @@ func (c *CmdShow) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		}
 		c.cmd = cmd
 
-		c.SelfCmd = &cobra.Command {
+		c.SelfCmd = &cobra.Command{
 			Use:                   "show",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Show"},
@@ -34,7 +33,7 @@ func (c *CmdShow) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			Long:                  fmt.Sprintf("High-level Sungrow commands."),
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
-			PreRunE:               func(cmd *cobra.Command, args []string) error {
+			PreRunE: func(cmd *cobra.Command, args []string) error {
 				cmds.Error = cmds.ProcessArgs(cmd, args)
 				if cmds.Error != nil {
 					return cmds.Error

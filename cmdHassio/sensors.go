@@ -3,15 +3,14 @@ package cmdHassio
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 	"strings"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+)
 
 const LabelSensor = "sensor"
 
 func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsSensor() {
 			break
@@ -24,7 +23,7 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
 
-		payload := Sensor {
+		payload := Sensor{
 			Device:                 newDevice,
 			Name:                   String(JoinStrings(m.DeviceName, config.Name)),
 			StateTopic:             String(JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, id, "state")),
@@ -40,8 +39,8 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 			EnabledByDefault:       true,
 			LastResetValueTemplate: String(config.LastResetValueTemplate),
 			// LastReset:              config.LastReset,
-			ValueTemplate:          Template(config.ValueTemplate),
-			Icon:                   Icon(config.Icon),
+			ValueTemplate: Template(config.ValueTemplate),
+			Icon:          Icon(config.Icon),
 		}
 
 		tag := JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, id, "config")
@@ -52,7 +51,6 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) SensorPublishValue(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsSensor() {
 			break
@@ -76,13 +74,13 @@ func (m *Mqtt) SensorPublishValue(config EntityConfig) error {
 			break
 		}
 
-		payload := MqttState {
-			LastReset: config.LastReset,	// m.GetLastReset(config.FullId),
+		payload := MqttState{
+			LastReset: config.LastReset, // m.GetLastReset(config.FullId),
 			Value:     value,
 		}
 		if config.StateClass != "total" {
-			payload = MqttState {
-				Value:     value,
+			payload = MqttState{
+				Value: value,
 			}
 		}
 
@@ -92,10 +90,9 @@ func (m *Mqtt) SensorPublishValue(config EntityConfig) error {
 	return m.err
 }
 
-
 type Sensor struct {
 	// A list of MQTT topics subscribed to receive availability (online/offline) updates. Must not be used together with availability_topic.
-	Availability           *Availability `json:"availability,omitempty"`
+	Availability *Availability `json:"availability,omitempty"`
 
 	// When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest. If set to all, payload_available must be received on all configured availability topics before the entity is marked as online. If set to any, payload_available must be received on at least one configured availability topic before the entity is marked as online. If set to latest, the last payload_available or payload_not_available received on any configured availability topic controls the availability.
 	AvailabilityMode String `json:"availability_mode,omitempty" Default:"latest"`
@@ -311,7 +308,6 @@ func (config *EntityConfig) IsSensor() bool {
 	return ok
 }
 
-
 type Fields map[string]string
 
 func (m *Mqtt) PublishSensorValues(configs []EntityConfig) error {
@@ -340,6 +336,6 @@ func (m *Mqtt) PublishSensorValues(configs []EntityConfig) error {
 
 func (m *Mqtt) GetSensorStateTopic(config EntityConfig) string {
 	st := JoinStringsForId(m.DeviceName, config.FullId)
-	st = JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, st, "state")		// m.GetSensorStateTopic(name, config.SubName),m.EntityPrefix, m.Device.FullName, config.SubName
+	st = JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, st, "state") // m.GetSensorStateTopic(name, config.SubName),m.EntityPrefix, m.Device.FullName, config.SubName
 	return st
 }

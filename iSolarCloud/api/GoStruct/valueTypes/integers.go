@@ -2,10 +2,10 @@ package valueTypes
 
 import (
 	"encoding/json"
-	"github.com/MickMake/GoUnify/Only"
 	"strconv"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+)
 
 type Integer struct {
 	string `json:"string,omitempty"`
@@ -137,12 +137,11 @@ func SetIntegerValue(value int64) Integer {
 	return t.SetValue(value)
 }
 
-
 type Count struct {
 	string `json:"string,omitempty"`
 	int64  `json:"integer,omitempty"`
-	Valid   bool `json:"valid"`
-	Error   error `json:"-"`
+	Valid  bool  `json:"valid"`
+	Error  error `json:"-"`
 }
 
 // UnmarshalJSON - Convert JSON to value

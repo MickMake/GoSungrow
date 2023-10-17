@@ -9,7 +9,6 @@ import (
 	"github.com/mattn/go-runewidth"
 )
 
-
 // TableFormat - Basic Structure of TableFormat
 type TableFormat struct {
 	LineTop         Line
@@ -43,7 +42,7 @@ type Row struct {
 // The user can define his own format, just by adding an entry to this map
 // and calling it with Render function e.g t.Render("customFormat")
 var TableFormats = map[string]TableFormat{
-	"simple": TableFormat {
+	"simple": {
 		LineTop:         Line{"", "-", "  ", ""},
 		LineBelowHeader: Line{"", "-", "  ", ""},
 		LineBottom:      Line{"", "-", "  ", ""},
@@ -52,13 +51,13 @@ var TableFormats = map[string]TableFormat{
 		TitleRow:        Row{"", "  ", ""},
 		Padding:         1,
 	},
-	"plain": TableFormat {
+	"plain": {
 		HeaderRow: Row{"", "  ", ""},
 		DataRow:   Row{"", "  ", ""},
 		TitleRow:  Row{"", "  ", ""},
 		Padding:   1,
 	},
-	"grid": TableFormat {
+	"grid": {
 		LineTop:         Line{"+", "-", "+", "+"},
 		LineBelowHeader: Line{"+", "=", "+", "+"},
 		LineBetweenRows: Line{"+", "-", "+", "+"},
@@ -68,7 +67,7 @@ var TableFormats = map[string]TableFormat{
 		TitleRow:        Row{"|", " ", "|"},
 		Padding:         1,
 	},
-	"utf8": TableFormat {
+	"utf8": {
 		LineTop:         Line{"┏", "━", "┳", "┓"},
 		LineBelowHeader: Line{"┣", "━", "╇", "┫"},
 		// LineBetweenRows: Line{"┣", "━", "╇", "┫"},
@@ -79,7 +78,7 @@ var TableFormats = map[string]TableFormat{
 		TitleRow:        Row{"┃", "┃", "┃"},
 		Padding:         1,
 	},
-	"mick": TableFormat {
+	"mick": {
 		LineTop:         Line{"┏", "—", "┳", "┓"},
 		LineBelowHeader: Line{"|", "—", "╇", "|"},
 		// LineBetweenRows: Line{"┃", "━", "╇", "┃"},
@@ -90,7 +89,7 @@ var TableFormats = map[string]TableFormat{
 		TitleRow:        Row{"|", "|", "|"},
 		Padding:         1,
 	},
-	"condensed": TableFormat {
+	"condensed": {
 		LineTop:         Line{"", "-", "  ", ""},
 		LineBelowHeader: Line{"", "-", "  ", ""},
 		LineBottom:      Line{"", "-", "  ", ""},
@@ -99,7 +98,7 @@ var TableFormats = map[string]TableFormat{
 		TitleRow:        Row{"", "  ", ""},
 		Padding:         1,
 	},
-	"markdown": TableFormat {
+	"markdown": {
 		LineTop:         Line{"", "-", "  ", ""},
 		LineBelowHeader: Line{"", "-", "  ", ""},
 		LineBottom:      Line{"", "-", "  ", ""},
@@ -151,6 +150,7 @@ func (b *writeBuffer) Write(str string, count int) *writeBuffer {
 	}
 	return b
 }
+
 func (b *writeBuffer) String() string {
 	return b.Buffer.String()
 }
@@ -206,7 +206,7 @@ func (t *Tabulate) buildLine(padded_widths []int, padding []int, l Line) string 
 
 	cells := make([]string, len(padded_widths))
 
-	for i, _ := range cells {
+	for i := range cells {
 		b := createBuffer()
 		b.Write(l.hline, padding[i]+MinPadding)
 		cells[i] = b.String()
@@ -229,7 +229,6 @@ func (t *Tabulate) buildLine(padded_widths []int, padding []int, l Line) string 
 
 // buildRow - based on padded_widths from t.GetWidths()
 func (t *Tabulate) buildRow(elements []string, padded_widths []int, paddings []int, d Row) string {
-
 	var buffer bytes.Buffer
 	buffer.WriteString(d.begin)
 	padFunc := t.getAlignFunc()
@@ -302,7 +301,7 @@ func (t *Tabulate) Render(format ...interface{}) string {
 	cols := t.getWidths(t.Headers, t.Data)
 
 	padded_widths := make([]int, len(cols))
-	for i, _ := range padded_widths {
+	for i := range padded_widths {
 		padded_widths[i] = cols[i] + MinPadding*t.TableFormat.Padding
 	}
 
@@ -348,7 +347,7 @@ func (t *Tabulate) Render(format ...interface{}) string {
 				// 	t.TableFormat.LineBetweenRows.sep == "" &&
 				// 	t.TableFormat.LineBetweenRows.end == "" {
 				// } else {
-					lines = append(lines, t.buildLine(padded_widths, cols, t.TableFormat.LineBetweenRows))
+				lines = append(lines, t.buildLine(padded_widths, cols, t.TableFormat.LineBetweenRows))
 				// }
 			}
 		}
@@ -392,7 +391,6 @@ func (t *Tabulate) getWidths(headers []string, data []*TabulateRow) []int {
 
 // SetTitle sets the title of the table can also accept a second string to define an alignment for the title
 func (t *Tabulate) SetTitle(title ...string) *Tabulate {
-
 	t.Title = title[0]
 	if len(title) > 1 {
 		t.TitleAlign = title[1]

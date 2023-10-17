@@ -2,15 +2,14 @@ package cmdHassio
 
 import (
 	"encoding/json"
-	"github.com/MickMake/GoUnify/Only"
 	"strings"
+
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const LabelCamera = "camera"
 
-
 func (m *Mqtt) CameraPublishConfig(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsCamera() {
 			break
@@ -23,13 +22,13 @@ func (m *Mqtt) CameraPublishConfig(config EntityConfig) error {
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
 
-		payload := Camera {
-			Device:       newDevice,
-			Name:         String(JoinStrings(m.DeviceName, config.Name)),
+		payload := Camera{
+			Device: newDevice,
+			Name:   String(JoinStrings(m.DeviceName, config.Name)),
 			// StateTopic:   JoinStringsForTopic(m.switchPrefix, id, "state"),
 			// CommandTopic: String(JoinStringsForTopic(m.switchPrefix, id, "cmd")),
-			ObjectId:     String(id),
-			UniqueId:     String(id),
+			ObjectId: String(id),
+			UniqueId: String(id),
 			// Qos:          0,
 			// Retain:       true,
 
@@ -38,7 +37,7 @@ func (m *Mqtt) CameraPublishConfig(config EntityConfig) error {
 			// StateOn:       "true",
 			// StateOff:      "false",
 			// ValueTemplate: config.ValueTemplate,
-			Icon:          Icon(config.Icon),
+			Icon: Icon(config.Icon),
 		}
 
 		tag := JoinStringsForTopic(m.Prefix, LabelCamera, m.ClientId, id, "config")
@@ -49,7 +48,6 @@ func (m *Mqtt) CameraPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) CameraPublishValue(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsCamera() {
 			break
@@ -133,7 +131,6 @@ type Camera struct {
 	// An ID that uniquely identifies this camera. If two cameras have the same unique ID Home Assistant will raise an exception.
 	UniqueId String `json:"unique_id,omitempty"`
 }
-
 
 func (c *Camera) Json() string {
 	j, _ := json.Marshal(*c)

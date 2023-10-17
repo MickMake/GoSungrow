@@ -2,16 +2,14 @@ package cmdHassio
 
 import (
 	"encoding/json"
-	"github.com/MickMake/GoUnify/Only"
 	"strings"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+)
 
 const LabelUpdate = "update"
 
-
 func (m *Mqtt) UpdatePublishConfig(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsUpdate() {
 			break
@@ -24,9 +22,9 @@ func (m *Mqtt) UpdatePublishConfig(config EntityConfig) error {
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
 
-		payload := Update {
-			Device:       newDevice,
-			Name:         String(JoinStrings(m.DeviceName, config.Name)),
+		payload := Update{
+			Device: newDevice,
+			Name:   String(JoinStrings(m.DeviceName, config.Name)),
 			// StateTopic:   JoinStringsForTopic(m.switchPrefix, id, "state"),
 			CommandTopic: String(JoinStringsForTopic(m.Prefix, LabelUpdate, m.ClientId, id, "cmd")),
 			ObjectId:     String(id),
@@ -39,7 +37,7 @@ func (m *Mqtt) UpdatePublishConfig(config EntityConfig) error {
 			// StateOn:       "true",
 			// StateOff:      "false",
 			// ValueTemplate: config.ValueTemplate,
-			Icon:          Icon(config.Icon),
+			Icon: Icon(config.Icon),
 		}
 
 		tag := JoinStringsForTopic(m.Prefix, LabelUpdate, m.ClientId, id, "config")
@@ -50,7 +48,6 @@ func (m *Mqtt) UpdatePublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) UpdatePublishValue(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsUpdate() {
 			break
@@ -74,7 +71,7 @@ func (m *Mqtt) UpdatePublishValue(config EntityConfig) error {
 			break
 		}
 
-		payload := MqttState {
+		payload := MqttState{
 			LastReset: config.LastReset, // m.GetLastReset(config.FullId),
 			Value:     value,
 		}
@@ -166,7 +163,6 @@ type Update struct {
 	// Defines a template to extract the installed_version state value or to render to a valid JSON payload on from the payload received on state_topic.
 	ValueTemplate Template `json:"value_template,omitempty"`
 }
-
 
 func (c *Update) Json() string {
 	j, _ := json.Marshal(*c)

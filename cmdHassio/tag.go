@@ -2,15 +2,14 @@ package cmdHassio
 
 import (
 	"encoding/json"
-	"github.com/MickMake/GoUnify/Only"
 	"strings"
+
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const LabelTag = "tag"
 
-
 func (m *Mqtt) TagPublishConfig(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsTag() {
 			break
@@ -23,8 +22,8 @@ func (m *Mqtt) TagPublishConfig(config EntityConfig) error {
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
 
-		payload := Tag {
-			Device:       newDevice,
+		payload := Tag{
+			Device: newDevice,
 			// Name:         String(JoinStrings(m.DeviceName, config.Name)),
 			// StateTopic:   JoinStringsForTopic(m.switchPrefix, id, "state"),
 			// CommandTopic: String(JoinStringsForTopic(m.switchPrefix, id, "cmd")),
@@ -49,7 +48,6 @@ func (m *Mqtt) TagPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) TagPublishValue(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsTag() {
 			break
@@ -73,7 +71,7 @@ func (m *Mqtt) TagPublishValue(config EntityConfig) error {
 			break
 		}
 
-		payload := MqttState {
+		payload := MqttState{
 			LastReset: config.LastReset, // m.GetLastReset(config.FullId),
 			Value:     value,
 		}
@@ -93,7 +91,6 @@ type Tag struct {
 	// Information about the device this device trigger is a part of to tie it into the device registry. At least one of identifiers or connections must be present to identify the device.
 	Device Device `json:"device,omitempty" required:"true"`
 }
-
 
 func (c *Tag) Json() string {
 	j, _ := json.Marshal(*c)

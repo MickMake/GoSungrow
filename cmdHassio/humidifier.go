@@ -2,15 +2,14 @@ package cmdHassio
 
 import (
 	"encoding/json"
-	"github.com/MickMake/GoUnify/Only"
 	"strings"
+
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const LabelHumidifier = "humidifier"
 
-
 func (m *Mqtt) HumidifierPublishConfig(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsHumidifier() {
 			break
@@ -23,9 +22,9 @@ func (m *Mqtt) HumidifierPublishConfig(config EntityConfig) error {
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
 
-		payload := Humidifier {
-			Device:       newDevice,
-			Name:         String(JoinStrings(m.DeviceName, config.Name)),
+		payload := Humidifier{
+			Device: newDevice,
+			Name:   String(JoinStrings(m.DeviceName, config.Name)),
 			// StateTopic:   JoinStringsForTopic(m.switchPrefix, id, "state"),
 			CommandTopic: String(JoinStringsForTopic(m.Prefix, LabelHumidifier, m.ClientId, id, "cmd")),
 			ObjectId:     String(id),
@@ -38,7 +37,7 @@ func (m *Mqtt) HumidifierPublishConfig(config EntityConfig) error {
 			// StateOn:       "true",
 			// StateOff:      "false",
 			// ValueTemplate: config.ValueTemplate,
-			Icon:          Icon(config.Icon),
+			Icon: Icon(config.Icon),
 		}
 
 		tag := JoinStringsForTopic(m.Prefix, LabelHumidifier, m.ClientId, id, "config")
@@ -49,7 +48,6 @@ func (m *Mqtt) HumidifierPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) HumidifierPublishValue(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsHumidifier() {
 			break
@@ -73,7 +71,7 @@ func (m *Mqtt) HumidifierPublishValue(config EntityConfig) error {
 			break
 		}
 
-		payload := MqttState {
+		payload := MqttState{
 			LastReset: config.LastReset, // m.GetLastReset(config.FullId),
 			Value:     value,
 		}
@@ -202,7 +200,6 @@ type Humidifier struct {
 	// An ID that uniquely identifies this humidifier. If two humidifiers have the same unique ID, Home Assistant will raise an exception.
 	UniqueId String `json:"unique_id,omitempty"`
 }
-
 
 func (c *Humidifier) Json() string {
 	j, _ := json.Marshal(*c)

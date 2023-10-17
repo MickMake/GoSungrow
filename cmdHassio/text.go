@@ -2,16 +2,14 @@ package cmdHassio
 
 import (
 	"encoding/json"
-	"github.com/MickMake/GoUnify/Only"
 	"strings"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+)
 
 const LabelText = "text"
 
-
 func (m *Mqtt) TextPublishConfig(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsText() {
 			break
@@ -24,9 +22,9 @@ func (m *Mqtt) TextPublishConfig(config EntityConfig) error {
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
 
-		payload := Text {
-			Device:       newDevice,
-			Name:         String(JoinStrings(m.DeviceName, config.Name)),
+		payload := Text{
+			Device: newDevice,
+			Name:   String(JoinStrings(m.DeviceName, config.Name)),
 			// StateTopic:   JoinStringsForTopic(m.switchPrefix, id, "state"),
 			CommandTopic: String(JoinStringsForTopic(m.Prefix, LabelText, m.ClientId, id, "cmd")),
 			ObjectId:     String(id),
@@ -50,7 +48,6 @@ func (m *Mqtt) TextPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) TextPublishValue(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsText() {
 			break
@@ -74,7 +71,7 @@ func (m *Mqtt) TextPublishValue(config EntityConfig) error {
 			break
 		}
 
-		payload := MqttState {
+		payload := MqttState{
 			LastReset: config.LastReset, // m.GetLastReset(config.FullId),
 			Value:     value,
 		}
@@ -154,7 +151,6 @@ type Text struct {
 	// Defines a template to extract the text state value from the payload received on state_topic.
 	ValueTemplate Template `json:"value_template,omitempty"`
 }
-
 
 func (c *Text) Json() string {
 	j, _ := json.Marshal(*c)

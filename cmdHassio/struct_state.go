@@ -3,13 +3,13 @@ package cmdHassio
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
 )
 
-
 type MqttState struct {
 	LastReset string `json:"last_reset,omitempty"`
-	Value string `json:"value"`
+	Value     string `json:"value"`
 }
 
 func (mq *MqttState) Json() string {

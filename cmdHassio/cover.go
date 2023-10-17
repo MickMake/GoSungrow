@@ -2,16 +2,14 @@ package cmdHassio
 
 import (
 	"encoding/json"
-	"github.com/MickMake/GoUnify/Only"
 	"strings"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+)
 
 const LabelCover = "cover"
 
-
 func (m *Mqtt) CoverPublishConfig(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsCover() {
 			break
@@ -24,9 +22,9 @@ func (m *Mqtt) CoverPublishConfig(config EntityConfig) error {
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
 
-		payload := Cover {
-			Device:       newDevice,
-			Name:         String(JoinStrings(m.DeviceName, config.Name)),
+		payload := Cover{
+			Device: newDevice,
+			Name:   String(JoinStrings(m.DeviceName, config.Name)),
 			// StateTopic:   JoinStringsForTopic(m.switchPrefix, id, "state"),
 			CommandTopic: String(JoinStringsForTopic(m.Prefix, LabelCover, m.ClientId, id, "cmd")),
 			ObjectId:     String(id),
@@ -39,7 +37,7 @@ func (m *Mqtt) CoverPublishConfig(config EntityConfig) error {
 			// StateOn:       "true",
 			// StateOff:      "false",
 			// ValueTemplate: config.ValueTemplate,
-			Icon:          Icon(config.Icon),
+			Icon: Icon(config.Icon),
 		}
 
 		tag := JoinStringsForTopic(m.Prefix, LabelCover, m.ClientId, id, "config")
@@ -50,7 +48,6 @@ func (m *Mqtt) CoverPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) CoverPublishValue(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsCover() {
 			break
@@ -74,7 +71,7 @@ func (m *Mqtt) CoverPublishValue(config EntityConfig) error {
 			break
 		}
 
-		payload := MqttState {
+		payload := MqttState{
 			LastReset: config.LastReset, // m.GetLastReset(config.FullId),
 			Value:     value,
 		}

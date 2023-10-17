@@ -1,22 +1,23 @@
 //go:build !(freebsd && amd64)
+
 package cmdModbus
 
 import (
 	"errors"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
 )
 
-
 type Boolean struct {
 	address Address
-	values []bool
+	values  []bool
 }
 
 func (m Boolean) String() string {
 	var ret string
 	for i, b := range m.values {
-		ret += fmt.Sprintf("[%.4X]%d: %v\n", int(m.address) + i, int(m.address) + i, b)
+		ret += fmt.Sprintf("[%.4X]%d: %v\n", int(m.address)+i, int(m.address)+i, b)
 	}
 	return ret
 }
@@ -24,8 +25,8 @@ func (m Boolean) String() string {
 func (m Boolean) Table(width int) string {
 	var ret string
 	for i, b := range m.values {
-		if i % width == 0 {
-			ret += fmt.Sprintf("\n[%.4X]%d:\t", int(m.address) + i, int(m.address) + i)
+		if i%width == 0 {
+			ret += fmt.Sprintf("\n[%.4X]%d:\t", int(m.address)+i, int(m.address)+i)
 		}
 		ret += fmt.Sprintf("%v\t", b)
 	}

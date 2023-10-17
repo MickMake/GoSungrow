@@ -2,15 +2,14 @@ package cmdHassio
 
 import (
 	"encoding/json"
-	"github.com/MickMake/GoUnify/Only"
 	"strings"
+
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const LabelClimate = "climate"
 
-
 func (m *Mqtt) ClimatePublishConfig(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsClimate() {
 			break
@@ -23,22 +22,22 @@ func (m *Mqtt) ClimatePublishConfig(config EntityConfig) error {
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
 
-		payload := Climate {
-			Device:       newDevice,
-			Name:         String(JoinStrings(m.DeviceName, config.Name)),
+		payload := Climate{
+			Device: newDevice,
+			Name:   String(JoinStrings(m.DeviceName, config.Name)),
 			// StateTopic:   JoinStringsForTopic(m.switchPrefix, id, "state"),
 			// CommandTopic: String(JoinStringsForTopic(m.switchPrefix, id, "cmd")),
-			ObjectId:     String(id),
-			UniqueId:     String(id),
-			Qos:          0,
-			Retain:       true,
+			ObjectId: String(id),
+			UniqueId: String(id),
+			Qos:      0,
+			Retain:   true,
 
 			// PayloadOn:     "true",
 			// PayloadOff:    "false",
 			// StateOn:       "true",
 			// StateOff:      "false",
 			// ValueTemplate: config.ValueTemplate,
-			Icon:          Icon(config.Icon),
+			Icon: Icon(config.Icon),
 		}
 
 		tag := JoinStringsForTopic(m.Prefix, LabelClimate, m.ClientId, id, "config")
@@ -49,7 +48,6 @@ func (m *Mqtt) ClimatePublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) ClimatePublishValue(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsClimate() {
 			break
@@ -73,7 +71,7 @@ func (m *Mqtt) ClimatePublishValue(config EntityConfig) error {
 			break
 		}
 
-		payload := MqttState {
+		payload := MqttState{
 			LastReset: config.LastReset, // m.GetLastReset(config.FullId),
 			Value:     value,
 		}
@@ -288,7 +286,6 @@ type Climate struct {
 	// Default template to render the payloads on all *_state_topics with.
 	ValueTemplate Template `json:"value_template,omitempty"`
 }
-
 
 func (c *Climate) Json() string {
 	j, _ := json.Marshal(*c)

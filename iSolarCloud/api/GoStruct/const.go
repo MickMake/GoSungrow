@@ -3,7 +3,6 @@ package GoStruct
 
 // These are tags that can be added to a Go structure that GoStruct uses to process the structure.
 
-
 const (
 	// NameGoStruct - Name of field within structure that allows for assigning tags to the parent.
 	// Add like this:
@@ -13,10 +12,10 @@ const (
 	// ...
 	//
 	// }
-	NameGoStruct = "GoStruct"
-	PkgGoStruct = "GoStruct.GoStruct"
+	NameGoStruct       = "GoStruct"
+	PkgGoStruct        = "GoStruct.GoStruct"
 	NameGoStructParent = "GoStructParent"
-	PkgGoStructParent = "GoStruct.GoStructParent"
+	PkgGoStructParent  = "GoStruct.GoStructParent"
 
 	// PointId - Point id in the form p\d+ or \d+ or free-form text.
 	PointId = "PointId"
@@ -29,12 +28,11 @@ const (
 	// PointIdFromParent -  Searches child for field value to use for naming when hitting a slice, (as opposed to using an index).
 	// PointIdFromParent = "PointIdFromParent"	- Not supported.
 
-
 	// PointParentId -  Associated parent of point.
 	PointParentId = "PointParentId"
 
 	// PointUpdateFreq -  Point update frequency - Total, Yearly, Monthly, Day.
-	PointUpdateFreq = "PointUpdateFreq"
+	PointUpdateFreq   = "PointUpdateFreq"
 	UpdateFreqInstant = "instant"
 	UpdateFreq5Mins   = "5mins"
 	UpdateFreq15Mins  = "15mins"
@@ -44,7 +42,6 @@ const (
 	UpdateFreqMonth   = "monthly"
 	UpdateFreqYear    = "yearly"
 	UpdateFreqTotal   = "total"
-
 
 	// PointValueType -  Value type of point: energy, date, battery, temperature.
 	PointValueType = "PointValueType"
@@ -57,7 +54,6 @@ const (
 	// PointVariableUnit -  Will be any number of units - used mainly in table display.
 	PointVariableUnit = "PointVariableUnit"
 
-
 	// PointIgnore -  Ignore this point.
 	PointIgnore = "PointIgnore"
 	// PointIgnoreIfNil -  Ignore this point if a child is nil or empty.
@@ -66,7 +62,6 @@ const (
 	PointIgnoreIfChildFromNil = "PointIgnoreIfChildFromNil"
 	// PointIgnoreZero -  Ignore arrays with zero size, (default true).
 	PointIgnoreZero = "PointIgnoreZero"
-
 
 	// PointAliasTo -  Alias this point to another point.
 	PointAliasTo = "PointAliasTo"
@@ -77,20 +72,16 @@ const (
 	// PointVirtualShift -  Create a Virtual point alias.
 	PointVirtualShift = "PointVirtualShift"
 
-
 	// PointGroupName -  Point group name.
 	PointGroupName = "PointGroupName"
 	// PointGroupNameFrom -  Get PointGroupName from another field structure.
 	PointGroupNameFrom = "PointGroupNameFrom"
 
-
 	// PointName -  Human-readable name of point.
 	PointName = "PointName"
 
-
 	// PointIcon -  Icon of point.
 	PointIcon = "PointIcon"
-
 
 	// PointNameDateFormat -  Date format when using PointNameFrom, (if the field is a time.Time type).
 	PointNameDateFormat = "PointNameDateFormat"
@@ -115,14 +106,12 @@ const (
 	// PointValueReplaceWith -
 	PointValueReplaceWith = "PointValueReplaceWith"
 
-
 	// PointDevice - Define a PointDevice for this point.
 	PointDevice = "PointDevice"
 	// PointDeviceFrom - Reference PointDevice from another sibling.
 	PointDeviceFrom = "PointDeviceFrom"
 	// PointDeviceFromParent - Reference PointDevice from a parent.
 	PointDeviceFromParent = "PointDeviceFromParent"
-
 
 	// IsDataTable -  This entity is a data table - Will only traverse down one child.
 	IsDataTable = "DataTable"
@@ -151,5 +140,7 @@ const (
 	PointListFlatten = "PointListFlatten"
 )
 
-type GoStruct bool
-type GoStructParent bool
+type (
+	GoStruct       bool
+	GoStructParent bool
+)

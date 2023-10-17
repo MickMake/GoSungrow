@@ -2,6 +2,7 @@ package tablib
 
 import (
 	"bytes"
+
 	"github.com/agrison/mxj"
 )
 

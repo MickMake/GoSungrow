@@ -1,10 +1,10 @@
 package GoStruct
 
 import (
-	"github.com/MickMake/GoUnify/Only"
 	"strings"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+)
 
 type EndPointPath struct {
 	path []string
@@ -29,7 +29,7 @@ func (e EndPointPath) MarshalJSON() ([]byte, error) {
 		// if err!= nil {
 		// 	break
 		// }
-		data = []byte(`"` + e.String() +`"`)
+		data = []byte(`"` + e.String() + `"`)
 	}
 
 	return data, err
@@ -103,7 +103,7 @@ func (e *EndPointPath) IsBeginsWith(compare string) bool {
 func (e *EndPointPath) Copy() EndPointPath {
 	ret := make([]string, len(e.path))
 	copy(ret, e.path)
-	return EndPointPath { path:ret }
+	return EndPointPath{path: ret}
 }
 
 func (e *EndPointPath) Append(path ...string) {
@@ -121,7 +121,7 @@ func (e *EndPointPath) PopLast() {
 		return
 		// return *e
 	}
-	e.path = e.path[:len(e.path) - 1]
+	e.path = e.path[:len(e.path)-1]
 	return
 	// return (*e)[:len(*e) - 1]
 }

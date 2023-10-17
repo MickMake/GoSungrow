@@ -4,12 +4,12 @@ import (
 	"github.com/MickMake/GoUnify/Only"
 )
 
-
 type DataEntries struct {
 	Entries []DataEntry
 }
 
 const LastEntry = -1
+
 func (de *DataEntries) GetEntry(index int) *DataEntry {
 	for range Only.Once {
 		if de == nil {

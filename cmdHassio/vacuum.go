@@ -2,15 +2,14 @@ package cmdHassio
 
 import (
 	"encoding/json"
-	"github.com/MickMake/GoUnify/Only"
 	"strings"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+)
 
 const LabelVacuum = "vacuum"
 
 func (m *Mqtt) VacuumPublishConfig(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsVacuum() {
 			break
@@ -23,9 +22,9 @@ func (m *Mqtt) VacuumPublishConfig(config EntityConfig) error {
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
 
-		payload := Vacuum {
-			Device:       newDevice,
-			Name:         String(JoinStrings(m.DeviceName, config.Name)),
+		payload := Vacuum{
+			Device: newDevice,
+			Name:   String(JoinStrings(m.DeviceName, config.Name)),
 			// StateTopic:   JoinStringsForTopic(m.switchPrefix, id, "state"),
 			CommandTopic: String(JoinStringsForTopic(m.Prefix, LabelVacuum, m.ClientId, id, "cmd")),
 			ObjectId:     String(id),
@@ -52,7 +51,6 @@ func (m *Mqtt) VacuumPublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) VacuumPublishValue(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsVacuum() {
 			break
@@ -180,7 +178,6 @@ type Vacuum struct {
 	// An ID that uniquely identifies this vacuum. If two vacuums have the same unique ID, Home Assistant will raise an exception.
 	UniqueId String `json:"unique_id,omitempty"`
 }
-
 
 func (c *Vacuum) Json() string {
 	j, _ := json.Marshal(*c)

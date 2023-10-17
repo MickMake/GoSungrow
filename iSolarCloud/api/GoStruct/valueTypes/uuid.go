@@ -2,16 +2,16 @@ package valueTypes
 
 import (
 	"encoding/json"
-	"github.com/MickMake/GoUnify/Only"
 	"strconv"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+)
 
 type Uuid struct {
 	string `json:"string,omitempty"`
 	int64  `json:"integer,omitempty"`
-	Valid   bool `json:"valid"`
-	Error   error `json:"-"`
+	Valid  bool  `json:"valid"`
+	Error  error `json:"-"`
 }
 
 // UnmarshalJSON - Convert JSON to value

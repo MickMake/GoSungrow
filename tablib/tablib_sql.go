@@ -11,9 +11,11 @@ import (
 var (
 	typePostgres = "postgres"
 	typeMySQL    = "mysql"
-	defaults     = map[string]string{"various." + typePostgres: "TEXT",
-		"various." + typeMySQL: "VARCHAR(100)", "numeric." + typePostgres: "NUMERIC",
-		"numeric." + typeMySQL: "DOUBLE"}
+	defaults     = map[string]string{
+		"various." + typePostgres: "TEXT",
+		"various." + typeMySQL:    "VARCHAR(100)", "numeric." + typePostgres: "NUMERIC",
+		"numeric." + typeMySQL: "DOUBLE",
+	}
 )
 
 // columnSQLType determines the type of a column

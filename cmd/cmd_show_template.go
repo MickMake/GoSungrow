@@ -2,15 +2,15 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/spf13/cobra"
 )
 
-
 func (c *CmdShow) AttachTemplate(cmd *cobra.Command) *cobra.Command {
 	for range Only.Once {
-		var self = &cobra.Command{
+		self := &cobra.Command{
 			Use:                   "template",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Template"},
@@ -36,9 +36,8 @@ func (c *CmdShow) AttachTemplate(cmd *cobra.Command) *cobra.Command {
 	return c.SelfCmd
 }
 
-
 func (c *CmdShow) AttachTemplateList(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "list",
 		Aliases:               []string{"ls"},
 		Annotations:           map[string]string{"group": "Template"},
@@ -55,6 +54,7 @@ func (c *CmdShow) AttachTemplateList(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcTemplateList(_ *cobra.Command, _ []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.OutputType.SetTable()
@@ -64,7 +64,7 @@ func (c *CmdShow) funcTemplateList(_ *cobra.Command, _ []string) error {
 }
 
 func (c *CmdShow) AttachTemplatePoints(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "points <template id>",
 		Aliases:               []string{"point"},
 		Annotations:           map[string]string{"group": "Template"},
@@ -81,6 +81,7 @@ func (c *CmdShow) AttachTemplatePoints(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcTemplatePoints(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.OutputType.SetTable()
@@ -90,7 +91,7 @@ func (c *CmdShow) funcTemplatePoints(_ *cobra.Command, args []string) error {
 }
 
 func (c *CmdShow) AttachTemplateData(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "data <template_id> " + ArgsDateInterval,
 		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "Template"},
@@ -109,10 +110,11 @@ func (c *CmdShow) AttachTemplateData(cmd *cobra.Command) *cobra.Command {
 		"8092 20221201 20221202",
 		"8092 20221201",
 		"8092",
-		)
+	)
 
 	return cmd
 }
+
 func (c *CmdShow) funcTemplateData(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		args = MinimumArraySize(4, args)
@@ -126,7 +128,7 @@ func (c *CmdShow) funcTemplateData(_ *cobra.Command, args []string) error {
 }
 
 func (c *CmdShow) AttachTemplateGraph(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "graph <template_id> " + ArgsDateInterval,
 		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "Template"},
@@ -149,6 +151,7 @@ func (c *CmdShow) AttachTemplateGraph(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcTemplateGraph(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		args = MinimumArraySize(4, args)
@@ -162,7 +165,7 @@ func (c *CmdShow) funcTemplateGraph(_ *cobra.Command, args []string) error {
 }
 
 func (c *CmdShow) AttachTemplateSave(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "save <template_id> " + ArgsDateInterval,
 		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "Template"},
@@ -185,6 +188,7 @@ func (c *CmdShow) AttachTemplateSave(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcTemplateSave(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		args = MinimumArraySize(4, args)

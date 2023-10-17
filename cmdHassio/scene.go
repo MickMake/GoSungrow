@@ -2,15 +2,14 @@ package cmdHassio
 
 import (
 	"encoding/json"
-	"github.com/MickMake/GoUnify/Only"
 	"strings"
+
+	"github.com/MickMake/GoUnify/Only"
 )
 
 const LabelScene = "scene"
 
-
 func (m *Mqtt) ScenePublishConfig(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsScene() {
 			break
@@ -23,9 +22,9 @@ func (m *Mqtt) ScenePublishConfig(config EntityConfig) error {
 
 		id := JoinStringsForId(m.DeviceName, config.FullId)
 
-		payload := Scene {
+		payload := Scene{
 			// Device:       newDevice,
-			Name:         String(JoinStrings(m.DeviceName, config.Name)),
+			Name: String(JoinStrings(m.DeviceName, config.Name)),
 			// StateTopic:   JoinStringsForTopic(m.switchPrefix, id, "state"),
 			CommandTopic: String(JoinStringsForTopic(m.Prefix, LabelScene, m.ClientId, id, "cmd")),
 			ObjectId:     String(id),
@@ -38,7 +37,7 @@ func (m *Mqtt) ScenePublishConfig(config EntityConfig) error {
 			// StateOn:       "true",
 			// StateOff:      "false",
 			// ValueTemplate: config.ValueTemplate,
-			Icon:          Icon(config.Icon),
+			Icon: Icon(config.Icon),
 		}
 
 		tag := JoinStringsForTopic(m.Prefix, LabelScene, m.ClientId, id, "config")
@@ -49,7 +48,6 @@ func (m *Mqtt) ScenePublishConfig(config EntityConfig) error {
 }
 
 func (m *Mqtt) ScenePublishValue(config EntityConfig) error {
-
 	for range Only.Once {
 		if !config.IsScene() {
 			break
@@ -73,7 +71,7 @@ func (m *Mqtt) ScenePublishValue(config EntityConfig) error {
 			break
 		}
 
-		payload := MqttState {
+		payload := MqttState{
 			LastReset: config.LastReset, // m.GetLastReset(config.FullId),
 			Value:     value,
 		}
@@ -132,7 +130,6 @@ type Scene struct {
 	// An ID that uniquely identifies this scene entity. If two scenes have the same unique ID, Home Assistant will raise an exception.
 	UniqueId String `json:"unique_id,omitempty"`
 }
-
 
 func (c *Scene) Json() string {
 	j, _ := json.Marshal(*c)

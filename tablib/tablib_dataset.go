@@ -22,14 +22,14 @@ type Dataset struct {
 	cols             int
 	ValidationErrors []ValidationError
 
-	Align            string
-	EmptyString      string
-	FloatFormat      byte
-	MaxCellSize      int
-	WrapDelimiter    rune
-	WrapStrings      bool
-	DenseMode        bool
-	SplitConcat      string
+	Align         string
+	EmptyString   string
+	FloatFormat   byte
+	MaxCellSize   int
+	WrapDelimiter rune
+	WrapStrings   bool
+	DenseMode     bool
+	SplitConcat   string
 }
 
 const (
@@ -78,7 +78,6 @@ func (d *Dataset) SetSplitConcat(split string) {
 	d.SplitConcat = split
 }
 
-
 // DynamicColumn represents a function that can be evaluated dynamically
 // when exporting to a predefined format.
 type DynamicColumn func([]interface{}) interface{}
@@ -101,25 +100,25 @@ func NewDataset(headers []string) *Dataset {
 
 // NewDatasetWithData creates a new Dataset.
 func NewDatasetWithData(headers []string, data [][]interface{}) *Dataset {
-	d := &Dataset {
-		EmptyValue: "",
-		headers: headers,
-		data: data,
-		tags: make([][]string, 0),
-		constraints: make([]ColumnConstraint, len(headers)),
-		rows: len(data),
-		cols: len(headers),
+	d := &Dataset{
+		EmptyValue:       "",
+		headers:          headers,
+		data:             data,
+		tags:             make([][]string, 0),
+		constraints:      make([]ColumnConstraint, len(headers)),
+		rows:             len(data),
+		cols:             len(headers),
 		ValidationErrors: nil,
 
 		// Defaults for gotabulate
-		Align:            AlignRight,
-		EmptyString:      "",
-		FloatFormat:      'f',
-		MaxCellSize:      30,
-		WrapDelimiter:    0,
-		WrapStrings:      false,
-		DenseMode:        false,
-		SplitConcat:      "",
+		Align:         AlignRight,
+		EmptyString:   "",
+		FloatFormat:   'f',
+		MaxCellSize:   30,
+		WrapDelimiter: 0,
+		WrapStrings:   false,
+		DenseMode:     false,
+		SplitConcat:   "",
 	}
 	return d
 }
@@ -344,7 +343,8 @@ func (d *Dataset) InsertDynamicColumn(index int, header string, fn DynamicColumn
 
 // InsertConstrainedColumn insert a new constrained column at a given index.
 func (d *Dataset) InsertConstrainedColumn(index int, header string,
-	constraint ColumnConstraint, cols []interface{}) error {
+	constraint ColumnConstraint, cols []interface{},
+) error {
 	err := d.InsertColumn(index, header, cols)
 	if err != nil {
 		return err
@@ -687,20 +687,20 @@ func (d *Dataset) internalSort(column string, reverse bool) *Dataset {
 	var how sort.Interface
 	// sort by column
 	switch pairs[0].value.(type) {
-		case string:
-			how = byStringValue(pairs)
-		case int:
-			how = byIntValue(pairs)
-		case int64:
-			how = byInt64Value(pairs)
-		case uint64:
-			how = byUint64Value(pairs)
-		case float64:
-			how = byFloatValue(pairs)
-		case time.Time:
-			how = byTimeValue(pairs)
-		default:
-			// nothing
+	case string:
+		how = byStringValue(pairs)
+	case int:
+		how = byIntValue(pairs)
+	case int64:
+		how = byInt64Value(pairs)
+	case uint64:
+		how = byUint64Value(pairs)
+	case float64:
+		how = byFloatValue(pairs)
+	case time.Time:
+		how = byTimeValue(pairs)
+	default:
+		// nothing
 	}
 
 	if !reverse {

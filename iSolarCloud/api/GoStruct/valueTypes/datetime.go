@@ -3,10 +3,10 @@ package valueTypes
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 	"time"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+)
 
 var inputDateLayout = []string{
 	DateTimeFullLayout,
@@ -23,33 +23,32 @@ var inputDateLayout = []string{
 	DateTimeLayoutYear,
 }
 
-var DateLayoutMap = map[string]string {
-	"DateTimeFullLayout": DateTimeFullLayout,
-	"DateTimeLayout": DateTimeLayout,
-	"DateTimeAltLayout": DateTimeAltLayout,
-	"DateHumanLayoutLayout": DateHumanLayoutLayout,
+var DateLayoutMap = map[string]string{
+	"DateTimeFullLayout":        DateTimeFullLayout,
+	"DateTimeLayout":            DateTimeLayout,
+	"DateTimeAltLayout":         DateTimeAltLayout,
+	"DateHumanLayoutLayout":     DateHumanLayoutLayout,
 	"DateTimeLayoutZeroSeconds": DateTimeLayoutZeroSeconds,
-	"DateTimeLayoutSecond": DateTimeLayoutSecond,
-	"DateTimeLayoutMinute": DateTimeLayoutMinute,
-	"DateTimeLayoutHour": DateTimeLayoutHour,
-	"DateTimeLayoutDay": DateTimeLayoutDay,
-	"DateTimeLayoutMonth": DateTimeLayoutMonth,
-	"DateTimeLayoutYear": DateTimeLayoutYear,
+	"DateTimeLayoutSecond":      DateTimeLayoutSecond,
+	"DateTimeLayoutMinute":      DateTimeLayoutMinute,
+	"DateTimeLayoutHour":        DateTimeLayoutHour,
+	"DateTimeLayoutDay":         DateTimeLayoutDay,
+	"DateTimeLayoutMonth":       DateTimeLayoutMonth,
+	"DateTimeLayoutYear":        DateTimeLayoutYear,
 
-	"DateLayout": DateLayout,
+	"DateLayout":      DateLayout,
 	"DateHumanLayout": DateHumanLayout,
-	"DateLayoutDay": DateLayoutDay,
+	"DateLayoutDay":   DateLayoutDay,
 	"DateLayoutMonth": DateLayoutMonth,
-	"DateLayoutYear": DateLayoutYear,
+	"DateLayoutYear":  DateLayoutYear,
 
-	"TimeLayout": TimeLayout,
+	"TimeLayout":            TimeLayout,
 	"TimeLayoutZeroSeconds": TimeLayoutZeroSeconds,
-	"TimeLayoutHourColon": TimeLayoutHourColon,
-	"TimeLayoutSecond": TimeLayoutSecond,
-	"TimeLayoutMinute": TimeLayoutMinute,
-	"TimeLayoutHour": TimeLayoutHour,
+	"TimeLayoutHourColon":   TimeLayoutHourColon,
+	"TimeLayoutSecond":      TimeLayoutSecond,
+	"TimeLayoutMinute":      TimeLayoutMinute,
+	"TimeLayoutHour":        TimeLayoutHour,
 }
-
 
 const (
 	DateTimeFullLayout        = time.RFC3339
@@ -64,13 +63,13 @@ const (
 	DateTimeLayoutMonth       = DateLayoutMonth
 	DateTimeLayoutYear        = DateLayoutYear
 
-	DateLayout            = "2006-01-02"
-	DateHumanLayout       = "2006/01/02"
-	DateHumanMonth        = "2006/01"
-	DateHumanYear         = "2006"
-	DateLayoutDay         = "20060102"
-	DateLayoutMonth       = "200601"
-	DateLayoutYear        = "2006"
+	DateLayout      = "2006-01-02"
+	DateHumanLayout = "2006/01/02"
+	DateHumanMonth  = "2006/01"
+	DateHumanYear   = "2006"
+	DateLayoutDay   = "20060102"
+	DateLayoutMonth = "200601"
+	DateLayoutYear  = "2006"
 
 	TimeLayout            = "15:04:05"
 	TimeLayoutZeroSeconds = "15:04:00"
@@ -84,7 +83,6 @@ const (
 	DateTypeYear  = "3"
 	DateTypeTotal = "4"
 )
-
 
 type DateTime struct {
 	string    `json:"string,omitempty"`
@@ -226,30 +224,30 @@ func (dt *DateTime) SetDateType(value string) {
 	for range Only.Once {
 		l := len(value)
 		switch {
-			case l == len(DateTimeLayout):
-				dt.DateType = "1"
-				dt.format = DateTimeLayout
-			case l == len(DateTimeLayoutYear):
-				dt.DateType = "3"
-				dt.format = DateTimeLayoutYear
-			case l == len(DateTimeLayoutMonth):
-				dt.DateType = "2"
-				dt.format = DateTimeLayoutMonth
-			case l == len(DateTimeLayoutDay):
-				dt.DateType = "1"
-				dt.format = DateTimeLayoutDay
-			case l == len(DateTimeLayoutHour):
-				dt.DateType = "1"
-				dt.format = DateTimeLayoutHour
-			case l == len(DateTimeLayoutMinute):
-				dt.DateType = "1"
-				dt.format = DateTimeLayoutMinute
-			case l == len(DateTimeLayoutSecond):
-				dt.DateType = "1"
-				dt.format = DateTimeLayoutSecond
-			case value == "total":
-				dt.DateType = "4"
-				dt.format = DateTimeLayoutYear
+		case l == len(DateTimeLayout):
+			dt.DateType = "1"
+			dt.format = DateTimeLayout
+		case l == len(DateTimeLayoutYear):
+			dt.DateType = "3"
+			dt.format = DateTimeLayoutYear
+		case l == len(DateTimeLayoutMonth):
+			dt.DateType = "2"
+			dt.format = DateTimeLayoutMonth
+		case l == len(DateTimeLayoutDay):
+			dt.DateType = "1"
+			dt.format = DateTimeLayoutDay
+		case l == len(DateTimeLayoutHour):
+			dt.DateType = "1"
+			dt.format = DateTimeLayoutHour
+		case l == len(DateTimeLayoutMinute):
+			dt.DateType = "1"
+			dt.format = DateTimeLayoutMinute
+		case l == len(DateTimeLayoutSecond):
+			dt.DateType = "1"
+			dt.format = DateTimeLayoutSecond
+		case value == "total":
+			dt.DateType = "4"
+			dt.format = DateTimeLayoutYear
 		}
 		dt.string = dt.Time.Format(dt.format)
 	}
@@ -300,14 +298,14 @@ func (dt DateTime) PrintFull() string {
 func (dt DateTime) Original() string {
 	var ret string
 	switch dt.DateType {
-		case "3":
-			ret = dt.Time.Format(DateTimeLayoutYear)
-		case "2":
-			ret = dt.Time.Format(DateTimeLayoutMonth)
-		case "1":
-			ret = dt.Time.Format(DateTimeLayoutDay)
-		default:
-			ret = dt.Time.Format(DateTimeLayout)
+	case "3":
+		ret = dt.Time.Format(DateTimeLayoutYear)
+	case "2":
+		ret = dt.Time.Format(DateTimeLayoutMonth)
+	case "1":
+		ret = dt.Time.Format(DateTimeLayoutDay)
+	default:
+		ret = dt.Time.Format(DateTimeLayout)
 	}
 	return ret
 }

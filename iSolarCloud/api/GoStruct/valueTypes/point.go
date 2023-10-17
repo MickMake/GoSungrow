@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 	"regexp"
 	"strconv"
 	"strings"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+)
 
 // @TODO - Consider standardizing points to a known format.
 // @TODO - queryUserCurveTemplateData is a good example of the structure.
@@ -26,22 +26,20 @@ import (
 //	Unit       valueTypes.String  `json:"unit"`
 // }
 
-
 type PsKey struct {
-	string     `json:"string,omitempty"`
+	string `json:"string,omitempty"`
 
 	PsId       string `json:"ps_id"`
 	DeviceType string `json:"device_type"`
 	DeviceCode string `json:"device_code"`
 	ChannelId  string `json:"channel_id"`
 
-	Valid      bool   `json:"-"`
-	Error      error  `json:"-"`
+	Valid bool  `json:"-"`
+	Error error `json:"-"`
 }
 
 // UnmarshalJSON - Convert JSON to value
 func (t *PsKey) UnmarshalJSON(data []byte) error {
-
 	for range Only.Once {
 		t.Valid = false
 
@@ -116,26 +114,26 @@ func (t *PsKey) SetValue(value string) PsKey {
 
 		s := strings.Split(value, "_")
 		switch {
-			case len(s) == 1:
-				t.PsId = s[0]
-				t.Valid = true
-			case len(s) == 2:
-				t.PsId = s[0]
-				t.DeviceType = s[1]
-				t.Valid = true
-			case len(s) == 3:
-				t.PsId = s[0]
-				t.DeviceType = s[1]
-				t.DeviceCode = s[2]
-				t.Valid = true
-			case len(s) >= 4:
-				t.PsId = s[0]
-				t.DeviceType = s[1]
-				t.DeviceCode = s[2]
-				t.ChannelId = s[3]
-				t.Valid = true
-			default:
-				t.Error = errors.New("invalid ps_key")
+		case len(s) == 1:
+			t.PsId = s[0]
+			t.Valid = true
+		case len(s) == 2:
+			t.PsId = s[0]
+			t.DeviceType = s[1]
+			t.Valid = true
+		case len(s) == 3:
+			t.PsId = s[0]
+			t.DeviceType = s[1]
+			t.DeviceCode = s[2]
+			t.Valid = true
+		case len(s) >= 4:
+			t.PsId = s[0]
+			t.DeviceType = s[1]
+			t.DeviceCode = s[2]
+			t.ChannelId = s[3]
+			t.Valid = true
+		default:
+			t.Error = errors.New("invalid ps_key")
 		}
 	}
 
@@ -162,7 +160,6 @@ func SetPsKeyString(value string) PsKey {
 	var t PsKey
 	return t.SetValue(value)
 }
-
 
 type PsId struct {
 	string `json:"string,omitempty"`
@@ -270,7 +267,6 @@ func (t *PsId) SetValue(value int64) PsId {
 	return *t
 }
 
-
 func SetPsIdString(value string) PsId {
 	var t PsId
 	return t.SetString(value)
@@ -309,13 +305,12 @@ func SetPsIdValues(values []int64) PsIds {
 	return t
 }
 
-
 type PsIds []PsId
 
 func (t PsIds) String() string {
 	var ret string
 	for _, pid := range t {
-		ret += pid.String() +"\n"
+		ret += pid.String() + "\n"
 	}
 	return ret
 }
@@ -328,17 +323,16 @@ func (t *PsIds) Strings() []string {
 	return ret
 }
 
-
 type PointId struct {
 	// string `json:"string,omitempty"`
 	// int64  `json:"integer,omitempty"`
 	// isInt  bool
 
-	Point     string `json:"point"`
-	PsKey     PsKey `json:"ps_key"`
+	Point string `json:"point"`
+	PsKey PsKey  `json:"ps_key"`
 
-	Valid  bool `json:"valid"`
-	Error  error `json:"-"`
+	Valid bool  `json:"valid"`
+	Error error `json:"-"`
 }
 
 // UnmarshalJSON - Convert JSON to value
@@ -362,7 +356,7 @@ func (t *PointId) UnmarshalJSON(data []byte) error {
 		}
 
 		var ds string
-		t.Error = json.Unmarshal([]byte(`"` + pid + `"`), &ds)
+		t.Error = json.Unmarshal([]byte(`"`+pid+`"`), &ds)
 		if t.Error == nil {
 			t.Set(ds)
 			break
@@ -430,14 +424,14 @@ func (t *PointId) Set(values ...string) PointId {
 
 		a := strings.Split(value, ".")
 		switch {
-			case len(a) == 0:
-			case len(a) == 1:
-				t.Point = a[0]
-				t.Valid = true
-			case len(a) >= 2:
-				t.PsKey.SetValue(a[0])
-				t.Point = a[1]
-				t.Valid = true
+		case len(a) == 0:
+		case len(a) == 1:
+			t.Point = a[0]
+			t.Valid = true
+		case len(a) >= 2:
+			t.PsKey.SetValue(a[0])
+			t.Point = a[1]
+			t.Valid = true
 		}
 	}
 
@@ -509,7 +503,6 @@ func PointToName(ret string) string {
 	return ret
 }
 
-
 func SetPointIdString(value ...string) PointId {
 	var t PointId
 	return t.Set(value...)
@@ -520,12 +513,11 @@ func SetPointIdString(value ...string) PointId {
 // 	return t.SetValue(value)
 // }
 
-
 type PsKeys struct {
 	PsKeys []PsKey `json:"ps_keys,omitempty"`
 
-	Valid  bool `json:"valid"`
-	Error  error `json:"-"`
+	Valid bool  `json:"valid"`
+	Error error `json:"-"`
 }
 
 // UnmarshalJSON - Convert JSON to value
@@ -648,12 +640,11 @@ func SetPsKeysString(values string) PsKeys {
 	return t
 }
 
-
 type PointIds struct {
 	PointIds []PointId `json:"points,omitempty"`
 
-	Valid  bool `json:"valid"`
-	Error  error `json:"-"`
+	Valid bool  `json:"valid"`
+	Error error `json:"-"`
 }
 
 // UnmarshalJSON - Convert JSON to value

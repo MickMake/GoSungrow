@@ -1,53 +1,54 @@
 // Package gojson - generates go struct defintions from JSON documents
 //
-// Reads from stdin and prints to stdout
+// # Reads from stdin and prints to stdout
 //
 // Output:
-// 	package main
 //
-// 	type User struct {
-// 		AvatarURL         string      `json:"avatar_url"`
-// 		Bio               interface{} `json:"bio"`
-// 		Blog              string      `json:"blog"`
-// 		Company           string      `json:"company"`
-// 		CreatedAt         string      `json:"created_at"`
-// 		Email             string      `json:"email"`
-// 		EventsURL         string      `json:"events_url"`
-// 		Followers         float64     `json:"followers"`
-// 		FollowersURL      string      `json:"followers_url"`
-// 		Following         float64     `json:"following"`
-// 		FollowingURL      string      `json:"following_url"`
-// 		GistsURL          string      `json:"gists_url"`
-// 		GravatarID        string      `json:"gravatar_id"`
-// 		Hireable          bool        `json:"hireable"`
-// 		HtmlURL           string      `json:"html_url"`
-// 		ID                float64     `json:"id"`
-// 		Location          string      `json:"location"`
-// 		Login             string      `json:"login"`
-// 		Name              string      `json:"name"`
-// 		OrganizationsURL  string      `json:"organizations_url"`
-// 		PublicGists       float64     `json:"public_gists"`
-// 		PublicRepos       float64     `json:"public_repos"`
-// 		ReceivedEventsURL string      `json:"received_events_url"`
-// 		ReposURL          string      `json:"repos_url"`
-// 		StarredURL        string      `json:"starred_url"`
-// 		SubscriptionsURL  string      `json:"subscriptions_url"`
-// 		Type              string      `json:"type"`
-// 		UpdatedAt         string      `json:"updated_at"`
-// 		URL               string      `json:"url"`
-// 	}
+//	package main
+//
+//	type User struct {
+//		AvatarURL         string      `json:"avatar_url"`
+//		Bio               interface{} `json:"bio"`
+//		Blog              string      `json:"blog"`
+//		Company           string      `json:"company"`
+//		CreatedAt         string      `json:"created_at"`
+//		Email             string      `json:"email"`
+//		EventsURL         string      `json:"events_url"`
+//		Followers         float64     `json:"followers"`
+//		FollowersURL      string      `json:"followers_url"`
+//		Following         float64     `json:"following"`
+//		FollowingURL      string      `json:"following_url"`
+//		GistsURL          string      `json:"gists_url"`
+//		GravatarID        string      `json:"gravatar_id"`
+//		Hireable          bool        `json:"hireable"`
+//		HtmlURL           string      `json:"html_url"`
+//		ID                float64     `json:"id"`
+//		Location          string      `json:"location"`
+//		Login             string      `json:"login"`
+//		Name              string      `json:"name"`
+//		OrganizationsURL  string      `json:"organizations_url"`
+//		PublicGists       float64     `json:"public_gists"`
+//		PublicRepos       float64     `json:"public_repos"`
+//		ReceivedEventsURL string      `json:"received_events_url"`
+//		ReposURL          string      `json:"repos_url"`
+//		StarredURL        string      `json:"starred_url"`
+//		SubscriptionsURL  string      `json:"subscriptions_url"`
+//		Type              string      `json:"type"`
+//		UpdatedAt         string      `json:"updated_at"`
+//		URL               string      `json:"url"`
+//	}
 package gojson
 
 import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 	"io"
 	"os"
+
+	"github.com/MickMake/GoUnify/Only"
 	// . "github.com/ChimeraCoder/gojson"
 )
-
 
 // var (
 // 	name        = flag.String("name", "Foo", "the name of the struct")
@@ -60,12 +61,14 @@ import (
 // 	subStruct   = flag.Bool("subStruct", false, "create types for sub-structs (default is false)")
 // )
 
-var formatYaml = "yaml"	// true
-var formatJson = "json"	// false
+var (
+	formatYaml = "yaml" // true
+	formatJson = "json" // false
+)
 
 type Options struct {
-	inputName     *string
-	outputName    *string
+	inputName  *string
+	outputName *string
 
 	saveOutput    bool
 	structureName *string
@@ -76,42 +79,41 @@ type Options struct {
 	subStructs    bool
 }
 
-func (o *Options) StructureName(name string)  {
+func (o *Options) StructureName(name string) {
 	o.structureName = &name
 }
 
-func (o *Options) PackageName(name string)  {
+func (o *Options) PackageName(name string) {
 	o.packageName = &name
 }
 
-func (o *Options) InputIsJson()  {
+func (o *Options) InputIsJson() {
 	o.format = formatJson
 }
 
-func (o *Options) InputIsYaml()  {
+func (o *Options) InputIsYaml() {
 	o.format = formatYaml
 }
 
-func (o *Options) Tags(names []string)  {
+func (o *Options) Tags(names []string) {
 	o.tags = names
 }
 
-func (o *Options) ForceFloats()  {
+func (o *Options) ForceFloats() {
 	o.forceFloats = true
 }
 
-func (o *Options) SubStructs()  {
+func (o *Options) SubStructs() {
 	o.subStructs = true
 }
 
-func (o *Options) SetOutput(name string)  {
+func (o *Options) SetOutput(name string) {
 	o.outputName = &name
 }
 
-func (o *Options) SaveOutput()  {
+func (o *Options) SaveOutput() {
 	o.saveOutput = true
 }
-
 
 func Parse(options Options, data []byte) (string, error) {
 	var ret string
@@ -170,11 +172,11 @@ func Parse(options Options, data []byte) (string, error) {
 		var convertFloats bool
 		var parser Parser
 		switch options.format {
-			case "json":
-				parser = ParseJson
-				convertFloats = true
-			case "yaml":
-				parser = ParseYaml
+		case "json":
+			parser = ParseJson
+			convertFloats = true
+		case "yaml":
+			parser = ParseYaml
 		}
 
 		var output []byte
