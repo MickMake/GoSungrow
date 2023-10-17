@@ -1,22 +1,22 @@
 package api
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/reflection"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"encoding/json"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 	"os"
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/reflection"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-
 type DataMap struct {
-	Map            map[string]*DataEntries
+	Map map[string]*DataEntries
 
 	parentDeviceId string
 	TimeStamp      time.Time
@@ -28,7 +28,7 @@ type DataMap struct {
 }
 
 func NewDataMap() DataMap {
-	return DataMap {
+	return DataMap{
 		Map: make(map[string]*DataEntries),
 	}
 }
@@ -42,11 +42,11 @@ func (dm *DataMap) StructToDataMap(endpoint EndPoint, parentDeviceId string, nam
 		dm.EndPoint = endpoint
 		dm.parentDeviceId = parentDeviceId
 		dm.EndPointPath = name
-		dm.TimeStamp = time.Now()	// .Round(5 * time.Minute)
+		dm.TimeStamp = time.Now() // .Round(5 * time.Minute)
 		dm.Debug = endpoint.IsDebug()
 
 		// Parse response structure.
-		dm.StructMap.InitScan(endpoint.ResponseRef(), GoStruct.StructMapOptions {
+		dm.StructMap.InitScan(endpoint.ResponseRef(), GoStruct.StructMapOptions{
 			StartAt:        "ResultData",
 			Name:           name,
 			TimeStamp:      dm.TimeStamp,
@@ -66,7 +66,6 @@ func (dm *DataMap) StructToDataMap(endpoint EndPoint, parentDeviceId string, nam
 }
 
 func (dm *DataMap) AddPointUnitValues(Current *GoStruct.Reflect, parentDeviceId string, date valueTypes.DateTime) {
-
 	for range Only.Once {
 		if parentDeviceId == "" {
 			parentDeviceId = "system"
@@ -133,8 +132,7 @@ func (dm *DataMap) CopyPoint(refEndpoint *GoStruct.Reflect, endpoint GoStruct.En
 		if pointName != "" {
 			Current.DataStructure.PointName = pointName
 			// Current.DataStructure.PointName += " (" + Current.DataStructure.PointId + ")"
-		// } else {
-
+			// } else {
 		}
 
 		if !endpoint.IsZero() {
@@ -312,20 +310,19 @@ func (dm *DataMap) ProcessMap() {
 			}
 
 			switch {
-				case Child.DataStructure.Endpoint.IsBeginsWith("virtual"):
-					// Don't prepend path - fixes the double virtual path issue.
-				case Child.DataStructure.PointVirtualShift > 0:
-					Child.DataStructure.Endpoint.ShiftLeft(Child.DataStructure.PointVirtualShift)
-					Child.DataStructure.Endpoint.InsertFirst("virtual")
-				default:
-					Child.DataStructure.Endpoint.ReplaceFirst("virtual")
+			case Child.DataStructure.Endpoint.IsBeginsWith("virtual"):
+				// Don't prepend path - fixes the double virtual path issue.
+			case Child.DataStructure.PointVirtualShift > 0:
+				Child.DataStructure.Endpoint.ShiftLeft(Child.DataStructure.PointVirtualShift)
+				Child.DataStructure.Endpoint.InsertFirst("virtual")
+			default:
+				Child.DataStructure.Endpoint.ReplaceFirst("virtual")
 			}
 
 			dm.AddPointUnitValues(Child, dm.parentDeviceId, when)
 		}
 	}
 }
-
 
 type Tables GoStruct.StructTables
 
@@ -374,7 +371,7 @@ func (dm *DataMap) CreateResultTable(full bool) output.Table {
 			for _, de := range entries {
 				if full {
 					if de.Current.DataStructure.DataTable {
-						continue	// We are a datatable parent.
+						continue // We are a datatable parent.
 					}
 
 					if de.Current.CurrentReflect.IsPointListFlatten() {
@@ -387,10 +384,10 @@ func (dm *DataMap) CreateResultTable(full bool) output.Table {
 					}
 				} else {
 					if de.Hide {
-						continue	// Ignore hidden entries.
+						continue // Ignore hidden entries.
 					}
 					if de.Current.DataStructure.DataTableChild {
-						continue	// Ignore data table children.
+						continue // Ignore data table children.
 					}
 					// child, i := de.Current.IsTableChild()
 					// fmt.Printf("%t[%d]\n", child, i)
@@ -552,7 +549,6 @@ func (dm *DataMap) Sort() []string {
 	return sorted
 }
 
-
 func CreatePointDataEntry(Current *GoStruct.Reflect, parentDeviceId string, point Point, dateTime valueTypes.DateTime, uv valueTypes.UnitValue) DataEntry {
 	// CreatePointDataEntry(Current, Current.EndPointPath().String(), parentDeviceId, point, date, *Current.Value.First())
 	var ret DataEntry
@@ -563,15 +559,15 @@ func CreatePointDataEntry(Current *GoStruct.Reflect, parentDeviceId string, poin
 			uv.SetDeviceId(parentDeviceId)
 		}
 
-		ret = DataEntry {
-			Current:    Current,
-			EndPoint:   Current.EndPointPath().String(),
-			Point:      &point,
-			Parent:     NewParentDevice(parentDeviceId),
-			Date:       dateTime,
-			Value:      uv,
-			Valid:      true,
-			Hide:       false,
+		ret = DataEntry{
+			Current:  Current,
+			EndPoint: Current.EndPointPath().String(),
+			Point:    &point,
+			Parent:   NewParentDevice(parentDeviceId),
+			Date:     dateTime,
+			Value:    uv,
+			Valid:    true,
+			Hide:     false,
 			// Index:      0,
 		}
 	}
@@ -643,7 +639,7 @@ func CreatePoint(Current *GoStruct.Reflect, parentDeviceId string) Point {
 		var parents ParentDevices
 		parents.Add(parent)
 
-		point = Point {
+		point = Point{
 			Parents:     parents,
 			Id:          Current.PointId(),
 			GroupName:   Current.PointGroupName(),
@@ -665,7 +661,7 @@ func GetPercent(value float64, max float64, precision int) float64 {
 		return 0
 	}
 
-	percent := valueTypes.SetPrecision((value / max) * 100, precision)
+	percent := valueTypes.SetPrecision((value/max)*100, precision)
 	return percent
 }
 

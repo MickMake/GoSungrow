@@ -1,16 +1,19 @@
 package findPsType
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/powerStationService/findPsType"
-const Disabled = false
-const EndPointName = "AppService.findPsType"
+const (
+	Url          = "/v1/powerStationService/findPsType"
+	Disabled     = false
+	EndPointName = "AppService.findPsType"
+)
 
 type RequestData struct {
 	PsId valueTypes.PsId `json:"ps_id" required:"true"`

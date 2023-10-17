@@ -1,21 +1,25 @@
 package showTjReport
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/reportService/showTjReport"
-const Disabled = false
-const EndPointName = "WebAppService.showTjReport"
+const (
+	Url          = "/v1/reportService/showTjReport"
+	Disabled     = false
+	EndPointName = "WebAppService.showTjReport"
+)
 
 type RequestData struct {
 	PsId      valueTypes.PsId     `json:"ps_id" required:"true"`
 	MonthDate valueTypes.DateTime `json:"month_date" required:"true"`
 }
+
 // ./goraw.sh WebAppService.showTjReport '{"ps_id":1171348,"month_date":"202210"}'
 
 func (rd RequestData) IsValid() error {
@@ -27,9 +31,7 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData []struct {
-}
+type ResultData []struct{}
 
 func (e *ResultData) IsValid() error {
 	var err error

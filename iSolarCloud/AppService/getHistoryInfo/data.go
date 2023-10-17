@@ -1,19 +1,21 @@
 package getHistoryInfo
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 
 	"github.com/MickMake/GoUnify/Only"
 )
 
-const Url = "/v1/powerStationService/getHistoryInfo"
-const Disabled = false
-const EndPointName = "AppService.getHistoryInfo"
+const (
+	Url          = "/v1/powerStationService/getHistoryInfo"
+	Disabled     = false
+	EndPointName = "AppService.getHistoryInfo"
+)
 
 type RequestData struct {
-	DateType valueTypes.String `json:"date_type" required:"true"`
+	DateType valueTypes.String   `json:"date_type" required:"true"`
 	DateId   valueTypes.DateTime `json:"date_id" required:"true"`
 }
 
@@ -26,7 +28,6 @@ func (rd RequestData) Help() string {
 	ret += api.HelpDataType()
 	return ret
 }
-
 
 type ResultData struct {
 	// Dummy valueTypes.String `json:"dummy"`

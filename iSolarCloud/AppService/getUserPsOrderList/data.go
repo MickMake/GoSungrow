@@ -1,19 +1,21 @@
 package getUserPsOrderList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/faultService/getUserPsOrderList"
-const Disabled = false
-const EndPointName = "AppService.getUserPsOrderList"
+const (
+	Url          = "/v1/faultService/getUserPsOrderList"
+	Disabled     = false
+	EndPointName = "AppService.getUserPsOrderList"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -25,13 +27,13 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	CurPage    valueTypes.Integer   `json:"curPage" PointId:"cur_page"`
-	IsMore     valueTypes.Bool      `json:"isMore" PointId:"is_more"`
-	PageList   []interface{} `json:"pageList" PointId:"page_list" PointIdReplace:"true" PointArrayFlatten:"false"`
-	RowCount   valueTypes.Integer   `json:"rowCount" PointId:"row_count"`
-	Size       valueTypes.Integer   `json:"size"`
-	StartIndex interface{}   `json:"startIndex" PointId:"start_index"`
-	TotalPage  interface{}   `json:"totalPage" PointId:"total_page"`
+	CurPage    valueTypes.Integer `json:"curPage" PointId:"cur_page"`
+	IsMore     valueTypes.Bool    `json:"isMore" PointId:"is_more"`
+	PageList   []interface{}      `json:"pageList" PointId:"page_list" PointIdReplace:"true" PointArrayFlatten:"false"`
+	RowCount   valueTypes.Integer `json:"rowCount" PointId:"row_count"`
+	Size       valueTypes.Integer `json:"size"`
+	StartIndex interface{}        `json:"startIndex" PointId:"start_index"`
+	TotalPage  interface{}        `json:"totalPage" PointId:"total_page"`
 }
 
 func (e *ResultData) IsValid() error {

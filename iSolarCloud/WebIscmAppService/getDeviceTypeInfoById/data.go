@@ -1,19 +1,21 @@
 package getDeviceTypeInfoById
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/getDeviceTypeInfoById"
-const Disabled = false
-const EndPointName = "WebIscmAppService.getDeviceTypeInfoById"
+const (
+	Url          = "/v1/devService/getDeviceTypeInfoById"
+	Disabled     = false
+	EndPointName = "WebIscmAppService.getDeviceTypeInfoById"
+)
 
 type RequestData struct {
-	CodeType       valueTypes.String `json:"code_type" required:"true"`
+	CodeType valueTypes.String `json:"code_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -25,17 +27,17 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-type ResultData   struct {
+type ResultData struct {
 	PowerDeviceTypeMap struct {
-		UpdateDate      valueTypes.DateTime  `json:"update_date" PointNameDateFormat:"DateTimeLayout"`
-		SysId           valueTypes.String  `json:"sys_id"`
-		SysName         valueTypes.String  `json:"sys_name"`
-		TypeCode        valueTypes.Integer `json:"type_code"`
-		TypeId          valueTypes.Integer `json:"type_id"`
-		TypeName        valueTypes.String  `json:"type_name"`
-		TypeNameEn      valueTypes.String  `json:"type_name_en"`
-		IsRemoteUpgrade valueTypes.Bool `json:"is_remote_upgrade"`
-		ValidFlag       valueTypes.Bool `json:"valid_flag"`
+		UpdateDate      valueTypes.DateTime `json:"update_date" PointNameDateFormat:"DateTimeLayout"`
+		SysId           valueTypes.String   `json:"sys_id"`
+		SysName         valueTypes.String   `json:"sys_name"`
+		TypeCode        valueTypes.Integer  `json:"type_code"`
+		TypeId          valueTypes.Integer  `json:"type_id"`
+		TypeName        valueTypes.String   `json:"type_name"`
+		TypeNameEn      valueTypes.String   `json:"type_name_en"`
+		IsRemoteUpgrade valueTypes.Bool     `json:"is_remote_upgrade"`
+		ValidFlag       valueTypes.Bool     `json:"valid_flag"`
 	} `json:"powerDeviceTypeMap" PointId:"power_device_type_map" DataTable:"true"`
 	SysList []struct {
 		CodeValue  valueTypes.String `json:"code_value"`

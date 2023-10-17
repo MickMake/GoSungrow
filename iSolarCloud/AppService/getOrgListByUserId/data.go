@@ -1,19 +1,21 @@
 package getOrgListByUserId
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/userService/getOrgListByUserId"
-const Disabled = false
-const EndPointName = "AppService.getOrgListByUserId"
+const (
+	Url          = "/v1/userService/getOrgListByUserId"
+	Disabled     = false
+	EndPointName = "AppService.getOrgListByUserId"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -24,10 +26,9 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData   struct {
-	Depth valueTypes.Integer   `json:"depth"`
-	List  []interface{} `json:"list"`
+type ResultData struct {
+	Depth valueTypes.Integer `json:"depth"`
+	List  []interface{}      `json:"list"`
 }
 
 func (e *ResultData) IsValid() error {

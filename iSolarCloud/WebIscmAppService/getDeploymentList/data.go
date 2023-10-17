@@ -1,19 +1,21 @@
 package getDeploymentList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/faultService/getDeploymentList"
-const Disabled = false
-const EndPointName = "WebIscmAppService.getDeploymentList"
+const (
+	Url          = "/v1/faultService/getDeploymentList"
+	Disabled     = false
+	EndPointName = "WebIscmAppService.getDeploymentList"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -25,7 +27,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"DeploymentTime"`
+	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"DeploymentTime"`
 
 	DeploymentTime valueTypes.DateTime `json:"deploymentTime" PointId:"deployment_time" PointNameDateFormat:"DateTimeLayout"`
 	Id             valueTypes.String   `json:"id"`
@@ -36,7 +38,6 @@ func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

@@ -1,16 +1,19 @@
 package getDeviceUuid
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/getDeviceUuid"
-const Disabled = false
-const EndPointName = "WebAppService.getDeviceUuid"
+const (
+	Url          = "/v1/devService/getDeviceUuid"
+	Disabled     = false
+	EndPointName = "WebAppService.getDeviceUuid"
+)
 
 type RequestData struct {
 	PsKey valueTypes.PsKey `json:"ps_key" required:"true"`

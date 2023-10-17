@@ -1,18 +1,20 @@
 package queryBatchCreatePsTaskList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 )
 
-const Url = "/v1/powerStationService/queryBatchCreatePsTaskList"
-const Disabled = false
-const EndPointName = "AppService.queryBatchCreatePsTaskList"
+const (
+	Url          = "/v1/powerStationService/queryBatchCreatePsTaskList"
+	Disabled     = false
+	EndPointName = "AppService.queryBatchCreatePsTaskList"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

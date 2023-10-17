@@ -1,16 +1,18 @@
 package psForcastInfo
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-
-const Url = "/v1/powerStationService/psForcastInfo"
-const Disabled = false
-const EndPointName = "AppService.psForcastInfo"
+const (
+	Url          = "/v1/powerStationService/psForcastInfo"
+	Disabled     = false
+	EndPointName = "AppService.psForcastInfo"
+)
 
 type RequestData struct {
 	PsId valueTypes.PsId `json:"ps_id" required:"true"`
@@ -25,43 +27,42 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
 	AreaForecastList []struct {
-		GoStruct          GoStruct.GoStruct   `json:"-" PointIdReplace:"true" PointIdFrom:"DateTime" PointNameDateFormat:"DateLayoutDay" PointTimestampFrom:"DateTime"`
+		GoStruct GoStruct.GoStruct `json:"-" PointIdReplace:"true" PointIdFrom:"DateTime" PointNameDateFormat:"DateLayoutDay" PointTimestampFrom:"DateTime"`
 
-		DateTime          valueTypes.DateTime `json:"date_time" PointNameDateFormat:"DateTimeLayout"`
+		DateTime valueTypes.DateTime `json:"date_time" PointNameDateFormat:"DateTimeLayout"`
 
-		City              valueTypes.String   `json:"city"`
-		Chill             valueTypes.Float    `json:"chill"`
-		Code              valueTypes.Integer  `json:"code"`
-		CodeName          valueTypes.String   `json:"code_name"`
-		Direction         valueTypes.Float    `json:"direction"`
-		HighF             valueTypes.Float    `json:"high" PointUnit:"F"`
-		HighC             valueTypes.Float    `json:"highc" PointUnit:"C"`
-		Humidity          valueTypes.Float    `json:"humidity"`
-		LowF              valueTypes.Float    `json:"low" PointUnit:"F"`
-		LowC              valueTypes.Float    `json:"lowc" PointUnit:"C"`
-		Pressure          valueTypes.Float    `json:"pressure" PointUnit:"hPa"`
-		Rising            valueTypes.Bool     `json:"rising"`
+		City      valueTypes.String  `json:"city"`
+		Chill     valueTypes.Float   `json:"chill"`
+		Code      valueTypes.Integer `json:"code"`
+		CodeName  valueTypes.String  `json:"code_name"`
+		Direction valueTypes.Float   `json:"direction"`
+		HighF     valueTypes.Float   `json:"high" PointUnit:"F"`
+		HighC     valueTypes.Float   `json:"highc" PointUnit:"C"`
+		Humidity  valueTypes.Float   `json:"humidity"`
+		LowF      valueTypes.Float   `json:"low" PointUnit:"F"`
+		LowC      valueTypes.Float   `json:"lowc" PointUnit:"C"`
+		Pressure  valueTypes.Float   `json:"pressure" PointUnit:"hPa"`
+		Rising    valueTypes.Bool    `json:"rising"`
 
-		Speed             valueTypes.Float    `json:"speed" PointUnitFrom:"SpeedUnit"`
-		SpeedUnit         valueTypes.String   `json:"speed_unit"`
+		Speed     valueTypes.Float  `json:"speed" PointUnitFrom:"SpeedUnit"`
+		SpeedUnit valueTypes.String `json:"speed_unit"`
 
-		SpeedOriginal     valueTypes.Float    `json:"speed_original" PointUnitFrom:"SpeedOriginalUnit"`
-		SpeedOriginalUnit valueTypes.String   `json:"speed_original_unit" PointIgnore:"true"`
+		SpeedOriginal     valueTypes.Float  `json:"speed_original" PointUnitFrom:"SpeedOriginalUnit"`
+		SpeedOriginalUnit valueTypes.String `json:"speed_original_unit" PointIgnore:"true"`
 
-		Sunrise           valueTypes.Time     `json:"sunrise"`
-		Sunset            valueTypes.Time     `json:"sunset"`
-		Visibility        valueTypes.Float    `json:"visibility"`
-		WeatherDesc       valueTypes.String   `json:"weather_desc"`
-		WeatherURL        valueTypes.String   `json:"weather_url"`
-		PsKnowledge       valueTypes.String   `json:"ps_knowledge"`
+		Sunrise     valueTypes.Time   `json:"sunrise"`
+		Sunset      valueTypes.Time   `json:"sunset"`
+		Visibility  valueTypes.Float  `json:"visibility"`
+		WeatherDesc valueTypes.String `json:"weather_desc"`
+		WeatherURL  valueTypes.String `json:"weather_url"`
+		PsKnowledge valueTypes.String `json:"ps_knowledge"`
 	} `json:"areaForcastList" PointId:"area_forcast_list" DataTable:"true"`
 	StationsCityCode []struct {
-		PsId   valueTypes.PsId `json:"ps_id"`
-		PsName valueTypes.String  `json:"ps_name"`
-		City   valueTypes.String  `json:"city"`
+		PsId   valueTypes.PsId   `json:"ps_id"`
+		PsName valueTypes.String `json:"ps_name"`
+		City   valueTypes.String `json:"city"`
 	} `json:"stationsCityCode" PointId:"stations_city_code" DataTable:"true"`
 }
 

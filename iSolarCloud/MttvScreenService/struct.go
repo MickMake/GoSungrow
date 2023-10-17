@@ -2,39 +2,40 @@
 package MttvScreenService
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/accumEnergyPsKpiData"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/addBuildProgressing"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/deleteBuildProgressing"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/energyEquivalentHoursRanking"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/energyGetRankBySortName"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/energyPovertyAlleviation"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/energyPowerGenerationTrends"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/findSingleStationPR"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/getCapabilityTrend"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/getKpiByUserIdAndAreaCode"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/getMapByUser"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/getOrgProByUserId"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/getPlanAndActualPower"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/getPsDeviceListValue"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/getPsInfoWithJoinGridByPsId"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/getPsKpiForHoursByPsId"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/getPsListByMapId"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/getPsListByUserIdAndAreaCode"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/getTheoryAndActualPower"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/nextLevelOrgList"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/nextLevelOrgStatisticalDataList"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/orgPowerReport"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/queryBuildProgressing"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/queryBuildProgressingNew"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/queryBuildProgressingOne"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/queryNearlyTwoYearsGenAndPrft"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/querySaveEnergyPsSOH"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/queryScreenUserMdIfo"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/saveOrUpdatePosition"
-	"github.com/MickMake/GoSungrow/iSolarCloud/MttvScreenService/updateBuildProgressing"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/accumEnergyPsKpiData"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/addBuildProgressing"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/deleteBuildProgressing"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/energyEquivalentHoursRanking"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/energyGetRankBySortName"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/energyPovertyAlleviation"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/energyPowerGenerationTrends"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/findSingleStationPR"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/getCapabilityTrend"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/getKpiByUserIdAndAreaCode"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/getMapByUser"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/getOrgProByUserId"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/getPlanAndActualPower"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/getPsDeviceListValue"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/getPsInfoWithJoinGridByPsId"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/getPsKpiForHoursByPsId"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/getPsListByMapId"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/getPsListByUserIdAndAreaCode"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/getTheoryAndActualPower"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/nextLevelOrgList"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/nextLevelOrgStatisticalDataList"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/orgPowerReport"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/queryBuildProgressing"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/queryBuildProgressingNew"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/queryBuildProgressingOne"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/queryNearlyTwoYearsGenAndPrft"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/querySaveEnergyPsSOH"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/queryScreenUserMdIfo"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/saveOrUpdatePosition"
+	"github.com/anicoll/gosungrow/iSolarCloud/MttvScreenService/updateBuildProgressing"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
 )
 
 var _ api.Area = (*Area)(nil)
@@ -80,7 +81,8 @@ func Init(apiRoot api.Web) Area {
 			api.GetName(querySaveEnergyPsSOH.EndPoint{}):            querySaveEnergyPsSOH.Init(apiRoot),
 			api.GetName(queryScreenUserMdIfo.EndPoint{}):            queryScreenUserMdIfo.Init(apiRoot),
 			api.GetName(saveOrUpdatePosition.EndPoint{}):            saveOrUpdatePosition.Init(apiRoot),
-			api.GetName(updateBuildProgressing.EndPoint{}):          updateBuildProgressing.Init(apiRoot)},
+			api.GetName(updateBuildProgressing.EndPoint{}):          updateBuildProgressing.Init(apiRoot),
+		},
 	}
 
 	return area

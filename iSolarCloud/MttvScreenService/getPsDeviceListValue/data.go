@@ -1,18 +1,21 @@
 package getPsDeviceListValue
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/powerStationService/getPsDeviceListValue"
-const Disabled = false
-const EndPointName = "MttvScreenService.getPsDeviceListValue"
+const (
+	Url          = "/v1/powerStationService/getPsDeviceListValue"
+	Disabled     = false
+	EndPointName = "MttvScreenService.getPsDeviceListValue"
+)
 
 type RequestData struct {
-	PsId valueTypes.PsId    `json:"ps_id" required:"true"`
+	PsId valueTypes.PsId `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -26,13 +29,13 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	List []struct {
-		GoStruct                GoStruct.GoStruct  `json:"-" PointIdFromChild:"PsKey" PointIdReplace:"true" PointDeviceFrom:"PsKey"`
+		GoStruct GoStruct.GoStruct `json:"-" PointIdFromChild:"PsKey" PointIdReplace:"true" PointDeviceFrom:"PsKey"`
 
-		PsKey                   valueTypes.String  `json:"pskey" PointId:"ps_key"`
-		PsId                    valueTypes.Integer `json:"ps_id"`
-		DeviceType              valueTypes.Integer `json:"device_type"`
-		DeviceCode              valueTypes.Integer  `json:"device_code"`
-		ChannelId               valueTypes.Integer  `json:"chnnl_id" PointId:"channel_id"`
+		PsKey      valueTypes.String  `json:"pskey" PointId:"ps_key"`
+		PsId       valueTypes.Integer `json:"ps_id"`
+		DeviceType valueTypes.Integer `json:"device_type"`
+		DeviceCode valueTypes.Integer `json:"device_code"`
+		ChannelId  valueTypes.Integer `json:"chnnl_id" PointId:"channel_id"`
 
 		AttrId                  valueTypes.Integer `json:"attr_id"`
 		ComponentAmount         valueTypes.Integer `json:"component_amount"`

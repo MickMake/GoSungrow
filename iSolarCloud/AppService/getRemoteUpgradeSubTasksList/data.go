@@ -1,16 +1,19 @@
 package getRemoteUpgradeSubTasksList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/getRemoteUpgradeSubTasksList"
-const Disabled = false
-const EndPointName = "AppService.getRemoteUpgradeSubTasksList"
+const (
+	Url          = "/v1/devService/getRemoteUpgradeSubTasksList"
+	Disabled     = false
+	EndPointName = "AppService.getRemoteUpgradeSubTasksList"
+)
 
 type RequestData struct {
 	QueryType valueTypes.String `json:"query_type" required:"true"`
@@ -27,8 +30,8 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	PageList []interface{} `json:"pageList" PointId:"page_list" PointIdReplace:"true"`
-	RowCount valueTypes.Integer   `json:"rowCount" PointId:"row_count"`
+	PageList []interface{}      `json:"pageList" PointId:"page_list" PointIdReplace:"true"`
+	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 }
 
 func (e *ResultData) IsValid() error {

@@ -1,15 +1,18 @@
 package getPowerDeviceSetTaskList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/getPowerDeviceSetTaskList"
-const Disabled = false
-const EndPointName = "AppService.getPowerDeviceSetTaskList"
+const (
+	Url          = "/v1/devService/getPowerDeviceSetTaskList"
+	Disabled     = false
+	EndPointName = "AppService.getPowerDeviceSetTaskList"
+)
 
 type RequestData struct {
 	Size    valueTypes.Integer `json:"size" required:"true"`
@@ -27,7 +30,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		GoStruct             GoStruct.GoStruct   `json:"GoStruct" PointIdFrom:"TaskId" PointIdReplace:"true" PointDeviceFrom:"PsId"`
+		GoStruct GoStruct.GoStruct `json:"GoStruct" PointIdFrom:"TaskId" PointIdReplace:"true" PointDeviceFrom:"PsId"`
 
 		TaskId               valueTypes.Integer  `json:"task_id"`
 		TaskType             valueTypes.Integer  `json:"task_type"`

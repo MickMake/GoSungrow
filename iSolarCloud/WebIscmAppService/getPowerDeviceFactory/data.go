@@ -1,18 +1,20 @@
 package getPowerDeviceFactory
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/getPowerDeviceFactory"
-const Disabled = false
-const EndPointName = "WebIscmAppService.getPowerDeviceFactory"
+const (
+	Url          = "/v1/devService/getPowerDeviceFactory"
+	Disabled     = false
+	EndPointName = "WebIscmAppService.getPowerDeviceFactory"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -23,7 +25,7 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-type ResultData   struct {
+type ResultData struct {
 	IndustryList []struct {
 		CodeValue  valueTypes.String `json:"code_value"`
 		CodeName   valueTypes.String `json:"code_name"`

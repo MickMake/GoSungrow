@@ -1,19 +1,21 @@
 package getDeviceInfo
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+
 	"github.com/MickMake/GoUnify/Only"
 )
 
-const Url = "/v1/devService/getDeviceInfo"
-const Disabled = false
-const EndPointName = "AppService.getDeviceInfo"
+const (
+	Url          = "/v1/devService/getDeviceInfo"
+	Disabled     = false
+	EndPointName = "AppService.getDeviceInfo"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

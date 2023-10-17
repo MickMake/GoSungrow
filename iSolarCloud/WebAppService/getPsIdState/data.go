@@ -1,19 +1,22 @@
 package getPsIdState
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/powerStationService/getPsIdState"
-const Disabled = false
-const EndPointName = "WebAppService.getPsIdState"
+const (
+	Url          = "/v1/powerStationService/getPsIdState"
+	Disabled     = false
+	EndPointName = "WebAppService.getPsIdState"
+)
 
 type RequestData struct {
-	PsId     valueTypes.PsId `json:"ps_id" required:"true"`
+	PsId valueTypes.PsId `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -24,7 +27,6 @@ func (rd RequestData) Help() string {
 	ret := fmt.Sprintf("")
 	return ret
 }
-
 
 type ResultData struct {
 	AllPsCount     valueTypes.Integer `json:"allPsCount"`

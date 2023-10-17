@@ -1,19 +1,21 @@
 package getDeviceModel
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/getDeviceModel"
-const Disabled = false
-const EndPointName = "WebIscmAppService.getDeviceModel"
+const (
+	Url          = "/v1/devService/getDeviceModel"
+	Disabled     = false
+	EndPointName = "WebIscmAppService.getDeviceModel"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -81,7 +83,7 @@ type ResultData struct {
 	} `json:"sysTypeList" PointId:"sys_type_list" DataTable:"true" DataTableSortOn:"CodeValue"`
 
 	AllFactoryList []struct {
-		GoStruct       GoStruct.GoStruct  `json:"-" PointListFlatten:"true"`
+		GoStruct GoStruct.GoStruct `json:"-" PointListFlatten:"true"`
 
 		Id             valueTypes.Integer `json:"id"`
 		FactoryName    valueTypes.String  `json:"factory_name"`
@@ -92,7 +94,7 @@ type ResultData struct {
 		Remark         valueTypes.String  `json:"remark"`
 	} `json:"all_factory_list" DataTable:"true" DataTableSortOn:"Id"`
 	DeviceTypeList []struct {
-		GoStruct        GoStruct.GoStruct   `json:"-" PointListFlatten:"true"`
+		GoStruct GoStruct.GoStruct `json:"-" PointListFlatten:"true"`
 
 		TypeId          valueTypes.Integer  `json:"type_id"`
 		TypeCode        valueTypes.Integer  `json:"type_code"`

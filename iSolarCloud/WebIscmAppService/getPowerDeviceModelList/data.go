@@ -1,16 +1,20 @@
 package getPowerDeviceModelList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/getPowerDeviceModelList"
-const Disabled = false
-const EndPointName = "WebIscmAppService.getPowerDeviceModelList"
+const (
+	Url          = "/v1/devService/getPowerDeviceModelList"
+	Disabled     = false
+	EndPointName = "WebIscmAppService.getPowerDeviceModelList"
+)
+
 // ./gojson.sh WebIscmAppService.getPowerDeviceModelList '{"device_type":"44"}'
 
 type RequestData struct {
@@ -27,7 +31,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"ModelId"`
+	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"ModelId"`
 
 	ModelId           valueTypes.Integer `json:"model_id"`
 	InverterModelType valueTypes.Integer `json:"inverter_model_type"`
@@ -43,7 +47,6 @@ func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

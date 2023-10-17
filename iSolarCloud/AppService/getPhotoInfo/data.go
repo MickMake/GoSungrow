@@ -1,18 +1,20 @@
 package getPhotoInfo
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 )
 
-const Url = "/v1/otherService/getPhotoInfo"
-const Disabled = false
-const EndPointName = "AppService.getPhotoInfo"
+const (
+	Url          = "/v1/otherService/getPhotoInfo"
+	Disabled     = false
+	EndPointName = "AppService.getPhotoInfo"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -23,8 +25,7 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData   struct {
+type ResultData struct {
 	PhotoInf []interface{} `json:"photoInf"`
 }
 

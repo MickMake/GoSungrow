@@ -1,19 +1,22 @@
 package orgPowerReport
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/orgService/orgPowerReport"
-const Disabled = false
-const EndPointName = "MttvScreenService.orgPowerReport"
+const (
+	Url          = "/v1/orgService/orgPowerReport"
+	Disabled     = false
+	EndPointName = "MttvScreenService.orgPowerReport"
+)
 
 type RequestData struct {
-	Type valueTypes.Integer  `json:"type" required:"true"`
+	Type valueTypes.Integer `json:"type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -25,8 +28,7 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData   struct {
+type ResultData struct {
 	RespMsg valueTypes.String `json:"respMsg" PointId:"resp_msg"`
 }
 

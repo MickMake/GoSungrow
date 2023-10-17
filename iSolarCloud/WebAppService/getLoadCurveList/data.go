@@ -1,19 +1,21 @@
 package getLoadCurveList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/reportService/getLoadCurveList"
-const Disabled = false
-const EndPointName = "WebAppService.getLoadCurveList"
+const (
+	Url          = "/v1/reportService/getLoadCurveList"
+	Disabled     = false
+	EndPointName = "WebAppService.getLoadCurveList"
+)
 
 type RequestData struct {
-	PsId      valueTypes.PsId     `json:"ps_id" required:"true"`
+	PsId       valueTypes.PsId    `json:"ps_id" required:"true"`
 	MonthDate2 valueTypes.Integer `json:"monthDate" required:"true"`
 }
 
@@ -26,9 +28,9 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-type ResultData   struct {
-	DayList []interface{} `json:"dayList"`
-	PsKey   valueTypes.String        `json:"psKey"`
+type ResultData struct {
+	DayList []interface{}     `json:"dayList"`
+	PsKey   valueTypes.String `json:"psKey"`
 }
 
 func (e *ResultData) IsValid() error {

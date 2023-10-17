@@ -1,19 +1,21 @@
 package componentInfo2Cloud
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 
 	"github.com/MickMake/GoUnify/Only"
-	"fmt"
 )
 
-const Url = "/v1/devService/componentInfo2Cloud"
-const Disabled = false
-const EndPointName = "AppService.componentInfo2Cloud"
+const (
+	Url          = "/v1/devService/componentInfo2Cloud"
+	Disabled     = false
+	EndPointName = "AppService.componentInfo2Cloud"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -23,7 +25,6 @@ func (rd RequestData) Help() string {
 	ret := fmt.Sprintf("")
 	return ret
 }
-
 
 type ResultData struct {
 	// Dummy valueTypes.String `json:"dummy"`

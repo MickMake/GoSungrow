@@ -1,18 +1,20 @@
 package getPowerPlanList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/powerStationService/getPowerPlanList"
-const Disabled = false
-const EndPointName = "WebIscmAppService.getPowerPlanList"
+const (
+	Url          = "/v1/powerStationService/getPowerPlanList"
+	Disabled     = false
+	EndPointName = "WebIscmAppService.getPowerPlanList"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -24,9 +26,9 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"CodeId"`
+	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"CodeId"`
 
-	PsId      valueTypes.Float `json:"ps_id"`
+	PsId valueTypes.Float `json:"ps_id"`
 
 	January   valueTypes.Float `json:"one" PointId:"january"`
 	February  valueTypes.Float `json:"two" PointId:"february"`

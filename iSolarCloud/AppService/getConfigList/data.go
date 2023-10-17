@@ -1,19 +1,21 @@
 package getConfigList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 
 	"github.com/MickMake/GoUnify/Only"
-	"fmt"
 )
 
-const Url = "/devDataHandleService/getConfigList"
-const Disabled = false
-const EndPointName = "AppService.getConfigList"
+const (
+	Url          = "/devDataHandleService/getConfigList"
+	Disabled     = false
+	EndPointName = "AppService.getConfigList"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

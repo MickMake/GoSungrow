@@ -3,12 +3,12 @@
 package AliSmsService
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/AliSmsService/msgDownwardStatusReceipt"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
 	"fmt"
-)
 
+	"github.com/anicoll/gosungrow/iSolarCloud/AliSmsService/msgDownwardStatusReceipt"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
+)
 
 var _ api.Area = (*Area)(nil)
 

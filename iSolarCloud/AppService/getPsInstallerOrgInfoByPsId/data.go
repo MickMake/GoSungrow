@@ -1,16 +1,18 @@
 package getPsInstallerOrgInfoByPsId
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/powerStationService/getPsInstallerOrgInfoByPsId"
-const Disabled = false
-const EndPointName = "AppService.getPsInstallerOrgInfoByPsId"
+const (
+	Url          = "/v1/powerStationService/getPsInstallerOrgInfoByPsId"
+	Disabled     = false
+	EndPointName = "AppService.getPsInstallerOrgInfoByPsId"
+)
 
 type RequestData struct {
 	PsId valueTypes.PsId `json:"ps_id" required:"true"`
@@ -25,8 +27,7 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData   struct {
+type ResultData struct {
 	PsOrgInfoList []struct {
 		OrgId           valueTypes.Integer `json:"org_id"`
 		OrgName         valueTypes.String  `json:"org_name"`
@@ -44,7 +45,6 @@ func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

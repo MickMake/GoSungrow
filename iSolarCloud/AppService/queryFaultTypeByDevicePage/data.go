@@ -1,19 +1,21 @@
 package queryFaultTypeByDevicePage
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/faultService/queryFaultTypeByDevicePage"
-const Disabled = false
-const EndPointName = "AppService.queryFaultTypeByDevicePage"
+const (
+	Url          = "/v1/faultService/queryFaultTypeByDevicePage"
+	Disabled     = false
+	EndPointName = "AppService.queryFaultTypeByDevicePage"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -33,7 +35,7 @@ type ResultData struct {
 		IsAllowOwnerView valueTypes.Bool    `json:"is_allow_owner_view"`
 	} `json:"pageList" PointId:"page_list" DataTable:"true"`
 	CurPage    valueTypes.Integer `json:"curPage" PointId:"cur_page"`
-	IsMore     valueTypes.Bool `json:"isMore" PointId:"is_more"`
+	IsMore     valueTypes.Bool    `json:"isMore" PointId:"is_more"`
 	RowCount   valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 	Size       valueTypes.Integer `json:"size"`
 	StartIndex valueTypes.Integer `json:"startIndex" PointId:"start_index"`

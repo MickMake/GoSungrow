@@ -1,19 +1,21 @@
 package addDeviceToStructureForHouseholdByPsIdS
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+
 	"github.com/MickMake/GoUnify/Only"
 )
 
-const Url = "/devDataHandleService/addDeviceToStructureForHouseholdByPsIdS"
-const Disabled = false
-const EndPointName = "AppService.addDeviceToStructureForHouseholdByPsIdS"
+const (
+	Url          = "/devDataHandleService/addDeviceToStructureForHouseholdByPsIdS"
+	Disabled     = false
+	EndPointName = "AppService.addDeviceToStructureForHouseholdByPsIdS"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -23,7 +25,6 @@ func (rd RequestData) Help() string {
 	ret := fmt.Sprintf("")
 	return ret
 }
-
 
 type ResultData struct {
 	// Dummy valueTypes.String `json:"dummy"`

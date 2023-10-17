@@ -1,19 +1,20 @@
 package getPowerDeviceFactoryListCount
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/getPowerDeviceFactoryListCount"
-const Disabled = false
-const EndPointName = "WebIscmAppService.getPowerDeviceFactoryListCount"
+const (
+	Url          = "/v1/devService/getPowerDeviceFactoryListCount"
+	Disabled     = false
+	EndPointName = "WebIscmAppService.getPowerDeviceFactoryListCount"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -24,8 +25,7 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData   struct {
+type ResultData struct {
 	Count valueTypes.Integer `json:"count"`
 }
 

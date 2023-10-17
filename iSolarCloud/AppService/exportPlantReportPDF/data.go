@@ -1,19 +1,21 @@
 package exportPlantReportPDF
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/powerStationService/exportPlantReportPDF"
-const Disabled = false
-const EndPointName = "AppService.exportPlantReportPDF"
+const (
+	Url          = "/v1/powerStationService/exportPlantReportPDF"
+	Disabled     = false
+	EndPointName = "AppService.exportPlantReportPDF"
+)
 
 type RequestData struct {
-	PsId valueTypes.PsId     `json:"ps_id" required:"true"`
+	PsId valueTypes.PsId `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -25,8 +27,7 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData   struct {
+type ResultData struct {
 	Code valueTypes.String `json:"code"`
 }
 

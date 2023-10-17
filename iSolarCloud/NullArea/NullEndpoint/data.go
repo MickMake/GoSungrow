@@ -1,17 +1,19 @@
 package NullEndpoint
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+
 	"github.com/MickMake/GoUnify/Only"
 )
 
-
-const Url = "%URL%"
-const Disabled = false
-const EndPointName = "NullArea.NullEndpoint"
+const (
+	Url          = "%URL%"
+	Disabled     = false
+	EndPointName = "NullArea.NullEndpoint"
+)
 
 type RequestData struct {
 	// DeviceType valueTypes.Integer `json:"device_type" required:"true"`

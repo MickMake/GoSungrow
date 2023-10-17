@@ -1,19 +1,21 @@
 package getModuleLogTaskList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/integrationService/getModuleLogTaskList"
-const Disabled = false
-const EndPointName = "AppService.getModuleLogTaskList"
+const (
+	Url          = "/integrationService/getModuleLogTaskList"
+	Disabled     = false
+	EndPointName = "AppService.getModuleLogTaskList"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -29,7 +31,7 @@ type ResultData struct {
 	IsMore   valueTypes.Bool    `json:"isMore" PointId:"is_more"`
 	PageList []struct {
 		// PointIdFromChild:"TaskId" PointIdReplace:"true"
-		GoStruct       GoStruct.GoStruct   `json:"-" PointIdReplace:"true" PointIdFrom:"TaskId" PointNameDateFormat:"DateTimeAltLayout" PointTimestampFrom:"CreateTime"`
+		GoStruct GoStruct.GoStruct `json:"-" PointIdReplace:"true" PointIdFrom:"TaskId" PointNameDateFormat:"DateTimeAltLayout" PointTimestampFrom:"CreateTime"`
 
 		TaskId         valueTypes.Integer  `json:"task_id"`
 		CreateTime     valueTypes.DateTime `json:"create_time" PointNameDateFormat:"DateTimeLayout"`

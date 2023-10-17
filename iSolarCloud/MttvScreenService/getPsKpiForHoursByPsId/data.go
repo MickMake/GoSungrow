@@ -1,17 +1,20 @@
 package getPsKpiForHoursByPsId
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"encoding/json"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/powerStationService/getPsKpiForHoursByPsId"
-const Disabled = false
-const EndPointName = "MttvScreenService.getPsKpiForHoursByPsId"
+const (
+	Url          = "/v1/powerStationService/getPsKpiForHoursByPsId"
+	Disabled     = false
+	EndPointName = "MttvScreenService.getPsKpiForHoursByPsId"
+)
 
 type RequestData struct {
 	PsId valueTypes.PsId     `json:"ps_id" required:"true"`
@@ -28,7 +31,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	Hours map[string]Hour `json:"hours" DataTable:"true" DataTableIndex:"true"`	// DataTableSortOn:"Index"`
+	Hours map[string]Hour `json:"hours" DataTable:"true" DataTableIndex:"true"` // DataTableSortOn:"Index"`
 }
 
 type Hour struct {

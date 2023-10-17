@@ -1,18 +1,21 @@
 package modelPointsPage
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/modelPointsPage"
-const Disabled = false
-const EndPointName = "WebIscmAppService.modelPointsPage"
+const (
+	Url          = "/v1/devService/modelPointsPage"
+	Disabled     = false
+	EndPointName = "WebIscmAppService.modelPointsPage"
+)
 
 type RequestData struct {
-	DeviceModelId valueTypes.String `json:"device_model_id" required:"true"`
+	DeviceModelId valueTypes.String  `json:"device_model_id" required:"true"`
 	DeviceType    valueTypes.Integer `json:"device_type"     required:"true"`
 }
 
@@ -27,7 +30,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PointList []struct {
-		GoStructParent      GoStruct.GoStructParent  `json:"-" PointIdFromChild:"PointId" PointIdReplace:"false"`
+		GoStructParent GoStruct.GoStructParent `json:"-" PointIdFromChild:"PointId" PointIdReplace:"false"`
 
 		PointId             valueTypes.Integer `json:"point_id"`
 		PointName           valueTypes.String  `json:"point_name"`
@@ -38,7 +41,7 @@ type ResultData struct {
 		OrderNum            valueTypes.Integer `json:"order_num"`
 	} `json:"pointList" PointId:"point_list" DataTable:"true" DataTableSortOn:"PointId"`
 	ModelList []struct {
-		GoStruct        GoStruct.GoStructParent   `json:"GoStruct" PointIdFromChild:"DeviceModelId" PointIdReplace:"false"`
+		GoStruct GoStruct.GoStructParent `json:"GoStruct" PointIdFromChild:"DeviceModelId" PointIdReplace:"false"`
 
 		DeviceModelId   valueTypes.Integer `json:"device_model_id"`
 		DeviceModel     valueTypes.String  `json:"device_model"`

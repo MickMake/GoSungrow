@@ -1,20 +1,23 @@
 package getInverterInfo
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+
 	"github.com/MickMake/GoUnify/Only"
 )
 
-const Url = "/v1/devService/getInverterInfo"
-const Disabled = false
-const EndPointName = "WebAppService.getInverterInfo"
+const (
+	Url          = "/v1/devService/getInverterInfo"
+	Disabled     = false
+	EndPointName = "WebAppService.getInverterInfo"
+)
 
 type RequestData struct {
-	PsId      valueTypes.PsId  `json:"ps_id" required:"true"`
+	PsId valueTypes.PsId `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -26,7 +29,6 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData []struct {
 	// Dummy valueTypes.String `json:"dummy"`
 }
@@ -35,7 +37,6 @@ func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

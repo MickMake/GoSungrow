@@ -1,18 +1,20 @@
 package getCommunicationDeviceConfigInfo
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/getCommunicationDeviceConfigInfo"
-const Disabled = false
-const EndPointName = "AppService.getCommunicationDeviceConfigInfo"
+const (
+	Url          = "/v1/devService/getCommunicationDeviceConfigInfo"
+	Disabled     = false
+	EndPointName = "AppService.getCommunicationDeviceConfigInfo"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -23,10 +25,9 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData []struct {
-	GoStructParent         GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"TypeId"`
-	GoStruct               GoStruct.GoStruct        `json:"-" PointIdFrom:"TypeId" PointIdReplace:"false"`
+	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"TypeId"`
+	GoStruct       GoStruct.GoStruct       `json:"-" PointIdFrom:"TypeId" PointIdReplace:"false"`
 
 	TypeId                 valueTypes.Integer `json:"type_id"`
 	DeviceName             valueTypes.String  `json:"device_name"`

@@ -1,16 +1,16 @@
 package GoStruct
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/reflection"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 	"os"
 	"reflect"
 	"strings"
 	"time"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/reflection"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+)
 
 type StructMapOptions struct {
 	StartAt        string
@@ -34,11 +34,13 @@ type StructMap struct {
 	VirtualMap map[string]*Reflect
 	_Timestamp valueTypes.DateTime
 
-	Error      error
+	Error error
 }
 
-func (sm *StructMap) PrintDebug(format string, args ...interface{})  {
-	if sm.Debug { _, _ = fmt.Fprintf(os.Stderr, format, args...) }
+func (sm *StructMap) PrintDebug(format string, args ...interface{}) {
+	if sm.Debug {
+		_, _ = fmt.Fprintf(os.Stderr, format, args...)
+	}
 }
 
 func (sm *StructMap) InitScan(current interface{}, options StructMapOptions) {
@@ -93,45 +95,45 @@ func (sm *StructMap) Scan(Parent *Reflect, Current *Reflect) *StructMap {
 		}
 
 		switch Current.Kind {
-			case reflect.Slice:
-				fallthrough
-			case reflect.Array:
-				sm.ScanSlice(Parent, Current)
+		case reflect.Slice:
+			fallthrough
+		case reflect.Array:
+			sm.ScanSlice(Parent, Current)
 
-			case reflect.Map:
-				sm.ScanMap(Parent, Current)
+		case reflect.Map:
+			sm.ScanMap(Parent, Current)
 
-			case reflect.Struct:
-				sm.ScanStruct(Parent, Current)
+		case reflect.Struct:
+			sm.ScanStruct(Parent, Current)
 
-			case reflect.Uintptr:
-				fallthrough
-			case reflect.Complex64:
-				fallthrough
-			case reflect.Complex128:
-				fallthrough
-			case reflect.Chan:
-				fallthrough
-			case reflect.Func:
-				fallthrough
-			case reflect.UnsafePointer:
-				sm.PrintDebug("Scan() IsUnsupported: %s\n", Current)
-				sm.IsUnsupported(Current)
+		case reflect.Uintptr:
+			fallthrough
+		case reflect.Complex64:
+			fallthrough
+		case reflect.Complex128:
+			fallthrough
+		case reflect.Chan:
+			fallthrough
+		case reflect.Func:
+			fallthrough
+		case reflect.UnsafePointer:
+			sm.PrintDebug("Scan() IsUnsupported: %s\n", Current)
+			sm.IsUnsupported(Current)
 
-			case reflect.Interface:
-				sm.PrintDebug("Scan() IsUnsupported: %s\n", Current)
-				sm.IsUnsupported(Current)
+		case reflect.Interface:
+			sm.PrintDebug("Scan() IsUnsupported: %s\n", Current)
+			sm.IsUnsupported(Current)
 
-			case reflect.Invalid:
-				sm.PrintDebug("Scan() IsInvalid: %s\n", Current)
-				sm.IsInvalid(Current)
+		case reflect.Invalid:
+			sm.PrintDebug("Scan() IsInvalid: %s\n", Current)
+			sm.IsInvalid(Current)
 
-			default:
-				if Current.IsGoStruct() {
-					break
-				}
-				sm.PrintDebug("Scan() IsUnsupported: %s\n", Current)
-				sm.IsUnsupported(Current)
+		default:
+			if Current.IsGoStruct() {
+				break
+			}
+			sm.PrintDebug("Scan() IsUnsupported: %s\n", Current)
+			sm.IsUnsupported(Current)
 		}
 	}
 
@@ -151,7 +153,7 @@ func (sm *StructMap) ScanMap(Parent *Reflect, Current *Reflect) bool {
 			break
 		}
 
-		ok = true	// ok = Current.IsKnown()
+		ok = true // ok = Current.IsKnown()
 		for index, key := range Current.FieldVo.MapKeys() {
 			var Child Reflect
 			Child.SetByIndex(Parent, Current, index, key)
@@ -190,7 +192,7 @@ func (sm *StructMap) ScanSlice(Parent *Reflect, Current *Reflect) bool {
 			break
 		}
 
-		ok = true	// ok = Current.IsKnown()
+		ok = true // ok = Current.IsKnown()
 		for index := 0; index < Current.Length; index++ {
 			var Child Reflect
 			Child.SetByIndex(Parent, Current, index, reflect.Value{})
@@ -220,7 +222,7 @@ func (sm *StructMap) ScanStruct(Parent *Reflect, Current *Reflect) bool {
 			break
 		}
 
-		ok = true	// ok = Current.IsKnown()
+		ok = true // ok = Current.IsKnown()
 		for index := 0; index < Current.Length; index++ {
 			var Child Reflect
 			Child.SetByIndex(Parent, Current, index, reflect.Value{})
@@ -266,7 +268,7 @@ func (sm *StructMap) Process(Child *Reflect) bool {
 				sm.PrintDebug("DEBUG: sm.Start.EndPointPath().PopLast(): %s\n", sm.Start.EndPointPath())
 			}
 
-			sm.PrintDebug( "DEBUG: sm.StructMapOptions.Name1: %s\n", sm.StructMapOptions.Name)
+			sm.PrintDebug("DEBUG: sm.StructMapOptions.Name1: %s\n", sm.StructMapOptions.Name)
 			sm.StructMapOptions.Name = sm.Start.EndPointPath().Copy()
 			sm.PrintDebug("DEBUG: sm.StructMapOptions.Name2: %s\n", sm.StructMapOptions.Name)
 			break
@@ -274,7 +276,7 @@ func (sm *StructMap) Process(Child *Reflect) bool {
 
 		if sm.Start == nil {
 			ok = Child.IsKnown()
-			break	// Wait until we've started.
+			break // Wait until we've started.
 		}
 
 		if Child.IsGoStruct() {
@@ -289,7 +291,6 @@ func (sm *StructMap) Process(Child *Reflect) bool {
 				Child.DataStructure.PointTimestamp = sm.TimeStamp
 			}
 		}
-
 
 		// Start processing the Child here on...
 		if sm.Exists(Child) {
@@ -373,7 +374,7 @@ func (sm *StructMap) Exists(Current *Reflect) bool {
 	return yes
 }
 
-func (sm *StructMap) Add(Current *Reflect)  {
+func (sm *StructMap) Add(Current *Reflect) {
 	for range Only.Once {
 		if Current.IsGoStruct() {
 			break
@@ -399,7 +400,7 @@ func (sm *StructMap) Add(Current *Reflect)  {
 	}
 }
 
-func (sm *StructMap) AddTable(Current *Reflect)  {
+func (sm *StructMap) AddTable(Current *Reflect) {
 	for range Only.Once {
 		if Current.IsGoStruct() {
 			break
@@ -423,7 +424,7 @@ func (sm *StructMap) AddTable(Current *Reflect)  {
 	}
 }
 
-func (sm *StructMap) AddVirtual(Current *Reflect)  {
+func (sm *StructMap) AddVirtual(Current *Reflect) {
 	for range Only.Once {
 		if Current.IsGoStruct() {
 			break
@@ -454,11 +455,11 @@ func (sm *StructMap) AddVirtual(Current *Reflect)  {
 func (sm *StructMap) IsNil(Current *Reflect) bool {
 	var yes bool
 	for range Only.Once {
-		yes = Current.PointIgnoreIfChildFromNil()	// true - Current is nil.
+		yes = Current.PointIgnoreIfChildFromNil() // true - Current is nil.
 
 		if sm.AddNil {
 			sm.Add(Current)
-			_, _ = fmt.Fprintf(os.Stderr,"WARNING: Field type is nil: %s\n", Current)
+			_, _ = fmt.Fprintf(os.Stderr, "WARNING: Field type is nil: %s\n", Current)
 			break
 		}
 	}
@@ -483,7 +484,7 @@ func (sm *StructMap) IsEmpty(Current *Reflect) bool {
 		yes = true
 		if sm.AddEmpty {
 			sm.Add(Current)
-			_, _ = fmt.Fprintf(os.Stderr,"WARNING: Field type is nil: %s\n", Current)
+			_, _ = fmt.Fprintf(os.Stderr, "WARNING: Field type is nil: %s\n", Current)
 			break
 		}
 	}
@@ -500,7 +501,7 @@ func (sm *StructMap) IsUnexported(Current *Reflect) bool {
 		yes = true
 		if sm.AddUnexported {
 			sm.Add(Current)
-			_, _ = fmt.Fprintf(os.Stderr,"WARNING: Field type is not exported: %s\n", Current)
+			_, _ = fmt.Fprintf(os.Stderr, "WARNING: Field type is not exported: %s\n", Current)
 		}
 	}
 	return yes
@@ -512,7 +513,7 @@ func (sm *StructMap) IsUnsupported(Current *Reflect) {
 			break
 		}
 		sm.Add(Current)
-		_, _ = fmt.Fprintf(os.Stderr,"WARNING: Field type is unsupported: %s\n", Current)
+		_, _ = fmt.Fprintf(os.Stderr, "WARNING: Field type is unsupported: %s\n", Current)
 	}
 }
 
@@ -522,7 +523,7 @@ func (sm *StructMap) IsInvalid(Current *Reflect) {
 			break
 		}
 		sm.Add(Current)
-		_, _ = fmt.Fprintf(os.Stderr,"WARNING: Field type is invalid: %s\n", Current)
+		_, _ = fmt.Fprintf(os.Stderr, "WARNING: Field type is invalid: %s\n", Current)
 	}
 }
 

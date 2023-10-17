@@ -1,19 +1,21 @@
 package queryDeviceListByUserId
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/queryDeviceListByUserId"
-const Disabled = false
-const EndPointName = "AppService.queryDeviceListByUserId"
+const (
+	Url          = "/v1/devService/queryDeviceListByUserId"
+	Disabled     = false
+	EndPointName = "AppService.queryDeviceListByUserId"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -25,8 +27,8 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	List     []interface{} `json:"list"`
-	RowCount valueTypes.Integer   `json:"rowCount" PointId:"row_count"`
+	List     []interface{}      `json:"list"`
+	RowCount valueTypes.Integer `json:"rowCount" PointId:"row_count"`
 }
 
 func (e *ResultData) IsValid() error {

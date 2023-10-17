@@ -1,19 +1,21 @@
 package queryFaultTypeByDevice
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/faultService/queryFaultTypeByDevice"
-const Disabled = false
-const EndPointName = "AppService.queryFaultTypeByDevice"
+const (
+	Url          = "/v1/faultService/queryFaultTypeByDevice"
+	Disabled     = false
+	EndPointName = "AppService.queryFaultTypeByDevice"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -25,7 +27,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent          GoStruct.GoStructParent   `json:"-" DataTable:"true" DataTableSortOn:"FaultTypeCode"`
+	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"FaultTypeCode"`
 
 	FaultTypeCode     valueTypes.Integer   `json:"fault_type_code"`
 	FaultTypeCodeList []valueTypes.Integer `json:"fault_type_code_list"`

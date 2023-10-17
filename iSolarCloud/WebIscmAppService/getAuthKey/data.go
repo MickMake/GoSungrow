@@ -1,18 +1,19 @@
 package getAuthKey
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 )
 
-const Url = "/v1/powerStationService/getAuthKey"
-const Disabled = false
-const EndPointName = "WebIscmAppService.getAuthKey"
+const (
+	Url          = "/v1/powerStationService/getAuthKey"
+	Disabled     = false
+	EndPointName = "WebIscmAppService.getAuthKey"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

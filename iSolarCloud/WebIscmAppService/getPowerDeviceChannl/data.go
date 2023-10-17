@@ -1,15 +1,18 @@
 package getPowerDeviceChannl
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/getPowerDeviceChannl"
-const Disabled = false
-const EndPointName = "WebIscmAppService.getPowerDeviceChannl"
+const (
+	Url          = "/v1/devService/getPowerDeviceChannl"
+	Disabled     = false
+	EndPointName = "WebIscmAppService.getPowerDeviceChannl"
+)
 
 type RequestData struct {
 	Id valueTypes.Integer `json:"id" required:"true"`

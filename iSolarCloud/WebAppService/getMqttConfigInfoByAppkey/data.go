@@ -1,16 +1,18 @@
 package getMqttConfigInfoByAppkey
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-
-const Url = "/v1/commonService/getMqttConfigInfoByAppkey"
-const Disabled = false
-const EndPointName = "WebAppService.getMqttConfigInfoByAppkey"
+const (
+	Url          = "/v1/commonService/getMqttConfigInfoByAppkey"
+	Disabled     = false
+	EndPointName = "WebAppService.getMqttConfigInfoByAppkey"
+)
 
 const (
 	AppKey      = "93D72E60331ABDCDC7B39ADC2D1F32B3"
@@ -35,13 +37,13 @@ func (rd RequestData) Help() string {
 
 // ResultData holds data returned from the API.
 type ResultData struct {
-	Code             string   `json:"code"`
-	MqttPassword     string   `json:"mqtt_password"`
-	MqttRsaPublicKey string   `json:"mqtt_rsa_public_key"`
-	MqttType         string   `json:"mqtt_type"`
+	Code             string              `json:"code"`
+	MqttPassword     string              `json:"mqtt_password"`
+	MqttRsaPublicKey string              `json:"mqtt_rsa_public_key"`
+	MqttType         string              `json:"mqtt_type"`
 	MqttURLList      []valueTypes.String `json:"mqtt_url_list"`
 	MqttURLListLan   []valueTypes.String `json:"mqtt_url_list_lan"`
-	MqttUsername     string   `json:"mqtt_username"`
+	MqttUsername     string              `json:"mqtt_username"`
 }
 
 // IsValid Checks for validity of results data.

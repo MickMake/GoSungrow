@@ -1,15 +1,17 @@
 package getReportData
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/Common"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/iSolarCloud/Common"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/powerStationService/getReportData"
-const Disabled = false
-const EndPointName = "AppService.getReportData"
+const (
+	Url          = "/v1/powerStationService/getReportData"
+	Disabled     = false
+	EndPointName = "AppService.getReportData"
+)
 
 type RequestData struct {
 	PsId       valueTypes.PsId    `json:"ps_id" required:"true"`

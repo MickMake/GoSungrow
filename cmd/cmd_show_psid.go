@@ -1,20 +1,20 @@
 package cmd
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud"
-	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPsDetail"
-	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPsDetailWithPsType"
 	"fmt"
+	"strings"
+
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdHelp"
+	"github.com/anicoll/gosungrow/iSolarCloud"
+	"github.com/anicoll/gosungrow/iSolarCloud/AppService/getPsDetail"
+	"github.com/anicoll/gosungrow/iSolarCloud/AppService/getPsDetailWithPsType"
 	"github.com/spf13/cobra"
-	"strings"
 )
-
 
 func (c *CmdShow) AttachPs(cmd *cobra.Command) *cobra.Command {
 	for range Only.Once {
-		var self = &cobra.Command{
+		self := &cobra.Command{
 			Use:                   "ps",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "PsId"},
@@ -42,9 +42,8 @@ func (c *CmdShow) AttachPs(cmd *cobra.Command) *cobra.Command {
 	return c.SelfCmd
 }
 
-
 func (c *CmdShow) AttachPsList(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "list",
 		Aliases:               []string{"ls"},
 		Annotations:           map[string]string{"group": "PsId"},
@@ -61,6 +60,7 @@ func (c *CmdShow) AttachPsList(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcPsList(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		var devices string
@@ -75,7 +75,7 @@ func (c *CmdShow) funcPsList(_ *cobra.Command, args []string) error {
 }
 
 func (c *CmdShow) AttachPsIdList2(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "list2",
 		Aliases:               []string{"ls2"},
 		Annotations:           map[string]string{"group": "PsId"},
@@ -92,6 +92,7 @@ func (c *CmdShow) AttachPsIdList2(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcPsIdList2(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		pids := cmds.Api.SunGrow.SetPsIds(args...)
@@ -105,7 +106,7 @@ func (c *CmdShow) funcPsIdList2(_ *cobra.Command, args []string) error {
 }
 
 func (c *CmdShow) AttachPsTree(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "tree",
 		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "PsId"},
@@ -122,6 +123,7 @@ func (c *CmdShow) AttachPsTree(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcPsTree(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		var pids iSolarCloud.PsTrees
@@ -136,7 +138,7 @@ func (c *CmdShow) funcPsTree(_ *cobra.Command, args []string) error {
 }
 
 func (c *CmdShow) AttachPsPoints(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "points [ps_ids | .] [device_type]",
 		Aliases:               []string{"point"},
 		Annotations:           map[string]string{"group": "PsId"},
@@ -153,6 +155,7 @@ func (c *CmdShow) AttachPsPoints(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcPsPoints(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		args = MinimumArraySize(2, args)
@@ -168,7 +171,7 @@ func (c *CmdShow) funcPsPoints(_ *cobra.Command, args []string) error {
 }
 
 func (c *CmdShow) AttachPsData(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "data <ps_ids | .> [device_type | .] " + ArgsDateInterval,
 		Aliases:               []string{"point"},
 		Annotations:           map[string]string{"group": "PsId"},
@@ -185,6 +188,7 @@ func (c *CmdShow) AttachPsData(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcPsData(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.OutputType.SetTable()
@@ -198,7 +202,7 @@ func (c *CmdShow) funcPsData(_ *cobra.Command, args []string) error {
 }
 
 func (c *CmdShow) AttachPsGraph(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "graph <ps_ids | .> [device_type | .] " + ArgsDateInterval,
 		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "PsId"},
@@ -215,6 +219,7 @@ func (c *CmdShow) AttachPsGraph(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcPsGraph(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.OutputType.SetGraph()
@@ -228,7 +233,7 @@ func (c *CmdShow) funcPsGraph(_ *cobra.Command, args []string) error {
 }
 
 func (c *CmdShow) AttachPsSave(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "save <ps_ids | .> [device_type | .] " + ArgsDateInterval,
 		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "PsId"},
@@ -245,6 +250,7 @@ func (c *CmdShow) AttachPsSave(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcPsSave(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		args = MinimumArraySize(5, args)
@@ -257,7 +263,7 @@ func (c *CmdShow) funcPsSave(_ *cobra.Command, args []string) error {
 }
 
 func (c *CmdShow) AttachPsDetail(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "detail [ps_id ...]",
 		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "PsId"},
@@ -274,6 +280,7 @@ func (c *CmdShow) AttachPsDetail(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcPsDetail(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		pids := cmds.Api.SunGrow.SetPsIds(args...)

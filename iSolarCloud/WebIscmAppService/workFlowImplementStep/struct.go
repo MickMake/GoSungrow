@@ -5,16 +5,16 @@
 package workFlowImplementStep
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/reflection"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 	"time"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/reflection"
+)
 
 // api.EndPoint - Import API endpoint interface
 var _ api.EndPoint = (*EndPoint)(nil)
@@ -53,7 +53,6 @@ func Init(apiRoot api.Web) EndPoint {
 	}
 }
 
-
 // ******************************************************************************** //
 
 // Methods not scoped by api.EndPoint interface type
@@ -75,17 +74,18 @@ func (e EndPoint) GetResponse() Response {
 }
 
 // Assert - Used to obtain locally scoped EndPoint methods, (not visible from api.EndPoint).
+//
 //goland:noinspection GoUnusedExportedFunction
 func Assert(e api.EndPoint) EndPoint {
 	return e.(EndPoint)
 }
 
 // AssertResultData - Used to obtain locally scoped ResultData methods, (not visible from api.EndPoint).
+//
 //goland:noinspection GoUnusedExportedFunction
 func AssertResultData(e api.EndPoint) ResultData {
 	return e.(EndPoint).Response.ResultData
 }
-
 
 // ******************************************************************************** //
 
@@ -167,7 +167,6 @@ func (e EndPoint) WriteDataFile() error {
 	return e.ApiWriteDataFile(e.Response.ResultData)
 }
 
-
 // ********************************************************************************
 
 // SetRequest - Save an interface reference as either api.RequestCommon or RequestData.
@@ -241,7 +240,6 @@ func (e EndPoint) IsRequestValid() error {
 	return e.Error
 }
 
-
 // ********************************************************************************
 
 // SetResponse - Save a JSON string to the Response structure.
@@ -297,7 +295,6 @@ func (e EndPoint) ResponseString() string {
 	return output.GetRequestString(e.Response)
 }
 
-
 // ********************************************************************************
 
 // MarshalJSON - Marshall the EndPoint.
@@ -320,7 +317,6 @@ func (e EndPoint) MarshalJSON() ([]byte, error) {
 	// 	Response: e.Response,
 	// })
 }
-
 
 // ********************************************************************************
 
@@ -361,7 +357,6 @@ func (e EndPoint) GetCacheTimeout() time.Duration {
 	return e.ApiRoot.GetCacheTimeout()
 }
 
-
 func (e EndPoint) GetEndPointData() api.DataMap {
 	return e.GetData()
 }
@@ -393,4 +388,3 @@ func (e EndPoint) ResultDataRef() ResultData {
 func (e EndPoint) IsDebug() bool {
 	return e.ApiIsDebug()
 }
-

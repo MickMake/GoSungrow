@@ -1,20 +1,22 @@
 package getParamSetTemplatePointInfo
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/getParamSetTemplatePointInfo"
-const Disabled = false
-const EndPointName = "AppService.getParamSetTemplatePointInfo"
+const (
+	Url          = "/v1/devService/getParamSetTemplatePointInfo"
+	Disabled     = false
+	EndPointName = "AppService.getParamSetTemplatePointInfo"
+)
 
 type RequestData struct {
-	UuidList          valueTypes.String  `json:"uuid_list" required:"true"`
-	SetType           valueTypes.String  `json:"set_type" required:"true"`
+	UuidList valueTypes.String `json:"uuid_list" required:"true"`
+	SetType  valueTypes.String `json:"set_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -29,15 +31,12 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData struct {
-}
+type ResultData struct{}
 
 func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

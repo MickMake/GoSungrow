@@ -1,20 +1,22 @@
 package getDeviceModelInfoList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/getDeviceModelInfoList"
-const Disabled = false
-const EndPointName = "AppService.getDeviceModelInfoList"
+const (
+	Url          = "/v1/devService/getDeviceModelInfoList"
+	Disabled     = false
+	EndPointName = "AppService.getDeviceModelInfoList"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -26,14 +28,14 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	ComType           valueTypes.String `json:"com_type"`
-	DeviceFactoryId   valueTypes.String `json:"device_factory_id"`
-	DeviceFactoryName valueTypes.String `json:"device_factory_name"`
-	DeviceModel       valueTypes.String `json:"device_model"`
-	DeviceModelCode   valueTypes.String `json:"device_model_code"`
-	DeviceModelId     valueTypes.Integer  `json:"device_model_id"`
-	DeviceType        valueTypes.Integer  `json:"device_type"`
-	IsRemoteUpgrade   valueTypes.Bool     `json:"is_remote_upgrade"`
+	ComType           valueTypes.String  `json:"com_type"`
+	DeviceFactoryId   valueTypes.String  `json:"device_factory_id"`
+	DeviceFactoryName valueTypes.String  `json:"device_factory_name"`
+	DeviceModel       valueTypes.String  `json:"device_model"`
+	DeviceModelCode   valueTypes.String  `json:"device_model_code"`
+	DeviceModelId     valueTypes.Integer `json:"device_model_id"`
+	DeviceType        valueTypes.Integer `json:"device_type"`
+	IsRemoteUpgrade   valueTypes.Bool    `json:"is_remote_upgrade"`
 }
 
 func (e *ResultData) IsValid() error {

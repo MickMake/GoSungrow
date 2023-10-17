@@ -1,21 +1,24 @@
 package queryPsProfit
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/powerStationService/queryPsProfit"
-const Disabled = false
-const EndPointName = "AppService.queryPsProfit"
+const (
+	Url          = "/v1/powerStationService/queryPsProfit"
+	Disabled     = false
+	EndPointName = "AppService.queryPsProfit"
+)
 
 type RequestData struct {
-	PsId     valueTypes.PsId `json:"ps_id" required:"true"`
+	PsId     valueTypes.PsId     `json:"ps_id" required:"true"`
 	DateId   valueTypes.DateTime `json:"date_id" required:"true"`
-	DateType valueTypes.String `json:"date_type" required:"true"`
+	DateType valueTypes.String   `json:"date_type" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -31,33 +34,33 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	ActualList []struct {
-		GoStruct                 GoStruct.GoStruct   `json:"-" PointIdReplace:"true" PointIdFrom:"DateId" PointNameDateFormat:"DateLayoutDay" PointTimestampFrom:"UpdateTime"`
+		GoStruct GoStruct.GoStruct `json:"-" PointIdReplace:"true" PointIdFrom:"DateId" PointNameDateFormat:"DateLayoutDay" PointTimestampFrom:"UpdateTime"`
 
-		DateId                   valueTypes.DateTime `json:"date_id" PointNameDateFormat:"DateLayout" PointTimestampFrom:"UpdateTime"`
-		UpdateTime               valueTypes.DateTime `json:"update_time" PointNameDateFormat:"DateTimeLayout"`
+		DateId     valueTypes.DateTime `json:"date_id" PointNameDateFormat:"DateLayout" PointTimestampFrom:"UpdateTime"`
+		UpdateTime valueTypes.DateTime `json:"update_time" PointNameDateFormat:"DateTimeLayout"`
 
-		NetPowerProfit           valueTypes.Float    `json:"net_power_profit" PointTimestampFrom:"UpdateTime"`
-		SubsidyProfit            interface{}         `json:"subsidy_profit" PointTimestampFrom:"UpdateTime"`
-		UsePowerProfit           valueTypes.Float    `json:"use_power_profit" PointTimestampFrom:"UpdateTime"`
-		UsePowerByDiscountProfit valueTypes.Float    `json:"use_power_by_discount_profit" PointTimestampFrom:"UpdateTime"`
-		TotalProfit              valueTypes.Float    `json:"total_profit" PointTimestampFrom:"UpdateTime"`
+		NetPowerProfit           valueTypes.Float `json:"net_power_profit" PointTimestampFrom:"UpdateTime"`
+		SubsidyProfit            interface{}      `json:"subsidy_profit" PointTimestampFrom:"UpdateTime"`
+		UsePowerProfit           valueTypes.Float `json:"use_power_profit" PointTimestampFrom:"UpdateTime"`
+		UsePowerByDiscountProfit valueTypes.Float `json:"use_power_by_discount_profit" PointTimestampFrom:"UpdateTime"`
+		TotalProfit              valueTypes.Float `json:"total_profit" PointTimestampFrom:"UpdateTime"`
 
-		NetPowerQuantityTotal    valueTypes.Float    `json:"net_power_quantity_total" PointTimestampFrom:"UpdateTime"`
-		PowerQuantityTotal       valueTypes.Float    `json:"power_quantity_total" PointTimestampFrom:"UpdateTime"`
-		UsePowerQuantityTotal    valueTypes.Float    `json:"use_power_quantity_total" PointTimestampFrom:"UpdateTime"`
+		NetPowerQuantityTotal valueTypes.Float `json:"net_power_quantity_total" PointTimestampFrom:"UpdateTime"`
+		PowerQuantityTotal    valueTypes.Float `json:"power_quantity_total" PointTimestampFrom:"UpdateTime"`
+		UsePowerQuantityTotal valueTypes.Float `json:"use_power_quantity_total" PointTimestampFrom:"UpdateTime"`
 
-		CuspNetPowerQuantity     interface{}         `json:"cusp_net_power_quantity" PointTimestampFrom:"UpdateTime"`
-		CuspPowerQuantity        interface{}         `json:"cusp_power_quantity" PointTimestampFrom:"UpdateTime"`
-		CuspUsePowerQuantity     interface{}         `json:"cusp_use_power_quantity" PointTimestampFrom:"UpdateTime"`
-		FlatNetPowerQuantity     valueTypes.Float    `json:"flat_net_power_quantity" PointTimestampFrom:"UpdateTime"`
-		FlatPowerQuantity        valueTypes.Float    `json:"flat_power_quantity" PointTimestampFrom:"UpdateTime"`
-		FlatUsePowerQuantity     valueTypes.Float    `json:"flat_use_power_quantity" PointTimestampFrom:"UpdateTime"`
-		PeakNetPowerQuantity     interface{}         `json:"peak_net_power_quantity" PointTimestampFrom:"UpdateTime"`
-		PeakPowerQuantity        interface{}         `json:"peak_power_quantity" PointTimestampFrom:"UpdateTime"`
-		PeakUsePowerQuantity     interface{}         `json:"peak_use_power_quantity" PointTimestampFrom:"UpdateTime"`
-		ValleyNetPowerQuantity   interface{}         `json:"valley_net_power_quantity" PointTimestampFrom:"UpdateTime"`
-		ValleyPowerQuantity      interface{}         `json:"valley_power_quantity" PointTimestampFrom:"UpdateTime"`
-		ValleyUsePowerQuantity   interface{}         `json:"valley_use_power_quantity" PointTimestampFrom:"UpdateTime"`
+		CuspNetPowerQuantity   interface{}      `json:"cusp_net_power_quantity" PointTimestampFrom:"UpdateTime"`
+		CuspPowerQuantity      interface{}      `json:"cusp_power_quantity" PointTimestampFrom:"UpdateTime"`
+		CuspUsePowerQuantity   interface{}      `json:"cusp_use_power_quantity" PointTimestampFrom:"UpdateTime"`
+		FlatNetPowerQuantity   valueTypes.Float `json:"flat_net_power_quantity" PointTimestampFrom:"UpdateTime"`
+		FlatPowerQuantity      valueTypes.Float `json:"flat_power_quantity" PointTimestampFrom:"UpdateTime"`
+		FlatUsePowerQuantity   valueTypes.Float `json:"flat_use_power_quantity" PointTimestampFrom:"UpdateTime"`
+		PeakNetPowerQuantity   interface{}      `json:"peak_net_power_quantity" PointTimestampFrom:"UpdateTime"`
+		PeakPowerQuantity      interface{}      `json:"peak_power_quantity" PointTimestampFrom:"UpdateTime"`
+		PeakUsePowerQuantity   interface{}      `json:"peak_use_power_quantity" PointTimestampFrom:"UpdateTime"`
+		ValleyNetPowerQuantity interface{}      `json:"valley_net_power_quantity" PointTimestampFrom:"UpdateTime"`
+		ValleyPowerQuantity    interface{}      `json:"valley_power_quantity" PointTimestampFrom:"UpdateTime"`
+		ValleyUsePowerQuantity interface{}      `json:"valley_use_power_quantity" PointTimestampFrom:"UpdateTime"`
 	} `json:"actual_list" PointId:"actual" DataTable:"true"`
 	// Need to fix this output - PointIdFromChild:"DateId" isn't working.
 	PlanList []interface{} `json:"plan_list" PointArrayFlatten:"false"`

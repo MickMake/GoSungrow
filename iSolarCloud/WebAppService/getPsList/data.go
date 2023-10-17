@@ -1,19 +1,21 @@
 package getPsList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/powerStationService/getPsListForWeb"
-const Disabled = false
-const EndPointName = "WebAppService.getPsList"
+const (
+	Url          = "/v1/powerStationService/getPsListForWeb"
+	Disabled     = false
+	EndPointName = "WebAppService.getPsList"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -25,8 +27,8 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent     GoStruct.GoStructParent  `json:"-" PointIdFromChild:"PsId" PointIdReplace:"true" DataTable:"true" DataTableSortOn:"PsId"`
-	GoStruct           GoStruct.GoStruct        `json:"-" PointDeviceFrom:"PsId"`
+	GoStructParent GoStruct.GoStructParent `json:"-" PointIdFromChild:"PsId" PointIdReplace:"true" DataTable:"true" DataTableSortOn:"PsId"`
+	GoStruct       GoStruct.GoStruct       `json:"-" PointDeviceFrom:"PsId"`
 
 	PsId               valueTypes.Integer  `json:"psid" PointId:"ps_id"`
 	PsName             valueTypes.String   `json:"psname" PointId:"ps_name"`
@@ -41,7 +43,7 @@ type ResultData []struct {
 	PsType             valueTypes.Integer  `json:"ps_type"`
 	ShareType          valueTypes.String   `json:"share_type"`
 
-	RowCount           valueTypes.Integer  `json:"rowCount"`
+	RowCount valueTypes.Integer `json:"rowCount"`
 }
 
 func (e *ResultData) IsValid() error {

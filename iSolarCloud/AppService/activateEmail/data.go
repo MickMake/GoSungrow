@@ -1,19 +1,21 @@
 package activateEmail
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 
 	"github.com/MickMake/GoUnify/Only"
-	"fmt"
 )
 
-const Url = "/v1/userService/activateEmail"
-const Disabled = false
-const EndPointName = "AppService.activateEmail"
+const (
+	Url          = "/v1/userService/activateEmail"
+	Disabled     = false
+	EndPointName = "AppService.activateEmail"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

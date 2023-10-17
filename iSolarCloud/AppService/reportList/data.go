@@ -1,20 +1,22 @@
 package reportList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/Common"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
+	"github.com/anicoll/gosungrow/iSolarCloud/Common"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/powerStationService/reportList"
-const Disabled = false
-const EndPointName = "AppService.reportList"
+const (
+	Url          = "/v1/powerStationService/reportList"
+	Disabled     = false
+	EndPointName = "AppService.reportList"
+)
 
 const (
-	Day = 1
+	Day   = 1
 	Month = 2
-	Year = 3
+	Year  = 3
 	Total = 4
 )
 

@@ -1,19 +1,21 @@
 package getFaultMsgListWithYYYYMM
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/faultService/getFaultMsgListWithYYYYMM"
-const Disabled = false
-const EndPointName = "AppService.getFaultMsgListWithYYYYMM"
+const (
+	Url          = "/v1/faultService/getFaultMsgListWithYYYYMM"
+	Disabled     = false
+	EndPointName = "AppService.getFaultMsgListWithYYYYMM"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -24,18 +26,17 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData   []struct {
-	CreateTime    valueTypes.Integer  `json:"create_time"`
-	FaultCode     valueTypes.String   `json:"fault_code"`
-	FaultLevel    valueTypes.Integer  `json:"fault_level"`
-	FaultReason   valueTypes.String   `json:"fault_reason"`
-	FaultType     valueTypes.Integer  `json:"fault_type"`
-	FaultTypeCode valueTypes.Integer  `json:"fault_type_code"`
-	Id            valueTypes.Integer  `json:"id"`
-	PsId          valueTypes.PsId  `json:"ps_id"`
-	PsKey         valueTypes.PsKey    `json:"ps_key"`
-	UUID          valueTypes.Integer  `json:"uuid"`
+type ResultData []struct {
+	CreateTime    valueTypes.Integer `json:"create_time"`
+	FaultCode     valueTypes.String  `json:"fault_code"`
+	FaultLevel    valueTypes.Integer `json:"fault_level"`
+	FaultReason   valueTypes.String  `json:"fault_reason"`
+	FaultType     valueTypes.Integer `json:"fault_type"`
+	FaultTypeCode valueTypes.Integer `json:"fault_type_code"`
+	Id            valueTypes.Integer `json:"id"`
+	PsId          valueTypes.PsId    `json:"ps_id"`
+	PsKey         valueTypes.PsKey   `json:"ps_key"`
+	UUID          valueTypes.Integer `json:"uuid"`
 }
 
 func (e *ResultData) IsValid() error {

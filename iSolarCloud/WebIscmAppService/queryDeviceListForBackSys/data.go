@@ -1,19 +1,22 @@
 package queryDeviceListForBackSys
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/queryDeviceListForBackSys"
-const Disabled = false
-const EndPointName = "WebIscmAppService.queryDeviceListForBackSys"
+const (
+	Url          = "/v1/devService/queryDeviceListForBackSys"
+	Disabled     = false
+	EndPointName = "WebIscmAppService.queryDeviceListForBackSys"
+)
 
 type RequestData struct {
-	PsId       valueTypes.PsId     `json:"ps_id" require:"true"`
+	PsId valueTypes.PsId `json:"ps_id" require:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -28,9 +31,9 @@ func (rd RequestData) Help() string {
 type ResultData []Device
 
 type Device struct {
-	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"UUID"`
+	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"UUID"`
 
-	UUID       valueTypes.Integer `json:"uuid"`
+	UUID valueTypes.Integer `json:"uuid"`
 
 	DeviceCode valueTypes.Integer `json:"device_code"`
 	DeviceType valueTypes.Integer `json:"device_type"`

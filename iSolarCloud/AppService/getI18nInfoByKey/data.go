@@ -1,19 +1,21 @@
 package getI18nInfoByKey
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 
 	"github.com/MickMake/GoUnify/Only"
-	"fmt"
 )
 
-const Url = "/integrationService/i18nfile/getI18nInfoByKey"
-const Disabled = false
-const EndPointName = "AppService.getI18nInfoByKey"
+const (
+	Url          = "/integrationService/i18nfile/getI18nInfoByKey"
+	Disabled     = false
+	EndPointName = "AppService.getI18nInfoByKey"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -23,7 +25,6 @@ func (rd RequestData) Help() string {
 	ret := fmt.Sprintf("")
 	return ret
 }
-
 
 type ResultData struct {
 	// Dummy valueTypes.String `json:"dummy"`

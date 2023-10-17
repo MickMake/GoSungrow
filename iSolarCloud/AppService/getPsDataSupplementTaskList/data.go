@@ -1,18 +1,20 @@
 package getPsDataSupplementTaskList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/powerStationService/getPsDataSupplementTaskList"
-const Disabled = false
-const EndPointName = "AppService.getPsDataSupplementTaskList"
+const (
+	Url          = "/v1/powerStationService/getPsDataSupplementTaskList"
+	Disabled     = false
+	EndPointName = "AppService.getPsDataSupplementTaskList"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

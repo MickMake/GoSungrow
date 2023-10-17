@@ -1,15 +1,18 @@
 package psHourPointsValue
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/powerStationService/psHourPointsValue"
-const Disabled = false
-const EndPointName = "AppService.psHourPointsValue"
+const (
+	Url          = "/v1/powerStationService/psHourPointsValue"
+	Disabled     = false
+	EndPointName = "AppService.psHourPointsValue"
+)
 
 type RequestData struct {
 	PsId valueTypes.PsId `json:"ps_id" required:"true"`
@@ -25,7 +28,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData struct {
-	GoStructParent        GoStruct.GoStructParent `json:"-" PointIdReplace:"true" DataTable:"true" DataTableIndex:"true" DataTableIndexTitle:"Hour"`	// DataTablePivot:"true"`
+	GoStructParent GoStruct.GoStructParent `json:"-" PointIdReplace:"true" DataTable:"true" DataTableIndex:"true" DataTableIndexTitle:"Hour"` // DataTablePivot:"true"`
 
 	P24001List []valueTypes.Float `json:"p24001List" PointId:"p24001" PointUnitFrom:"P24001Unit"`
 	P24001Unit valueTypes.String  `json:"p24001_unit" PointIgnore:"true"`

@@ -1,18 +1,20 @@
 package queryMutiPointDataList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
-
 	"encoding/json"
 	"fmt"
+
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/commonService/queryMutiPointDataList"
-const Disabled = false
-const EndPointName = "AppService.queryMutiPointDataList"
+const (
+	Url          = "/v1/commonService/queryMutiPointDataList"
+	Disabled     = false
+	EndPointName = "AppService.queryMutiPointDataList"
+)
 
 type RequestData struct {
 	PsId           valueTypes.PsId     `json:"ps_id" required:"true"`
@@ -32,21 +34,21 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
 	Data Data `json:"data" DataTable:"true" DataTableSortOn:"Timestamp"`
 }
 
-type Data map[valueTypes.DateTime]Value
-type Value struct {
-	GoStructParent  GoStruct.GoStructParent   `json:"-" PointIdFrom:"PsKey.Timestamp" PointIdReplace:"true" PointDeviceFrom:"PsKey"`
-	// GoStruct  GoStruct.GoStruct   `json:"-" PointDeviceFrom:"PsKey"`
+type (
+	Data  map[valueTypes.DateTime]Value
+	Value struct {
+		GoStructParent GoStruct.GoStructParent `json:"-" PointIdFrom:"PsKey.Timestamp" PointIdReplace:"true" PointDeviceFrom:"PsKey"`
+		// GoStruct  GoStruct.GoStruct   `json:"-" PointDeviceFrom:"PsKey"`
 
-	Timestamp valueTypes.DateTime `json:"timestamp" PointNameDateFormat:"DateTimeLayout"`
-	PsKey     valueTypes.PsKey    `json:"ps_key"`
-	Points    map[string]valueTypes.Generic	`json:"points" PointDeviceFrom:"PsKey"`
-}
-
+		Timestamp valueTypes.DateTime           `json:"timestamp" PointNameDateFormat:"DateTimeLayout"`
+		PsKey     valueTypes.PsKey              `json:"ps_key"`
+		Points    map[string]valueTypes.Generic `json:"points" PointDeviceFrom:"PsKey"`
+	}
+)
 
 func (e *ResultData) IsValid() error {
 	var err error
@@ -125,7 +127,7 @@ func (e *ResultData) UnmarshalJSON(data []byte) error {
 					ts := d[device][point][value].Timestamp
 
 					if _, ok := e.Data[ts]; !ok {
-						rdv := Value {
+						rdv := Value{
 							Timestamp: ts,
 							PsKey:     valueTypes.SetPsKeyString(device),
 							Points:    make(map[string]valueTypes.Generic),
@@ -144,10 +146,10 @@ func (e *ResultData) UnmarshalJSON(data []byte) error {
 	return err
 }
 
-
 // Scan incoming JSON.
 
 type scanDevices map[string]scanPoints
+
 func (e *scanDevices) UnmarshalJSON(data []byte) error {
 	var err error
 
@@ -170,6 +172,7 @@ func (e *scanDevices) UnmarshalJSON(data []byte) error {
 }
 
 type scanPoints map[string]scanValues
+
 func (e *scanPoints) UnmarshalJSON(data []byte) error {
 	var err error
 
@@ -197,6 +200,7 @@ func (e *scanPoints) UnmarshalJSON(data []byte) error {
 }
 
 type scanValues []scanValue
+
 func (e *scanValues) UnmarshalJSON(data []byte) error {
 	var err error
 
@@ -215,10 +219,10 @@ func (e *scanValues) UnmarshalJSON(data []byte) error {
 
 		*e = make(scanValues, 0)
 		for k, v := range d {
-			*e = append(*e, scanValue {
+			*e = append(*e, scanValue{
 				Timestamp: valueTypes.SetDateTimeString(k),
 				// PointId:   valueTypes.SetPointIdString(v),
-				Value:     valueTypes.SetGenericString(v),
+				Value: valueTypes.SetGenericString(v),
 			})
 		}
 	}
@@ -229,9 +233,8 @@ func (e *scanValues) UnmarshalJSON(data []byte) error {
 type scanValue struct {
 	Timestamp valueTypes.DateTime `json:"timestamp"`
 	PointId   valueTypes.PointId  `json:"point_id"`
-	Value     valueTypes.Generic    `json:"value"`
+	Value     valueTypes.Generic  `json:"value"`
 }
-
 
 // func (e *EndPoint) GetPointDataTable(points api.TemplatePoints) output.Table {
 // 	var table output.Table

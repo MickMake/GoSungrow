@@ -1,19 +1,21 @@
 package acceptPsSharing
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 
 	"github.com/MickMake/GoUnify/Only"
-	"fmt"
 )
 
-const Url = "/v1/powerStationService/acceptPsSharing"
-const Disabled = false
-const EndPointName = "AppService.acceptPsSharing"
+const (
+	Url          = "/v1/powerStationService/acceptPsSharing"
+	Disabled     = false
+	EndPointName = "AppService.acceptPsSharing"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

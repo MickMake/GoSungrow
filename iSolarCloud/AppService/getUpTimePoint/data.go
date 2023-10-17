@@ -1,19 +1,21 @@
 package getUpTimePoint
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/getUpTimePoint"
-const Disabled = false
-const EndPointName = "AppService.getUpTimePoint"
+const (
+	Url          = "/v1/devService/getUpTimePoint"
+	Disabled     = false
+	EndPointName = "AppService.getUpTimePoint"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -32,8 +34,8 @@ type ResultData struct {
 		PointList []struct {
 			PointId  valueTypes.Integer `json:"point_id"`
 			TimeType valueTypes.Integer `json:"time_type"`
-		} `json:"point_list" DataTable:"true"`	// DataTablePivot:"true"`
-	} `json:"point_time_relation"`	// DataTable:"true"`
+		} `json:"point_list" DataTable:"true"` // DataTablePivot:"true"`
+	} `json:"point_time_relation"` // DataTable:"true"`
 }
 
 func (e *ResultData) IsValid() error {

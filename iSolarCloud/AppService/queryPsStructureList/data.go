@@ -1,19 +1,22 @@
 package queryPsStructureList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/queryPsStructureList"
-const Disabled = false
-const EndPointName = "AppService.queryPsStructureList"
+const (
+	Url          = "/v1/devService/queryPsStructureList"
+	Disabled     = false
+	EndPointName = "AppService.queryPsStructureList"
+)
 
 type RequestData struct {
-	PsId      valueTypes.PsId   `json:"ps_id" required:"true"`
+	PsId valueTypes.PsId `json:"ps_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -26,8 +29,8 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"PsKey"`
-	GoStruct       GoStruct.GoStruct        `json:"-" PointDeviceFrom:"PsId"`
+	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"PsKey"`
+	GoStruct       GoStruct.GoStruct       `json:"-" PointDeviceFrom:"PsId"`
 
 	PsId          valueTypes.Integer `json:"ps_id"`
 	PsName        valueTypes.String  `json:"ps_name"`
@@ -44,7 +47,6 @@ func (e *ResultData) IsValid() error {
 	var err error
 	return err
 }
-
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()

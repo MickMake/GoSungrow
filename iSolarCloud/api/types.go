@@ -1,9 +1,8 @@
 package api
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
 )
-
 
 func (w *Web) ApiGetEndPointResultTable(endpoint EndPoint) output.Table {
 	var table output.Table

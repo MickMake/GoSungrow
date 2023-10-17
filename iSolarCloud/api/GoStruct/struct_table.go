@@ -1,16 +1,16 @@
 package GoStruct
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"errors"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 	"os"
 	"sort"
 	"strconv"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+)
 
 type StructTables map[string]*StructTable
 
@@ -26,11 +26,10 @@ func (sm *StructTables) GetTableNames() []string {
 	return ret
 }
 
-
 type StructTable struct {
-	Area       string
-	Name       string
-	Current    *Reflect
+	Area    string
+	Name    string
+	Current *Reflect
 
 	MapName    string
 	Reflects   ReflectArray
@@ -46,12 +45,14 @@ type StructTable struct {
 	ActualRows int
 	ActualCols int
 
-	Debug      bool
-	Error      error
+	Debug bool
+	Error error
 }
 
-func (ta *StructTable) PrintDebug(format string, args ...interface{})  {
-	if ta.Debug { _, _ = fmt.Fprintf(os.Stderr, format, args...) }
+func (ta *StructTable) PrintDebug(format string, args ...interface{}) {
+	if ta.Debug {
+		_, _ = fmt.Fprintf(os.Stderr, format, args...)
+	}
 }
 
 func (ta *StructTable) AddRow(refs ...*Reflect) {
@@ -79,7 +80,6 @@ func (ta *StructTable) Get() ReflectArray {
 }
 
 func (ta *StructTable) Process(area string, name string, Current *Reflect) error {
-
 	for range Only.Once {
 		if Current == nil {
 			ta.Error = errors.New("*Reflect is nil")
@@ -100,7 +100,6 @@ func (ta *StructTable) Process(area string, name string, Current *Reflect) error
 		if ta.Current.DataStructure.DataTableIndexTitle != "" {
 			ta.IndexTitle = ta.Current.DataStructure.DataTableIndexTitle
 		}
-
 
 		ta.Rows, ta.Cols = ta.Current.CountChildren()
 		var isPivot bool
@@ -209,7 +208,6 @@ func (ta *StructTable) Process(area string, name string, Current *Reflect) error
 }
 
 func (ta *StructTable) GetValues() StructValues {
-
 	for range Only.Once {
 		ta.Values = make(StructValues, 0)
 		if !ta.IsValid {
@@ -219,14 +217,14 @@ func (ta *StructTable) GetValues() StructValues {
 		colOrder := make(map[string]int)
 		var colOrderIndex int
 
-		var addCol = func(name string) {
+		addCol := func(name string) {
 			if _, ok := colOrder[name]; !ok {
 				colOrder[name] = colOrderIndex
 				colOrderIndex++
 			}
 		}
 
-		var colName = func(sub *Reflect, value *valueTypes.UnitValue, length int) string {
+		colName := func(sub *Reflect, value *valueTypes.UnitValue, length int) string {
 			name := sub.DataStructure.PointName
 			var pointName bool
 			if sub.DataStructure.PointName != "" {
@@ -241,25 +239,25 @@ func (ta *StructTable) GetValues() StructValues {
 				valueKey = true
 			}
 			switch {
-				case pointName == true && deviceId == true && valueKey == true:
-					name = value.DeviceId() + "." + value.ValueKey()
-				case pointName == true && deviceId == true && valueKey == false:
-					name = value.DeviceId() + "." + sub.DataStructure.PointName
+			case pointName == true && deviceId == true && valueKey == true:
+				name = value.DeviceId() + "." + value.ValueKey()
+			case pointName == true && deviceId == true && valueKey == false:
+				name = value.DeviceId() + "." + sub.DataStructure.PointName
 
-				case pointName == true && deviceId == false && valueKey == true:
-					name = value.ValueKey()
-				case pointName == true && deviceId == false && valueKey == false:
-					name = sub.DataStructure.PointName
+			case pointName == true && deviceId == false && valueKey == true:
+				name = value.ValueKey()
+			case pointName == true && deviceId == false && valueKey == false:
+				name = sub.DataStructure.PointName
 
-				case pointName == false && deviceId == true && valueKey == true:
-					name = value.DeviceId() + "." + value.ValueKey()
-				case pointName == false && deviceId == true && valueKey == false:
-					name = "Column " + strconv.Itoa(length)
+			case pointName == false && deviceId == true && valueKey == true:
+				name = value.DeviceId() + "." + value.ValueKey()
+			case pointName == false && deviceId == true && valueKey == false:
+				name = "Column " + strconv.Itoa(length)
 
-				case pointName == false && deviceId == false && valueKey == true:
-					name = value.ValueKey()
-				case pointName == false && deviceId == false && valueKey == false:
-					name = "Column " + strconv.Itoa(length)
+			case pointName == false && deviceId == false && valueKey == true:
+				name = value.ValueKey()
+			case pointName == false && deviceId == false && valueKey == false:
+				name = "Column " + strconv.Itoa(length)
 			}
 
 			// if value.DeviceId() != "" {
@@ -290,12 +288,12 @@ func (ta *StructTable) GetValues() StructValues {
 			// 	name += " " + value.ValueKey()
 			// }
 			switch value.Unit() {
-				case "--":
-				case "":
-				default:
-					if !sub.DataStructure.PointVariableUnit {
-						name += " (" + value.Unit() + ")"
-					}
+			case "--":
+			case "":
+			default:
+				if !sub.DataStructure.PointVariableUnit {
+					name += " (" + value.Unit() + ")"
+				}
 			}
 			return name
 		}
@@ -375,7 +373,6 @@ func (ta *StructTable) GetValues() StructValues {
 			break
 		}
 
-
 		if len(ta.Reflects) == 1 {
 			// Probs an array of values - sw we want to pivot the data.
 			cm := make(map[string][]valueTypes.UnitValue)
@@ -388,10 +385,10 @@ func (ta *StructTable) GetValues() StructValues {
 				name := sub.DataStructure.PointName
 				if !sub.DataStructure.PointVariableUnit {
 					switch sub.Value.GetUnit() {
-						case "--":
-						case "":
-						default:
-							name += " (" + sub.Value.GetUnit() + ")"
+					case "--":
+					case "":
+					default:
+						name += " (" + sub.Value.GetUnit() + ")"
 					}
 					addCol(name)
 				} else {
@@ -436,12 +433,11 @@ func (ta *StructTable) GetValues() StructValues {
 			break
 		}
 
-
 		if ta.ShowIndex {
 			addCol(ta.IndexTitle)
 		}
 
-		for rowIndex, _ := range ta.Reflects {
+		for rowIndex := range ta.Reflects {
 			// fmt.Printf("ROW[%d] - size:%d\n", rowIndex, len(ta.Reflects[rowIndex]))
 			data := make(StructValue)
 			// fmt.Printf("DEBUG[0].FieldPath == %s\n", row[0].FieldPath.String())
@@ -574,7 +570,7 @@ func (ta *StructTable) CreateTable() (output.Table, error) { // (output.Tables, 
 		ta.Table.SetJson(nil)
 		ta.Table.SetRaw(nil)
 
-		ta.Table.SetGraphFilter("")	// @TODO - Consider setting graph options here instead of iSolarCloud/data.go:487
+		ta.Table.SetGraphFilter("") // @TODO - Consider setting graph options here instead of iSolarCloud/data.go:487
 
 		// if sgd.Options.GraphRequest.TimeColumn == nil {
 		// 	for _, col := range table.GetHeaders() {
@@ -610,9 +606,10 @@ func (ta *StructTable) CreateTable() (output.Table, error) { // (output.Tables, 
 	return ta.Table, ta.Error
 }
 
-
-type ReflectArray []ReflectArrayRow
-type ReflectArrayRow []*Reflect
+type (
+	ReflectArray    []ReflectArrayRow
+	ReflectArrayRow []*Reflect
+)
 
 func (ta *ReflectArray) AddRow(refs ...*Reflect) ReflectArray {
 	for range Only.Once {
@@ -634,9 +631,10 @@ func (ta *ReflectArray) GetRow(row int) ReflectArrayRow {
 	return (*ta)[row]
 }
 
-
-type StructValuesMap map[string]StructValues
-type StructValue map[string]valueTypes.UnitValue
+type (
+	StructValuesMap map[string]StructValues
+	StructValue     map[string]valueTypes.UnitValue
+)
 
 type StructValues []StructValue
 
@@ -658,7 +656,6 @@ func (ta *StructValues) GetCell(row int, col string) valueTypes.UnitValue {
 	return ret
 }
 
-
 func sortMapByValues(data map[string]int) []string {
 	var ret []string
 	keys := make([]string, 0, len(data))
@@ -666,11 +663,11 @@ func sortMapByValues(data map[string]int) []string {
 	for key := range data {
 		keys = append(keys, key)
 	}
-	sort.SliceStable(keys, func(i, j int) bool{
+	sort.SliceStable(keys, func(i, j int) bool {
 		return data[keys[i]] < data[keys[j]]
 	})
 
-	for _, k := range keys{
+	for _, k := range keys {
 		ret = append(ret, k)
 	}
 	return ret

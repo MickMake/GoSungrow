@@ -1,17 +1,17 @@
 package cmd
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdHelp"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
 	"github.com/spf13/cobra"
 )
 
-
 func (c *CmdShow) AttachMeta(cmd *cobra.Command) *cobra.Command {
 	for range Only.Once {
-		var self = &cobra.Command{
+		self := &cobra.Command{
 			Use:                   "meta",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Meta"},
@@ -35,9 +35,8 @@ func (c *CmdShow) AttachMeta(cmd *cobra.Command) *cobra.Command {
 	return c.SelfCmd
 }
 
-
 func (c *CmdShow) AttachMetaUnitList(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "unit-list",
 		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "Meta"},
@@ -54,6 +53,7 @@ func (c *CmdShow) AttachMetaUnitList(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcMetaUnitList(_ *cobra.Command, _ []string) error {
 	for range Only.Once {
 		c.Error = cmds.Api.SunGrow.MetaUnitList()
@@ -65,7 +65,7 @@ func (c *CmdShow) funcMetaUnitList(_ *cobra.Command, _ []string) error {
 }
 
 func (c *CmdShow) AttachMetaMqtt(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "mqtt",
 		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "Meta"},
@@ -82,6 +82,7 @@ func (c *CmdShow) AttachMetaMqtt(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcMetaMqtt(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.SetOutputType(output.StringTypeTable)
@@ -95,7 +96,7 @@ func (c *CmdShow) funcMetaMqtt(_ *cobra.Command, args []string) error {
 }
 
 func (c *CmdShow) AttachMetaRealTime(cmd *cobra.Command) *cobra.Command {
-	var self = &cobra.Command{
+	self := &cobra.Command{
 		Use:                   "real-time",
 		Aliases:               []string{},
 		Annotations:           map[string]string{"group": "Meta"},
@@ -112,6 +113,7 @@ func (c *CmdShow) AttachMetaRealTime(cmd *cobra.Command) *cobra.Command {
 
 	return cmd
 }
+
 func (c *CmdShow) funcMetaRealTime(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.SetOutputType(output.StringTypeTable)

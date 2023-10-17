@@ -1,19 +1,21 @@
 package deviceInputDiscreteDeleteTime
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 
 	"github.com/MickMake/GoUnify/Only"
-	"fmt"
 )
 
-const Url = "/v1/devService/deviceInputDiscreteDeleteTime"
-const Disabled = false
-const EndPointName = "AppService.deviceInputDiscreteDeleteTime"
+const (
+	Url          = "/v1/devService/deviceInputDiscreteDeleteTime"
+	Disabled     = false
+	EndPointName = "AppService.deviceInputDiscreteDeleteTime"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -23,7 +25,6 @@ func (rd RequestData) Help() string {
 	ret := fmt.Sprintf("")
 	return ret
 }
-
 
 type ResultData struct {
 	// Dummy valueTypes.String `json:"dummy"`

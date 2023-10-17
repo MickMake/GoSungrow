@@ -1,23 +1,23 @@
 package iSolarCloud
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPowerStatistics"
-	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPsDetail"
-	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPsDetailWithPsType"
-	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPsHealthState"
-	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPsList"
-	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPsListStaticData"
-	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPsWeatherList"
-	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/powerDevicePointList"
-	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/queryDeviceList"
-	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/queryDeviceListForApp"
-	"github.com/MickMake/GoSungrow/iSolarCloud/WebAppService/showPSView"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/AppService/getPowerStatistics"
+	"github.com/anicoll/gosungrow/iSolarCloud/AppService/getPsDetail"
+	"github.com/anicoll/gosungrow/iSolarCloud/AppService/getPsDetailWithPsType"
+	"github.com/anicoll/gosungrow/iSolarCloud/AppService/getPsHealthState"
+	"github.com/anicoll/gosungrow/iSolarCloud/AppService/getPsList"
+	"github.com/anicoll/gosungrow/iSolarCloud/AppService/getPsListStaticData"
+	"github.com/anicoll/gosungrow/iSolarCloud/AppService/getPsWeatherList"
+	"github.com/anicoll/gosungrow/iSolarCloud/AppService/powerDevicePointList"
+	"github.com/anicoll/gosungrow/iSolarCloud/AppService/queryDeviceList"
+	"github.com/anicoll/gosungrow/iSolarCloud/AppService/queryDeviceListForApp"
+	"github.com/anicoll/gosungrow/iSolarCloud/WebAppService/showPSView"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+)
 
 func (sg *SunGrow) AllCritical() error {
 	var ep api.EndPoint

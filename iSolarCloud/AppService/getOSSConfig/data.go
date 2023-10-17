@@ -1,19 +1,21 @@
 package getOSSConfig
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/commonService/getOSSConfig"
-const Disabled = false
-const EndPointName = "AppService.getOSSConfig"
+const (
+	Url          = "/v1/commonService/getOSSConfig"
+	Disabled     = false
+	EndPointName = "AppService.getOSSConfig"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -24,17 +26,16 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
-	AccessId       valueTypes.String   `json:"accessid"`
-	Dir            valueTypes.String   `json:"dir"`
-	Expire         valueTypes.Integer   `json:"expire"`
-	Host           valueTypes.String   `json:"host"`
-	IsPrivateCloud valueTypes.Bool `json:"is_private_cloud"`
-	OssFileURL     valueTypes.String   `json:"oss_file_url"`
-	Policy         valueTypes.String   `json:"policy"`
-	SguZipDir      valueTypes.String   `json:"sgu_zip_dir"`
-	Signature      valueTypes.String   `json:"signature"`
+	AccessId       valueTypes.String  `json:"accessid"`
+	Dir            valueTypes.String  `json:"dir"`
+	Expire         valueTypes.Integer `json:"expire"`
+	Host           valueTypes.String  `json:"host"`
+	IsPrivateCloud valueTypes.Bool    `json:"is_private_cloud"`
+	OssFileURL     valueTypes.String  `json:"oss_file_url"`
+	Policy         valueTypes.String  `json:"policy"`
+	SguZipDir      valueTypes.String  `json:"sgu_zip_dir"`
+	Signature      valueTypes.String  `json:"signature"`
 }
 
 func (e *ResultData) IsValid() error {

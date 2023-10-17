@@ -1,18 +1,19 @@
 package getMaterialList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 )
 
-const Url = "/v1/devService/getMaterialList"
-const Disabled = false
-const EndPointName = "WebIscmAppService.getMaterialList"
+const (
+	Url          = "/v1/devService/getMaterialList"
+	Disabled     = false
+	EndPointName = "WebIscmAppService.getMaterialList"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

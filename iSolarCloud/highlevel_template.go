@@ -1,15 +1,15 @@
 package iSolarCloud
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getTemplateList"
-	"github.com/MickMake/GoSungrow/iSolarCloud/WebAppService/queryUserCurveTemplateData"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"errors"
-	"github.com/MickMake/GoUnify/Only"
 	"strings"
 	"time"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/AppService/getTemplateList"
+	"github.com/anicoll/gosungrow/iSolarCloud/WebAppService/queryUserCurveTemplateData"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+)
 
 // TemplateList - Return all templates.
 func (sg *SunGrow) TemplateList() error {
@@ -275,7 +275,6 @@ func (sg *SunGrow) TemplateDataSave(template string, startDate string, endDate s
 
 	return sg.Error
 }
-
 
 // GetTemplateList - AppService.getTemplateList
 func (sg *SunGrow) GetTemplateList() (getTemplateList.ResultData, error) {

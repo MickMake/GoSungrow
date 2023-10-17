@@ -1,19 +1,21 @@
 package searchM2MMonthFlowCMCC
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
+	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 
 	"github.com/MickMake/GoUnify/Only"
-	"fmt"
 )
 
-const Url = "/v1/devService/searchM2MMonthFlowCMCC"
-const Disabled = false
-const EndPointName = "AppService.searchM2MMonthFlowCMCC"
+const (
+	Url          = "/v1/devService/searchM2MMonthFlowCMCC"
+	Disabled     = false
+	EndPointName = "AppService.searchM2MMonthFlowCMCC"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -23,7 +25,6 @@ func (rd RequestData) Help() string {
 	ret := fmt.Sprintf("")
 	return ret
 }
-
 
 type ResultData struct {
 	// Dummy valueTypes.String `json:"dummy"`

@@ -1,16 +1,18 @@
 package getAuthKeyList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/getAuthKeyList"
-const Disabled = false
-const EndPointName = "WebIscmAppService.getAuthKeyList"
+const (
+	Url          = "/v1/devService/getAuthKeyList"
+	Disabled     = false
+	EndPointName = "WebIscmAppService.getAuthKeyList"
+)
 
 type RequestData struct {
 	PsId valueTypes.PsId `json:"ps_id" required:"true"`
@@ -25,8 +27,7 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-type ResultData []struct {
-}
+type ResultData []struct{}
 
 func (e *ResultData) IsValid() error {
 	var err error

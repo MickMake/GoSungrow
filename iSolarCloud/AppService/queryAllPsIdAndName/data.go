@@ -1,18 +1,20 @@
 package queryAllPsIdAndName
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/powerStationService/queryAllPsIdAndName"
-const Disabled = false
-const EndPointName = "AppService.queryAllPsIdAndName"
+const (
+	Url          = "/v1/powerStationService/queryAllPsIdAndName"
+	Disabled     = false
+	EndPointName = "AppService.queryAllPsIdAndName"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -27,8 +29,8 @@ type ResultData struct {
 	PageList []struct {
 		GoStruct GoStruct.GoStruct `json:"-" PointIdReplace:"true" PointIdFrom:"PsId"`
 
-		PsId     valueTypes.PsId   `json:"ps_id"`
-		PsName   valueTypes.String `json:"ps_name"`
+		PsId   valueTypes.PsId   `json:"ps_id"`
+		PsName valueTypes.String `json:"ps_name"`
 	} `json:"pageList" PointId:"page_list" DataTable:"true"`
 }
 

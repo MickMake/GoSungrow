@@ -1,12 +1,12 @@
 package NullArea
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/NullArea/NullEndpoint"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
 	"fmt"
-)
 
+	"github.com/anicoll/gosungrow/iSolarCloud/NullArea/NullEndpoint"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
+)
 
 var _ api.Area = (*Area)(nil)
 

@@ -1,15 +1,18 @@
 package getPsDetailWithPsType
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/powerStationService/getPsDetailWithPsType"
-const Disabled = false
-const EndPointName = "AppService.getPsDetailWithPsType"
+const (
+	Url          = "/v1/powerStationService/getPsDetailWithPsType"
+	Disabled     = false
+	EndPointName = "AppService.getPsDetailWithPsType"
+)
 
 type RequestData struct {
 	PsId valueTypes.PsId `json:"ps_id" required:"true"`
@@ -28,17 +31,17 @@ type ResultData struct {
 	// GoStruct                    GoStruct.GoStruct    `json:"-" PointIdFrom:"PsKey" PointIdReplace:"true"`
 
 	BatteryLevelPercent         valueTypes.Float     `json:"battery_level_percent" PointId:"battery_level_percent" PointUnit:"%" PointIcon:"mdi:battery" PointUpdateFreq:"UpdateFreqInstant"`
-	ChargingDischargingPowerMap valueTypes.UnitValue `json:"charging_discharging_power_map" PointId:"charging_discharging_power_map" PointUpdateFreq:"UpdateFreqInstant"`	// Holds the battery charge/discharge amount
+	ChargingDischargingPowerMap valueTypes.UnitValue `json:"charging_discharging_power_map" PointId:"charging_discharging_power_map" PointUpdateFreq:"UpdateFreqInstant"` // Holds the battery charge/discharge amount
 	Co2ReduceTotal              valueTypes.UnitValue `json:"co2_reduce_total" PointId:"co2_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
 	CoalReduceTotal             valueTypes.UnitValue `json:"coal_reduce_total" PointId:"coal_reduce_total" PointUpdateFreq:"UpdateFreqTotal"`
 	ConnectType                 valueTypes.Integer   `json:"connect_type" PointId:"connect_type" PointUpdateFreq:"UpdateFreqBoot"`
 	CurrPower                   valueTypes.UnitValue `json:"curr_power" PointId:"curr_power" PointUpdateFreq:"UpdateFreqInstant"`
 	DesignCapacity              valueTypes.UnitValue `json:"design_capacity" PointId:"design_capacity" PointUpdateFreq:"UpdateFreqBoot"`
-	EnergyScheme                valueTypes.Generic          `json:"energy_scheme" PointId:"energy_scheme"`
+	EnergyScheme                valueTypes.Generic   `json:"energy_scheme" PointId:"energy_scheme"`
 	GcjLatitude                 valueTypes.Float     `json:"gcj_latitude" PointId:"gcj_latitude" PointUpdateFreq:"UpdateFreqBoot"`
 	GcjLongitude                valueTypes.Float     `json:"gcj_longitude" PointId:"gcj_longitude" PointUpdateFreq:"UpdateFreqBoot"`
 	HasAmmeter                  valueTypes.Bool      `json:"has_ammeter" PointId:"has_ammeter" PointUpdateFreq:"UpdateFreqBoot"`
-	HouseholdInverterData       valueTypes.Generic          `json:"household_inverter_data" PointId:"household_inverter_data"`
+	HouseholdInverterData       valueTypes.Generic   `json:"household_inverter_data" PointId:"household_inverter_data"`
 	InstallerPsFaultStatus      valueTypes.Integer   `json:"installer_ps_fault_status" PointId:"installer_ps_fault_status" PointUpdateFreq:"UpdateFreqInstant"`
 	IsHaveEsInverter            valueTypes.Bool      `json:"is_have_es_inverter" PointId:"is_have_es_inverter" PointUpdateFreq:"UpdateFreqBoot"`
 	IsSingleInverter            valueTypes.Bool      `json:"is_single_inverter" PointId:"is_single_inverter" PointUpdateFreq:"UpdateFreqBoot"`
@@ -54,30 +57,30 @@ type ResultData struct {
 	MonthEnergy                 valueTypes.UnitValue `json:"month_energy" PointId:"month_energy" PointUpdateFreq:"UpdateFreqMonth"`
 	MonthEnergyVirgin           valueTypes.UnitValue `json:"month_energy_virgin"  PointIgnore:"true"`
 	MonthIncome                 valueTypes.UnitValue `json:"month_income" PointId:"month_income" PointUpdateFreq:"UpdateFreqMonth"`
-	NegativeLoadMsg             valueTypes.Generic          `json:"negative_load_msg" PointId:"negative_load_msg"`
+	NegativeLoadMsg             valueTypes.Generic   `json:"negative_load_msg" PointId:"negative_load_msg"`
 	OwnerPsFaultStatus          valueTypes.Integer   `json:"owner_ps_fault_status" PointId:"owner_ps_fault_status" PointUpdateFreq:"UpdateFreqInstant"`
 
-	P83081Map                   valueTypes.UnitValue `json:"p83081_map" PointId:"p83081" PointName:"Load Power" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
-	P83081MapVirgin             valueTypes.UnitValue `json:"p83081_map_virgin"  PointIgnore:"true"`
-	P83102Map                   valueTypes.UnitValue `json:"p83102_map" PointId:"p83102" PointName:"Energy Purchased" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
-	P83102MapVirgin             valueTypes.UnitValue `json:"p83102_map_virgin"  PointIgnore:"true"`
-	P83102Percent               valueTypes.Float     `json:"p83102_percent" PointId:"p83102_percent" PointName:"Energy Purchased Percent" PointUnit:"%" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
-	P83118Map                   valueTypes.UnitValue `json:"p83118_map" PointId:"p83118" PointName:"Energy Used" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
-	P83118MapVirgin             valueTypes.UnitValue `json:"p83118_map_virgin"  PointIgnore:"true"`
-	P83119Map                   valueTypes.UnitValue `json:"p83119_map" PointId:"p83119" PointName:"Energy Feed-In" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
-	P83119MapVirgin             valueTypes.UnitValue `json:"p83119_map_virgin"  PointIgnore:"true"`
-	P83120Map                   valueTypes.UnitValue `json:"p83120_map" PointId:"p83120" PointName:"Energy Battery Charge" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
-	P83120MapVirgin             valueTypes.UnitValue `json:"p83120_map_virgin"  PointIgnore:"true"`
-	P83122                      valueTypes.Float     `json:"p83122" PointName:"Self Sufficiency Percent" PointUnit:"%" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
-	P83124Map                   valueTypes.UnitValue `json:"p83124_map" PointId:"p83124" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
-	P83124MapVirgin             valueTypes.UnitValue `json:"p83124_map_virgin"  PointIgnore:"true"`
-	P83202Map                   valueTypes.UnitValue `json:"p83202_map" PointId:"p83202" PointName:"Installed Power" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
-	P83202MapVirgin             valueTypes.UnitValue `json:"p83202_map_virgin" PointIgnore:"true"`
-	P83532MapVirgin             valueTypes.UnitValue `json:"p83532_map_virgin"  PointIgnore:"true"`
-	ZfzyMap                     valueTypes.UnitValue `json:"zfzy_map" PointId:"zfzy_map" PointName:"Self Consumption Of PV" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
-	ZfzyMapVirgin               valueTypes.UnitValue `json:"zfzy_map_virgin"  PointIgnore:"true"`
-	ZjzzMap                     valueTypes.UnitValue `json:"zjzz_map" PointId:"zjzz_map" PointName:"Self Sufficiency" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
-	ZjzzMapVirgin               valueTypes.UnitValue `json:"zjzz_map_virgin"  PointIgnore:"true"`
+	P83081Map       valueTypes.UnitValue `json:"p83081_map" PointId:"p83081" PointName:"Load Power" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
+	P83081MapVirgin valueTypes.UnitValue `json:"p83081_map_virgin"  PointIgnore:"true"`
+	P83102Map       valueTypes.UnitValue `json:"p83102_map" PointId:"p83102" PointName:"Energy Purchased" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
+	P83102MapVirgin valueTypes.UnitValue `json:"p83102_map_virgin"  PointIgnore:"true"`
+	P83102Percent   valueTypes.Float     `json:"p83102_percent" PointId:"p83102_percent" PointName:"Energy Purchased Percent" PointUnit:"%" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
+	P83118Map       valueTypes.UnitValue `json:"p83118_map" PointId:"p83118" PointName:"Energy Used" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
+	P83118MapVirgin valueTypes.UnitValue `json:"p83118_map_virgin"  PointIgnore:"true"`
+	P83119Map       valueTypes.UnitValue `json:"p83119_map" PointId:"p83119" PointName:"Energy Feed-In" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
+	P83119MapVirgin valueTypes.UnitValue `json:"p83119_map_virgin"  PointIgnore:"true"`
+	P83120Map       valueTypes.UnitValue `json:"p83120_map" PointId:"p83120" PointName:"Energy Battery Charge" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
+	P83120MapVirgin valueTypes.UnitValue `json:"p83120_map_virgin"  PointIgnore:"true"`
+	P83122          valueTypes.Float     `json:"p83122" PointName:"Self Sufficiency Percent" PointUnit:"%" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
+	P83124Map       valueTypes.UnitValue `json:"p83124_map" PointId:"p83124" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
+	P83124MapVirgin valueTypes.UnitValue `json:"p83124_map_virgin"  PointIgnore:"true"`
+	P83202Map       valueTypes.UnitValue `json:"p83202_map" PointId:"p83202" PointName:"Installed Power" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
+	P83202MapVirgin valueTypes.UnitValue `json:"p83202_map_virgin" PointIgnore:"true"`
+	P83532MapVirgin valueTypes.UnitValue `json:"p83532_map_virgin"  PointIgnore:"true"`
+	ZfzyMap         valueTypes.UnitValue `json:"zfzy_map" PointId:"zfzy_map" PointName:"Self Consumption Of PV" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
+	ZfzyMapVirgin   valueTypes.UnitValue `json:"zfzy_map_virgin"  PointIgnore:"true"`
+	ZjzzMap         valueTypes.UnitValue `json:"zjzz_map" PointId:"zjzz_map" PointName:"Self Sufficiency" PointVirtual:"true" PointUpdateFreq:"UpdateFreq5Mins"`
+	ZjzzMapVirgin   valueTypes.UnitValue `json:"zjzz_map_virgin"  PointIgnore:"true"`
 
 	PowerChargeSet                valueTypes.Bool      `json:"power_charge_setted" PointId:"power_charge_set" PointUpdateFreq:"UpdateFreqBoot"`
 	PowerGridPowerMap             valueTypes.UnitValue `json:"power_grid_power_map" PointId:"power_grid_power_map" PointUpdateFreq:"UpdateFreq5Mins"`
@@ -106,8 +109,8 @@ type ResultData struct {
 	WgsLatitude                   valueTypes.Float     `json:"wgs_latitude" PointId:"wgs_latitude" PointUpdateFreq:"UpdateFreqBoot"`
 	WgsLongitude                  valueTypes.Float     `json:"wgs_longitude" PointId:"wgs_longitude" PointUpdateFreq:"UpdateFreqBoot"`
 
-	StorageInverterData           []struct {
-		GoStruct                GoStruct.GoStruct    `json:"-" PointIdFrom:"PsKey" PointIdReplace:"true"`
+	StorageInverterData []struct {
+		GoStruct GoStruct.GoStruct `json:"-" PointIdFrom:"PsKey" PointIdReplace:"true"`
 
 		PsKey                   valueTypes.PsKey     `json:"ps_key" PointId:"ps_key" PointUpdateFreq:"UpdateFreqBoot"`
 		UUID                    valueTypes.Integer   `json:"uuid" PointId:"uuid" PointUpdateFreq:"UpdateFreqBoot"`
@@ -126,22 +129,22 @@ type ResultData struct {
 		InverterSn              valueTypes.String    `json:"inverter_sn" PointId:"inverter_sn" PointUpdateFreq:"UpdateFreqBoot"`
 		OwnerDevFaultStatus     valueTypes.Integer   `json:"owner_dev_fault_status" PointId:"owner_dev_fault_status" PointUpdateFreq:"UpdateFreqInstant"`
 
-		P13003Map               valueTypes.UnitValue `json:"p13003_map" PointId:"p13003" PointName:"PV Power To Load" PointVirtual:"true" PointVirtualShift:"3" PointUpdateFreq:"UpdateFreq5Mins"`
-		P13003MapVirgin         valueTypes.UnitValue `json:"p13003_map_virgin"  PointIgnore:"true"`
-		P13119Map               valueTypes.UnitValue `json:"p13119_map" PointId:"p13119" PointName:"Load Power" PointVirtual:"true" PointVirtualShift:"3" PointUpdateFreq:"UpdateFreq5Mins"`
-		P13119MapVirgin         valueTypes.UnitValue `json:"p13119_map_virgin"  PointIgnore:"true"`
-		P13121Map               valueTypes.UnitValue `json:"p13121_map" PointId:"p13121" PointName:"PV Power To Grid" PointVirtual:"true" PointVirtualShift:"3" PointUpdateFreq:"UpdateFreq5Mins"`
-		P13121MapVirgin         valueTypes.UnitValue `json:"p13121_map_virgin"  PointIgnore:"true"`
-		P13126Map               valueTypes.UnitValue `json:"p13126_map" PointId:"p13126" PointName:"PV Power To Battery" PointVirtual:"true" PointVirtualShift:"3" PointUpdateFreq:"UpdateFreq5Mins"`
-		P13126MapVirgin         valueTypes.UnitValue `json:"p13126_map_virgin"  PointIgnore:"true"`
-		P13141                  valueTypes.Float     `json:"p13141" PointId:"p13141" PointName:"Battery Charge Percent" PointIcon:"mdi:battery" PointVirtual:"true" PointVirtualShift:"3" PointUnit:"%" PointUpdateFreq:"UpdateFreq5Mins"`
-		P13149Map               valueTypes.UnitValue `json:"p13149_map" PointId:"p13149" PointName:"Grid Power To Load" PointVirtual:"true" PointVirtualShift:"3" PointUpdateFreq:"UpdateFreq5Mins"`
-		P13149MapVirgin         valueTypes.UnitValue `json:"p13149_map_virgin"  PointIgnore:"true"`
-		P13150Map               valueTypes.UnitValue `json:"p13150_map" PointId:"p13150" PointVirtual:"true" PointVirtualShift:"3" PointUpdateFreq:"UpdateFreq5Mins"`
-		P13150MapVirgin         valueTypes.UnitValue `json:"p13150_map_virgin" PointIgnore:"true"`
+		P13003Map       valueTypes.UnitValue `json:"p13003_map" PointId:"p13003" PointName:"PV Power To Load" PointVirtual:"true" PointVirtualShift:"3" PointUpdateFreq:"UpdateFreq5Mins"`
+		P13003MapVirgin valueTypes.UnitValue `json:"p13003_map_virgin"  PointIgnore:"true"`
+		P13119Map       valueTypes.UnitValue `json:"p13119_map" PointId:"p13119" PointName:"Load Power" PointVirtual:"true" PointVirtualShift:"3" PointUpdateFreq:"UpdateFreq5Mins"`
+		P13119MapVirgin valueTypes.UnitValue `json:"p13119_map_virgin"  PointIgnore:"true"`
+		P13121Map       valueTypes.UnitValue `json:"p13121_map" PointId:"p13121" PointName:"PV Power To Grid" PointVirtual:"true" PointVirtualShift:"3" PointUpdateFreq:"UpdateFreq5Mins"`
+		P13121MapVirgin valueTypes.UnitValue `json:"p13121_map_virgin"  PointIgnore:"true"`
+		P13126Map       valueTypes.UnitValue `json:"p13126_map" PointId:"p13126" PointName:"PV Power To Battery" PointVirtual:"true" PointVirtualShift:"3" PointUpdateFreq:"UpdateFreq5Mins"`
+		P13126MapVirgin valueTypes.UnitValue `json:"p13126_map_virgin"  PointIgnore:"true"`
+		P13141          valueTypes.Float     `json:"p13141" PointId:"p13141" PointName:"Battery Charge Percent" PointIcon:"mdi:battery" PointVirtual:"true" PointVirtualShift:"3" PointUnit:"%" PointUpdateFreq:"UpdateFreq5Mins"`
+		P13149Map       valueTypes.UnitValue `json:"p13149_map" PointId:"p13149" PointName:"Grid Power To Load" PointVirtual:"true" PointVirtualShift:"3" PointUpdateFreq:"UpdateFreq5Mins"`
+		P13149MapVirgin valueTypes.UnitValue `json:"p13149_map_virgin"  PointIgnore:"true"`
+		P13150Map       valueTypes.UnitValue `json:"p13150_map" PointId:"p13150" PointVirtual:"true" PointVirtualShift:"3" PointUpdateFreq:"UpdateFreq5Mins"`
+		P13150MapVirgin valueTypes.UnitValue `json:"p13150_map_virgin" PointIgnore:"true"`
 	} `json:"storage_inverter_data" PointId:"inverter"`
 
-	RobotNumSweepCapacity       struct {
+	RobotNumSweepCapacity struct {
 		Num           valueTypes.Integer `json:"num" PointId:"num" PointUpdateFreq:"UpdateFreqBoot"`
 		SweepCapacity valueTypes.Float   `json:"sweep_capacity" PointId:"sweep_capacity" PointUpdateFreq:"UpdateFreqBoot"`
 	} `json:"robot_num_sweep_capacity" PointId:"robot"`
@@ -154,7 +157,7 @@ func (e *ResultData) IsValid() error {
 
 func (e *EndPoint) GetData() api.DataMap {
 	entries := api.NewDataMap()
-	entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String()))	// , e.Response.ResultData.PsKey.String()
+	entries.StructToDataMap(*e, e.Request.PsId.String(), GoStruct.NewEndPointPath(e.Request.PsId.String())) // , e.Response.ResultData.PsKey.String()
 
 	// for range Only.Once {
 	//

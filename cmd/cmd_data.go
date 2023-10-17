@@ -1,14 +1,14 @@
 package cmd
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
+	"sync"
+
 	"github.com/MickMake/GoUnify/cmdHelp"
+	"github.com/anicoll/gosungrow/iSolarCloud"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
 	"github.com/spf13/cobra"
 )
-
 
 //goland:noinspection GoNameStartsWithPackageName
 type CmdData CmdDefault
@@ -16,21 +16,23 @@ type CmdData CmdDefault
 func NewCmdData() *CmdData {
 	var ret *CmdData
 
-	for range Only.Once {
+	var once sync.Once
+	once.Do(func() {
 		ret = &CmdData{
 			Error:   nil,
 			cmd:     nil,
 			SelfCmd: nil,
 		}
-	}
+	})
 
 	return ret
 }
 
 func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
-	for range Only.Once {
+	var once sync.Once
+	once.Do(func() {
 		if cmd == nil {
-			break
+			return
 		}
 		c.cmd = cmd
 
@@ -44,16 +46,16 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 			DisableFlagParsing:    false,
 			DisableFlagsInUseLine: false,
 			PreRunE:               cmds.SunGrowArgs,
-			RunE:                  func(cmd *cobra.Command, args []string) error {
+			RunE: func(cmd *cobra.Command, args []string) error {
 				return cmd.Help()
 			},
-			Args:                  cobra.MinimumNArgs(0),
+			Args: cobra.MinimumNArgs(0),
 		}
 		cmd.AddCommand(c.SelfCmd)
 		c.SelfCmd.Example = cmdHelp.PrintExamples(c.SelfCmd, "get <endpoint>", "put <endpoint>")
 
 		// ******************************************************************************** //
-		var cmdDataGet = &cobra.Command{
+		cmdDataGet := &cobra.Command{
 			Use:                   output.StringTypeList + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{"get"},
 			Annotations:           map[string]string{"group": "Data"},
@@ -69,7 +71,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		cmdDataGet.Example = cmdHelp.PrintExamples(cmdDataGet, "queryDeviceList", "WebAppService.showPSView", "stats")
 
 		// ******************************************************************************** //
-		var cmdDataTable = &cobra.Command{
+		cmdDataTable := &cobra.Command{
 			Use:                   output.StringTypeTable + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
@@ -85,7 +87,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		cmdDataGet.Example = cmdHelp.PrintExamples(cmdDataTable, "queryDeviceList", "WebAppService.showPSView", "stats")
 
 		// ******************************************************************************** //
-		var cmdDataRaw = &cobra.Command{
+		cmdDataRaw := &cobra.Command{
 			Use:                   output.StringTypeRaw + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
@@ -101,7 +103,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		cmdDataRaw.Example = cmdHelp.PrintExamples(cmdDataRaw, "queryDeviceList", "WebAppService.showPSView", "stats")
 
 		// ******************************************************************************** //
-		var cmdDataJson = &cobra.Command{
+		cmdDataJson := &cobra.Command{
 			Use:                   output.StringTypeJson + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
@@ -117,7 +119,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		cmdDataJson.Example = cmdHelp.PrintExamples(cmdDataJson, "queryDeviceList", "WebAppService.showPSView", "stats")
 
 		// ******************************************************************************** //
-		var cmdDataCsv = &cobra.Command{
+		cmdDataCsv := &cobra.Command{
 			Use:                   output.StringTypeCsv + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
@@ -133,7 +135,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		cmdDataCsv.Example = cmdHelp.PrintExamples(cmdDataCsv, "queryDeviceList", "WebAppService.showPSView", "stats")
 
 		// ******************************************************************************** //
-		var cmdDataGraph = &cobra.Command{
+		cmdDataGraph := &cobra.Command{
 			Use:                   output.StringTypeGraph + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
@@ -149,7 +151,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		cmdDataGraph.Example = cmdHelp.PrintExamples(cmdDataGraph, "queryDeviceList", "WebAppService.showPSView", "stats")
 
 		// ******************************************************************************** //
-		var cmdApiXML = &cobra.Command{
+		cmdApiXML := &cobra.Command{
 			Use:                   output.StringTypeXML + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
@@ -165,7 +167,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		cmdApiXML.Example = cmdHelp.PrintExamples(cmdApiXML, "queryDeviceList", "WebAppService.showPSView")
 
 		// ******************************************************************************** //
-		var cmdApiXLSX = &cobra.Command{
+		cmdApiXLSX := &cobra.Command{
 			Use:                   output.StringTypeXLSX + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
@@ -181,7 +183,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		cmdApiXLSX.Example = cmdHelp.PrintExamples(cmdApiXLSX, "queryDeviceList", "WebAppService.showPSView")
 
 		// ******************************************************************************** //
-		var cmdApiMarkDown = &cobra.Command{
+		cmdApiMarkDown := &cobra.Command{
 			Use:                   output.StringTypeMarkDown + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
@@ -197,7 +199,7 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		cmdApiMarkDown.Example = cmdHelp.PrintExamples(cmdApiMarkDown, "queryDeviceList", "WebAppService.showPSView")
 
 		// ******************************************************************************** //
-		var cmdApiStruct = &cobra.Command{
+		cmdApiStruct := &cobra.Command{
 			Use:                   output.StringTypeStruct + " <[area.]endpoint> [endpoint args ...]",
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Data"},
@@ -211,14 +213,14 @@ func (c *CmdData) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		}
 		c.SelfCmd.AddCommand(cmdApiStruct)
 		cmdApiStruct.Example = cmdHelp.PrintExamples(cmdApiStruct, "queryDeviceList", "WebAppService.showPSView")
-	}
+	})
 	return c.SelfCmd
 }
 
-
 func (c *CmdData) GetEndpoints(cmd *cobra.Command, args []string) error {
 	// endpoints string, psIds string, date string
-	for range Only.Once {
+	var once sync.Once
+	once.Do(func() {
 		cmds.Api.SunGrow.SetOutputType(cmd.Name())
 		if cmd.Name() == output.StringTypeXLSX {
 			cmds.Api.SaveFile = true
@@ -238,14 +240,14 @@ func (c *CmdData) GetEndpoints(cmd *cobra.Command, args []string) error {
 
 		c.Error = data.GetData()
 		if c.Error != nil {
-			break
+			return
 		}
 
 		c.Error = data.Output()
 		if c.Error != nil {
-			break
+			return
 		}
-	}
+	})
 
 	return c.Error
 }

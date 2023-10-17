@@ -1,19 +1,21 @@
 package getAreaList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/powerStationService/getAreaList"
-const Disabled = false
-const EndPointName = "AppService.getAreaList"
+const (
+	Url          = "/v1/powerStationService/getAreaList"
+	Disabled     = false
+	EndPointName = "AppService.getAreaList"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -26,7 +28,7 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	PageList []struct {
-		GoStruct.GoStructParent    `json:"-" PointIdFromChild:"OrgId" PointIdReplace:"true"`
+		GoStruct.GoStructParent `json:"-" PointIdFromChild:"OrgId" PointIdReplace:"true"`
 
 		OrgId             valueTypes.Integer   `json:"org_id"`
 		OrgName           valueTypes.String    `json:"org_name"`

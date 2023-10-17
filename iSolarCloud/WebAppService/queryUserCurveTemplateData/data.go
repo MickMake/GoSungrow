@@ -1,19 +1,20 @@
 package queryUserCurveTemplateData
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"encoding/json"
-	"github.com/MickMake/GoUnify/Only"
-
 	"fmt"
+
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/queryUserCurveTemplateData"
-const Disabled = false
-const EndPointName = "WebAppService.queryUserCurveTemplateData"
-
+const (
+	Url          = "/v1/devService/queryUserCurveTemplateData"
+	Disabled     = false
+	EndPointName = "WebAppService.queryUserCurveTemplateData"
+)
 
 // {"template_id":"","date_type":"","start_time":"","end_time":""}
 
@@ -34,7 +35,6 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 // ResultData (struct) -> PointsData(struct) -> Devices(map[string]DeviceData) -> Points(map[string]Point)
 type ResultData struct {
 	CreateTime   valueTypes.DateTime `json:"create_time" PointNameDateFormat:"DateTimeLayout"`
@@ -49,10 +49,9 @@ type ResultData struct {
 	PointsData   PointsData          `json:"points_data" PointIdReplace:"true"`
 }
 
-
 type PointsData struct {
-	Devices map[string]DeviceData `json:"devices" PointIdReplace:"true"`	// PointIdFromChild:"DateId" PointIdReplace:"true"`
-	Order   valueTypes.String  `json:"order" PointSplitOn:"," PointValueReplace:"&" PointValueReplaceWith:".p"`
+	Devices map[string]DeviceData `json:"devices" PointIdReplace:"true"` // PointIdFromChild:"DateId" PointIdReplace:"true"`
+	Order   valueTypes.String     `json:"order" PointSplitOn:"," PointValueReplace:"&" PointValueReplaceWith:".p"`
 }
 
 type Devices map[string]DeviceData
@@ -96,12 +95,11 @@ func (p *PointsData) UnmarshalJSON(data []byte) error {
 	return err
 }
 
-
 type DeviceData struct {
 	DeviceName valueTypes.String  `json:"device_name"`
 	DeviceType valueTypes.Integer `json:"device_type"`
 	DeviceUUID valueTypes.Integer `json:"device_uuid"`
-	Points     Points             `json:"points" DataTable:"true" DataTableMerge:"true" DataTableSortOn:"PointId"`	// PointIdReplace:"false" PointIdFromChild:"PsId.PsKey"
+	Points     Points             `json:"points" DataTable:"true" DataTableMerge:"true" DataTableSortOn:"PointId"` // PointIdReplace:"false" PointIdFromChild:"PsId.PsKey"
 }
 
 func (p *DeviceData) UnmarshalJSON(data []byte) error {
@@ -144,7 +142,6 @@ func (p *DeviceData) UnmarshalJSON(data []byte) error {
 	return err
 }
 
-
 type Points map[string]Point
 
 func (p *Points) UnmarshalJSON(data []byte) error {
@@ -170,7 +167,6 @@ func (p *Points) UnmarshalJSON(data []byte) error {
 
 	return err
 }
-
 
 type Point struct {
 	PointId    valueTypes.PointId `json:"point_id"`

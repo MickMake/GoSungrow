@@ -1,20 +1,23 @@
 package getPowerStationInfo
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/Common"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/Common"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/powerStationService/getPowerStationInfoForBackSys"
-const Disabled = false
-const EndPointName = "WebIscmAppService.getPowerStationInfo"
+const (
+	Url          = "/v1/powerStationService/getPowerStationInfoForBackSys"
+	Disabled     = false
+	EndPointName = "WebIscmAppService.getPowerStationInfo"
+)
 
 type RequestData struct {
 	// @TODO - Fixup this up for iSolarCloud/data_request.go
-	PsId2       valueTypes.PsId     `json:"psId" require:"true"`
+	PsId2 valueTypes.PsId `json:"psId" require:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -32,8 +35,8 @@ type ResultData struct {
 	PsList []struct {
 		// GoStruct              GoStruct.GoStruct  `json:"-" PointIdFrom:"PsId" PointIdReplace:"true" PointDeviceFrom:"PsId"`
 
-		PsId                  valueTypes.PsId    `json:"ps_id"`
-		PsType                valueTypes.Integer `json:"ps_type"`
+		PsId   valueTypes.PsId    `json:"ps_id"`
+		PsType valueTypes.Integer `json:"ps_type"`
 
 		BatteryPlateArea      Common.Unknown     `json:"battery_plate_area"`
 		BatteryType           valueTypes.Integer `json:"battery_type"`
@@ -76,8 +79,8 @@ type ResultData struct {
 	} `json:"psList" PointId:"ps_list"`
 
 	PsMap struct {
-		PsId              valueTypes.PsId     `json:"psid" PointId:"ps_id"`
-		PsType            valueTypes.Integer  `json:"pstype" PointId:"ps_type"`
+		PsId   valueTypes.PsId    `json:"psid" PointId:"ps_id"`
+		PsType valueTypes.Integer `json:"pstype" PointId:"ps_type"`
 
 		AccessType        Common.Unknown      `json:"access_type"`
 		AreaType          Common.Unknown      `json:"area_type"`

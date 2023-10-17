@@ -1,16 +1,18 @@
 package stationsPointReport
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/powerStationService/stationsPointReport"
-const Disabled = false
-const EndPointName = "AppService.stationsPointReport"
+const (
+	Url          = "/v1/powerStationService/stationsPointReport"
+	Disabled     = false
+	EndPointName = "AppService.stationsPointReport"
+)
 
 type RequestData struct {
 	Type valueTypes.String `json:"type" required:"true"`
@@ -25,8 +27,7 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData   struct {
+type ResultData struct {
 	List []struct {
 		GoStruct.GoStructParent `json:"-" PointIdFromChild:"PsId" PointIdReplace:"true"`
 
@@ -62,8 +63,8 @@ type ResultData   struct {
 		So2            valueTypes.Float `json:"so2"`
 		Tree           valueTypes.Float `json:"tree"`
 	} `json:"list" PointId:"devices" PointIdReplace:"true" DataTable:"true" DataTableSortOn:"PsId"`
-	MinDateId valueTypes.DateTime  `json:"min_date_id"`
-	RowCount  valueTypes.Integer `json:"rowCount" PointId:"row_count"`
+	MinDateId valueTypes.DateTime `json:"min_date_id"`
+	RowCount  valueTypes.Integer  `json:"rowCount" PointId:"row_count"`
 }
 
 func (e *ResultData) IsValid() error {

@@ -1,19 +1,21 @@
 package exportParamSettingValPDF
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/exportParamSettingValPDF"
-const Disabled = false
-const EndPointName = "AppService.exportParamSettingValPDF"
+const (
+	Url          = "/v1/devService/exportParamSettingValPDF"
+	Disabled     = false
+	EndPointName = "AppService.exportParamSettingValPDF"
+)
 
 type RequestData struct {
-	TaskId    valueTypes.String  `json:"task_id" required:"true"`
+	TaskId valueTypes.String `json:"task_id" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -25,10 +27,9 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData   struct {
+type ResultData struct {
 	Code            valueTypes.Integer `json:"code"`
-	ReturnValPdfURL valueTypes.String `json:"return_val_pdf_url"`
+	ReturnValPdfURL valueTypes.String  `json:"return_val_pdf_url"`
 }
 
 func (e *ResultData) IsValid() error {

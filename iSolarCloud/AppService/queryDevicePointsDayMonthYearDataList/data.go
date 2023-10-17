@@ -1,25 +1,27 @@
 package queryDevicePointsDayMonthYearDataList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/commonService/queryDevicePointsDayMonthYearDataList"
-const Disabled = false
-const EndPointName = "AppService.queryDevicePointsDayMonthYearDataList"
+const (
+	Url          = "/v1/commonService/queryDevicePointsDayMonthYearDataList"
+	Disabled     = false
+	EndPointName = "AppService.queryDevicePointsDayMonthYearDataList"
+)
 
 type RequestData struct {
-	PsKey          valueTypes.PsKey    `json:"ps_key" required:"true"`
-	DataPoint      valueTypes.String   `json:"data_point" required:"true"`
-	StartTime      valueTypes.DateTime `json:"start_time" required:"true"`
-	EndTime        valueTypes.DateTime `json:"end_time" required:"true"`
-	DataType       valueTypes.String   `json:"data_type" required:"true"`
-	QueryType      valueTypes.String   `json:"query_type" required:"true"`
-	Points         valueTypes.String   `json:"points" required:"true"`
+	PsKey     valueTypes.PsKey    `json:"ps_key" required:"true"`
+	DataPoint valueTypes.String   `json:"data_point" required:"true"`
+	StartTime valueTypes.DateTime `json:"start_time" required:"true"`
+	EndTime   valueTypes.DateTime `json:"end_time" required:"true"`
+	DataType  valueTypes.String   `json:"data_type" required:"true"`
+	QueryType valueTypes.String   `json:"query_type" required:"true"`
+	Points    valueTypes.String   `json:"points" required:"true"`
 }
 
 func (rd RequestData) IsValid() error {
@@ -31,8 +33,7 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData   struct {
+type ResultData struct {
 	One []struct {
 		TimeStamp valueTypes.DateTime `json:"time_stamp"`
 	} `json:"1"`

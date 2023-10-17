@@ -1,6 +1,6 @@
 package api
 
-import "github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
+import "github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
 
 type Area interface {
 	Init(*Web) AreaStruct
@@ -14,4 +14,3 @@ type Area interface {
 	IsValid(name EndPointName) error
 	GetError(name EndPointName) error
 }
-

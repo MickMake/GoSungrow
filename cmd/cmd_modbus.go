@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/MickMake/GoSungrow/cmdModbus"
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdHelp"
 	"github.com/MickMake/GoUnify/cmdLog"
+	"github.com/anicoll/gosungrow/cmdModbus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -74,7 +74,7 @@ func (c *CmdModbus) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		c.cmd = cmd
 
 		// ******************************************************************************** //
-		var cmdRoot = &cobra.Command{
+		cmdRoot := &cobra.Command{
 			Use:                   "modbus",
 			Aliases:               []string{""},
 			Annotations:           map[string]string{"group": "ModBus"},
@@ -90,7 +90,7 @@ func (c *CmdModbus) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		cmdRoot.Example = cmdHelp.PrintExamples(cmdRoot, "run", "sync")
 
 		// ******************************************************************************** //
-		var cmdRootGet = &cobra.Command{
+		cmdRootGet := &cobra.Command{
 			Use:                   "get <address> [quantity] [type]",
 			Aliases:               []string{""},
 			Annotations:           map[string]string{"group": "MQTT"},
@@ -116,7 +116,7 @@ func (c *CmdModbus) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		cmdRootGet.Example = cmdHelp.PrintExamples(cmdRootGet, "")
 
 		// ******************************************************************************** //
-		var cmdRootScan = &cobra.Command{
+		cmdRootScan := &cobra.Command{
 			Use:                   "scan <start address> <end address> [type]",
 			Aliases:               []string{""},
 			Annotations:           map[string]string{"group": "MQTT"},

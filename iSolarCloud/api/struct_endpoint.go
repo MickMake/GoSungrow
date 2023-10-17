@@ -1,14 +1,14 @@
 package api
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
+)
 
 type EndPointName string
 
@@ -17,8 +17,8 @@ func (n EndPointName) String() string {
 }
 
 type EndPointStruct struct {
-	ApiRoot        Web `json:"-"`
-	RawResponse    []byte
+	ApiRoot     Web `json:"-"`
+	RawResponse []byte
 
 	Area           AreaName     `json:"area"`
 	Name           EndPointName `json:"name"`
@@ -129,7 +129,6 @@ func (ep EndPointStruct) ResponseAsJson(raw bool, r interface{}) output.Json {
 func (ep EndPointStruct) ApiGetRequestArgNames(req interface{}) map[string]string {
 	return GoStruct.GetStructFields(req)
 }
-
 
 func MarshalJSON(endpoint EndPoint) ([]byte, error) {
 	e := endpoint.SetError("")

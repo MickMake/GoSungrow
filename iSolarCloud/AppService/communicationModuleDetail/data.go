@@ -1,16 +1,19 @@
 package communicationModuleDetail
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/communicationModuleDetail"
-const Disabled = false
-const EndPointName = "AppService.communicationModuleDetail"
+const (
+	Url          = "/v1/devService/communicationModuleDetail"
+	Disabled     = false
+	EndPointName = "AppService.communicationModuleDetail"
+)
 
 type RequestData struct {
 	Sn valueTypes.String `json:"sn" required:"true"`

@@ -1,13 +1,13 @@
 package cmd
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/output"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
 	"github.com/MickMake/GoUnify/cmdHelp"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/output"
 	"github.com/spf13/cobra"
 )
-
 
 //goland:noinspection GoNameStartsWithPackageName
 type CmdInfo CmdDefault
@@ -54,7 +54,7 @@ func (c *CmdInfo) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		c.SelfCmd.Example = cmdHelp.PrintExamples(c.SelfCmd, "get <endpoint>", "put <endpoint>")
 
 		// ********************************************************************************
-		var cmdInfoGet = &cobra.Command{
+		cmdInfoGet := &cobra.Command{
 			Use:                   "get",
 			Aliases:               []string{output.StringTypeTable},
 			Annotations:           map[string]string{"group": "Info"},
@@ -73,7 +73,7 @@ func (c *CmdInfo) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		// c.AttachCmdInfo(cmdInfoGet)
 
 		// ********************************************************************************
-		var cmdInfoRaw = &cobra.Command{
+		cmdInfoRaw := &cobra.Command{
 			Use:                   output.StringTypeRaw,
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Info"},
@@ -92,7 +92,7 @@ func (c *CmdInfo) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		// c.AttachCmdInfo(cmdInfoRaw)
 
 		// ********************************************************************************
-		var cmdInfoJson = &cobra.Command{
+		cmdInfoJson := &cobra.Command{
 			Use:                   output.StringTypeJson,
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Info"},
@@ -111,7 +111,7 @@ func (c *CmdInfo) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		// c.AttachCmdInfo(cmdInfoJson)
 
 		// ********************************************************************************
-		var cmdInfoCsv = &cobra.Command{
+		cmdInfoCsv := &cobra.Command{
 			Use:                   output.StringTypeCsv,
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Info"},
@@ -130,7 +130,7 @@ func (c *CmdInfo) AttachCommand(cmd *cobra.Command) *cobra.Command {
 		// c.AttachCmdInfo(cmdInfoCsv)
 
 		// ********************************************************************************
-		var cmdInfoMarkDown = &cobra.Command{
+		cmdInfoMarkDown := &cobra.Command{
 			Use:                   output.StringTypeMarkDown,
 			Aliases:               []string{},
 			Annotations:           map[string]string{"group": "Info"},

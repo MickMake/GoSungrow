@@ -1,19 +1,21 @@
 package getCloudList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-	"github.com/MickMake/GoUnify/Only"
 	"fmt"
+
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/commonService/getCloudList"
-const Disabled = false
-const EndPointName = "AppService.getCloudList"
+const (
+	Url          = "/v1/commonService/getCloudList"
+	Disabled     = false
+	EndPointName = "AppService.getCloudList"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -26,52 +28,52 @@ func (rd RequestData) Help() string {
 
 type ResultData struct {
 	CloudList []struct {
-		CloudId    valueTypes.Integer  `json:"cloud_id"`
-		CloudName  valueTypes.String `json:"cloud_name"`
-		GatewayURL valueTypes.String `json:"gateway_url"`
-		OrderId    valueTypes.Integer  `json:"order_id"`
-		ServiceURL valueTypes.String `json:"service_url"`
-		Value      valueTypes.String `json:"value"`
-		ValueDeDe  valueTypes.String `json:"value_de_de"`
-		ValueEnUs  valueTypes.String `json:"value_en_us"`
-		ValueEsEs  valueTypes.String `json:"value_es_es"`
-		ValueFrFr  valueTypes.String `json:"value_fr_fr"`
-		ValueItIt  valueTypes.String `json:"value_it_it"`
-		ValueJaJp  valueTypes.String `json:"value_ja_jp"`
-		ValueKoKr  valueTypes.String `json:"value_ko_kr"`
-		ValueNlNl  valueTypes.String `json:"value_nl_nl"`
-		ValuePlPl  valueTypes.String `json:"value_pl_pl"`
-		ValuePtBr  valueTypes.String `json:"value_pt_br"`
-		ValuePtPt  valueTypes.String `json:"value_pt_pt"`
-		ValueTrTr  valueTypes.String `json:"value_tr_tr"`
-		ValueViVn  valueTypes.String `json:"value_vi_vn"`
-		ValueZhCn  valueTypes.String `json:"value_zh_cn"`
-		ValueZhTw  valueTypes.String `json:"value_zh_tw"`
-		WebURL     valueTypes.String `json:"web_url"`
+		CloudId    valueTypes.Integer `json:"cloud_id"`
+		CloudName  valueTypes.String  `json:"cloud_name"`
+		GatewayURL valueTypes.String  `json:"gateway_url"`
+		OrderId    valueTypes.Integer `json:"order_id"`
+		ServiceURL valueTypes.String  `json:"service_url"`
+		Value      valueTypes.String  `json:"value"`
+		ValueDeDe  valueTypes.String  `json:"value_de_de"`
+		ValueEnUs  valueTypes.String  `json:"value_en_us"`
+		ValueEsEs  valueTypes.String  `json:"value_es_es"`
+		ValueFrFr  valueTypes.String  `json:"value_fr_fr"`
+		ValueItIt  valueTypes.String  `json:"value_it_it"`
+		ValueJaJp  valueTypes.String  `json:"value_ja_jp"`
+		ValueKoKr  valueTypes.String  `json:"value_ko_kr"`
+		ValueNlNl  valueTypes.String  `json:"value_nl_nl"`
+		ValuePlPl  valueTypes.String  `json:"value_pl_pl"`
+		ValuePtBr  valueTypes.String  `json:"value_pt_br"`
+		ValuePtPt  valueTypes.String  `json:"value_pt_pt"`
+		ValueTrTr  valueTypes.String  `json:"value_tr_tr"`
+		ValueViVn  valueTypes.String  `json:"value_vi_vn"`
+		ValueZhCn  valueTypes.String  `json:"value_zh_cn"`
+		ValueZhTw  valueTypes.String  `json:"value_zh_tw"`
+		WebURL     valueTypes.String  `json:"web_url"`
 	} `json:"cloud_list" DataTable:"true"`
 	CurrentCloud struct {
-		CloudId    valueTypes.Integer  `json:"cloud_id"`
-		CloudName  valueTypes.String `json:"cloud_name"`
-		GatewayURL valueTypes.String `json:"gateway_url"`
-		OrderId    valueTypes.Integer  `json:"order_id"`
-		ServiceURL valueTypes.String `json:"service_url"`
-		Value      valueTypes.String `json:"value"`
-		ValueDeDe  valueTypes.String `json:"value_de_de"`
-		ValueEnUs  valueTypes.String `json:"value_en_us"`
-		ValueEsEs  valueTypes.String `json:"value_es_es"`
-		ValueFrFr  valueTypes.String `json:"value_fr_fr"`
-		ValueItIt  valueTypes.String `json:"value_it_it"`
-		ValueJaJp  valueTypes.String `json:"value_ja_jp"`
-		ValueKoKr  valueTypes.String `json:"value_ko_kr"`
-		ValueNlNl  valueTypes.String `json:"value_nl_nl"`
-		ValuePlPl  valueTypes.String `json:"value_pl_pl"`
-		ValuePtBr  valueTypes.String `json:"value_pt_br"`
-		ValuePtPt  valueTypes.String `json:"value_pt_pt"`
-		ValueTrTr  valueTypes.String `json:"value_tr_tr"`
-		ValueViVn  valueTypes.String `json:"value_vi_vn"`
-		ValueZhCn  valueTypes.String `json:"value_zh_cn"`
-		ValueZhTw  valueTypes.String `json:"value_zh_tw"`
-		WebURL     valueTypes.String `json:"web_url"`
+		CloudId    valueTypes.Integer `json:"cloud_id"`
+		CloudName  valueTypes.String  `json:"cloud_name"`
+		GatewayURL valueTypes.String  `json:"gateway_url"`
+		OrderId    valueTypes.Integer `json:"order_id"`
+		ServiceURL valueTypes.String  `json:"service_url"`
+		Value      valueTypes.String  `json:"value"`
+		ValueDeDe  valueTypes.String  `json:"value_de_de"`
+		ValueEnUs  valueTypes.String  `json:"value_en_us"`
+		ValueEsEs  valueTypes.String  `json:"value_es_es"`
+		ValueFrFr  valueTypes.String  `json:"value_fr_fr"`
+		ValueItIt  valueTypes.String  `json:"value_it_it"`
+		ValueJaJp  valueTypes.String  `json:"value_ja_jp"`
+		ValueKoKr  valueTypes.String  `json:"value_ko_kr"`
+		ValueNlNl  valueTypes.String  `json:"value_nl_nl"`
+		ValuePlPl  valueTypes.String  `json:"value_pl_pl"`
+		ValuePtBr  valueTypes.String  `json:"value_pt_br"`
+		ValuePtPt  valueTypes.String  `json:"value_pt_pt"`
+		ValueTrTr  valueTypes.String  `json:"value_tr_tr"`
+		ValueViVn  valueTypes.String  `json:"value_vi_vn"`
+		ValueZhCn  valueTypes.String  `json:"value_zh_cn"`
+		ValueZhTw  valueTypes.String  `json:"value_zh_tw"`
+		WebURL     valueTypes.String  `json:"web_url"`
 	} `json:"current_cloud"`
 }
 

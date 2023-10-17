@@ -1,17 +1,20 @@
 package getPowerTrendDayData
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+
 	"github.com/MickMake/GoUnify/Only"
 )
 
-const Url = "/v1/powerStationService/getPowerTrendDayData"
-const Disabled = false
-const EndPointName = "AppService.getPowerTrendDayData"
+const (
+	Url          = "/v1/powerStationService/getPowerTrendDayData"
+	Disabled     = false
+	EndPointName = "AppService.getPowerTrendDayData"
+)
 
 type RequestData struct {
 	BeginTime2 valueTypes.String `json:"beginTime" required:"true"`
@@ -26,7 +29,6 @@ func (rd RequestData) Help() string {
 	ret := fmt.Sprintf("")
 	return ret
 }
-
 
 type ResultData []struct {
 	// Dummy valueTypes.String `json:"dummy"`

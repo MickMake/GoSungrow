@@ -1,19 +1,22 @@
 package getInstallerInfoByDealerOrgCodeOrId
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/orgService/getInstallerInfoByDealerOrgCodeOrId"
-const Disabled = false
-const EndPointName = "AppService.getInstallerInfoByDealerOrgCodeOrId"
+const (
+	Url          = "/v1/orgService/getInstallerInfoByDealerOrgCodeOrId"
+	Disabled     = false
+	EndPointName = "AppService.getInstallerInfoByDealerOrgCodeOrId"
+)
 
 type RequestData struct {
-	DealerOrgCode valueTypes.String `json:"dealer_org_code"` // required:"true"`
+	DealerOrgCode valueTypes.String  `json:"dealer_org_code"` // required:"true"`
 	OrgId         valueTypes.Integer `json:"org_id"`          // required:"true"`
 }
 

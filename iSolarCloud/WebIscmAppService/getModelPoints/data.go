@@ -1,16 +1,19 @@
 package getModelPoints
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/getModelPoints"
-const Disabled = false
-const EndPointName = "WebIscmAppService.getModelPoints"
+const (
+	Url          = "/v1/devService/getModelPoints"
+	Disabled     = false
+	EndPointName = "WebIscmAppService.getModelPoints"
+)
 
 type RequestData struct {
 	DeviceModelId valueTypes.String `json:"device_model_id" required:"true"`
@@ -26,7 +29,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"PointId"`
+	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"PointId"`
 
 	DeviceModelId valueTypes.Integer `json:"device_model_id"`
 	PointId       valueTypes.Integer `json:"point_id"`

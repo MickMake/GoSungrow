@@ -1,16 +1,16 @@
 package reflection
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"crypto/md5"
 	"errors"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 	"reflect"
 	"strings"
 	"time"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+)
 
 const AnyIndex = -1
 
@@ -24,28 +24,28 @@ func GetPointNameFrom(ref interface{}, name string, intSize int, dateFormat stri
 
 		var ra []string
 		switch vo.Kind() {
-			case reflect.Struct:
-				for _, pnf := range strings.Split(name, ".") {
-					// Iterate over all available fields, looking for the field name.
-					for i := 0; i < vo.NumField(); i++ {
-						fn := vo.Type().Field(i).Name
-						if fn == pnf {
-							ra = append(ra, valueTypes.AnyToValueString(vo.Field(i).Interface(), intSize, dateFormat))
-							break
-						}
+		case reflect.Struct:
+			for _, pnf := range strings.Split(name, ".") {
+				// Iterate over all available fields, looking for the field name.
+				for i := 0; i < vo.NumField(); i++ {
+					fn := vo.Type().Field(i).Name
+					if fn == pnf {
+						ra = append(ra, valueTypes.AnyToValueString(vo.Field(i).Interface(), intSize, dateFormat))
+						break
 					}
 				}
+			}
 
-			case reflect.Map:
-				for _, pnf := range strings.Split(name, ".") {
-					// Iterate over all available keys, looking for the key name.
-					for _, key := range vo.MapKeys() {
-						if key.String() == pnf {
-							ra = append(ra, valueTypes.AnyToValueString(vo.MapIndex(key).Interface(), intSize, dateFormat))
-							break
-						}
+		case reflect.Map:
+			for _, pnf := range strings.Split(name, ".") {
+				// Iterate over all available keys, looking for the key name.
+				for _, key := range vo.MapKeys() {
+					if key.String() == pnf {
+						ra = append(ra, valueTypes.AnyToValueString(vo.MapIndex(key).Interface(), intSize, dateFormat))
+						break
 					}
 				}
+			}
 		}
 		ret = strings.Join(ra, ".")
 	}
@@ -94,12 +94,12 @@ func GetStringFromArray(ref interface{}, index int, name string, intSize int, da
 				v := vo.Index(i).Interface()
 				ivo := reflect.ValueOf(v)
 				switch ivo.Kind() {
-					case reflect.Struct:
-						ret = GetStringFromStruct(v, name, intSize, dateFormat)
-					case reflect.Map:
-						ret = GetStringFromMap(v, name, intSize, dateFormat)
-					default:
-						// Don't descend anything else.
+				case reflect.Struct:
+					ret = GetStringFromStruct(v, name, intSize, dateFormat)
+				case reflect.Map:
+					ret = GetStringFromMap(v, name, intSize, dateFormat)
+				default:
+					// Don't descend anything else.
 				}
 				if ret != "" {
 					break
@@ -116,18 +116,18 @@ func GetStringFromArray(ref interface{}, index int, name string, intSize int, da
 			if l > 1 {
 				break
 			}
-			index = l - 1	// @TODO - Hack fixup!
+			index = l - 1 // @TODO - Hack fixup!
 		}
 
 		v := vo.Index(index).Interface()
 		ivo := reflect.ValueOf(v)
 		switch ivo.Kind() {
-			case reflect.Struct:
-				ret = GetStringFromStruct(v, name, intSize, dateFormat)
-			case reflect.Map:
-				ret = GetStringFromMap(v, name, intSize, dateFormat)
-			default:
-				// Don't descend anything else.
+		case reflect.Struct:
+			ret = GetStringFromStruct(v, name, intSize, dateFormat)
+		case reflect.Map:
+			ret = GetStringFromMap(v, name, intSize, dateFormat)
+		default:
+			// Don't descend anything else.
 		}
 	}
 
@@ -190,7 +190,6 @@ func GetStringFromMap(ref interface{}, name string, intSize int, dateFormat stri
 	return ret
 }
 
-
 func GetJsonTag(fieldTo reflect.StructField) string {
 	var ret string
 
@@ -212,25 +211,25 @@ func GetTimestampFrom(ref interface{}, name string, dateFormat string) time.Time
 		vo := reflect.ValueOf(ref)
 
 		switch vo.Kind() {
-			case reflect.Struct:
-				// Iterate over all available fields, looking for the field name.
-				for i := 0; i < vo.NumField(); i++ {
-					if vo.Type().Field(i).Name == name {
-						v := fmt.Sprintf("%v", vo.Field(i).Interface())
-						ret = valueTypes.SetDateTimeString(v).Time
-						break
-					}
+		case reflect.Struct:
+			// Iterate over all available fields, looking for the field name.
+			for i := 0; i < vo.NumField(); i++ {
+				if vo.Type().Field(i).Name == name {
+					v := fmt.Sprintf("%v", vo.Field(i).Interface())
+					ret = valueTypes.SetDateTimeString(v).Time
+					break
 				}
+			}
 
-			case reflect.Map:
-				// Iterate over all available fields, looking for the field name.
-				for _, key := range vo.MapKeys() {
-					if key.String() == name {
-						v := fmt.Sprintf("%v", vo.MapIndex(key).Interface())
-						ret = valueTypes.SetDateTimeString(v).Time
-						break
-					}
+		case reflect.Map:
+			// Iterate over all available fields, looking for the field name.
+			for _, key := range vo.MapKeys() {
+				if key.String() == name {
+					v := fmt.Sprintf("%v", vo.MapIndex(key).Interface())
+					ret = valueTypes.SetDateTimeString(v).Time
+					break
 				}
+			}
 		}
 	}
 
@@ -267,7 +266,6 @@ func GetRequestString(ref interface{}) string {
 func IsRefZero(x interface{}) bool {
 	return reflect.DeepEqual(x, reflect.Zero(reflect.TypeOf(x)).Interface())
 }
-
 
 func SetFrom(to interface{}, from interface{}) error {
 	var err error
@@ -329,7 +327,6 @@ func SetFrom(to interface{}, from interface{}) error {
 
 	return err
 }
-
 
 // GetArea Return an Area name if we are given an Area or EndPoint struct.
 func GetArea(trim string, v interface{}) string {
@@ -408,7 +405,6 @@ func HelpOptions(ref interface{}) string {
 
 	return ret
 }
-
 
 func GetStructName(v interface{}) (string, string) {
 	var area string

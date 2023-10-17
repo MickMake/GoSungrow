@@ -1,20 +1,23 @@
 package getUserMenuLs
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/userService/getUserMenuLs"
-const Disabled = false
-const EndPointName = "WebIscmAppService.getUserMenuLs"
+const (
+	Url          = "/v1/userService/getUserMenuLs"
+	Disabled     = false
+	EndPointName = "WebIscmAppService.getUserMenuLs"
+)
 
 type RequestData struct {
 	UserId valueTypes.String `json:"userId" required:"true"`
 }
+
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
 }
@@ -25,7 +28,7 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent   GoStruct.GoStructParent  `json:"-" DataTable:"true" DataTableSortOn:"MenuId"`
+	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true" DataTableSortOn:"MenuId"`
 	// GoStruct         GoStruct.GoStruct        `json:"-" PointIdFrom:"MenuId" PointIdReplace:"false"`
 
 	MenuId        valueTypes.Integer `json:"menuid" PointId:"menu_id"`

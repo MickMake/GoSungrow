@@ -1,19 +1,21 @@
 package queryDeviceRealTimeDataByPsKeys
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/queryDeviceRealTimeDataByPsKeys"
-const Disabled = false
-const EndPointName = "AppService.queryDeviceRealTimeDataByPsKeys"
+const (
+	Url          = "/v1/devService/queryDeviceRealTimeDataByPsKeys"
+	Disabled     = false
+	EndPointName = "AppService.queryDeviceRealTimeDataByPsKeys"
+)
 
 type RequestData struct {
-	PsKeyList valueTypes.String `json:"ps_key_list" required:"true"`
+	PsKeyList  valueTypes.String `json:"ps_key_list" required:"true"`
 	PsKeyList2 valueTypes.String `json:"ps_ke_list" required:"true"`
 }
 
@@ -28,9 +30,7 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData struct {
-}
+type ResultData struct{}
 
 func (e *ResultData) IsValid() error {
 	var err error

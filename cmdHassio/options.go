@@ -1,14 +1,14 @@
 package cmdHassio
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"errors"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
-	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"sync"
-)
 
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	mqtt "github.com/eclipse/paho.mqtt.golang"
+)
 
 type Options struct {
 	mu  sync.Mutex
@@ -20,7 +20,6 @@ type Option struct {
 	Handler mqtt.MessageHandler
 	Values  []string
 }
-
 
 func (m *Mqtt) CreateOption(id string, name string, fn mqtt.MessageHandler, options ...string) error {
 	for range Only.Once {
@@ -60,9 +59,10 @@ func (m *Mqtt) GetOption(id string) string {
 	return m.UserOptions.Get(id)
 }
 
-
-const OptionEnabled = "Enabled"
-const OptionDisabled = "Disabled"
+const (
+	OptionEnabled  = "Enabled"
+	OptionDisabled = "Disabled"
+)
 
 func (m *Options) New() {
 	for range Only.Once {
@@ -85,11 +85,11 @@ func (m *Options) Create(id string, name string, handler mqtt.MessageHandler, va
 		//goland:noinspection GoDeferInLoop
 		defer m.mu.Unlock()
 
-		m.Map[id] = Option {
-			Config:  &EntityConfig {
-				Name:          "Option " + name,
-				FullId:        JoinStringsForId("option", id),
-				Icon:          "mdi:format-list-group",
+		m.Map[id] = Option{
+			Config: &EntityConfig{
+				Name:   "Option " + name,
+				FullId: JoinStringsForId("option", id),
+				Icon:   "mdi:format-list-group",
 				// ValueTemplate: `{"value": "{{ value }}"}`,
 				ValueTemplate: `{{ value }}`,
 				Units:         LabelSelect,

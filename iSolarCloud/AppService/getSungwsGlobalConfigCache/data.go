@@ -1,21 +1,22 @@
 package getSungwsGlobalConfigCache
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"encoding/json"
-	"github.com/MickMake/GoUnify/Only"
-
 	"fmt"
+
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/commonService/getSungwsGlobalConfigCache"
-const Disabled = false
-const EndPointName = "AppService.getSungwsGlobalConfigCache"
+const (
+	Url          = "/v1/commonService/getSungwsGlobalConfigCache"
+	Disabled     = false
+	EndPointName = "AppService.getSungwsGlobalConfigCache"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)
@@ -26,94 +27,92 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
 type ResultData struct {
 	Config map[string]Config `json:"config" DataTable:"true"`
 }
 
 type Config struct {
-	Id                  valueTypes.Integer `json:"id"`
-	CreateTime          valueTypes.DateTime  `json:"create_time"`
-	UpdateTime          valueTypes.DateTime  `json:"update_time"`
+	Id         valueTypes.Integer  `json:"id"`
+	CreateTime valueTypes.DateTime `json:"create_time"`
+	UpdateTime valueTypes.DateTime `json:"update_time"`
 
-	CheckState          valueTypes.String  `json:"check_state"`
-	CreateUser          valueTypes.Integer `json:"create_user"`
-	DevKey              valueTypes.String  `json:"dev_key"`
-	DevKeyNew           valueTypes.String  `json:"dev_key_new"`
-	EnAbbr              valueTypes.String  `json:"en_abbr"`
-	EntryCategory       valueTypes.Integer `json:"entry_category"`
-	EntryPermission     valueTypes.Integer `json:"entry_permission"`
-	IndustryStandard    valueTypes.String  `json:"industry_standard"`
-	ItemType            valueTypes.Integer `json:"item_type"`
-	LogicDel            valueTypes.Integer `json:"logic_del"`
-	Module              valueTypes.String  `json:"module"`
-	NeutralTransId      valueTypes.Integer `json:"neutral_trans_id"`
-	OldId               valueTypes.Integer `json:"old_id"`
-	Path                valueTypes.String  `json:"path"`
-	Polysemy            valueTypes.Integer `json:"polysemy"`
-	TermMaxLength       valueTypes.String  `json:"term_max_length"`
-	Type                valueTypes.Integer `json:"type"`
-	UpdateUser          valueTypes.Integer `json:"update_user"`
+	CheckState       valueTypes.String  `json:"check_state"`
+	CreateUser       valueTypes.Integer `json:"create_user"`
+	DevKey           valueTypes.String  `json:"dev_key"`
+	DevKeyNew        valueTypes.String  `json:"dev_key_new"`
+	EnAbbr           valueTypes.String  `json:"en_abbr"`
+	EntryCategory    valueTypes.Integer `json:"entry_category"`
+	EntryPermission  valueTypes.Integer `json:"entry_permission"`
+	IndustryStandard valueTypes.String  `json:"industry_standard"`
+	ItemType         valueTypes.Integer `json:"item_type"`
+	LogicDel         valueTypes.Integer `json:"logic_del"`
+	Module           valueTypes.String  `json:"module"`
+	NeutralTransId   valueTypes.Integer `json:"neutral_trans_id"`
+	OldId            valueTypes.Integer `json:"old_id"`
+	Path             valueTypes.String  `json:"path"`
+	Polysemy         valueTypes.Integer `json:"polysemy"`
+	TermMaxLength    valueTypes.String  `json:"term_max_length"`
+	Type             valueTypes.Integer `json:"type"`
+	UpdateUser       valueTypes.Integer `json:"update_user"`
 
-	IsAPI               valueTypes.Bool    `json:"is_api"`
-	IsApp               valueTypes.Bool    `json:"is_app"`
-	IsAppJs             valueTypes.Bool    `json:"is_app_js"`
-	IsAutoCreate        valueTypes.Bool    `json:"is_auto_create"`
-	IsConfig            valueTypes.Bool    `json:"is_config"`
-	IsDB                valueTypes.Bool    `json:"is_db"`
-	IsEmbeddedDevice    valueTypes.Bool    `json:"is_embedded_device"`
-	IsEmsPpc            valueTypes.Bool    `json:"is_ems_ppc"`
-	IsEmsPpcXML         valueTypes.Bool    `json:"is_ems_ppc_xml"`
-	IsEsp               valueTypes.Bool    `json:"is_esp"`
-	IsIconfigJs         valueTypes.Bool    `json:"is_iconfig_js"`
-	IsImportant         valueTypes.Bool    `json:"is_important"`
-	IsInsightJs         valueTypes.Bool    `json:"is_insight_js"`
-	IsInsightProperties valueTypes.Bool    `json:"is_insight_properties"`
-	IsIscapp            valueTypes.Bool    `json:"is_iscapp"`
-	IsIshapp            valueTypes.Bool    `json:"is_ishapp"`
-	IsIsolarDesign      valueTypes.Bool    `json:"is_isolar_design"`
-	IsLogger            valueTypes.Bool    `json:"is_logger"`
-	IsLoggerConfigJs    valueTypes.Bool    `json:"is_logger_config_js"`
-	IsMachineJs         valueTypes.Bool    `json:"is_machine_js"`
-	IsMenu              valueTypes.Bool    `json:"is_menu"`
-	IsNewWeb            valueTypes.Bool    `json:"is_new_web"`
-	IsPoint             valueTypes.Bool    `json:"is_point"`
-	IsQuerytoolJs       valueTypes.Bool    `json:"is_querytool_js"`
-	IsRichtext          valueTypes.Bool    `json:"is_richtext"`
-	IsSasapp            valueTypes.Bool    `json:"is_sasapp"`
-	IsScreenJs          valueTypes.Bool    `json:"is_screen_js"`
-	IsScreenProperties  valueTypes.Bool    `json:"is_screen_properties"`
-	IsScuProperties     valueTypes.Bool    `json:"is_scu_properties"`
-	IsScuXML            valueTypes.Bool    `json:"is_scu_xml"`
-	IsStandard          valueTypes.Bool    `json:"is_standard"`
-	IsTerm              valueTypes.Bool    `json:"is_term"`
-	IsWebJs             valueTypes.Bool    `json:"is_web_js"`
-	IsWebProperties     valueTypes.Bool    `json:"is_web_properties"`
-	IsWinet             valueTypes.Bool    `json:"is_winet"`
+	IsAPI               valueTypes.Bool `json:"is_api"`
+	IsApp               valueTypes.Bool `json:"is_app"`
+	IsAppJs             valueTypes.Bool `json:"is_app_js"`
+	IsAutoCreate        valueTypes.Bool `json:"is_auto_create"`
+	IsConfig            valueTypes.Bool `json:"is_config"`
+	IsDB                valueTypes.Bool `json:"is_db"`
+	IsEmbeddedDevice    valueTypes.Bool `json:"is_embedded_device"`
+	IsEmsPpc            valueTypes.Bool `json:"is_ems_ppc"`
+	IsEmsPpcXML         valueTypes.Bool `json:"is_ems_ppc_xml"`
+	IsEsp               valueTypes.Bool `json:"is_esp"`
+	IsIconfigJs         valueTypes.Bool `json:"is_iconfig_js"`
+	IsImportant         valueTypes.Bool `json:"is_important"`
+	IsInsightJs         valueTypes.Bool `json:"is_insight_js"`
+	IsInsightProperties valueTypes.Bool `json:"is_insight_properties"`
+	IsIscapp            valueTypes.Bool `json:"is_iscapp"`
+	IsIshapp            valueTypes.Bool `json:"is_ishapp"`
+	IsIsolarDesign      valueTypes.Bool `json:"is_isolar_design"`
+	IsLogger            valueTypes.Bool `json:"is_logger"`
+	IsLoggerConfigJs    valueTypes.Bool `json:"is_logger_config_js"`
+	IsMachineJs         valueTypes.Bool `json:"is_machine_js"`
+	IsMenu              valueTypes.Bool `json:"is_menu"`
+	IsNewWeb            valueTypes.Bool `json:"is_new_web"`
+	IsPoint             valueTypes.Bool `json:"is_point"`
+	IsQuerytoolJs       valueTypes.Bool `json:"is_querytool_js"`
+	IsRichtext          valueTypes.Bool `json:"is_richtext"`
+	IsSasapp            valueTypes.Bool `json:"is_sasapp"`
+	IsScreenJs          valueTypes.Bool `json:"is_screen_js"`
+	IsScreenProperties  valueTypes.Bool `json:"is_screen_properties"`
+	IsScuProperties     valueTypes.Bool `json:"is_scu_properties"`
+	IsScuXML            valueTypes.Bool `json:"is_scu_xml"`
+	IsStandard          valueTypes.Bool `json:"is_standard"`
+	IsTerm              valueTypes.Bool `json:"is_term"`
+	IsWebJs             valueTypes.Bool `json:"is_web_js"`
+	IsWebProperties     valueTypes.Bool `json:"is_web_properties"`
+	IsWinet             valueTypes.Bool `json:"is_winet"`
 
-	Scenarios           valueTypes.String  `json:"scenarios"`
-	Background          valueTypes.String  `json:"background"`
-	Meaning             valueTypes.String  `json:"meaning"`
-	Remark              valueTypes.String  `json:"remark"`
-	ValueEnUs           valueTypes.String  `json:"value_en_us"`
+	Scenarios  valueTypes.String `json:"scenarios"`
+	Background valueTypes.String `json:"background"`
+	Meaning    valueTypes.String `json:"meaning"`
+	Remark     valueTypes.String `json:"remark"`
+	ValueEnUs  valueTypes.String `json:"value_en_us"`
 
-	Value               valueTypes.String  `json:"value"`
-	ValueDeDe           valueTypes.String  `json:"value_de_de"`
-	ValueEsEs           valueTypes.String  `json:"value_es_es"`
-	ValueFrFr           valueTypes.String  `json:"value_fr_fr"`
-	ValueIDID           valueTypes.String  `json:"value_id_id"`
-	ValueItIt           valueTypes.String  `json:"value_it_it"`
-	ValueJaJp           valueTypes.String  `json:"value_ja_jp"`
-	ValueKoKr           valueTypes.String  `json:"value_ko_kr"`
-	ValueNlNl           valueTypes.String  `json:"value_nl_nl"`
-	ValuePlPl           valueTypes.String  `json:"value_pl_pl"`
-	ValuePtBr           valueTypes.String  `json:"value_pt_br"`
-	ValuePtPt           valueTypes.String  `json:"value_pt_pt"`
-	ValueTrTr           valueTypes.String  `json:"value_tr_tr"`
-	ValueUkUa           valueTypes.String  `json:"value_uk_ua"`
-	ValueViVn           valueTypes.String  `json:"value_vi_vn"`
-	ValueZhTw           valueTypes.String  `json:"value_zh_tw"`
-
+	Value     valueTypes.String `json:"value"`
+	ValueDeDe valueTypes.String `json:"value_de_de"`
+	ValueEsEs valueTypes.String `json:"value_es_es"`
+	ValueFrFr valueTypes.String `json:"value_fr_fr"`
+	ValueIDID valueTypes.String `json:"value_id_id"`
+	ValueItIt valueTypes.String `json:"value_it_it"`
+	ValueJaJp valueTypes.String `json:"value_ja_jp"`
+	ValueKoKr valueTypes.String `json:"value_ko_kr"`
+	ValueNlNl valueTypes.String `json:"value_nl_nl"`
+	ValuePlPl valueTypes.String `json:"value_pl_pl"`
+	ValuePtBr valueTypes.String `json:"value_pt_br"`
+	ValuePtPt valueTypes.String `json:"value_pt_pt"`
+	ValueTrTr valueTypes.String `json:"value_tr_tr"`
+	ValueUkUa valueTypes.String `json:"value_uk_ua"`
+	ValueViVn valueTypes.String `json:"value_vi_vn"`
+	ValueZhTw valueTypes.String `json:"value_zh_tw"`
 }
 
 func (e *ResultData) UnmarshalJSON(data []byte) error {
@@ -147,7 +146,6 @@ func (e *EndPoint) GetData() api.DataMap {
 	entries.StructToDataMap(*e, "", GoStruct.EndPointPath{})
 	return entries
 }
-
 
 const (
 	I18NCHANGECOMMUNICATIONMODULESTATUS                     = "I18NCHANGECOMMUNICATIONMODULESTATUS"

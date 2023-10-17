@@ -1,16 +1,18 @@
 package getDevInstalledPowerByPsId
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/getDevInstalledPowerByPsId"
-const Disabled = false
-const EndPointName = "AppService.getDevInstalledPowerByPsId"
+const (
+	Url          = "/v1/devService/getDevInstalledPowerByPsId"
+	Disabled     = false
+	EndPointName = "AppService.getDevInstalledPowerByPsId"
+)
 
 type RequestData struct {
 	PsId valueTypes.PsId `json:"ps_id" required:"true"`

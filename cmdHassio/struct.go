@@ -1,27 +1,27 @@
 package cmdHassio
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getDeviceList"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"errors"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
-	"github.com/MickMake/GoUnify/cmdLog"
-	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"net/url"
 	"strings"
 	"time"
+
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/MickMake/GoUnify/cmdLog"
+	"github.com/anicoll/gosungrow/iSolarCloud/AppService/getDeviceList"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
+	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
-
 type Mqtt struct {
-	ClientId      string `json:"client_id"`
-	Username      string `json:"username"`
-	Password      string `json:"password"`
-	Host          string `json:"host"`
-	Port          string `json:"port"`
-	Timeout       time.Duration `json:"timeout"`
-	EntityPrefix  string `json:"entity_prefix"`
+	ClientId     string        `json:"client_id"`
+	Username     string        `json:"username"`
+	Password     string        `json:"password"`
+	Host         string        `json:"host"`
+	Port         string        `json:"port"`
+	Timeout      time.Duration `json:"timeout"`
+	EntityPrefix string        `json:"entity_prefix"`
 
 	url           *url.URL
 	client        mqtt.Client
@@ -42,14 +42,16 @@ type Mqtt struct {
 	logger   cmdLog.Log
 }
 
-const OptionLogLevel = "mqtt_loglevel"
-const OptionDebug    = "mqtt_debug"
+const (
+	OptionLogLevel = "mqtt_loglevel"
+	OptionDebug    = "mqtt_debug"
+)
 
 func New(req Mqtt) *Mqtt {
 	var ret Mqtt
 
 	for range Only.Once {
-		ret = Mqtt {
+		ret = Mqtt{
 			ClientId:       req.ClientId,
 			Username:       req.Username,
 			Password:       req.Password,
@@ -86,7 +88,6 @@ func New(req Mqtt) *Mqtt {
 
 	return &ret
 }
-
 
 func (m *Mqtt) IsFirstRun() bool {
 	return m.firstRun
@@ -126,7 +127,6 @@ func (m *Mqtt) IsNewDay() bool {
 }
 
 func (m *Mqtt) setUrl() error {
-
 	for range Only.Once {
 		var u string
 
@@ -177,7 +177,7 @@ func (m *Mqtt) setUrl() error {
 		// 	// set the server/CA certificate
 		// 	m.config.TLSRootCAs = m.serverCertPool
 		// } else {
-			u = "tcp://" + u
+		u = "tcp://" + u
 		// }
 
 		m.url, m.err = url.Parse(u)
@@ -190,7 +190,6 @@ func (m *Mqtt) setUrl() error {
 }
 
 func (m *Mqtt) SetAuth(username string, password string) error {
-
 	for range Only.Once {
 		if username == "" {
 			m.err = errors.New("username empty")
@@ -226,14 +225,14 @@ func (m *Mqtt) Connect() error {
 			m.ClientId = "GoSungrow"
 		}
 
-		device := Config {
-			Entry:      JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId),	// m.servicePrefix
+		device := Config{
+			Entry:      JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId), // m.servicePrefix
 			Name:       m.ClientId,
-			UniqueId:   m.ClientId, 	// + "_Service",
-			StateTopic:   "~/state",
-			DeviceConfig: DeviceConfig {
+			UniqueId:   m.ClientId, // + "_Service",
+			StateTopic: "~/state",
+			DeviceConfig: DeviceConfig{
 				Identifiers:  []string{"GoSungrow"},
-				SwVersion:    "GoSungrow https://github.com/MickMake/GoSungrow",
+				SwVersion:    "GoSungrow https://github.com/anicoll/gosungrow",
 				Name:         m.ClientId + " Service",
 				Manufacturer: "MickMake",
 				Model:        "SunGrow",
@@ -341,7 +340,6 @@ func (m *Mqtt) Subscribe(topic string, fn mqtt.MessageHandler) error {
 		t := m.client.Subscribe(topic, 0, fn)
 		if !t.WaitTimeout(m.Timeout) {
 			m.err = t.Error()
-
 		}
 	}
 	return m.err
@@ -362,40 +360,40 @@ func (m *Mqtt) PublishValue(Type string, subtopic string, value string) error {
 	for range Only.Once {
 		topic := ""
 		switch Type {
-			case LabelSensor:
-				topic = JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, subtopic, "state")
-				// state := MqttState {
-				// 	LastReset: "", // m.GetLastReset(point.PointId),
-				// 	Value:     value,
-				// }
-				// value = state.Json()
+		case LabelSensor:
+			topic = JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, subtopic, "state")
+			// state := MqttState {
+			// 	LastReset: "", // m.GetLastReset(point.PointId),
+			// 	Value:     value,
+			// }
+			// value = state.Json()
 
-			case "binary_sensor":
-				topic = JoinStringsForTopic(m.Prefix, LabelBinarySensor, m.ClientId, subtopic, "state")
-				// state := MqttState {
-				// 	LastReset: "", // m.GetLastReset(point.PointId),
-				// 	Value:     value,
-				// }
-				// value = state.Json()
+		case "binary_sensor":
+			topic = JoinStringsForTopic(m.Prefix, LabelBinarySensor, m.ClientId, subtopic, "state")
+			// state := MqttState {
+			// 	LastReset: "", // m.GetLastReset(point.PointId),
+			// 	Value:     value,
+			// }
+			// value = state.Json()
 
-			case "lights":
-				topic = JoinStringsForTopic(m.Prefix, LabelLight, m.ClientId, subtopic, "state")
-				// state := MqttState {
-				// 	LastReset: "", // m.GetLastReset(point.PointId),
-				// 	Value:     value,
-				// }
-				// value = state.Json()
+		case "lights":
+			topic = JoinStringsForTopic(m.Prefix, LabelLight, m.ClientId, subtopic, "state")
+			// state := MqttState {
+			// 	LastReset: "", // m.GetLastReset(point.PointId),
+			// 	Value:     value,
+			// }
+			// value = state.Json()
 
-			case LabelSwitch:
-				topic = JoinStringsForTopic(m.Prefix, LabelSwitch, m.ClientId, subtopic, "state")
-				// state := MqttState {
-				// 	LastReset: "", // m.GetLastReset(point.PointId),
-				// 	Value:     value,
-				// }
-				// value = state.Json()
+		case LabelSwitch:
+			topic = JoinStringsForTopic(m.Prefix, LabelSwitch, m.ClientId, subtopic, "state")
+			// state := MqttState {
+			// 	LastReset: "", // m.GetLastReset(point.PointId),
+			// 	Value:     value,
+			// }
+			// value = state.Json()
 
-			default:
-				topic = JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, subtopic, "state")
+		default:
+			topic = JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, subtopic, "state")
 		}
 
 		m.logger.Debug("PublishValue - topic: '%s'\tpayload: '%s'\n", topic, value)
@@ -424,14 +422,14 @@ func (m *Mqtt) SetDeviceConfig(swname string, parentId string, id string, name s
 			}
 		}
 
-		ret = Device {
-			Connections:  c,
-			Identifiers:  []string{JoinStringsForId(m.EntityPrefix, id)},
-			Manufacturer: vendor,
-			Model:        model,
-			Name:         name,
-			SwVersion:    swname + " https://github.com/MickMake/" + swname,
-			ViaDevice:    swname,
+		ret = Device{
+			Connections:   c,
+			Identifiers:   []string{JoinStringsForId(m.EntityPrefix, id)},
+			Manufacturer:  vendor,
+			Model:         model,
+			Name:          name,
+			SwVersion:     swname + " https://github.com/MickMake/" + swname,
+			ViaDevice:     swname,
 			SuggestedArea: area,
 		}
 		m.MqttDevices[id] = ret

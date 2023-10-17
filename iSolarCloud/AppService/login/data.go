@@ -4,15 +4,17 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/userService/login"
-const Disabled = false
-const EndPointName = "AppService.login"
+const (
+	Url          = "/v1/userService/login"
+	Disabled     = false
+	EndPointName = "AppService.login"
+)
 
 type RequestData struct {
 	UserAccount  valueTypes.String `json:"user_account" required:"true"`
@@ -160,30 +162,39 @@ func (e *EndPoint) AppKey() string {
 func (e *EndPoint) Email() string {
 	return e.Response.ResultData.Email.String()
 }
+
 func (e *EndPoint) CreateDate() string {
 	return e.Response.ResultData.CreateDate.String()
 }
+
 func (e *EndPoint) IsOnline() bool {
 	return e.Response.ResultData.IsOnline.Value()
 }
+
 func (e *EndPoint) LoginLastDate() string {
 	return e.Response.ResultData.LoginLastDate.String()
 }
+
 func (e *EndPoint) LoginLastIP() string {
 	return e.Response.ResultData.LoginLastIP.String()
 }
+
 func (e *EndPoint) LoginState() string {
 	return e.Response.ResultData.LoginState.String()
 }
+
 func (e *EndPoint) Token() string {
 	return e.Response.ResultData.Token.String()
 }
+
 func (e *EndPoint) UserAccount() string {
 	return e.Response.ResultData.UserAccount.String()
 }
+
 func (e *EndPoint) UserId() string {
 	return e.Response.ResultData.UserId.String()
 }
+
 func (e *EndPoint) UserName() string {
 	return e.Response.ResultData.UserName.String()
 }

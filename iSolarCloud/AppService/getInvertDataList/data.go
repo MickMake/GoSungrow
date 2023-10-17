@@ -1,18 +1,20 @@
 package getInvertDataList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
 	"fmt"
+
 	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
 )
 
-const Url = "/v1/devService/getInvertDataList"
-const Disabled = false
-const EndPointName = "AppService.getInvertDataList"
+const (
+	Url          = "/v1/devService/getInvertDataList"
+	Disabled     = false
+	EndPointName = "AppService.getInvertDataList"
+)
 
-type RequestData struct {
-}
+type RequestData struct{}
 
 func (rd RequestData) IsValid() error {
 	return GoStruct.VerifyOptionsRequired(rd)

@@ -1,16 +1,18 @@
 package getPowerDeviceModelTechList
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/devService/getPowerDeviceModelTechList"
-const Disabled = false
-const EndPointName = "WebIscmAppService.getPowerDeviceModelTechList"
+const (
+	Url          = "/v1/devService/getPowerDeviceModelTechList"
+	Disabled     = false
+	EndPointName = "WebIscmAppService.getPowerDeviceModelTechList"
+)
 
 type RequestData struct {
 	DeviceType valueTypes.Integer `json:"device_type" required:"true"`
@@ -26,8 +28,8 @@ func (rd RequestData) Help() string {
 }
 
 type ResultData []struct {
-	GoStructParent  GoStruct.GoStructParent  `json:"-" DataTable:"true"`	// PointIdFrom:"CodeId" PointIdReplace:"true"`
-	GoStruct        GoStruct.GoStruct        `json:"-"`	// PointIdFrom:"CodeId" PointIdReplace:"true"`
+	GoStructParent GoStruct.GoStructParent `json:"-" DataTable:"true"` // PointIdFrom:"CodeId" PointIdReplace:"true"`
+	GoStruct       GoStruct.GoStruct       `json:"-"`                  // PointIdFrom:"CodeId" PointIdReplace:"true"`
 
 	CodeId          valueTypes.Integer `json:"code_id"`
 	CodeValue       valueTypes.String  `json:"code_value"`

@@ -1,27 +1,26 @@
 package api
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
 	"fmt"
-	"github.com/MickMake/GoUnify/Only"
 	"strings"
 	"time"
+
+	"github.com/MickMake/GoUnify/Only"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-
 type Point struct {
-	Parents     ParentDevices      `json:"parents,omitempty"`
-	Id          string             `json:"id,omitempty"`
-	GroupName   string             `json:"group_name,omitempty"`
-	Description string             `json:"description,omitempty"`
-	Unit        string             `json:"unit,omitempty"`
-	UpdateFreq  string             `json:"time_span,omitempty"`
-	ValueType   string             `json:"value_type,omitempty"`
-	Valid       bool               `json:"valid,omitempty"`
-	States      map[string]string  `json:"states,omitempty"`
+	Parents     ParentDevices     `json:"parents,omitempty"`
+	Id          string            `json:"id,omitempty"`
+	GroupName   string            `json:"group_name,omitempty"`
+	Description string            `json:"description,omitempty"`
+	Unit        string            `json:"unit,omitempty"`
+	UpdateFreq  string            `json:"time_span,omitempty"`
+	ValueType   string            `json:"value_type,omitempty"`
+	Valid       bool              `json:"valid,omitempty"`
+	States      map[string]string `json:"states,omitempty"`
 }
-
 
 func (p *Point) FixUnitType() Point {
 	vt := valueTypes.UnitValueType(p.Unit)
@@ -41,53 +40,52 @@ func (p *Point) WhenReset(date valueTypes.DateTime) string {
 		now = date.Time
 
 		switch {
-			case p.Is5Minute():
-				// now, err = time.Parse("2006-01-02T15:04:05", now.Truncate(time.Minute * 5).Format("2006-01-02T15:04:05"))
-				// ret = fmt.Sprintf("%d", now.Unix())
-				ret = now.Truncate(time.Minute * 5).Format(valueTypes.DateTimeFullLayout)
+		case p.Is5Minute():
+			// now, err = time.Parse("2006-01-02T15:04:05", now.Truncate(time.Minute * 5).Format("2006-01-02T15:04:05"))
+			// ret = fmt.Sprintf("%d", now.Unix())
+			ret = now.Truncate(time.Minute * 5).Format(valueTypes.DateTimeFullLayout)
 
-			case p.Is15Minute():
-				// now, err = time.Parse("2006-01-02T15:04:05", now.Truncate(time.Minute * 15).Format("2006-01-02T15:04:05"))
-				// ret = fmt.Sprintf("%d", now.Unix())
-				ret = now.Truncate(time.Minute * 15).Format(valueTypes.DateTimeFullLayout)
+		case p.Is15Minute():
+			// now, err = time.Parse("2006-01-02T15:04:05", now.Truncate(time.Minute * 15).Format("2006-01-02T15:04:05"))
+			// ret = fmt.Sprintf("%d", now.Unix())
+			ret = now.Truncate(time.Minute * 15).Format(valueTypes.DateTimeFullLayout)
 
-			case p.Is30Minute():
-				// now, err = time.Parse("2006-01-02T15:04:05", now.Truncate(time.Minute * 30).Format("2006-01-02T15:04:05"))
-				// ret = fmt.Sprintf("%d", now.Unix())
-				ret = now.Truncate(time.Minute * 30).Format(valueTypes.DateTimeFullLayout)
+		case p.Is30Minute():
+			// now, err = time.Parse("2006-01-02T15:04:05", now.Truncate(time.Minute * 30).Format("2006-01-02T15:04:05"))
+			// ret = fmt.Sprintf("%d", now.Unix())
+			ret = now.Truncate(time.Minute * 30).Format(valueTypes.DateTimeFullLayout)
 
+		case p.IsInstant():
+			// ret = ""
+			// valueTypes.DateTimeFullLayout
+			ret = now.Format(valueTypes.DateTimeFullLayout)
 
-			case p.IsInstant():
-				// ret = ""
-				// valueTypes.DateTimeFullLayout
-				ret = now.Format(valueTypes.DateTimeFullLayout)
+		case p.IsBoot():
+			now, err = time.Parse("2006-01-02T15:04:05", now.Format("2006-01-02")+"T00:00:00")
+			// ret = fmt.Sprintf("%d", now.Unix())
+			ret = now.Format(valueTypes.DateTimeFullLayout)
 
-			case p.IsBoot():
-				now, err = time.Parse("2006-01-02T15:04:05", now.Format("2006-01-02") + "T00:00:00")
-				// ret = fmt.Sprintf("%d", now.Unix())
-				ret = now.Format(valueTypes.DateTimeFullLayout)
+		case p.IsDaily():
+			now, err = time.Parse("2006-01-02T15:04:05", now.Format("2006-01-02")+"T00:00:00")
+			// ret = fmt.Sprintf("%d", now.Unix())
+			ret = now.Format(valueTypes.DateTimeFullLayout)
 
-			case p.IsDaily():
-				now, err = time.Parse("2006-01-02T15:04:05", now.Format("2006-01-02") + "T00:00:00")
-				// ret = fmt.Sprintf("%d", now.Unix())
-				ret = now.Format(valueTypes.DateTimeFullLayout)
+		case p.IsMonthly():
+			now, err = time.Parse("2006-01-02T15:04:05", now.Format("2006-01")+"-01T00:00:00")
+			ret = fmt.Sprintf("%d", now.Unix())
+			ret = now.Format(valueTypes.DateTimeFullLayout)
 
-			case p.IsMonthly():
-				now, err = time.Parse("2006-01-02T15:04:05", now.Format("2006-01") + "-01T00:00:00")
-				ret = fmt.Sprintf("%d", now.Unix())
-				ret = now.Format(valueTypes.DateTimeFullLayout)
+		case p.IsYearly():
+			now, err = time.Parse("2006-01-02T15:04:05", now.Format("2006")+"-01-01T00:00:00")
+			ret = fmt.Sprintf("%d", now.Unix())
+			ret = now.Format(valueTypes.DateTimeFullLayout)
 
-			case p.IsYearly():
-				now, err = time.Parse("2006-01-02T15:04:05", now.Format("2006") + "-01-01T00:00:00")
-				ret = fmt.Sprintf("%d", now.Unix())
-				ret = now.Format(valueTypes.DateTimeFullLayout)
+		case p.IsTotal():
+			ret = "1970-01-01T00:00:00"
 
-			case p.IsTotal():
-				ret = "1970-01-01T00:00:00"
-
-			default:
-				// ret = "1970-01-01T00:00:00"
-				ret = now.Format(valueTypes.DateTimeFullLayout)
+		default:
+			// ret = "1970-01-01T00:00:00"
+			ret = now.Format(valueTypes.DateTimeFullLayout)
 		}
 		if err != nil {
 			// now := time.Now()
@@ -179,7 +177,6 @@ func (p *Point) SetName(name string) {
 	p.Description = name
 }
 
-
 func GetPoint(point string) *Point {
 	return Points.Get(point)
 }
@@ -225,7 +222,6 @@ func GetDevicePoint(devicePoint string) *Point {
 // 	// return point
 // 	return point
 // }
-
 
 type ParentDevice struct {
 	Key  string `json:"ps_key"`
@@ -273,9 +269,8 @@ func (pd *ParentDevice) Split() {
 	}
 }
 
-
 type ParentDevices struct {
-	Map map[string]*ParentDevice
+	Map   map[string]*ParentDevice
 	Index []string
 }
 

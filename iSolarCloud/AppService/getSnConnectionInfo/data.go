@@ -1,16 +1,18 @@
 package getSnConnectionInfo
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/commonService/getSnConnectionInfo"
-const Disabled = false
-const EndPointName = "AppService.getSnConnectionInfo"
+const (
+	Url          = "/v1/commonService/getSnConnectionInfo"
+	Disabled     = false
+	EndPointName = "AppService.getSnConnectionInfo"
+)
 
 type RequestData struct {
 	Size    valueTypes.Integer `json:"size" required:"true"`
@@ -26,8 +28,7 @@ func (rd RequestData) Help() string {
 	return ret
 }
 
-
-type ResultData   struct {
+type ResultData struct {
 	CurPage    valueTypes.Integer `json:"curPage" PointId:"cur_page"`
 	IsMore     valueTypes.Integer `json:"isMore" PointId:"is_more"`
 	PageList   []interface{}      `json:"pageList" PointId:"page_list"`

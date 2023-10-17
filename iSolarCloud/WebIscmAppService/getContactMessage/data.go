@@ -1,19 +1,21 @@
 package getContactMessage
 
 import (
-	"github.com/MickMake/GoSungrow/iSolarCloud/api"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct"
-	"github.com/MickMake/GoSungrow/iSolarCloud/api/GoStruct/valueTypes"
-
 	"fmt"
+
+	"github.com/anicoll/gosungrow/iSolarCloud/api"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct"
+	"github.com/anicoll/gosungrow/iSolarCloud/api/GoStruct/valueTypes"
 )
 
-const Url = "/v1/powerStationService/getContactMessage"
-const Disabled = false
-const EndPointName = "WebIscmAppService.getContactMessage"
+const (
+	Url          = "/v1/powerStationService/getContactMessage"
+	Disabled     = false
+	EndPointName = "WebIscmAppService.getContactMessage"
+)
 
 type RequestData struct {
-	PsId2       valueTypes.PsId     `json:"psId" require:"true"`
+	PsId2 valueTypes.PsId `json:"psId" require:"true"`
 }
 
 func (rd RequestData) IsValid() error {
