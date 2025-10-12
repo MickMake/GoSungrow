@@ -42,6 +42,8 @@ github.com/MichaelMure/go-term-markdown v0.1.4 h1:Ir3kBXDUtOX7dEv0EaQV8CNPpH+T7A
 github.com/MichaelMure/go-term-markdown v0.1.4/go.mod h1:EhcA3+pKYnlUsxYKBJ5Sn1cTQmmBMjeNlpV8nRb+JxA=
 github.com/MichaelMure/go-term-text v0.3.1 h1:Kw9kZanyZWiCHOYu9v/8pWEgDQ6UVN9/ix2Vd2zzWf0=
 github.com/MichaelMure/go-term-text v0.3.1/go.mod h1:QgVjAEDUnRMlzpS6ky5CGblux7ebeiLnuy9dAaFZu8o=
+github.com/MickMake/GoUnify v1.0.3-0.20230904042338-0db745f1bada h1:5eNyQ1v0vKn1KvkodbJ00mrFeIrVr5mi3hReFthmJiU=
+github.com/MickMake/GoUnify v1.0.3-0.20230904042338-0db745f1bada/go.mod h1:FrPAWZco+Tk44Vhp7juiRdhQyb81bCneLRAhf8asi2E=
 github.com/abiosoft/ishell v2.0.0+incompatible h1:zpwIuEHc37EzrsIYah3cpevrIc8Oma7oZPxr03tlmmw=
 github.com/abiosoft/ishell/v2 v2.0.2 h1:5qVfGiQISaYM8TkbBl7RFO6MddABoXpATrsFbVI+SNo=
 github.com/abiosoft/ishell/v2 v2.0.2/go.mod h1:E4oTCXfo6QjoCart0QYa5m9w4S+deXs/P/9jA77A9Bs=

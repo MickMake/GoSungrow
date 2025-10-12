@@ -2,22 +2,7 @@ module github.com/MickMake/GoSungrow
 
 go 1.19
 
-replace github.com/MickMake/GoUnify => ../../GoUnify
-
-//replace github.com/MickMake/GoUnify/cmdConfig => ../../GoUnify/cmdConfig
-//replace github.com/MickMake/GoUnify/cmdLog => ../../GoUnify/cmdLog
-//replace github.com/MickMake/GoUnify/cmdHelp => ../../GoUnify/cmdHelp
-//replace github.com/MickMake/GoUnify/Unify => ../../GoUnify/Unify
-//replace github.com/MickMake/GoUnify/Only => ../../GoUnify/Only
-//replace github.com/MickMake/GoUnify/cmdCron => ../../GoUnify/cmdCron
-//replace github.com/MickMake/GoUnify/cmdDaemon => ../../GoUnify/cmdDaemon
-//replace github.com/MickMake/GoUnify/cmdShell => ../../GoUnify/cmdShell
-//replace github.com/MickMake/GoUnify/cmdVersion => ../../GoUnify/cmdVersion
-//replace github.com/MickMake/GoUnify/cmdExec => ../../GoUnify/cmdExec
-//replace github.com/MickMake/GoUnify/cmdPath => ../../GoUnify/cmdPath
-
 require (
-	github.com/MickMake/GoUnify v0.0.0-00010101000000-000000000000
 	github.com/agrison/go-tablib v0.0.0-20160310143025-4930582c22ee
 	github.com/agrison/mxj v0.0.0-20160310142625-1269f8afb3b4
 	github.com/eclipse/paho.mqtt.golang v1.4.3
@@ -38,6 +23,7 @@ require (
 require (
 	github.com/MichaelMure/go-term-markdown v0.1.4 // indirect
 	github.com/MichaelMure/go-term-text v0.3.1 // indirect
+	github.com/MickMake/GoUnify v1.0.3-0.20230904042338-0db745f1bada // indirect
 	github.com/abiosoft/ishell/v2 v2.0.2 // indirect
 	github.com/abiosoft/readline v0.0.0-20180607040430-155bce2042db // indirect
 	github.com/alecthomas/chroma v0.7.1 // indirect
