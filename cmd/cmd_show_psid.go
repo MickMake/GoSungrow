@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/MickMake/GoSungrow/iSolarCloud"
+	"errors"
 	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPsDetail"
 	"github.com/MickMake/GoSungrow/iSolarCloud/AppService/getPsDetailWithPsType"
 	"fmt"
@@ -188,8 +189,27 @@ func (c *CmdShow) AttachPsData(cmd *cobra.Command) *cobra.Command {
 func (c *CmdShow) funcPsData(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.OutputType.SetTable()
-		args = MinimumArraySize(5, args)
-		c.Error = cmds.Api.SunGrow.PsPointsData(strings.Split(args[0], ","), args[1], args[2], args[3], args[4])
+
+		if len(args) > 1 {
+			// If second argument looks like a date, assume device_type is missing
+			arg := args[1]
+			isDate := len(arg) == 8
+			if isDate {
+				for _, r := range arg {
+					if r < '0' || r > '9' {
+						isDate = false
+						break
+					}
+				}
+			}
+			if isDate {
+				c.Error = errors.New("device_type is required when specifying a date range")
+				break
+			}
+		}
+
+		paddedArgs := MinimumArraySize(5, args)
+		c.Error = cmds.Api.SunGrow.PsPointsData(strings.Split(paddedArgs[0], ","), paddedArgs[1], paddedArgs[2], paddedArgs[3], paddedArgs[4])
 		if c.Error != nil {
 			break
 		}
@@ -218,8 +238,27 @@ func (c *CmdShow) AttachPsGraph(cmd *cobra.Command) *cobra.Command {
 func (c *CmdShow) funcPsGraph(_ *cobra.Command, args []string) error {
 	for range Only.Once {
 		cmds.Api.SunGrow.OutputType.SetGraph()
-		args = MinimumArraySize(5, args)
-		c.Error = cmds.Api.SunGrow.PsPointsData(strings.Split(args[0], ","), args[1], args[2], args[3], args[4])
+
+		if len(args) > 1 {
+			// If second argument looks like a date, assume device_type is missing
+			arg := args[1]
+			isDate := len(arg) == 8
+			if isDate {
+				for _, r := range arg {
+					if r < '0' || r > '9' {
+						isDate = false
+						break
+					}
+				}
+			}
+			if isDate {
+				c.Error = errors.New("device_type is required when specifying a date range")
+				break
+			}
+		}
+
+		paddedArgs := MinimumArraySize(5, args)
+		c.Error = cmds.Api.SunGrow.PsPointsData(strings.Split(paddedArgs[0], ","), paddedArgs[1], paddedArgs[2], paddedArgs[3], paddedArgs[4])
 		if c.Error != nil {
 			break
 		}
