@@ -34,6 +34,7 @@ func (m *Mqtt) SelectPublishConfig(config EntityConfig, fn mqtt.MessageHandler) 
 			CommandTemplate:  Template(fmt.Sprintf(`{{ value }}`)),
 			CommandTopic:     String(cmdTopic),
 			ObjectId:         String(id),
+			DefaultEntityID:  String(id),
 			UniqueId:         String(id),
 			Qos:              0,
 			Retain:           true,
@@ -139,6 +140,9 @@ type Select struct {
 
 	// Used instead of name for automatic generation of entity_id
 	ObjectId String `json:"object_id,omitempty"`
+
+	// Alternate for ObjectId required by Home Assistant
+	DefaultEntityID String `json:"default_entity_id,omitempty"`
 
 	// Flag that defines if the select works in optimistic mode.
 	Optimistic Boolean `json:"optimistic,omitempty"`

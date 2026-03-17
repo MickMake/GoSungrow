@@ -97,6 +97,9 @@ The name of the alarm.
 object_id string (optional)
 Used instead of name for automatic generation of entity_id
 
+default_entity_id string (optional)
+Used instead of name for automatic generation of entity_id - alternate for homeassistant
+
 payload_arm_away string (optional, default: ARM_AWAY)
 The payload to set armed-away mode on your Alarm Panel.
 

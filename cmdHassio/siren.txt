@@ -91,6 +91,9 @@ The name to use when displaying this siren.
 object_id string (optional)
 Used instead of name for automatic generation of entity_id
 
+default_entity_id string (optional)
+Used instead of name for automatic generation of entity_id - alternate for homeassistant
+
 optimistic boolean (optional)
 Flag that defines if siren works in optimistic mode.
 

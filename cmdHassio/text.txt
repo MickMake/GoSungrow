@@ -91,6 +91,9 @@ The name of the text entity.
 object_id string (optional)
 Used instead of name for automatic generation of entity_id
 
+default_entity_id string (optional)
+Used instead of name for automatic generation of entity_id - alternate for homeassistant
+
 pattern string (optional)
 A valid regular expression the text being set or received must match with.
 
