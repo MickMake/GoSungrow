@@ -145,6 +145,9 @@ The name of the light.
 object_id string (optional)
 Used instead of name for automatic generation of entity_id
 
+default_entity_id string (optional)
+Used instead of name for automatic generation of entity_id - alternate for homeassistant
+
 on_command_type string (optional)
 Defines when on the payload_on is sent. Using last (the default) will send any style (brightness, color, etc) topics first and then a payload_on to the command_topic. Using first will send the payload_on and then any style topics. Using brightness will only send brightness commands instead of the payload_on to turn the light on.
 

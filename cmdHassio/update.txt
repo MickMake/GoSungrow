@@ -94,6 +94,9 @@ The name of the Select.
 object_id string (optional)
 Used instead of name for automatic generation of entity_id
 
+default_entity_id string (optional)
+Used instead of name for automatic generation of entity_id - alternate for homeassistant
+
 payload_install string (optional)
 The MQTT payload to start installing process.
 

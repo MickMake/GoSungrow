@@ -82,6 +82,9 @@ The name of the camera.
 object_id string (optional)
 Used instead of name for automatic generation of entity_id
 
+default_entity_id string (optional)
+Used instead of name for automatic generation of entity_id - alternate for homeassistant
+
 topic string REQUIRED
 The MQTT topic to subscribe to.
 

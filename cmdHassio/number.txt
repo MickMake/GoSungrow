@@ -91,6 +91,9 @@ The name of the Number.
 object_id string (optional)
 Used instead of name for automatic generation of entity_id
 
+default_entity_id string (optional)
+Used instead of name for automatic generation of entity_id - alternate for homeassistant
+
 optimistic boolean (optional)
 Flag that defines if number works in optimistic mode.
 

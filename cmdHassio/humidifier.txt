@@ -94,6 +94,9 @@ The name of the humidifier.
 object_id string (optional)
 Used instead of name for automatic generation of entity_id
 
+default_entity_id string (optional)
+Used instead of name for automatic generation of entity_id - alternate for homeassistant
+
 optimistic boolean (optional)
 Flag that defines if humidifier works in optimistic mode
 

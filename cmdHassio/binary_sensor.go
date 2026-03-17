@@ -50,6 +50,7 @@ func (m *Mqtt) BinarySensorPublishConfig(config EntityConfig) error {
 			StateTopic:             String(JoinStringsForTopic(m.Prefix, LabelBinarySensor, m.ClientId, id, "state")),
 			// StateClass:             config.StateClass,
 			ObjectId:               String(id),
+			DefaultEntityID:        String(id),
 			UniqueId:               String(id),
 			// UnitOfMeasurement:      config.Units,
 			DeviceClass:            DeviceClass(config.DeviceClass),
@@ -178,6 +179,9 @@ type BinarySensor struct {
 
 	// Used instead of name for automatic generation of entity_id
 	ObjectId String `json:"object_id,omitempty"`
+
+	// Alternate for ObjectId required by Home Assistant
+	DefaultEntityID String `json:"default_entity_id,omitempty"`
 
 	// For sensors that only send on state updates (like PIRs), this variable sets a delay in seconds after which the sensor’s state will be updated back to off.
 	OffDelay Integer `json:"off_delay,omitempty"`

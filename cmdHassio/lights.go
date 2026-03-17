@@ -29,6 +29,7 @@ func (m *Mqtt) PublishLightConfig(config EntityConfig) error {
 			StateTopic:             String(JoinStringsForTopic(m.Prefix, LabelLight, m.ClientId, id, "state")),
 			UniqueId:               String(id),
 			ObjectId:               String(id),
+			DefaultEntityID:        String(id),
 
 			// StateClass:             config.StateClass,
 			// UniqueId:               id,
@@ -192,6 +193,9 @@ type Light struct {
 
 	// Used instead of name for automatic generation of entity_id
 	ObjectId String `json:"object_id,omitempty"`
+
+	// Alternate for ObjectId required by Home Assistant
+	DefaultEntityID String `json:"default_entity_id,omitempty"`
 
 	// Defines when on the payload_on is sent. Using last (the default) will send any style (brightness, color, etc) topics first and then a payload_on to the command_topic. Using first will send the payload_on and then any style topics. Using brightness will only send brightness commands instead of the payload_on to turn the light on.
 	OnCommandType String `json:"on_command_type,omitempty"`

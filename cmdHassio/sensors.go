@@ -30,6 +30,7 @@ func (m *Mqtt) SensorPublishConfig(config EntityConfig) error {
 			StateTopic:             String(JoinStringsForTopic(m.Prefix, LabelSensor, m.ClientId, id, "state")),
 			StateClass:             String(config.StateClass),
 			ObjectId:               String(id),
+			DefaultEntityID:        String(id),
 			UniqueId:               String(id),
 			UnitOfMeasurement:      String(config.Units),
 			DeviceClass:            DeviceClass(config.DeviceClass),
@@ -144,6 +145,9 @@ type Sensor struct {
 
 	// Used instead of name for automatic generation of entity_id
 	ObjectId String `json:"object_id,omitempty"`
+
+	// Alternate for ObjectId required by Home Assistant
+	DefaultEntityID String `json:"default_entity_id,omitempty"`
 
 	// The payload that represents the available state.
 	PayloadAvailable String `json:"payload_available,omitempty" Default:"online"`

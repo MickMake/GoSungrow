@@ -76,6 +76,9 @@ The name of the vacuum.
 object_id string (optional)
 Used instead of name for automatic generation of entity_id
 
+default_entity_id string (optional)
+Used instead of name for automatic generation of entity_id - alternate for homeassistant
+
 payload_available string (optional, default: online)
 The payload that represents the available state.
 

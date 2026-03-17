@@ -29,6 +29,7 @@ func (m *Mqtt) NumberPublishConfig(config EntityConfig) error {
 			// StateTopic:   JoinStringsForTopic(m.switchPrefix, id, "state"),
 			CommandTopic: String(JoinStringsForTopic(m.Prefix, LabelNumber, m.ClientId, id, "cmd")),
 			ObjectId:     String(id),
+			DefaultEntityID: String(id),
 			UniqueId:     String(id),
 			Qos:          0,
 			Retain:       true,
@@ -137,6 +138,9 @@ type Number struct {
 
 	// Used instead of name for automatic generation of entity_id
 	ObjectId String `json:"object_id,omitempty"`
+
+	// Alternate for ObjectId required by Home Assistant
+	DefaultEntityID String `json:"default_entity_id,omitempty"`
 
 	// Flag that defines if number works in optimistic mode.
 	Optimistic Boolean `json:"optimistic,omitempty"`
