@@ -510,7 +510,7 @@ Change iSolarCloud API token.
 | --timeout       |            | GOSUNGROW_TIMEOUT       | Web timeout.                   | 0s                                 |
 | --user          | -u         | GOSUNGROW_USER          | SunGrow: api username.         | ------------------                 |
 | --password      | -p         | GOSUNGROW_PASSWORD      | SunGrow: api password.         | ---------------------------        |
-| --appkey        |            | GOSUNGROW_APPKEY        | SunGrow: api application key.  | 93D72E60331ABDCDC7B39ADC2D1F32B3   |
+| --appkey        |            | GOSUNGROW_APPKEY        | SunGrow: api application key.  | ANDROIDE13EC118BD7892FE7AB5A3F20   |
 |                 |            |                         |                                | *                                  |
 | --host          |            | GOSUNGROW_HOST          | SunGrow: Provider API URL.     | https://augateway.isolarcloud.com  |
 |                 |            |                         |                                | *                                  |
